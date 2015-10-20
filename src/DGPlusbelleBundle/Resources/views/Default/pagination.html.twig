@@ -1,0 +1,25 @@
+{% extends "DGPlusbelleBundle:Layout:general.html.twig" %}
+
+{% block bodycontenido -%}
+<table class="table">
+    <thead>
+      <tr>
+        <th>id</th>
+        <th>title</th>
+        <th>date</th>
+      </tr>
+    </thead>
+    <tbody>
+        {% for e in entities%}
+            <tr>
+            <td>{{e.id}}</td>
+            <td>{{e.title}}</td>
+            <td>{{e.created | date('d-m-Y')}}</td>
+            </tr>
+        {% endfor%}
+    </tbody>
+</table>
+{{ knp_pagination_render(entities,'KnpPaginatorBundle:Pagination:twitter_bootstrap_v3_pagination.html.twig') }}
+
+</html>
+{% endblock %}

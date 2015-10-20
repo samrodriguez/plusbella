@@ -1,0 +1,16 @@
+dg_plusbelle:
+    resource: "@DGPlusbelleBundle/Resources/config/routing.yml"
+    prefix:   /
+
+app:
+    resource: "@AppBundle/Controller/"
+    type:     annotation
+
+adesigns_calendar:
+    resource: "@ADesignsCalendarBundle/Resources/config/routing.xml" 
+fos_js_routing:
+    resource: "@FOSJsRoutingBundle/Resources/config/routing/routing.xml"
+easy_admin_bundle:
+    resource: "@EasyAdminBundle/Controller/"
+    type:     annotation
+    prefix:   /admin

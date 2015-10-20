@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+{%block head -%} 
+    {% block title -%}<title>:{% block titlename -%}:: Plus Belle ::{% endblock %}</title>{% endblock %}
+
+    {% block meta -%}
+    <meta content="text/html;charset=utf-8" http-equiv="Content-Type">
+    <meta content="utf-8" http-equiv="encoding">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    {% endblock %}
+    {% block css -%}
+    <link href="{{ asset('Resources/bootstrap-3/css/bootstrap.css') }}" rel="stylesheet" media="all">
+    {%- endblock %}
+    {% block js -%}
+    <script type="text/javascript" src="{{ asset('Resources/bootstrap-3/js/jquery.min.js') }}"></script>  
+    <script type="text/javascript" src="{{ asset('Resources/bootstrap-3/js/bootstrap.js') }}"></script>  
+    {%- endblock %}
+    {% block jquery -%}{% endblock %}  
+{% endblock %}
+</head>
+<body {% block htmlbody %}{% endblock %}>
+{% block body -%}
+<div>{% block menu -%}{% endblock %}</div>
+<div class="container-fluid">
+  <div class="row">     
+   <div class="col-xs-12 cols-sm-12 col-md-12 col col-lg-12">
+       {% block header -%}
+        <div class="row"> 
+          <div class="col-xs-3 cols-sm-3 col-md-3 col col-lg-3">
+            {% block logo %}{% endblock %}
+          </div>
+          <div class="col-xs-9 cols-sm-9 col-md-9 col col-lg-9">
+            {% block titleHeader %}
+            <h2><p class="fheader">PLUS BELLE</p></h2>	
+            {% endblock %}    
+          </div>
+        </div>
+        {%- endblock %}
+   </div>
+  </div>
+  {% block bodycontenido -%}
+  <div class="row">     
+      <div class="col-xs2 cols-sm-3 col-md-3 col col-lg-3">
+            {% block sidebar %}{% endblock %}
+      </div>
+      <div class="col-xs-9 cols-sm-9 col-md-9 col col-lg-9">
+            {% block contenido %}{% endblock %} 
+      </div>
+  </div>
+  {% endblock %}
+  <div class="row">     
+      <div class="col-xs-12 cols-sm-12 col-md-12 col col-lg-12">
+          {% block footer -%}{% endblock %}
+      </div>
+</div>
+</div>
+{% endblock %}
+</body>
+</html>

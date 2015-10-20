@@ -1,0 +1,89 @@
+{% extends "DGPlusbelleBundle:Layout:calendar.html.twig" %}
+
+{% block bodycontenido -%}
+{% include 'ADesignsCalendarBundle::calendar.html.twig' %}
+{% endblock %}
+
+{% block jquery -%}
+<script type="text/javascript">     
+var calendario = null;
+var source = 
+    {
+        url: Routing.generate('fullcalendar_loader'),
+        type: 'POST',
+        data: {
+            filtro: 1
+        },
+        error: function() {
+            alert('There was an error while fetching Calendar!');
+        }
+    };
+    
+$(document).ready(function() {        
+    // page is now ready, initialize the calendar...
+    calendario = $('#calendar-holder').fullCalendar({
+        
+        header: {
+            left: 'prev,next, today',
+            center: 'title',
+            right: 'month,agendaWeek,agendaDay'
+        },
+        buttonText: {
+            today:    'Today',
+            month:    'Month',
+            week:     'Week',
+            day:      'Day'
+        },
+        lazyFetching: true,
+        defaultView: 'agendaWeek',
+        editable: true,
+        weekends: true,
+        weekNumbers: true,
+        firstDay: 0,
+        slotMinutes: 30,
+        axisFormat: 'hh:mm tt',
+        firstHour: 7,
+        minTime: '06:00:00',
+        maxTime: '23:00:00',
+        allDaySlot: false,
+        selectable: true,
+        selectHelper: true,
+        select: function( startDate, endDate, allDay, jsEvent, view ){
+            var stdate = $.fullCalendar.formatDate(startDate,'dd-MM-yyyy');
+            var endate = $.fullCalendar.formatDate(endDate,'dd-MM-yyyy');
+            var starttm = $.fullCalendar.formatDate(startDate,'HH:mm');
+            var endtm = $.fullCalendar.formatDate(endDate,'HH:mm');
+            var day = $.fullCalendar.formatDate(startDate,'dddd'); 
+            var element = $(jsEvent.srcElement);
+        },
+        eventDrop: function( event, dayDelta, minuteDelta, allDay, revertFunc, jsEvent, ui, view ) { 
+            var stdate = $.fullCalendar.formatDate(event.start,'dd-MM-yyyy');
+            var endate = $.fullCalendar.formatDate(event.end,'dd-MM-yyyy');
+            var starttm = $.fullCalendar.formatDate(event.start,'HH:mm');
+            var endtm = $.fullCalendar.formatDate(event.end,'HH:mm');    
+            
+        },
+        eventResize: function( event, dayDelta, minuteDelta, revertFunc, jsEvent, ui, view ) { 
+            var stdate = $.fullCalendar.formatDate(event.start,'dd-MM-yyyy');
+            var endate = $.fullCalendar.formatDate(event.end,'dd-MM-yyyy');
+            var starttm = $.fullCalendar.formatDate(event.start,'HH:mm');
+            var endtm = $.fullCalendar.formatDate(event.end,'HH:mm');    
+        },
+        eventClick: function ( event, jsEvent, view )  {
+        },
+        
+        
+        //eventSources: [ source ],
+        eventRender: function(event, element) {
+           
+        },
+        eventAfterAllRender: function( view ) {
+            
+        }
+
+        
+    });//FIN DE LA CONFIGURACION DEL CALENDARIO
+    calendario.fullCalendar('addEventSource', source);    
+});//FIN
+</script> 
+{% endblock %}

@@ -1,0 +1,19 @@
+services:
+#    dg_plusbelle.example:
+#        class: DGPlusbelleBundle\Example
+#        arguments: [@service_id, "plain_value", %parameter%]
+    calendarListener:
+        class: DGPlusbelleBundle\Listener\CalendarEventListener
+        arguments: 
+            entityManagerMy: "@doctrine.orm.default_entity_manager"
+            mail: '@mailer'
+            templating: '@templating'
+            security: "@security.context"
+        tags:
+            - { name: kernel.event_listener, event: calendar.load_events, method: loadEvents }
+
+    plussbelle.mailer:
+        class: DGPlusbelleBundle\Service\EmailService
+        arguments: 
+            mail: '@mailer'
+            templating: '@templating'
