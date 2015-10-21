@@ -268,4 +268,8 @@ class Empleado
     {
         return $this->tratamiento;
     }
+    
+    public function __toString() {
+    return $this->cargo ? $this->cargo : '';
+    }
 }
