@@ -190,4 +190,8 @@ class Comision
     {
         return $this->empleado;
     }
+    
+    public function __toString() {
+    return $this->descripcion ? $this->descripcion : '';
+    }
 }

@@ -293,4 +293,8 @@ class Sucursal
     {
         return $this->tratamiento;
     }
+    
+    public function __toString() {
+    return $this->nombre ? $this->nombre : '';
+    }
 }

@@ -221,4 +221,8 @@ class Producto
     {
         return $this->categoria;
     }
+    
+    public function __toString() {
+    return $this->nombre ? $this->nombre : '';
+    }
 }

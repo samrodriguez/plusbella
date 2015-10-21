@@ -238,4 +238,8 @@ class Usuario
     {
         return $this->rol;
     }
+    
+    public function __toString() {
+    return $this->username ? $this->username : '';
+    }
 }
