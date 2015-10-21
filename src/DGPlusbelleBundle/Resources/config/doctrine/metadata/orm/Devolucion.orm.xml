@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+  <entity name="Devolucion" table="devolucion">
+    <indexes>
+      <index name="fk_devolucion_paciente1_idx" columns="paciente"/>
+      <index name="fk_devolucion_empleado1_idx" columns="empleado"/>
+    </indexes>
+    <id name="id" type="integer" column="id">
+      <generator strategy="IDENTITY"/>
+    </id>
+    <field name="monto" type="float" column="monto" precision="10" scale="0" nullable="false"/>
+    <field name="motivo" type="string" column="motivo" length="200" nullable="false">
+      <options>
+        <option name="fixed"/>
+      </options>
+    </field>
+    <field name="fechaDevolucion" type="datetime" column="fecha_devolucion" nullable="false">
+      <options>
+        <option name="default">CURRENT_TIMESTAMP</option>
+      </options>
+    </field>
+    <many-to-one field="paciente" target-entity="Paciente" fetch="LAZY">
+      <join-columns>
+        <join-column name="paciente" referenced-column-name="id"/>
+      </join-columns>
+    </many-to-one>
+    <many-to-one field="empleado" target-entity="Empleado" fetch="LAZY">
+      <join-columns>
+        <join-column name="empleado" referenced-column-name="id"/>
+      </join-columns>
+    </many-to-one>
+  </entity>
+</doctrine-mapping>

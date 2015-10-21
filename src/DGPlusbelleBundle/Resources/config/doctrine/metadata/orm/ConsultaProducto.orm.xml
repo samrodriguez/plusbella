@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+  <entity name="ConsultaProducto" table="consulta_producto">
+    <indexes>
+      <index name="fk_medicamento_consulta_medicamento1_idx" columns="producto"/>
+      <index name="fk_medicamento_consulta_consulta1_idx" columns="consulta"/>
+    </indexes>
+    <id name="id" type="integer" column="id">
+      <generator strategy="IDENTITY"/>
+    </id>
+    <field name="indicaciones" type="string" column="indicaciones" length="150" nullable="false">
+      <options>
+        <option name="fixed"/>
+      </options>
+    </field>
+    <many-to-one field="producto" target-entity="Producto" fetch="LAZY">
+      <join-columns>
+        <join-column name="producto" referenced-column-name="id"/>
+      </join-columns>
+    </many-to-one>
+    <many-to-one field="consulta" target-entity="Consulta" fetch="LAZY">
+      <join-columns>
+        <join-column name="consulta" referenced-column-name="id"/>
+      </join-columns>
+    </many-to-one>
+  </entity>
+</doctrine-mapping>

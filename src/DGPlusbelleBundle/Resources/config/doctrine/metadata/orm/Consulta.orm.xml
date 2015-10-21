@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+  <entity name="Consulta" table="consulta">
+    <indexes>
+      <index name="fk_consulta_cita1_idx" columns="cita"/>
+      <index name="fk_consulta_tipo_consulta1_idx" columns="tipo_consulta"/>
+      <index name="fk_consulta_paciente1_idx" columns="paciente"/>
+      <index name="fk_consulta_tratamiento1_idx" columns="tratamiento_id"/>
+    </indexes>
+    <id name="id" type="integer" column="id">
+      <generator strategy="IDENTITY"/>
+    </id>
+    <field name="fechaConsulta" type="date" column="fecha_consulta" nullable="false"/>
+    <field name="horaInicio" type="time" column="hora_inicio" nullable="false"/>
+    <field name="horaFin" type="time" column="hora_fin" nullable="false"/>
+    <field name="observacion" type="string" column="observacion" length="200" nullable="false">
+      <options>
+        <option name="fixed"/>
+      </options>
+    </field>
+    <field name="incapacidad" type="boolean" column="incapacidad" nullable="false"/>
+    <many-to-one field="tratamiento" target-entity="Tratamiento" fetch="LAZY">
+      <join-columns>
+        <join-column name="tratamiento_id" referenced-column-name="id"/>
+      </join-columns>
+    </many-to-one>
+    <many-to-one field="tipoConsulta" target-entity="TipoConsulta" fetch="LAZY">
+      <join-columns>
+        <join-column name="tipo_consulta" referenced-column-name="id"/>
+      </join-columns>
+    </many-to-one>
+    <many-to-one field="paciente" target-entity="Paciente" fetch="LAZY">
+      <join-columns>
+        <join-column name="paciente" referenced-column-name="id"/>
+      </join-columns>
+    </many-to-one>
+    <many-to-one field="cita" target-entity="Cita" fetch="LAZY">
+      <join-columns>
+        <join-column name="cita" referenced-column-name="id"/>
+      </join-columns>
+    </many-to-one>
+  </entity>
+</doctrine-mapping>

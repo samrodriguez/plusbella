@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+  <entity name="Expediente" table="expediente">
+    <indexes>
+      <index name="fk_expediente_usuario1_idx" columns="usuario"/>
+      <index name="fk_expediente_paciente1_idx" columns="paciente"/>
+    </indexes>
+    <unique-constraints>
+      <unique-constraint name="numero_UNIQUE" columns="numero"/>
+    </unique-constraints>
+    <id name="id" type="integer" column="id">
+      <generator strategy="IDENTITY"/>
+    </id>
+    <field name="numero" type="string" column="numero" length="9" nullable="false">
+      <options>
+        <option name="fixed">1</option>
+      </options>
+    </field>
+    <field name="fechaCreacion" type="date" column="fecha_creacion" nullable="false"/>
+    <field name="horaCreacion" type="time" column="hora_creacion" nullable="false"/>
+    <field name="estado" type="boolean" column="estado" nullable="false"/>
+    <many-to-one field="usuario" target-entity="Usuario" fetch="LAZY">
+      <join-columns>
+        <join-column name="usuario" referenced-column-name="id"/>
+      </join-columns>
+    </many-to-one>
+    <many-to-one field="paciente" target-entity="Paciente" fetch="LAZY">
+      <join-columns>
+        <join-column name="paciente" referenced-column-name="id"/>
+      </join-columns>
+    </many-to-one>
+  </entity>
+</doctrine-mapping>

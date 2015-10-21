@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+  <entity name="Producto" table="producto">
+    <indexes>
+      <index name="fk_producto_categoria_tratamiento1_idx" columns="categoria"/>
+    </indexes>
+    <id name="id" type="integer" column="id">
+      <generator strategy="IDENTITY"/>
+    </id>
+    <field name="nombre" type="string" column="nombre" length="100" nullable="false">
+      <options>
+        <option name="fixed"/>
+      </options>
+    </field>
+    <field name="costo" type="float" column="costo" precision="10" scale="0" nullable="false"/>
+    <field name="fechaCompra" type="string" column="fecha_compra" length="45" nullable="false">
+      <options>
+        <option name="fixed"/>
+      </options>
+    </field>
+    <field name="fechaVencimiento" type="date" column="fecha_vencimiento" nullable="false"/>
+    <field name="estado" type="boolean" column="estado" nullable="false"/>
+    <many-to-one field="categoria" target-entity="Categoria" fetch="LAZY">
+      <join-columns>
+        <join-column name="categoria" referenced-column-name="id"/>
+      </join-columns>
+    </many-to-one>
+  </entity>
+</doctrine-mapping>

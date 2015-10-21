@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+  <entity name="DetalleEstadoCuenta" table="detalle_estado_cuenta">
+    <indexes>
+      <index name="fk_detalle_estado_cuenta_estado_cuenta1_idx" columns="estado_cuenta"/>
+    </indexes>
+    <id name="id" type="integer" column="id">
+      <generator strategy="IDENTITY"/>
+    </id>
+    <field name="monto" type="float" column="monto" precision="10" scale="0" nullable="false"/>
+    <field name="fechaMovimiento" type="datetime" column="fecha_movimiento" nullable="false">
+      <options>
+        <option name="default">CURRENT_TIMESTAMP</option>
+      </options>
+    </field>
+    <many-to-one field="estadoCuenta" target-entity="EstadoCuenta" fetch="LAZY">
+      <join-columns>
+        <join-column name="estado_cuenta" referenced-column-name="id"/>
+      </join-columns>
+    </many-to-one>
+  </entity>
+</doctrine-mapping>
