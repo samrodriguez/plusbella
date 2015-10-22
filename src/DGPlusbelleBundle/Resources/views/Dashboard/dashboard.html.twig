@@ -1,0 +1,66 @@
+{% extends 'DGPlusbelleBundle:Layout:general.html.twig' %}
+{% block sucursal %}
+    <h3 class="panel-title text" >Sistema</h3>
+    <h3 class="panel-title text" >Nombre de Sucursal</h3>
+{% endblock %}
+{% block fotoemp %}
+    <img height="70px" width="70px" class="img-circle" src="{{ asset('Resources/img/empleado/persona4.jpg') }}"  style="margin-top: 10px; display: block; margin-left: auto; margin-right: auto; border:none;"/>
+{% endblock %}
+{% block perfil %}
+    <p class="text-center">BIENVENIDO</p>
+    <P class="text-center">Nombre del empleado</P>
+    <p class="text-center">Cargo del empleado</p>
+{% endblock %}
+{% block acceso %}
+    <div class="panel panel-warning col-md-12" >
+        <div class="panel-heading">
+            <h3 class="panel-title text-center" >ACCESO RAPIDO</h3>
+        </div>
+        <div class="panel-body">
+            <a href="">VENTA DE PAQUETE A PACIENTE</a>
+            <a href="">EXPEDIENTES DE PACIENTES</a>
+            <a href="">AGREGAR NUEVA CITA A PACIENTE</a>
+            <a href="">CONSULTAS DE EMERGENCIA</a>
+            <a href="">CALENDARIO DE CONSULTAS</a>
+            <a href="">PACIENTES (AGREGAR, EDITAR)</a>
+        </div>
+    </div>
+{% endblock %}
+{% block contenido -%}
+    <div class="container-fluid" >
+        <div class="col-md-6">
+           <div class="row">   
+                <div class="panel panel-warning" >
+                    <div class="panel-heading">
+                        HOLA
+                    </div>
+                    <div class="panel-body">
+                  
+                    </div>
+                </div>
+            </div>
+        </div>    
+       <div class="col-md-6">
+            <div class="row"> 
+                <div class="panel panel-warning" col-md-12>
+                    <div class="panel-heading">
+                        HOLA
+                    </div>
+                    <div class="panel-body">
+                        <p></p>
+                    </div>
+                </div> 
+                <div class="panel panel-warning" col-md-12>
+                    <div class="panel-heading">
+                        HOLA
+                    </div>
+                    <div class="panel-body">
+                        <p></p>
+                    </div>
+                </div> 
+            </div>
+        </div>
+    </div>
+    
+    
+ {% endblock %}    

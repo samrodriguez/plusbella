@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 {%block head -%} 
-    {% block title -%}<title>:{% block titlename -%}:: Plus Belle ::{% endblock %}</title>{% endblock %}
+    {% block title -%}<title>:{% block titlename -%}:: La Plus Belle ::{% endblock %}</title>{% endblock %}
 
     {% block meta -%}
     <meta content="text/html;charset=utf-8" http-equiv="Content-Type">
@@ -16,14 +16,15 @@
     <script type="text/javascript" src="{{ asset('Resources/bootstrap-3/js/jquery.min.js') }}"></script>  
     <script type="text/javascript" src="{{ asset('Resources/bootstrap-3/js/bootstrap.js') }}"></script>  
     {%- endblock %}
-    {% block jquery -%}{% endblock %}  
+    {% block jquery -%}
+    {% endblock %}  
 {% endblock %}
 </head>
 <body {% block htmlbody %}{% endblock %}>
 {% block body -%}
 <div>{% block menu -%}{% endblock %}</div>
-<div class="container-fluid">
-  <div class="row">     
+<div class="container" style="margin-top: 30px;">
+  {#<div class="row">     
    <div class="col-xs-12 cols-sm-12 col-md-12 col col-lg-12">
        {% block header -%}
         <div class="row"> 
@@ -32,19 +33,51 @@
           </div>
           <div class="col-xs-9 cols-sm-9 col-md-9 col col-lg-9">
             {% block titleHeader %}
-            <h2><p class="fheader">PLUS BELLE</p></h2>	
+            <h2><p class="fheader">LA PLUS BELLE</p></h2>	
             {% endblock %}    
           </div>
         </div>
         {%- endblock %}
    </div>
-  </div>
+  </div>#}
   {% block bodycontenido -%}
   <div class="row">     
-      <div class="col-xs2 cols-sm-3 col-md-3 col col-lg-3">
-            {% block sidebar %}{% endblock %}
+      <div class="col-md-4">
+            {% block sidebar %}
+                <div class="container-fluid" >
+                    <div class="row"> 
+                        <div class="panel panel-warning col-md-12" >
+                            <div class="panel-heading">
+                                {% block sucursal %}{% endblock %}
+                            </div>
+                            <div class="panel-body">
+                                <p></p>
+                            </div>
+                        </div>
+                        <div class="panel panel-warning col-md-12" style="margin-top: 10px">
+                            <div class="panel-heading">
+                                <h3 class="panel-title text-center" >Perfil</h3>
+                            </div>
+                            <div class="panel-body ">
+                                <div class="row">
+                                    {% block fotoemp %}{% endblock %}
+                                    {% block perfil %}{% endblock %}
+                                    <div class="col-md-10"></div>
+                                    <div class="col-md-2">
+                                        <img height="40px" width="40px" src="{{ asset('Resources/img/power-off-icon.jpg') }}" onclick=""/>
+                                    </div>
+                                </div>
+                                
+                            </div>                            
+                        </div>
+                        <div class="col-xs-12 cols-sm-12 col-md-12 col col-lg-12">
+                           {% block acceso %}{% endblock %}
+                        </div>
+                    </div> 
+                </div>  
+            {% endblock %}
       </div>
-      <div class="col-xs-9 cols-sm-9 col-md-9 col col-lg-9">
+      <div class="col-md-8">
             {% block contenido %}{% endblock %} 
       </div>
   </div>
