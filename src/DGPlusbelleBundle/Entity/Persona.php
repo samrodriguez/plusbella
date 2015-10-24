@@ -84,9 +84,20 @@ class Persona
      */
     private $estado;
 
+     /**
+     * @ORM\OneToMany(targetEntity="Paciente", mappedBy="persona", cascade={"persist", "remove"})
+     */
+    private $paciente;
 
+    function getPaciente() {
+        return $this->paciente;
+    }
 
-    /**
+    function setPaciente($paciente) {
+        $this->paciente = $paciente;
+    }
+
+        /**
      * Get id
      *
      * @return integer

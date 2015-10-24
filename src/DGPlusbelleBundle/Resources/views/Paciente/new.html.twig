@@ -1,0 +1,17 @@
+{% extends 'DGPlusbelleBundle:Layout:general.html.twig' %}
+
+{% block contenido -%}
+    <h1>Paciente creation</h1>
+
+    {{ form_start(form) }}
+    {{ form_errors(form) }}
+
+        <ul class="record_actions">
+    <li>
+        <a href="{{ path('admin_paciente') }}">
+            Back to the list
+        </a>
+    </li>
+</ul>
+    {{ form_end(form) }}
+{% endblock %}

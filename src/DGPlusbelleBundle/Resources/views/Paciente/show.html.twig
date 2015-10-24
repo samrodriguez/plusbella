@@ -1,0 +1,68 @@
+{% extends 'DGPlusbelleBundle:Layout:general.html.twig' %}
+
+{% block contenido -%}
+    <h1>Paciente</h1>
+
+    <table class="record_properties">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ entity.id }}</td>
+            </tr>
+            <tr>
+                <th>Dui</th>
+                <td>{{ entity.dui }}</td>
+            </tr>
+            <tr>
+                <th>Estadocivil</th>
+                <td>{{ entity.estadoCivil }}</td>
+            </tr>
+            <tr>
+                <th>Sexo</th>
+                <td>{{ entity.sexo }}</td>
+            </tr>
+            <tr>
+                <th>Ocupacion</th>
+                <td>{{ entity.ocupacion }}</td>
+            </tr>
+            <tr>
+                <th>Lugartrabajo</th>
+                <td>{{ entity.lugarTrabajo }}</td>
+            </tr>
+            <tr>
+                <th>Fechanacimiento</th>
+                <td>{{ entity.fechaNacimiento|date('Y-m-d H:i:s') }}</td>
+            </tr>
+            <tr>
+                <th>Referidopor</th>
+                <td>{{ entity.referidoPor }}</td>
+            </tr>
+            <tr>
+                <th>Personaemergencia</th>
+                <td>{{ entity.personaEmergencia }}</td>
+            </tr>
+            <tr>
+                <th>Telefonoemergencia</th>
+                <td>{{ entity.telefonoEmergencia }}</td>
+            </tr>
+            <tr>
+                <th>Estado</th>
+                <td>{{ entity.estado }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+        <ul class="record_actions">
+    <li>
+        <a href="{{ path('admin_paciente') }}">
+            Back to the list
+        </a>
+    </li>
+    <li>
+        <a href="{{ path('admin_paciente_edit', { 'id': entity.id }) }}">
+            Edit
+        </a>
+    </li>
+    <li>{{ form(delete_form) }}</li>
+</ul>
+{% endblock %}
