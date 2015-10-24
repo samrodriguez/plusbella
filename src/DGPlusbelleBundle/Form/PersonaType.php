@@ -15,14 +15,38 @@ class PersonaType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('primerNombre')
-            ->add('segundoNombre')
-            ->add('primerApellido')
-            ->add('segundoApellido')
-            ->add('apellidoCasada')
-            ->add('direccion')
-            ->add('telefono')
-            ->add('email')
+            ->add('primerNombre','text',array('label' => 'Primer nombre',
+                    'attr'=>array(
+                    'class'=>'form-control'
+                    )))
+            ->add('segundoNombre','text',array('label' => 'Segundo nombre',
+                    'attr'=>array(
+                    'class'=>'form-control'
+                    )))
+            ->add('primerApellido','text',array('label' => 'Primer apellido',
+                    'attr'=>array(
+                    'class'=>'form-control'
+                    )))
+            ->add('segundoApellido','text',array('label' => 'Segundo nombre',
+                    'attr'=>array(
+                    'class'=>'form-control'
+                    )))
+            ->add('apellidoCasada','text',array('label' => 'Apellido Casada',
+                    'attr'=>array(
+                    'class'=>'form-control'
+                    )))
+            ->add('direccion','text',array('label' => 'Dirección',
+                    'attr'=>array(
+                    'class'=>'form-control'
+                    )))
+            ->add('telefono','number',array('label' => 'Telefono',
+                    'attr'=>array(
+                        'class'=>'form-control'
+                    )))
+            ->add('email','text',array('label' => 'Correo',
+                    'attr'=>array(
+                    'class'=>'form-control'
+                    )))
             ->add('estado')
         ;
     }

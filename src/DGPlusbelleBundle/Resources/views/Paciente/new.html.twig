@@ -1,17 +1,44 @@
 {% extends 'DGPlusbelleBundle:Layout:general.html.twig' %}
 
 {% block contenido -%}
-    <h1>Paciente creation</h1>
-
-    {{ form_start(form) }}
+ <div class="panel panel-default">
+  <!-- Default panel contents -->
+  <div class="panel-heading"<h1>Paciente nuevo</h1></div>
+  <div class="panel-body">
+  {{ form_start(form) }}
     {{ form_errors(form) }}
-
-        <ul class="record_actions">
-    <li>
-        <a href="{{ path('admin_paciente') }}">
-            Back to the list
-        </a>
-    </li>
-</ul>
+    <div class="row">
+         <div class="col-xs-6 col-sm-6">
+        {% include 'DGPlusbelleBundle:Persona:form.html.twig' with { 'form': form.persona }%}
+        </div>
+        <div class="col-xs-6 col-sm-6">
+        {{ form_row(form.dui) }}
+        {{ form_row(form.estadoCivil) }}
+        {{ form_row(form.sexo) }}
+        {{ form_row(form.ocupacion) }}
+        {{ form_row(form.lugarTrabajo) }}
+        {{ form_row(form.fechaNacimiento) }}
+        {{ form_row(form.referidoPor) }}
+        {{ form_row(form.personaEmergencia) }}
+        {{ form_row(form.telefonoEmergencia) }}
+        {{ form_row(form.estado) }}
+        </div>
+    </div>
+    <div class="row">
+         <div class="col-xs-12 col-sm-12">
+             <div class="modal-footer">
+                <a href="{{ path('admin_paciente') }}" class="btn btn-default">Regresar al listado</a>
+                {{ form_widget(form.submit) }}
+              </div>
+            
+        </div>
+    </div>
     {{ form_end(form) }}
+  </div>
+
+
+</div>
+    
+    
+    
 {% endblock %}

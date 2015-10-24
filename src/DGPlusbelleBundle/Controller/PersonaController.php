@@ -49,6 +49,7 @@ class PersonaController extends Controller
         $form->handleRequest($request);
 
         if ($form->isValid()) {
+            //$entity->setEstado(1);
             $em = $this->getDoctrine()->getManager();
             $em->persist($entity);
             $em->flush();

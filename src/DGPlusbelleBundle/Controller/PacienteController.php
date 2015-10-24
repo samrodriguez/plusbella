@@ -44,11 +44,14 @@ class PacienteController extends Controller
      */
     public function createAction(Request $request)
     {
+       // $persona = new Persona();
+        
         $entity = new Paciente();
         $form = $this->createCreateForm($entity);
         $form->handleRequest($request);
 
         if ($form->isValid()) {
+           //$entity->setEstado(TRUE);
             $em = $this->getDoctrine()->getManager();
             $em->persist($entity);
             $em->flush();
@@ -76,7 +79,11 @@ class PacienteController extends Controller
             'method' => 'POST',
         ));
 
-        $form->add('submit', 'submit', array('label' => 'Create'));
+        $form->add('submit', 'submit', array('label' => 'Guardar',
+                                               'attr'=>
+                                                        array('class'=>'btn btn-primary')
+                                                 
+         ));
 
         return $form;
     }

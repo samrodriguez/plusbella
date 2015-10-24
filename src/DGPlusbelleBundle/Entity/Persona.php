@@ -80,7 +80,7 @@ class Persona
     /**
      * @var boolean
      *
-     * @ORM\Column(name="estado", type="boolean", nullable=false)
+     * @ORM\Column(name="estado", type="boolean", nullable=true)
      */
     private $estado;
 
