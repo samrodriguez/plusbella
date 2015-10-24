@@ -1,12 +1,12 @@
-{% extends '::base.html.twig' %}
+{% extends 'DGPlusbelleBundle:Layout:general.html.twig' %}
 
-{% block body -%}
-    <h1>Paquete list</h1>
+{% block contenido -%}
+    <h1>Paquetes</h1>
 
     <table class="records_list">
         <thead>
             <tr>
-                <th>Id</th>
+                <th>#</th>
                 <th>Nombre</th>
                 <th>Costo</th>
                 <th>Estado</th>
@@ -34,12 +34,6 @@
         {% endfor %}
         </tbody>
     </table>
+            <a href="{{ path('admin_paquete_new') }}" class="btn btn-success"> Crear nuevo paquete</a>
 
-        <ul>
-        <li>
-            <a href="{{ path('admin_paquete_new') }}">
-                Create a new entry
-            </a>
-        </li>
-    </ul>
     {% endblock %}

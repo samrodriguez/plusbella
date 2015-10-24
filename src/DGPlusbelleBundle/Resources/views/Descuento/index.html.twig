@@ -1,12 +1,12 @@
-{% extends '::base.html.twig' %}
+{% extends 'DGPlusbelleBundle:Layout:general.html.twig' %}
 
-{% block body -%}
-    <h1>Descuento list</h1>
+{% block contenido -%}
+    <h1>Descuentos</h1>
 
     <table class="records_list">
         <thead>
             <tr>
-                <th>Id</th>
+                <th>#</th>
                 <th>Nombre</th>
                 <th>Porcentaje</th>
                 <th>Estado</th>
@@ -34,12 +34,6 @@
         {% endfor %}
         </tbody>
     </table>
+            <a href="{{ path('admin_descuento_new') }}" class="btn btn-success"> Crear nuevo descuento</a>
 
-        <ul>
-        <li>
-            <a href="{{ path('admin_descuento_new') }}">
-                Create a new entry
-            </a>
-        </li>
-    </ul>
     {% endblock %}

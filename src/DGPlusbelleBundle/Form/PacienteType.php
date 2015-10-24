@@ -18,7 +18,7 @@ class PacienteType extends AbstractType
             ->add('persona', new PersonaType())
          
                 
-            ->add('dui','number',array('label' => 'DUI','required' => false,
+            ->add('dui','text',array('label' => 'DUI','required' => false,
                     'attr'=>array(
                     'class'=>'form-control'
                     )))

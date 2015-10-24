@@ -15,11 +15,20 @@ class ComisionType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('descripcion')
-            ->add('porcentaje')
-            ->add('meta')
+            ->add('descripcion','text',array('label' => 'Descripción',
+                    'attr'=>array(
+                    'class'=>'form-control'
+                    )))
+            ->add('porcentaje','text',array('label' => 'Porcentaje %',
+                    'attr'=>array(
+                    'class'=>'form-control'
+                    )))
+            ->add('meta','text',array('label' => 'Meta $',
+                    'attr'=>array(
+                    'class'=>'form-control'
+                    )))
             ->add('estado')
-            ->add('empleado')
+           // ->add('empleado')
         ;
     }
     

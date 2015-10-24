@@ -36,9 +36,9 @@ class Producto
     private $costo;
 
     /**
-     * @var string
+     * @var datetime
      *
-     * @ORM\Column(name="fecha_compra", type="string", length=45, nullable=false)
+     * @ORM\Column(name="fecha_compra", type="datetime", nullable=false)
      */
     private $fechaCompra;
 

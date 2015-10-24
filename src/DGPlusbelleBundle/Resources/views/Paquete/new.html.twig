@@ -1,15 +1,33 @@
-{% extends '::base.html.twig' %}
+{% extends 'DGPlusbelleBundle:Layout:general.html.twig' %}
 
-{% block body -%}
-    <h1>Paquete creation</h1>
+{% block contenido -%}
+    
+    
+    <div class="panel panel-default">
+  <!-- Default panel contents -->
+  <div class="panel-heading"<h1>Nuevo paquete</h1></div>
+  <div class="panel-body">
+    {{ form_start(form) }}
+    {{ form_errors(form) }}
+    
+    <div class="col-xs-12 col-sm-6">
+     {{ form_row(form.nombre) }} 
+     {{ form_row(form.costo) }} 
+     {{ form_row(form.estado) }} 
+    </div>
+    
+   <div class="row">
+         <div class="col-xs-12 col-sm-12">
+             <div class="modal-footer"> 
+                 <a href="{{ path('admin_paquete') }}" class="btn btn-default">Regresar al listado</a>
+                {{ form_widget(form.submit) }}
+             </div>
+         </div>
+    </div>
+ 
+ </div>
 
-    {{ form(form) }}
-
-        <ul class="record_actions">
-    <li>
-        <a href="{{ path('admin_paquete') }}">
-            Back to the list
-        </a>
-    </li>
-</ul>
+</div>  
+{{ form_end(form) }}  
+    
 {% endblock %}

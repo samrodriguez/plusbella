@@ -1,12 +1,12 @@
-{% extends '::base.html.twig' %}
+{% extends 'DGPlusbelleBundle:Layout:general.html.twig' %}
 
-{% block body -%}
-    <h1>Comision list</h1>
+{% block contenido -%}
+    <h1>Comisiones</h1>
 
     <table class="records_list">
         <thead>
             <tr>
-                <th>Id</th>
+                <th>#</th>
                 <th>Descripcion</th>
                 <th>Porcentaje</th>
                 <th>Meta</th>
@@ -36,12 +36,6 @@
         {% endfor %}
         </tbody>
     </table>
-
-        <ul>
-        <li>
-            <a href="{{ path('admin_comision_new') }}">
-                Create a new entry
-            </a>
-        </li>
-    </ul>
+            <a href="{{ path('admin_comision_new') }}" class="btn btn-success"> Crear nueva comisión</a>
+            
     {% endblock %}

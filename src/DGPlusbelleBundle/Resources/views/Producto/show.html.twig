@@ -1,6 +1,6 @@
-{% extends '::base.html.twig' %}
+{% extends 'DGPlusbelleBundle:Layout:general.html.twig' %}
 
-{% block body -%}
+{% block contenido -%}
     <h1>Producto</h1>
 
     <table class="record_properties">
@@ -19,11 +19,11 @@
             </tr>
             <tr>
                 <th>Fechacompra</th>
-                <td>{{ entity.fechaCompra }}</td>
+                <td>{{ entity.fechaCompra|date('Y-m-d H:i:s') }}</td>
             </tr>
             <tr>
                 <th>Fechavencimiento</th>
-                <td>{{ entity.fechaVencimiento|date('Y-m-d H:i:s') }}</td>
+                <td>{{ entity.fechaVencimiento|date('Y-m-d') }}</td>
             </tr>
             <tr>
                 <th>Estado</th>

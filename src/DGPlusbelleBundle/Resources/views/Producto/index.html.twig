@@ -1,12 +1,12 @@
-{% extends '::base.html.twig' %}
+{% extends 'DGPlusbelleBundle:Layout:general.html.twig' %}
 
-{% block body -%}
-    <h1>Producto list</h1>
+{% block contenido -%}
+    <h1>Productos</h1>
 
     <table class="records_list">
         <thead>
             <tr>
-                <th>Id</th>
+                <th>#</th>
                 <th>Nombre</th>
                 <th>Costo</th>
                 <th>Fechacompra</th>
@@ -21,8 +21,8 @@
                 <td><a href="{{ path('admin_producto_show', { 'id': entity.id }) }}">{{ entity.id }}</a></td>
                 <td>{{ entity.nombre }}</td>
                 <td>{{ entity.costo }}</td>
-                <td>{{ entity.fechaCompra }}</td>
-                <td>{% if entity.fechaVencimiento %}{{ entity.fechaVencimiento|date('Y-m-d H:i:s') }}{% endif %}</td>
+                <td>{% if entity.fechaCompra %}{{ entity.fechaCompra|date('Y-m-d H:i:s') }}{% endif %}</td>
+                <td>{% if entity.fechaVencimiento %}{{ entity.fechaVencimiento|date('Y-m-d') }}{% endif %}</td>
                 <td>{{ entity.estado }}</td>
                 <td>
                 <ul>
@@ -38,12 +38,5 @@
         {% endfor %}
         </tbody>
     </table>
-
-        <ul>
-        <li>
-            <a href="{{ path('admin_producto_new') }}">
-                Create a new entry
-            </a>
-        </li>
-    </ul>
+             <a href="{{ path('admin_producto_new') }}" class="btn btn-success"> Crear nuevo producto</a>
     {% endblock %}

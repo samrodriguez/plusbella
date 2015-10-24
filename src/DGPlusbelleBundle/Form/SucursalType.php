@@ -15,13 +15,22 @@ class SucursalType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('nombre')
-            ->add('direccion')
-            ->add('telefono')
+            ->add('nombre','text',array('label' => 'Nombre',
+                    'attr'=>array(
+                    'class'=>'form-control'
+                    )))
+            ->add('direccion','text',array('label' => 'Dirección',
+                    'attr'=>array(
+                    'class'=>'form-control'
+                    )))
+            ->add('telefono','text',array('label' => 'Telefono',
+                    'attr'=>array(
+                    'class'=>'form-control'
+                    )))
             ->add('estado')
             ->add('slug')
-            ->add('paquete')
-            ->add('tratamiento')
+           // ->add('paquete')
+           // ->add('tratamiento')
         ;
     }
     

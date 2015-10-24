@@ -15,10 +15,22 @@ class ProductoType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('nombre')
-            ->add('costo')
-            ->add('fechaCompra')
-            ->add('fechaVencimiento')
+            ->add('nombre','text',array('label' => 'Nombre',
+                    'attr'=>array(
+                    'class'=>'form-control'
+                    )))
+            ->add('costo','text',array('label' => 'Costo',
+                    'attr'=>array(
+                    'class'=>'form-control'
+                    )))
+            ->add('fechaCompra','date',array('label' => 'Fecha de Compra',
+                    'attr'=>array(
+                    'class'=>'form-control'
+                    )))
+            ->add('fechaVencimiento','date',array('label' => 'Fecha de vencimiento',
+                    'attr'=>array(
+                    'class'=>'form-control'
+                    )))
             ->add('estado')
             ->add('categoria')
         ;

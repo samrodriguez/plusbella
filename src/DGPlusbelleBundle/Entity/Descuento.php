@@ -38,7 +38,7 @@ class Descuento
     /**
      * @var string
      *
-     * @ORM\Column(name="estado", type="string", length=45, nullable=false)
+     * @ORM\Column(name="estado", type="boolean", length=45, nullable=false)
      */
     private $estado;
 

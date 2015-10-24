@@ -15,13 +15,19 @@ class TratamientoType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('nombre')
-            ->add('costo')
+            ->add('nombre','text',array('label' => 'Nombre',
+                    'attr'=>array(
+                    'class'=>'form-control'
+                    )))
+            ->add('costo','text',array('label' => 'Costo',
+                    'attr'=>array(
+                    'class'=>'form-control'
+                    )))
             ->add('estado')
-            ->add('categoria')
-            ->add('empleado')
-            ->add('paquete')
-            ->add('sucursal')
+            //->add('categoria')
+            //->add('empleado')
+           //->add('paquete')
+            //->add('sucursal')
         ;
     }
     

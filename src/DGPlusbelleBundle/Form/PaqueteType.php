@@ -15,11 +15,17 @@ class PaqueteType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('nombre')
-            ->add('costo')
+            ->add('nombre','text',array('label' => 'Nombre',
+                    'attr'=>array(
+                    'class'=>'form-control'
+                    )))
+            ->add('costo','text',array('label' => 'Costo',
+                    'attr'=>array(
+                    'class'=>'form-control'
+                    )))
             ->add('estado')
-            ->add('tratamiento')
-            ->add('sucursal')
+           // ->add('tratamiento')
+           // ->add('sucursal')
         ;
     }
     

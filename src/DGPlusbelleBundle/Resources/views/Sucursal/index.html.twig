@@ -1,14 +1,14 @@
-{% extends '::base.html.twig' %}
+{% extends 'DGPlusbelleBundle:Layout:general.html.twig' %}
 
-{% block body -%}
-    <h1>Sucursal list</h1>
+{% block contenido -%}
+    <h1>Sucursales</h1>
 
     <table class="records_list">
         <thead>
             <tr>
-                <th>Id</th>
+                <th>#</th>
                 <th>Nombre</th>
-                <th>Direccion</th>
+                <th>Dirección</th>
                 <th>Telefono</th>
                 <th>Estado</th>
                 <th>Slug</th>
@@ -38,12 +38,5 @@
         {% endfor %}
         </tbody>
     </table>
-
-        <ul>
-        <li>
-            <a href="{{ path('admin_sucursal_new') }}">
-                Create a new entry
-            </a>
-        </li>
-    </ul>
+                <a href="{{ path('admin_sucursal_new') }}" class="btn btn-success"> Crear nueva sucursal</a>
     {% endblock %}

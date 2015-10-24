@@ -15,8 +15,14 @@ class DescuentoType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('nombre')
-            ->add('porcentaje')
+            ->add('nombre','text',array('label' => 'Nombre',
+                    'attr'=>array(
+                    'class'=>'form-control'
+                    )))
+            ->add('porcentaje','text',array('label' => 'Porcentaje',
+                    'attr'=>array(
+                    'class'=>'form-control'
+                    )))
             ->add('estado')
         ;
     }
