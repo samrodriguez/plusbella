@@ -1,0 +1,7 @@
+.usuario {
+background-image: linear-gradient(bottom, #FFF 60%, #FF7B00 40%);
+background-image: -o-linear-gradient(bottom, #FFF 60%, #FF7B00 40%);
+background-image: -moz-linear-gradient(bottom, #FFF 60%, #FF7B00 40%);
+background-image: -webkit-linear-gradient(bottom, #FFF 60%, #FF7B00 40%);
+background-image: -ms-linear-gradient(bottom, #FFF 60%, #FF7B00 40%);
+}

@@ -1,46 +1,44 @@
 {% extends 'DGPlusbelleBundle:Layout:general.html.twig' %}
 
 {% block contenido -%}
-    <h1>Paciente list</h1>
+    <h2 class="text-center">Listado de pacientes</h2>
 
-    <table class="records_list">
+    <table id = "datable" class="table table-bordered table-hover display dt-responsive">
         <thead>
             <tr>
-                <th>Id</th>
+                <th>#</th>
                 <th>Dui</th>
-                <th>Estadocivil</th>
-                <th>Sexo</th>
-                <th>Ocupacion</th>
-                <th>Lugartrabajo</th>
-                <th>Fechanacimiento</th>
-                <th>Referidopor</th>
-                <th>Personaemergencia</th>
-                <th>Telefonoemergencia</th>
-                <th>Estado</th>
-                <th>Actions</th>
+                <th>Nombre</th>
+                <th>Ocupación</th>
+                <th>Lugar de trabajo</th>
+                <th>Fecha de nacimiento</th>
+                <th>Referido por</th>
+                
+                <th>Acciones</th>
             </tr>
         </thead>
         <tbody>
-        {% for entity in entities %}
+        {% for entity in pacientes %}
             <tr>
-                <td><a href="{{ path('admin_paciente_show', { 'id': entity.id }) }}">{{ entity.id }}</a></td>
+                <td>{{ entity.idpac }}</td>
                 <td>{{ entity.dui }}</td>
-                <td>{{ entity.estadoCivil }}</td>
-                <td>{{ entity.sexo }}</td>
+                <td>{{ entity.pnombre }} {{ entity.snombre }} {{ entity.papellido }} {{ entity.sapellido }}</td>
+                
+               
                 <td>{{ entity.ocupacion }}</td>
                 <td>{{ entity.lugarTrabajo }}</td>
                 <td>{% if entity.fechaNacimiento %}{{ entity.fechaNacimiento|date('Y-m-d H:i:s') }}{% endif %}</td>
                 <td>{{ entity.referidoPor }}</td>
-                <td>{{ entity.personaEmergencia }}</td>
-                <td>{{ entity.telefonoEmergencia }}</td>
-                <td>{{ entity.estado }}</td>
+                {#<td>{{ entity.personaEmergencia }}</td>
+                <td>{{ entity.telefonoEmergencia }}</td>#}
+                
                 <td>
                 <ul>
                     <li>
-                        <a href="{{ path('admin_paciente_show', { 'id': entity.id }) }}">show</a>
+                        <a href="{{ path('admin_paciente_show', { 'id': entity.idpac }) }}">Mostrar</a>
                     </li>
                     <li>
-                        <a href="{{ path('admin_paciente_edit', { 'id': entity.id }) }}">edit</a>
+                        <a href="{{ path('admin_paciente_edit', { 'id': entity.idpac }) }}">Editar</a>
                     </li>
                 </ul>
                 </td>
@@ -50,10 +48,16 @@
     </table>
 
         <ul>
-        <li>
-            <a href="{{ path('admin_paciente_new') }}">
-                Create a new entry
-            </a>
-        </li>
+        
     </ul>
     {% endblock %}
+    {% block javascripts_step %}
+    <script type="text/javascript">
+            $(document).ready(function() {
+                    $('#datable').DataTable( {
+                            "scrollCollapse": true,
+                            "paging":         true
+                    } );
+            } );
+    </script>
+     {% endblock %}   

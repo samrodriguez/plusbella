@@ -11,12 +11,36 @@
     {% endblock %}
     {% block css -%}
     <link href="{{ asset('Resources/bootstrap-3/css/bootstrap.css') }}" rel="stylesheet" media="all">
+    <link href="{{ asset('Resources/bootstrap-3/css/style.css') }}" rel="stylesheet" media="all">
     {%- endblock %}
     {% block js -%}
     <script type="text/javascript" src="{{ asset('Resources/bootstrap-3/js/jquery.min.js') }}"></script>  
     <script type="text/javascript" src="{{ asset('Resources/bootstrap-3/js/bootstrap.js') }}"></script>  
     {%- endblock %}
     {% block jquery -%}
+    {% endblock %}  
+    {% block datatables -%}
+        <link rel="stylesheet" type="text/css" href="{{ asset('Resources/datatables/datatables-1.10.9/css/dataTables.bootstrap.min.css') }}"/>
+	<link rel="stylesheet" type="text/css" href="{{ asset('Resources/datatables/autofill-2.0.0/css/autoFill.bootstrap.css') }}"/>
+	<link rel="stylesheet" type="text/css" href="{{ asset('Resources/datatables/buttons-1.0.3/css/buttons.bootstrap.min.css') }}"/>
+	<link rel="stylesheet" type="text/css" href="{{ asset('Resources/datatables/responsive-1.0.7/css/responsive.bootstrap.min.css') }}"/>
+	<link rel="stylesheet" type="text/css" href="{{ asset('Resources/datatables/scroller-1.3.0/css/scroller.bootstrap.min.css') }}"/>
+        
+        <script type="text/javascript" src="{{ asset('Resources/datatables/jszip-2.5.0/jszip.min.js') }}"></script>
+	<script type="text/javascript" src="{{ asset('Resources/datatables/pdfmake-0.1.18/build/pdfmake.min.js') }}"></script>
+	<script type="text/javascript" src="{{ asset('Resources/datatables/pdfmake-0.1.18/build/vfs_fonts.js') }}"></script>
+	<script type="text/javascript" src="{{ asset('Resources/datatables/datatables-1.10.9/js/jquery.dataTables.js') }}"></script>
+	<script type="text/javascript" src="{{ asset('Resources/datatables/datatables-1.10.9/js/dataTables.bootstrap.min.js') }}"></script>
+	<script type="text/javascript" src="{{ asset('Resources/datatables/autofill-2.0.0/js/dataTables.autoFill.min.js') }}"></script>
+	<script type="text/javascript" src="{{ asset('Resources/datatables/autofill-2.0.0/js/autoFill.bootstrap.min.js') }}"></script>
+	<script type="text/javascript" src="{{ asset('Resources/datatables/buttons-1.0.3/js/dataTables.buttons.min.js') }}"></script>
+	<script type="text/javascript" src="{{ asset('Resources/datatables/buttons-1.0.3/js/buttons.bootstrap.min.js') }}"></script>
+	<script type="text/javascript" src="{{ asset('Resources/datatables/buttons-1.0.3/js/buttons.colVis.min.js') }}"></script>
+	<script type="text/javascript" src="{{ asset('Resources/datatables/buttons-1.0.3/js/buttons.flash.min.js') }}"></script>
+	<script type="text/javascript" src="{{ asset('Resources/datatables/buttons-1.0.3/js/buttons.html5.min.js') }}"></script>
+	<script type="text/javascript" src="{{ asset('Resources/datatables/buttons-1.0.3/js/buttons.print.min.js') }}"></script>
+	<script type="text/javascript" src="{{ asset('Resources/datatables/responsive-1.0.7/js/dataTables.responsive.min.js') }}"></script>
+	<script type="text/javascript" src="{{ asset('Resources/datatables/scroller-1.3.0/js/dataTables.scroller.min.js') }}"></script>
     {% endblock %}  
 {% endblock %}
 </head>
@@ -89,5 +113,42 @@
 </div>
 </div>
 {% endblock %}
+
+  <div class="container">
+    <div class="row">
+      <div class="col-md-4">
+        <div class="row">
+          <div class="col-md-12">
+            <div class="panel panel-default" style="border: 1px solid #C9731C; background-color: #DDD;">
+              <div class="panel-body">
+                <p>SISTEMA</p>
+                <h1 class="text-center">SANTA ELENA</h1>
+              </div>
+            </div>
+          </div>  
+          <div class="clearfix"></div>
+          <div class="col-md-12">
+            <div class="panel panel-default usuario" style="border: 1px solid #C9731C; background-color: #DDD; height: 250px;">
+              <div class="panel-body">
+                <p class="text-center">BIENVENIDO</p>
+                <p class="text-center"><img src="{{ asset('Resources/img/empleado/persona4.jpg') }}" alt="..." class="img-circle" style="width: 100px; height: 100px;"></p>
+              </div>
+            </div>
+          </div>  
+          <div class="clearfix"></div>
+          <div class="col-md-12">
+            sdkjfklsdjlk
+          </div>  
+        </div>
+      </div>
+      <div class="col-md-4">
+sdfsdf
+      </div>
+      <div class="col-md-4">
+sdfsd
+      </div>
+    </div>
+  </div>
+
 </body>
 </html>

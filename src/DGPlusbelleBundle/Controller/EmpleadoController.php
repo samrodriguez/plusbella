@@ -8,8 +8,11 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use DGPlusbelleBundle\Entity\Empleado;
+use DGPlusbelleBundle\Entity\Persona;
 use DGPlusbelleBundle\Form\EmpleadoType;
-
+use DGPlusbelleBundle\Form\PersonaType;
+use Doctrine\ORM\EntityRepository;
+use Doctrine\ORM\Query\ResultSetMapping;
 /**
  * Empleado controller.
  *
@@ -27,12 +30,29 @@ class EmpleadoController extends Controller
      */
     public function indexAction()
     {
+        $rsm = new ResultSetMapping();
         $em = $this->getDoctrine()->getManager();
-
+        
+        $sql = "select * "
+                . "from empleado pac inner join ";
+        
+        $rsm->addScalarResult('id','id');
+        $rsm->addScalarResult('descripcion','descripcion');
+        $rsm->addScalarResult('codigo','codigo');
+        $rsm->addScalarResult('fechacreacion','fechacreacion');
+        $rsm->addScalarResult('fechafinalizacion','fechafinalizacion');
+        $rsm->addScalarResult('observacion','observacion');
+        
         $entities = $em->getRepository('DGPlusbelleBundle:Empleado')->findAll();
+        $empleados = $em->createNativeQuery($sql, $rsm)
+                    ->setParameter(1, $usuario->getIdEmpleado()->getId())
+                    ->setParameter(2, $asignado->getId())
+                    ->getResult();
+        
 
         return array(
             'entities' => $entities,
+            'empleados' => $empleados,
         );
     }
     /**
@@ -47,7 +67,19 @@ class EmpleadoController extends Controller
         $entity = new Empleado();
         $form = $this->createCreateForm($entity);
         $form->handleRequest($request);
-
+        
+        $parameters = $request->request->all();
+        foreach($parameters as $p){
+            $primerNombre = $p['primerNombre'];
+            $segundoNombre = $p['segundoNombre'];
+            $primerApellido = $p['primerApellido'];
+            $segundoApellido = $p['segundoApellido'];
+            $apellidoCasada = $p['apellidoCasada'];
+            $direccion = $p['direccion'];
+            $telefono = $p['telefono'];
+            $email = $p['email'];
+        }
+        
         if ($form->isValid()) {
             $em = $this->getDoctrine()->getManager();
             $em->persist($entity);
@@ -71,6 +103,8 @@ class EmpleadoController extends Controller
      */
     private function createCreateForm(Empleado $entity)
     {
+        $persona = new Persona();
+        $formPersona = new PersonaType();
         $form = $this->createForm(new EmpleadoType(), $entity, array(
             'action' => $this->generateUrl('admin_empleado_create'),
             'method' => 'POST',

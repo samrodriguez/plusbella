@@ -9,6 +9,8 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use DGPlusbelleBundle\Entity\Paciente;
 use DGPlusbelleBundle\Form\PacienteType;
+use Doctrine\ORM\EntityRepository;
+use Doctrine\ORM\Query\ResultSetMapping;
 
 /**
  * Paciente controller.
@@ -27,12 +29,37 @@ class PacienteController extends Controller
      */
     public function indexAction()
     {
+        $rsm = new ResultSetMapping();
         $em = $this->getDoctrine()->getManager();
-
-        $entities = $em->getRepository('DGPlusbelleBundle:Paciente')->findAll();
-
+        
+        $sql = "select per.primer_nombre as pnombre, per.segundo_nombre as snombre, per.primer_apellido as papellido, per.segundo_apellido as sapellido, per.apellido_casada as casada, "
+                . "per.direccion as direccion, per.telefono as tel, per.email as email, pac.id as idpac, pac.dui as dui, pac.estado_civil as ecivil, pac.sexo as sexo, pac.ocupacion as ocupacion, "
+                . "pac.lugar_trabajo as lugarTrabajo, pac.fecha_nacimiento as fechaNacimiento, pac.referido_por as referidoPor "
+                . "from paciente pac inner join persona per on pac.persona = per.id order by per.primer_apellido";
+        
+        $rsm->addScalarResult('idpac','idpac');
+        $rsm->addScalarResult('pnombre','pnombre');
+        $rsm->addScalarResult('snombre','snombre');
+        $rsm->addScalarResult('papellido','papellido');
+        $rsm->addScalarResult('sapellido','sapellido');
+        $rsm->addScalarResult('casada','casada');
+        $rsm->addScalarResult('direccion','direccion');
+        $rsm->addScalarResult('tel','tel');
+        $rsm->addScalarResult('email','email');
+        $rsm->addScalarResult('dui','dui');
+        $rsm->addScalarResult('ecivil','ecivil');
+        $rsm->addScalarResult('sexo','sexo');
+        $rsm->addScalarResult('ocupacion','ocupacion');
+        $rsm->addScalarResult('lugarTrabajo','lugarTrabajo');
+        $rsm->addScalarResult('fechaNacimiento','fechaNacimiento');
+       $rsm->addScalarResult('referidoPor','referidoPor');
+        
+        $pacientes = $em->createNativeQuery($sql, $rsm)
+                    ->getResult();
+        
         return array(
-            'entities' => $entities,
+            //'entities' => $entities,
+            'pacientes' => $pacientes,
         );
     }
     /**

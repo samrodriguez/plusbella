@@ -1,15 +1,41 @@
-{% extends '::base.html.twig' %}
-
-{% block body -%}
+{% extends 'DGPlusbelleBundle:Layout:general.html.twig' %}
+{% block sucursal %}
+    <h3 class="panel-title text" >Sistema</h3>
+    <h3 class="panel-title text" >Nombre de Sucursal</h3>
+{% endblock %}
+{% block fotoemp %}
+    <img height="70px" width="70px" class="img-circle" src="{{ asset('Resources/img/empleado/persona4.jpg') }}"  style="margin-top: 10px; display: block; margin-left: auto; margin-right: auto; border:none;"/>
+{% endblock %}
+{% block perfil %}
+    <p class="text-center">BIENVENIDO</p>
+    <P class="text-center">Nombre del empleado</P>
+    <p class="text-center">Cargo del empleado</p>
+{% endblock %}
+{% block acceso %}
+    <div class="panel panel-warning col-md-12" >
+        <div class="panel-heading">
+            <h3 class="panel-title text-center" >ACCESO RAPIDO</h3>
+        </div>
+        <div class="panel-body">
+            <a href=""></a>
+            
+        </div>
+    </div>
+{% endblock %}
+{% block contenido -%}
     <h1>Empleado creation</h1>
 
-    {{ form(form) }}
+    {{form_start(form)}}
+    {{form_errors(form)}}
+    
+    
 
         <ul class="record_actions">
-    <li>
-        <a href="{{ path('admin_empleado') }}">
-            Back to the list
-        </a>
-    </li>
-</ul>
+            <li>
+                <a href="{{ path('admin_empleado') }}">
+                    Back to the list
+                </a>
+            </li>
+        </ul>
+    {{form_end(form)}}    
 {% endblock %}
