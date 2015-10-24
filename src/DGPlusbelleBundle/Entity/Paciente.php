@@ -376,4 +376,13 @@ class Paciente
     {
         return $this->persona;
     }
+    
+    /**
+     * Get persona
+     *
+     * @return \DGPlusbelleBundle\Entity\Persona
+     */
+    public function __toString() {
+    return $this->persona->getPrimerNombre().' '.$this->persona->getPrimerApellido();
+    }
 }
