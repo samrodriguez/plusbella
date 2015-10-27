@@ -2,11 +2,13 @@
 
 {% block contenido -%}
     <h1>Productos</h1>
+    
+     <a href="{{ path('admin_producto_new') }}" class="btn btn-success"> Crear nuevo producto</a>
 
-    <table id = "datable" class="table table-bordered table-hover display dt-responsive">
+    <table id = "datable" class="table table-bordered table-hover display dt-responsive" style="margin-top: 30px">
         <thead>
             <tr>
-                <th>#</th>
+             {#   <th>#</th> #}
                 <th>Categoria</th>
                 <th>Nombre</th>
                 <th>Costo $</th>
@@ -19,7 +21,7 @@
         <tbody>
         {% for entity in entities %}
             <tr>
-                <td><a href="{{ path('admin_producto_show', { 'id': entity.id }) }}">{{ entity.id }}</a></td>
+               {#   <td><a href="{{ path('admin_producto_show', { 'id': entity.id }) }}">{{ entity.id }}</a></td>  #}
                 <td>{{ entity.categoria }}</td>
                 <td>{{ entity.nombre }}</td>
                 <td>{{ entity.costo }}</td>
@@ -40,7 +42,7 @@
         {% endfor %}
         </tbody>
     </table>
-             <a href="{{ path('admin_producto_new') }}" class="btn btn-success"> Crear nuevo producto</a>
+            
              
              
      <script type="text/javascript">

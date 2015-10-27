@@ -2,11 +2,13 @@
 
 {% block contenido -%}
     <h1>Tipos de Consulta</h1>
+    
+    <a href="{{ path('admin_tipoconsulta_new') }}" class="btn btn-success"> Crear nuevo descuento</a>
 
-    <table id = "datable" class="table table-bordered table-hover display dt-responsive">
+    <table id = "datable" class="table table-bordered table-hover display dt-responsive" style="margin-top: 30px">
         <thead>
             <tr>
-                <th>#</th>
+              {#  <th>#</th> #} 
                 <th>Nombre</th>
                 <th>Estado</th>
                 <th>Actions</th>
@@ -15,7 +17,7 @@
         <tbody>
         {% for entity in entities %}
             <tr>
-                <td><a href="{{ path('admin_tipoconsulta_show', { 'id': entity.id }) }}">{{ entity.id }}</a></td>
+         {#       <td><a href="{{ path('admin_tipoconsulta_show', { 'id': entity.id }) }}">{{ entity.id }}</a></td>  #}
                 <td>{{ entity.nombre }}</td>
                 <td>{{ entity.estado }}</td>
                 <td>
@@ -32,9 +34,8 @@
         {% endfor %}
         </tbody>
     </table>
-             <a href="{{ path('admin_tipoconsulta_new') }}" class="btn btn-success"> Crear nuevo descuento</a>
-             
-             
+            
+     
      <script type="text/javascript">
             $(document).ready(function() {
                     $('#datable').DataTable( {

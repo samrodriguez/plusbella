@@ -34,7 +34,7 @@ class EmpleadoController extends Controller
         $em = $this->getDoctrine()->getManager();
         
         $sql = "select * "
-                . "from empleado pac inner join ";
+                . "from empleado ";
         
         $rsm->addScalarResult('id','id');
         $rsm->addScalarResult('descripcion','descripcion');
@@ -45,8 +45,9 @@ class EmpleadoController extends Controller
         
         $entities = $em->getRepository('DGPlusbelleBundle:Empleado')->findAll();
         $empleados = $em->createNativeQuery($sql, $rsm)
-                    ->setParameter(1, $usuario->getIdEmpleado()->getId())
-                    ->setParameter(2, $asignado->getId())
+                      ->setParameter(1,1)
+                    //->setParameter(1, $usuario->getIdEmpleado()->getId())
+                  //
                     ->getResult();
         
 
@@ -65,10 +66,11 @@ class EmpleadoController extends Controller
     public function createAction(Request $request)
     {
         $entity = new Empleado();
+        //$entity->setEstado(true);
         $form = $this->createCreateForm($entity);
         $form->handleRequest($request);
         
-        $parameters = $request->request->all();
+       /* $parameters = $request->request->all();
         foreach($parameters as $p){
             $primerNombre = $p['primerNombre'];
             $segundoNombre = $p['segundoNombre'];
@@ -78,7 +80,7 @@ class EmpleadoController extends Controller
             $direccion = $p['direccion'];
             $telefono = $p['telefono'];
             $email = $p['email'];
-        }
+        }*/
         
         if ($form->isValid()) {
             $em = $this->getDoctrine()->getManager();
@@ -103,14 +105,17 @@ class EmpleadoController extends Controller
      */
     private function createCreateForm(Empleado $entity)
     {
-        $persona = new Persona();
-        $formPersona = new PersonaType();
+      /* $persona = new Persona();
+        $formPersona = new PersonaType();*/
         $form = $this->createForm(new EmpleadoType(), $entity, array(
             'action' => $this->generateUrl('admin_empleado_create'),
             'method' => 'POST',
         ));
 
-        $form->add('submit', 'submit', array('label' => 'Create'));
+        $form->add('submit', 'submit', array('label' => 'Guardar',
+                                               'attr'=>
+                                                        array('class'=>'btn btn-primary')
+             ));
 
         return $form;
     }
