@@ -2,15 +2,16 @@
 
 {% block contenido -%}
     <h1>Modificar categoria</h1>
+    
+  <div class="panel-body">
+<div class="row">
+         <div class="col-xs-12 col-sm-12">
+             <div class="modal-footer">
+                 <center> {{ form(edit_form) }}<a href="{{ path('admin_categoria') }}" class="btn btn-default">Regresar al listado</a>{{ form(delete_form) }} </center>
+              </div>
+            
+          </div>
+    </div>
 
-    {{ form(edit_form) }}
-
-        <ul class="record_actions">
-    <li>
-        <a href="{{ path('admin_categoria') }}">
-            Back to the list
-        </a>
-    </li>
-    <li>{{ form(delete_form) }}</li>
-</ul>
+</div>    
 {% endblock %}

@@ -19,7 +19,7 @@ class CategoriaType extends AbstractType
                     'attr'=>array(
                     'class'=>'form-control'
                     )))
-            ->add('estado')
+            //->add('estado')
         ;
     }
     

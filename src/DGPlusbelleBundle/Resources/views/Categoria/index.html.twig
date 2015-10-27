@@ -2,8 +2,10 @@
 
 {% block contenido -%}
     <h1>Categorias</h1>
+    
+     <a href="{{ path('admin_categoria_new') }}" class="btn btn-success"> Crear nueva categoria</a>
 
-    <table class="records_list">
+    <table id = "datable" class="table table-bordered table-hover display dt-responsive" style="margin-top: 30px">
         <thead>
             <tr>
                 <th>Id</th>
@@ -33,6 +35,15 @@
         </tbody>
     </table>
 
-            <a href="{{ path('admin_categoria_new') }}" class="btn btn-success"> Crear nueva categoria</a>
+           
+            
+      <script type="text/javascript">
+            $(document).ready(function() {
+                    $('#datable').DataTable( {
+                            "scrollCollapse": true,
+                            "paging":         true
+                    } );
+            } );
+    </script>             
            
     {% endblock %}

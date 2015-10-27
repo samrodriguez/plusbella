@@ -45,6 +45,7 @@ class SucursalController extends Controller
     public function createAction(Request $request)
     {
         $entity = new Sucursal();
+        $entity->setEstado(true);
         $form = $this->createCreateForm($entity);
         $form->handleRequest($request);
 

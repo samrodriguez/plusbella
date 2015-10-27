@@ -19,11 +19,11 @@ class PaqueteType extends AbstractType
                     'attr'=>array(
                     'class'=>'form-control'
                     )))
-            ->add('costo','text',array('label' => 'Costo',
+            ->add('costo','text',array('label' => 'Costo $',
                     'attr'=>array(
                     'class'=>'form-control'
                     )))
-            ->add('estado')
+            //->add('estado')
            // ->add('tratamiento')
            // ->add('sucursal')
         ;

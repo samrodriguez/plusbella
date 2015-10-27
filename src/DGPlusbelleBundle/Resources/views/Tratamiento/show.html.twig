@@ -3,7 +3,7 @@
 {% block contenido -%}
     <h1>Tratamiento</h1>
 
-    <table class="record_properties">
+    <table id = "datable" class="table table-bordered table-hover display dt-responsive">
         <tbody>
             <tr>
                 <th>Id</th>
@@ -37,4 +37,13 @@
     </li>
     <li>{{ form(delete_form) }}</li>
 </ul>
+
+<script type="text/javascript">
+            $(document).ready(function() {
+                    $('#datable').DataTable( {
+                            "scrollCollapse": true,
+                            "paging":         true
+                    } );
+            } );
+    </script>           
 {% endblock %}

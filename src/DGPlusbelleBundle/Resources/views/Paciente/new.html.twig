@@ -21,7 +21,7 @@
         {{ form_row(form.referidoPor) }}
         {{ form_row(form.personaEmergencia) }}
         {{ form_row(form.telefonoEmergencia) }}
-        {{ form_row(form.estado) }}
+        {# {{ form_row(form.estado) }}#}
         </div>
     </div>
     <div class="row">
@@ -42,3 +42,10 @@
     
     
 {% endblock %}
+{% block javascritp_step %} 
+<script>
+  $(function() {
+    $( "#dgplusbellebundle_paciente_fechaNacimiento" ).datepicker();
+  });
+  </script>
+ {% endblock %}

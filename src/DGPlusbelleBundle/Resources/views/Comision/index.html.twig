@@ -3,13 +3,14 @@
 {% block contenido -%}
     <h1>Comisiones</h1>
 
-    <table class="records_list">
+    <table id = "datable" class="table table-bordered table-hover display dt-responsive">
         <thead>
             <tr>
                 <th>#</th>
                 <th>Descripcion</th>
                 <th>Porcentaje</th>
                 <th>Meta</th>
+                <th>Empleado</th>
                 <th>Estado</th>
                 <th>Actions</th>
             </tr>
@@ -21,6 +22,7 @@
                 <td>{{ entity.descripcion }}</td>
                 <td>{{ entity.porcentaje }}</td>
                 <td>{{ entity.meta }}</td>
+                <td>{{ entity.empleado }}</td>
                 <td>{{ entity.estado }}</td>
                 <td>
                 <ul>
@@ -37,5 +39,13 @@
         </tbody>
     </table>
             <a href="{{ path('admin_comision_new') }}" class="btn btn-success"> Crear nueva comisión</a>
-            
+    
+     <script type="text/javascript">
+            $(document).ready(function() {
+                    $('#datable').DataTable( {
+                            "scrollCollapse": true,
+                            "paging":         true
+                    } );
+            } );
+    </script>        
     {% endblock %}
