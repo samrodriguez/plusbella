@@ -32,7 +32,7 @@ class EmpleadoType extends AbstractType
                     'class'=>'form-control'
                     )))
             //->add('horario')
-            //->add('tratamiento')
+            ->add('tratamiento')
         ;
     }
     
