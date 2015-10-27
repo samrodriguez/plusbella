@@ -3,7 +3,7 @@
 {% block contenido -%}
     <h1>Paquetes</h1>
 
-    <table class="records_list">
+    <table id = "datable" class="table table-bordered table-hover display dt-responsive">
         <thead>
             <tr>
                 <th>#</th>
@@ -35,5 +35,14 @@
         </tbody>
     </table>
             <a href="{{ path('admin_paquete_new') }}" class="btn btn-success"> Crear nuevo paquete</a>
+            
+     <script type="text/javascript">
+            $(document).ready(function() {
+                    $('#datable').DataTable( {
+                            "scrollCollapse": true,
+                            "paging":         true
+                    } );
+            } );
+    </script>            
 
     {% endblock %}

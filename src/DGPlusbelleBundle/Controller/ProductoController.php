@@ -45,6 +45,7 @@ class ProductoController extends Controller
     public function createAction(Request $request)
     {
         $entity = new Producto();
+        $entity->setEstado(true);
         $form = $this->createCreateForm($entity);
         $form->handleRequest($request);
 

@@ -3,7 +3,7 @@
 {% block contenido -%}
     <h1>Tipos de Consulta</h1>
 
-    <table class="records_list">
+    <table id = "datable" class="table table-bordered table-hover display dt-responsive">
         <thead>
             <tr>
                 <th>#</th>
@@ -33,5 +33,15 @@
         </tbody>
     </table>
              <a href="{{ path('admin_tipoconsulta_new') }}" class="btn btn-success"> Crear nuevo descuento</a>
+             
+             
+     <script type="text/javascript">
+            $(document).ready(function() {
+                    $('#datable').DataTable( {
+                            "scrollCollapse": true,
+                            "paging":         true
+                    } );
+            } );
+    </script>                
             
     {% endblock %}

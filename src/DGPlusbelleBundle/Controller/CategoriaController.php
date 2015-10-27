@@ -45,6 +45,7 @@ class CategoriaController extends Controller
     public function createAction(Request $request)
     {
         $entity = new Categoria();
+        $entity->setEstado(true);
         $form = $this->createCreateForm($entity);
         $form->handleRequest($request);
 

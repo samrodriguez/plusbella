@@ -3,12 +3,12 @@
 {% block contenido -%}
     <h1>Descuentos</h1>
 
-    <table class="records_list">
+    <table id = "datable" class="table table-bordered table-hover display dt-responsive">
         <thead>
             <tr>
                 <th>#</th>
                 <th>Nombre</th>
-                <th>Porcentaje</th>
+                <th>Porcentaje %</th>
                 <th>Estado</th>
                 <th>Actions</th>
             </tr>
@@ -35,5 +35,14 @@
         </tbody>
     </table>
             <a href="{{ path('admin_descuento_new') }}" class="btn btn-success"> Crear nuevo descuento</a>
+            
+     <script type="text/javascript">
+            $(document).ready(function() {
+                    $('#datable').DataTable( {
+                            "scrollCollapse": true,
+                            "paging":         true
+                    } );
+            } );
+    </script>               
 
     {% endblock %}

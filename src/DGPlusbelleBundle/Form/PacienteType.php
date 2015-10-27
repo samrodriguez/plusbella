@@ -43,7 +43,7 @@ class PacienteType extends AbstractType
                     )))
             ->add('fechaNacimiento','date',array('label' => 'Fecha de nacimiento',
                     'attr'=>array(
-                    'class'=>'form-control'
+                    'class'=>'form-control',
                     )))
             ->add('referidoPor','text',array('label' => 'Referido por',
                     'attr'=>array(
@@ -57,7 +57,7 @@ class PacienteType extends AbstractType
                     'attr'=>array(
                     'class'=>'form-control'
                     )))
-            ->add('estado')
+            //->add('estado')
            // ->add('persona')
         ;
     }

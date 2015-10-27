@@ -27,8 +27,11 @@ class SucursalType extends AbstractType
                     'attr'=>array(
                     'class'=>'form-control'
                     )))
-            ->add('estado')
-            ->add('slug')
+           // ->add('estado')
+            ->add('slug','text',array('label' => 'Slug',
+                    'attr'=>array(
+                    'class'=>'form-control'
+                    )))
            // ->add('paquete')
            // ->add('tratamiento')
         ;

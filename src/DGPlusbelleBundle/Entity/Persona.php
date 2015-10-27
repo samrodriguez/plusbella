@@ -77,13 +77,6 @@ class Persona
      */
     private $email;
 
-    /**
-     * @var boolean
-     *
-     * @ORM\Column(name="estado", type="boolean", nullable=true)
-     */
-    private $estado;
-
      /**
      * @ORM\OneToMany(targetEntity="Paciente", mappedBy="persona", cascade={"persist", "remove"})
      */

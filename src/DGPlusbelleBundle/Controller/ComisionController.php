@@ -45,6 +45,7 @@ class ComisionController extends Controller
     public function createAction(Request $request)
     {
         $entity = new Comision();
+        $entity->setEstado(true);
         $form = $this->createCreateForm($entity);
         $form->handleRequest($request);
 

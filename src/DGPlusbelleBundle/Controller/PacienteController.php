@@ -74,6 +74,7 @@ class PacienteController extends Controller
        // $persona = new Persona();
         
         $entity = new Paciente();
+        $entity->setEstado(true);
         $form = $this->createCreateForm($entity);
         $form->handleRequest($request);
 
