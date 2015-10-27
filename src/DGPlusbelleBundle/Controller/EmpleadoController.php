@@ -66,9 +66,36 @@ class EmpleadoController extends Controller
     public function createAction(Request $request)
     {
         $entity = new Empleado();
+      /*  $path="/recursos/img/boletas/";	
+        $nombre_archivo = $_FILES['userfile']['name'];
+        $tipo_archivo = $_FILES['userfile']['type'];	
+        $entity->setFoto($path.$nombre_archivo.$nombre_archivo.'.'.$tipo_archivo); */
         //$entity->setEstado(true);
         $form = $this->createCreateForm($entity);
         $form->handleRequest($request);
+        
+        
+
+ /* 
+
+$tamano_archivo = $_FILES['userfile']['size'];	
+if (!((strpos($nombre_archivo, "doc") || strpos($nombre_archivo, "gif") || strpos($nombre_archivo,"jpg")|| strpos($nombre_archivo,"png")))) 
+{
+echo "La extensión o el tamaño de los archivos no es correcta";	
+}
+else
+{
+if (move_uploaded_file($_FILES['userfile']['tmp_name'], $path.$_FILES['userfile']['name']))
+{
+echo "El archivo ha sido cargado correctamente.";
+}
+else
+{
+echo "Ocurrió algún error al subir el fichero. No pudo guardarse.";
+}
+}
+
+  */       
         
        /* $parameters = $request->request->all();
         foreach($parameters as $p){

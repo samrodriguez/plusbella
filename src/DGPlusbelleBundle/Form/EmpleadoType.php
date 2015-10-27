@@ -22,9 +22,10 @@ class EmpleadoType extends AbstractType
                     'attr'=>array(
                     'class'=>'form-control'
                     )))
-            ->add('foto','text',array('label' => 'Foto',
+            ->add('foto','file',array('label' => 'Foto',
                     'attr'=>array(
                     'class'=>'form-control'
+                      
                     )))
             //->add('persona')
             ->add('sucursal',null,array('label' => 'Sucursal','empty_value'=>'Seleccione Sucursal',
@@ -32,7 +33,7 @@ class EmpleadoType extends AbstractType
                     'class'=>'form-control'
                     )))
             //->add('horario')
-            ->add('tratamiento')
+            //->add('tratamiento')
         ;
     }
     

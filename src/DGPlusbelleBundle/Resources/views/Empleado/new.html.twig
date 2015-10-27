@@ -8,10 +8,11 @@
   {{ form_start(form) }}
     {{ form_errors(form) }}
     <div class="row">
-         <div class="col-xs-12 col-sm-6">
-        {% include 'DGPlusbelleBundle:Persona:form.html.twig' with { 'form': form.persona }%}
-        </div>
+        {# <div class="col-xs-12 col-sm-6"> #}
+        
+      {#  </div> #}
         <div class="col-xs-12 col-sm-6">
+        {% include 'DGPlusbelleBundle:Persona:form.html.twig' with { 'form': form.persona }%}    
         {{ form_row(form.cargo) }}
         {{ form_row(form.foto) }}
         {{ form_row(form.sucursal) }}
@@ -19,7 +20,7 @@
         </div>
     </div>
     <div class="row">
-         <div class="col-xs-12 col-sm-12">
+         <div class="col-xs-12 col-sm-6">
              <div class="modal-footer">
                 <a href="{{ path('admin_empleado') }}" class="btn btn-default">Regresar al listado</a>
                 {{ form_widget(form.submit) }}
