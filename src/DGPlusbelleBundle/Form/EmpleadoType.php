@@ -77,7 +77,7 @@ class EmpleadoType extends AbstractType
             ->add('persona')
             ->add('sucursal')
             //->add('horario')
-            //->add('tratamiento')
+            ->add('tratamiento')
         ;
     }
     
