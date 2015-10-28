@@ -27,8 +27,11 @@ class ComisionType extends AbstractType
                     'attr'=>array(
                     'class'=>'form-control'
                     )))
-            ->add('estado')
-           // ->add('empleado')
+           // ->add('estado')
+            ->add('empleado',null,array('label' => 'Empleado', 'empty_value'=>'Seleccione empleado',
+                    'attr'=>array(
+                    'class'=>'form-control'
+                    )))
         ;
     }
     

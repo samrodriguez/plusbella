@@ -2,14 +2,17 @@
 
 {% block contenido -%}
     <h1>Comisiones</h1>
+    
+     <a href="{{ path('admin_comision_new') }}" class="btn btn-success"> Crear nueva comisión</a>
 
-    <table class="records_list">
+    <table id = "datable" class="table table-bordered table-hover display dt-responsive" style="margin-top: 30px">
         <thead>
             <tr>
-                <th>#</th>
+               {# <th>#</th> #}
                 <th>Descripcion</th>
                 <th>Porcentaje</th>
                 <th>Meta</th>
+                <th>Empleado</th>
                 <th>Estado</th>
                 <th>Actions</th>
             </tr>
@@ -17,10 +20,11 @@
         <tbody>
         {% for entity in entities %}
             <tr>
-                <td><a href="{{ path('admin_comision_show', { 'id': entity.id }) }}">{{ entity.id }}</a></td>
+             {#   <td><a href="{{ path('admin_comision_show', { 'id': entity.id }) }}">{{ entity.id }}</a></td> #}
                 <td>{{ entity.descripcion }}</td>
                 <td>{{ entity.porcentaje }}</td>
                 <td>{{ entity.meta }}</td>
+                <td>{{ entity.empleado }}</td>
                 <td>{{ entity.estado }}</td>
                 <td>
                 <ul>
@@ -36,6 +40,14 @@
         {% endfor %}
         </tbody>
     </table>
-            <a href="{{ path('admin_comision_new') }}" class="btn btn-success"> Crear nueva comisión</a>
-            
+           
+    
+     <script type="text/javascript">
+            $(document).ready(function() {
+                    $('#datable').DataTable( {
+                            "scrollCollapse": true,
+                            "paging":         true
+                    } );
+            } );
+    </script>        
     {% endblock %}

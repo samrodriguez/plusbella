@@ -45,6 +45,7 @@ class PaqueteController extends Controller
     public function createAction(Request $request)
     {
         $entity = new Paquete();
+         $entity->setEstado(true);
         $form = $this->createCreateForm($entity);
         $form->handleRequest($request);
 

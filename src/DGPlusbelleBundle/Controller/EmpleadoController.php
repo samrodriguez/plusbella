@@ -34,7 +34,7 @@ class EmpleadoController extends Controller
         $em = $this->getDoctrine()->getManager();
         
         $sql = "select * "
-                . "from empleado pac inner join ";
+                . "from empleado ";
         
         $rsm->addScalarResult('id','id');
         $rsm->addScalarResult('descripcion','descripcion');
@@ -45,8 +45,9 @@ class EmpleadoController extends Controller
         
         $entities = $em->getRepository('DGPlusbelleBundle:Empleado')->findAll();
         $empleados = $em->createNativeQuery($sql, $rsm)
-                    ->setParameter(1, $usuario->getIdEmpleado()->getId())
-                    ->setParameter(2, $asignado->getId())
+                      ->setParameter(1,1)
+                    //->setParameter(1, $usuario->getIdEmpleado()->getId())
+                  //
                     ->getResult();
         
 
@@ -65,10 +66,38 @@ class EmpleadoController extends Controller
     public function createAction(Request $request)
     {
         $entity = new Empleado();
+      /*  $path="/recursos/img/boletas/";	
+        $nombre_archivo = $_FILES['userfile']['name'];
+        $tipo_archivo = $_FILES['userfile']['type'];	
+        $entity->setFoto($path.$nombre_archivo.$nombre_archivo.'.'.$tipo_archivo); */
+        //$entity->setEstado(true);
         $form = $this->createCreateForm($entity);
         $form->handleRequest($request);
         
-        $parameters = $request->request->all();
+        
+
+ /* 
+
+$tamano_archivo = $_FILES['userfile']['size'];	
+if (!((strpos($nombre_archivo, "doc") || strpos($nombre_archivo, "gif") || strpos($nombre_archivo,"jpg")|| strpos($nombre_archivo,"png")))) 
+{
+echo "La extensión o el tamaño de los archivos no es correcta";	
+}
+else
+{
+if (move_uploaded_file($_FILES['userfile']['tmp_name'], $path.$_FILES['userfile']['name']))
+{
+echo "El archivo ha sido cargado correctamente.";
+}
+else
+{
+echo "Ocurrió algún error al subir el fichero. No pudo guardarse.";
+}
+}
+
+  */       
+        
+       /* $parameters = $request->request->all();
         foreach($parameters as $p){
             $primerNombre = $p['primerNombre'];
             $segundoNombre = $p['segundoNombre'];
@@ -78,7 +107,7 @@ class EmpleadoController extends Controller
             $direccion = $p['direccion'];
             $telefono = $p['telefono'];
             $email = $p['email'];
-        }
+        }*/
         
         if ($form->isValid()) {
             $em = $this->getDoctrine()->getManager();
@@ -103,14 +132,17 @@ class EmpleadoController extends Controller
      */
     private function createCreateForm(Empleado $entity)
     {
-        $persona = new Persona();
-        $formPersona = new PersonaType();
+      /* $persona = new Persona();
+        $formPersona = new PersonaType();*/
         $form = $this->createForm(new EmpleadoType(), $entity, array(
             'action' => $this->generateUrl('admin_empleado_create'),
             'method' => 'POST',
         ));
 
-        $form->add('submit', 'submit', array('label' => 'Create'));
+        $form->add('submit', 'submit', array('label' => 'Guardar',
+                                               'attr'=>
+                                                        array('class'=>'btn btn-primary')
+             ));
 
         return $form;
     }

@@ -1,0 +1,49 @@
+{% extends 'DGPlusbelleBundle:Layout:general.html.twig' %}
+
+{% block contenido -%}
+    <h1>Devolucion</h1>
+
+    <table id = "datable" class="table table-bordered table-hover display dt-responsive">
+        <tbody>
+            <tr>
+              {#  <th>Id</th> #}
+             {#   <td>{{ entity.id }}</td> #}
+            </tr>
+            <tr>
+                <th>Monto</th>
+                <td>{{ entity.monto }}</td>
+            </tr>
+            <tr>
+                <th>Motivo</th>
+                <td>{{ entity.motivo }}</td>
+            </tr>
+            <tr>
+                <th>Fechadevolucion</th>
+                <td>{{ entity.fechaDevolucion|date('Y-m-d H:i:s') }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+        <ul class="record_actions">
+    <li>
+        <a href="{{ path('admin_devolucion') }}">
+            Back to the list
+        </a>
+    </li>
+    <li>
+        <a href="{{ path('admin_devolucion_edit', { 'id': entity.id }) }}">
+            Edit
+        </a>
+    </li>
+    <li>{{ form(delete_form) }}</li>
+</ul>
+    
+ <script type="text/javascript">
+            $(document).ready(function() {
+                    $('#datable').DataTable( {
+                            "scrollCollapse": true,
+                            "paging":         true
+                    } );
+            } );
+</script>       
+{% endblock %}

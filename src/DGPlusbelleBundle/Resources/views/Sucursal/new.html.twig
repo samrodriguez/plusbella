@@ -13,7 +13,7 @@
      {{ form_row(form.nombre) }} 
      {{ form_row(form.direccion) }} 
      {{ form_row(form.telefono) }} 
-     {{ form_row(form.estado) }} 
+     {#{{ form_row(form.estado) }} #}
      {{ form_row(form.slug ) }}   
     </div>
     
@@ -27,7 +27,7 @@
     </div>
  
  </div>
-
+{{ form_widget(form._token) }}
 </div>  
 {{ form_end(form) }}                
 {% endblock %}

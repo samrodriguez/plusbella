@@ -1,41 +1,39 @@
 {% extends 'DGPlusbelleBundle:Layout:general.html.twig' %}
-{% block sucursal %}
-    <h3 class="panel-title text" >Sistema</h3>
-    <h3 class="panel-title text" >Nombre de Sucursal</h3>
-{% endblock %}
-{% block fotoemp %}
-    <img height="70px" width="70px" class="img-circle" src="{{ asset('Resources/img/empleado/persona4.jpg') }}"  style="margin-top: 10px; display: block; margin-left: auto; margin-right: auto; border:none;"/>
-{% endblock %}
-{% block perfil %}
-    <p class="text-center">BIENVENIDO</p>
-    <P class="text-center">Nombre del empleado</P>
-    <p class="text-center">Cargo del empleado</p>
-{% endblock %}
-{% block acceso %}
-    <div class="panel panel-warning col-md-12" >
-        <div class="panel-heading">
-            <h3 class="panel-title text-center" >ACCESO RAPIDO</h3>
+
+{% block contenido -%}
+ <div class="panel panel-default">
+  <!-- Default panel contents -->
+  <div class="panel-heading"<h1>Empleado nuevo</h1></div>
+  <div class="panel-body">
+  {{ form_start(form) }}
+    {{ form_errors(form) }}
+    <div class="row">
+        {# <div class="col-xs-12 col-sm-6"> #}
+        
+      {#  </div> #}
+        <div class="col-xs-12 col-sm-6">
+        {% include 'DGPlusbelleBundle:Persona:form.html.twig' with { 'form': form.persona }%}    
+        {{ form_row(form.cargo) }}
+        {{ form_row(form.foto) }}
+        {{ form_row(form.sucursal) }}
+        {# {{ form_row(form.estado) }}#}
         </div>
-        <div class="panel-body">
-            <a href=""></a>
+    </div>
+    <div class="row">
+         <div class="col-xs-12 col-sm-6">
+             <div class="modal-footer">
+                <a href="{{ path('admin_empleado') }}" class="btn btn-default">Regresar al listado</a>
+                {{ form_widget(form.submit) }}
+              </div>
             
         </div>
     </div>
-{% endblock %}
-{% block contenido -%}
-    <h1>Empleado creation</h1>
+    {{ form_end(form) }}
+  </div>
 
-    {{form_start(form)}}
-    {{form_errors(form)}}
+
+</div>
     
     
-
-        <ul class="record_actions">
-            <li>
-                <a href="{{ path('admin_empleado') }}">
-                    Back to the list
-                </a>
-            </li>
-        </ul>
-    {{form_end(form)}}    
+    
 {% endblock %}

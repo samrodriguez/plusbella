@@ -19,11 +19,11 @@ class DescuentoType extends AbstractType
                     'attr'=>array(
                     'class'=>'form-control'
                     )))
-            ->add('porcentaje','text',array('label' => 'Porcentaje',
+            ->add('porcentaje','text',array('label' => 'Porcentaje %',
                     'attr'=>array(
                     'class'=>'form-control'
                     )))
-            ->add('estado')
+            //->add('estado')
         ;
     }
     

@@ -1,4 +1,4 @@
-{% extends 'DGPlusbelleBundle:Layout:general.html.twig' %}
+{% extends 'DGPlusbelleBundle:Layout:layout.html.twig' %}
 {% block sucursal %}
     <h3 class="panel-title text" >Sistema</h3>
     <h3 class="panel-title text" >Nombre de Sucursal</h3>
@@ -12,55 +12,104 @@
     <p class="text-center">Cargo del empleado</p>
 {% endblock %}
 {% block acceso %}
-    <div class="panel panel-warning col-md-12" >
-        <div class="panel-heading">
-            <h3 class="panel-title text-center" >ACCESO RAPIDO</h3>
-        </div>
+    
+      <div class="panel panel-default acceso" style="border: 1px solid #C9731C; background-color: #DDD; height: 215px;">
         <div class="panel-body">
-            <a href="">VENTA DE PAQUETE A PACIENTE</a>
-            <a href="">EXPEDIENTES DE PACIENTES</a>
-            <a href="">AGREGAR NUEVA CITA A PACIENTE</a>
-            <a href="">CONSULTAS DE EMERGENCIA</a>
-            <a href="">CALENDARIO DE CONSULTAS</a>
-            <a href="">PACIENTES (AGREGAR, EDITAR)</a>
+            <h4 class="text-center">ACCESO RAPIDO</h4>
+            </br>
+            <a href="">VENTA DE PAQUETE A PACIENTE</a></br>
+            <a href="">EXPEDIENTES DE PACIENTES</a></br>
+            <a href="">AGREGAR NUEVA CITA A PACIENTE</a></br>
+            <a href="">CONSULTAS DE EMERGENCIA</a></br>
+            <a href="">CALENDARIO DE CONSULTAS</a></br>
+            <a href="">PACIENTES (AGREGAR, EDITAR)</a></br>
         </div>
-    </div>
+      </div>
+   
 {% endblock %}
 {% block contenido -%}
-    <div class="container-fluid" >
-        <div class="col-md-6">
-           <div class="row">   
-                <div class="panel panel-warning" >
-                    <div class="panel-heading">
-                        HOLA
-                    </div>
-                    <div class="panel-body">
-                  
-                    </div>
-                </div>
-            </div>
-        </div>    
-       <div class="col-md-6">
-            <div class="row"> 
-                <div class="panel panel-warning" col-md-12>
-                    <div class="panel-heading">
-                        HOLA
-                    </div>
-                    <div class="panel-body">
-                        <p></p>
-                    </div>
-                </div> 
-                <div class="panel panel-warning" col-md-12>
-                    <div class="panel-heading">
-                        HOLA
-                    </div>
-                    <div class="panel-body">
-                        <p></p>
-                    </div>
-                </div> 
-            </div>
-        </div>
-    </div>
+
+ {% endblock %}   
+ {% block jquery -%}
+<script type="text/javascript">     
+var calendario = null;
+var source = 
+    {
+        url: Routing.generate('fullcalendar_loader'),
+        type: 'POST',
+        data: {
+            filtro: 1
+        },
+        error: function() {
+            alert('There was an error while fetching Calendar!');
+        }
+    };
     
-    
- {% endblock %}    
+$(document).ready(function() {        
+    // page is now ready, initialize the calendar...
+    calendario = $('#calendar-holder').fullCalendar({
+        
+        header: {
+            left: 'prev,next, today',
+            center: 'title',
+            right: ''
+        },
+        buttonText: {
+            today:    'Today',
+            month:    'Month',
+            week:     'Week',
+            day:      'Day'
+        },
+        lazyFetching: true,
+        defaultView: 'agendaDay',
+        editable: true,
+        weekends: true,
+        weekNumbers: true,
+        firstDay: 0,
+        slotMinutes: 30,
+        axisFormat: 'hh:mm tt',
+        firstHour: 7,
+        minTime: '08:00:00',
+        maxTime: '18:00:00',
+        allDaySlot: false,
+        selectable: true,
+        selectHelper: true,
+        select: function( startDate, endDate, allDay, jsEvent, view ){
+            var stdate = $.fullCalendar.formatDate(startDate,'dd-MM-yyyy');
+            var endate = $.fullCalendar.formatDate(endDate,'dd-MM-yyyy');
+            var starttm = $.fullCalendar.formatDate(startDate,'HH:mm');
+            var endtm = $.fullCalendar.formatDate(endDate,'HH:mm');
+            var day = $.fullCalendar.formatDate(startDate,'dddd'); 
+            var element = $(jsEvent.srcElement);
+        },
+        eventDrop: function( event, dayDelta, minuteDelta, allDay, revertFunc, jsEvent, ui, view ) { 
+            var stdate = $.fullCalendar.formatDate(event.start,'dd-MM-yyyy');
+            var endate = $.fullCalendar.formatDate(event.end,'dd-MM-yyyy');
+            var starttm = $.fullCalendar.formatDate(event.start,'HH:mm');
+            var endtm = $.fullCalendar.formatDate(event.end,'HH:mm');    
+            
+        },
+        eventResize: function( event, dayDelta, minuteDelta, revertFunc, jsEvent, ui, view ) { 
+            var stdate = $.fullCalendar.formatDate(event.start,'dd-MM-yyyy');
+            var endate = $.fullCalendar.formatDate(event.end,'dd-MM-yyyy');
+            var starttm = $.fullCalendar.formatDate(event.start,'HH:mm');
+            var endtm = $.fullCalendar.formatDate(event.end,'HH:mm');    
+        },
+        eventClick: function ( event, jsEvent, view )  {
+        },
+        
+        
+        //eventSources: [ source ],
+        eventRender: function(event, element) {
+           
+        },
+        eventAfterAllRender: function( view ) {
+            
+        }
+
+        
+    });//FIN DE LA CONFIGURACION DEL CALENDARIO
+    calendario.fullCalendar('addEventSource', source);    
+});//FIN
+</script> 
+{% endblock %}

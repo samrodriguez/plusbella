@@ -2,11 +2,13 @@
 
 {% block contenido -%}
     <h2 class="text-center">Listado de pacientes</h2>
+    
+     <a href="{{ path('admin_paciente_new') }}" class="btn btn-success"> Crear nuevo paciente</a>
 
-    <table id = "datable" class="table table-bordered table-hover display dt-responsive">
+    <table id = "datable" class="table table-bordered table-hover display dt-responsive" style="margin-top: 30px">
         <thead>
             <tr>
-                <th>#</th>
+            {#      <th>#</th>  #} 
                 <th>Dui</th>
                 <th>Nombre</th>
                 <th>Ocupación</th>
@@ -20,7 +22,7 @@
         <tbody>
         {% for entity in pacientes %}
             <tr>
-                <td>{{ entity.idpac }}</td>
+             {#     <td>{{ entity.idpac }}</td> #}
                 <td>{{ entity.dui }}</td>
                 <td>{{ entity.pnombre }} {{ entity.snombre }} {{ entity.papellido }} {{ entity.sapellido }}</td>
                 
@@ -46,7 +48,7 @@
         {% endfor %}
         </tbody>
     </table>
-        <a href="{{ path('admin_paciente_new') }}" class="btn btn-success"> Crear nuevo paciente</a>
+       
 
         <ul>
         

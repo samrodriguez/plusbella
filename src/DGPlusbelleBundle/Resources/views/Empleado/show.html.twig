@@ -1,13 +1,13 @@
-{% extends '::base.html.twig' %}
+{% extends 'DGPlusbelleBundle:Layout:general.html.twig' %}
 
-{% block body -%}
+{% block contenido -%}
     <h1>Empleado</h1>
 
-    <table class="record_properties">
+    <table id = "datable" class="table table-bordered table-hover display dt-responsive">
         <tbody>
             <tr>
-                <th>Id</th>
-                <td>{{ entity.id }}</td>
+              {#  <th>Id</th> #}
+              {#   <td>{{ entity.id }}</td> #}
             </tr>
             <tr>
                 <th>Cargo</th>
@@ -33,4 +33,13 @@
     </li>
     <li>{{ form(delete_form) }}</li>
 </ul>
+    
+ <script type="text/javascript">
+            $(document).ready(function() {
+                    $('#datable').DataTable( {
+                            "scrollCollapse": true,
+                            "paging":         true
+                    } );
+            } );
+    </script>           
 {% endblock %}

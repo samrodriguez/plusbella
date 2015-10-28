@@ -27,7 +27,7 @@ class PersonaType extends AbstractType
                     'attr'=>array(
                     'class'=>'form-control'
                     )))
-            ->add('segundoApellido','text',array('label' => 'Segundo nombre',
+            ->add('segundoApellido','text',array('label' => 'Segundo apellido',
                     'attr'=>array(
                     'class'=>'form-control'
                     )))
@@ -47,7 +47,7 @@ class PersonaType extends AbstractType
                     'attr'=>array(
                     'class'=>'form-control'
                     )))
-            ->add('estado')
+           
         ;
     }
     
