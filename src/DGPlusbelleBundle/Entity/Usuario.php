@@ -2,22 +2,23 @@
 
 namespace DGPlusbelleBundle\Entity;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Security\Core\User\AdvancedUserInterface;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
  * Usuario
  *
- * @ORM\Table(name="usuario")
  * @ORM\Entity
+ * @ORM\Table(name="usuario")
  */
-class Usuario implements UserInterface
+class Usuario implements AdvancedUserInterface, \Serializable
 {
     /**
      * @var integer
      *
      * @ORM\Column(name="id", type="integer", nullable=false)
      * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
+     * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $id;
 
@@ -69,6 +70,7 @@ class Usuario implements UserInterface
      */
     private $user_roles;
 
+    private $isEnabled;// = false; 
     /**
      * Constructor
      */
@@ -211,7 +213,7 @@ class Usuario implements UserInterface
     /**
      * Add rol
      *
-     * @param \DGPlusbelleBundle\Entity\Rol $rol
+     * @param \DGPlusbelleBundle\Entity\Rol $userRoles
      *
      * @return Usuario
      */
@@ -221,6 +223,18 @@ class Usuario implements UserInterface
 
         return $this;
     }
+    
+    /**
+     * Remove role
+     *
+     * @param \DGPlusbelleBundle\Entity\Rol $userRoles
+     */
+    public function removeRole(\DGPlusbelleBundle\Entity\Rol $userRoles)
+    {
+        $this->user_roles->removeElement($userRoles);
+    }
+
+    
     
     public function setUserRoles($roles) {
         $this->user_roles = $roles;
@@ -267,4 +281,47 @@ class Usuario implements UserInterface
     /*public function __toString() {
         return $this->username ? $this->username : '';
     }*/
+    
+    /**
+     * @see \Serializable::serialize()
+     */
+    public function serialize()
+    {
+        return serialize(array(
+            $this->id,
+        ));
+    }
+    /**
+     * @see \Serializable::unserialize()
+     */
+    public function unserialize($serialized)
+    {
+        list (
+            $this->id,
+            ) = unserialize($serialized);
+    }
+    
+    public function isAccountNonExpired()
+    {
+            return true;
+    }
+
+    public function isAccountNonLocked()
+    {
+            return  !$this->isEnabled;
+    }
+
+    public function isCredentialsNonExpired()
+    {
+            return true;
+    }
+
+    public function isEnabled()
+    {
+        if ((int)$this->estado == 1)
+        $this->isEnabled = true;
+        else
+        $this->isEnabled  = false;
+        return  $this->isEnabled;
+    }
 }

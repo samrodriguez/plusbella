@@ -14,7 +14,7 @@ security:
             entity: { class: DGPlusbelleBundle\Entity\Usuario, property: username }
         
     firewalls:
-        #Firewalls para ingreso de ABCIS
+        #Firewalls para ingreso de la Plus belle
         login_:
             pattern:  ^/secured/login$
             security: false

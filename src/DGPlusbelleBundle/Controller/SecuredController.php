@@ -68,7 +68,7 @@ class SecuredController extends Controller
     }
 
     /**
-     * @Route("/logout", name="abcis_logout")
+     * @Route("/logout", name="plusbelle_logout")
      */
     public function logoutAction()
     {
