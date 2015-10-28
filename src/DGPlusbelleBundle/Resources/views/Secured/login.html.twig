@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+{% block head -%}
+   {% block meta -%}
+   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   {% endblock %}
+   <title>{% block title %} Plus Belle {% endblock %}</title>
+   {% block css -%}
+   <link href="{{ asset('Resources/bootstrap-3/css/bootstrap.css') }}" rel="stylesheet" media="all"> 
+   <link href="{{ asset('Resources/bootstrap-3/css/docs.css') }}" rel="stylesheet" media="all">
+   {% endblock %}
+   
+   {% block js -%}
+   <script src="{{ asset('Resources/bootstrap-3/js/jquery.min.js') }}"></script>  
+   <script src="{{ asset('Resources/bootstrap-3/js/bootstrap.js') }}"></script>  
+   <script src="{{ asset('Resources/bootstrap-3/js/tooltip.js') }}"></script> 
+   <script src="{{ asset('Resources/bootstrap-3/js/popover.js') }}"></script>  
+   {% endblock %}
+   <style type="text/css">
+    /* The white background content wrapper */
+    .login-form  {
+     margin: 25px auto;
+     padding: 10px;
+     -webkit-border-radius: 10px 10px 10px 10px;
+        -moz-border-radius: 10px 10px 10px 10px;
+             border-radius: 10px 10px 10px 10px;
+     -webkit-box-shadow: 0 1px 2px rgba(0,0,0,.75);
+        -moz-box-shadow: 0 1px 2px rgba(0,0,0,.75);
+             box-shadow: 0 1px 2px rgba(0,0,0,.75);
+     border: 2px solid rgba(0, 0, 0, 0.10); 
+     background-color: rgba(0, 0, 0, 0.90);
+     color: #FFFFFF;
+    }
+    .view-login {
+      background: url('{{ asset('Resources/img/fondo.jpg') }}') no-repeat center center fixed; 
+      -webkit-background-size: cover;
+      -moz-background-size: cover;
+      -o-background-size: cover;
+      background-size: cover;
+    }
+   </style>
+{% endblock %}
+</head>
+<body class="view-login">
+<div class="container-fluid">
+{% block body -%}
+  <div class="row">
+    <div class="col-xs-offset-3 cols-sm-offset-8 col-md-offset-8 col col-lg-offset-8 col-xs-9 cols-sm-4 col-md-4 col col-lg-4">
+    <div class="row login-form">
+        {% block header %}
+        <div class="col-xs-12 cols-sm-12 col-md-12 col col-lg-12">
+            {% block header_pic %}{% endblock %}
+        </div>
+        <div class="col-xs-12 cols-sm-12 col-md-12 col col-lg-12">
+            {% block header_title %}
+            <h4><center>Plus Belle</center></h4>
+            {% endblock %}
+            {% block header_subtitle %}{% endblock %}
+            <br/>
+        </div>
+        {% endblock %}
+        
+        {% block bodycontenido -%}
+        <div class="col-xs-12 cols-sm-12 col-md-12 col col-lg-12" >
+            {% block alert -%}
+                {% if error %}
+                    <div>{{ error.message }}</div>
+                {% endif %}
+            {% endblock %}          
+            <form action="{% block form_action %}{{ path("plusbelle_security_check") }}{% endblock %}" method="post" id="frmLogin">           
+            {% block auth_form %}
+            Username: 
+            <input class="form-control" type="text" id="username" name="_username" value="{{ last_username }}" placeholder="Username" />
+            Password:
+            <input class="form-control" type="password" id="password" name="_password" placeholder="Password"/>
+            {% endblock %}
+            {% block auth_remember_me %}{% endblock %} 
+            
+            {% block auth_ %}
+            <div class="modal-footer">
+            {% block auth_btn %}
+            <button type="submit" class="btn btn-primary" tabindex="3" id="frmSubmit" data-loading-text="Sign in..." autocomplete="off">Sign in</button>
+            {% endblock %} 
+            {% endblock %}
+            <input type="hidden" name="hacerSubmit" id="ihacerSubmit" value="" >
+            {% block content %}     
+            {% endblock %}
+            </div>
+            </form>
+        </div>
+        {% endblock %}
+    </div>
+    </div>
+   </div>    
+{% endblock %}
+</div>
+
+{% block javascripts %}
+<script></script>
+{% endblock %}  
+{% block footer %}{% endblock %}
+</body>
+</html>

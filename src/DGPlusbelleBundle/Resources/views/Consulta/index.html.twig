@@ -1,7 +1,9 @@
-{% extends 'DGPlusbelleBundle:Layout:general.html.twig' %}
+{#{% extends 'DGPlusbelleBundle:Layout:general.html.twig' %}#}
+{% extends 'DGPlusbelleBundle:Layout:layout.html.twig' %}
 
 
 {% block contenido -%}
+    
     <h3 class="modal-title" id="myModalLabel">Consultas del paciente</h3>
     <br>
     <div class="row">
@@ -9,44 +11,85 @@
             Registrar consulta
         </a>
     </div>
-            <br>
-    <div class="row">
-        <table id = "datable" class="table table-bordered table-hover display dt-responsive">
-            <thead>
-                <tr>
-                    <th>N°</th>
-                    <th>Fechaconsulta</th>
-                    <th>Horainicio</th>
-                    <th>Horafin</th>
-                    <th>Observacion</th>
-                    <th>Incapacidad</th>
-                    <th>Actions</th>
-                </tr>
-            </thead>
-            <tbody>
-            {% for key, entity in entities %}
-                <tr>
-                    {#<td><a href="{{ path('admin_consulta_show', { 'id': entity.id }) }}">{{ entity.id }}</a></td>#}
-                    <td>{{key+1 }}</td>
-                    <td>{% if entity.fechaConsulta %}{{ entity.fechaConsulta|date('d/m/Y') }}{% endif %}</td>
-                    <td>{{ entity.horaInicio|date('H:m:s') }}</td>
-                    <td>{{ entity.horaFin|date('H:m:s') }}</td>
-                    <td>{{ entity.observacion }}</td>
-                    <td>{{ entity.incapacidad }}</td>
-                    <td>
-                    <ul>
-                        <li>
-                            <a href="{{ path('admin_consulta_show', { 'id': entity.id }) }}">show</a>
-                        </li>
-                        <li>
-                            <a href="{{ path('admin_consulta_edit', { 'id': entity.id }) }}">edit</a>
-                        </li>
-                    </ul>
-                    </td>
-                </tr>
-            {% endfor %}
-            </tbody>
-        </table>
+            <br><div class="container-fluid">
+            <div class="btn-group btn-group-sm pull-left">
+                  <button data-original-title="add new record" data-toggle="tooltip" data-container="body" title="" id="add-datatables1" class="btn btn-default" role="button">
+                    <i class="fa fa-plus"></i>
+                  </button>
+                </div>
+        
+        <div id="datatables1_wrapper" class="dataTables_wrapper form-inline dt-bootstrap">
+            <div class="table-responsive">
+                <table id = "datatables1" class="table table-noborder table-hover bordered-top dataTable" role="grid" aria-describedby="datatables1_info">
+                <thead>
+                    <tr row="role">
+                        <th>N°</th>
+                        <th>Fechaconsulta</th>
+                        <th>Horainicio</th>
+                        <th>Horafin</th>
+                        <th>Observacion</th>
+                        <th>Incapacidad</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                {% for key, entity in entities %}
+                    <tr>
+                        {#<td><a href="{{ path('admin_consulta_show', { 'id': entity.id }) }}">{{ entity.id }}</a></td>#}
+                        <td>{{key+1 }}</td>
+                        <td>{% if entity.fechaConsulta %}{{ entity.fechaConsulta|date('d/m/Y') }}{% endif %}</td>
+                        <td>{{ entity.horaInicio|date('H:m:s') }}</td>
+                        <td>{{ entity.horaFin|date('H:m:s') }}</td>
+                        <td>{{ entity.observacion }}</td>
+                        <td>{{ entity.incapacidad }}</td>
+                        <td>
+                        <ul>
+                            <li>
+                                <a href="{{ path('admin_consulta_show', { 'id': entity.id }) }}">show</a>
+                            </li>
+                            <li>
+                                <a href="{{ path('admin_consulta_edit', { 'id': entity.id }) }}">edit</a>
+                            </li>
+                        </ul>
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+            </div>
+        {#<div class="table-footer">
+            <div class="pull-left">
+                <div aria-live="polite" role="status" id="datatables1_info" class="dataTables_info">Showing 1 to 10 of 57 entries
+                </div>
+                    
+            </div>
+            <div id="datatables1_paginate" class="dataTables_paginate paging_simple_numbers">
+                <ul class="pagination pagination-circle">
+                    <li id="datatables1_previous" class="paginate_button previous disabled">
+                        <a tabindex="0" data-dt-idx="0" aria-controls="datatables1" href="#">Previous</a>
+                    </li>
+                    <li class="paginate_button active"><a tabindex="0" data-dt-idx="1" aria-controls="datatables1" href="#">1</a>
+                    </li>
+                    <li class="paginate_button "><a tabindex="0" data-dt-idx="2" aria-controls="datatables1" href="#">2</a>
+                    </li>
+                    <li class="paginate_button "><a tabindex="0" data-dt-idx="3" aria-controls="datatables1" href="#">3</a>
+                    </li>
+                    <li class="paginate_button "><a tabindex="0" data-dt-idx="4" aria-controls="datatables1" href="#">4</a>
+                    </li>
+                    <li class="paginate_button "><a tabindex="0" data-dt-idx="5" aria-controls="datatables1" href="#">5</a>
+                    </li>
+                    <li class="paginate_button "><a tabindex="0" data-dt-idx="6" aria-controls="datatables1" href="#">6</a>
+                    </li>
+                    <li id="datatables1_next" class="paginate_button next"><a tabindex="0" data-dt-idx="7" aria-controls="datatables1" href="#">Next</a>
+                    </li>
+                </ul>
+            </div>
+        </div>#}
+        </div>
+            
+        
+            
     </div>
+       
             
     {% endblock %}

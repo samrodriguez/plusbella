@@ -1,24 +1,39 @@
-# To get started with security, check out the documentation:
-# http://symfony.com/doc/current/book/security.html
+imports:
+    - { resource: parameters.yml }
 security:
-
-    # http://symfony.com/doc/current/book/security.html#where-do-users-come-from-user-providers
-    providers:
-        in_memory:
-            memory: ~
-
+    encoders:
+        DGPlusbelleBundle\Entity\Usuario:
+            algorithm: sha512
+            encode-as-base64: true
+            iterations: 10       
+    role_hierarchy:
+        ROLE_ADMIN:    [ ROLE_USUARIO ] 
+        
+    providers:      
+        user_login:
+            entity: { class: DGPlusbelleBundle\Entity\Usuario, property: username }
+        
     firewalls:
-        # disables authentication for assets and the profiler, adapt it according to your needs
-        dev:
-            pattern: ^/(_(profiler|wdt)|css|images|js)/
+        #Firewalls para ingreso de la Plus belle
+        login_:
+            pattern:  ^/secured/login$
             security: false
-
-        main:
             anonymous: ~
-            # activate different ways to authenticate
-
-            # http_basic: ~
-            # http://symfony.com/doc/current/book/security.html#a-configuring-how-your-users-will-authenticate
-
-            # form_login: ~
-            # http://symfony.com/doc/current/cookbook/security/form_login_setup.html
+        secured_area_:
+            pattern: ^/
+            switch_user: { role: ROLE_ADMIN, parameter: _change }
+            form_login:
+                login_path: /secured/login
+                check_path: /secured/login_check
+                #default_target_path: /admin/dashboard
+                #always_use_default_target_path: true 
+                failure_path:      /secured/login
+                #use_referer:         true
+            logout:
+                path: /secured/logout
+                target: /secured/login
+            anonymous: ~        
+    access_control:
+        - { path: ^/*, role:  ROLE_USER } 
+        - { path: ^/secured/*, role: IS_AUTHENTICATED_ANONYMOUSLY }
+      
