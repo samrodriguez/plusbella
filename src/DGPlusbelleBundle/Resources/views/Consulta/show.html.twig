@@ -1,0 +1,48 @@
+{% extends '::base.html.twig' %}
+
+{% block body -%}
+    <h1>Consulta</h1>
+
+    <table class="record_properties">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ entity.id }}</td>
+            </tr>
+            <tr>
+                <th>Fechaconsulta</th>
+                <td>{{ entity.fechaConsulta|date('Y-m-d H:i:s') }}</td>
+            </tr>
+            <tr>
+                <th>Horainicio</th>
+                <td>{{ entity.horaInicio }}</td>
+            </tr>
+            <tr>
+                <th>Horafin</th>
+                <td>{{ entity.horaFin }}</td>
+            </tr>
+            <tr>
+                <th>Observacion</th>
+                <td>{{ entity.observacion }}</td>
+            </tr>
+            <tr>
+                <th>Incapacidad</th>
+                <td>{{ entity.incapacidad }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+        <ul class="record_actions">
+    <li>
+        <a href="{{ path('admin_consulta') }}">
+            Back to the list
+        </a>
+    </li>
+    <li>
+        <a href="{{ path('admin_consulta_edit', { 'id': entity.id }) }}">
+            Edit
+        </a>
+    </li>
+    <li>{{ form(delete_form) }}</li>
+</ul>
+{% endblock %}

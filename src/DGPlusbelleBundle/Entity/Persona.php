@@ -82,12 +82,17 @@ class Persona
      *
      * @ORM\Column(name="estado", type="boolean", nullable=true)
      */
-    private $estado;
+    /*private $estado;*/
 
      /**
      * @ORM\OneToMany(targetEntity="Paciente", mappedBy="persona", cascade={"persist", "remove"})
      */
     private $paciente;
+
+    /**
+     * @ORM\OneToMany(targetEntity="Empleado", mappedBy="persona", cascade={"persist", "remove"})
+     */
+    private $empleado;
 
     function getPaciente() {
         return $this->paciente;
@@ -306,22 +311,22 @@ class Persona
      *
      * @return Persona
      */
-    public function setEstado($estado)
+    /*public function setEstado($estado)
     {
         $this->estado = $estado;
 
         return $this;
-    }
+    }*/
 
     /**
      * Get estado
      *
      * @return boolean
      */
-    public function getEstado()
+    /*public function getEstado()
     {
         return $this->estado;
-    }
+    }*/
     
     public function __toString() {
     return $this->primerNombre.' '.$this->primerApellido;

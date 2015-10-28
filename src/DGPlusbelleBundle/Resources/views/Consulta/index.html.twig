@@ -1,0 +1,52 @@
+{% extends 'DGPlusbelleBundle:Layout:general.html.twig' %}
+
+
+{% block contenido -%}
+    <h3 class="modal-title" id="myModalLabel">Consultas del paciente</h3>
+    <br>
+    <div class="row">
+        <a id="nuevo" href="{{ path('admin_consulta_new') }}"  class="btn btn-primary btn-md" style="float: right">
+            Registrar consulta
+        </a>
+    </div>
+            <br>
+    <div class="row">
+        <table id = "datable" class="table table-bordered table-hover display dt-responsive">
+            <thead>
+                <tr>
+                    <th>N°</th>
+                    <th>Fechaconsulta</th>
+                    <th>Horainicio</th>
+                    <th>Horafin</th>
+                    <th>Observacion</th>
+                    <th>Incapacidad</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for key, entity in entities %}
+                <tr>
+                    {#<td><a href="{{ path('admin_consulta_show', { 'id': entity.id }) }}">{{ entity.id }}</a></td>#}
+                    <td>{{key+1 }}</td>
+                    <td>{% if entity.fechaConsulta %}{{ entity.fechaConsulta|date('d/m/Y') }}{% endif %}</td>
+                    <td>{{ entity.horaInicio|date('H:m:s') }}</td>
+                    <td>{{ entity.horaFin|date('H:m:s') }}</td>
+                    <td>{{ entity.observacion }}</td>
+                    <td>{{ entity.incapacidad }}</td>
+                    <td>
+                    <ul>
+                        <li>
+                            <a href="{{ path('admin_consulta_show', { 'id': entity.id }) }}">show</a>
+                        </li>
+                        <li>
+                            <a href="{{ path('admin_consulta_edit', { 'id': entity.id }) }}">edit</a>
+                        </li>
+                    </ul>
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+            
+    {% endblock %}

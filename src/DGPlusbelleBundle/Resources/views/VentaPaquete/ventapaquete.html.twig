@@ -1,0 +1,69 @@
+{% extends 'DGPlusbelleBundle:Layout:general.html.twig' %}
+
+{% block javascripts_step %}
+    <script type="text/javascript">
+            $(document).ready(function() {
+                    $('#datable').DataTable( {
+                            "scrollCollapse": true,
+                            "paging":         true
+                    } );
+            } );
+    </script>
+{% endblock %}   
+{% block contenido -%}
+    <h1>Venta Paquete</h1>
+    <div class=row>
+        <table id = "datable" class="table table-bordered table-hover display dt-responsive">
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Dui</th>
+                <th>Nombre</th>
+                <th>Ocupación</th>
+                <th>Lugar de trabajo</th>
+                <th>Fecha de nacimiento</th>
+                <th>Referido por</th>
+                
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for entity in pacientes %}
+            <tr>
+                <td>{{ entity.idpac }}</td>
+                <td>{{ entity.dui }}</td>
+                <td>{{ entity.pnombre }} {{ entity.snombre }} {{ entity.papellido }} {{ entity.sapellido }}</td>
+                
+               
+                <td>{{ entity.ocupacion }}</td>
+                <td>{{ entity.lugarTrabajo }}</td>
+                <td>{% if entity.fechaNacimiento %}{{ entity.fechaNacimiento|date('Y-m-d H:i:s') }}{% endif %}</td>
+                <td>{{ entity.referidoPor }}</td>
+                {#<td>{{ entity.personaEmergencia }}</td>
+                <td>{{ entity.telefonoEmergencia }}</td>#}
+                
+                <td>
+                <ul>
+                    <li>
+                        <a href="{{ path('admin_paciente_show', { 'id': entity.idpac }) }}">Mostrar</a>
+                    </li>
+                    <li>
+                        <a href="{{ path('admin_paciente_edit', { 'id': entity.idpac }) }}">Editar</a>
+                    </li>
+                </ul>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    </div>
+    <div class=row>
+
+    </div>
+
+                    <a href="{{ path('admin_ventapaquete_new') }}" class="btn btn-success">
+                Registrar venta
+            </a>
+        
+    {% endblock %}

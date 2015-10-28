@@ -1,0 +1,56 @@
+{% extends 'DGPlusbelleBundle:Layout:general.html.twig' %}
+
+
+{% block contenido -%}
+    <h3 class="modal-title" id="myModalLabel">Paquete vendido</h3>
+    <br>
+    <table class="table table-bordered table-hover display dt-responsive">
+        <tbody>
+            {#<tr>
+                <th>Id</th>
+                <td>{{ entity.id }}</td>
+            </tr>#}
+            <tr>
+                <th>
+                    Nombre
+                </th>
+                <td>{{ entity.paquete.nombre}}</td>
+            </tr>
+            
+            <tr>
+                <th>
+                    Costo
+                </th>
+                <td>${{ entity.paquete.costo|number_format(2, '.', ',') }}</td>
+            </tr>
+            
+            <tr>
+                <th>
+                    Vendido por
+                </th>
+                <td>{{ entity.empleado.primernombre }}  {{entity.empleado.segundonombre}}
+            </tr>
+            
+            <tr>
+                <th>
+                    Fecha de venta
+                </th>
+                <td>{{ entity.fechaVenta|date('d/m/Y') }}</td>
+            </tr>
+            <tr>
+                <th>Fecha de registro</th>
+                <td>{{ entity.fechaRegistro|date('d/m/Y') }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+            <div class="modal-footer">
+                <a href="{{ path('admin_ventapaquete') }}" class="btn btn-default">
+                    Regresar a la lista
+                </a>
+            </div>
+        {#<a href="{{ path('admin_ventapaquete_edit', { 'id': entity.id }) }}">
+            Edit
+        </a>
+    {{ form(delete_form) }}#}
+{% endblock %}
