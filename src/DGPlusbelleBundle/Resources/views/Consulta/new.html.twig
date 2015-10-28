@@ -5,14 +5,143 @@
     <h3 class="modal-title" id="myModalLabel">Registrar consulta</h3>
     
     <br>
+    {{ form_start(form) }}
+        {{ form_errors(form) }}
+            {#  {{ form(form) }}  #}
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-12">
+                        <h3 class="text-center">Paciente</h3>
+                        <br>
+                    </div>
+                </div>
+                {# Formulario de persona #}
 
-    {{ form(form) }}
+                <div class="row">
+                    <div class="col-md-3">
+                        {{ form_row(form.paciente.persona.primerNombre) }}
+                    </div>
+                    <div class="col-md-3">
+                        {{ form_row(form.paciente.persona.segundoNombre) }}
+                    </div>
+                    <div class="col-md-3">
+                        {{ form_row(form.paciente.persona.primerApellido) }}
+                    </div>
+                    <div class="col-md-3">
+                        {{ form_row(form.paciente.persona.segundoApellido) }}
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-3">
+                        {{ form_row(form.paciente.persona.direccion) }}
+                    </div>
+                    <div class="col-md-3">
+                        {{ form_row(form.paciente.persona.telefono) }}
+                    </div>
+                    <div class="col-md-3">
+                        {{ form_row(form.paciente.persona.email) }}
+                    </div>
 
+                {# Formulario de paciente #}
+                    <div class="col-md-3">
+                        {{ form_row(form.paciente.dui) }}
+                    </div>
+                    
+                </div>
+                    <div class="row">
+                        <div class="col-md-3">
+                            {{ form_row(form.paciente.referidoPor) }}
+                        </div>
+                        <div class="col-md-3">
+                            {{ form_row(form.paciente.fechaNacimiento) }}
+                        </div>
+                        <div class="col-md-3">
+                            {{ form_row(form.paciente.estadoCivil) }}
+                        </div>
+                        <div class="col-md-3">
+                            {{ form_row(form.paciente.sexo) }}
+                        </div>
+                       
+                    </div>
+                        
+                    
+                    <div class="row">   
+                        <div class="col-md-2">
+                            {{ form_row(form.paciente.telefonoEmergencia) }}
+                        </div>
+                        <div class="col-md-10">
+                            {{ form_row(form.paciente.ocupacion) }}
+                        </div>
+                    </div>
+                        
+                <div class="row">
+                    <br>
+                    <hr>
+                    <div class="col-md-12">
+                        <h3 class="text-center">Consulta</h3>
+                    </div>
+                </div>
+            
+            {# Formulario de consulta#}
+            <div class="row">
+                <br>
+                <div class="col-md-2">
+                    {{ form_row(form.fechaConsulta) }}
+                </div>
+                
+                <div class="col-md-2">
+                    {{ form_row(form.horaInicio) }}
+                </div>
+                
+                <div class="col-md-2">
+                    {{ form_row(form.horaFin) }}
+                </div>
+                <div class="col-md-3">
+                    {{ form_row(form.tipoConsulta) }}
+                </div>
+                
+                <div class="col-md-3">
+                    {{ form_row(form.tratamiento) }}
+                </div>
+                
+            </div>
+            
+            
+            <div class="row">
+                <br>
+                {#<div class="col-md-3">
+                    {{ form_row(form.cita) }}
+                </div>
+                #}
+                <div class="col-md-3">
+                    {{ form_row(form.incapacidad) }}
+                </div>
+                
+                <div class="col-md-9">
+                    {{ form_row(form.observacion) }}
+                </div>
+            </div>
+            {#
         <ul class="record_actions">
     <li>
         <a href="{{ path('admin_consulta') }}">
             Back to the list
         </a>
     </li>
-</ul>
+</ul>#}
+            
+            <br>
+            <div class="modal-footer">
+                <a href="{{ path('admin_consulta') }}" class="btn btn-default">
+                    Regresar a la lista
+                </a>
+                    {{ form_widget(form._token) }}
+                {{ form_widget(form.submit) }}
+            </div>
+	        
+        
+            
+            
+            
+            
 {% endblock %}

@@ -11,15 +11,15 @@
             </tr>
             <tr>
                 <th>Fechaconsulta</th>
-                <td>{{ entity.fechaConsulta|date('Y-m-d H:i:s') }}</td>
+                <td>{{ entity.fechaConsulta|date('d/m/Y') }}</td>
             </tr>
             <tr>
                 <th>Horainicio</th>
-                <td>{{ entity.horaInicio }}</td>
+                <td>{{ entity.horaInicio|date('H:i:s') }}</td>
             </tr>
             <tr>
                 <th>Horafin</th>
-                <td>{{ entity.horaFin }}</td>
+                <td>{{ entity.horaFin|date('H:i:s') }}</td>
             </tr>
             <tr>
                 <th>Observacion</th>
