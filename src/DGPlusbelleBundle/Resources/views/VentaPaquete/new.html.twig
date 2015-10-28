@@ -1,0 +1,53 @@
+{% extends 'DGPlusbelleBundle:Layout:general.html.twig' %}
+
+
+{% block contenido -%}
+    <h3 class="modal-title" id="myModalLabel">Registrar nueva venta</h3>
+    
+    <br>
+    {# {{ form(form) }} #}
+    {{ form_start(form) }}
+    {{ form_errors(form) }}
+    <div class="row">
+        
+	        <div class="col-md-6" >
+
+	        	{{ form_row(form.paciente)}}
+		
+			</div>
+
+			<div class="col-md-6" >
+	        
+	        	{{ form_row(form.empleado)}}
+		
+			</div>
+
+			
+			<div class="col-md-6" >
+		    	{{ form_row(form.paquete)}}
+		    </div>			
+			<div class="col-md-6" >
+				{{ form_row(form.fechaVenta)}}
+			</div>
+
+		
+
+    </div>
+
+	
+		<br>
+
+		<div class="modal-footer">
+                    <a href="{{ path('admin_ventapaquete') }}" class="btn btn-default">
+                        Regresar a la lista
+                    </a>
+                    {{ form_widget(form.submit) }}
+                </div>
+	        
+        
+	
+
+		{{ form_end(form) }}
+	    
+    
+{% endblock %}

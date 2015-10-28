@@ -1,0 +1,79 @@
+{% extends 'DGPlusbelleBundle:Layout:general.html.twig' %}
+
+{% block javascripts_step %}
+    <script type="text/javascript">
+            $(document).ready(function() {
+                    
+                    $('#datable').DataTable( {
+                            "scrollCollapse": true,
+                            "paging":         true
+                    } );
+
+                    
+            } );
+    </script>
+{% endblock %}
+{% block contenido -%}
+    <h3 class="modal-title" id="myModalLabel">Paquetes vendidos</h3>
+    <br>
+    <div class="row">
+        <a id="nuevo" href="{{ path('admin_ventapaquete_new') }}" class="btn btn-primary btn-md" style="float: right">
+            Registrar venta
+        </a>
+    </div>
+        <br>
+    <div class="row">
+        <table id = "datable" class="table table-bordered table-hover display dt-responsive">
+            <thead>
+                <tr>
+                    <th>N°</th>
+                    <th>Nombre</th>
+                    <th>Costo</th>
+                    <th>Fecha venta</th>
+                    
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for key, entity in entities %}
+                <tr>
+                    <td>{{key+1 }}</td>
+                    <td>{{ entity.empleado.primernombre }} {{ entity.empleado.segundonombre }}  {{entity.empleado.primerapellido}} {{entity.empleado.segundoapellido}}
+                    <td style="text-align: right; padding-right: 10px">${{ entity.paquete.costo|number_format(2, '.', ',') }}
+                    <td style="text-align: right; padding-right: 20px">{% if entity.fechaVenta %}{{ entity.fechaVenta|date('d/m/Y') }}{% endif %}</td>
+                    
+                    <td>
+                    <ul>
+                        <li>
+                            <a href="{{ path('admin_ventapaquete_show', { 'id': entity.id }) }}">show</a>
+                        </li>
+                        <li>
+                            <a href="{{ path('admin_ventapaquete_edit', { 'id': entity.id }) }}">edit</a>
+                        </li>
+                    </ul>
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+
+    </div>
+    <div class="row">
+
+    </div>
+
+                    {#<a href="{{ path('admin_ventapaquete_new') }}" class="btn btn-success">
+                        Registrar venta
+                    </a>#}
+
+                    
+
+
+
+
+            
+        
+    {% endblock %}
+
+
+

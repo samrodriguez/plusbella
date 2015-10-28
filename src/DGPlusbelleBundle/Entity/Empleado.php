@@ -38,7 +38,7 @@ class Empleado
     /**
      * @var \Persona
      *
-     * @ORM\ManyToOne(targetEntity="Persona", inversedBy="empleado", cascade={"persist", "remove"})
+     * @ORM\ManyToOne(targetEntity="Persona")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="persona", referencedColumnName="id")
      * })
@@ -270,6 +270,7 @@ class Empleado
     }
     
     public function __toString() {
+    //return $this->cargo ? $this->cargo : '';
     return $this->persona->getPrimerNombre().' '.$this->persona->getPrimerApellido();
     }
 }
