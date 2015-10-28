@@ -41,10 +41,11 @@ class PacienteType extends AbstractType
                     'attr'=>array(
                     'class'=>'form-control'
                     )))
-            ->add('fechaNacimiento','date',array('label' => 'Fecha de nacimiento',
-                    'attr'=>array(
-                    'class'=>'form-control',
-                    )))
+            ->add('fechaNacimiento', null,
+                  array('label'  => 'Fecha nacimiento',
+                        'widget' => 'single_text',
+                        'attr'   => array('class' => 'form-control input-sm'),
+                       ))
             ->add('referidoPor','text',array('label' => 'Referido por',
                     'attr'=>array(
                     'class'=>'form-control'

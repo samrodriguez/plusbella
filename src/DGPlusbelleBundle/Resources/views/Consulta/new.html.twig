@@ -2,13 +2,18 @@
 
 
 {% block contenido -%}
-    <h3 class="modal-title" id="myModalLabel">Registrar consulta</h3>
     
+    
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <p>Registrar consulta</p>
+    </div>
     <br>
+    <div class="container-fluid">
     {{ form_start(form) }}
         {{ form_errors(form) }}
             {#  {{ form(form) }}  #}
-            <div class="container-fluid">
+            
                 <div class="row">
                     <div class="col-md-12">
                         <h3 class="text-center">Paciente</h3>
@@ -131,7 +136,7 @@
 </ul>#}
             
             <br>
-            <div class="form-grouphide">
+            <div class="form-grouphide" style="margin-bottom:30px;">
                 <a href="{{ path('admin_consulta') }}" class="btn btn-default btn-sm" id="add-datatables1">
                     Regresar a la lista
                 </a>
@@ -140,7 +145,8 @@
             </div>
 	        
         
-            
+       </div>       
+            </div>
             
             
             
