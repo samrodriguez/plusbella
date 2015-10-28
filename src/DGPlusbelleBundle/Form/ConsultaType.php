@@ -18,7 +18,7 @@ class ConsultaType extends AbstractType
             ->add('fechaConsulta', null,
                   array('label'  => 'Fecha consulta',
                         'widget' => 'single_text',
-                        'attr'   => array('class' => 'form-control'),
+                        'attr'   => array('class' => 'form-control input-sm'),
                        ))
             ->add('horaInicio')
             ->add('horaFin')

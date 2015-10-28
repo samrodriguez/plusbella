@@ -28,11 +28,14 @@ class ConsultaController extends Controller
     public function indexAction()
     {
         $em = $this->getDoctrine()->getManager();
-
+        $entity = new Consulta();
+        $form   = $this->createCreateForm($entity);
         $entities = $em->getRepository('DGPlusbelleBundle:Consulta')->findAll();
 
         return array(
             'entities' => $entities,
+            'entity' => $entity,
+            'form'   => $form->createView(),
         );
     }
     /**
@@ -83,7 +86,7 @@ class ConsultaController extends Controller
 
         $form->add('submit', 'submit', array('label' => 'Guardar',
                                                'attr'=>
-                                                        array('class'=>'btn btn-primary')));
+                                                        array('class'=>'btn btn-success btn-sm')));
 
         return $form;
     }
