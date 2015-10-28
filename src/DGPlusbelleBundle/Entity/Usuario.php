@@ -1,16 +1,16 @@
 <?php
 
 namespace DGPlusbelleBundle\Entity;
-
+use Symfony\Component\Security\Core\User\UserInterface;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
  * Usuario
  *
- * @ORM\Table(name="usuario", indexes={@ORM\Index(name="fk_usuario_persona1_idx", columns={"persona"})})
+ * @ORM\Table(name="usuario")
  * @ORM\Entity
  */
-class Usuario
+class Usuario implements UserInterface
 {
     /**
      * @var integer
@@ -59,19 +59,22 @@ class Usuario
      */
     private $persona;
 
+
     /**
-     * @var \Doctrine\Common\Collections\Collection
-     *
-     * @ORM\ManyToMany(targetEntity="Rol", mappedBy="usuario")
+     * @ORM\ManyToMany(targetEntity="Rol")
+     * @ORM\JoinTable(name="rol_usuario",
+     *     joinColumns={@ORM\JoinColumn(name="usuario", referencedColumnName="id")},
+     *     inverseJoinColumns={@ORM\JoinColumn(name="rol", referencedColumnName="id")}
+     * )
      */
-    private $rol;
+    private $user_roles;
 
     /**
      * Constructor
      */
     public function __construct()
     {
-        $this->rol = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->user_roles = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
 
@@ -212,34 +215,56 @@ class Usuario
      *
      * @return Usuario
      */
-    public function addRol(\DGPlusbelleBundle\Entity\Rol $rol)
+    public function addRol(\DGPlusbelleBundle\Entity\Rol $userRoles)
     {
-        $this->rol[] = $rol;
+        $this->user_roles[] = $userRoles;
 
         return $this;
     }
-
-    /**
-     * Remove rol
-     *
-     * @param \DGPlusbelleBundle\Entity\Rol $rol
-     */
-    public function removeRol(\DGPlusbelleBundle\Entity\Rol $rol)
-    {
-        $this->rol->removeElement($rol);
+    
+    public function setUserRoles($roles) {
+        $this->user_roles = $roles;
     }
 
     /**
-     * Get rol
+     * Get user_roles
      *
-     * @return \Doctrine\Common\Collections\Collection
+     * @return Doctrine\Common\Collections\Collection
      */
-    public function getRol()
+    public function getUserRoles()
     {
-        return $this->rol;
+        return $this->user_roles;
+    }
+ 
+    /**
+     * Get roles
+     *
+     * @return Doctrine\Common\Collections\Collection
+     */
+    public function getRoles()
+    {
+        return $this->user_roles->toArray(); //IMPORTANTE: el mecanismo de seguridad de Sf2 requiere ésto como un array
     }
     
-    public function __toString() {
-    return $this->username ? $this->username : '';
+    /**
+     * Compares this user to another to determine if they are the same.
+     *
+     * @param UserInterface $user The user
+     * @return boolean True if equal, false othwerwise.
+     */
+    public function equals(UserInterface $user) {
+        return md5($this->getUsername()) == md5($user->getUsername());
+ 
     }
+ 
+    /**
+     * Erases the user credentials.
+     */
+    public function eraseCredentials() {
+ 
+    }
+    
+    /*public function __toString() {
+        return $this->username ? $this->username : '';
+    }*/
 }
