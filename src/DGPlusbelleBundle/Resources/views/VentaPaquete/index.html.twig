@@ -1,20 +1,91 @@
-{% extends 'DGPlusbelleBundle:Layout:general.html.twig' %}
+{% extends 'DGPlusbelleBundle:Layout:layout.html.twig' %}
 
-{% block javascripts_step %}
-    <script type="text/javascript">
-            $(document).ready(function() {
-                    
-                    $('#datable').DataTable( {
-                            "scrollCollapse": true,
-                            "paging":         true
-                    } );
 
-                    
-            } );
-    </script>
-{% endblock %}
 {% block contenido -%}
-    <h3 class="modal-title" id="myModalLabel">Paquetes vendidos</h3>
+    <div class="panel" data-fill-color="true">
+        <div class="panel-heading">
+            <div class="panel-control pull-right">
+                <a href="#" class="btn btn-icon" data-toggle="panel-refresh" rel="tooltip" data-placement="bottom" title="refresh"><i class="icon-refresh"></i></a>
+                <a href="#" class="btn btn-icon" data-toggle="panel-expand" rel="tooltip" data-placement="bottom" title="expand"><i class="arrow_expand"></i></a>
+                <a href="#" class="btn btn-icon" data-toggle="panel-collapse" rel="tooltip" data-placement="bottom" title="collapse"><i class="icon_minus_alt2"></i></a>
+            </div>
+            <h3 class="panel-title">Lista de paquetes vendidos</h3>
+        </div><!-- /.panel-heading -->
+        <div class="panel-body">
+            <div class="btn-toolbar clearfix" role="toolbar">
+                <div class="btn-group pull-right" style="direction: ltr">
+                    <label class="text-muted" style="margin-right:10px">Selección multiple:</label>
+                    <input id="allowMultipleSelect" type="checkbox" class="js-switch" data-class-name="switchery switchery-alt"><!-- /switcher-flat -->
+                </div>
+                <div class="btn-group btn-group-sm pull-left">
+                    <button data-toggle="tooltip" data-container="body" title="add new record" id="add-datatables1" class="btn btn-default" role="button">
+                        <i class="fa fa-plus"></i>
+                    </button>
+                </div>
+                <div class="btn-group btn-group-sm pull-left">
+                    <button id="edit-datatables1" data-toggle="tooltip" data-container="body" title="edit record" class="btn btn-default datatables1-actions disabled" role="button">
+                        <i class="fa fa-edit"></i>
+                    </button>
+                    <button id="delete-datatables1" data-toggle="tooltip" data-container="body" title="delete record(s)" class="btn btn-default datatables1-actions disabled" role="button">
+                        <i class="fa fa-trash-o"></i>
+                    </button>
+                </div>
+                <div class="btn-group pull-left">
+                    <input id="filterDatatables1" class="form-control input-sm" placeholder="Filtro">
+                </div>
+            </div>
+        </div>
+        <div class="panel-body hide" id="addFormContainer">
+            <form id="formAddDatatables1" action="#" method="POST">
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-md-3">
+                          <div class="form-group">
+                            <input name="addEngine" id="addEngine" class="form-control input-sm" placeholder="Rendering engine" autocomplete="off" required="">
+                          </div>
+                        </div><!-- /.cols -->
+                        <div class="col-md-3">
+                          <div class="form-group">
+                            <input name="addBrowser" id="addBrowser" class="form-control input-sm" placeholder="Browser" autocomplete="off" required="">
+                          </div>
+                        </div><!-- /.cols -->
+                        <div class="col-md-2">
+                          <div class="form-group">
+                            <input name="addPlatform" id="addPlatform" class="form-control input-sm" placeholder="Platform" autocomplete="off" required="">
+                          </div>
+                        </div><!-- /.cols -->
+                        <div class="col-md-2">
+                          <div class="form-group">
+                            <input name="addVersion" id="addVersion" class="form-control input-sm" placeholder="Engine version" autocomplete="off" required="">
+                          </div>
+                        </div><!-- /.cols -->
+                        <div class="col-md-2">
+                          <div class="form-group">
+                            <label class="select select-sm">
+                              <select name="addGrade" id="addGrade" required="">
+                                <option value="">CSS grade</option>
+                                <option value="A"> A </option>
+                                <option value="B"> B </option>
+                                <option value="C"> C </option>
+                                <option value="D"> D </option>
+                                <option value="E"> E </option>
+                                <option value="X"> X </option>
+                                <option value="C/A1"> C/A<sup>1</sup> </option>
+                              </select>
+                            </label>
+                          </div>
+                        </div><!-- /.cols -->
+                    </div><!-- /.row -->
+                </div>
+                <div class="form-grouphide">
+                    <button id="hideAddDatatables1" class="btn btn-default btn-sm">Cancelar</button>
+                    <button type="submit" class="btn btn-success btn-sm">Crear</button>
+                </div><!-- /.form-group -->
+            </form>
+        </div>
+    </div>
+{% endblock %}    
+    {#<h3 class="modal-title" id="myModalLabel">Paquetes vendidos</h3>
     <br>
     <div class="row">
         <a id="nuevo" href="{{ path('admin_ventapaquete_new') }}" class="btn btn-primary btn-md" style="float: right">
@@ -60,7 +131,7 @@
     </div>
     <div class="row">
 
-    </div>
+    </div>#}
 
                     {#<a href="{{ path('admin_ventapaquete_new') }}" class="btn btn-success">
                         Registrar venta
@@ -73,7 +144,9 @@
 
             
         
-    {% endblock %}
 
+{% block javascripts_step %}
+    
+{% endblock %}
 
 

@@ -1,4 +1,4 @@
-{% extends 'DGPlusbelleBundle:Layout:general.html.twig' %}
+{% extends 'DGPlusbelleBundle:Layout:layout.html.twig' %}
 
 
 {% block contenido -%}
@@ -26,8 +26,10 @@
 			<div class="col-md-6" >
 		    	{{ form_row(form.paquete)}}
 		    </div>			
-			<div class="col-md-6" >
-				{{ form_row(form.fechaVenta)}}
+			<div class="form-group col-md-6" >
+                            <div class="input-group input-group-in">
+				{{ form_row(form.fechaVenta, {'attr': {'data-input':'daterangepicker', 'data-single-date-picker':'true', 'data-show-dropdowns':'true'} })}}
+                            </div>    
 			</div>
 
 		
@@ -50,4 +52,8 @@
 		{{ form_end(form) }}
 	    
     
+{% endblock %}
+{% block js -%}
+    {{parent()}}
+    <script src="{{ asset('Resources/wrapkit/scripts/daterangepicker.js') }}"></script>
 {% endblock %}

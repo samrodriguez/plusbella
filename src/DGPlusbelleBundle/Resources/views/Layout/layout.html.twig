@@ -32,7 +32,7 @@
             <link href="http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,400,700,600,300" rel="stylesheet" type="text/css">
             <link rel="stylesheet" href="{{ asset('Resources/wrapkit/styles/bootstrap.css') }}">
             <link rel="stylesheet" href="{{ asset('Resources/wrapkit/styles/dependencies.css') }}">
-            <link rel="stylesheet" href="{{ asset('Resources/wrapkit/styles/components.css') }}">
+            {#<link rel="stylesheet" href="{{ asset('Resources/wrapkit/styles/components.css') }}">#}
             <link rel="stylesheet" href="{{ asset('Resources/wrapkit/styles/wrapkit.css') }}">
             <link rel="stylesheet" href="{{ asset('Resources/wrapkit/styles/demo.css') }}">
         {%- endblock %}
@@ -58,7 +58,7 @@
                               <!-- use .pull-*, couse we need this float on any screen size -->
                               <div class="pull-left">
                                 <a class="navbar-brand" href="" role="logo" aria-label="Logo">
-                                  <img class="logo" src="images/logo/brand-text-dark.png" alt="Brand">
+                                  <img class="logo" src="{{ asset('Resources/wrapkit/images/logo/brand-text-dark.png') }}" alt="Brand">
                                 </a>
                                 <button data-sidebar="toggleVisible" class="btn btn-icon navbar-btn">
                                   <i class="fa fa-bars"></i>
@@ -87,7 +87,7 @@
                                           <li class="media unread">
                                             <a href="#">
                                               <div class="media-left">
-                                                <img class="media-object img-circle" width="32" src="images/dummy/unknown-profile.jpg" alt="user">
+                                                <img class="media-object img-circle" width="32" src="{{ asset('Resources/wrapkit/images/dummy/profile.jpg') }}" alt="user">
                                               </div>
                                               <div class="media-body">
                                                 <p class="pull-right"><small>6m</small></p>
@@ -257,7 +257,7 @@
                             <li class="divider"></li>
                             <li class="nav-header" role="presentation">ACCESO RAPIDO</li>
                             <li class="nav-item" role="presentation">
-                              <a href="layout.html">
+                              <a href="{{path('admin_ventapaquete_new')}}">
                                 <span class="nav-icon"><i class="fa fa-object-group"></i></span>
                                 <span class="nav-text">Venta de paquete a paciente</span>
                               </a>
@@ -405,17 +405,49 @@
                         </div>
                       </aside><!-- /.SIDEBAR -->
                     {% endblock %}
-                    {% block contenido %}
-                        <footer class="footer-wrapper" role="contentinfo">
-                            <div class="footer">
-                                <div class="pull-right text-muted"><small>Currently v1.2</small></div>
-                                <div>Wrapkit Template  &copy; 2015</div>
-                            </div>
-                       </footer><!-- /.FOOTER -->
-                    {% endblock %} 
+                    
+                    <section class="content-wrapper" role="main">
+                        <div class="content">
+                          <div class="content-bar">
+                              <div class="pull-right" role="group">
+                                <a data-toggle="modal" href="#" data-scripts="{{ asset('Resources/wrapkit/_includes/setups.js') }}" data-target="#templateSetup" title="Template Setups" aria-label="template setups" class="btn btn-nofill btn-sm btn-default" href="#"><span class="icon-settings fa-lg text-muted"></span></a>
+                              </div>
+                               {% block bar %}  
+                                    <ul class="breadcrumb breadcrumb-angle">
+                                        <li><a href="#" aria-label="home"><i class="fa fa-home"></i></a></li>
+                                        <li class="active">Dashboard</li>
+                                    </ul>
+                              {% endblock %}   
+                            </div><!-- /.content-bar -->
+                        
+
+                          <div class="content-body">
+                            {% block contenido %}{% endblock %} 
+                         </div><!-- /.content-body -->
+
+
+                          
+
+
+                    <!-- Template Setups -->
+                    <div class="modal fade" id="templateSetup">
+                      <div class="modal-dialog">
+                        <!-- modal-content -->
+                        <div class="modal-content"></div>
+                      </div><!-- /.modal-dialog -->
+                    </div><!-- /.templateSetup -->
+
+
+                  </div><!-- /.content -->
+                </section><!-- /MAIN -->
                 {% endblock %}
                 {% block footer -%} 
-                    
+                    <footer class="footer-wrapper" role="contentinfo">
+                        <div class="footer">
+                            <div class="pull-right text-muted"><small>Currently v1.2</small></div>
+                            <div>Digitality Garage  &copy; 2015</div>
+                        </div>
+                   </footer><!-- /.FOOTER -->
                 {% endblock %}
             </main>    
         {%- endblock %}  
@@ -446,13 +478,13 @@
     <script src="{{ asset('Resources/wrapkit/scripts/select2.js') }}"></script>
     <script src="{{ asset('Resources/wrapkit/scripts/jquery.selectBoxit.js') }}"></script>
     <script src="{{ asset('Resources/wrapkit/scripts/moment.js') }}"></script>
-    <script src="{{ asset('Resources/wrapkit/scripts/daterangepicker.js') }}"></script>
+    {#<script src="{{ asset('Resources/wrapkit/scripts/daterangepicker.js') }}"></script>#}
     <script src="{{ asset('Resources/wrapkit/scripts/jquery-minicolors.js') }}"></script>
     <script src="{{ asset('Resources/wrapkit/scripts/moment.js') }}"></script>
-    <script src="{{ asset('Resources/wrapkit/scripts/fullcalendar.js') }}"></script>
-    <script src="{{ asset('Resources/wrapkit/scripts/clndr.js') }}"></script>
-    <script src="{{ asset('Resources/wrapkit/scripts/dataTables.bootstrap.js') }}"></script>
-    <script src="{{ asset('Resources/wrapkit/scripts/dataTables.tableTools.js') }}"></script>
+    {#<script src="{{ asset('Resources/wrapkit/scripts/fullcalendar.js') }}"></script>
+    <script src="{{ asset('Resources/wrapkit/scripts/clndr.js') }}"></script>#}
+    {#<script src="{{ asset('Resources/wrapkit/scripts/dataTables.bootstrap.js') }}"></script>#}
+    {#<script src="{{ asset('Resources/wrapkit/scripts/dataTables.tableTools.js') }}"></script>#}
     <script src="{{ asset('Resources/wrapkit/scripts/jquery.validate.js') }}"></script>
     <script src="{{ asset('Resources/wrapkit/scripts/bootbox.js') }}"></script>
     <script src="{{ asset('Resources/wrapkit/scripts/toastr.js') }}"></script>
