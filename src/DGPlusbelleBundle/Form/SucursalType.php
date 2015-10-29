@@ -17,20 +17,20 @@ class SucursalType extends AbstractType
         $builder
             ->add('nombre','text',array('label' => 'Nombre',
                     'attr'=>array(
-                    'class'=>'form-control'
+                    'class'=>'form-control input-sm '
                     )))
             ->add('direccion','text',array('label' => 'Dirección',
                     'attr'=>array(
-                    'class'=>'form-control'
+                    'class'=>'form-control input-sm'
                     )))
             ->add('telefono','text',array('label' => 'Telefono',
                     'attr'=>array(
-                    'class'=>'form-control'
+                    'class'=>'form-control input-sm'
                     )))
            // ->add('estado')
             ->add('slug','text',array('label' => 'Slug',
                     'attr'=>array(
-                    'class'=>'form-control'
+                    'class'=>'form-control input-sm'
                     )))
            // ->add('paquete')
            // ->add('tratamiento')

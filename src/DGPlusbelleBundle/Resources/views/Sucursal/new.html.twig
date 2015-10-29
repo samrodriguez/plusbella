@@ -1,30 +1,36 @@
-{% extends 'DGPlusbelleBundle:Layout:layout.html.twig' %}
+
 
 {% block contenido -%}
  
 <div class="panel panel-default">
   <!-- Default panel contents -->
-  <div class="panel-heading"<h1>Nueva Sucursal</h1></div>
+  <div class="panel-heading"><p>Nueva Sucursal</p></div>
   <div class="panel-body">
     {{ form_start(form) }}
     {{ form_errors(form) }}
     
-    <div class="col-xs-12 col-sm-6">
+    <div class="col-xs-12 col-sm-4">
      {{ form_row(form.nombre) }} 
+    </div>
+    <div class="col-xs-12 col-sm-5">
      {{ form_row(form.direccion) }} 
-     {{ form_row(form.telefono) }} 
+    </div>
+    <div class="col-xs-12 col-sm-2">
+     {{ form_row(form.telefono) }}
+    </div>
      {#{{ form_row(form.estado) }} #}
+    <div class="col-xs-12 col-sm-1">
      {{ form_row(form.slug ) }}   
     </div>
     
-   <div class="row">
-         <div class="col-xs-12 col-sm-12">
-             <div class="modal-footer"> 
-                 <a href="{{ path('admin_sucursal') }}" class="btn btn-default">Regresar al listado</a>
+   
+         
+             <div class="form-grouphide"> 
+                 <a href="{{ path('admin_sucursal') }}" class="btn btn-default btn-sm">Cancelar</a>
                 {{ form_widget(form.submit) }}
              </div>
-         </div>
-    </div>
+        
+   
  
  </div>
 {{ form_widget(form._token) }}
