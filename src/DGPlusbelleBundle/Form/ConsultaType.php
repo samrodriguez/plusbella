@@ -15,15 +15,43 @@ class ConsultaType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('fechaConsulta')
+            ->add('fechaConsulta', null,
+                  array('label'  => 'Fecha consulta',
+                        'widget' => 'single_text',
+                        'attr'   => array('class' => 'form-control'),
+                       ))
             ->add('horaInicio')
             ->add('horaFin')
-            ->add('observacion')
-            ->add('incapacidad')
-            ->add('cita')
-            ->add('paciente')
-            ->add('tipoConsulta')
-            ->add('tratamiento')
+            ->add('observacion','text',array('label' => 'Observacion',
+                    'attr'=>array(
+                    'class'=>'form-control'
+                    )))
+            ->add('incapacidad', 'choice', array(
+                    'choices'  => array('1' => 'Sí', '0' => 'No'),
+                    'multiple' => false,
+                'expanded'=>'true',
+                    'required' => true,
+                    
+                
+                ))
+            //->add('cita')
+            ->add('paciente',new PacienteType())
+            ->add('tipoConsulta','entity', array( 'label' => 'Tipo de consulta',
+                         'empty_value'   => 'Seleccione un tipo de consulta...',
+                         'class'         => 'DGPlusbelleBundle:TipoConsulta',
+                         
+                         'attr'=>array(
+                         'class'=>'form-control'
+                         )
+                       ))
+            ->add('tratamiento','entity', array( 'label' => 'Tratamiento',
+                         'empty_value'   => 'Seleccione un tratamiento...',
+                         'class'         => 'DGPlusbelleBundle:Tratamiento',
+                         
+                         'attr'=>array(
+                         'class'=>'form-control'
+                         )
+                       ))
         ;
     }
     

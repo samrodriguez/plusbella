@@ -2,7 +2,7 @@ dg_plusbelle_homepage:
     path:     /hello/{name}
     defaults: { _controller: DGPlusbelleBundle:Default:index }
 
-ABCAnnotations:
+DGAnnotations:
     resource: "@DGPlusbelleBundle/Controller/"
     prefix:   /
     type:     annotation

@@ -1,25 +1,177 @@
-{% extends 'DGPlusbelleBundle:Layout:general.html.twig' %}
+{% extends 'DGPlusbelleBundle:Layout:layout.html.twig' %}
 
 {% block contenido -%}
-    <h1>Sucursales</h1>
+ 
+ <!-- ============================================
+    MAIN CONTENT SECTION
+    =============================================== -->
+    <section class="content-wrapper" role="main">
+      <div class="content">
+        <div class="content-bar">
+          <div class="pull-right" role="group">
+            <a data-toggle="modal" href="#" data-scripts="_includes/setups.js" data-target="#templateSetup" title="Template Setups" aria-label="template setups" class="btn btn-nofill btn-sm btn-default" href="#"><span class="icon-settings fa-lg text-muted"></span></a>
+          </div>
+          <ul class="breadcrumb breadcrumb-angle">
+            <li><a href="#" aria-label="home"><i class="fa fa-home"></i></a></li>
+            <li><a href="#">Tables</a></li>
+            <li class="active">Sucursales</li>
+          </ul>
+        </div><!-- /.content-bar -->
 
-     <a href="{{ path('admin_sucursal_new') }}" class="btn btn-success " > Crear nueva sucursal</a>
 
-    <table id = "datable" class="table table-bordered table-hover display dt-responsive" style="margin-top: 30px" >
-        <thead>
-        <thead>
-            <tr>
-               {# <th>#</th> #}
+        <div class="content-body">
+          <div class="panel" data-fill-color="true">
+            <div class="panel-heading">
+              <div class="panel-control pull-right">
+                <a href="#" class="btn btn-icon" data-toggle="panel-refresh" rel="tooltip" data-placement="bottom" title="refresh"><i class="icon-refresh"></i></a>
+                <a href="#" class="btn btn-icon" data-toggle="panel-expand" rel="tooltip" data-placement="bottom" title="expand"><i class="arrow_expand"></i></a>
+                <a href="#" class="btn btn-icon" data-toggle="panel-collapse" rel="tooltip" data-placement="bottom" title="collapse"><i class="icon_minus_alt2"></i></a>
+              </div>
+              <h3 class="panel-title">Sucursales</h3>
+            </div><!-- /.panel-heading -->
+
+            <div class="panel-body">
+              <div class="btn-toolbar clearfix" role="toolbar">
+                <div class="btn-group pull-right" style="direction: ltr">
+                  <label class="text-muted" style="margin-right:10px">Multiple select:</label>
+                  <input id="allowMultipleSelect" type="checkbox" class="js-switch" data-class-name="switchery switchery-alt"><!-- /switcher-flat -->
+                </div>
+
+                <div class="btn-group btn-group-sm pull-left">
+                  <button data-toggle="tooltip" data-container="body" title="add new record" id="add-datatables1" class="btn btn-default" role="button">
+                    <i class="fa fa-plus"></i>
+                  </button>
+                </div>
+                <div class="btn-group btn-group-sm pull-left">
+                  <button id="edit-datatables1" data-toggle="tooltip" data-container="body" title="edit record" class="btn btn-default datatables1-actions disabled" role="button">
+                    <i class="fa fa-edit"></i>
+                  </button>
+                  <button id="delete-datatables1" data-toggle="tooltip" data-container="body" title="delete record(s)" class="btn btn-default datatables1-actions disabled" role="button">
+                    <i class="fa fa-trash-o"></i>
+                  </button>
+                </div>
+                <div class="btn-group pull-left">
+                  <input id="filterDatatables1" class="form-control input-sm" placeholder="Filter">
+                </div>
+              </div><!-- /btn-toolbar -->
+            </div><!-- /.panel-body -->
+
+            <div class="panel-body hide" id="addFormContainer">
+              <form id="formAddDatatables1" action="#" method="POST">
+                <div class="form-group">
+                  <p class="lead">Add new record</p>
+                  <div class="row">
+                    <div class="col-md-3">
+                      <div class="form-group">
+                        <input name="addEngine" id="addEngine" class="form-control input-sm" placeholder="Rendering engine" autocomplete="off" required="">
+                      </div>
+                    </div><!-- /.cols -->
+                    <div class="col-md-3">
+                      <div class="form-group">
+                        <input name="addBrowser" id="addBrowser" class="form-control input-sm" placeholder="Browser" autocomplete="off" required="">
+                      </div>
+                    </div><!-- /.cols -->
+                    <div class="col-md-2">
+                      <div class="form-group">
+                        <input name="addPlatform" id="addPlatform" class="form-control input-sm" placeholder="Platform" autocomplete="off" required="">
+                      </div>
+                    </div><!-- /.cols -->
+                    <div class="col-md-2">
+                      <div class="form-group">
+                        <input name="addVersion" id="addVersion" class="form-control input-sm" placeholder="Engine version" autocomplete="off" required="">
+                      </div>
+                    </div><!-- /.cols -->
+                    <div class="col-md-2">
+                      <div class="form-group">
+                        <label class="select select-sm">
+                          <select name="addGrade" id="addGrade" required="">
+                            <option value="">CSS grade</option>
+                            <option value="A"> A </option>
+                            <option value="B"> B </option>
+                            <option value="C"> C </option>
+                            <option value="D"> D </option>
+                            <option value="E"> E </option>
+                            <option value="X"> X </option>
+                            <option value="C/A1"> C/A<sup>1</sup> </option>
+                          </select>
+                        </label>
+                      </div>
+                    </div><!-- /.cols -->
+                  </div><!-- /.row -->
+                </div><!-- /.form-group -->
+
+                <div class="form-grouphide">
+                  <button id="hideAddDatatables1" class="btn btn-default btn-sm">Cancel</button>
+                  <button type="submit" class="btn btn-success btn-sm">Create</button>
+                </div><!-- /.form-group -->
+              </form><!-- /#formAddDatatables1 -->
+            </div><!-- /.panel-body -->
+
+            <div class="panel-body hide" id="editFormContainer">
+              <form id="formEditDatatables1" action="#" method="POST">
+                <div class="form-group">
+                  <p class="lead">Edit selected row</p>
+                  <div class="row">
+                    <div class="col-md-3">
+                      <div class="form-group">
+                        <input type="hidden" name="datatables1ID" id="datatables1ID">
+                        <input name="editEngine" id="editEngine" class="form-control input-sm" placeholder="Rendering engine" autocomplete="off" required="">
+                      </div>
+                    </div><!-- /.cols -->
+                    <div class="col-md-3">
+                      <div class="form-group">
+                        <input name="editBrowser" id="editBrowser" class="form-control input-sm" placeholder="Browser" autocomplete="off" required="">
+                      </div>
+                    </div><!-- /.cols -->
+                    <div class="col-md-2">
+                      <div class="form-group">
+                        <input name="editPlatform" id="editPlatform" class="form-control input-sm" placeholder="Platform" autocomplete="off" required="">
+                      </div>
+                    </div><!-- /.cols -->
+                    <div class="col-md-2">
+                      <div class="form-group">
+                        <input name="editVersion" id="editVersion" class="form-control input-sm" placeholder="Engine version" autocomplete="off" required="">
+                      </div>
+                    </div><!-- /.cols -->
+                    <div class="col-md-2">
+                      <div class="form-group">
+                        <label class="select select-sm">
+                          <select name="editGrade" id="editGrade" required="">
+                            <option value="">CSS grade</option>
+                            <option value="A"> A </option>
+                            <option value="B"> B </option>
+                            <option value="C"> C </option>
+                            <option value="D"> D </option>
+                            <option value="E"> E </option>
+                            <option value="X"> X </option>
+                            <option value="C/A1"> C/A<sup>1</sup> </option>
+                          </select>
+                        </label>
+                      </div>
+                    </div><!-- /.cols -->
+                  </div><!-- /.row -->
+                </div><!-- /.form-group -->
+
+                <div class="form-group">
+                  <button id="hideEditDatatables1" class="btn btn-default btn-sm">Cancel</button>
+                  <button type="submit" class="btn btn-primary btn-sm">Save Change</button>
+                </div><!-- /.form-group -->
+              </form><!-- /#formAddDatatables1 -->
+            </div><!-- /.panel-body -->
+
+            <!-- datatables1 -->
+            <table id="datatables1" class="table table-noborder table-hover bordered-top">
+              <thead>
                 <th>Nombre</th>
                 <th>Dirección</th>
                 <th>Telefono</th>
                 <th>Estado</th>
                 <th>Slug</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
-        <tbody>
-        {% for entity in entities %}
+                <th>Acción</th>
+              </thead>
+
+              <tbody>
+                 {% for entity in entities %}
             <tr>
             {#      <td><a href="{{ path('admin_sucursal_show', { 'id': entity.id }) }}">{{ entity.id }}</a></td> #}
                 <td>{{ entity.nombre }}</td>
@@ -39,18 +191,73 @@
                 </td>
             </tr>
         {% endfor %}
-        </tbody>
-    </table>
-               
-                
-      
-    
-    <script type="text/javascript">
+                  
+              </tbody>
+              
+              <tfoot>
+                <th>Nombre</th>
+                <th>Dirección</th>
+                <th>Telefono</th>
+                <th>Estado</th>
+                <th>Slug</th>
+                <th>Acción</th>  
+              </tfoot>
+
+            </table>
+          </div><!-- /.panel -->
+          
+          <a href="{{ path('admin_sucursal_new') }}" class="btn btn-success " > Crear nueva sucursal</a>
+          
+    <!-- Template Setups -->
+        <div class="modal fade" id="templateSetup">
+          <div class="modal-dialog">
+            <!-- modal-content -->
+            <div class="modal-content"></div>
+          </div><!-- /.modal-dialog -->
+        </div><!-- /.templateSetup -->
+
+      </div><!-- /.content -->
+    </section><!-- /MAIN -->      
+
+   </section><!-- /MAIN --> 
+
+   
+
+
+     
+
+  <!-- COMPONENTS -->
+  <script src="{{ asset('Resources/wrapkit/scripts/dataTables.bootstrap.js') }}"></script>
+  <script src="{{ asset('Resources/wrapkit/scripts/dataTables.tableTools.js') }}"></script>
+  <!-- <script src="scripts/jquery.validate.js"></script>
+  <script src="scripts/bootbox.js"></script> -->
+  <!-- END COMPONENTS -->
+
+  <!-- DUMMY: Use for demo -->
+  <script src="{{ asset('Resources/wrapkit/scripts/demo/table-datatables-extras.js') }}"></script>
+  <script src="{{ asset('Resources/wrapkit/scripts/demo/table-datatables-demo.js') }}"></script>
+  
+  
+  
+  {% block javascripts_step %}
+   <script type="text/javascript">
             $(document).ready(function() {
-                    $('#datable').DataTable( {
+                    $('#datatables1').DataTable( {
                             "scrollCollapse": true,
                             "paging":         true
                     } );
             } );
-    </script>     
-    {% endblock %}
+    </script>  
+    
+      <script>
+    (function(b,o,i,l,e,r){b.GoogleAnalyticsObject=l;b[l]||(b[l]=
+      function(){(b[l].q=b[l].q||[]).push(arguments)});b[l].l=+new Date;
+    e=o.createElement(i);r=o.getElementsByTagName(i)[0];
+    e.src='//www.google-analytics.com/analytics.js';
+    r.parentNode.insertBefore(e,r)}(window,document,'script','ga'));
+    ga('create','UA-48454066-1');ga('send','pageview');
+     </script>
+  {% endblock %} 
+  
+
+   {% endblock %}

@@ -45,11 +45,16 @@ class ConsultaController extends Controller
     public function createAction(Request $request)
     {
         $entity = new Consulta();
+        
+        
         $form = $this->createCreateForm($entity);
         $form->handleRequest($request);
 
         if ($form->isValid()) {
             $em = $this->getDoctrine()->getManager();
+            $paciente = $entity->getPaciente();
+        
+            $paciente->setEstado(true);
             $em->persist($entity);
             $em->flush();
 
@@ -76,7 +81,9 @@ class ConsultaController extends Controller
             'method' => 'POST',
         ));
 
-        $form->add('submit', 'submit', array('label' => 'Create'));
+        $form->add('submit', 'submit', array('label' => 'Guardar',
+                                               'attr'=>
+                                                        array('class'=>'btn btn-primary')));
 
         return $form;
     }

@@ -69,7 +69,7 @@ class Consulta
     /**
      * @var \Paciente
      *
-     * @ORM\ManyToOne(targetEntity="Paciente")
+     * @ORM\ManyToOne(targetEntity="Paciente", inversedBy="consulta", cascade={"persist", "remove"})
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="paciente", referencedColumnName="id")
      * })
