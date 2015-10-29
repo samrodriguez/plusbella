@@ -1,6 +1,3 @@
-{% extends 'DGPlusbelleBundle:Layout:layout.html.twig' %}
-
-
 {% block contenido -%}
     <h3 class="modal-title" id="myModalLabel">Registrar nueva venta</h3>
     
@@ -52,8 +49,4 @@
 		{{ form_end(form) }}
 	    
     
-{% endblock %}
-{% block js -%}
-    {{parent()}}
-    <script src="{{ asset('Resources/wrapkit/scripts/daterangepicker.js') }}"></script>
 {% endblock %}

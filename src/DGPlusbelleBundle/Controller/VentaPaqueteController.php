@@ -29,11 +29,14 @@ class VentaPaqueteController extends Controller
     public function indexAction()
     {
         $em = $this->getDoctrine()->getManager();
-
+        $entity = new VentaPaquete();
+        $form   = $this->createCreateForm($entity);
         $entities = $em->getRepository('DGPlusbelleBundle:VentaPaquete')->findAll();
 
         return array(
             'entities' => $entities,
+            'entity' => $entity,
+            'form'   => $form->createView(),
         );
     }
     /**
@@ -80,7 +83,7 @@ class VentaPaqueteController extends Controller
             $em->persist($entity);
             $em->flush();
 
-            return $this->redirect($this->generateUrl('admin_ventapaquete_show', array('id' => $entity->getId())));
+            return $this->redirect($this->generateUrl('admin_ventapaquete'));
         }
 
         return array(
