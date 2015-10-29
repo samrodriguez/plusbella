@@ -29,20 +29,20 @@
                 
 
                 <div class="btn-group btn-group-sm pull-left">
-                  <button data-toggle="tooltip" data-container="body" title="add new record" id="add-datatables1" class="btn btn-default" role="button">
+                  <button data-toggle="tooltip" data-container="body" title="Nuevo registro" id="add-datatables1" class="btn btn-default" role="button">
                     <i class="fa fa-plus"></i>
                   </button>
                 </div>
                 <div class="btn-group btn-group-sm pull-left">
-                  <button id="edit-datatables1" data-toggle="tooltip" data-container="body" title="edit record" class="btn btn-default datatables1-actions disabled" role="button">
+                  <button id="edit-datatables1" data-toggle="tooltip" data-container="body" title="Editar egistro" class="btn btn-default datatables1-actions disabled" role="button">
                     <i class="fa fa-edit"></i>
                   </button>
-                  <button id="delete-datatables1" data-toggle="tooltip" data-container="body" title="delete record(s)" class="btn btn-default datatables1-actions disabled" role="button">
+                  <button id="delete-datatables1" data-toggle="tooltip" data-container="body" title="Borrar registro" class="btn btn-default datatables1-actions disabled" role="button">
                     <i class="fa fa-trash-o"></i>
                   </button>
                 </div>
                 <div class="btn-group pull-left">
-                  <input id="filterDatatables1" class="form-control input-sm" placeholder="Filter">
+                  <input id="filterDatatables1" class="form-control input-sm" placeholder="Buscar">
                 </div>
               </div><!-- /btn-toolbar -->
             </div><!-- /.panel-body -->
@@ -53,9 +53,8 @@
 
             <!-- datatables1 -->
             
-          </div><!-- /.panel -->
-
-          <table id = "datatables1" class="table table-noborder table-hover bordered-top dataTable" role="grid" aria-describedby="datatables1_info">
+            
+            <table id = "datatables1" class="table table-noborder table-hover bordered-top dataTable" role="grid" aria-describedby="datatables1_info">
                     <thead>
                         <tr row="role">
                             <th>N°</th>
@@ -91,6 +90,10 @@
                     {% endfor %}
                     </tbody>
                 </table>
+            
+          </div><!-- /.panel -->
+
+          
       
     
     
@@ -142,7 +145,7 @@
                     "language": {
                     "info": "Mostrando página _PAGE_ de _PAGES_",
                     "infoEmpty": "",
-                    "emptyTable": "No se encontraron afiliados",
+                    "emptyTable": "No se encontraron registros",
                     "paginate": { 
                         "next": "Siguiente",
                         "previous": "Antetior"
@@ -154,12 +157,23 @@
                     
         });
         $('#datatables1_filter').hide();
-        $('#datatables1>tr>td').on('click', function(event) {
-            alert('dsv');
+        $('#datatables1>tbody>tr').on('click', function(event) {
+            $(this).addClass("active");
+            $("#edit-datatables1").removeClass("disabled");
+            $("#delete-datatables1").removeClass("disabled");
         });
         
             });
             
+            
+            $('#dgplusbellebundle_consulta_paciente_fechaNacimiento, #dgplusbellebundle_consulta_fechaConsulta').daterangepicker({
+                singleDatePicker: true,
+                showDropdowns: true
+            } 
+            
+                //var years = moment().diff(start, 'years');
+                //alert("You are " + years + " years old.");
+            );             
             
         </script>
     {% endblock %}

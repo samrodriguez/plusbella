@@ -27,12 +27,16 @@ class SucursalController extends Controller
      */
     public function indexAction()
     {
+        $entity = new Sucursal();
+        $form   = $this->createCreateForm($entity);
         $em = $this->getDoctrine()->getManager();
 
         $entities = $em->getRepository('DGPlusbelleBundle:Sucursal')->findAll();
 
         return array(
             'entities' => $entities,
+            'entity' => $entity,
+            'form'   => $form->createView(),
         );
     }
     /**
@@ -54,7 +58,7 @@ class SucursalController extends Controller
             $em->persist($entity);
             $em->flush();
 
-            return $this->redirect($this->generateUrl('admin_sucursal_show', array('id' => $entity->getId())));
+            return $this->redirect($this->generateUrl('admin_sucursal', array('id' => $entity->getId())));
         }
 
         return array(
@@ -79,7 +83,7 @@ class SucursalController extends Controller
 
         $form->add('submit', 'submit', array('label' => 'Guardar',
                                                'attr'=>
-                                                        array('class'=>'btn btn-primary')));
+                                                        array('class'=>'btn btn-success btn-sm')));
 
         return $form;
     }

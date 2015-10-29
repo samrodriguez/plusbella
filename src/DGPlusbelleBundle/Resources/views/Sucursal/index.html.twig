@@ -5,18 +5,7 @@
  <!-- ============================================
     MAIN CONTENT SECTION
     =============================================== -->
-    <section class="content-wrapper" role="main">
-      <div class="content">
-        <div class="content-bar">
-          <div class="pull-right" role="group">
-            <a data-toggle="modal" href="#" data-scripts="_includes/setups.js" data-target="#templateSetup" title="Template Setups" aria-label="template setups" class="btn btn-nofill btn-sm btn-default" href="#"><span class="icon-settings fa-lg text-muted"></span></a>
-          </div>
-          <ul class="breadcrumb breadcrumb-angle">
-            <li><a href="#" aria-label="home"><i class="fa fa-home"></i></a></li>
-            <li><a href="#">Tables</a></li>
-            <li class="active">Sucursales</li>
-          </ul>
-        </div><!-- /.content-bar -->
+ 
 
 
         <div class="content-body">
@@ -32,15 +21,11 @@
 
             <div class="panel-body">
               <div class="btn-toolbar clearfix" role="toolbar">
-                <div class="btn-group pull-right" style="direction: ltr">
-                  <label class="text-muted" style="margin-right:10px">Multiple select:</label>
-                  <input id="allowMultipleSelect" type="checkbox" class="js-switch" data-class-name="switchery switchery-alt"><!-- /switcher-flat -->
-                </div>
-
+               
                 <div class="btn-group btn-group-sm pull-left">
-                  <button data-toggle="tooltip" data-container="body" title="add new record" id="add-datatables1" class="btn btn-default" role="button">
+                   <button data-toggle="tooltip" data-container="body" title="Nueva sucursal" id="add-datatables1" class="btn btn-default" role="button">
                     <i class="fa fa-plus"></i>
-                  </button>
+                      </button> 
                 </div>
                 <div class="btn-group btn-group-sm pull-left">
                   <button id="edit-datatables1" data-toggle="tooltip" data-container="body" title="edit record" class="btn btn-default datatables1-actions disabled" role="button">
@@ -57,54 +42,7 @@
             </div><!-- /.panel-body -->
 
             <div class="panel-body hide" id="addFormContainer">
-              <form id="formAddDatatables1" action="#" method="POST">
-                <div class="form-group">
-                  <p class="lead">Add new record</p>
-                  <div class="row">
-                    <div class="col-md-3">
-                      <div class="form-group">
-                        <input name="addEngine" id="addEngine" class="form-control input-sm" placeholder="Rendering engine" autocomplete="off" required="">
-                      </div>
-                    </div><!-- /.cols -->
-                    <div class="col-md-3">
-                      <div class="form-group">
-                        <input name="addBrowser" id="addBrowser" class="form-control input-sm" placeholder="Browser" autocomplete="off" required="">
-                      </div>
-                    </div><!-- /.cols -->
-                    <div class="col-md-2">
-                      <div class="form-group">
-                        <input name="addPlatform" id="addPlatform" class="form-control input-sm" placeholder="Platform" autocomplete="off" required="">
-                      </div>
-                    </div><!-- /.cols -->
-                    <div class="col-md-2">
-                      <div class="form-group">
-                        <input name="addVersion" id="addVersion" class="form-control input-sm" placeholder="Engine version" autocomplete="off" required="">
-                      </div>
-                    </div><!-- /.cols -->
-                    <div class="col-md-2">
-                      <div class="form-group">
-                        <label class="select select-sm">
-                          <select name="addGrade" id="addGrade" required="">
-                            <option value="">CSS grade</option>
-                            <option value="A"> A </option>
-                            <option value="B"> B </option>
-                            <option value="C"> C </option>
-                            <option value="D"> D </option>
-                            <option value="E"> E </option>
-                            <option value="X"> X </option>
-                            <option value="C/A1"> C/A<sup>1</sup> </option>
-                          </select>
-                        </label>
-                      </div>
-                    </div><!-- /.cols -->
-                  </div><!-- /.row -->
-                </div><!-- /.form-group -->
-
-                <div class="form-grouphide">
-                  <button id="hideAddDatatables1" class="btn btn-default btn-sm">Cancel</button>
-                  <button type="submit" class="btn btn-success btn-sm">Create</button>
-                </div><!-- /.form-group -->
-              </form><!-- /#formAddDatatables1 -->
+              {% include 'DGPlusbelleBundle:Sucursal:new.html.twig' %}
             </div><!-- /.panel-body -->
 
             <div class="panel-body hide" id="editFormContainer">
@@ -194,19 +132,19 @@
                   
               </tbody>
               
-              <tfoot>
+        <!--    <tfoot>
                 <th>Nombre</th>
                 <th>Dirección</th>
                 <th>Telefono</th>
                 <th>Estado</th>
                 <th>Slug</th>
                 <th>Acción</th>  
-              </tfoot>
+              </tfoot>     -->
 
             </table>
           </div><!-- /.panel -->
           
-          <a href="{{ path('admin_sucursal_new') }}" class="btn btn-success " > Crear nueva sucursal</a>
+     <!--     <a href="{{ path('admin_sucursal_new') }}" class="btn btn-success " > Crear nueva sucursal</a> -->
           
     <!-- Template Setups -->
         <div class="modal fade" id="templateSetup">
@@ -217,47 +155,62 @@
         </div><!-- /.templateSetup -->
 
       </div><!-- /.content -->
-    </section><!-- /MAIN -->      
-
-   </section><!-- /MAIN --> 
-
    
 
 
-     
-
-  <!-- COMPONENTS -->
-  <script src="{{ asset('Resources/wrapkit/scripts/dataTables.bootstrap.js') }}"></script>
-  <script src="{{ asset('Resources/wrapkit/scripts/dataTables.tableTools.js') }}"></script>
-  <!-- <script src="scripts/jquery.validate.js"></script>
-  <script src="scripts/bootbox.js"></script> -->
-  <!-- END COMPONENTS -->
-
-  <!-- DUMMY: Use for demo -->
-  <script src="{{ asset('Resources/wrapkit/scripts/demo/table-datatables-extras.js') }}"></script>
-  <script src="{{ asset('Resources/wrapkit/scripts/demo/table-datatables-demo.js') }}"></script>
-  
-  
-  
+ 
   {% block javascripts_step %}
-   <script type="text/javascript">
-            $(document).ready(function() {
-                    $('#datatables1').DataTable( {
-                            "scrollCollapse": true,
-                            "paging":         true
-                    } );
-            } );
-    </script>  
-    
-      <script>
-    (function(b,o,i,l,e,r){b.GoogleAnalyticsObject=l;b[l]||(b[l]=
-      function(){(b[l].q=b[l].q||[]).push(arguments)});b[l].l=+new Date;
-    e=o.createElement(i);r=o.getElementsByTagName(i)[0];
-    e.src='//www.google-analytics.com/analytics.js';
-    r.parentNode.insertBefore(e,r)}(window,document,'script','ga'));
-    ga('create','UA-48454066-1');ga('send','pageview');
-     </script>
-  {% endblock %} 
+      
+       <script>
+            $(document).ready(function(){
+                
+                $("#add-datatables1").click(function(){
+                    if($("#addFormContainer").hasClass("hide")){
+                        $("#addFormContainer").removeClass("hide");
+                    }
+                    else{
+                        $("#addFormContainer").addClass("hide");
+                    }
+
+                });
+                
+                $('#filterDatatables1').on('keyup', function(event) {
+                    var filtro = $(this).val(); 
+                    //alert(filtro);
+                    $('#datatables1_filter>label>input').val($(this).val());
+                    $('#datatables1_filter>label>input').keyup();
+
+                });
+                
+                
+                $('#datatables1').DataTable({ 
+                    searching:true,
+                    "language": {
+                    "info": "Mostrando página _PAGE_ de _PAGES_",
+                    "infoEmpty": "",
+                    "emptyTable": "No se encontraron afiliados",
+                    "paginate": { 
+                        "next": "Siguiente",
+                        "previous": "Antetior"
+                    },
+                    "processing": "Procesando petición...",
+                    "search": "Buscar registros:",
+                    "lengthMenu": "Mostrar _MENU_ registros"
+                },          
+                    
+        });
+        $('#datatables1_filter').hide();
+        $('#datatables1>tr>td').on('click', function(event) {
+            alert('dsv');
+        });
+        
+            });
+            
+            
+        </script>
+
+
+    {% endblock %} 
   
 
    {% endblock %}
