@@ -44,7 +44,7 @@ class SucursalController extends Controller
      *
      * @Route("/", name="admin_sucursal_create")
      * @Method("POST")
-     * @Template("DGPlusbelleBundle:Sucursal:new.html.twig")
+     * @Template("DGPlusbelleBundle:Sucursal:index.html.twig")
      */
     public function createAction(Request $request)
     {
@@ -140,6 +140,11 @@ class SucursalController extends Controller
      */
     public function editAction($id)
     {
+        
+        if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') {
+            //echo "Es una petición AJAX";
+        }
+        
         $em = $this->getDoctrine()->getManager();
 
         $entity = $em->getRepository('DGPlusbelleBundle:Sucursal')->find($id);
@@ -172,7 +177,9 @@ class SucursalController extends Controller
             'method' => 'PUT',
         ));
 
-        $form->add('submit', 'submit', array('label' => 'Update'));
+        $form->add('submit', 'submit', array('label' => 'Modificar',
+                                               'attr'=>
+                                                        array('class'=>'btn btn-success btn-sm')));
 
         return $form;
     }
@@ -200,7 +207,7 @@ class SucursalController extends Controller
         if ($editForm->isValid()) {
             $em->flush();
 
-            return $this->redirect($this->generateUrl('admin_sucursal_edit', array('id' => $id)));
+            return $this->redirect($this->generateUrl('admin_sucursal', array('id' => $id)));
         }
 
         return array(

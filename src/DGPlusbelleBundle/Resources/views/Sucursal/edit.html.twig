@@ -1,16 +1,59 @@
-{% extends 'DGPlusbelleBundle:Layout:layout.html.twig' %}
+
 
 {% block contenido -%}
-    <h1>Modificar sucursal</h1>
+    
+<div class="panel panel-default">
+    <div class="panel-heading"><p>Modificar Sucursal</p></div>
 
-    {{ form(edit_form) }}
+    {#{{ form(edit_form) }}#}
 
-        <ul class="record_actions">
-    <li>
-        <a href="{{ path('admin_sucursal') }}">
-            Back to the list
-        </a>
-    </li>
-    <li>{{ form(delete_form) }}</li>
-</ul>
+    <div class="panel-body">
+    {{ form_start(edit_form) }}
+    {{ form_errors(edit_form) }}
+    
+    <div class="col-xs-12 col-sm-4">
+     {{ form_row(edit_form.nombre) }} 
+    </div>
+    <div class="col-xs-12 col-sm-5">
+     {{ form_row(edit_form.direccion) }} 
+    </div>
+    <div class="col-xs-12 col-sm-2">
+     {{ form_row(edit_form.telefono) }}
+    </div>
+     {#{{ form_row(form.estado) }} #}
+    <div class="col-xs-12 col-sm-1">
+     {{ form_row(edit_form.slug ) }}   
+    </div>
+    
+        <div class="form-grouphide"> 
+            <a href="{{ path('admin_sucursal') }}" class="btn btn-default btn-sm" id="cancelarModificar">Cancelar</a>
+                {{ form_widget(edit_form._token) }}
+                {{ form_widget(edit_form.submit) }}
+        </div>
+    </div>
+    
+        </div>
+ </div>
+
+</div>  
+
+{{ form_end(edit_form) }}  
+    
+    
+{% endblock %}
+
+
+{% block jquery %}
+<script>
+    $(document).ready(function(){
+    //Accion cancelar del boton modificar
+        $("#cancelarModificar").click(function(){
+            $("#edit-datatables1").click();
+            return false;
+        });
+        
+        
+    });
+   
+</script>
 {% endblock %}

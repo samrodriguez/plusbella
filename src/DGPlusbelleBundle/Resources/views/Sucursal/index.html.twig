@@ -28,22 +28,26 @@
                       </button> 
                 </div>
                 <div class="btn-group btn-group-sm pull-left">
-                  <button id="edit-datatables1" data-toggle="tooltip" data-container="body" title="edit record" class="btn btn-default datatables1-actions disabled" role="button">
+                  <button id="edit-datatables1" data-toggle="tooltip" data-container="body" title="Editar sucursal" class="btn btn-default datatables1-actions disabled" role="button">
                     <i class="fa fa-edit"></i>
                   </button>
-                  <button id="delete-datatables1" data-toggle="tooltip" data-container="body" title="delete record(s)" class="btn btn-default datatables1-actions disabled" role="button">
+                  <button id="delete-datatables1" data-toggle="tooltip" data-container="body" title="Borrar sucursal" class="btn btn-default datatables1-actions disabled" role="button">
                     <i class="fa fa-trash-o"></i>
                   </button>
                 </div>
                 <div class="btn-group pull-left">
-                  <input id="filterDatatables1" class="form-control input-sm" placeholder="Filter">
+                  <input id="filterDatatables1" class="form-control input-sm" placeholder="Buscar...">
                 </div>
               </div><!-- /btn-toolbar -->
             </div><!-- /.panel-body -->
 
             <div class="panel-body hide" id="addFormContainer">
               {% include 'DGPlusbelleBundle:Sucursal:new.html.twig' %}
-            </div><!-- /.panel-body -->
+            </div>
+            
+            <div class="panel-body hide" id="editFormContainer">
+              {#{% include 'DGPlusbelleBundle:Sucursal:edit.html.twig' %}#}
+            </div>
 
             <div class="panel-body hide" id="editFormContainer">
               <form id="formEditDatatables1" action="#" method="POST">
@@ -100,32 +104,38 @@
             <!-- datatables1 -->
             <table id="datatables1" class="table table-noborder table-hover bordered-top">
               <thead>
+                <th>N°</th>
                 <th>Nombre</th>
                 <th>Dirección</th>
-                <th>Telefono</th>
+                <th>Teléfono</th>
                 <th>Estado</th>
                 <th>Slug</th>
                 <th>Acción</th>
               </thead>
 
               <tbody>
-                 {% for entity in entities %}
-            <tr>
-            {#      <td><a href="{{ path('admin_sucursal_show', { 'id': entity.id }) }}">{{ entity.id }}</a></td> #}
+                 {% for key, entity in entities %}
+            <tr id="{{entity.id}}">
+                  <td>
+                      {#<a class="correlativo" href="{{ path('admin_sucursal_show', { 'id': entity.id }) }}">#}
+                          {{key+1}}
+                      {#</a>#}
+                  </td>
                 <td>{{ entity.nombre }}</td>
                 <td>{{ entity.direccion }}</td>
                 <td>{{ entity.telefono }}</td>
-                <td>{{ entity.estado }}</td>
+                <td>
+                    {% if entity.estado == 1 %}
+                        Activo
+                    {% else %}
+                        Inactivo
+                    {% endif %}
+                    
+                </td>
                 <td>{{ entity.slug }}</td>
                 <td>
-                <ul>
-                    <li>
-                        <a href="{{ path('admin_sucursal_show', { 'id': entity.id }) }}">show</a>
-                    </li>
-                    <li>
-                        <a href="{{ path('admin_sucursal_edit', { 'id': entity.id }) }}">edit</a>
-                    </li>
-                </ul>
+                    <a href="{{ path('admin_sucursal_show', { 'id': entity.id }) }}">show</a>
+                    {#<a href="{{ path('admin_sucursal_edit', { 'id': entity.id }) }}">edit</a>#}
                 </td>
             </tr>
         {% endfor %}
@@ -164,16 +174,80 @@
        <script>
             $(document).ready(function(){
                 
+                //Seleccionar un registro
+                $('#datatables1>tbody>tr').on('click', function(event) {
+                    //Se limpia los otros que esten activos
+                    $('#datatables1>tbody>tr').each(function(index, val) {
+                        $(this).removeClass("active");
+                    });
+                    //Se activa el registro en el que se hizo click
+                    $(this).addClass("active");
+                    //Se habilitan los botones de editar y borrar
+                    $("#edit-datatables1").removeClass("disabled");
+                    $("#delete-datatables1").removeClass("disabled");
+                    
+                    //var link=$('#datatables1>tbody>tr>td>a').attr("href");
+                    //var link=$(this).children("td:first").children().attr("href");
+                    //Obtener el id del registro
+                    var link=$(this).attr("id");
+                    //alert(link);
+                    //Carga del form modificar
+                    $("#editFormContainer").load(link+"/edit");
+                    
+                    
+                    //var href=link.attr("href");
+                    //alert(object);
+                    
+                    
+                });
+                
+                
                 $("#add-datatables1").click(function(){
                     if($("#addFormContainer").hasClass("hide")){
                         $("#addFormContainer").removeClass("hide");
+                        $("#editFormContainer").addClass("hide");
                     }
                     else{
                         $("#addFormContainer").addClass("hide");
+                        limpiarCampos();
+                        //$("#editFormContainer").removeClass("hide");
                     }
 
                 });
                 
+                //Accion cancelar del boton nuevo
+                $("#cancelarNuevo").click(function(){
+                    $("#add-datatables1").click();
+                    limpiarCampos();
+                    return false;
+                });
+                
+                //Accion cancelar del boton modificar
+                $("#cancelarModificar").click(function(){
+                    $("#edit-datatables1").click();
+                    return false;
+                });
+                
+                
+                $("#edit-datatables1").click(function(){
+                    if(!$("#edit-datatables1").hasClass("disabled")){
+                        if($("#editFormContainer").hasClass("hide")){
+                            $("#addFormContainer").addClass("hide");
+                            $("#editFormContainer").removeClass("hide");
+                        }
+                        else{
+                            //$("#addFormContainer").removeClass("hide");
+                            $("#editFormContainer").addClass("hide");
+                        }
+                    }
+
+                });
+                /*
+                $("#dgplusbellebundle_sucursal_submit").click(function(){
+                    $(".icon-refresh").click();
+                    return false;
+                });
+                */
                 $('#filterDatatables1').on('keyup', function(event) {
                     var filtro = $(this).val(); 
                     //alert(filtro);
@@ -185,6 +259,16 @@
                 
                 $('#datatables1').DataTable({ 
                     searching:true,
+                    "order":[[0, "desc"],[1,"desc"]],
+                    "columnDefs": [
+                           { "orderable": false, "targets": 0 },
+                           { "orderable": false, "targets": 2 },
+                           { "orderable": false, "targets": 3 },
+                           { "orderable": false, "targets": 4 },
+                           { "orderable": false, "targets": 5 },
+                           { "orderable": false, "targets": 6 }
+                           //{ "orderData": [ 2, 3, 4 ], "targets": 2 }
+                    ],
                     "language": {
                     "info": "Mostrando página _PAGE_ de _PAGES_",
                     "infoEmpty": "",
@@ -199,14 +283,37 @@
                 },          
                     
         });
-        $('#datatables1_filter').hide();
+        
         $('#datatables1>tr>td').on('click', function(event) {
             alert('dsv');
         });
+        //Oculta el filtro de la tabla
+        $('#datatables1_filter').hide();
+        $('#filterDatatables1').val('');
         
-            });
+        
+        
+        
+    });//Fin document ready
+        
+    //Definición de funciones
+    function limpiarCampos(){
+        //Limpiar los campos de tipo text
+        $("input[type=text]").each(function(index, val) {
+            $(this).val("");
+        });
+        //Seleccionar el primer elemento de los dropdown
+        $('select option').each( function(index, val) {
+            if(index == 0){
+                $(this).attr("selected","selected");
+            }
+            else{
+                $(this).removeAttr("selected");
+            }
             
-            
+        
+	});             
+    };
         </script>
 
 
