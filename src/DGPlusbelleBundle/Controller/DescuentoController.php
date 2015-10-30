@@ -27,12 +27,16 @@ class DescuentoController extends Controller
      */
     public function indexAction()
     {
+        $entity = new Descuento();
+        $form = $this->createCreateForm($entity);
         $em = $this->getDoctrine()->getManager();
 
         $entities = $em->getRepository('DGPlusbelleBundle:Descuento')->findAll();
 
         return array(
             'entities' => $entities,
+            'entity' => $entity,
+            'form'   => $form->createView(),
         );
     }
     /**
@@ -54,7 +58,7 @@ class DescuentoController extends Controller
             $em->persist($entity);
             $em->flush();
 
-            return $this->redirect($this->generateUrl('admin_descuento_show', array('id' => $entity->getId())));
+            return $this->redirect($this->generateUrl('admin_descuento', array('id' => $entity->getId())));
         }
 
         return array(
@@ -79,7 +83,7 @@ class DescuentoController extends Controller
 
         $form->add('submit', 'submit', array('label' => 'Guardar',
                                                'attr'=>
-                                                        array('class'=>'btn btn-primary')));
+                                                        array('class'=>'btn btn-success btn-sm')));
 
         return $form;
     }

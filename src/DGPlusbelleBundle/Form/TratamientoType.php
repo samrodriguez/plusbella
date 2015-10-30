@@ -18,15 +18,15 @@ class TratamientoType extends AbstractType
                 
             ->add('categoria',null,array('label' => 'Categoria', 'empty_value'=>'Seleccione Categoria',
                     'attr'=>array(
-                    'class'=>'form-control'
+                    'class'=>'form-control input-sm'
                     )))    
             ->add('nombre','text',array('label' => 'Nombre',
                     'attr'=>array(
-                    'class'=>'form-control'
+                    'class'=>'form-control input-sm'
                     )))
             ->add('costo','text',array('label' => 'Costo $',
                     'attr'=>array(
-                    'class'=>'form-control'
+                    'class'=>'form-control input-sm'
                     )))
            // ->add('estado')
             

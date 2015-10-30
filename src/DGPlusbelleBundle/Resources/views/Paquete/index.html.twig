@@ -1,11 +1,111 @@
 {% extends 'DGPlusbelleBundle:Layout:layout.html.twig' %}
 
 {% block contenido -%}
-    <h1>Paquetes</h1>
     
-     <a href="{{ path('admin_paquete_new') }}" class="btn btn-success"> Crear nuevo paquete</a>
+    <!-- ============================================
+    MAIN CONTENT SECTION
+    =============================================== -->
+ 
 
-    <table id = "datable" class="table table-bordered table-hover display dt-responsive" style="margin-top: 30px">
+
+        <div class="content-body">
+          <div class="panel" data-fill-color="true">
+            <div class="panel-heading">
+              <div class="panel-control pull-right">
+                <a href="#" class="btn btn-icon" data-toggle="panel-refresh" rel="tooltip" data-placement="bottom" title="refresh"><i class="icon-refresh"></i></a>
+                <a href="#" class="btn btn-icon" data-toggle="panel-expand" rel="tooltip" data-placement="bottom" title="expand"><i class="arrow_expand"></i></a>
+                <a href="#" class="btn btn-icon" data-toggle="panel-collapse" rel="tooltip" data-placement="bottom" title="collapse"><i class="icon_minus_alt2"></i></a>
+              </div>
+              <h3 class="panel-title">Paquetes</h3>
+            </div><!-- /.panel-heading -->
+
+            <div class="panel-body">
+              <div class="btn-toolbar clearfix" role="toolbar">
+               
+                <div class="btn-group btn-group-sm pull-left">
+                   <button data-toggle="tooltip" data-container="body" title="Nuevo paquete" id="add-datatables1" class="btn btn-default" role="button">
+                    <i class="fa fa-plus"></i>
+                      </button> 
+                </div>
+                <div class="btn-group btn-group-sm pull-left">
+                  <button id="edit-datatables1" data-toggle="tooltip" data-container="body" title="edit record" class="btn btn-default datatables1-actions disabled" role="button">
+                    <i class="fa fa-edit"></i>
+                  </button>
+                  <button id="delete-datatables1" data-toggle="tooltip" data-container="body" title="delete record(s)" class="btn btn-default datatables1-actions disabled" role="button">
+                    <i class="fa fa-trash-o"></i>
+                  </button>
+                </div>
+                <div class="btn-group pull-left">
+                  <input id="filterDatatables1" class="form-control input-sm" placeholder="Filtrar">
+                </div>
+              </div><!-- /btn-toolbar -->
+            </div><!-- /.panel-body -->
+
+            <div class="panel-body hide" id="addFormContainer">
+              {% include 'DGPlusbelleBundle:Paquete:new.html.twig' %}
+            </div><!-- /.panel-body -->
+
+            <div class="panel-body hide" id="editFormContainer">
+              <form id="formEditDatatables1" action="#" method="POST">
+                <div class="form-group">
+                  <p class="lead">Edit selected row</p>
+                  <div class="row">
+                    <div class="col-md-3">
+                      <div class="form-group">
+                        <input type="hidden" name="datatables1ID" id="datatables1ID">
+                        <input name="editEngine" id="editEngine" class="form-control input-sm" placeholder="Rendering engine" autocomplete="off" required="">
+                      </div>
+                    </div><!-- /.cols -->
+                    <div class="col-md-3">
+                      <div class="form-group">
+                        <input name="editBrowser" id="editBrowser" class="form-control input-sm" placeholder="Browser" autocomplete="off" required="">
+                      </div>
+                    </div><!-- /.cols -->
+                    <div class="col-md-2">
+                      <div class="form-group">
+                        <input name="editPlatform" id="editPlatform" class="form-control input-sm" placeholder="Platform" autocomplete="off" required="">
+                      </div>
+                    </div><!-- /.cols -->
+                    <div class="col-md-2">
+                      <div class="form-group">
+                        <input name="editVersion" id="editVersion" class="form-control input-sm" placeholder="Engine version" autocomplete="off" required="">
+                      </div>
+                    </div><!-- /.cols -->
+                    <div class="col-md-2">
+                      <div class="form-group">
+                        <label class="select select-sm">
+                          <select name="editGrade" id="editGrade" required="">
+                            <option value="">CSS grade</option>
+                            <option value="A"> A </option>
+                            <option value="B"> B </option>
+                            <option value="C"> C </option>
+                            <option value="D"> D </option>
+                            <option value="E"> E </option>
+                            <option value="X"> X </option>
+                            <option value="C/A1"> C/A<sup>1</sup> </option>
+                          </select>
+                        </label>
+                      </div>
+                    </div><!-- /.cols -->
+                  </div><!-- /.row -->
+                </div><!-- /.form-group -->
+
+                <div class="form-group">
+                  <button id="hideEditDatatables1" class="btn btn-default btn-sm">Cancel</button>
+                  <button type="submit" class="btn btn-primary btn-sm">Save Change</button>
+                </div><!-- /.form-group -->
+              </form><!-- /#formAddDatatables1 -->
+            </div><!-- /.panel-body --> 
+    
+    
+    
+    
+    
+
+    
+   <!--    <a href="{{ path('admin_paquete_new') }}" class="btn btn-success"> Crear nuevo paquete</a>  -->
+
+    <table id = "datatables1" class="table table-bordered table-hover display dt-responsive" >
         <thead>
             <tr>
              {#   <th>#</th> #}
@@ -36,15 +136,71 @@
         {% endfor %}
         </tbody>
     </table>
-           
+        
+        
+         <!-- Template Setups -->
+        <div class="modal fade" id="templateSetup">
+          <div class="modal-dialog">
+            <!-- modal-content -->
+            <div class="modal-content"></div>
+          </div><!-- /.modal-dialog -->
+        </div><!-- /.templateSetup -->
+
+      </div><!-- /.content -->
+       </div><!-- /.panel -->
+        
+        
+ {% block javascripts_step %}
+      
+       <script>
+            $(document).ready(function(){
+                
+                $("#add-datatables1").click(function(){
+                    if($("#addFormContainer").hasClass("hide")){
+                        $("#addFormContainer").removeClass("hide");
+                    }
+                    else{
+                        $("#addFormContainer").addClass("hide");
+                    }
+
+                });
+                
+                $('#filterDatatables1').on('keyup', function(event) {
+                    var filtro = $(this).val(); 
+                    //alert(filtro);
+                    $('#datatables1_filter>label>input').val($(this).val());
+                    $('#datatables1_filter>label>input').keyup();
+
+                });
+                
+                
+                $('#datatables1').DataTable({ 
+                    searching:true,
+                    "language": {
+                    "info": "Mostrando página _PAGE_ de _PAGES_",
+                    "infoEmpty": "",
+                    "emptyTable": "No se encontraron afiliados",
+                    "paginate": { 
+                        "next": "Siguiente",
+                        "previous": "Antetior"
+                    },
+                    "processing": "Procesando petición...",
+                    "search": "Buscar registros:",
+                    "lengthMenu": "Mostrar _MENU_ registros"
+                },          
+                    
+        });
+        $('#datatables1_filter').hide();
+        $('#datatables1>tr>td').on('click', function(event) {
+            alert('dsv');
+        });
+        
+            });
             
-     <script type="text/javascript">
-            $(document).ready(function() {
-                    $('#datable').DataTable( {
-                            "scrollCollapse": true,
-                            "paging":         true
-                    } );
-            } );
-    </script>            
+            
+        </script>
+
+
+    {% endblock %}        
 
     {% endblock %}
