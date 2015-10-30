@@ -20,7 +20,7 @@ class VentaPaqueteType extends AbstractType
             ->add('fechaVenta', null,
                   array('label'  => 'Fecha de venta',
                         'widget' => 'single_text',
-                        'attr'   => array('class' => 'form-control'),
+                        'attr'   => array('class' => 'form-control input-sm'),
                        ))
             //->add('fechaRegistro')
             ->add('paquete', 'entity', 
