@@ -1,11 +1,11 @@
 {% block contenido -%}
-    <h3 class="modal-title" id="myModalLabel">Registrar nueva venta</h3>
-    
-    <br>
-    {# {{ form(form) }} #}
-    {{ form_start(form) }}
-    {{ form_errors(form) }}
-    <div class="row">
+    <div class="panel panel-default">
+        <div class="panel-heading"><p>Registrar nueva venta</p></div>
+        <div class="panel-body">
+            {# {{ form(form) }} #}
+            {{ form_start(form) }}
+            {{ form_errors(form) }}
+            <div class="row">
         
 	        <div class="col-md-6" >
 
@@ -24,9 +24,9 @@
 		    	{{ form_row(form.paquete)}}
 		    </div>			
 			<div class="form-group col-md-6" >
-                            <div class="input-group input-group-in">
-				{{ form_row(form.fechaVenta, {'attr': {'data-input':'daterangepicker', 'data-single-date-picker':'true', 'data-show-dropdowns':'true'} })}}
-                            </div>    
+                            
+				{{ form_row(form.fechaVenta)}}
+                            
 			</div>
 
 		
@@ -47,6 +47,14 @@
 	
 
 		{{ form_end(form) }}
-	    
-    
+        </div>
+    </div>
+    <br> 
 {% endblock %}
+{% block javascritp_step %} 
+<script>
+  $(function() {
+    $( "#dgplusbellebundle_ventapaquete_fechaVenta" ).datepicker();
+  });
+  </script>
+ {% endblock %}
