@@ -172,7 +172,9 @@ class TratamientoController extends Controller
             'method' => 'PUT',
         ));
 
-        $form->add('submit', 'submit', array('label' => 'Update'));
+        $form->add('submit', 'submit', array('label' => 'Modificar',
+                                               'attr'=>
+                                                        array('class'=>'btn btn-success btn-sm')));
 
         return $form;
     }
@@ -200,7 +202,7 @@ class TratamientoController extends Controller
         if ($editForm->isValid()) {
             $em->flush();
 
-            return $this->redirect($this->generateUrl('admin_tratamiento_edit', array('id' => $id)));
+            return $this->redirect($this->generateUrl('admin_tratamiento'));
         }
 
         return array(

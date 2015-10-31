@@ -17,20 +17,20 @@ class ComisionType extends AbstractType
         $builder
             ->add('descripcion','text',array('label' => 'Descripción',
                     'attr'=>array(
-                    'class'=>'form-control'
+                    'class'=>'form-control input-sm'
                     )))
             ->add('porcentaje','text',array('label' => 'Porcentaje %',
                     'attr'=>array(
-                    'class'=>'form-control'
+                    'class'=>'form-control input-sm'
                     )))
             ->add('meta','text',array('label' => 'Meta $',
                     'attr'=>array(
-                    'class'=>'form-control'
+                    'class'=>'form-control input-sm'
                     )))
            // ->add('estado')
             ->add('empleado',null,array('label' => 'Empleado', 'empty_value'=>'Seleccione empleado',
                     'attr'=>array(
-                    'class'=>'form-control'
+                    'class'=>'form-control input-sm'
                     )))
         ;
     }

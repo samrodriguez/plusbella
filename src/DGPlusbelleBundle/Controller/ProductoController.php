@@ -27,12 +27,16 @@ class ProductoController extends Controller
      */
     public function indexAction()
     {
+        $entity = new Producto();
+        $form = $this->createCreateForm($entity);
         $em = $this->getDoctrine()->getManager();
 
         $entities = $em->getRepository('DGPlusbelleBundle:Producto')->findAll();
 
         return array(
             'entities' => $entities,
+            'entity' => $entity,
+            'form'   => $form->createView(),
         );
     }
     /**
@@ -54,7 +58,7 @@ class ProductoController extends Controller
             $em->persist($entity);
             $em->flush();
 
-            return $this->redirect($this->generateUrl('admin_producto_show', array('id' => $entity->getId())));
+            return $this->redirect($this->generateUrl('admin_producto', array('id' => $entity->getId())));
         }
 
         return array(
@@ -79,7 +83,7 @@ class ProductoController extends Controller
 
         $form->add('submit', 'submit', array('label' => 'Guardar',
                                                'attr'=>
-                                                        array('class'=>'btn btn-primary')));
+                                                        array('class'=>'btn btn-success btn-sm')));
 
         return $form;
     }
@@ -168,7 +172,9 @@ class ProductoController extends Controller
             'method' => 'PUT',
         ));
 
-        $form->add('submit', 'submit', array('label' => 'Update'));
+        $form->add('submit', 'submit', array('label' => 'Modificar',
+                                               'attr'=>
+                                                        array('class'=>'btn btn-success btn-sm')));
 
         return $form;
     }
@@ -196,7 +202,7 @@ class ProductoController extends Controller
         if ($editForm->isValid()) {
             $em->flush();
 
-            return $this->redirect($this->generateUrl('admin_producto_edit', array('id' => $id)));
+            return $this->redirect($this->generateUrl('admin_producto'));
         }
 
         return array(

@@ -29,6 +29,8 @@ class PacienteController extends Controller
      */
     public function indexAction()
     {
+        $entity = new Paciente();
+        $form = $this->createCreateForm($entity);
         $rsm = new ResultSetMapping();
         $em = $this->getDoctrine()->getManager();
         
@@ -60,6 +62,8 @@ class PacienteController extends Controller
         return array(
             //'entities' => $entities,
             'pacientes' => $pacientes,
+            'entity' => $entity,
+            'form'   => $form->createView(),
         );
     }
     /**
@@ -84,7 +88,7 @@ class PacienteController extends Controller
             $em->persist($entity);
             $em->flush();
 
-            return $this->redirect($this->generateUrl('admin_paciente_show', array('id' => $entity->getId())));
+            return $this->redirect($this->generateUrl('admin_paciente', array('id' => $entity->getId())));
         }
 
         return array(
@@ -109,7 +113,7 @@ class PacienteController extends Controller
 
         $form->add('submit', 'submit', array('label' => 'Guardar',
                                                'attr'=>
-                                                        array('class'=>'btn btn-primary')
+                                                        array('class'=>'btn btn-success btn-sm')
                                                  
          ));
 

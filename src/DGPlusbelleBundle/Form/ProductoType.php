@@ -17,23 +17,23 @@ class ProductoType extends AbstractType
         $builder
              ->add('categoria',null,array('label' => 'Categoria','empty_value'=>'Seleccione categoria',
                     'attr'=>array(
-                    'class'=>'form-control'
+                    'class'=>'form-control input-sm'
                     )))    
             ->add('nombre','text',array('label' => 'Nombre',
                     'attr'=>array(
-                    'class'=>'form-control'
+                    'class'=>'form-control input-sm'
                     )))
             ->add('costo','text',array('label' => 'Costo $',
                     'attr'=>array(
-                    'class'=>'form-control'
+                    'class'=>'form-control input-sm'
                     )))
             ->add('fechaCompra','date',array('label' => 'Fecha de Compra',
                     'attr'=>array(
-                    'class'=>'form-control'
+                    'class'=>'form-control input-sm'
                     )))
             ->add('fechaVencimiento','date',array('label' => 'Fecha de vencimiento',
                     'attr'=>array(
-                    'class'=>'form-control'
+                    'class'=>'form-control input-sm'
                     )))
             //->add('estado')
            

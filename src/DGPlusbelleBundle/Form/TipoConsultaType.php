@@ -17,7 +17,7 @@ class TipoConsultaType extends AbstractType
         $builder
             ->add('nombre','text',array('label' => 'Nombre',
                     'attr'=>array(
-                    'class'=>'form-control'
+                    'class'=>'form-control input-sm'
                     )))
             //->add('estado')
         ;

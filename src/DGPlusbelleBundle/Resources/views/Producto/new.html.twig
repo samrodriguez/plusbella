@@ -1,4 +1,4 @@
-{% extends 'DGPlusbelleBundle:Layout:general.html.twig' %}
+
 
 {% block contenido -%}
     
@@ -9,27 +9,31 @@
   {{ form_start(form) }}
     {{ form_errors(form) }}
     <div class="row">
-        <div class="col-xs-12 col-sm-6">
+        <div class="col-xs-12 col-sm-2">
         {{ form_row(form.categoria) }}
-        {{ form_row(form.nombre) }}
-        {{ form_row(form.costo) }}
-        {{ form_row(form.fechaCompra) }}
-        {{ form_row(form.fechaVencimiento) }}
-        {#{{ form_row(form.estado) }}#}
-        {{ form_row(form.categoria) }}
-      
-        
         </div>
+        <div class="col-xs-12 col-sm-3">
+        {{ form_row(form.nombre) }}
+         </div>
+         <div class="col-xs-12 col-sm-1">
+        {{ form_row(form.costo) }}
+         </div>
+         <div class="col-xs-12 col-sm-3">
+        {{ form_row(form.fechaCompra) }}
+         </div>
+          <div class="col-xs-12 col-sm-3">
+        {{ form_row(form.fechaVencimiento) }}
+         </div>
+        {#{{ form_row(form.estado) }}#}
+        
     </div>
-    <div class="row">
-         <div class="col-xs-12 col-sm-12">
-             <div class="modal-footer">
-                <a href="{{ path('admin_producto') }}" class="btn btn-default">Regresar al listado</a>
+   
+             <div class="form-grouphide">
+                <a href="{{ path('admin_producto') }}" class="btn btn-default btn-sm" id="cancelarNuevo">Cancelar</a>
                 {{ form_widget(form.submit) }}
               </div>
             
-        </div>
-    </div>
+    
     {{ form_end(form) }}
   </div>
 

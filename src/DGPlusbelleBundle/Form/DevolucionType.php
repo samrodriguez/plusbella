@@ -17,20 +17,20 @@ class DevolucionType extends AbstractType
         $builder
             ->add('monto','text',array('label' => 'Monto $',
                     'attr'=>array(
-                    'class'=>'form-control'
+                    'class'=>'form-control input-sm'
                     )))
             ->add('motivo','text',array('label' => 'Motivo',
                     'attr'=>array(
-                    'class'=>'form-control'
+                    'class'=>'form-control input-sm'
                     )))
            // ->add('fechaDevolucion')
             ->add('empleado',null,array('label' => 'Empleado','empty_value'=>'Seleccione empleado',
                     'attr'=>array(
-                    'class'=>'form-control'
+                    'class'=>'form-control input-sm'
                     )))
             ->add('paciente',null,array('label' => 'Paciente','empty_value'=>'Seleccione paciente',
                     'attr'=>array(
-                    'class'=>'form-control'
+                    'class'=>'form-control input-sm'
                     )))
         ;
     }
