@@ -175,7 +175,9 @@ class ConsultaController extends Controller
             'method' => 'PUT',
         ));
 
-        $form->add('submit', 'submit', array('label' => 'Update'));
+        $form->add('submit', 'submit', array('label' => 'Modificar',
+                                               'attr'=>
+                                                        array('class'=>'btn btn-success btn-sm')));
 
         return $form;
     }
@@ -203,7 +205,7 @@ class ConsultaController extends Controller
         if ($editForm->isValid()) {
             $em->flush();
 
-            return $this->redirect($this->generateUrl('admin_consulta_edit', array('id' => $id)));
+            return $this->redirect($this->generateUrl('admin_consulta', array('id' => $id)));
         }
 
         return array(

@@ -54,7 +54,7 @@ class VentaPaqueteType extends AbstractType
                                                 //return $r->seleccionarEmpleadosPersonasActivos();
                                             } ,  
                          'attr'=>array(
-                         'class'=>'form-control'
+                            'class'=>'form-control'
                          )
                        ))
             //->add('usuario')

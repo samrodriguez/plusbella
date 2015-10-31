@@ -19,20 +19,20 @@
                 
 
                 <div class="btn-group btn-group-sm pull-left">
-                  <button data-toggle="tooltip" data-container="body" title="add new record" id="add-datatables1" class="btn btn-default" role="button">
+                  <button data-toggle="tooltip" data-container="body" title="Nueva venta de paquete" id="add-datatables1" class="btn btn-default" role="button">
                     <i class="fa fa-plus"></i>
                   </button>
                 </div>
                 <div class="btn-group btn-group-sm pull-left">
-                  <button id="edit-datatables1" data-toggle="tooltip" data-container="body" title="edit record" class="btn btn-default datatables1-actions disabled" role="button">
+                  <button id="edit-datatables1" data-toggle="tooltip" data-container="body" title="Editar venta de paquete" class="btn btn-default datatables1-actions disabled" role="button">
                     <i class="fa fa-edit"></i>
                   </button>
-                  <button id="delete-datatables1" data-toggle="tooltip" data-container="body" title="delete record(s)" class="btn btn-default datatables1-actions disabled" role="button">
+                  <button id="delete-datatables1" data-toggle="tooltip" data-container="body" title="Borrar venta de paquete" class="btn btn-default datatables1-actions disabled" role="button">
                     <i class="fa fa-trash-o"></i>
                   </button>
                 </div>
                 <div class="btn-group pull-left">
-                  <input id="filterDatatables1" class="form-control input-sm" placeholder="Filter">
+                  <input id="filterDatatables1" class="form-control input-sm" placeholder="Buscar...">
                 </div>
               </div><!-- /btn-toolbar -->
             </div><!-- /.panel-body -->
@@ -40,27 +40,31 @@
             <div class="panel-body hide" id="addFormContainer">
               {% include 'DGPlusbelleBundle:VentaPaquete:new.html.twig' %}
             </div>
+            
+            <div class="panel-body hide" id="editFormContainer">
+              {#{% include 'DGPlusbelleBundle:Sucursal:edit.html.twig' %}#}
+            </div>
 
             <!-- datatables1 -->
             <table id = "datatables1" class="table table-noborder table-hover bordered-top dataTable" role="grid" aria-describedby="datatables1_info">
                     <thead>
                         <tr row="role">
-                        <th>N°</th>
-                        <th>Nombre</th>
-                        <th>Costo</th>
-                        <th>Fecha venta</th>
-                        <th>Acciones</th>
+                            <th>N°</th>
+                            <th>Nombre</th>
+                            <th style="text-align: right; padding-right: 20px">Costo</th>
+                            <th style="text-align: right; padding-right: 20px">Fecha venta</th>
+                            {#<th>Acciones</th>#}
                         </tr>
                     </thead>
                     <tbody>
                     {% for key, entity in entities %}
-                        <tr>
+                        <tr id="{{entity.id}}">
                             <td>{{key+1 }}</td>
                             <td>{{ entity.empleado.primernombre }} {{ entity.empleado.segundonombre }}  {{entity.empleado.primerapellido}} {{entity.empleado.segundoapellido}}
-                            <td style="text-align: right; padding-right: 10px">${{ entity.paquete.costo|number_format(2, '.', ',') }}
+                            <td style="text-align: right; padding-right: 20px">$ {{ entity.paquete.costo|number_format(2, '.', ',') }}
                             <td style="text-align: right; padding-right: 20px">{% if entity.fechaVenta %}{{ entity.fechaVenta|date('d/m/Y') }}{% endif %}</td>
 
-                            <td>
+                            {#<td>
                             <ul>
                                 <li>
                                     <a href="{{ path('admin_ventapaquete_show', { 'id': entity.id }) }}">show</a>
@@ -69,7 +73,7 @@
                                     <a href="{{ path('admin_ventapaquete_edit', { 'id': entity.id }) }}">edit</a>
                                 </li>
                             </ul>
-                            </td>
+                            </td>#}
                         </tr>
                     {% endfor %}
                     </tbody>
@@ -79,18 +83,84 @@
                      
     {% endblock %}
     {% block javascripts_step %}
-        <script src="{{ asset('Resources/wrapkit/scripts/dataTables.bootstrap.js') }}"></script>
-        <script src="{{ asset('Resources/wrapkit/scripts/dataTables.tableTools.js') }}"></script>
-        <script src="{{ asset('Resources/wrapkit/scripts/dataTables.tableTools.js') }}"></script>
+        
         <script>
             $(document).ready(function(){
+                //var calendario = document.getElementById("dgplusbellebundle_ventapaquete_fechaVenta"); 
+                
+                $('#dgplusbellebundle_ventapaquete_fechaVenta').daterangepicker({
+                    singleDatePicker: true,
+                    showDropdowns: true,
+                    locale: {
+                        format: 'YYYY-MM-DD'
+                    },
+                }); 
+            
+                //Seleccionar un registro
+                $('#datatables1>tbody>tr').on('click', function(event) {
+                    //Se limpia los otros que esten activos
+                    $('#datatables1>tbody>tr').each(function(index, val) {
+                        $(this).removeClass("active");
+                    });
+                    //Se activa el registro en el que se hizo click
+                    $(this).addClass("active");
+                    //Se habilitan los botones de editar y borrar
+                    $("#edit-datatables1").removeClass("disabled");
+                    $("#delete-datatables1").removeClass("disabled");
+                    
+                    //var link=$('#datatables1>tbody>tr>td>a').attr("href");
+                    //var link=$(this).children("td:first").children().attr("href");
+                    //Obtener el id del registro
+                    var link=$(this).attr("id");
+                    //alert(link);
+                    //Carga del form modificar
+                    $("#editFormContainer").load(link+"/edit");
+                    
+                    
+                    //var href=link.attr("href");
+                    //alert(object);
+                    
+                    
+                });
+                
                 
                 $("#add-datatables1").click(function(){
                     if($("#addFormContainer").hasClass("hide")){
                         $("#addFormContainer").removeClass("hide");
+                        $("#editFormContainer").addClass("hide");
                     }
                     else{
                         $("#addFormContainer").addClass("hide");
+                        limpiarCampos();
+                        //$("#editFormContainer").removeClass("hide");
+                    }
+
+                });
+                
+                //Accion cancelar del boton nuevo
+                $("#cancelarNuevo").click(function(){
+                    $("#add-datatables1").click();
+                    limpiarCampos();
+                    return false;
+                });
+                
+                //Accion cancelar del boton modificar
+                $("#cancelarModificar").click(function(){
+                    $("#edit-datatables1").click();
+                    return false;
+                });
+                
+                
+                $("#edit-datatables1").click(function(){
+                    if(!$("#edit-datatables1").hasClass("disabled")){
+                        if($("#editFormContainer").hasClass("hide")){
+                            $("#addFormContainer").addClass("hide");
+                            $("#editFormContainer").removeClass("hide");
+                        }
+                        else{
+                            //$("#addFormContainer").removeClass("hide");
+                            $("#editFormContainer").addClass("hide");
+                        }
                     }
 
                 });
@@ -106,32 +176,60 @@
                 
                 $('#datatables1').DataTable({ 
                     searching:true,
+                    "order":[[0, "desc"],[1,"desc"]],
+                    "columnDefs": [
+                           { "orderable": false, "targets": 0 },
+                           { "orderable": false, "targets": 2 },
+                           { "orderable": false, "targets": 3 }
+                           
+                           //{ "orderData": [ 2, 3, 4 ], "targets": 2 }
+                    ],
                     "language": {
                     "info": "Mostrando página _PAGE_ de _PAGES_",
                     "infoEmpty": "",
-                    "emptyTable": "No se encontraron ventas registradas",
+                    "emptyTable": "No se encontraron afiliados",
                     "paginate": { 
                         "next": "Siguiente",
-                        "previous": "Antetior"
+                        "previous": "Anterior"
                     },
                     "processing": "Procesando petición...",
                     "search": "Buscar registros:",
                     "lengthMenu": "Mostrar _MENU_ registros"
-                },          
+                }, 
                     
         });
-        $('#datatables1_filter').hide();
+        
         $('#datatables1>tr>td').on('click', function(event) {
             alert('dsv');
         });
+        //Oculta el filtro de la tabla
+        $('#datatables1_filter').hide();
+        $('#filterDatatables1').val('');
         
-            $('#dgplusbellebundle_ventapaquete_fechaVenta').daterangepicker({
-                singleDatePicker: true,
-                showDropdowns: true
-            }); 
         
+        
+        
+    });//Fin document ready
+        
+    //Definición de funciones
+    function limpiarCampos(){
+        //Limpiar los campos de tipo text
+        $("input[type=text]").each(function(index, val) {
+            $(this).val("");
         });
+        //Seleccionar el primer elemento de los dropdown
+        $('select option').each( function(index, val) {
+            if(index == 0){
+                $(this).attr("selected","selected");
+            }
+            else{
+                $(this).removeAttr("selected");
+            }
             
-            
+        
+	});             
+    };
         </script>
+        
+        
     {% endblock %}

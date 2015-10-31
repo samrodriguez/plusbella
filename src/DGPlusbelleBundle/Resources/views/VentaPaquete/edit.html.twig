@@ -1,47 +1,58 @@
-{% extends 'DGPlusbelleBundle:Layout:general.html.twig' %}
+{% block js -%}
+    
+    <script src="{{ asset('Resources/wrapkit/scripts/daterangepicker.js') }}"></script>
+{% endblock %}
 
 
 {% block contenido -%}
-    <h3 class="modal-title" id="myModalLabel">Paquete vendido</h3>
-    <br>
-    {#{{ form(edit_form) }}#}
-    {{ form_start(edit_form) }}
-    {{ form_errors(edit_form) }}
-    <div class="row">
+    <div class="panel panel-default">
+        <div class="panel-heading"><p>Modificar nueva venta</p></div>
+        <div class="panel-body">
+        {#{{ form(edit_form) }}#}
+        {{ form_start(edit_form) }}
+        {{ form_errors(edit_form) }}
+        <div class="row">
         
 	        <div class="col-md-6" >
-
-	        	{{ form_row(edit_form.paciente)}}
-		
-			</div>
-
-			<div class="col-md-6" >
-	        
-	        	{{ form_row(edit_form.empleado)}}
-		
-			</div>
-
-			
-			<div class="col-md-6" >
-		    	{{ form_row(edit_form.paquete)}}
-		    </div>			
-			<div class="col-md-6" >
-				{{ form_row(edit_form.fechaVenta)}}
-			</div>
-
-		
-
-    </div>
-        <div class="modal-footer">
-        	<a href="{{ path('admin_ventapaquete') }}" class="btn btn-default">
-	            Regresar a la lista
-	        </a>
-	        {{ form_widget(edit_form.submit) }}
-	     </div>
-	        
-        
-	
-
-		{{ form_end(edit_form) }}
+                    {{ form_row(edit_form.paciente)}}
+                </div>
+                <div class="col-md-6" >
+                    {{ form_row(edit_form.empleado)}}
+		</div>
+                <div class="col-md-6" >
+                    {{ form_row(edit_form.paquete)}}
+                </div>
+		<div class="form-group col-md-6" >
+                    {{ form_row(edit_form.fechaVenta)}}
+                </div>
+            </div>
+        <div class="form-grouphide"> 
+            <a href="{{ path('admin_ventapaquete') }}" class="btn btn-default btn-sm" id="cancelarModificar">Cancelar</a>
+            {{ form_widget(edit_form.submit) }}
+        </div>
+        </div>
+            {{ form_widget(edit_form._token) }}
+    </div>  
+            {{ form_end(edit_form) }}     
 
 {% endblock %}
+
+{% block javascritp_step %} 
+
+<script>
+        //Accion cancelar del boton modificar
+        $("#cancelarModificar").click(function(){
+            $("#edit-datatables1").click();
+            return false;
+        });
+        $('#dgplusbellebundle_ventapaquete_fechaVenta').daterangepicker({
+            singleDatePicker: true,
+            showDropdowns: false,
+            locale: {
+                format: 'YYYY-MM-DD'
+            },
+        }); 
+        
+        
+ </script>
+ {% endblock %}

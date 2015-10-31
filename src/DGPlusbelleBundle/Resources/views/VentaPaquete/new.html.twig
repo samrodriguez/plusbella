@@ -8,53 +8,25 @@
             <div class="row">
         
 	        <div class="col-md-6" >
-
-	        	{{ form_row(form.paciente)}}
-		
-			</div>
-
-			<div class="col-md-6" >
-	        
-	        	{{ form_row(form.empleado)}}
-		
-			</div>
-
-			
-			<div class="col-md-6" >
-		    	{{ form_row(form.paquete)}}
-		    </div>			
-			<div class="form-group col-md-6" >
-                            
-				{{ form_row(form.fechaVenta)}}
-                            
-			</div>
-
-		
-
-    </div>
-
-	
-		<br>
-
-		<div class="modal-footer">
-                    <a href="{{ path('admin_ventapaquete') }}" class="btn btn-default">
-                        Regresar a la lista
-                    </a>
-                    {{ form_widget(form.submit) }}
+                    {{ form_row(form.paciente)}}
                 </div>
-	        
-        
-	
-
-		{{ form_end(form) }}
+                <div class="col-md-6" >
+                    {{ form_row(form.empleado)}}
+		</div>
+                <div class="col-md-6" >
+                    {{ form_row(form.paquete)}}
+		</div>			
+		<div class="form-group col-md-6" >
+                    {{ form_row(form.fechaVenta)}}
+                </div>
+            </div>
+            <div class="form-grouphide"> 
+                <a href="{{ path('admin_sucursal') }}" class="btn btn-default btn-sm" id="cancelarNuevo">Cancelar</a>
+                {{ form_widget(form.submit) }}
+            </div>
         </div>
-    </div>
-    <br> 
+            {{ form_widget(form._token) }}
+    </div>  
+            {{ form_end(form) }}    
 {% endblock %}
-{% block javascritp_step %} 
-<script>
-  $(function() {
-    $( "#dgplusbellebundle_ventapaquete_fechaVenta" ).datepicker();
-  });
-  </script>
- {% endblock %}
+

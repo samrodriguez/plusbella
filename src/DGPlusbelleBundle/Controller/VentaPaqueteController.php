@@ -108,7 +108,7 @@ class VentaPaqueteController extends Controller
 
         $form->add('submit', 'submit', array('label' => 'Guardar',
                                                'attr'=>
-                                                        array('class'=>'btn btn-primary')));
+                                                        array('class'=>'btn btn-primary btn-sm')));
 
         return $form;
     }
@@ -199,7 +199,7 @@ class VentaPaqueteController extends Controller
 
         $form->add('submit', 'submit', array('label' => 'Modificar',
                                                'attr'=>
-                                                        array('class'=>'btn btn-primary')));
+                                                        array('class'=>'btn btn-primary btn-sm')));
 
         return $form;
     }

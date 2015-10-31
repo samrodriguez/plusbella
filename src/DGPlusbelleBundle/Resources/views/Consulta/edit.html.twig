@@ -1,16 +1,173 @@
-{% extends '::base.html.twig' %}
+{% block contenido -%}
+    
+    
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <p>Modificar consulta</p>
+    </div>
+    <br>
+    <div class="panel-body">
+    {{ form_start(edit_form) }}
+        {{ form_errors(edit_form) }}
+            {#  {{ form(form) }}  #}
+            
+                <div class="row">
+                    <div class="col-md-12">
+                        <h3 class="text-center">Paciente</h3>
+                        <br>
+                    </div>
+                </div>
+                {# Formulario de persona #}
 
-{% block body -%}
-    <h1>Consulta edit</h1>
+                <div class="row">
+                    <div class="col-md-3">
+                        {{ form_row(edit_form.paciente.persona.primerNombre) }}
+                    </div>
+                    <div class="col-md-3">
+                        {{ form_row(edit_form.paciente.persona.segundoNombre) }}
+                    </div>
+                    <div class="col-md-3">
+                        {{ form_row(edit_form.paciente.persona.primerApellido) }}
+                    </div>
+                    <div class="col-md-3">
+                        {{ form_row(edit_form.paciente.persona.segundoApellido) }}
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-3">
+                        {{ form_row(edit_form.paciente.persona.direccion) }}
+                    </div>
+                    <div class="col-md-3">
+                        {{ form_row(edit_form.paciente.persona.telefono) }}
+                    </div>
+                    <div class="col-md-3">
+                        {{ form_row(edit_form.paciente.persona.email) }}
+                    </div>
 
-    {{ form(edit_form) }}
-
+                {# Formulario de paciente #}
+                    <div class="col-md-3">
+                        {{ form_row(edit_form.paciente.dui) }}
+                    </div>
+                    
+                </div>
+                    <div class="row">
+                        <div class="col-md-3">
+                            {{ form_row(edit_form.paciente.referidoPor) }}
+                        </div>
+                        <div class="col-md-3">
+                            {{ form_row(edit_form.paciente.fechaNacimiento) }}
+                        </div>
+                        <div class="col-md-3">
+                            {{ form_row(edit_form.paciente.estadoCivil) }}
+                        </div>
+                        <div class="col-md-3">
+                            {{ form_row(edit_form.paciente.sexo) }}
+                        </div>
+                       
+                    </div>
+                        
+                    
+                    <div class="row">   
+                        <div class="col-md-3">
+                            {{ form_row(edit_form.paciente.telefonoEmergencia) }}
+                        </div>
+                        <div class="col-md-3">
+                            {{ form_row(edit_form.paciente.ocupacion) }}
+                        </div>
+                        <div class="col-md-3">
+                            {{ form_row(edit_form.paciente.lugarTrabajo) }}
+                        </div>
+                        <div class="col-md-3">
+                            {{ form_row(edit_form.paciente.personaEmergencia) }}
+                        </div>
+                    </div>
+                        
+                <div class="row">
+                    <br>
+                    <hr>
+                    <div class="col-md-12">
+                        <h3 class="text-center">Consulta</h3>
+                    </div>
+                </div>
+            
+            {# Formulario de consulta#}
+            <div class="row">
+                <br>
+                <div class="col-md-2">
+                    {{ form_row(edit_form.fechaConsulta) }}
+                </div>
+                
+                <div class="col-md-2">
+                    {{ form_row(edit_form.horaInicio) }}
+                </div>
+                
+                <div class="col-md-2">
+                    {{ form_row(edit_form.horaFin) }}
+                </div>
+                <div class="col-md-3">
+                    {{ form_row(edit_form.tipoConsulta) }}
+                </div>
+                
+                <div class="col-md-3">
+                    {{ form_row(edit_form.tratamiento) }}
+                </div>
+                
+            </div>
+            
+            
+            <div class="row">
+                <br>
+                {#<div class="col-md-3">
+                    {{ form_row(form.cita) }}
+                </div>
+                #}
+                <div class="col-md-3">
+                    {{ form_row(edit_form.incapacidad) }}
+                </div>
+                
+                <div class="col-md-9">
+                    {{ form_row(edit_form.observacion) }}
+                </div>
+            </div>
+            {#
         <ul class="record_actions">
     <li>
         <a href="{{ path('admin_consulta') }}">
             Back to the list
         </a>
     </li>
-    <li>{{ form(delete_form) }}</li>
-</ul>
+</ul>#}
+            
+            <br>
+            <div class="form-grouphide"> 
+                 <a href="{{ path('admin_sucursal') }}" class="btn btn-default btn-sm" id="cancelarModificar">Cancelar</a>
+                    {{ form_widget(edit_form._token) }}
+                    {{ form_widget(edit_form.submit) }}
+            </div>
+	        
+        
+     
+ </div>
+
+</div>  
+{{ form_end(edit_form) }}   
+            
 {% endblock %}
+
+
+{% block jquery %}
+<script>
+    $(document).ready(function(){
+        //Accion cancelar del boton modificar
+        $("#cancelarModificar").click(function(){
+            $("#edit-datatables1").click();
+            return false;
+        });
+        
+        
+    });
+   
+</script>
+{% endblock %}
+
+

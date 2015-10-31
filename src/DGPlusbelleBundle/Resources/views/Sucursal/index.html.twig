@@ -110,12 +110,12 @@
                 <th>Teléfono</th>
                 <th>Estado</th>
                 <th>Slug</th>
-                <th>Acción</th>
+                {#<th>Acción</th>#}
               </thead>
 
               <tbody>
-                 {% for key, entity in entities %}
-            <tr id="{{entity.id}}">
+                {% for key, entity in entities %}
+                <tr id="{{entity.id}}">
                   <td>
                       {#<a class="correlativo" href="{{ path('admin_sucursal_show', { 'id': entity.id }) }}">#}
                           {{key+1}}
@@ -133,10 +133,10 @@
                     
                 </td>
                 <td>{{ entity.slug }}</td>
-                <td>
-                    <a href="{{ path('admin_sucursal_show', { 'id': entity.id }) }}">show</a>
+                {#<td>#}
+                    {#<a href="{{ path('admin_sucursal_show', { 'id': entity.id }) }}">show</a>#}
                     {#<a href="{{ path('admin_sucursal_edit', { 'id': entity.id }) }}">edit</a>#}
-                </td>
+                {#</td>#}
             </tr>
         {% endfor %}
                   
@@ -265,8 +265,8 @@
                            { "orderable": false, "targets": 2 },
                            { "orderable": false, "targets": 3 },
                            { "orderable": false, "targets": 4 },
-                           { "orderable": false, "targets": 5 },
-                           { "orderable": false, "targets": 6 }
+                           { "orderable": false, "targets": 5 }
+                           
                            //{ "orderData": [ 2, 3, 4 ], "targets": 2 }
                     ],
                     "language": {
@@ -275,12 +275,12 @@
                     "emptyTable": "No se encontraron afiliados",
                     "paginate": { 
                         "next": "Siguiente",
-                        "previous": "Antetior"
+                        "previous": "Anterior"
                     },
                     "processing": "Procesando petición...",
                     "search": "Buscar registros:",
                     "lengthMenu": "Mostrar _MENU_ registros"
-                },          
+                }, 
                     
         });
         
