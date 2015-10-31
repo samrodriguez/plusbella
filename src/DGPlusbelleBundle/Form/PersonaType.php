@@ -31,10 +31,10 @@ class PersonaType extends AbstractType
                     'attr'=>array(
                     'class'=>'form-control input-sm'
                     )))
-            /*->add('apellidoCasada','text',array('label' => 'Apellido Casada',
+           /*->add('apellidoCasada','text',array('label' => 'Apellido Casada',
                     'attr'=>array(
                     'class'=>'form-control input-sm'
-                    )))
+                    )))*/
             ->add('direccion','text',array('label' => 'Dirección',
                     'attr'=>array(
                     'class'=>'form-control input-sm'

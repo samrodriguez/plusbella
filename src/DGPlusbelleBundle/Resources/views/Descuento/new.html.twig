@@ -3,12 +3,10 @@
 {% block contenido -%}
  
 <div class="panel panel-default">
-  <!-- Default panel contents -->
-  <div class="panel-heading"<h1>Nuevo descuento</h1></div>
+  <div class="panel-heading"><p>Nuevo descuento</p></div>
   <div class="panel-body">
   {{ form_start(form) }}
     {{ form_errors(form) }}
-    <div class="row">
         <div class="col-xs-12 col-sm-4">
         {{ form_row(form.nombre) }}
         </div>
@@ -16,21 +14,15 @@
         {{ form_row(form.porcentaje) }}
         </div>
        {# {{ form_row(form.estado) }} #}
-
-     </div>
-    </div>
-    
-             <div class="form-grouphide">
+   
+             <div class="form-grouphide col-sm-9">
                 <a href="{{ path('admin_descuento') }}" class="btn btn-default btn-sm" id="cancelarNuevo">Cancelar</a>
                 {{ form_widget(form.submit) }}
               </div>
-            
-        
-    {{ form_end(form) }}
-  </div>
 
+ </div>
+{{ form_widget(form._token) }}
+</div>  
+{{ form_end(form) }} 
 
-</div>        
-        
- 
 {% endblock %}

@@ -37,7 +37,7 @@
                   </button>
                 </div>
                 <div class="btn-group pull-left">
-                  <input id="filterDatatables1" class="form-control input-sm" placeholder="Filtrar">
+                  <input id="filterDatatables1" class="form-control input-sm" placeholder="Buscar...">
                 </div>
               </div><!-- /btn-toolbar -->
             </div><!-- /.panel-body -->
@@ -57,12 +57,12 @@
     <table id = "datatables1" class="table table-bordered table-hover display dt-responsive" style="margin-top: 30px">
         <thead>
             <tr>
-                <th>Id</th> 
+                <th>N°</th> 
                 <th>Empleado</th>
                 <th>Paciente</th>
-                <th>Monto</th>
+                <th style="text-align: right; padding-right: 20px">Monto</th>
                 <th>Motivo</th>
-                <th>Fechadevolucion</th>
+                <th><center>Fechadevolucion</center></th>
              {#   <th>Actions</th> #}
             </tr>
         </thead>
@@ -77,9 +77,9 @@
             {#    <td><a href="{{ path('admin_devolucion_show', { 'id': entity.id }) }}">{{ entity.id }}</a></td> #}
                 <td>{{ entity.empleado }}</td>
                 <td>{{ entity.paciente }}</td>
-                <td>$ {{ entity.monto }}</td>
+                <td style="text-align: right; padding-right: 20px">$ {{ entity.monto |number_format(2, '.', ',')  }}</td>
                 <td>{{ entity.motivo }}</td>
-                <td>{% if entity.fechaDevolucion %}{{ entity.fechaDevolucion|date('Y-m-d H:i:s') }}{% endif %}</td>
+                <td><center>{% if entity.fechaDevolucion %}{{ entity.fechaDevolucion|date('Y-m-d H:i:s') }}{% endif %}</center></td>
              <!--   <td>
                 <ul>
                     <li>

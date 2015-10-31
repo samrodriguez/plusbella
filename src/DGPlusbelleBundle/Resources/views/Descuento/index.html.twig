@@ -37,7 +37,7 @@
                   </button>
                 </div>
                 <div class="btn-group pull-left">
-                  <input id="filterDatatables1" class="form-control input-sm" placeholder="Fitrar">
+                  <input id="filterDatatables1" class="form-control input-sm" placeholder="Buscar...">
                 </div>
               </div><!-- /btn-toolbar -->
             </div><!-- /.panel-body -->
@@ -56,9 +56,9 @@
     <table id = "datatables1" class="table table-bordered table-hover display dt-responsive" >
         <thead>
             <tr>
-                <th>#</th>
+                <th>N°</th>
                 <th>Nombre</th>
-                <th>Porcentaje %</th>
+                <th><center>Porcentaje %</center></th>
                 <th>Estado</th>
               {#  <th>Actions</th> #}
             </tr>
@@ -73,7 +73,7 @@
                   </td>
               {#    <td><a href="{{ path('admin_descuento_show', { 'id': entity.id }) }}">{{ entity.id }}</a></td> #}
                 <td>{{ entity.nombre }}</td>
-                <td>{{ entity.porcentaje }} %</td>
+                <td><center>{{ entity.porcentaje }} %</center></td>
                <td>
                     {% if entity.estado == 1 %}
                         Activo
