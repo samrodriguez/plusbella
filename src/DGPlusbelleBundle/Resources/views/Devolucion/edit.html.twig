@@ -1,17 +1,55 @@
-{% extends 'DGPlusbelleBundle:Layout:general.html.twig' %}
+
 
 {% block contenido -%}
-    <h1>Modificar Devolución</h1>
-
     
-    {{ form(edit_form) }}
+           
+       
+  <div class="panel panel-default">
+    <div class="panel-heading"><p>Modificar Devolución</p></div>
 
-        <ul class="record_actions">
-    <li>
-        <a href="{{ path('admin_devolucion') }}">
-            Back to the list
-        </a>
-    </li>
-    <li>{{ form(delete_form) }}</li>
-</ul>
+    {#{{ form(edit_form) }}#}
+
+    <div class="panel-body">
+    {{ form_start(edit_form) }}
+    {{ form_errors(edit_form) }}
+    
+ 
+    <div class="col-xs-12 col-sm-4">
+     {{ form_row(edit_form.empleado) }} 
+    </div>
+    <div class="col-xs-12 col-sm-4">
+     {{ form_row(edit_form.paciente) }} 
+    </div>
+    <div class="col-xs-12 col-sm-4">
+     {{ form_row(edit_form.monto) }} 
+    </div>
+     <div class="col-xs-12 col-sm-4">
+     {{ form_row(edit_form.motivo) }} 
+    </div>
+
+        <div class="form-grouphide col-sm-9"> 
+            <a href="{{ path('admin_devolucion') }}" class="btn btn-default btn-sm" id="cancelarModificar">Cancelar</a>
+                {{ form_widget(edit_form._token) }}
+                {{ form_widget(edit_form.submit) }}
+        </div>
+
+     </div>
+    
 {% endblock %}
+
+
+{% block jquery %}
+<script>
+    $(document).ready(function(){
+    //Accion cancelar del boton modificar
+        $("#cancelarModificar").click(function(){
+            $("#edit-datatables1").click();
+            return false;
+        });
+        
+        
+    });
+   
+</script>
+{% endblock %}
+

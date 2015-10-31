@@ -1,4 +1,4 @@
-{% extends 'DGPlusbelleBundle:Layout:general.html.twig' %}
+
 
 {% block contenido -%}
     
@@ -9,22 +9,19 @@
   {{ form_start(form) }}
     {{ form_errors(form) }}
     <div class="row">
-        <div class="col-xs-12 col-sm-12">
+        <div class="col-xs-12 col-sm-4">
         {{ form_row(form.nombre) }}
         {#{{ form_row(form.estado) }}#}
-      
-        
+
         </div>
     </div>
-    <div class="row">
-         <div class="col-xs-12 col-sm-12">
-             <div class="modal-footer">
-                <a href="{{ path('admin_tipoconsulta') }}" class="btn btn-default">Regresar al listado</a>
+    
+             <div class="form-grouphide">
+                <a href="{{ path('admin_tipoconsulta') }}" class="btn btn-default btn-sm" id="cancelarNuevo">Cancelar</a>
                 {{ form_widget(form.submit) }}
               </div>
             
-        </div>
-    </div>
+       
     {{ form_end(form) }}
   </div>
 

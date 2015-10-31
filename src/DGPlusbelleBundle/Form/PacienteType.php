@@ -20,26 +20,26 @@ class PacienteType extends AbstractType
                 
             ->add('dui','text',array('label' => 'DUI','required' => false,
                     'attr'=>array(
-                    'class'=>'form-control'
+                    'class'=>'form-control input-sm'
                     )))
             ->add('estadoCivil','choice',array('label' => 'Estado Civil', 'empty_value'=>'Seleccione estado civil...',
                     'choices'  => array('s' => 'Soltero', 'c' => 'Casado', 'e' => 'Estudiante'),
                     'attr'=>array(
-                    'class'=>'form-control'
+                    'class'=>'form-control input-sm'
                     )))
             ->add('sexo','choice',array('label' => 'Sexo','required' => true,'empty_value'=>'Seleccione sexo...',
                     'choices'  => array('m' => 'Masculino', 'f' => 'Femenino'),
                     'attr'=>array(
-                    'class'=>'form-control'
+                    'class'=>'form-control input-sm'
                     )))
             
             ->add('ocupacion','text',array('label' => 'Ocupación',
                     'attr'=>array(
-                    'class'=>'form-control'
+                    'class'=>'form-control input-sm'
                     )))
             ->add('lugarTrabajo','text',array('label' => 'Lugar de Trabajo',
                     'attr'=>array(
-                    'class'=>'form-control'
+                    'class'=>'form-control input-sm'
                     )))
             ->add('fechaNacimiento', null,
                   array('label'  => 'Fecha nacimiento',
@@ -48,15 +48,15 @@ class PacienteType extends AbstractType
                        ))
             ->add('referidoPor','text',array('label' => 'Referido por',
                     'attr'=>array(
-                    'class'=>'form-control'
+                    'class'=>'form-control input-sm'
                     )))
             ->add('personaEmergencia','text',array('label' => 'En caso de Emergencia llamar a',
                     'attr'=>array(
-                    'class'=>'form-control'
+                    'class'=>'form-control input-sm'
                     )))
             ->add('telefonoEmergencia','text',array('label' => 'Al telefono',
                     'attr'=>array(
-                    'class'=>'form-control'
+                    'class'=>'form-control input-sm'
                     )))
             //->add('estado')
            // ->add('persona')

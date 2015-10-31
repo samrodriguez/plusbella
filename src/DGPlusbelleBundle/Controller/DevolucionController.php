@@ -27,12 +27,16 @@ class DevolucionController extends Controller
      */
     public function indexAction()
     {
+        $entity = new Devolucion();
+        $form = $this->createCreateForm($entity);
         $em = $this->getDoctrine()->getManager();
 
         $entities = $em->getRepository('DGPlusbelleBundle:Devolucion')->findAll();
 
         return array(
             'entities' => $entities,
+            'entity' => $entity,
+            'form'   => $form->createView(),
         );
     }
     /**
@@ -54,7 +58,7 @@ class DevolucionController extends Controller
             $em->persist($entity);
             $em->flush();
 
-            return $this->redirect($this->generateUrl('admin_devolucion_show', array('id' => $entity->getId())));
+            return $this->redirect($this->generateUrl('admin_devolucion', array('id' => $entity->getId())));
         }
 
         return array(
@@ -79,7 +83,7 @@ class DevolucionController extends Controller
 
         $form->add('submit', 'submit', array('label' => 'Guardar',
                                                'attr'=>
-                                                        array('class'=>'btn btn-primary')));
+                                                        array('class'=>'btn btn-success btn-sm')));
 
         return $form;
     }
@@ -168,7 +172,9 @@ class DevolucionController extends Controller
             'method' => 'PUT',
         ));
 
-        $form->add('submit', 'submit', array('label' => 'Update'));
+        $form->add('submit','submit', array('label' => 'Modificar',
+                                               'attr'=>
+                                                        array('class'=>'btn btn-success btn-sm')));
 
         return $form;
     }
@@ -196,7 +202,7 @@ class DevolucionController extends Controller
         if ($editForm->isValid()) {
             $em->flush();
 
-            return $this->redirect($this->generateUrl('admin_devolucion_edit', array('id' => $id)));
+            return $this->redirect($this->generateUrl('admin_devolucion'));
         }
 
         return array(

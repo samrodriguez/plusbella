@@ -1,17 +1,48 @@
-{% extends 'DGPlusbelleBundle:Layout:general.html.twig' %}
+
 
 {% block contenido -%}
-    <h1>Modificar categoria</h1>
     
-  <div class="panel-body">
-<div class="row">
-         <div class="col-xs-12 col-sm-12">
-             <div class="modal-footer">
-                 <center> {{ form(edit_form) }}<a href="{{ path('admin_categoria') }}" class="btn btn-default">Regresar al listado</a>{{ form(delete_form) }} </center>
-              </div>
-            
-          </div>
-    </div>
+    
+          
+       
+  <div class="panel panel-default">
+    <div class="panel-heading"><p>Modificar categoria</p></div>
 
-</div>    
+    {#{{ form(edit_form) }}#}
+
+    <div class="panel-body">
+    {{ form_start(edit_form) }}
+    {{ form_errors(edit_form) }}
+    
+ 
+    <div class="col-xs-12 col-sm-4">
+     {{ form_row(edit_form.nombre) }} 
+    </div>
+     
+
+        <div class="form-grouphide col-sm-9"> 
+            <a href="{{ path('admin_categoria') }}" class="btn btn-default btn-sm" id="cancelarModificar">Cancelar</a>
+                {{ form_widget(edit_form._token) }}
+                {{ form_widget(edit_form.submit) }}
+        </div>
+
+     </div>
+    
 {% endblock %}
+
+
+{% block jquery %}
+<script>
+    $(document).ready(function(){
+    //Accion cancelar del boton modificar
+        $("#cancelarModificar").click(function(){
+            $("#edit-datatables1").click();
+            return false;
+        });
+        
+        
+    });
+   
+</script>
+{% endblock %}
+
