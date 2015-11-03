@@ -118,6 +118,22 @@
        <script>
             $(document).ready(function(){
                 
+                 $('#dgplusbellebundle_producto_fechaCompra').daterangepicker({
+                    singleDatePicker: true,
+                    showDropdowns: true,
+                    locale: {
+                        format: 'YYYY-MM-DD'
+                    },
+                }); 
+                
+                $('#dgplusbellebundle_producto_fechaVencimiento').daterangepicker({
+                    singleDatePicker: true,
+                    showDropdowns: true,
+                    locale: {
+                        format: 'YYYY-MM-DD'
+                    },
+                }); 
+                
                 //Seleccionar un registro
                 $('#datatables1>tbody>tr').on('click', function(event) {
                     //Se limpia los otros que esten activos

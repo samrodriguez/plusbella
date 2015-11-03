@@ -3,11 +3,11 @@
 {% block contenido -%}
  <div class="panel panel-default">
   <!-- Default panel contents -->
-  <div class="panel-heading"<h1>Nuevo paciente</h1></div>
+  <div class="panel-heading"><p>Nuevo paciente</p></div>
   <div class="panel-body">
   {{ form_start(form) }}
     {{ form_errors(form) }}
-    <div class="row">
+  
       <!--    <div class="col-xs-12 col-sm-6">   -->
         {% include 'DGPlusbelleBundle:Persona:form.html.twig' with { 'form': form.persona }%}
     <!--     </div> -->
@@ -39,10 +39,10 @@
         {{ form_row(form.telefonoEmergencia) }}
         {# {{ form_row(form.estado) }}#}
         </div>
-    </div>
+  
    
-             <div class="form-grouphide">
-                <a href="{{ path('admin_paciente') }}" class="btn btn-default btn-sm">Cancelar</a>
+             <div class="form-grouphide col-sm-9">
+                <a href="{{ path('admin_paciente') }}" class="btn btn-default btn-sm" id="cancelarNuevo">Cancelar</a>
                 {{ form_widget(form.submit) }}
               </div>
             
@@ -56,10 +56,3 @@
     
     
 {% endblock %}
-{% block javascritp_step %} 
-<script>
-  $(function() {
-    $( "#dgplusbellebundle_paciente_fechaNacimiento" ).datepicker();
-  });
-  </script>
- {% endblock %}

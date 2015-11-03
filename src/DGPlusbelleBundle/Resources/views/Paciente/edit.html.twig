@@ -1,18 +1,73 @@
 
 
 {% block contenido -%}
-    <h1>Modificar paciente</h1>
+    
+    
+       
+<div class="panel panel-default">
+    <div class="panel-heading"><p>Modificar paciente</p></div>
 
+    {#{{ form(edit_form) }}#}
+
+    <div class="panel-body">
     {{ form_start(edit_form) }}
     {{ form_errors(edit_form) }}
+ 
+   {% include 'DGPlusbelleBundle:Persona:edit_form.html.twig' with { 'edit_form': edit_form.persona }%} 
+    <div class="col-xs-12 col-sm-1">
+        {{ form_row(edit_form.dui) }}
+        </div>
+        <div class="col-xs-12 col-sm-2">
+        {{ form_row(edit_form.estadoCivil) }}
+         </div>
+        <div class="col-xs-12 col-sm-2">
+        {{ form_row(edit_form.sexo) }}
+         </div>
+        <div class="col-xs-12 col-sm-2">
+        {{ form_row(edit_form.ocupacion) }}
+         </div>
+        <div class="col-xs-12 col-sm-3">
+        {{ form_row(edit_form.lugarTrabajo) }}
+         </div>
+        <div class="col-xs-12 col-sm-2">
+        {{ form_row(edit_form.fechaNacimiento) }}
+         </div>
+        <div class="col-xs-12 col-sm-2">
+        {{ form_row(edit_form.referidoPor) }}
+         </div>
+        <div class="col-xs-12 col-sm-2">
+        {{ form_row(edit_form.personaEmergencia) }}
+         </div>
+        <div class="col-xs-12 col-sm-1">
+        {{ form_row(edit_form.telefonoEmergencia) }}
+        {# {{ form_row(form.estado) }}#}
+        </div>
+   
+    
+        <div class="form-grouphide col-sm-9"> 
+            <a href="{{ path('admin_paciente') }}" class="btn btn-default btn-sm" id="cancelarModificar">Cancelar</a>
+                {{ form_widget(edit_form._token) }}
+                {{ form_widget(edit_form.submit) }}
+        </div>
+    </div>
+    
+        </div>
+ </div>
 
-        <ul class="record_actions">
-    <li>
-        <a href="{{ path('admin_paciente') }}">
-            Back to the list
-        </a>
-    </li>
-    <li>{{ form(delete_form) }}</li>
-</ul>
-    {{ form_end(edit_form) }}
+</div>  
+
+{{ form_end(edit_form) }}  
+    
 {% endblock %}
+
+{% block jquery %}
+ <script>
+            $(document).ready(function(){
+               //Accion cancelar del boton modificar
+               $("#cancelarModificar").click(function(){
+               $("#edit-datatables1").click();
+                return false;
+        });
+</script>
+{% endblock %}
+

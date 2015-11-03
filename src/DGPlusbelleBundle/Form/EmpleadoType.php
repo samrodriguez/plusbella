@@ -20,17 +20,17 @@ class EmpleadoType extends AbstractType
                 
             ->add('cargo','text',array('label' => 'Cargo',
                     'attr'=>array(
-                    'class'=>'form-control'
+                    'class'=>'form-control input-sm'
                     )))
-            ->add('foto','file',array('label' => 'Foto',
+            ->add('foto','text',array('label' => 'Foto',
                     'attr'=>array(
-                    'class'=>'form-control'
+                    'class'=>'form-control '
                       
                     )))
             //->add('persona')
             ->add('sucursal',null,array('label' => 'Sucursal','empty_value'=>'Seleccione Sucursal',
                     'attr'=>array(
-                    'class'=>'form-control'
+                    'class'=>'form-control input-sm'
                     )))
             //->add('horario')
             //->add('tratamiento')

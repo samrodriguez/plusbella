@@ -1,33 +1,38 @@
-{% extends 'DGPlusbelleBundle:Layout:general.html.twig' %}
+
 
 {% block contenido -%}
  <div class="panel panel-default">
   <!-- Default panel contents -->
-  <div class="panel-heading"<h1>Empleado nuevo</h1></div>
+  <div class="panel-heading"><p>Empleado nuevo</p></div>
   <div class="panel-body">
   {{ form_start(form) }}
     {{ form_errors(form) }}
-    <div class="row">
+   
         {# <div class="col-xs-12 col-sm-6"> #}
         
       {#  </div> #}
-        <div class="col-xs-12 col-sm-6">
-        {% include 'DGPlusbelleBundle:Persona:form.html.twig' with { 'form': form.persona }%}    
+     
+        {% include 'DGPlusbelleBundle:Persona:form.html.twig' with { 'form': form.persona }%}  
+        <div class="col-xs-12 col-sm-2">
         {{ form_row(form.cargo) }}
-        {{ form_row(form.foto) }}
+         </div>
+        <div class="col-xs-12 col-sm-2">
         {{ form_row(form.sucursal) }}
         {# {{ form_row(form.estado) }}#}
         </div>
-    </div>
-    <div class="row">
-         <div class="col-xs-12 col-sm-6">
-             <div class="modal-footer">
-                <a href="{{ path('admin_empleado') }}" class="btn btn-default">Regresar al listado</a>
+         <div class="col-xs-12 col-sm-3">
+        {{ form_row(form.foto) }}
+         </div>
+ 
+    
+         
+             <div class="form-grouphide col-sm-12">
+                <a href="{{ path('admin_empleado') }}" class="btn btn-default btn-sm" id="cancelarNuevo">Cancelar</a>
                 {{ form_widget(form.submit) }}
               </div>
             
-        </div>
-    </div>
+      
+  
     {{ form_end(form) }}
   </div>
 
@@ -37,3 +42,4 @@
     
     
 {% endblock %}
+
