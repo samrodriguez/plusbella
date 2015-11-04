@@ -60,7 +60,7 @@
                     {% for key, entity in entities %}
                         <tr id="{{entity.id}}">
                             <td>{{key+1 }}</td>
-                            <td>{{ entity.empleado.primernombre }} {{ entity.empleado.segundonombre }}  {{entity.empleado.primerapellido}} {{entity.empleado.segundoapellido}}
+                            <td>{{ entity.empleado.primernombre }}  {{entity.empleado.primerapellido}} 
                             <td style="text-align: right; padding-right: 20px">$ {{ entity.paquete.costo|number_format(2, '.', ',') }}
                             <td style="text-align: right; padding-right: 20px">{% if entity.fechaVenta %}{{ entity.fechaVenta|date('d/m/Y') }}{% endif %}</td>
 

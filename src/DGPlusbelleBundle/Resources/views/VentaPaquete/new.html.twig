@@ -1,3 +1,4 @@
+{% extends 'DGPlusbelleBundle:Layout:layout.html.twig' %}
 {% block contenido -%}
     <div class="panel panel-default">
         <div class="panel-heading"><p>Registrar nueva venta</p></div>
@@ -30,3 +31,109 @@
             {{ form_end(form) }}    
 {% endblock %}
 
+{% block javascripts_step %}
+        
+        
+        <script>
+            $(document).ready(function(){
+                //Generación de calendario zebra
+                $('#dgplusbellebundle_cita_fechaCita').Zebra_DatePicker(//{
+                    /*onSelect:
+                        $.getJSON(Routing.generate('get_horas', { idEmp: idEmp}), 
+                        function(data) {
+                            var numRegistros = data.regs.length;
+                            var x='1,2,3,4,5,6,0,';
+                            $.each(data.regs, function(indice, reg) {
+                                //alert(indice);
+                                switch(reg.diaHorario){
+                                    case 'Lunes'    : index = x.indexOf('1'); break;
+                                    case 'Martes'   : index = x.indexOf('2'); break;
+                                    case 'Miercoles': index = x.indexOf('3'); break;
+                                    case 'Jueves'   : index = x.indexOf('4'); break;
+                                    case 'Viernes'  : index = x.indexOf('5'); break; 
+                                    case 'Sabado'   : index = x.indexOf('6'); break; 
+                                    case 'Domingo'  : index = x.indexOf('0'); break;
+                                }
+                                x = x.substring(0, index) + x.substring(index+2, x.length);   
+
+
+                                //alert(deshabilitar);
+                                datepicker.update({
+                                    direction: true,
+                                    disabled_dates: ['* * * '+x] 
+                                });
+                            });        
+                        }); */
+               /* }*/);
+                
+                /*$('#dgplusbellebundle_cita_fechaCita').daterangepicker({
+                    singleDatePicker: true,
+                    showDropdowns: true,
+                    locale: {
+                        format: 'YYYY-MM-DD'
+                    },
+                });*/ 
+                var seleccionado="";
+                //Eliminar options del select de pacientes
+                $('#dgplusbellebundle_cita_paciente option').each(function(index, val) {
+                    
+                    seleccionado = $(this).attr('selected');
+                    if (!seleccionado){
+                        $(this).remove();
+                    }
+                });
+                
+                //Eliminar las opciones de la lista creada por el selectBoxIt
+                $("#dgplusbellebundle_ventapaquete_pacienteSelectBoxItOptions li").remove();
+                //$('#dgplusbellebundle_cita_empleado').select2();
+                
+                //$('#dgplusbellebundle_cita_horaInicio').ptTimeSelect();
+                
+                
+                
+                var url = Routing.generate('get_dias', { idEmp: 10 });
+                var idEmp = 0;
+                
+                //Cargar los horarios al inicio
+                $('#dgplusbellebundle_cita_empleado').change();
+                //Modificar horarios al cmabiar dropdown
+                $('#dgplusbellebundle_cita_empleado').on('change', function() {
+                    var idEmp = $(this).val();
+                    //alert(idEmp);
+                    var datepicker = $('#dgplusbellebundle_cita_fechaCita').data('Zebra_DatePicker');
+                    if(idEmp==""){
+                        idEmp = 0;
+                    }
+                    var deshabilitar="* * * ";
+                    $.getJSON(Routing.generate('get_dias', { idEmp: idEmp}), 
+                    function(data) {
+                        var numRegistros = data.regs.length;
+                        var x='1,2,3,4,5,6,0,';
+                        $.each(data.regs, function(indice, reg) {
+                            //alert(indice);
+                            switch(reg.diaHorario){
+                                case 'Lunes'    : index = x.indexOf('1'); break;
+                                case 'Martes'   : index = x.indexOf('2'); break;
+                                case 'Miercoles': index = x.indexOf('3'); break;
+                                case 'Jueves'   : index = x.indexOf('4'); break;
+                                case 'Viernes'  : index = x.indexOf('5'); break; 
+                                case 'Sabado'   : index = x.indexOf('6'); break; 
+                                case 'Domingo'  : index = x.indexOf('0'); break;
+                            }
+                            x = x.substring(0, index) + x.substring(index+2, x.length);   
+                            
+
+                            //alert(deshabilitar);
+                            datepicker.update({
+                                direction: true,
+                                disabled_dates: ['* * * '+x] 
+                            });
+                        });        
+                    }); 
+                });
+                
+                
+                
+            });
+        </script>
+{% endblock %}

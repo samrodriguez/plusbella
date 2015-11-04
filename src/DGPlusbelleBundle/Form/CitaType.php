@@ -22,11 +22,11 @@ class CitaType extends AbstractType
                         'attr'   => array('class' => 'form-control input-sm'),
                        ))
             ->add('horaInicio', null,
-                  array('label'  => 'Hora inicio',
+                  array('label'  => 'Hora',
                         'widget' => 'single_text',
                         'attr'   => array('class' => 'form-control input-sm'),
                        ))
-            ->add('horaFin')
+            //->add('horaFin')
            // ->add('fechaRegistro')
             //->add('estado')
             ->add('descuento', null, 
@@ -46,16 +46,16 @@ class CitaType extends AbstractType
                                                 //return $r->seleccionarEmpleadosPersonasActivos();
                                             } ,  
                          'attr'=>array(
-                         'class'=>'form-control'
+                         'class'=>'form-control busqueda'
                          )
                        ))
-            ->add('horario', null, 
+            /*->add('horario', null, 
                   array( 'label'         => 'Horario',
                          'empty_value'   => 'Seleccione un día...',
                          'attr'=>array(
                          'class'=>'form-control'
                          )
-                       ))
+                       ))*/
             ->add('paciente', null, 
                   array( 'label'         => 'Paciente',
                          'empty_value'   => 'Seleccione un paciente...',

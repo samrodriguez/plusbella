@@ -266,10 +266,10 @@ class CitaController extends Controller
     
     
      /**
-     * @Route("/horarios/get/{idEmp}", name="get_horarios", options={"expose"=true})
+     * @Route("/dias/get/{idEmp}", name="get_dias", options={"expose"=true})
      * @Method("GET")
      */
-    public function getHorariosAction(Request $request, $idEmp) {
+    public function getDiasAction(Request $request, $idEmp) {
         
         $request = $this->getRequest();
         
@@ -279,10 +279,101 @@ class CitaController extends Controller
                     FROM DGPlusbelleBundle:Horario ho
                     JOIN ho.empleado emp
                 WHERE emp.id =:idEmp";
-        $regiones['regs'] = $em->createQuery($dql)
+        $dias['regs'] = $em->createQuery($dql)
                 ->setParameter('idEmp', $idEmp)
                 ->getArrayResult();
         //var_dump($regiones);
-        return new Response(json_encode($regiones));
+        return new Response(json_encode($dias));
+    }
+    
+    
+    /**
+     * @Route("/horas/get/{idEmp}/{dia}", name="get_horas", options={"expose"=true})
+     * @Method("GET")
+     */
+    public function getHorasAction(Request $request, $idEmp,$dia) {
+        
+        $request = $this->getRequest();
+        
+        $em = $this->getDoctrine()->getEntityManager();
+        
+        $dql = "SELECT ho.horaInicio, ho.horarioFin
+                    FROM DGPlusbelleBundle:Horario ho
+                    JOIN ho.empleado emp
+                WHERE emp.id =:idEmp AND ho.diaHorario =:dia";
+        $horas['regs'] = $em->createQuery($dql)
+                ->setParameters(array('idEmp'=>$idEmp,'dia'=>$dia))
+                ->getArrayResult();
+        //var_dump($horas);
+        $inicio=$horas['regs'][0]['horaInicio']->format('H:i');
+        $fin=$horas['regs'][0]['horarioFin']->format('H:i');
+        $horasExtraidas['regs']=array('horaInicio'=>$inicio,'horaFin'=>$fin);
+        //var_dump($inicio);
+        
+        array_push($horasExtraidas['regs'], $inicio, $fin); 
+        
+        
+
+        $time = strtotime($inicio);
+        $time = date("H:i", strtotime('+30 minutes', $time));
+        $timeString = $inicio;
+        
+        //var_dump($timeString);
+
+        $w = strtotime($inicio);
+        $s = strtotime($fin);
+
+        $flag = true;
+
+        $st_time    =   strtotime($inicio);
+        $end_time   =   strtotime($fin);
+        $cur_time   =   strtotime("now");
+        
+
+        $time = strtotime($inicio);
+        $timeFin = strtotime($fin);
+        $endTime = date("H:i", strtotime( $time));
+        $endString = strtotime($endTime);
+    
+        if($endString<$timeFin){
+            //echo "ksjdcnds";
+        }
+        
+        while($endString<=$timeFin){
+            $time = strtotime($inicio);
+            $endTime = date("H:i", strtotime('+30 minutes', $time));
+            $endString = strtotime($endTime);
+            echo date("H:i", $endString);
+        }
+        //echo $time."\n";
+        echo $endTime."\n";
+        
+        
+        //$endTime = date("H:i", strtotime('+30 minutes', $time));
+        while($flag){
+            if($w<$s){
+                $w = strtotime($timeString);
+                $timek = date("H:i", strtotime('+30 minutes', $time));
+                $timeString = date('H:i',$timek);
+            }
+            else{
+                $flag = false;
+            }
+        }
+        /*while($w<$s){
+            /*$time = strtotime($timeString);
+            $timek = date("H:i", strtotime('+30 minutes', $time));
+            $timeString = date('H:i',$timek);*/
+           /* $time = strtotime($inicio);
+            $timeString = date("H:i", strtotime('+30 minutes', $time));
+            array_push($horasExtraidas['regs'], $timeString);
+        }*/
+        
+
+
+        //$horas2['regs'] = 
+        //var_dump($horas['regs'][0]['horarioFin']);
+        var_dump($horasExtraidas);
+        return new Response(json_encode($horas));
     }
 }

@@ -109,7 +109,7 @@ class VentaPaqueteController extends Controller
 
         $form->add('submit', 'submit', array('label' => 'Guardar',
                                                'attr'=>
-                                                        array('class'=>'btn btn-primary btn-sm')));
+                                                        array('class'=>'btn btn-success btn-sm')));
 
         return $form;
     }
@@ -124,6 +124,17 @@ class VentaPaqueteController extends Controller
     public function newAction()
     {
         $entity = new VentaPaquete();
+        $em = $this->getDoctrine()->getManager();
+        
+        //Recuperación del paciente
+        $request = $this->getRequest();
+        $id= $request->get('id');
+        
+        //Busqueda del paciente
+        $paciente = $em->getRepository('DGPlusbelleBundle:Paciente')->find($id);
+        //Seteo del paciente en la entidad
+        $persona=$paciente->getPersona();
+        $entity->setPaciente($persona);
         $form   = $this->createCreateForm($entity);
 
         return array(

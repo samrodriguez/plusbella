@@ -1,4 +1,4 @@
-{% extends 'DGPlusbelleBundle:Layout:layout.html.twig' %}
+{% extends 'DGPlusbelleBundle:Layout:layout.html.twig' %} 
 
 
 
@@ -26,10 +26,10 @@
          {{ form_row(form.fechaCita) }} 
         </div>
         
-        <div class="col-md-3">
+        {#<div class="col-md-3">
          {{ form_row(form.horario ) }}   
         </div>
-        
+        #}
         <div class="col-md-3">
          {{ form_row(form.horaInicio) }} 
         </div>
@@ -62,7 +62,7 @@
     </div>
          
              <div class="form-grouphide"> 
-                 <a href="{{ path('admin_sucursal') }}" class="btn btn-default btn-sm" id="cancelarNuevo">Cancelar</a>
+                 <a href="{{ path('admin_paciente') }}" class="btn btn-default btn-sm" id="cancelarNuevo">Cancelar</a>
                 {{ form_widget(form.submit) }}
              </div>
         
@@ -76,13 +76,39 @@
 
 
 {% block javascripts_step %}
-        <script src="{{ asset('Resources/wrapkit/scripts/dataTables.bootstrap.js') }}"></script>
-        <script src="{{ asset('Resources/wrapkit/scripts/dataTables.tableTools.js') }}"></script>
-        <script src="{{ asset('Resources/wrapkit/scripts/dataTables.tableTools.js') }}"></script>
-        <script src="{{ asset('Resources/zebra/js/zebra_datepicker.js') }}"></script>
+        
         
         <script>
             $(document).ready(function(){
+                //Generación de calendario zebra
+                $('#dgplusbellebundle_cita_fechaCita').Zebra_DatePicker(//{
+                    /*onSelect:
+                        $.getJSON(Routing.generate('get_horas', { idEmp: idEmp}), 
+                        function(data) {
+                            var numRegistros = data.regs.length;
+                            var x='1,2,3,4,5,6,0,';
+                            $.each(data.regs, function(indice, reg) {
+                                //alert(indice);
+                                switch(reg.diaHorario){
+                                    case 'Lunes'    : index = x.indexOf('1'); break;
+                                    case 'Martes'   : index = x.indexOf('2'); break;
+                                    case 'Miercoles': index = x.indexOf('3'); break;
+                                    case 'Jueves'   : index = x.indexOf('4'); break;
+                                    case 'Viernes'  : index = x.indexOf('5'); break; 
+                                    case 'Sabado'   : index = x.indexOf('6'); break; 
+                                    case 'Domingo'  : index = x.indexOf('0'); break;
+                                }
+                                x = x.substring(0, index) + x.substring(index+2, x.length);   
+
+
+                                //alert(deshabilitar);
+                                datepicker.update({
+                                    direction: true,
+                                    disabled_dates: ['* * * '+x] 
+                                });
+                            });        
+                        }); */
+               /* }*/);
                 
                 /*$('#dgplusbellebundle_cita_fechaCita').daterangepicker({
                     singleDatePicker: true,
@@ -92,47 +118,59 @@
                     },
                 });*/ 
                 var seleccionado="";
-                $('#dgplusbellebundle_cita_paciente option').each(function(index, val) {
+                //Eliminar options del select de pacientes
+                //$('#dgplusbellebundle_cita_paciente option').each(function(index, val) {
                     
-                    seleccionado = $(this).attr('selected');
-                    if (!seleccionado){
-                        $(this).remove();
-                    }
-                });
+                   
+                //Eliminar las opciones de la lista creada por el selectBoxIt
+                $("#dgplusbellebundle_cita_pacienteSelectBoxItOptions li").remove();
                 
-                $('#dgplusbellebundle_cita_empleado').select2();
+                //$('#dgplusbellebundle_cita_empleado').select2();
                 
-                $('#dgplusbellebundle_cita_horaInicio').ptTimeSelect();
+                //$('#dgplusbellebundle_cita_horaInicio').ptTimeSelect();
                 
-                $('#dgplusbellebundle_cita_fechaCita').Zebra_DatePicker();
-                var url = Routing.generate('get_horarios', { idEmp: 10 });
+                
+                
+                
                 var idEmp = 0;
                 
-                //alert(url);
-                
+                //Cargar los horarios al inicio
+                //$('#dgplusbellebundle_cita_empleado').change();
+                //Modificar horarios al cmabiar dropdown
                 $('#dgplusbellebundle_cita_empleado').on('change', function() {
                     var idEmp = $(this).val();
                     //alert(idEmp);
+                    var datepicker = $('#dgplusbellebundle_cita_fechaCita').data('Zebra_DatePicker');
                     if(idEmp==""){
                         idEmp = 0;
                     }
-                    $.getJSON(Routing.generate('get_horarios', { idEmp: idEmp}), 
+                    
+                    $.getJSON(Routing.generate('get_dias', { idEmp: idEmp}), 
                     function(data) {
-                    $.each(data.regs, function(indice, reg) {
-                        if(reg.length!=0){
-                            alert("se encontro data");
-                        }
-                        else{
-                            alert("no se encontro data");
-                        }
-                        //alert(reg.diaHorario);
-                    });
-                                
-                }); 
-                });
-                
-                
-                
-            });
+                        var numRegistros = data.regs.length;
+                        var x='1,2,3,4,5,6,0,';
+                        $.each(data.regs, function(indice, reg) {
+                            //alert(indice);
+                            switch(reg.diaHorario){
+                                case 'Lunes'    : index = x.indexOf('1'); break;
+                                case 'Martes'   : index = x.indexOf('2'); break;
+                                case 'Miercoles': index = x.indexOf('3'); break;
+                                case 'Jueves'   : index = x.indexOf('4'); break;
+                                case 'Viernes'  : index = x.indexOf('5'); break; 
+                                case 'Sabado'   : index = x.indexOf('6'); break; 
+                                case 'Domingo'  : index = x.indexOf('0'); break;
+                            }
+                            x = x.substring(0, index) + x.substring(index+2, x.length);   
+                            
+
+                            //alert(deshabilitar);
+                            datepicker.update({
+                                direction: true,
+                                disabled_dates: ['* * * '+x] 
+                            });
+                        });        
+                    }); 
+                });     
+        });
         </script>
 {% endblock %}

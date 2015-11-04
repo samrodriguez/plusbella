@@ -234,13 +234,15 @@
                             <div class="media-left">
                               <a href="page-profile.html">
                                 <span class="status dotted dotted-primary" data-toggle="tooltip" data-container="body" title="available"></span>
-                                <img class="media-object img-circle" src="{{ asset('Resources/wrapkit/images/dummy/uifaces14.jpg') }}" alt="photo profile">
+                                {% block imagenPerfil %}
+                                <img class="media-object img-circle" src="{{ asset('Resources/img/empleados/dr.jpg') }}" alt="photo profile">
+                                {% endblock %}
                               </a>
                             </div>
                             <div class="media-body">
-                              <h4 class="media-heading">Marvin Vigil</h4>  <!-- nombre de usuario conectado -->
+                              <h4 class="media-heading">Juan Carlos Pacheco</h4>  <!-- nombre de usuario conectado -->
                               <p class="text-muted">
-                                <small>Graphic Designer</small>
+                                <small>Cirujano</small>
                               </p>
                             </div>
                           </div>
@@ -463,6 +465,21 @@
     <script src="{{ path('fos_js_routing_js', {'callback': 'fos.Router.setData'}) }}"></script>
     
     <!-- END COMPONENTS -->
+    
+    <!-- Aspectos generales de la plantilla -->
+    <script>
+        $(document).ready(function(){
+            $('select').each(function(index, val) {    
+                if (!$(this).hasClass("busqueda") ){
+                   $(this).selectBoxIt();
+                }
+                else{
+                    $(this).select2();
+                }
+            });
+            
+        });
+    </script>
 {% endblock %}    
 
 {% block javascripts_step %}

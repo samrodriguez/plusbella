@@ -33,7 +33,7 @@ class Persona
      *
      * @ORM\Column(name="segundo_nombre", type="string", length=75, nullable=true)
      */
-    private $segundoNombre;
+    //private $segundoNombre;
 
     /**
      * @var string
@@ -47,14 +47,14 @@ class Persona
      *
      * @ORM\Column(name="segundo_apellido", type="string", length=50, nullable=true)
      */
-    private $segundoApellido;
+    //private $segundoApellido;
 
     /**
      * @var string
      *
      * @ORM\Column(name="apellido_casada", type="string", length=50, nullable=true)
      */
-    private $apellidoCasada;
+    //private $apellidoCasada;
 
     /**
      * @var string
@@ -143,23 +143,23 @@ class Persona
      *
      * @return Persona
      */
-    public function setSegundoNombre($segundoNombre)
+    /*public function setSegundoNombre($segundoNombre)
     {
         $this->segundoNombre = $segundoNombre;
 
         return $this;
     }
-
+*/
     /**
      * Get segundoNombre
      *
      * @return string
      */
-    public function getSegundoNombre()
+    /*public function getSegundoNombre()
     {
         return $this->segundoNombre;
     }
-
+*/
     /**
      * Set primerApellido
      *
@@ -203,10 +203,10 @@ class Persona
      *
      * @return string
      */
-    public function getSegundoApellido()
+    /*public function getSegundoApellido()
     {
         return $this->segundoApellido;
-    }
+    }*/
 
     /**
      * Set apellidoCasada
@@ -215,22 +215,22 @@ class Persona
      *
      * @return Persona
      */
-    public function setApellidoCasada($apellidoCasada)
+   /* public function setApellidoCasada($apellidoCasada)
     {
         $this->apellidoCasada = $apellidoCasada;
 
         return $this;
-    }
+    }*/
 
     /**
      * Get apellidoCasada
      *
      * @return string
      */
-    public function getApellidoCasada()
+    /*public function getApellidoCasada()
     {
         return $this->apellidoCasada;
-    }
+    }*/
 
     /**
      * Set direccion

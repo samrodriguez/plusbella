@@ -35,16 +35,16 @@ class EmpleadoController extends Controller
         $rsm = new ResultSetMapping();
         $em = $this->getDoctrine()->getManager();
         
-        $sql = "select per.primer_nombre as pnombre, per.segundo_nombre as snombre, per.primer_apellido as papellido, per.segundo_apellido as sapellido, per.apellido_casada as casada, "
+        $sql = "select per.primer_nombre as pnombre, per.primer_apellido as papellido,  "
                 . "per.direccion as direccion, per.telefono as tel, per.email as email, emp.id as idemp, emp.cargo as cargo, emp.foto as foto, emp.sucursal as sucursal "
                 . "from empleado emp inner join persona per on emp.persona = per.id order by per.primer_apellido";
         
         $rsm->addScalarResult('idemp','idemp');
         $rsm->addScalarResult('pnombre','pnombre');
-        $rsm->addScalarResult('snombre','snombre');
+        //$rsm->addScalarResult('snombre','snombre');
         $rsm->addScalarResult('papellido','papellido');
-        $rsm->addScalarResult('sapellido','sapellido');
-        $rsm->addScalarResult('casada','casada');
+        //$rsm->addScalarResult('sapellido','sapellido');
+        //$rsm->addScalarResult('casada','casada');
         $rsm->addScalarResult('direccion','direccion');
         $rsm->addScalarResult('tel','tel');
         $rsm->addScalarResult('email','email');

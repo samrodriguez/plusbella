@@ -19,14 +19,25 @@
                
                 <div class="btn-group btn-group-sm pull-left">
                    <button data-toggle="tooltip" data-container="body" title="Nuevo paciente" id="add-datatables1" class="btn btn-default" role="button">
-                    <i class="fa fa-plus"></i>
+                    <i class="icon-user-follow"></i>
                       </button> 
+                </div>
+                <div class="btn-group btn-group-sm pull-left">
+                    <button id="nueva-cita" data-toggle="tooltip" data-container="body" title="Nueva cita" class="btn btn-default datatables1-actions disabled opciones" role="button">
+                        <i class="fa fa-calendar-plus-o"></i><a href="{{ path('admin_cita_new') }}"> </a>
+                    </button>
+                    <button id="nuevo-abono" data-toggle="tooltip" data-container="body" title="Nuevo abono" class="btn btn-default datatables1-actions disabled opciones" role="button">
+                        <i class="fa fa-money"></i><a href="{{ path('admin_devolucion_new') }}"> </a>
+                    </button> 
+                    <button id="vender-paquete" data-toggle="tooltip" data-container="body" title="Vender paquete" class="btn btn-default datatables1-actions disabled opciones" role="button">
+                        <i class="fa fa-briefcase"></i><a href="{{ path('admin_ventapaquete_new') }}"> </a>
+                    </button> 
                 </div>
                 <div class="btn-group btn-group-sm pull-left">
                   <button id="edit-datatables1" data-toggle="tooltip" data-container="body" title="Modificar paciente" class="btn btn-default datatables1-actions disabled" role="button">
                     <i class="fa fa-edit"></i>
                   </button>
-                  <button id="delete-datatables1" data-toggle="tooltip" data-container="body" title="delete record(s)" class="btn btn-default datatables1-actions disabled" role="button">
+                  <button id="delete-datatables1" data-toggle="tooltip" data-container="body" title="Eliminar registro" class="btn btn-default datatables1-actions disabled" role="button">
                     <i class="fa fa-trash-o"></i>
                   </button>
                 </div>
@@ -41,6 +52,10 @@
             </div><!-- /.panel-body -->
             
             <div class="panel-body hide" id="editFormContainer">
+            
+            </div>
+            
+            <div class="panel-body hide" id="opcionesFormContainer">
             
             </div>
 
@@ -61,7 +76,7 @@
                 <th>Fecha de nacimiento</th>
                 <th>Referido por</th>
                 
-             {#     <th>Acciones</th>  #} 
+                {#<th>Acciones</th>#}
             </tr>
         </thead>
         <tbody>
@@ -69,9 +84,9 @@
                 <tr id="{{entity.idpac}}">
              {# <td>{{ entity.idpac }}</td>  #}
 
-                <td>{{ entity.pnombre }} {{ entity.snombre }} {{ entity.papellido }} {{ entity.sapellido }}</td>
-                 <td>{{ entity.dui }}</td>
-                 <td>{{ entity.direccion }}</td>
+                <td>{{ entity.pnombre }} {{ entity.papellido }}</td>
+                <td>{{ entity.dui }}</td>
+                <td>{{ entity.direccion }}</td>
                 <td>{{ entity.tel}}</td>
                 <td>{{ entity.email }}</td>
                
@@ -82,16 +97,16 @@
                 {#<td>{{ entity.personaEmergencia }}</td>
                 <td>{{ entity.telefonoEmergencia }}</td>#}
                 
-             <!--    <td>
+                 {#<td>
                 <ul>
                     <li>
-                        <a href="{{ path('admin_paciente_show', { 'id': entity.idpac }) }}">Mostrar</a>
+                        <a href="{{ path('admin_paciente_show', { 'id': entity.idpac }) }}">Consulta de emergencia</a>
                     </li>
                     <li>
-                        <a href="{{ path('admin_paciente_edit', { 'id': entity.idpac }) }}">Editar</a>
+                        <a href="{{ path('admin_cita_new', { 'id': entity.idpac }) }}">Nueva cita</a>
                     </li>
                 </ul>
-                </td>  -->  
+                </td>#}    
             </tr>
         {% endfor %}
         </tbody>
@@ -119,7 +134,7 @@
       
        <script>
             $(document).ready(function(){
-                
+                var idPaciente = 0;
                  $('#dgplusbellebundle_paciente_fechaNacimiento').daterangepicker({
                     singleDatePicker: true,
                     showDropdowns: true,
@@ -139,14 +154,18 @@
                     //Se habilitan los botones de editar y borrar
                     $("#edit-datatables1").removeClass("disabled");
                     $("#delete-datatables1").removeClass("disabled");
-                    
+                    $("#nueva-cita").removeClass("disabled");
+                    $("#nuevo-abono").removeClass("disabled");
+                    $("#vender-paquete").removeClass("disabled");
+        
                     //var link=$('#datatables1>tbody>tr>td>a').attr("href");
                     //var link=$(this).children("td:first").children().attr("href");
                     //Obtener el id del registro
-                    var link=$(this).attr("id");
+                    idPaciente=$(this).attr("id");
+                    
                     //alert(link);
                     //Carga del form modificar
-                    $("#editFormContainer").load(link+"/edit");
+                    $("#editFormContainer").load(idPaciente+"/edit");
                     
                     
                     //var href=link.attr("href");
@@ -179,6 +198,22 @@
                 //Accion cancelar del boton modificar
                 $("#cancelarModificar").click(function(){
                     $("#edit-datatables1").click();
+                    return false;
+                });
+                
+                //Accion nueva cita
+                $(".opciones").click(function(){
+                    //$("#edit-datatables1").click();
+                    var href = $(this).children("a").attr("href")+"?id="+idPaciente;
+                    
+                    //alert();
+                    if( !$(this).hasClass("disabled") ){
+                        //$("#opcionesFormContainer").load(href);
+                        window.location=href;
+                        //$("#addFormContainer").addClass("hide");
+                        //$("#editFormContainer").addClass("hide");
+                        //$("#opcionesFormContainer").removeClass("hide");
+                    }
                     return false;
                 });
                 
@@ -215,7 +250,7 @@
                     searching:true,
                     "order":[[0, "desc"],[1,"desc"]],
                     "columnDefs": [
-                           { "orderable": false, "targets": 0 },
+                           { "orderable": false, "targets": 1 },
                            { "orderable": false, "targets": 2 },
                            { "orderable": false, "targets": 3 },
                            { "orderable": false, "targets": 4 },
@@ -223,11 +258,7 @@
                            { "orderable": false, "targets": 6 },
                            { "orderable": false, "targets": 7 },
                            { "orderable": false, "targets": 8 }
-                           
-                      
-                           
-                        
-                         
+                                 
                        
                            
                            
