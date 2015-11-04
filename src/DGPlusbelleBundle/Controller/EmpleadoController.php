@@ -30,30 +30,38 @@ class EmpleadoController extends Controller
      */
     public function indexAction()
     {
+        $entity = new Empleado();
+        $form = $this->createCreateForm($entity);
         $rsm = new ResultSetMapping();
         $em = $this->getDoctrine()->getManager();
         
-        $sql = "select * "
-                . "from empleado ";
+        $sql = "select per.primer_nombre as pnombre, per.segundo_nombre as snombre, per.primer_apellido as papellido, per.segundo_apellido as sapellido, per.apellido_casada as casada, "
+                . "per.direccion as direccion, per.telefono as tel, per.email as email, emp.id as idemp, emp.cargo as cargo, emp.foto as foto, emp.sucursal as sucursal "
+                . "from empleado emp inner join persona per on emp.persona = per.id order by per.primer_apellido";
         
-        $rsm->addScalarResult('id','id');
-        $rsm->addScalarResult('descripcion','descripcion');
-        $rsm->addScalarResult('codigo','codigo');
-        $rsm->addScalarResult('fechacreacion','fechacreacion');
-        $rsm->addScalarResult('fechafinalizacion','fechafinalizacion');
-        $rsm->addScalarResult('observacion','observacion');
-        
-        $entities = $em->getRepository('DGPlusbelleBundle:Empleado')->findAll();
+        $rsm->addScalarResult('idemp','idemp');
+        $rsm->addScalarResult('pnombre','pnombre');
+        $rsm->addScalarResult('snombre','snombre');
+        $rsm->addScalarResult('papellido','papellido');
+        $rsm->addScalarResult('sapellido','sapellido');
+        $rsm->addScalarResult('casada','casada');
+        $rsm->addScalarResult('direccion','direccion');
+        $rsm->addScalarResult('tel','tel');
+        $rsm->addScalarResult('email','email');
+        $rsm->addScalarResult('cargo','cargo');
+        $rsm->addScalarResult('foto','foto');
+        $rsm->addScalarResult('sucursal','sucursal');
+
+       
         $empleados = $em->createNativeQuery($sql, $rsm)
-                      ->setParameter(1,1)
-                    //->setParameter(1, $usuario->getIdEmpleado()->getId())
-                  //
                     ->getResult();
         
 
         return array(
-            'entities' => $entities,
+            //'entities' => $entities,
             'empleados' => $empleados,
+            'entity' => $entity,
+            'form'   => $form->createView(),
         );
     }
     /**
@@ -66,49 +74,10 @@ class EmpleadoController extends Controller
     public function createAction(Request $request)
     {
         $entity = new Empleado();
-      /*  $path="/recursos/img/boletas/";	
-        $nombre_archivo = $_FILES['userfile']['name'];
-        $tipo_archivo = $_FILES['userfile']['type'];	
-        $entity->setFoto($path.$nombre_archivo.$nombre_archivo.'.'.$tipo_archivo); */
-        //$entity->setEstado(true);
+        $entity->setEstado(true);
         $form = $this->createCreateForm($entity);
         $form->handleRequest($request);
-        
-        
 
- /* 
-
-$tamano_archivo = $_FILES['userfile']['size'];	
-if (!((strpos($nombre_archivo, "doc") || strpos($nombre_archivo, "gif") || strpos($nombre_archivo,"jpg")|| strpos($nombre_archivo,"png")))) 
-{
-echo "La extensión o el tamaño de los archivos no es correcta";	
-}
-else
-{
-if (move_uploaded_file($_FILES['userfile']['tmp_name'], $path.$_FILES['userfile']['name']))
-{
-echo "El archivo ha sido cargado correctamente.";
-}
-else
-{
-echo "Ocurrió algún error al subir el fichero. No pudo guardarse.";
-}
-}
-
-  */       
-        
-       /* $parameters = $request->request->all();
-        foreach($parameters as $p){
-            $primerNombre = $p['primerNombre'];
-            $segundoNombre = $p['segundoNombre'];
-            $primerApellido = $p['primerApellido'];
-            $segundoApellido = $p['segundoApellido'];
-            $apellidoCasada = $p['apellidoCasada'];
-            $direccion = $p['direccion'];
-            $telefono = $p['telefono'];
-            $email = $p['email'];
-        }*/
-        
         if ($form->isValid()) {
             $em = $this->getDoctrine()->getManager();
             $em->persist($entity);
@@ -132,8 +101,6 @@ echo "Ocurrió algún error al subir el fichero. No pudo guardarse.";
      */
     private function createCreateForm(Empleado $entity)
     {
-      /* $persona = new Persona();
-        $formPersona = new PersonaType();*/
         $form = $this->createForm(new EmpleadoType(), $entity, array(
             'action' => $this->generateUrl('admin_empleado_create'),
             'method' => 'POST',
@@ -141,7 +108,7 @@ echo "Ocurrió algún error al subir el fichero. No pudo guardarse.";
 
         $form->add('submit', 'submit', array('label' => 'Guardar',
                                                'attr'=>
-                                                        array('class'=>'btn btn-primary')
+                                                        array('class'=>'btn btn-primary btn-sm')
              ));
 
         return $form;
@@ -231,7 +198,10 @@ echo "Ocurrió algún error al subir el fichero. No pudo guardarse.";
             'method' => 'PUT',
         ));
 
-        $form->add('submit', 'submit', array('label' => 'Update'));
+        $form->add('submit', 'submit', array('label' => 'Modificar',
+                                               'attr'=>
+                                                        array('class'=>'btn btn-primary btn-sm')
+            ));
 
         return $form;
     }
@@ -259,7 +229,7 @@ echo "Ocurrió algún error al subir el fichero. No pudo guardarse.";
         if ($editForm->isValid()) {
             $em->flush();
 
-            return $this->redirect($this->generateUrl('admin_empleado_edit', array('id' => $id)));
+            return $this->redirect($this->generateUrl('admin_empleado'));
         }
 
         return array(

@@ -4,11 +4,11 @@
 
   <div class="panel panel-default">
   <!-- Default panel contents -->
-  <div class="panel-heading"<h1>Registar devolución</h1></div>
+  <div class="panel-heading"><p>Registar devolución</p></div>
   <div class="panel-body">
   {{ form_start(form) }}
     {{ form_errors(form) }}
-    <div class="row">
+   
         <div class="col-xs-12 col-sm-2">
         {{ form_row(form.empleado) }}
         </div>
@@ -21,9 +21,9 @@
         <div class="col-xs-12 col-sm-6">
         {{ form_row(form.motivo) }}
         </div>
-    </div>
+   
   
-             <div class="form-grouphide">
+             <div class="form-grouphide col-sm-9">
                 <a href="{{ path('admin_devolucion') }}" class="btn btn-default btn-sm" id="cancelarNuevo">Cancelar</a>
                 {{ form_widget(form.submit) }}
               </div>

@@ -4,11 +4,13 @@
     
     <div class="panel panel-default">
   <!-- Default panel contents -->
-  <div class="panel-heading"<h1>Nueva comisión</h1></div>
+  <div class="panel-heading"><p>Nueva comisión</p></div>
   <div class="panel-body">
   {{ form_start(form) }}
     {{ form_errors(form) }}
-    <div class="row">
+        <div class="col-xs-12 col-sm-2">
+        {{ form_row(form.empleado) }}
+        </div>
         <div class="col-xs-12 col-sm-5">
         {{ form_row(form.descripcion) }}
         </div>
@@ -19,12 +21,10 @@
         {{ form_row(form.meta) }}
         </div>
        {# {{ form_row(form.estado) }}#}
-       <div class="col-xs-12 col-sm-2">
-        {{ form_row(form.empleado) }}
-        </div>
-    </div>
+      
+   
   
-             <div class="form-grouphide">
+             <div class="form-grouphide col-sm-9">
                 <a href="{{ path('admin_comision') }}" class="btn btn-default btn-sm" id="cancelarNuevo">Cancelar</a>
                 {{ form_widget(form.submit) }}
               </div>

@@ -27,14 +27,16 @@ class ProductoType extends AbstractType
                     'attr'=>array(
                     'class'=>'form-control input-sm'
                     )))
-            ->add('fechaCompra','date',array('label' => 'Fecha de Compra',
-                    'attr'=>array(
-                    'class'=>'form-control input-sm'
-                    )))
-            ->add('fechaVencimiento','date',array('label' => 'Fecha de vencimiento',
-                    'attr'=>array(
-                    'class'=>'form-control input-sm'
-                    )))
+            ->add('fechaCompra', null,
+                  array('label'  => 'Fecha de compra',
+                        'widget' => 'single_text',
+                        'attr'   => array('class' => 'form-control input-sm'),
+                       ))
+            ->add('fechaVencimiento', null,
+                  array('label'  => 'Fecha de vencimiento',
+                        'widget' => 'single_text',
+                        'attr'   => array('class' => 'form-control input-sm'),
+                       ))
             //->add('estado')
            
         ;

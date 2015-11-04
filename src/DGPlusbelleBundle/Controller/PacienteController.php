@@ -54,7 +54,7 @@ class PacienteController extends Controller
         $rsm->addScalarResult('ocupacion','ocupacion');
         $rsm->addScalarResult('lugarTrabajo','lugarTrabajo');
         $rsm->addScalarResult('fechaNacimiento','fechaNacimiento');
-       $rsm->addScalarResult('referidoPor','referidoPor');
+        $rsm->addScalarResult('referidoPor','referidoPor');
         
         $pacientes = $em->createNativeQuery($sql, $rsm)
                     ->getResult();
@@ -204,7 +204,9 @@ class PacienteController extends Controller
             'method' => 'PUT',
         ));
 
-        $form->add('submit', 'submit', array('label' => 'Update'));
+        $form->add('submit', 'submit', array('label' => 'Modificar',
+                                               'attr'=>
+                                                        array('class'=>'btn btn-success btn-sm')));
 
         return $form;
     }
@@ -232,7 +234,7 @@ class PacienteController extends Controller
         if ($editForm->isValid()) {
             $em->flush();
 
-            return $this->redirect($this->generateUrl('admin_paciente_edit', array('id' => $id)));
+            return $this->redirect($this->generateUrl('admin_paciente'));
         }
 
         return array(

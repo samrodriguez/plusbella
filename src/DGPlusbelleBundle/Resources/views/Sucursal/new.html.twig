@@ -3,7 +3,6 @@
 {% block contenido -%}
  
 <div class="panel panel-default">
-  <!-- Default panel contents -->
   <div class="panel-heading"><p>Nueva Sucursal</p></div>
   <div class="panel-body">
     {{ form_start(form) }}
@@ -25,7 +24,7 @@
     
    
          
-             <div class="form-grouphide"> 
+             <div class="form-grouphide col-sm-9"> 
                  <a href="{{ path('admin_sucursal') }}" class="btn btn-default btn-sm" id="cancelarNuevo">Cancelar</a>
                 {{ form_widget(form.submit) }}
              </div>

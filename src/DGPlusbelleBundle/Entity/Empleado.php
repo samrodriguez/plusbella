@@ -34,6 +34,13 @@ class Empleado
      * @ORM\Column(name="foto", type="string", length=255, nullable=true)
      */
     private $foto;
+    
+     /**
+     * @var boolean
+     *
+     * @ORM\Column(name="estado", type="boolean", nullable=false)
+     */
+    private $estado;
 
     /**
      * @var \Persona
@@ -151,6 +158,31 @@ class Empleado
     public function getFoto()
     {
         return $this->foto;
+    }
+    
+    
+    /**
+     * Set estado
+     *
+     * @param boolean $estado
+     *
+     * @return empleado
+     */
+    public function setEstado($estado)
+    {
+        $this->estado = $estado;
+
+        return $this;
+    }
+
+    /**
+     * Get estado
+     *
+     * @return boolean
+     */
+    public function getEstado()
+    {
+        return $this->estado;
     }
 
     /**
