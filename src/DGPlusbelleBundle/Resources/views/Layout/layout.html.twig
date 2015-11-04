@@ -35,6 +35,8 @@
             <link rel="stylesheet" href="{{ asset('Resources/wrapkit/styles/components.css') }}">
             <link rel="stylesheet" href="{{ asset('Resources/wrapkit/styles/wrapkit.css') }}">
             <link rel="stylesheet" href="{{ asset('Resources/wrapkit/styles/demo.css') }}">
+            <link rel="stylesheet" href="{{ asset('Resources/ptTimeSelect/css/jquery.ptTimeSelect.css') }}">
+            <link rel="stylesheet" href="{{ asset('Resources/zebra/css/bootstrap.css') }}">
         {%- endblock %}
         {#{% block js -%}
             <script type="text/javascript" src="{{ asset('Resources/bootstrap-3/js/jquery.min.js') }}"></script>  
@@ -455,6 +457,11 @@
     <script src="{{ asset('Resources/wrapkit/scripts/bootbox.js') }}"></script>
     <script src="{{ asset('Resources/wrapkit/scripts/toastr.js') }}"></script>
     <script src="{{ asset('Resources/wrapkit/scripts/bootstrap-editable.js') }}"></script>
+    <script src="{{ asset('Resources/ptTimeSelect/js/jquery.ptTimeSelect.js') }}"></script>
+    <script src="{{ asset('Resources/zebra/js/zebra_datepicker.js') }}"></script>
+    <script src="{{ asset('bundles/fosjsrouting/js/router.js') }}"></script>
+    <script src="{{ path('fos_js_routing_js', {'callback': 'fos.Router.setData'}) }}"></script>
+    
     <!-- END COMPONENTS -->
 {% endblock %}    
 

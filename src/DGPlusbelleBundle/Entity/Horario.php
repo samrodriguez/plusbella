@@ -22,9 +22,9 @@ class Horario
     private $id;
 
     /**
-     * @var \DateTime
+     * @var \String
      *
-     * @ORM\Column(name="dia_horario", type="date", nullable=false)
+     * @ORM\Column(name="dia_horario", type="string", nullable=false)
      */
     private $diaHorario;
 
@@ -172,5 +172,9 @@ class Horario
     public function getEmpleado()
     {
         return $this->empleado;
+    }
+    
+    public function __toString() {
+        return $this->diaHorario;
     }
 }

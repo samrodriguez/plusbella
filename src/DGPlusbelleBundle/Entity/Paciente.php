@@ -383,6 +383,30 @@ class Paciente
     }
     
     /**
+     * Set consulta
+     *
+     * @param \DGPlusbelleBundle\Entity\Consulta $consulta
+     *
+     * @return Consulta
+     */
+    public function setConsulta(\DGPlusbelleBundle\Entity\Consulta $consulta = null)
+    {
+        $this->consulta = consulta;
+
+        return $this;
+    }
+
+    /**
+     * Get consulta
+     *
+     * @return \DGPlusbelleBundle\Entity\Consulta
+     */
+    public function getConsulta()
+    {
+        return $this->consulta;
+    }
+    
+    /**
      * Get persona
      *
      * @return \DGPlusbelleBundle\Entity\Persona

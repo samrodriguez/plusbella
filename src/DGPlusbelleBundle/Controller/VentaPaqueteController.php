@@ -53,7 +53,8 @@ class VentaPaqueteController extends Controller
         $em = $this->getDoctrine()->getManager();//
         
         //Obtener el usuario segun el id
-        $usuario = $em->getRepository('DGPlusbelleBundle:Usuario')->findBy(array("id"=>1));
+        //$usuario = $em->getRepository('DGPlusbelleBundle:Usuario')->findBy(array("id"=>1));
+        $usuario= $this->get('security.token_storage')->getToken()->getUser();
 
         $dql = "SELECT suc.id
             FROM DGPlusbelleBundle:Usuario u

@@ -3,6 +3,7 @@
 namespace DGPlusbelleBundle\Controller;
 
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -76,7 +77,9 @@ class CitaController extends Controller
             'method' => 'POST',
         ));
 
-        $form->add('submit', 'submit', array('label' => 'Create'));
+        $form->add('submit', 'submit', array('label' => 'Guardar',
+                                               'attr'=>
+                                                        array('class'=>'btn btn-success btn-sm')));
 
         return $form;
     }
@@ -88,11 +91,25 @@ class CitaController extends Controller
      * @Method("GET")
      * @Template()
      */
-    public function newAction()
+    public function newAction(Request $request)
     {
         $entity = new Cita();
+        
+        $em = $this->getDoctrine()->getManager();
+        
+        //Recuperación del paciente
+        $request = $this->getRequest();
+        $id= $request->get('id');
+        
+        //Busqueda del paciente
+        $paciente = $em->getRepository('DGPlusbelleBundle:Paciente')->find($id);
+        //Seteo del paciente en la entidad
+        $entity->setPaciente($paciente);
+        
+        //Enlace del form con la entidad
         $form   = $this->createCreateForm($entity);
-
+        //var_dump($form->getConfig()->getData());
+        
         return array(
             'entity' => $entity,
             'form'   => $form->createView(),
@@ -243,5 +260,29 @@ class CitaController extends Controller
             ->add('submit', 'submit', array('label' => 'Delete'))
             ->getForm()
         ;
+    }
+    
+    
+    
+    
+     /**
+     * @Route("/horarios/get/{idEmp}", name="get_horarios", options={"expose"=true})
+     * @Method("GET")
+     */
+    public function getHorariosAction(Request $request, $idEmp) {
+        
+        $request = $this->getRequest();
+        
+        $em = $this->getDoctrine()->getEntityManager();
+        
+        $dql = "SELECT ho.diaHorario 
+                    FROM DGPlusbelleBundle:Horario ho
+                    JOIN ho.empleado emp
+                WHERE emp.id =:idEmp";
+        $regiones['regs'] = $em->createQuery($dql)
+                ->setParameter('idEmp', $idEmp)
+                ->getArrayResult();
+        //var_dump($regiones);
+        return new Response(json_encode($regiones));
     }
 }

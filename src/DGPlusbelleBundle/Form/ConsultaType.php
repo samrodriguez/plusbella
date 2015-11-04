@@ -36,14 +36,14 @@ class ConsultaType extends AbstractType
                 ))
             //->add('cita')
             ->add('paciente',new PacienteType())
-            ->add('tipoConsulta','entity', array( 'label' => 'Tipo de consulta',
+            /*->add('tipoConsulta','entity', array( 'label' => 'Tipo de consulta',
                          'empty_value'   => 'Seleccione un tipo de consulta...',
                          'class'         => 'DGPlusbelleBundle:TipoConsulta',
                          
                          'attr'=>array(
                          'class'=>'form-control'
                          )
-                       ))
+                       ))*/
             ->add('tratamiento','entity', array( 'label' => 'Tratamiento',
                          'empty_value'   => 'Seleccione un tratamiento...',
                          'class'         => 'DGPlusbelleBundle:Tratamiento',

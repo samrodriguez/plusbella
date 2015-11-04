@@ -1,5 +1,5 @@
 {#{% extends 'DGPlusbelleBundle:Layout:general.html.twig' %}#}
-
+{% extends 'DGPlusbelleBundle:Layout:layout.html.twig' %}
 
 {% block contenido -%}
     
@@ -17,7 +17,7 @@
                 <div class="row">
                     <div class="col-md-12">
                         <h3 class="text-center">Paciente</h3>
-                        
+                        <hr>
                     </div>
                 </div>
                 {# Formulario de persona #}
@@ -86,10 +86,11 @@
                     </div>
                         
                 <div class="row">
-                    <br>
-                    <hr>
+                    
+                    
                     <div class="col-md-12">
                         <h3 class="text-center">Consulta</h3>
+                        <hr>
                     </div>
                 </div>
             
@@ -107,10 +108,13 @@
                 <div class="col-md-2">
                     {{ form_row(form.horaFin) }}
                 </div>
-                <div class="col-md-3">
+                {#<div class="col-md-3">
                     {{ form_row(form.tipoConsulta) }}
                 </div>
-                
+                #} 
+                <div class="col-md-3">
+                    {{ form_row(form.incapacidad) }}
+                </div>
                 <div class="col-md-3">
                     {{ form_row(form.tratamiento) }}
                 </div>
@@ -124,11 +128,9 @@
                     {{ form_row(form.cita) }}
                 </div>
                 #}
-                <div class="col-md-3">
-                    {{ form_row(form.incapacidad) }}
-                </div>
                 
-                <div class="col-md-9">
+                
+                <div class="col-md-6">
                     {{ form_row(form.observacion) }}
                 </div>
             </div>

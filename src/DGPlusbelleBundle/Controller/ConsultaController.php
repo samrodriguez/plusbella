@@ -8,6 +8,8 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use DGPlusbelleBundle\Entity\Consulta;
+use DGPlusbelleBundle\Entity\Expediente;
+use DGPlusbelleBundle\Entity\HistorialClinico;
 use DGPlusbelleBundle\Form\ConsultaType;
 
 /**
@@ -19,7 +21,7 @@ class ConsultaController extends Controller
 {
 
     /**
-     * Lists all Consulta entities.
+     * Lists all Consulta de emergencia entities.
      *
      * @Route("/", name="admin_consulta")
      * @Method("GET")
@@ -36,8 +38,36 @@ class ConsultaController extends Controller
             'entities' => $entities,
             'entity' => $entity,
             'form'   => $form->createView(),
+            'tipo'  => 1,
         );
     }
+    
+    /**
+     * Lists all Consulta diaria entities.
+     *
+     * @Route("/diaria", name="admin_consulta_diaria")
+     * @Method("GET")
+     * @Template("DGPlusbelleBundle:Consulta:index.html.twig")
+     */
+    public function indexDiariaAction()
+    {
+        $em = $this->getDoctrine()->getManager();
+        $entity = new Consulta();
+        $form   = $this->createCreateForm($entity);
+        //$entities = $em->getRepository('DGPlusbelleBundle:Consulta')->findAll();
+        $dql = "SELECT c FROM DGPlusbelleBundle:Consulta c WHERE c.tipoConsulta= :tipo";
+        $entities = $em->createQuery($dql)
+                       ->setParameter('tipo',1)
+                       ->getResult();
+               //var_dump($entities);
+        return array(
+            'entities' => $entities,
+            'entity' => $entity,
+            'form'   => $form->createView(),
+            'tipo'  => 2,
+        );
+    }
+    
     /**
      * Creates a new Consulta entity.
      *
@@ -48,16 +78,72 @@ class ConsultaController extends Controller
     public function createAction(Request $request)
     {
         $entity = new Consulta();
+        $em = $this->getDoctrine()->getManager();
+        //Obtiene el usuario
+        $user = $this->get('security.token_storage')->getToken()->getUser();
+        //Entidades para insertar en el proceso de la consulta de emergencia
+        $historial = new HistorialClinico();
+        $expediente = new Expediente();
+        //Seteo de valores
+        $expediente->setFechaCreacion(new \DateTime('now'));
+        $expediente->setHoraCreacion(new \DateTime('now'));
+        $expediente->setEstado(true);
+        //$historial->setConsulta($entity);
         
-        
+        //Tipo de consulta actica, emergencia
+        $dql = "SELECT tc FROM DGPlusbelleBundle:TipoConsulta tc WHERE tc.estado = :estado AND tc.id=:id";
+        $tipoConsulta= $em->createQuery($dql)
+                       ->setParameters(array('estado'=>1,'id'=>1))
+                       ->getResult();
+               //var_dump($tipoConsulta[0]);
+               //die();
+        $tipoConsulta = $tipoConsulta[0];
+        //var_dump($tipoConsulta);
+               //die();
+        $entity->setTipoConsulta($tipoConsulta);
         $form = $this->createCreateForm($entity);
         $form->handleRequest($request);
 
         if ($form->isValid()) {
             $em = $this->getDoctrine()->getManager();
             $paciente = $entity->getPaciente();
-        
             $paciente->setEstado(true);
+            
+            $apellido = $paciente->getPersona()->getPrimerApellido();
+            $nombre= $paciente->getPersona()->getPrimerNombre();
+            
+            //Generacion del numero de expediente
+            $numeroExp = $nombre[0].$apellido[0].date("Y");
+            
+            $dql = "SELECT COUNT(exp)+1 FROM DGPlusbelleBundle:Expediente exp WHERE exp.numero LIKE :numero";
+            
+            $num = $em->createQuery($dql)
+                       ->setParameter('numero','%'.$numeroExp.'%')
+                       ->getResult();
+            //var_dump($user);
+            $numString = $num[0]["1"];
+            //var_dump($numString);
+            
+            switch($numString){
+                case 1:
+                        $numeroExp .= "00".$numString;
+                    break;
+                case 2:
+                        $numeroExp .= "0".$numString;
+                    break;
+                case 3:
+                        $numeroExp .= $numString;
+                    break;
+            }
+            
+            $expediente->setNumero($numeroExp);
+            $expediente->setPaciente($paciente);
+            $expediente->setUsuario($user);
+            
+            //$historial->setConsulta($consulta);
+            //$historial->setExpediente($expediente);
+            $em->persist($expediente);
+            
             $em->persist($entity);
             $em->flush();
 

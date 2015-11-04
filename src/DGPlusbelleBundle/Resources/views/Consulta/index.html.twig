@@ -127,7 +127,7 @@
                 
                 $('#dgplusbellebundle_consulta_fechaConsulta').daterangepicker({
                     singleDatePicker: true,
-                    showDropdowns: false,
+                    showDropdowns: true,
                     locale: {
                         format: 'YYYY-MM-DD'
                     },
@@ -136,7 +136,9 @@
                 
                 //Seleccionar un registro
                 $('#datatables1>tbody>tr').on('click', function(event) {
-                    //Se limpia los otros que esten activos
+                    $("#editFormContainer").html();
+                    
+                    //Limpia los otros tr que esten activos
                     $('#datatables1>tbody>tr').each(function(index, val) {
                         $(this).removeClass("active");
                     });

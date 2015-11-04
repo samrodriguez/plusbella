@@ -1,15 +1,138 @@
-{% extends '::base.html.twig' %}
+{% extends 'DGPlusbelleBundle:Layout:layout.html.twig' %}
 
-{% block body -%}
-    <h1>Cita creation</h1>
 
-    {{ form(form) }}
 
-        <ul class="record_actions">
-    <li>
-        <a href="{{ path('admin_cita') }}">
-            Back to the list
-        </a>
-    </li>
-</ul>
+{% block contenido -%}
+ 
+<div class="panel panel-default">
+  <!-- Default panel contents -->
+    <div class="panel-heading"><p>Nueva cita</p></div>
+    <div class="panel-body">
+    {{ form_start(form) }}
+    {{ form_errors(form) }}
+    
+    <div class="row">
+        <div class="col-md-3">
+         {{ form_row(form.paciente ) }}   
+        </div>
+    </div>
+    
+    <div class="row">
+        <div class="col-md-3">
+         {{ form_row(form.empleado) }}
+        </div>
+        
+        <div class="col-md-3">
+         {{ form_row(form.fechaCita) }} 
+        </div>
+        
+        <div class="col-md-3">
+         {{ form_row(form.horario ) }}   
+        </div>
+        
+        <div class="col-md-3">
+         {{ form_row(form.horaInicio) }} 
+        </div>
+        {#<div class="col-md-3">
+         {{ form_row(form.horaFin) }}
+        </div>#}
+         {#{{ form_row(form.estado) }} #}
+        {#
+            <div class="col-md-3">
+                {{ form_row(form.estado) }} 
+            </div>   
+        #}
+    </div>
+    <div class="row">
+        
+        
+         {#{{ form_row(form.estado) }} #}
+                
+        <div class="col-md-3">
+         {{ form_row(form.descuento) }} 
+        </div>
+
+        <div class="col-md-3">
+         {{ form_row(form.tratamiento ) }}   
+        </div>
+        
+    </div>
+    <div class="row">
+        
+    </div>
+         
+             <div class="form-grouphide"> 
+                 <a href="{{ path('admin_sucursal') }}" class="btn btn-default btn-sm" id="cancelarNuevo">Cancelar</a>
+                {{ form_widget(form.submit) }}
+             </div>
+        
+   
+ 
+    </div>
+{{ form_widget(form._token) }}
+</div>  
+{{ form_end(form) }}                
+{% endblock %}
+
+
+{% block javascripts_step %}
+        <script src="{{ asset('Resources/wrapkit/scripts/dataTables.bootstrap.js') }}"></script>
+        <script src="{{ asset('Resources/wrapkit/scripts/dataTables.tableTools.js') }}"></script>
+        <script src="{{ asset('Resources/wrapkit/scripts/dataTables.tableTools.js') }}"></script>
+        <script src="{{ asset('Resources/zebra/js/zebra_datepicker.js') }}"></script>
+        
+        <script>
+            $(document).ready(function(){
+                
+                /*$('#dgplusbellebundle_cita_fechaCita').daterangepicker({
+                    singleDatePicker: true,
+                    showDropdowns: true,
+                    locale: {
+                        format: 'YYYY-MM-DD'
+                    },
+                });*/ 
+                var seleccionado="";
+                $('#dgplusbellebundle_cita_paciente option').each(function(index, val) {
+                    
+                    seleccionado = $(this).attr('selected');
+                    if (!seleccionado){
+                        $(this).remove();
+                    }
+                });
+                
+                $('#dgplusbellebundle_cita_empleado').select2();
+                
+                $('#dgplusbellebundle_cita_horaInicio').ptTimeSelect();
+                
+                $('#dgplusbellebundle_cita_fechaCita').Zebra_DatePicker();
+                var url = Routing.generate('get_horarios', { idEmp: 10 });
+                var idEmp = 0;
+                
+                //alert(url);
+                
+                $('#dgplusbellebundle_cita_empleado').on('change', function() {
+                    var idEmp = $(this).val();
+                    //alert(idEmp);
+                    if(idEmp==""){
+                        idEmp = 0;
+                    }
+                    $.getJSON(Routing.generate('get_horarios', { idEmp: idEmp}), 
+                    function(data) {
+                    $.each(data.regs, function(indice, reg) {
+                        if(reg.length!=0){
+                            alert("se encontro data");
+                        }
+                        else{
+                            alert("no se encontro data");
+                        }
+                        //alert(reg.diaHorario);
+                    });
+                                
+                }); 
+                });
+                
+                
+                
+            });
+        </script>
 {% endblock %}
