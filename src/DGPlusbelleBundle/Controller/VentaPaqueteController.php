@@ -49,6 +49,7 @@ class VentaPaqueteController extends Controller
     public function createAction(Request $request)
     {
         $entity = new VentaPaquete();
+       
         //$entity->getFechaVenta();
         $em = $this->getDoctrine()->getManager();//
         
@@ -70,7 +71,7 @@ class VentaPaqueteController extends Controller
 
         $sucursal = $em->getRepository('DGPlusbelleBundle:Sucursal')->findBy(array("id"=>$entities[0]["id"]));
         $entity->setSucursal($sucursal[0]);
-        $entity->setUsuario($usuario[0]);
+        $entity->setUsuario($usuario);
         //var_dump($usuario);
 
         //die();

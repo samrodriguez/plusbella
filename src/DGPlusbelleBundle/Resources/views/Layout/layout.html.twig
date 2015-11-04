@@ -278,13 +278,13 @@
                               </a>
                             </li>
                             <li class="nav-item" role="presentation">
-                              <a href="#">
+                              <a href="{{path('admin_consulta_new')}}">
                                 <span class="nav-icon"><i class="fa fa-puzzle-piece"></i></span>
                                 <span class="nav-text">Consultas de emergencia</span>
                               </a>
                             </li>
                             <li class="nav-item" role="presentation">
-                              <a href="#">
+                              <a href="{{path('admin_paciente')}}">
                                 <span class="nav-icon"><i class="fa fa-puzzle-piece"></i></span>
                                 <span  class="nav-text">Gestión de pacientes</span>
                               </a>
@@ -306,7 +306,7 @@
                                 <span class="nav-text">Consultas</span>
                               </a>
                               <ul class="nav nav-child level-1 nav-stacked nav-pills" role="menu">
-                                <li role="presentation"><a role="menuitem" tabindex="-1" href="frm-basic.html"><span class="nav-text">Basic Elements</span></a></li>
+                                <li role="presentation"><a role="menuitem" tabindex="-1" href="{{ path('admin_tipoconsulta') }}"><span class="nav-text">Nuevo tipo de consulta</span></a></li>
                               </ul>
                             </li>
                             <li class="nav-item" role="presentation">
@@ -316,6 +316,9 @@
                               </a>
                               <ul class="nav nav-child level-1 nav-stacked nav-pills" role="menu">
                                 <li role="presentation"><a role="menuitem" tabindex="-1" href="{{ path('admin_tratamiento') }}"><span class="nav-text">Gestionar tratamiento</span></a></li>
+                              </ul>
+                              <ul class="nav nav-child level-1 nav-stacked nav-pills" role="menu">
+                                <li role="presentation"><a role="menuitem" tabindex="-1" href="{{ path('admin_categoria') }}"><span class="nav-text">Gestionar categoria</span></a></li>
                               </ul>
                             </li>
                             <li class="nav-item" role="presentation">
@@ -333,8 +336,7 @@
                                 <span class="nav-text">Inventario</span>
                               </a>
                               <ul class="nav nav-child level-1 nav-stacked nav-pills" role="menu">
-                                <li role="presentation"><a role="menuitem" tabindex="-1" href="table-basic.html"><span class="nav-text">Basic Table</span></a></li>
-                                <li role="presentation"><a role="menuitem" tabindex="-1" href="table-datatables.html"><span class="nav-text">DataTables</span></a></li>
+                                <li role="presentation"><a role="menuitem" tabindex="-1" href="{{ path('admin_producto') }}"><span class="nav-text">Gestionar productos</span></a></li>
                               </ul>
                             </li>
                             <li class="nav-item" role="presentation">
@@ -344,6 +346,7 @@
                               </a>
                               <ul class="nav nav-child level-1 nav-stacked nav-pills" role="menu">
                                 <li role="presentation"><a role="menuitem" tabindex="-1" href="{{ path('admin_empleado') }}"><span class="nav-text">Gestionar empleado</span></a></li>
+                                <li role="presentation"><a role="menuitem" tabindex="-1" href="{{ path('admin_comision') }}"><span class="nav-text">Gestionar meta</span></a></li>
                               </ul>
                             </li>
                             <li class="nav-item" role="presentation">

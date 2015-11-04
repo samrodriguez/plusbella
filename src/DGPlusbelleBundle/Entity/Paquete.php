@@ -225,6 +225,6 @@ class Paquete
     }
     
     public function __toString() {
-    return $this->nombre ? $this->nombre : '';
+    return $this->nombre.'   $'.$this->costo;
     }
 }
