@@ -17,11 +17,11 @@ class VentaPaqueteType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('fechaVenta', null,
+        ->add('fechaVenta', null,
                   array('label'  => 'Fecha de venta',
                         'widget' => 'single_text',
                         'attr'   => array('class' => 'form-control input-sm'),
-                       ))
+                       )) 
             //->add('fechaRegistro')
             ->add('paquete', 'entity', 
                   array( 'label'         => 'Paquete',

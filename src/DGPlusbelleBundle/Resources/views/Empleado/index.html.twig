@@ -54,7 +54,7 @@
                <th>Cargo</th>
                 <th>Foto</th>
                 <th>Sucursal</th>
-                <th>Actions</th>
+             {# <th>Actions</th>  #}
             </tr>
         </thead>
         <tbody>
@@ -65,7 +65,7 @@
                 <td>{{ entity.cargo }}</td>
                 <td>{{ entity.foto }}</td>
                 <td>{{ entity.sucursal }}</td> 
-                <td>
+           <!--      <td>
                 <ul>
                     <li>
                         <a href="{{ path('admin_empleado_show', { 'id': entity.idemp }) }}">show</a>
@@ -74,7 +74,7 @@
                         <a href="{{ path('admin_empleado_edit', { 'id': entity.idemp }) }}">edit</a>
                     </li>
                 </ul>
-                </td>
+                </td> -->
             </tr>
         {% endfor %}
         </tbody>
@@ -196,16 +196,9 @@
                     "columnDefs": [
                            { "orderable": false, "targets": 0 },
                            { "orderable": false, "targets": 2 },
-                           { "orderable": false, "targets": 3 },
-                           { "orderable": false, "targets": 4 }
-                        
-                           
-                      
-                           
-                        
-                         
-                       
-                           
+                           { "orderable": false, "targets": 3 }
+                          
+
                            
                            //{ "orderData": [ 2, 3, 4 ], "targets": 2 }
                     ],
