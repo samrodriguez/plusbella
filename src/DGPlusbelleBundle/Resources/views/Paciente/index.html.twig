@@ -85,10 +85,10 @@
              <!--    <td>
                 <ul>
                     <li>
-                        <a href="{{ path('admin_paciente_show', { 'id': entity.idpac }) }}">Consulta de emergencia</a>
+                        <a href="{{ path('admin_paciente_show', { 'id': entity.idpac }) }}">Mostrar</a>
                     </li>
                     <li>
-                        <a href="{{ path('admin_cita_new', { 'id': entity.idpac }) }}">Nueva cita</a>
+                        <a href="{{ path('admin_paciente_edit', { 'id': entity.idpac }) }}">Editar</a>
                     </li>
                 </ul>
                 </td>  -->  
@@ -199,6 +199,7 @@
                     return false;
                 });
                 */
+               
                 $('#filterDatatables1').on('keyup', function(event) {
                     var filtro = $(this).val(); 
                     //alert(filtro);
