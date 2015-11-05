@@ -57,10 +57,18 @@ class Paquete
      */
     private $tratamiento;
 
-    /**
+     /**
      * @var \Doctrine\Common\Collections\Collection
      *
-     * @ORM\ManyToMany(targetEntity="Sucursal", mappedBy="paquete")
+     * @ORM\ManyToMany(targetEntity="Sucursal", inversedBy="paquete")
+     * @ORM\JoinTable(name="sucursal_paquete",
+     *   joinColumns={
+     *     @ORM\JoinColumn(name="paquete", referencedColumnName="id")
+     *   },
+     *   inverseJoinColumns={
+     *     @ORM\JoinColumn(name="sucursal", referencedColumnName="id")
+     *   }
+     * )
      */
     private $sucursal;
 
