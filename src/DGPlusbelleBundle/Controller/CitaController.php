@@ -307,10 +307,10 @@ class CitaController extends Controller
         //var_dump($horas);
         $inicio=$horas['regs'][0]['horaInicio']->format('H:i');
         $fin=$horas['regs'][0]['horarioFin']->format('H:i');
-        $horasExtraidas['regs']=array('horaInicio'=>$inicio,'horaFin'=>$fin);
+        $horasExtraidas['regs']=array();
         //var_dump($inicio);
         
-        array_push($horasExtraidas['regs'], $inicio, $fin); 
+        ///array_push($horasExtraidas['regs'], $inicio, $fin); 
         
         
 
@@ -323,42 +323,31 @@ class CitaController extends Controller
         $w = strtotime($inicio);
         $s = strtotime($fin);
 
-        $flag = true;
+        
 
         $st_time    =   strtotime($inicio);
         $end_time   =   strtotime($fin);
         $cur_time   =   strtotime("now");
         
 
-        $time = strtotime($inicio);
+        $timeInicio = strtotime($inicio);
+        $timeIncrementos=$timeInicio;
         $timeFin = strtotime($fin);
-        $endTime = date("H:i", strtotime( $time));
-        $endString = strtotime($endTime);
-    
-        if($endString<$timeFin){
-            //echo "ksjdcnds";
-        }
-        
-        while($endString<=$timeFin){
-            $time = strtotime($inicio);
-            $endTime = date("H:i", strtotime('+30 minutes', $time));
-            $endString = strtotime($endTime);
-            echo date("H:i", $endString);
-        }
-        //echo $time."\n";
-        echo $endTime."\n";
-        
+        $stringInicio = "";
+        $stringIncrementos="";
+        $stringFin="";
         
         //$endTime = date("H:i", strtotime('+30 minutes', $time));
-        while($flag){
-            if($w<$s){
-                $w = strtotime($timeString);
-                $timek = date("H:i", strtotime('+30 minutes', $time));
-                $timeString = date('H:i',$timek);
-            }
-            else{
-                $flag = false;
-            }
+        //echo $inicio."\n";
+        while($timeIncrementos<$timeFin){
+            //echo $timeIncrementos."\n";
+            //$time = strtotime($inicio);
+            $stringIncrementos = date("H:i", strtotime('+30 minutes', $timeIncrementos));
+            //echo $timeIncrementos;
+            $timeIncrementos = strtotime($stringIncrementos);
+            //echo $timeIncrementos;
+            //echo date("H:i", $timeIncrementos)."\n";
+            array_push($horasExtraidas['regs'], $stringIncrementos);
         }
         /*while($w<$s){
             /*$time = strtotime($timeString);
