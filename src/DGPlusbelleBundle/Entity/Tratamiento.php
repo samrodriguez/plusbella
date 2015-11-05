@@ -66,10 +66,18 @@ class Tratamiento
      */
     private $paquete;
 
-    /**
+     /**
      * @var \Doctrine\Common\Collections\Collection
      *
-     * @ORM\ManyToMany(targetEntity="Sucursal", mappedBy="tratamiento")
+     * @ORM\ManyToMany(targetEntity="Sucursal", inversedBy="tratamiento")
+     * @ORM\JoinTable(name="sucursal_tratamiento",
+     *   joinColumns={
+     *     @ORM\JoinColumn(name="tratamiento", referencedColumnName="id")
+     *   },
+     *   inverseJoinColumns={
+     *     @ORM\JoinColumn(name="sucursal", referencedColumnName="id")
+     *   }
+     * )
      */
     private $sucursal;
 

@@ -83,7 +83,7 @@ class EmpleadoController extends Controller
             $em->persist($entity);
             $em->flush();
 
-            return $this->redirect($this->generateUrl('admin_empleado_show', array('id' => $entity->getId())));
+            return $this->redirect($this->generateUrl('admin_empleado', array('id' => $entity->getId())));
         }
 
         return array(
