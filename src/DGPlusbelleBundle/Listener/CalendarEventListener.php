@@ -30,13 +30,24 @@ class CalendarEventListener
             // create an event with a start/end time, or an all day event
             $fi = $companyEvent->getFechaCita()->format('Y-m-d');
             $ih = $companyEvent->getHoraInicio()->format('H:i');
-            $fh = $companyEvent->getHoraFin()->format('H:i');
+            
+            //$fh = $companyEvent->getHoraFin()->format('H:i');
+            $h = date("H:i", strtotime('+30 minutes', strtotime($ih)));
+            
+            //var_dump($h);
             $st    = new \DateTime($fi.' '.$ih);
-            $end   = new \DateTime($fi.' '.$fh);
-            $eventEntity = new EventEntity('TEST', $st,$end );
+            $nh    = new \DateTime($fi.' '.$h);
+            //$//end   = new \DateTime($fi.' '.$fh);
+            $eventEntity = new EventEntity('TEST', $st,$nh );
+            
         
             
         //optional calendar event settings
+        
+        //var_dump($index);
+        $eventEntity->setId($companyEvent->getID());
+        
+        $eventEntity->setTitle("Expediente - ".$companyEvent->getPaciente()->getPersona()->getPrimerNombre().' '.$companyEvent->getPaciente()->getPersona()->getPrimerApellido());
         $eventEntity->setAllDay(false); // default is false, set to true if this is an all day event
         $eventEntity->setBgColor('#FF0000'); //set the background color of the event's label
         $eventEntity->setFgColor('#FFFFFF'); //set the foreground color of the event's label

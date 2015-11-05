@@ -19,7 +19,9 @@
     
     <div class="row">
         <div class="col-md-3">
-         {{ form_row(form.empleado) }}
+         
+         <label class="control-label" for="dgplusbellebundle_cita_paciente">Médico/Esteticista</label>
+         {{ form_widget(form.empleado) }}
         </div>
         
         <div class="col-md-3">
@@ -77,11 +79,24 @@
 
 {% block javascripts_step %}
         
-        
+    <style>
+        #dgplusbellebundle_cita_horaInicio{
+            width: 160px;
+        }
+            
+            #dgplusbellebundle_cita_horaInicio_hourSelectBoxItContainer {
+                width: 75px;
+                float: left;
+            }
+            #dgplusbellebundle_cita_horaInicio_minuteSelectBoxItContainer {
+                width: 75px;
+                float:right;
+            }
+    </style>
         <script>
             $(document).ready(function(){
                 //Generación de calendario zebra
-                $('#dgplusbellebundle_cita_fechaCita').Zebra_DatePicker(//{
+                //$('#dgplusbellebundle_cita_fechaCita').Zebra_DatePicker(//{
                     /*onSelect:
                         $.getJSON(Routing.generate('get_horas', { idEmp: idEmp}), 
                         function(data) {
@@ -108,15 +123,16 @@
                                 });
                             });        
                         }); */
-               /* }*/);
+               /* }*///);
+               
                 
-                /*$('#dgplusbellebundle_cita_fechaCita').daterangepicker({
+                $('#dgplusbellebundle_cita_fechaCita').daterangepicker({
                     singleDatePicker: true,
                     showDropdowns: true,
                     locale: {
                         format: 'YYYY-MM-DD'
                     },
-                });*/ 
+                });
                 var seleccionado="";
                 //Eliminar options del select de pacientes
                 //$('#dgplusbellebundle_cita_paciente option').each(function(index, val) {

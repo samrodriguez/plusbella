@@ -50,9 +50,9 @@ class Cita
     private $fechaRegistro = 'CURRENT_TIMESTAMP';
 
     /**
-     * @var boolean
+     * @var string
      *
-     * @ORM\Column(name="estado", type="boolean", nullable=false)
+     * @ORM\Column(name="estado", type="string", nullable=false)
      */
     private $estado;
 
