@@ -38,6 +38,15 @@
         
         <script>
             $(document).ready(function(){
+                
+                 $('#dgplusbellebundle_ventapaquete_fechaVenta').daterangepicker({
+                    singleDatePicker: true,
+                    showDropdowns: true,
+                    locale: {
+                        format: 'YYYY-MM-DD'
+                    },
+                }); 
+                
                 //Generación de calendario zebra
                 $('#dgplusbellebundle_cita_fechaCita').Zebra_DatePicker(//{
                     /*onSelect:

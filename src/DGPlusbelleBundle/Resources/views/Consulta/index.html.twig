@@ -76,7 +76,7 @@
                     <tr id="{{entity.id}}">
                         <td>{{key+1}}</td>
                             
-                            <td>{{ entity.paciente.persona.primernombre }} {{ entity.paciente.persona.segundonombre }}  {{entity.paciente.persona.primerapellido}} {{entity.paciente.persona.segundoapellido}}</td>
+                            <td>{{ entity.paciente.persona.primernombre }}  {{entity.paciente.persona.primerapellido}}</td>
                             <td>{{ entity.tipoConsulta}}</td>
                             <td>{% if entity.fechaConsulta %}{{ entity.fechaConsulta|date('d/m/Y') }}{% endif %}</td>
                             <td>{{ entity.horaInicio|date('H:m') }}</td>
@@ -122,6 +122,7 @@
         <script src="{{ asset('Resources/wrapkit/scripts/dataTables.bootstrap.js') }}"></script>
         <script src="{{ asset('Resources/wrapkit/scripts/dataTables.tableTools.js') }}"></script>
         <script src="{{ asset('Resources/wrapkit/scripts/dataTables.tableTools.js') }}"></script>
+       
         <script>
             $(document).ready(function(){
                 

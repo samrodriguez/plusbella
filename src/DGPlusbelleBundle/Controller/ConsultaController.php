@@ -10,7 +10,9 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use DGPlusbelleBundle\Entity\Consulta;
 use DGPlusbelleBundle\Entity\Expediente;
 use DGPlusbelleBundle\Entity\HistorialClinico;
+use DGPlusbelleBundle\Entity\ConsultaProducto;
 use DGPlusbelleBundle\Form\ConsultaType;
+use DGPlusbelleBundle\Form\ConsultaProductoType;
 
 /**
  * Consulta controller.
@@ -84,11 +86,15 @@ class ConsultaController extends Controller
         //Entidades para insertar en el proceso de la consulta de emergencia
         $historial = new HistorialClinico();
         $expediente = new Expediente();
+        
+        
         //Seteo de valores
         $expediente->setFechaCreacion(new \DateTime('now'));
         $expediente->setHoraCreacion(new \DateTime('now'));
         $expediente->setEstado(true);
         //$historial->setConsulta($entity);
+        
+        
         
         //Tipo de consulta actica, emergencia
         $dql = "SELECT tc FROM DGPlusbelleBundle:TipoConsulta tc WHERE tc.estado = :estado AND tc.id=:id";
@@ -103,7 +109,10 @@ class ConsultaController extends Controller
         $entity->setTipoConsulta($tipoConsulta);
         $form = $this->createCreateForm($entity);
         $form->handleRequest($request);
-
+        
+       // $producto = $form->get('producto')->getData();
+       // $indicaciones = $form->get('indicaciones')->getData();
+        
         if ($form->isValid()) {
             $em = $this->getDoctrine()->getManager();
             $paciente = $entity->getPaciente();
@@ -146,6 +155,10 @@ class ConsultaController extends Controller
             
             $em->persist($entity);
             $em->flush();
+            
+          /*  if($producto){
+                $this->establecerConsultaProducto($entity, $producto, $indicaciones);
+            } */
 
             return $this->redirect($this->generateUrl('admin_consulta' ));
         }
@@ -237,6 +250,22 @@ class ConsultaController extends Controller
             throw $this->createNotFoundException('Unable to find Consulta entity.');
         }
 
+        
+        
+         // Create an array of the current Tag objects in the database 
+        foreach ($entity->getPlacas() as $placa) { $originalPlacas[] = $placa; }
+        $editForm = $this->createForm(new ConsultaType(), $entity); 
+        $deleteForm = $this->createDeleteForm($id);
+        // filter $originalTags to contain tags no longer present 
+        foreach ($entity->getPlacas() as $placa) { 
+            foreach ($originalPlacas as $key => $toDel) { 
+                if ($toDel->getId() === $placa->getId()) {
+                    unset($originalPlacas[$key]); 
+                    
+                } } }
+
+        
+        
         $editForm = $this->createEditForm($entity);
         $deleteForm = $this->createDeleteForm($id);
 
@@ -283,15 +312,65 @@ class ConsultaController extends Controller
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find Consulta entity.');
         }
+        
+        $originalTags = array();
+                // Create an array of the current Tag objects in the database 
+                foreach ($entity->getPlacas() as $tag) { 
+                    $originalTags[] = $tag; 
+                }
 
         $deleteForm = $this->createDeleteForm($id);
         $editForm = $this->createEditForm($entity);
         $editForm->handleRequest($request);
 
         if ($editForm->isValid()) {
-            $em->flush();
+            
+            // filter $originalTags to contain tags no longer present 
+                    foreach ($entity->getPlacas() as $tag) { 
+                        foreach ($originalTags as $key => $toDel) { 
+                            if ($toDel->getId() === $tag->getId()) { 
+                                //echo $originalTags[$key];
+                                unset($originalTags[$key]); 
+                                
+                            } 
+                        } 
+                    }
+                   // die();
+                    // remove the relationship between the tag and the Task
+                    /*foreach ($originalTags as $tag) {
+                        if (false === $entity->getPlacas()->contains($tag)) {
+                            // remove the Task from the Tag
+                            //$tag->getConsulta()->removeElement($entity);
+                            unset($originalTags[$key]); 
+                            // if it was a many-to-one relationship, remove the relationship like this
+                            // $tag->setTask(null);
+
+                            $em->persist($tag);
+
+                            // if you wanted to delete the Tag entirely, you can also do that
+                            // $em->remove($tag);
+                        }
+                    }
+                */
+                // remove the relationship between the tag and the Task 
+                    foreach ($originalTags as $tag) { 
+                    // remove the Task from the Tag // 
+                    //$tag->getPlacas()->removeElement($task);
+                
+        // if it were a ManyToOne relationship, remove the relationship like this // 
+                    //$tag->setTask(null);
+                
+                        
+                        
+                         // if you wanted to delete the Tag entirely, you can also do that 
+                        $em->remove($tag);
+                        //$em->persist($tag);
+                        
+            
+            
 
             return $this->redirect($this->generateUrl('admin_consulta', array('id' => $id)));
+        }$em->flush();
         }
 
         return array(
@@ -341,5 +420,29 @@ class ConsultaController extends Controller
             ->add('submit', 'submit', array('label' => 'Delete'))
             ->getForm()
         ;
+    }
+    
+    /**
+     * Metodo que sirve para establecer los productos medicados en una consulta
+     *
+     * @param \DGPlusbelleBundle\Entity\Consulta $idConsulta
+     * @param \Doctrine\Common\Collections\ArrayCollection $producto
+     * @param string
+     *
+     */
+    private function establecerConsultaProducto(\DGPlusbelleBundle\Entity\Consulta $idConsulta,
+                                             \Doctrine\Common\Collections\ArrayCollection $producto, $indicaciones)
+    {
+        foreach ($producto as $idProducto)
+        {
+            $consulta_prod = new ConsultaProducto();
+            $consulta_prod->setProducto($idProducto);
+            $consulta_prod->setConsulta($idConsulta);
+            $consulta_prod->setIndicaciones($indicaciones);
+            
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($consulta_prod);
+            $em->flush();
+        }    
     }
 }
