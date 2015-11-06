@@ -17,10 +17,12 @@ var source =
         error: function() {
             alert('There was an error while fetching Calendar!');
         }
+        
     };
     
 $(document).ready(function() {        
     // page is now ready, initialize the calendar...
+    //var horaInicial=null;
     calendario = $('#calendar-holder').fullCalendar({
         
         header: {
@@ -29,25 +31,31 @@ $(document).ready(function() {
             right: ''
         },
         buttonText: {
-            today:    'Today',
-            month:    'Month',
-            week:     'Week',
-            day:      'Day'
+            today:    'Hoy',
+            month:    'Mes',
+            week:     'Semana',
+            day:      'Día'
         },
         lazyFetching: true,
         defaultView: 'agendaDay',
         editable: true,
+        disableResizing:true,
+        eventDurationEditable:false,
         weekends: true,
         weekNumbers: true,
         firstDay: 0,
         slotMinutes: 30,
         axisFormat: 'hh:mm tt',
         firstHour: 7,
+        //displayEventTime: false,
+        timeFormat: '',
+        
         minTime: '06:00:00',
         maxTime: '23:00:00',
         allDaySlot: false,
         selectable: true,
         selectHelper: true,
+        slotEventOverlap:false,
         select: function( startDate, endDate, allDay, jsEvent, view ){
             var stdate = $.fullCalendar.formatDate(startDate,'dd-MM-yyyy');
             var endate = $.fullCalendar.formatDate(endDate,'dd-MM-yyyy');
@@ -55,21 +63,83 @@ $(document).ready(function() {
             var endtm = $.fullCalendar.formatDate(endDate,'HH:mm');
             var day = $.fullCalendar.formatDate(startDate,'dddd'); 
             var element = $(jsEvent.srcElement);
-        },
-        eventDrop: function( event, dayDelta, minuteDelta, allDay, revertFunc, jsEvent, ui, view ) { 
-            var stdate = $.fullCalendar.formatDate(event.start,'dd-MM-yyyy');
-            var endate = $.fullCalendar.formatDate(event.end,'dd-MM-yyyy');
-            var starttm = $.fullCalendar.formatDate(event.start,'HH:mm');
-            var endtm = $.fullCalendar.formatDate(event.end,'HH:mm');    
             
         },
-        eventResize: function( event, dayDelta, minuteDelta, revertFunc, jsEvent, ui, view ) { 
+        eventDrop: function(startDate, event, dayDelta, minuteDelta, allDay, revertFunc, jsEvent, ui, view ) { 
             var stdate = $.fullCalendar.formatDate(event.start,'dd-MM-yyyy');
             var endate = $.fullCalendar.formatDate(event.end,'dd-MM-yyyy');
             var starttm = $.fullCalendar.formatDate(event.start,'HH:mm');
             var endtm = $.fullCalendar.formatDate(event.end,'HH:mm');    
+            var err = 0;
+            //alert(startDate.id);
+            //return false;
+            var id=startDate.id;
+            $.getJSON(Routing.generate('get_nuevaHora', { id: id,delta:dayDelta}), 
+                function(data) {
+                    //alert(data.regs);
+                    switch(data.regs){
+                        
+                        case 0:
+                            //Cita reprogramada con éxito
+                            //err=0;
+                            break;
+                        //case 1:
+                            //Fallo en reprogramar la cita
+                          //  break;
+                        case 2:
+                            //Conflicto con otra cita
+                            //jsEvent.revertFunc();
+                            //alert("cupo no disponible");
+                            //err=2;
+                            //Revierte el drag and drop el parametro revertFunc hace la inversión, pero por agregar
+                            //el parametro startDate se despleza a allDay
+                            allDay();
+                            break;
+                    }
+                    
+                          
+                }); 
+            //alert(dayDelta);
+            //
+            
         },
-        eventClick: function ( event, jsEvent, view )  {
+        /*eventResize: function( event, dayDelta, minuteDelta, revertFunc, jsEvent, ui, view ) { 
+            var stdate = $.fullCalendar.formatDate(event.start,'dd-MM-yyyy');
+            var endate = $.fullCalendar.formatDate(event.end,'dd-MM-yyyy');
+            var starttm = $.fullCalendar.formatDate(event.start,'HH:mm');
+            var endtm = $.fullCalendar.formatDate(event.end,'HH:mm');    
+        },*/
+        eventClick: function ( startDate, endDate, event, jsEvent, view )  {
+           
+            //alert("Información de la citra");
+            $.getJSON(Routing.generate('get_infoCita', { id: startDate.id}), 
+                function(data) {
+                    //alert(data.regs);
+                    switch(data.regs){
+                        
+                        case 0:
+                            //Cita reprogramada con éxito
+                            //err=0;
+                            break;
+                        //case 1:
+                            //Fallo en reprogramar la cita
+                          //  break;
+                        case 2:
+                            //Conflicto con otra cita
+                            //jsEvent.revertFunc();
+                            //alert("cupo no disponible");
+                            //err=2;
+                            //Revierte el drag and drop el parametro revertFunc hace la inversión, pero por agregar
+                            //el parametro startDate se despleza a allDay
+                            allDay();
+                            break;
+                    }
+                    
+                          
+            }); 
+           bootbox.alert(startDate.id, function() {
+               //Example.show("Hello world callback");
+           });
         },
         
         

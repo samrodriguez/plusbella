@@ -37,6 +37,8 @@
             <link rel="stylesheet" href="{{ asset('Resources/wrapkit/styles/demo.css') }}">
             <link rel="stylesheet" href="{{ asset('Resources/ptTimeSelect/css/jquery.ptTimeSelect.css') }}">
             <link rel="stylesheet" href="{{ asset('Resources/zebra/css/bootstrap.css') }}">
+            <link rel="stylesheet" href="{{ asset('bundles/adesignscalendar/css/fullcalendar/fullcalendar.css') }}" />
+            <link rel="stylesheet" href="{{ asset('Resources/fullcalendar/css/fullcalendar.print.css') }}" media="print"/>
         {%- endblock %}
         {#{% block js -%}
             <script type="text/javascript" src="{{ asset('Resources/bootstrap-3/js/jquery.min.js') }}"></script>  
@@ -466,6 +468,8 @@
     <script src="{{ asset('Resources/zebra/js/zebra_datepicker.js') }}"></script>
     <script src="{{ asset('bundles/fosjsrouting/js/router.js') }}"></script>
     <script src="{{ path('fos_js_routing_js', {'callback': 'fos.Router.setData'}) }}"></script>
+    <script type="text/javascript" src="{{ asset('bundles/adesignscalendar/js/fullcalendar/jquery.fullcalendar.min.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('Resources/jquery-ui/ui/jquery-ui.js') }}"></script>
     
     <!-- END COMPONENTS -->
     

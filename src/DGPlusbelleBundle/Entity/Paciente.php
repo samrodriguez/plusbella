@@ -106,6 +106,11 @@ class Paciente
      * @ORM\OneToMany(targetEntity="Consulta", mappedBy="paciente", cascade={"persist", "remove"})
      */
     private $consulta;
+    
+    /**
+     * @ORM\OneToMany(targetEntity="Expediente", mappedBy="paciente", cascade={"persist", "remove"})
+     */
+    private $expediente;
 
 
     /**
@@ -413,5 +418,15 @@ class Paciente
      */
     public function __toString() {
     return $this->persona->getPrimerNombre().' '.$this->persona->getPrimerApellido();
+    }
+    
+    /**
+     * Get expediente
+     *
+     * @return \DGPlusbelleBundle\Entity\Expediente
+     */
+    public function getExpediente()
+    {
+        return $this->expediente;
     }
 }

@@ -48,7 +48,7 @@
                 }); 
                 
                 //Generación de calendario zebra
-                $('#dgplusbellebundle_cita_fechaCita').Zebra_DatePicker(//{
+                //$('#dgplusbellebundle_cita_fechaCita').Zebra_DatePicker(//{
                     /*onSelect:
                         $.getJSON(Routing.generate('get_horas', { idEmp: idEmp}), 
                         function(data) {
@@ -75,7 +75,7 @@
                                 });
                             });        
                         }); */
-               /* }*/);
+               /* }*///);
                 
                 /*$('#dgplusbellebundle_cita_fechaCita').daterangepicker({
                     singleDatePicker: true,
@@ -106,9 +106,9 @@
                 var idEmp = 0;
                 
                 //Cargar los horarios al inicio
-                $('#dgplusbellebundle_cita_empleado').change();
+                //$('#dgplusbellebundle_cita_empleado').change();
                 //Modificar horarios al cmabiar dropdown
-                $('#dgplusbellebundle_cita_empleado').on('change', function() {
+                /*$('#dgplusbellebundle_cita_empleado').on('change', function() {
                     var idEmp = $(this).val();
                     //alert(idEmp);
                     var datepicker = $('#dgplusbellebundle_cita_fechaCita').data('Zebra_DatePicker');
@@ -142,7 +142,7 @@
                         });        
                     }); 
                 });
-                
+                */
                 
                 
             });
