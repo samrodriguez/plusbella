@@ -31,7 +31,16 @@ class CitaController extends Controller
         $em = $this->getDoctrine()->getManager();
 
         $entities = $em->getRepository('DGPlusbelleBundle:Cita')->findAll();
-
+        
+        /*$dql = "SELECT exp.paciente"
+                . "FROM DGPlusbelleBundle:Cita c, DGPlusbelleBundle:Paciente p, DGPlusbelleBundle:Expediente exp"
+                . "WHERE c.id.paciente = p.id AND p.expediente AND exp.paciente = exp.id";
+               
+        $entities = $em->createQuery($dql)
+                     ->getResult();
+        
+        var_dump($entities);
+        */
         return array(
             'entities' => $entities,
         );
@@ -429,4 +438,34 @@ class CitaController extends Controller
         //$exito['regs']=true;
         return new Response(json_encode($exito));
     }
+    
+    
+    
+    
+    /**
+     * @Route("/infocita/get/{id}", name="get_infoCita", options={"expose"=true})
+     * @Method("GET")
+     */
+    public function getInfoCitaAction(Request $request, $id) {
+        
+        $request = $this->getRequest();
+        
+        $em = $this->getDoctrine()->getEntityManager();
+        
+        $dql = "SELECT pac.primerNombre, pac.primerApellido, t.nombre, per.primerNombre, per.primerApellido, c.fechaCita
+                    FROM DGPlusbelleBundle:Cita c
+                    JOIN c.empleado emp
+                    JOIN c.tratamiento t
+                    JOIN c.paciente p
+                    JOIN p.persona pac
+                    JOIN emp.persona per
+                    
+                WHERE emp.id =:id";
+        $cita['regs'] = $em->createQuery($dql)
+                ->setParameter('id', $id)
+                ->getArrayResult();
+        //var_dump($regiones);
+        return new Response(json_encode($cita));
+    }
+    
 }
