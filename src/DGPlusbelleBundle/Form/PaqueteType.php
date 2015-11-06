@@ -24,8 +24,20 @@ class PaqueteType extends AbstractType
                     'class'=>'form-control input-sm'
                     )))
             //->add('estado')
-           // ->add('tratamiento')
-           // ->add('sucursal')
+            ->add('tratamiento','entity',array('label' => 'Tratamientos',
+                'class'=>'DGPlusbelleBundle:Tratamiento','property'=>'nombre',
+                'multiple'=>true,
+                'expanded'=>true,
+                    'attr'=>array(
+                    'class'=>''
+                    )))
+           ->add('sucursal','entity',array('label' => 'Sucursales',
+                'class'=>'DGPlusbelleBundle:Sucursal','property'=>'nombre',
+                'multiple'=>true,
+                'expanded'=>true,
+                    'attr'=>array(
+                    'class'=>''
+                    ))) 
         ;
     }
     

@@ -22,9 +22,8 @@ class CitaType extends AbstractType
                         'attr'   => array('class' => 'form-control input-sm'),
                        ))
             ->add('horaInicio', null,
-                  array('label'  => 'Hora',
-                        'widget' => 'single_text',
-                        'attr'   => array('class' => 'form-control input-sm'),
+                  array('label'  => 'Hora cita',
+                        'attr'   => array('class' => 'hora'),
                        ))
             //->add('horaFin')
            // ->add('fechaRegistro')

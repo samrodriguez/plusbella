@@ -32,7 +32,13 @@ class TratamientoType extends AbstractType
             
             //->add('empleado')
            //->add('paquete')
-            //->add('sucursal')
+           ->add('sucursal','entity',array('label' => 'Sucursales',
+                'class'=>'DGPlusbelleBundle:Sucursal','property'=>'nombre',
+                'multiple'=>true,
+                'expanded'=>true,
+                    'attr'=>array(
+                    'class'=>''
+                    ))) 
         ;
     }
     

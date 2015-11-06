@@ -59,30 +59,14 @@ class Sucursal
     /**
      * @var \Doctrine\Common\Collections\Collection
      *
-     * @ORM\ManyToMany(targetEntity="Paquete", inversedBy="sucursal")
-     * @ORM\JoinTable(name="sucursal_paquete",
-     *   joinColumns={
-     *     @ORM\JoinColumn(name="sucursal", referencedColumnName="id")
-     *   },
-     *   inverseJoinColumns={
-     *     @ORM\JoinColumn(name="paquete", referencedColumnName="id")
-     *   }
-     * )
+     * @ORM\ManyToMany(targetEntity="Paquete", mappedBy="sucursal")
      */
     private $paquete;
 
-    /**
+   /**
      * @var \Doctrine\Common\Collections\Collection
      *
-     * @ORM\ManyToMany(targetEntity="Tratamiento", inversedBy="sucursal")
-     * @ORM\JoinTable(name="sucursal_tratamiento",
-     *   joinColumns={
-     *     @ORM\JoinColumn(name="sucursal", referencedColumnName="id")
-     *   },
-     *   inverseJoinColumns={
-     *     @ORM\JoinColumn(name="tratamiento", referencedColumnName="id")
-     *   }
-     * )
+     * @ORM\ManyToMany(targetEntity="Tratamiento", mappedBy="sucursal")
      */
     private $tratamiento;
 

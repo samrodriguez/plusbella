@@ -32,8 +32,20 @@ class SucursalType extends AbstractType
                     'attr'=>array(
                     'class'=>'form-control input-sm'
                     )))
-           // ->add('paquete')
-           // ->add('tratamiento')
+        /*      ->add('paquete','entity',array('label' => 'Paquetes',
+                'class'=>'DGPlusbelleBundle:Paquete','property'=>'nombre',
+                'multiple'=>true,
+                'expanded'=>true,
+                    'attr'=>array(
+                    'class'=>''
+                  )))*/
+       /*   ->add('tratamiento','entity',array('label' => 'Tratamientos',
+                'class'=>'DGPlusbelleBundle:Tratamiento','property'=>'nombre',
+                'multiple'=>true,
+                'expanded'=>true,
+                    'attr'=>array(
+                    'class'=>''
+                    ))) */
         ;
     }
     
