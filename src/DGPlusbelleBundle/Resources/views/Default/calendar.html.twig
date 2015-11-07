@@ -28,7 +28,7 @@ $(document).ready(function() {
         header: {
             left: 'prev,next, today',
             center: 'title',
-            right: ''
+            right: 'month,agendaWeek,agendaDay'
         },
         buttonText: {
             today:    'Hoy',
@@ -65,16 +65,18 @@ $(document).ready(function() {
             var element = $(jsEvent.srcElement);
             
         },
-        eventDrop: function(startDate, event, dayDelta, minuteDelta, allDay, revertFunc, jsEvent, ui, view ) { 
+        eventDrop: function( startDate, event, dayDelta, minuteDelta, allDay, revertFunc, jsEvent, ui, view ) { 
             var stdate = $.fullCalendar.formatDate(event.start,'dd-MM-yyyy');
             var endate = $.fullCalendar.formatDate(event.end,'dd-MM-yyyy');
             var starttm = $.fullCalendar.formatDate(event.start,'HH:mm');
             var endtm = $.fullCalendar.formatDate(event.end,'HH:mm');    
             var err = 0;
-            //alert(startDate.id);
+            
+            var date = startDate.start;
+            //alert(date);
             //return false;
             var id=startDate.id;
-            $.getJSON(Routing.generate('get_nuevaHora', { id: id,delta:dayDelta}), 
+            $.getJSON(Routing.generate('get_nuevaHora', { id: id, delta:dayDelta, fecha:date}), 
                 function(data) {
                     //alert(data.regs);
                     switch(data.regs){
@@ -82,10 +84,25 @@ $(document).ready(function() {
                         case 0:
                             //Cita reprogramada con éxito
                             //err=0;
+                            var mensaje = "";
+                            mensaje += "<div class='row'><div class='col-md-12'><b><p class='text-left'>...</p></b></div></div>";
+                            mensaje += "<div class='row'><hr></div>";
+                            mensaje += "<div class='row'><div class='col-md-12'>Cita reprogramada exitosamente</div></div>"
+                            bootbox.alert(mensaje, function() {
+                                
+                            });
                             break;
-                        //case 1:
-                            //Fallo en reprogramar la cita
-                          //  break;
+                       case 1:
+                            //Cita no puede ser reprogramada por el estado, asistida o cancelada
+                            var mensaje = "";
+                            mensaje += "<div class='row'><div class='col-md-12'><b><p class='text-left'>Error...</p></b></div></div>";
+                            mensaje += "<div class='row'><hr></div>";
+                            mensaje += "<div class='row'><div class='col-md-12'>Esta cita no puede ser reprogramada</div></div>"
+                            bootbox.alert(mensaje, function() {
+                                
+                            });
+                            allDay();
+                            break;
                         case 2:
                             //Conflicto con otra cita
                             //jsEvent.revertFunc();
@@ -94,6 +111,15 @@ $(document).ready(function() {
                             //Revierte el drag and drop el parametro revertFunc hace la inversión, pero por agregar
                             //el parametro startDate se despleza a allDay
                             allDay();
+                            break;
+                        case 3:
+                            var mensaje = "";
+                            mensaje += "<div class='row'><div class='col-md-12'><b><p class='text-left'>Error...</p></b></div></div>";
+                            mensaje += "<div class='row'><hr></div>";
+                            mensaje += "<div class='row'><div class='col-md-12'>Esta cita no puede ser reprogramada a un día antes de hoy</div></div>"
+                            bootbox.alert(mensaje, function() {
+                                
+                            });
                             break;
                     }
                     
@@ -114,32 +140,26 @@ $(document).ready(function() {
             //alert("Información de la citra");
             $.getJSON(Routing.generate('get_infoCita', { id: startDate.id}), 
                 function(data) {
-                    //alert(data.regs);
-                    switch(data.regs){
-                        
-                        case 0:
-                            //Cita reprogramada con éxito
-                            //err=0;
-                            break;
-                        //case 1:
-                            //Fallo en reprogramar la cita
-                          //  break;
-                        case 2:
-                            //Conflicto con otra cita
-                            //jsEvent.revertFunc();
-                            //alert("cupo no disponible");
-                            //err=2;
-                            //Revierte el drag and drop el parametro revertFunc hace la inversión, pero por agregar
-                            //el parametro startDate se despleza a allDay
-                            allDay();
-                            break;
-                    }
-                    
+                          //alert(data.regs[0].fechaCita["date"].toString());
+                          //var dt = data.regs[0].fechaCita;
+                          //var hr = data.regs[0].horaInicio;
+                          var mensaje = "";
+                          mensaje += "<div class='row'><div class='col-md-12'><h3 class='text-center'>Información de la cita </h3></div><div class='row'>";
+                          mensaje += "<div class='col-md-12'><hr></div></div>";
+                          mensaje += "<div class='col-md-6 text-right'><b>Estado: </b></div><div class='col-md-6'>"+data.regs[0].estado+"</div>";
+                          mensaje += "<div class='col-md-6 text-right'><b>Expediente: </b></div><div class='col-md-6'>"+data.regs[0].numero+"</div>";
+                          mensaje += "<div class='col-md-6 text-right'><b>Nombre del paciente: </b></div><div class='col-md-6'>"+data.regs[0].primerNombre+" "+data.regs[0].primerApellido+"</div>";
+                          mensaje += "<div class='col-md-6 text-right'><b>Doctor del paciente: </b></div><div class='col-md-6'>"+data.regs[0].primerNombreEmp+" "+data.regs[0].primerApellidoEmp+"</div>";
+                          mensaje += "<div class='col-md-6 text-right'><b>Tratamiento: </b></div><div class='col-md-6'>"+data.regs[0].nombreTratamiento+"</div>";
+                          mensaje += "<div class='col-md-6 text-right'><b>Fecha: </b></div><div class='col-md-6'>"+data.regs[0].fechaCita+"</div>";
+                          mensaje += "<div class='col-md-6 text-right'><b>Hora: </b></div><div class='col-md-6'>"+data.regs[0].horaInicio+"</div>";
+                          mensaje += "</div>"
                           
+                          bootbox.alert(mensaje, function() {
+                                //Example.show("Hello world callback");
+                          });
             }); 
-           bootbox.alert(startDate.id, function() {
-               //Example.show("Hello world callback");
-           });
+           
         },
         
         
