@@ -15,9 +15,16 @@ class ConsultaProductoType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('indicaciones')
-            ->add('consulta')
-            ->add('producto')
+           
+           // ->add('consulta')
+            ->add('producto',null,array('label' => 'Producto', 'empty_value'=>'Seleccione producto...',
+                    'attr'=>array(
+                    'class'=>'form-control input-sm'
+                    )))
+                 ->add('indicaciones','textarea',array('label' => 'Indicaciones',
+                    'attr'=>array(
+                    'class'=>'form-control input-sm'
+                    )))
         ;
     }
     

@@ -41,7 +41,7 @@ class ConsultaProducto
     /**
      * @var \Producto
      *
-     * @ORM\ManyToOne(targetEntity="Producto")
+     * @ORM\ManyToOne(targetEntity="Producto", inversedBy="placas", cascade={"persist", "remove"}) 
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="producto", referencedColumnName="id")
      * })
