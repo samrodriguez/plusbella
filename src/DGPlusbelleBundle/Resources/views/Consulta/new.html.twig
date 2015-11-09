@@ -159,7 +159,19 @@
 
 
 {% block javascripts_step %}
-      
+    
+ <script>
+            $(document).ready(function(){
+                
+                 $('#dgplusbellebundle_paciente_fechaNacimiento').daterangepicker({
+                    singleDatePicker: true,
+                    showDropdowns: true,
+                    locale: {
+                        format: 'YYYY-MM-DD'
+                    },
+                });
+            }
+</script>   
 <script>
 
 // Get the ul that holds the collection of tags
@@ -289,5 +301,7 @@ if(editar!='editar_usuario'){
 }
 
  </script>
+ 
+ 
 
 {% endblock %} 

@@ -28,7 +28,7 @@ class ConsultaType extends AbstractType
                     'attr'=>array(
                     'class'=>' '
                     )))
-            ->add('observacion','textarea',array('label' => 'Observación',
+            ->add('observacion','textarea',array('label' => 'Observación','required' => false,
                     'attr'=>array(
                     'class'=>'form-control input-sm'
                     )))

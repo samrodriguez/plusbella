@@ -78,7 +78,7 @@
                             
                             <td>{{ entity.paciente.persona.primernombre }}  {{entity.paciente.persona.primerapellido}}</td>
                             <td>{{ entity.tipoConsulta}}</td>
-                            <td>{% if entity.fechaConsulta %}{{ entity.fechaConsulta|date('d/m/Y') }}{% endif %}</td>
+                            <td>{% if entity.fechaConsulta %}{{ entity.fechaConsulta|date('Y/m/d') }}{% endif %}</td>
                             <td>{{ entity.horaInicio|date('H:m') }}</td>
                             <td>{{ entity.horaFin|date('H:m') }}</td>
                             <td>{{ entity.observacion }}</td>
@@ -121,10 +121,18 @@
     {% block javascripts_step %}
         <script src="{{ asset('Resources/wrapkit/scripts/dataTables.bootstrap.js') }}"></script>
         <script src="{{ asset('Resources/wrapkit/scripts/dataTables.tableTools.js') }}"></script>
-        <script src="{{ asset('Resources/wrapkit/scripts/dataTables.tableTools.js') }}"></script>
+        <script src="{{ asset('Resources/wrapkit/scripts/dataTables.tableTools.js') }}"></script>         
        
         <script>
             $(document).ready(function(){
+                
+                 $('#dgplusbellebundle_paciente_fechaNacimiento').daterangepicker({
+                    singleDatePicker: true,
+                    showDropdowns: true,
+                    locale: {
+                        format: 'YYYY-MM-DD'
+                    },
+                }); 
                 
                 $('#dgplusbellebundle_consulta_fechaConsulta').daterangepicker({
                     singleDatePicker: true,
@@ -133,7 +141,6 @@
                         format: 'YYYY-MM-DD'
                     },
                 }); 
-                
                 
                 //Seleccionar un registro
                 $('#datatables1>tbody>tr').on('click', function(event) {
@@ -279,4 +286,5 @@
 	});             
     };
         </script>
+        
     {% endblock %}
