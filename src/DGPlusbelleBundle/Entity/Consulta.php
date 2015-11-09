@@ -46,7 +46,7 @@ class Consulta
     /**
      * @var string
      *
-     * @ORM\Column(name="observacion", type="string", length=200, nullable=false)
+     * @ORM\Column(name="observacion", type="string", length=200, nullable=true)
      */
     private $observacion;
 

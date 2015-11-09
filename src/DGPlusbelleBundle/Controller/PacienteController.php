@@ -34,10 +34,10 @@ class PacienteController extends Controller
         $rsm = new ResultSetMapping();
         $em = $this->getDoctrine()->getManager();
         
-        $sql = "select per.primer_nombre as pnombre, per.primer_apellido as papellido,  "
+        $sql = "select per.nombres as pnombre, per.apellidos as papellido,  "
                 . "per.direccion as direccion, per.telefono as tel, per.email as email, pac.id as idpac, pac.dui as dui, pac.estado_civil as ecivil, pac.sexo as sexo, pac.ocupacion as ocupacion, "
                 . "pac.lugar_trabajo as lugarTrabajo, pac.fecha_nacimiento as fechaNacimiento, pac.referido_por as referidoPor "
-                . "from paciente pac inner join persona per on pac.persona = per.id order by per.primer_apellido";
+                . "from paciente pac inner join persona per on pac.persona = per.id order by per.apellidos";
         
         $rsm->addScalarResult('idpac','idpac');
         $rsm->addScalarResult('pnombre','pnombre');
