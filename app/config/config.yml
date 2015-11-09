@@ -7,6 +7,9 @@ imports:
 # http://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
 parameters:
     locale: en
+    photo.empleado: %kernel.root_dir%/../web/Photos/Empleado/
+    photo.paciente: %kernel.root_dir%/../web/Photos/Paciente/
+    photo.tmp: %kernel.root_dir%/../web/Photos/Tmp/
 
 framework:
     #esi:             ~
@@ -37,6 +40,10 @@ twig:
     strict_variables: "%kernel.debug%"
     form:
         resources: ['bootstrap_3_layout.html.twig']
+    globals:
+        dir_empleado: 'Photos/Empleado'
+        dir_paciente: 'Photos/Paciente'
+        dir_tmp: 'Photos/Tmp'
 # Assetic Configuration
 assetic:
     debug:          "%kernel.debug%"

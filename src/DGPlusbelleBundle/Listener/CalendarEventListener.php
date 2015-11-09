@@ -27,16 +27,7 @@ class CalendarEventListener
         //$em = $this->getDoctrine()->getManager();
         
         $citas = $this->em->getRepository('DGPlusbelleBundle:Cita')->findAll();
-        /*$dql = "SELECT c,p,exp"
-                . " FROM DGPlusbelleBundle:Cita c"
-                . " JOIN c.paciente p"
-                . " JOIN p.expediente exp";
-         
-        $entities = $this->em->createQuery($dql)
-                     ->getResult();
         
-        var_dump($entities[0]->getPaciente()->getExpediente());
-        */
         foreach($citas as $key => $companyEvent) {
             // create an event with a start/end time, or an all day event
             //var_dump($key);
@@ -75,8 +66,22 @@ class CalendarEventListener
             
             $eventEntity->setTitle(strtoupper($expNumero).' - '.$companyEvent->getPaciente()->getPersona()->getPrimerNombre().' '.$companyEvent->getPaciente()->getPersona()->getPrimerApellido());
             $eventEntity->setAllDay(false); // default is false, set to true if this is an all day event
-            $eventEntity->setBgColor('#48CFAD'); //set the background color of the event's label
-            $eventEntity->setFgColor('#000'); //set the foreground color of the event's label
+            
+            switch($companyEvent->getEstado()){
+                case "A":    //Asistida
+                    $eventEntity->setBgColor('#48CFAD'); //set the background color of the event's label
+                    $eventEntity->setFgColor('#000'); //set the foreground color of the event's label
+                    break;
+                case "P":   //Pendiente
+                    $eventEntity->setBgColor('#4FC1E9'); //set the background color of the event's label
+                    $eventEntity->setFgColor('#000'); //set the foreground color of the event's label
+                    break;
+                case "C":    //Cancelada
+                    $eventEntity->setBgColor('#ED5565'); //set the background color of the event's label
+                    $eventEntity->setFgColor('#000'); //set the foreground color of the event's label
+                    break;
+            }
+            
             //$eventEntity->setUrl('http://www.google.com'); // url to send user to when event label is clicked
             $eventEntity->setCssClass('my-custom-class'); // a custom class you may want to apply to event labels
 

@@ -17,3 +17,8 @@ services:
         arguments: 
             mail: '@mailer'
             templating: '@templating'
+    plussbelle.photo:
+        class: DGPlusbelleBundle\Service\PhotoService
+        arguments: 
+            entityManagerMy: "@doctrine.orm.default_entity_manager"
+            security: "@security.context"
