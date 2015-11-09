@@ -89,7 +89,7 @@ class PaqueteTratamiento {
      *
      * @param \DGPlusbelleBundle\Entity\Paquete $paquete
      *
-     * @return VentaPaquete
+     * @return PaqueteTratamiento
      */
     public function setPaquete(\DGPlusbelleBundle\Entity\Paquete $paquete = null)
     {
@@ -113,7 +113,7 @@ class PaqueteTratamiento {
      *
      * @param \DGPlusbelleBundle\Entity\Tratamiento $tratamiento
      *
-     * @return Consulta
+     * @return PaqueteTratamiento
      */
     public function setTratamiento(\DGPlusbelleBundle\Entity\Tratamiento $tratamiento = null)
     {
