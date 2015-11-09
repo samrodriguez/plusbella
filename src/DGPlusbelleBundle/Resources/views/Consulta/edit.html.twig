@@ -1,3 +1,5 @@
+{% extends 'DGPlusbelleBundle:Layout:layout.html.twig' %}
+
 {% block contenido -%}
     
     
@@ -23,44 +25,37 @@
                     <div class="col-md-3">
                         {{ form_row(edit_form.paciente.persona.primerNombre) }}
                     </div>
-                    <div class="col-md-3">
-                        {{ form_row(edit_form.paciente.persona.segundoNombre) }}
-                    </div>
-                    <div class="col-md-3">
+                   <div class="col-md-3">
                         {{ form_row(edit_form.paciente.persona.primerApellido) }}
                     </div>
-                    <div class="col-md-3">
-                        {{ form_row(edit_form.paciente.persona.segundoApellido) }}
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-md-3">
+                    
+                
+                    <div class="col-md-5">
                         {{ form_row(edit_form.paciente.persona.direccion) }}
                     </div>
-                    <div class="col-md-3">
+                    <div class="col-md-1">
                         {{ form_row(edit_form.paciente.persona.telefono) }}
                     </div>
-                    <div class="col-md-3">
+                    <div class="col-md-2">
                         {{ form_row(edit_form.paciente.persona.email) }}
                     </div>
 
                 {# Formulario de paciente #}
-                    <div class="col-md-3">
+                    <div class="col-md-1">
                         {{ form_row(edit_form.paciente.dui) }}
                     </div>
                     
-                </div>
-                    <div class="row">
+               
                         <div class="col-md-3">
                             {{ form_row(edit_form.paciente.referidoPor) }}
                         </div>
-                        <div class="col-md-3">
+                        <div class="col-md-2">
                             {{ form_row(edit_form.paciente.fechaNacimiento) }}
                         </div>
-                        <div class="col-md-3">
+                        <div class="col-md-2">
                             {{ form_row(edit_form.paciente.estadoCivil) }}
                         </div>
-                        <div class="col-md-3">
+                        <div class="col-md-2">
                             {{ form_row(edit_form.paciente.sexo) }}
                         </div>
                        
@@ -68,7 +63,7 @@
                         
                     
                     <div class="row">   
-                        <div class="col-md-3">
+                        <div class="col-md-1">
                             {{ form_row(edit_form.paciente.telefonoEmergencia) }}
                         </div>
                         <div class="col-md-3">
@@ -93,42 +88,57 @@
             {# Formulario de consulta#}
             <div class="row">
                 <br>
+                 <div class="col-md-1">
+                    {{ form_row(edit_form.incapacidad) }}
+                </div>
+                
+                <div class="col-md-2">
+                    {{ form_row(edit_form.tratamiento) }}
+                </div>
                 <div class="col-md-2">
                     {{ form_row(edit_form.fechaConsulta) }}
                 </div>
                 
-                <div class="col-md-2">
+                <div class="col-md-1">
                     {{ form_row(edit_form.horaInicio) }}
                 </div>
                 
-                <div class="col-md-2">
+                <div class="col-md-1">
                     {{ form_row(edit_form.horaFin) }}
                 </div>
                 {#<div class="col-md-3">
                     {{ form_row(edit_form.tipoConsulta) }}
                 </div>
                 #}
-                
-                <div class="col-md-3">
-                    {{ form_row(edit_form.tratamiento) }}
+               
+                <div class="col-md-5">
+                    {{ form_row(edit_form.observacion) }}
                 </div>
                 
             </div>
             
             
             <div class="row">
-                <br>
-                {#<div class="col-md-3">
-                    {{ form_row(form.cita) }}
-                </div>
-                #}
-                <div class="col-md-3">
-                    {{ form_row(edit_form.incapacidad) }}
-                </div>
-                
-                <div class="col-md-9">
-                    {{ form_row(edit_form.observacion) }}
-                </div>
+             
+                 
+                            <div class="listado col-md-2">
+                                <ul style="border-top: 0px none;" class="placas" data-prototype="{{ form_widget(edit_form.placas.vars.prototype)|e }}">
+
+                                    {% for placa in edit_form.placas %}
+                                        <li> 
+
+                                             {{ form_row(placa) }} 
+                                             {# {{ form_row(placa) }}  #}
+                                            {# <a class="link" href="#" style="visibility: hidden;width:5px;">x</a> #}
+
+                                        </li>
+                                    {% endfor %}
+
+                                    {# {{ form_widget(edit_form.placas) }}
+                                    <a class="link" href="#" style="visibility: visible;">x</a> #}
+                                </ul>
+                            </div>
+                      
             </div>
             {#
         <ul class="record_actions">
@@ -167,8 +177,169 @@
         
         
     });
+    
+    
    
 </script>
 {% endblock %}
+
+
+{% block javascripts_step %}
+<script>
+   
+   // Get the ul that holds the collection of tags
+var collectionHolder = $('ul.placas');
+var col=$('#hnr_sircimbundle_estudioradiologicotype_placas');
+// setup an "add a tag" link
+var $addTagLink = $('<a href="#" class="add_placa_link">+</a>');
+var $removeTagLink = $('<a href="#" class="remove_placa_link">x</a>');
+var $newLinkLi = $('<li></li>').append($addTagLink);
+var $delLinkLi = $('#hnr_sircimbundle_estudioradiologicotype_placas.required').append($removeTagLink);
+
+$('.add_placa_link').on('click', function(e) {
+                // prevent the link from creating a "#" on the URL
+                e.preventDefault();
+
+                // add a new tag form (see next code block)
+                addTagForm(collectionHolder);
+            });
+
+
+
+jQuery(document).ready(function() {
+
+    var rol="";
+    var rolpredet = 0;
+
+
+    $('#hnr_sircimbundle_estudioradiologicotype_placas>div>label.required').hide('slow/400/fast');
+    col.children('div').each(function() {
+        addTagFormDeleteLink($(this));
+    }); 
+
+    collectionHolder.find('li').each(function() {
+        addTagFormDeleteLink($(this));
+
+    });
+
+    
+
+    // add the "add a tag" anchor and li to the tags ul
+    collectionHolder.append($newLinkLi);
+
+    // count the current form inputs we have (e.g. 2), use that as the new
+    // index when inserting a new item (e.g. 2)
+    collectionHolder.data('index', collectionHolder.find(':input').length);
+    
+
+    // addTagForm(collectionHolder, $newLinkLi);
+
+
+    $addTagLink.on('click', function(e) {
+        // prevent the link from creating a "#" on the URL
+        e.preventDefault();
+
+        // add a new tag form (see next code block)
+        addTagForm(collectionHolder, $newLinkLi);
+        // $('.btn_radio').attr('name', 'rol_predet');
+    });
+
+
+
+$(document).on('click', '.close', function(){
+        alert('del');
+    $(this).closest('#hnr_sircimbundle_estudioradiologicotype_placas').fadeOut(500, function() {
+        $(this).remove();
+    });
+});
+
+    
+});
+
+
+
+
+function addTagForm(collectionHolder, $newLinkLi) {
+    // Get the data-prototype explained earlier
+    var prototype = collectionHolder.data('prototype');
+
+    // get the new index
+    var index = collectionHolder.data('index');
+
+    // Replace '__name__' in the prototype's HTML to
+    // instead be a number based on how many items we have
+    var newForm = prototype.replace(/__name__/g, index);
+
+    // increase the index with one for the next item
+    collectionHolder.data('index', index + 1);
+
+    // Display the form in the page in an li, before the "Add a tag" link li
+    // var $newFormLi = $('<li></li>').append(newForm);
+
+    var $newFormLi = $('<li></li>').append('<div>'+newForm+'</div>');
+    $newLinkLi.before($newFormLi);
+    
+
+    
+    // add a delete link to the new form
+
+    addTagFormDeleteLink($newFormLi);
+    $('.btn_radio').click(function(event) {
+        /* Act on the event */
+        var id = $(this).attr('id');
+        // alert(id);
+        $('.btn_radio').prop('checked', false);
+        $('#'+id).prop('checked', true);
+        $('.btn_radio').removeClass('errorform');
+        // actualizarrolpredet();
+    });
+}
+
+function addTagFormDeleteLink($tagFormLi) {
+    var $removeFormA = $('<a class="link" href="#">x</a>');
+    $tagFormLi.append($removeFormA);
+
+    $removeFormA.on('click', function(e) {
+        // prevent the link from creating a "#" on the URL
+        e.preventDefault();
+
+        // $('.btn_radio:checked').each(function() {
+        //     //$(this).val() es el valor del checkbox correspondiente
+        //    // alert('chequeado'); 
+        //    $('#hnr_sircimbundle_usuariotype_placas_0_usroPredeterminado').prop('checked', true);
+        // });
+        // remove the li for the tag form
+        $('.btn_radio').prop('checked', false);
+        // $('#hnr_sircimbundle_usuariotype_placas_0_usroPredeterminado').prop('checked', true);//Se carga el radiobutton seleccionado
+        $tagFormLi.remove();
+
+    });
+    
+}
+
+$('ul.placas')
+            .on('mouseover','li', function(){
+                $(this).find('a.link').css('visibility','visible');
+            })
+            .on('mouseout','li', function(){ 
+                $(this).find('a.link').css('visibility','hidden'); 
+            });
+
+$('ul.placas')
+            .on('mouseover','li:first-child', function(){
+                $(this).find('a.link').css('visibility','hidden');
+            });
+
+        // $('.btn_radio').each(function() {
+        //     //$(this).val() es el valor del checkbox correspondiente
+        //    // alert('chequeado'); 
+        //    $('#hnr_sircimbundle_usuariotype_placas_0_usroPredeterminado').prop('checked', true);
+        // });// $('.btn_radio').attr('name', 'rol_predet');
+
+   
+   
+</script>
+{% endblock %}
+
 
 

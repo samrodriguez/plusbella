@@ -33,7 +33,7 @@ class EmpleadoType extends AbstractType
                     'class'=>'form-control input-sm'
                     )))
             //->add('horario')
-            ->add('tratamiento','entity',array('label' => 'Tratamientos que realiza',
+            ->add('tratamiento','entity',array('label' => 'Tratamientos que se realizan',
                 'class'=>'DGPlusbelleBundle:Tratamiento','property'=>'nombre',
                 'multiple'=>true,
                 'expanded'=>true,

@@ -31,7 +31,16 @@ class CitaController extends Controller
         $em = $this->getDoctrine()->getManager();
 
         $entities = $em->getRepository('DGPlusbelleBundle:Cita')->findAll();
-
+        
+        /*$dql = "SELECT exp.paciente"
+                . "FROM DGPlusbelleBundle:Cita c, DGPlusbelleBundle:Paciente p, DGPlusbelleBundle:Expediente exp"
+                . "WHERE c.id.paciente = p.id AND p.expediente AND exp.paciente = exp.id";
+               
+        $entities = $em->createQuery($dql)
+                     ->getResult();
+        
+        var_dump($entities);
+        */
         return array(
             'entities' => $entities,
         );
@@ -371,10 +380,10 @@ class CitaController extends Controller
     
     
      /**
-     * @Route("/nuevahora/get/{id}/{delta}", name="get_nuevaHora", options={"expose"=true})
+     * @Route("/nuevahora/get/{id}/{delta}/{fecha}", name="get_nuevaHora", options={"expose"=true})
      * @Method("GET")
      */
-    public function nuevaHoraAction(Request $request, $id, $delta) {
+    public function nuevaHoraAction(Request $request, $id, $delta, $fecha) {
         
         $request = $this->getRequest();
         
@@ -385,6 +394,10 @@ class CitaController extends Controller
         //$entityDuplicada = $em->getRepository('DGPlusbelleBundle:Cita')->findBy(array('empleado'=>$empleado->getId(),'horaInicio'=>$entity->getHoraInicio()));
         $horaInicial = $entity->getHoraInicio();
         //var_dump($dql);
+        $time = strtotime($fecha);
+        //var_dump($entity->getFechaCita());
+        $newformat = date('Y-m-d',$time);
+        //var_dump($newformat);
         //var_dump( count( $entityDuplicada));
         $exito['regs']=0;
         if(isset($entity)){
@@ -404,15 +417,36 @@ class CitaController extends Controller
                     FROM DGPlusbelleBundle:Cita c
                     WHERE c.empleado =:idEmp AND c.horaInicio =:hora AND c.fechaCita=:fecha AND c.id <>:id";
                 $entityDuplicada = $em->createQuery($dql)
-                                    ->setParameters(array('idEmp'=>$empleado->getId(),'hora'=>$entity->getHoraInicio()->format('H:i'),'fecha'=>$entity->getFechaCita()->format('Y-m-d'),'id'=>$entity->getId()))
+                                    ->setParameters(array('idEmp'=>$empleado->getId(),'hora'=>$entity->getHoraInicio()->format('H:i'),'fecha'=>$newformat,'id'=>$entity->getId()))
                                     ->getArrayResult();
                 if(count($entityDuplicada)==0){
-                    $em->persist($entity);
-                    $em->flush();
-                    $exito['regs']=0;
+                    //$hoy = new \DateTime('now');
+                    //var_dump($hoy);
+                    $today_dt = new \DateTime('now');
+                    $expire_dt = new \DateTime($newformat);
+                    /*var_dump($today_dt->format("Y-m-d"));
+                    var_dump(date('Y-m-d',$newformat));
+                    if ($expire_dt < $today_dt) {
+                        //var_dump($newformat);
+                        $exito['regs']=3;
+                    }*/
+                    if($entity->getEstado()=="P"){
+                        
+                        //if(){
+                            
+                            
+                            $entity->setFechaCita(new \DateTime($newformat));
+                            $em->persist($entity);
+                            $em->flush();   
+                            $exito['regs']=0; //Cita reprogramada con exito
+                        //}
+                    }
+                    else{
+                        $exito['regs']=1;//La cita tiene estado asistida o cancelada
+                    }
                 }
                 else{
-                    $exito['regs']=2;
+                    $exito['regs']=2;//La cita coincide con otro registro
                 }
         }
         else{
@@ -429,4 +463,63 @@ class CitaController extends Controller
         //$exito['regs']=true;
         return new Response(json_encode($exito));
     }
+    
+    
+    
+    
+    /**
+     * @Route("/infocita/get/{id}", name="get_infoCita", options={"expose"=true})
+     * @Method("GET")
+     */
+    public function getInfoCitaAction(Request $request, $id) {
+        
+        $request = $this->getRequest();
+        
+        $em = $this->getDoctrine()->getEntityManager();
+        
+        $dql = "SELECT exp.numero, pac.primerNombre, pac.primerApellido, t.nombre as nombreTratamiento,
+                per.primerNombre as primerNombreEmp, per.primerApellido as primerApellidoEmp, 
+                c.fechaCita, c.horaInicio, c.estado
+                    FROM DGPlusbelleBundle:Cita c
+                    JOIN c.empleado emp
+                    JOIN c.tratamiento t
+                    JOIN c.paciente p
+                    JOIN p.persona pac
+                    JOIN emp.persona per
+                    JOIN p.expediente exp                    
+                WHERE c.id =:id";
+        $cita['regs'] = $em->createQuery($dql)
+                ->setParameter('id', $id)
+                ->getArrayResult();
+        
+        //var_dump($cita);
+        $cita['regs'][0]["numero"] = strtoupper($cita['regs'][0]["numero"]);
+        $cita['regs'][0]["primerNombre"] = ucwords($cita['regs'][0]["primerNombre"]);
+        $cita['regs'][0]["primerApellido"] = ucwords($cita['regs'][0]["primerApellido"]);
+        $cita['regs'][0]["nombreTratamiento"] = ucwords($cita['regs'][0]["nombreTratamiento"]);
+        $cita['regs'][0]["primerNombreEmp"] = ucwords($cita['regs'][0]["primerNombreEmp"]);
+        $cita['regs'][0]["primerApellidoEmp"] = ucwords($cita['regs'][0]["primerApellidoEmp"]);
+        $cita['regs'][0]["fechaCita"] = $cita['regs'][0]["fechaCita"]->format("Y-m-d");
+        $cita['regs'][0]["horaInicio"] = $cita['regs'][0]["horaInicio"]->format("H:i");
+        
+        switch ($cita['regs'][0]["estado"]){
+            case "A":
+                $cita['regs'][0]["estado"] = "Asistida";
+                break;
+            case "P":
+                $cita['regs'][0]["estado"] = "Pendiente";
+                break;
+            case "C":
+                $cita['regs'][0]["estado"] = "Cancelada";
+                break;
+        }
+        
+        
+        
+        //var_dump($cita['regs'][0]["primerNombre"]);
+        //var_dump($cita);
+        
+        return new Response(json_encode($cita));
+    }
+    
 }

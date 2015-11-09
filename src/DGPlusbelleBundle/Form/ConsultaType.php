@@ -20,11 +20,17 @@ class ConsultaType extends AbstractType
                         'widget' => 'single_text',
                         'attr'   => array('class' => 'form-control input-sm'),
                        ))
-            ->add('horaInicio')
-            ->add('horaFin')
-            ->add('observacion','text',array('label' => 'Observacion',
+            ->add('horaInicio','time',array('label' => 'Hora Inicio',
                     'attr'=>array(
-                    'class'=>'form-control'
+                    'class'=>' '
+                    )))
+            ->add('horaFin','time',array('label' => 'Hora Fin',
+                    'attr'=>array(
+                    'class'=>' '
+                    )))
+            ->add('observacion','textarea',array('label' => 'Observación',
+                    'attr'=>array(
+                    'class'=>'form-control input-sm'
                     )))
             ->add('incapacidad', 'choice', array(
                     'choices'  => array('1' => 'Sí', '0' => 'No'),
@@ -49,9 +55,31 @@ class ConsultaType extends AbstractType
                          'class'         => 'DGPlusbelleBundle:Tratamiento',
                          
                          'attr'=>array(
-                         'class'=>'form-control'
+                         'class'=>'form-control input-sm'
                          )
                        ))
+          /*      
+            ->add('producto', 'entity', array(
+                    'label'         =>  'Seleccione el producto',
+                    'class'         =>  'DGPlusbelleBundle:Producto',
+                    'multiple'  => true,
+                    'expanded'  => true,
+                    'required'  => false,
+                    'mapped' => false
+                ))    
+            ->add('indicaciones', 'text', array(
+                    'label'         =>  'Indicaciones',
+                    'required'  => false,
+                    'mapped' => false
+                ))  */
+                
+            ->add('placas','collection',array(
+                'type' => new ConsultaProductoType(),
+                'label'=>' ',
+                'by_reference' => false,
+                'allow_add' => true,
+                'allow_delete' => true,
+                ))                
         ;
     }
     
