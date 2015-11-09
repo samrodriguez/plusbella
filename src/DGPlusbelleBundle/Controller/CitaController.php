@@ -424,43 +424,36 @@ class CitaController extends Controller
                     //var_dump($hoy);
                     $today_dt = new \DateTime('now');
                     $expire_dt = new \DateTime($newformat);
-                    /*var_dump($today_dt->format("Y-m-d"));
-                    var_dump(date('Y-m-d',$newformat));
-                    if ($expire_dt < $today_dt) {
+                    $fechaReprogramada = date("Y-m-d",$time);
+                    
+                    //var_dump($today_dt->format("Y-m-d"));
+                    //var_dump(date('Y-m-d',$newformat));
+                    $today_dt = $today_dt->format("Y-m-d");
+                    $expire_dt = $newformat;
+                    if ($fechaReprogramada < $today_dt) {
                         //var_dump($newformat);
-                        $exito['regs']=3;
-                    }*/
-                    if($entity->getEstado()=="P"){
-                        
-                        //if(){
-                            
-                            
+                        //var_dump($expire_dt);
+                        $exito['regs']=3;//Error, intenta reprogramar la cita a un dia anterior a "hoy"
+                    }
+                    else{
+                        if($entity->getEstado()=="P"){
                             $entity->setFechaCita(new \DateTime($newformat));
                             $em->persist($entity);
                             $em->flush();   
                             $exito['regs']=0; //Cita reprogramada con exito
-                        //}
-                    }
-                    else{
-                        $exito['regs']=1;//La cita tiene estado asistida o cancelada
+                        }
+                        else{
+                            $exito['regs']=1;//Error, La cita tiene estado asistida o cancelada
+                        }
                     }
                 }
                 else{
-                    $exito['regs']=2;//La cita coincide con otro registro
+                    $exito['regs']=2;//Error, La cita coincide con otro registro
                 }
         }
         else{
             $exito['regs']=1;
         }
-        /*$dql = "SELECT ho.diaHorario 
-                    FROM DGPlusbelleBundle:Horario ho
-                    JOIN ho.empleado emp
-                WHERE emp.id =:idEmp";
-        $dias['regs'] = $em->createQuery($dql)
-                ->setParameter('idEmp', $idEmp)
-                ->getArrayResult();*/
-        //var_dump($regiones);
-        //$exito['regs']=true;
         return new Response(json_encode($exito));
     }
     
