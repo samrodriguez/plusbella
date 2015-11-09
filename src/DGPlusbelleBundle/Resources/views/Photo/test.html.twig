@@ -1,0 +1,27 @@
+{% extends 'DGPlusbelleBundle:Layout:layout.html.twig' %}  
+{% block css -%}
+{{parent()}}
+<link rel="stylesheet" href="{{ asset('Resources/cropper/css/cropper.min.css') }}">
+<link rel="stylesheet" href="{{ asset('Resources/cropper/css/main.css') }}">
+{%- endblock %}
+
+{% block js -%}
+{{parent()}}
+<script type="text/javascript" src="{{ asset('Resources/cropper/js/cropper.min.js') }}"></script>  
+<script type="text/javascript" src="{{ asset('Resources/cropper/js/main.js') }}"></script>  
+{%- endblock %}
+
+{% block contenido -%}
+<div class="container" id="crop-avatar">
+    <!-- Current avatar -->
+    <div class="avatar-view" title="Cambiar foto">
+      <img src="{{ asset('Resources/img/avatar.png')}}" alt="Foto">
+    </div>
+   <!-- Cropping modal -->
+   {% import "DGPlusbelleBundle:Macro:modalPhoto.html.twig" as modal %}
+   {{ modal.crop(entity.id) }}
+   <!-- Cropping modal -->
+    <!-- Loading state -->
+    <div class="loading" aria-label="Loading" role="img" tabindex="-1"></div>
+</div>
+{% endblock %}
