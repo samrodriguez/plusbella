@@ -165,8 +165,9 @@
             
 {% endblock %}
 
-
-{% block jquery %}
+{% block javascripts_step %}
+    
+    
 <script>
     $(document).ready(function(){
         //Accion cancelar del boton modificar
@@ -175,16 +176,20 @@
             return false;
         });
         
-        
+         $('#dgplusbellebundle_paciente_fechaNacimiento').daterangepicker({
+                    singleDatePicker: true,
+                    showDropdowns: true,
+                    locale: {
+                        format: 'YYYY-MM-DD'
+                    },
+                });
+    
     });
     
+
+</script>    
     
-   
-</script>
-{% endblock %}
-
-
-{% block javascripts_step %}
+    
 <script>
    
    // Get the ul that holds the collection of tags

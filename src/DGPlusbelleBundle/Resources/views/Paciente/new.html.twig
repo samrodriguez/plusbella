@@ -56,3 +56,19 @@
     
     
 {% endblock %}
+
+{% block javascripts_step %}
+      
+       <script>
+            $(document).ready(function(){
+                var idPaciente = 0;
+                 $('#dgplusbellebundle_paciente_fechaNacimiento').daterangepicker({
+                    singleDatePicker: true,
+                    showDropdowns: true,
+                    locale: {
+                        format: 'YYYY-MM-DD'
+                    },
+                }); 
+            }
+       </script>
+{% endblock %}       

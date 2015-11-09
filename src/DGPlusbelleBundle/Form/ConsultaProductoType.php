@@ -17,11 +17,11 @@ class ConsultaProductoType extends AbstractType
         $builder
            
            // ->add('consulta')
-            ->add('producto',null,array('label' => 'Producto', 'empty_value'=>'Seleccione producto...',
+            ->add('producto',null,array('label' => 'Producto','required' => false, 'empty_value'=>'Seleccione producto...',
                     'attr'=>array(
                     'class'=>'form-control input-sm'
                     )))
-                 ->add('indicaciones','textarea',array('label' => 'Indicaciones',
+                 ->add('indicaciones','textarea',array('label' => 'Indicaciones','required' => false,
                     'attr'=>array(
                     'class'=>'form-control input-sm'
                     )))
