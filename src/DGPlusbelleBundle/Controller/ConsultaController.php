@@ -12,6 +12,7 @@ use DGPlusbelleBundle\Entity\Expediente;
 use DGPlusbelleBundle\Entity\HistorialClinico;
 use DGPlusbelleBundle\Entity\ConsultaProducto;
 use DGPlusbelleBundle\Form\ConsultaType;
+use DGPlusbelleBundle\Form\ConsultaConPacienteType;
 use DGPlusbelleBundle\Form\ConsultaProductoType;
 
 /**
@@ -33,7 +34,7 @@ class ConsultaController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
         $entity = new Consulta();
-        $form   = $this->createCreateForm($entity);
+        $form   = $this->createCreateForm($entity,1);
         $entities = $em->getRepository('DGPlusbelleBundle:Consulta')->findAll();
 
         return array(
@@ -107,7 +108,7 @@ class ConsultaController extends Controller
         //var_dump($tipoConsulta);
                //die();
         $entity->setTipoConsulta($tipoConsulta);
-        $form = $this->createCreateForm($entity);
+        $form = $this->createCreateForm($entity,2);
         $form->handleRequest($request);
         
        // $producto = $form->get('producto')->getData();
@@ -176,12 +177,20 @@ class ConsultaController extends Controller
      *
      * @return \Symfony\Component\Form\Form The form
      */
-    private function createCreateForm(Consulta $entity)
+    private function createCreateForm(Consulta $entity,$tipo)
     {
-        $form = $this->createForm(new ConsultaType(), $entity, array(
-            'action' => $this->generateUrl('admin_consulta_create'),
-            'method' => 'POST',
-        ));
+        if($tipo==1){
+            $form = $this->createForm(new ConsultaType(), $entity, array(
+                'action' => $this->generateUrl('admin_consulta_create'),
+                'method' => 'POST',
+            ));
+        }
+        else{
+            $form = $this->createForm(new ConsultaConPacienteType(), $entity, array(
+                'action' => $this->generateUrl('admin_consulta_create'),
+                'method' => 'POST',
+            ));
+        }
 
         $form->add('submit', 'submit', array('label' => 'Guardar',
                                                'attr'=>
@@ -200,13 +209,47 @@ class ConsultaController extends Controller
     public function newAction()
     {
         $entity = new Consulta();
-        $form   = $this->createCreateForm($entity);
+        $form   = $this->createCreateForm($entity,1);
 
         return array(
             'entity' => $entity,
             'form'   => $form->createView(),
         );
     }
+    
+    
+    //
+    
+    /**
+     * Displays a form to create a new Consulta entity.
+     *
+     * @Route("/newconpaciente", name="admin_consulta_nueva_paciente")
+     * @Method("GET")
+     * @Template()
+     */
+    public function newConPacienteAction()
+    {
+        $entity = new Consulta();
+        
+        $em = $this->getDoctrine()->getManager();
+        
+        //Recuperación del paciente
+        $request = $this->getRequest();
+        $id= $request->get('id');
+        
+        //Busqueda del paciente
+        $paciente = $em->getRepository('DGPlusbelleBundle:Paciente')->find($id);
+        //Seteo del paciente en la entidad
+        $entity->setPaciente($paciente);
+        
+        $form   = $this->createCreateForm($entity,2);
+
+        return array(
+            'entity' => $entity,
+            'form'   => $form->createView(),
+        );
+    }
+    
 
     /**
      * Finds and displays a Consulta entity.
@@ -275,6 +318,50 @@ class ConsultaController extends Controller
             'delete_form' => $deleteForm->createView(),
         );
     }
+    
+    
+    /**
+     * Displays a form to edit an existing Consulta entity.
+     *
+     * @Route("/{id}/edit", name="admin_consulta_edit")
+     * @Method("GET")
+     * @Template()
+     */
+    public function editConPacienteAction($id)
+    {
+        $em = $this->getDoctrine()->getManager();
+
+        $entity = $em->getRepository('DGPlusbelleBundle:Consulta')->find($id);
+
+        if (!$entity) {
+            throw $this->createNotFoundException('Unable to find Consulta entity.');
+        }
+
+        
+        
+         // Create an array of the current Tag objects in the database 
+        foreach ($entity->getPlacas() as $placa) { $originalPlacas[] = $placa; }
+        $editForm = $this->createForm(new ConsultaType(), $entity); 
+        $deleteForm = $this->createDeleteForm($id);
+        // filter $originalTags to contain tags no longer present 
+        foreach ($entity->getPlacas() as $placa) { 
+            foreach ($originalPlacas as $key => $toDel) { 
+                if ($toDel->getId() === $placa->getId()) {
+                    unset($originalPlacas[$key]); 
+                    
+                } } }
+
+        
+        
+        $editForm = $this->createEditForm($entity,2);
+        $deleteForm = $this->createDeleteForm($id);
+
+        return array(
+            'entity'      => $entity,
+            'edit_form'   => $editForm->createView(),
+            'delete_form' => $deleteForm->createView(),
+        );
+    }
 
     /**
     * Creates a form to edit a Consulta entity.
@@ -283,12 +370,21 @@ class ConsultaController extends Controller
     *
     * @return \Symfony\Component\Form\Form The form
     */
-    private function createEditForm(Consulta $entity)
+    private function createEditForm(Consulta $entity,$tipo)
     {
-        $form = $this->createForm(new ConsultaType(), $entity, array(
-            'action' => $this->generateUrl('admin_consulta_update', array('id' => $entity->getId())),
-            'method' => 'PUT',
-        ));
+        if($tipo==1){
+            $form = $this->createForm(new ConsultaConPacienteType(), $entity, array(
+                'action' => $this->generateUrl('admin_consulta_update', array('id' => $entity->getId())),
+                'method' => 'PUT',
+            ));
+        }
+        else{
+            $form = $this->createForm(new ConsultaConPacienteType(), $entity, array(
+                'action' => $this->generateUrl('admin_consulta_update', array('id' => $entity->getId())),
+                'method' => 'PUT',
+            )); 
+        }
+        
 
         $form->add('submit', 'submit', array('label' => 'Modificar',
                                                'attr'=>
@@ -301,7 +397,7 @@ class ConsultaController extends Controller
      *
      * @Route("/{id}", name="admin_consulta_update")
      * @Method("PUT")
-     * @Template("DGPlusbelleBundle:Consulta:edit.html.twig")
+     * @Template("DGPlusbelleBundle:Consulta:editconpaciente.html.twig")
      */
     public function updateAction(Request $request, $id)
     {
@@ -320,7 +416,7 @@ class ConsultaController extends Controller
                 }
 
         $deleteForm = $this->createDeleteForm($id);
-        $editForm = $this->createEditForm($entity);
+        $editForm = $this->createEditForm($entity,2);
         $editForm->handleRequest($request);
 
         if ($editForm->isValid()) {
@@ -368,9 +464,11 @@ class ConsultaController extends Controller
                         
             
             
-
-            return $this->redirect($this->generateUrl('admin_consulta', array('id' => $id)));
-        }$em->flush();
+                        
+            
+        }
+            $em->flush();
+            return $this->redirect($this->generateUrl('admin_consulta'));
         }
 
         return array(
@@ -445,4 +543,55 @@ class ConsultaController extends Controller
             $em->flush();
         }    
     }
+    
+    
+    /**
+     * Lista todas las consultas de un paciente
+     *
+     * @Route("/historialconsulta/{id}", name="admin_historial_consulta")
+     * @Method("GET")
+     * @Template()
+     */
+    public function historialConsultaAction($id){
+        $em = $this->getDoctrine()->getManager();
+        //$entity = new Consulta();
+        $entity = $em->getRepository('DGPlusbelleBundle:Consulta')->find($id);
+        
+        //var_dump($entity->getPaciente()->getExpediente());
+        $idPaciente = $entity->getPaciente()->getId();
+        $consultas = $em->getRepository('DGPlusbelleBundle:Consulta')->findBy(array('paciente'=>$idPaciente));
+        
+        $fecha = $entity->getPaciente()->getFechaNacimiento()->format("Y-m-d");
+        //var_dump($fecha);
+        //Calculo de la edad
+        list($Y,$m,$d) = explode("-",$fecha);
+        $edad = date("md") < $m.$d ? date("Y")-$Y-1 : date("Y")-$Y;
+        
+        
+        //Obtener el numero de sesiones de los tratamientos
+        $dql = "SELECT s.nuFROM DGPlusbelleBundle:Paciente p"
+                . "JOIN ";
+        
+        
+        
+// Formato: dd-mm-yy
+//echo calcular_edad(“01-10-1989″); // Resultado: 21
+        return array(
+            //'entities' => $entities,
+            'entity' => $entity,
+            'edad' => $edad,
+            'consultas' => $consultas,
+        );
+    }
+    
+    
+    public function calcularEdad($fecha){
+        
+        
+        
+        return $edad;
+    }
+    
+    
+    
 }
