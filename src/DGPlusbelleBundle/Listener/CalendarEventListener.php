@@ -32,7 +32,7 @@ class CalendarEventListener
             // create an event with a start/end time, or an all day event
             //var_dump($key);
             $fi = $companyEvent->getFechaCita()->format('Y-m-d');
-            $ih = $companyEvent->getHoraInicio()->format('H:i');
+            $ih = $companyEvent->getHoraCita()->format('H:i');
             
             //$fh = $companyEvent->getHoraFin()->format('H:i');
             $h = date("H:i", strtotime('+30 minutes', strtotime($ih)));
@@ -64,7 +64,7 @@ class CalendarEventListener
             //var_dump($index);
             $eventEntity->setId($companyEvent->getID());
             
-            $eventEntity->setTitle(strtoupper($expNumero).' - '.$companyEvent->getPaciente()->getPersona()->getPrimerNombre().' '.$companyEvent->getPaciente()->getPersona()->getPrimerApellido());
+            $eventEntity->setTitle(strtoupper($expNumero).' - '.$companyEvent->getPaciente()->getPersona()->getNombres().' '.$companyEvent->getPaciente()->getPersona()->getApellidos());
             $eventEntity->setAllDay(false); // default is false, set to true if this is an all day event
             
             switch($companyEvent->getEstado()){
