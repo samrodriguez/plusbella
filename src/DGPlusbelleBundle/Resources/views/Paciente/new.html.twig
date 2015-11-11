@@ -57,17 +57,18 @@
     
 {% endblock %}
 
-
-{% block javascript_step %}
-    
-    <script>
-        
-            //Accion cancelar del boton modificar
-            $("#cancelarModificar").click(function(){
-                $("#edit-datatables1").click();
-                return false;
-            });
-        
-    </script>
-    
-{% endblock %}
+{% block javascripts_step %}
+      
+       <script>
+            $(document).ready(function(){
+                var idPaciente = 0;
+                 $('#dgplusbellebundle_paciente_fechaNacimiento').daterangepicker({
+                    singleDatePicker: true,
+                    showDropdowns: true,
+                    locale: {
+                        format: 'YYYY-MM-DD'
+                    },
+                }); 
+            }
+       </script>
+{% endblock %}       

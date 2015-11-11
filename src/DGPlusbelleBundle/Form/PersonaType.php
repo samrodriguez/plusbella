@@ -15,7 +15,7 @@ class PersonaType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('primerNombre','text',array('label' => 'Nombres',
+            ->add('nombres','text',array('label' => 'Nombres',
                     'attr'=>array(
                     'class'=>'form-control input-sm'
                     )))
@@ -23,7 +23,7 @@ class PersonaType extends AbstractType
                     'attr'=>array(
                     'class'=>'form-control input-sm'
                     )))*/
-            ->add('primerApellido','text',array('label' => 'Apellidos',
+            ->add('apellidos','text',array('label' => 'Apellidos',
                     'attr'=>array(
                     'class'=>'form-control input-sm'
                     )))

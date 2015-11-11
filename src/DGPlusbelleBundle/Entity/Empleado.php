@@ -303,6 +303,6 @@ class Empleado
     
     public function __toString() {
     //return $this->cargo ? $this->cargo : '';
-    return $this->persona->getPrimerNombre().' '.$this->persona->getPrimerApellido();
+    return $this->persona->getNombres().' '.$this->persona->getApellidos();
     }
 }

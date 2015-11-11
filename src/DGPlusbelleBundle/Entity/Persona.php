@@ -24,9 +24,9 @@ class Persona
     /**
      * @var string
      *
-     * @ORM\Column(name="primer_nombre", type="string", length=50, nullable=false)
+     * @ORM\Column(name="nombres", type="string", length=50, nullable=false)
      */
-    private $primerNombre;
+    private $nombres;
 
     /**
      * @var string
@@ -38,9 +38,9 @@ class Persona
     /**
      * @var string
      *
-     * @ORM\Column(name="primer_apellido", type="string", length=50, nullable=false)
+     * @ORM\Column(name="apellidos", type="string", length=50, nullable=false)
      */
-    private $primerApellido;
+    private $apellidos;
 
     /**
      * @var string
@@ -115,13 +115,13 @@ class Persona
     /**
      * Set primerNombre
      *
-     * @param string $primerNombre
+     * @param string $nombres
      *
      * @return Persona
      */
-    public function setPrimerNombre($primerNombre)
+    public function setNombres($nombres)
     {
-        $this->primerNombre = $primerNombre;
+        $this->nombres = $nombres;
 
         return $this;
     }
@@ -131,9 +131,9 @@ class Persona
      *
      * @return string
      */
-    public function getPrimerNombre()
+    public function getNombres()
     {
-        return $this->primerNombre;
+        return $this->nombres;
     }
 
     /**
@@ -161,27 +161,27 @@ class Persona
     }
 */
     /**
-     * Set primerApellido
+     * Set apellidos
      *
-     * @param string $primerApellido
+     * @param string $apellidos
      *
      * @return Persona
      */
-    public function setPrimerApellido($primerApellido)
+    public function setApellidos($apellidos)
     {
-        $this->primerApellido = $primerApellido;
+        $this->apellidos = $apellidos;
 
         return $this;
     }
 
     /**
-     * Get primerApellido
+     * Get apellidos
      *
      * @return string
      */
-    public function getPrimerApellido()
+    public function getApellidos()
     {
-        return $this->primerApellido;
+        return $this->apellidos;
     }
 
     /**
@@ -191,12 +191,12 @@ class Persona
      *
      * @return Persona
      */
-    public function setSegundoApellido($segundoApellido)
+   /* public function setSegundoApellido($segundoApellido)
     {
         $this->segundoApellido = $segundoApellido;
 
         return $this;
-    }
+    }*/
 
     /**
      * Get segundoApellido
@@ -329,6 +329,6 @@ class Persona
     }*/
     
     public function __toString() {
-    return $this->primerNombre.' '.$this->primerApellido;
+    return $this->nombres.' '.$this->apellidos;
     }
 }

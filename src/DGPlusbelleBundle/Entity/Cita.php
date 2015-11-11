@@ -31,16 +31,16 @@ class Cita
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="hora_inicio", type="time", nullable=false)
+     * @ORM\Column(name="hora_cita", type="time", nullable=false)
      */
-    private $horaInicio;
+    private $horaCita;
 
     /**
      * @var \DateTime
      *
      * @ORM\Column(name="hora_fin", type="time", nullable=false)
      */
-    private $horaFin;
+     // private $horaFin;
 
     /**
      * @var \DateTime
@@ -143,27 +143,27 @@ class Cita
     }
 
     /**
-     * Set horaInicio
+     * Set horaCita
      *
-     * @param \DateTime $horaInicio
+     * @param \DateTime $horaCita
      *
      * @return Cita
      */
-    public function setHoraInicio($horaInicio)
+    public function setHoraCita($horaCita)
     {
-        $this->horaInicio = $horaInicio;
+        $this->horaCita = $horaCita;
 
         return $this;
     }
 
     /**
-     * Get horaInicio
+     * Get horaCita
      *
      * @return \DateTime
      */
-    public function getHoraInicio()
+    public function getHoraCita()
     {
-        return $this->horaInicio;
+        return $this->horaCita;
     }
 
     /**
@@ -173,22 +173,22 @@ class Cita
      *
      * @return Cita
      */
-    public function setHoraFin($horaFin)
+    /* public function setHoraFin($horaFin)
     {
         $this->horaFin = $horaFin;
 
         return $this;
-    }
+    }*/
 
     /**
      * Get horaFin
      *
      * @return \DateTime
      */
-    public function getHoraFin()
+    /*   public function getHoraFin()
     {
         return $this->horaFin;
-    }
+    }  */
 
     /**
      * Set fechaRegistro

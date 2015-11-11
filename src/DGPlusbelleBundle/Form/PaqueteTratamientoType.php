@@ -6,7 +6,7 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
-class ConsultaProductoType extends AbstractType
+class PaqueteTratamientoType extends AbstractType
 {
     /**
      * @param FormBuilderInterface $builder
@@ -15,16 +15,9 @@ class ConsultaProductoType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-           
-           // ->add('consulta')
-            ->add('producto',null,array('label' => 'Producto','required' => false, 'empty_value'=>'Seleccione producto...',
-                    'attr'=>array(
-                    'class'=>'form-control input-sm'
-                    )))
-                 ->add('indicaciones','textarea',array('label' => 'Indicaciones','required' => false,
-                    'attr'=>array(
-                    'class'=>'form-control input-sm'
-                    )))
+            ->add('numSesiones')
+            ->add('paquete')
+            ->add('tratamiento')
         ;
     }
     
@@ -34,7 +27,7 @@ class ConsultaProductoType extends AbstractType
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
         $resolver->setDefaults(array(
-            'data_class' => 'DGPlusbelleBundle\Entity\ConsultaProducto'
+            'data_class' => 'DGPlusbelleBundle\Entity\PaqueteTratamiento'
         ));
     }
 
@@ -43,6 +36,6 @@ class ConsultaProductoType extends AbstractType
      */
     public function getName()
     {
-        return 'dgplusbellebundle_consultaproducto';
+        return 'dgplusbellebundle_paquetetratamiento';
     }
 }

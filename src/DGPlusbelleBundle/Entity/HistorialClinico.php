@@ -36,7 +36,7 @@ class HistorialClinico
      *   @ORM\JoinColumn(name="consulta", referencedColumnName="id")
      * })
      */
-    private $consulta;
+    // private $consulta;
 
     /**
      * @var \Empleado
@@ -101,22 +101,22 @@ class HistorialClinico
      *
      * @return HistorialClinico
      */
-    public function setConsulta(\DGPlusbelleBundle\Entity\Consulta $consulta = null)
+    /*  public function setConsulta(\DGPlusbelleBundle\Entity\Consulta $consulta = null)
     {
         $this->consulta = $consulta;
 
         return $this;
-    }
+    } */
 
     /**
      * Get consulta
      *
      * @return \DGPlusbelleBundle\Entity\Consulta
      */
-    public function getConsulta()
+   /* public function getConsulta()
     {
         return $this->consulta;
-    }
+    }*/
 
     /**
      * Set empleado
