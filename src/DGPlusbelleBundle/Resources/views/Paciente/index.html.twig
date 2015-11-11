@@ -23,6 +23,11 @@
                       </button> 
                 </div>
                 <div class="btn-group btn-group-sm pull-left">
+                    <button id="ver-expediente" data-toggle="tooltip" data-container="body" title="Ver expediente" class="btn btn-default datatables1-actions disabled opciones" role="button">
+                        <i class="fa fa-book"></i><a href="{{ path('admin_historial_consulta') }}"> </a>
+                    </button> 
+                </div>
+                <div class="btn-group btn-group-sm pull-left">
                     <button id="nueva-cita" data-toggle="tooltip" data-container="body" title="Nueva cita" class="btn btn-default datatables1-actions disabled opciones" role="button">
                         <i class="fa fa-calendar-plus-o"></i><a href="{{ path('admin_cita_new') }}"> </a>
                     </button>
@@ -164,6 +169,7 @@
                     $("#nueva-consulta").removeClass("disabled");
                     $("#nuevo-abono").removeClass("disabled");
                     $("#vender-paquete").removeClass("disabled");
+                    $("#ver-expediente").removeClass("disabled");
         
                     //var link=$('#datatables1>tbody>tr>td>a').attr("href");
                     //var link=$(this).children("td:first").children().attr("href");

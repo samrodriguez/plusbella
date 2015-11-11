@@ -71,15 +71,13 @@
 
             
             
-            <div class="panel-body hide" id="addFormContainer">
             
-            </div>
             <!-- datatables1 -->
             <div class="row">
                 
-                <div class="col-md-4">
+                <div class="col-md-6">
 
-                    <div data-init-panel="true" class="panel bg-grd-light fade in panel-default panel-fill" data-fill-color="true" style="height:100%;">
+                    <div data-init-panel="true" class="panel bg-grd-light fade in panel-default panel-fill" data-fill-color="true" style="height:200px;">
                         <div class="panel-body">
                           {#<div class="pull-left mr-2x">
                             <span class="kit-avatar kit-avatar-64">
@@ -87,63 +85,97 @@
                             </span>
                           </div>#}
                             {#<p class="lead mb-1x">   Datos del paciente </p>#}
-                            <p class="text-muted"><i class="fa fa-fw"></i><div class="col-md-4">Nombre: </div><div class="col-md-8">{{ entity.paciente.persona.primerNombre }} {{ entity.paciente.persona.primerApellido }} </div> </p>
-                            <p class="text-muted"><i class="fa fa-fw"></i><div class="col-md-4">Expediente:</div><div class="col-md-8"> {{ entity.paciente.expediente[0].numero }} </div> </p>
+                            <p class="text-muted"><i class="fa fa-fw"></i><div class="col-md-4">Nombre: </div><div class="col-md-8">{{ entity[0].paciente.persona.nombres}} {{ entity[0].paciente.persona.apellidos}} </div> </p>
+                            <p class="text-muted"><i class="fa fa-fw"></i><div class="col-md-4">Expediente:</div><div class="col-md-8"> {{ entity[0].paciente.expediente[0].numero }} </div> </p>
                             <p class="text-muted"><i class="fa fa-fw"></i><div class="col-md-4">Edad: </div><div class="col-md-8">{{ edad }} años </div> </p>
                           <div class="clearfix"></div>
                           
                         </div><!-- /.panel-body -->
                     </div>
                 </div>
-                <div class="col-md-4">
+                <div class="col-md-6" id="progressTratamiento">
+                    <div id="donut-example" style="height:200px;"></div>
                     
                 </div>
-                <div class="col-md-4">
-                    
-                </div>
-                
+                                
             </div>
             <div class="row">
                 <div class="col-md-12"><hr></div>
             </div>
             <div class="panel-body">
               <div class="btn-toolbar clearfix" role="toolbar">
-                <div class="btn-group pull-left">
-                  <input id="filterDatatables1" class="form-control input-sm" placeholder="Buscar...">
+                <div class="btn-group btn-group-sm pull-left">
+                    <button data-toggle="tooltip" data-container="body" title="Tratamientos realizados" id="tratamientos-datatables1" class="btn btn-default" role="button">
+                        <i class="fa fa-clipboard"></i>
+                    </button>
+                </div>
+                <div class="btn-group btn-group-sm pull-left">
+                    <button data-toggle="tooltip" data-container="body" title="Paquetes vendidos" id="ventapaquetes-datatables2" class="btn btn-default" role="button">
+                        <i class="fa fa-briefcase"></i>
+                    </button>
+                </div>
+                <div class="btn-group btn-group-sm pull-left">
+                    <input id="filterDatatables1" class="form-control input-sm" placeholder="Buscar...">
+                    <input id="filterDatatables2" class="form-control input-sm" placeholder="Buscar...">
                 </div>
               </div><!-- /btn-toolbar -->
             </div><!-- /.panel-body -->
-            <table id = "datatables1" class="table table-noborder table-hover bordered-top dataTable" role="grid" aria-describedby="datatables1_info">
-                    <thead>
-                        <tr row="role">
-                            <th>N°</th>
-                            <th>Tratamiento</th>
-                            <th>Tipo consulta</th>
-                            <th>Fecha consulta</th>
-                            <th>Observacion</th>
-                            <th>Incapacidad</th>
-                            
-                        </tr>
-                    </thead>
-                    <tbody>
-                    {% for key, entity in consultas %}
-                    <tr id="{{entity.id}}">
-                        <td>{{key+1}}</td>
-                            <td>{{ entity.tratamiento}}</td>
-                            <td>{{ entity.tipoConsulta}}</td>
-                            <td>{% if entity.fechaConsulta %}{{ entity.fechaConsulta|date('d/m/Y') }}{% endif %}</td>
-                            <td>{{ entity.observacion }}</td>
-                            <td>{% if entity.incapacidad == 1 %}
-                                    Si
-                                {% else %}
-                                    No
-                                {% endif %}
-                            </td>
-                           
-                        </tr>
-                    {% endfor %}
-                    </tbody>
-                </table>
+            <div class="row" id="tabla1">
+                <div class="col-md-12">
+                    <table id = "datatables1" class="table table-noborder table-hover bordered-top dataTable" role="grid" aria-describedby="datatables1_info">
+                        <thead>
+                            <tr row="role">
+                                <th>N°</th>
+                                <th>Tratamiento</th>
+                                <th>Tipo consulta</th>
+                                <th>Fecha consulta</th>
+                                <th>Observacion</th>
+                                <th>Incapacidad</th>     
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for key, entity in consultas %}
+                                <tr id="{{entity.tratamiento.id}}">
+                                    <td>{{key+1}}</td>
+                                    <td>{{ entity.tratamiento}}</td>
+                                    <td>{{ entity.tipoConsulta}}</td>
+                                    <td>{% if entity.fechaConsulta %}{{ entity.fechaConsulta|date('d/m/Y') }}{% endif %}</td>
+                                    <td>{{ entity.observacion }}</td>
+                                    <td>{% if entity.incapacidad == 1 %}
+                                            Si
+                                        {% else %}
+                                            No
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="row hide" id="tabla2">
+                <div class="col-md-12"> 
+                    <table id = "datatables2" class="table table-noborder table-hover bordered-top dataTable" role="grid" aria-describedby="datatables1_info">
+                        <thead>
+                            <tr row="role">
+                                <th>N°</th>
+                                <th>Paquete</th>
+
+                            </tr>
+                        </thead>
+                        <tbody>
+                        {% for key, entity in paquetes %}
+                            <tr id="{{entity.tratamiento.id}}">
+                                <td>{{key+1}}</td>
+                                    <td>{{ entity.tratamiento}}</td>
+                                    <td>{{ entity.tipoConsulta}}</td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+                
             
           </div><!-- /.panel -->
     
@@ -194,11 +226,21 @@
                     //var link=$(this).children("td:first").children().attr("href");
                     //Obtener el id del registro
                     var link=$(this).attr("id");
-                    //alert(link);
+                    alert(link);
                     //Carga del form modificar
-                    $("#editFormContainer").load(link+"/edit");
-                    
-                    
+                    //$("#progressTratamiento").load(link+"/edit");
+                    $('#donut-example').remove();
+                    var mensaje="<div id='donut-example' style='height:200px;'></div>";
+                    $('#progressTratamiento').append();
+                    //alert(data0);
+                    Morris.Donut({
+                        element: 'donut-example',
+                        data: [
+
+                            { label: "Tratamiento 1", value: 80}
+                        ],
+                        formatter:function (y, data) { return y + '%' }
+                    });
                     //var href=link.attr("href");
                     //alert(object);
                     
@@ -206,45 +248,27 @@
                 });
                 
                 
-                $("#add-datatables1").click(function(){
-                    if($("#addFormContainer").hasClass("hide")){
-                        $("#addFormContainer").removeClass("hide");
-                        $("#editFormContainer").addClass("hide");
-                    }
-                    else{
-                        $("#addFormContainer").addClass("hide");
-                        limpiarCampos();
-                        //$("#editFormContainer").removeClass("hide");
-                    }
-
-                });
-                
-                //Accion cancelar del boton nuevo
-                $("#cancelarNuevo").click(function(){
-                    $("#add-datatables1").click();
-                    limpiarCampos();
-                    return false;
-                });
-                
-                //Accion cancelar del boton modificar
-                $("#cancelarModificar").click(function(){
-                    $("#edit-datatables1").click();
-                    return false;
-                });
-                
-                
-                $("#edit-datatables1").click(function(){
-                    if(!$("#edit-datatables1").hasClass("disabled")){
-                        if($("#editFormContainer").hasClass("hide")){
-                            $("#addFormContainer").addClass("hide");
-                            $("#editFormContainer").removeClass("hide");
-                        }
-                        else{
-                            //$("#addFormContainer").removeClass("hide");
-                            $("#editFormContainer").addClass("hide");
-                        }
+                $("#tratamientos-datatables1").click(function(){
+                    //alert("tratamiento");
+                    if($('#tabla2').hasClass("hide")){
+                        alert('oculto tabla2');
+                        $("#tabla1").addClass("hide");
+                        $("#tabla2").removeClass("hide");
+                        $('#filterDatatables2').show();
+                        $('#filterDatatables1').hide();
                     }
 
+                });
+                
+                $("#ventapaquetes-datatables2").click(function(){
+                    //alert("paquete");
+                    if($('#tabla1').hasClass("hide")){
+                            alert('oculto tabla1');
+                            $("#tabla1").addClass("hide");
+                            $("#tabla2").removeClass("hide");
+                            $('#filterDatatables1').hide();
+                            $('#filterDatatables2').show();
+                        }
                 });
                 /*
                 $("#dgplusbellebundle_sucursal_submit").click(function(){
@@ -258,6 +282,13 @@
                     $('#datatables1_filter>label>input').val($(this).val());
                     $('#datatables1_filter>label>input').keyup();
 
+                });
+                
+                $('#filterDatatables2').on('keyup', function(event) {
+                    var filtro = $(this).val(); 
+                    //alert(filtro);
+                    $('#datatables2_filter>label>input').val($(this).val());
+                    $('#datatables2_filter>label>input').keyup();
                 });
                 
                 
@@ -275,7 +306,8 @@
                     "language": {
                     "info": "Mostrando página _PAGE_ de _PAGES_",
                     "infoEmpty": "",
-                    "emptyTable": "No se encontraron afiliados",
+                    "infoFiltered": "filtrando de _MAX_ registros",
+                    "emptyTable": "No se encontraron registros",
                     "paginate": { 
                         "next": "Siguiente",
                         "previous": "Anterior"
@@ -285,15 +317,52 @@
                     "lengthMenu": "Mostrar _MENU_ registros"
                 }, 
                     
+                });
+                
+                
+                $('#datatables2').DataTable({ 
+                    searching:true,
+                    "order":[[0, "desc"],[1,"desc"]],
+                    "columnDefs": [
+                           { "orderable": false, "targets": 0 }
+                           //{ "orderData": [ 2, 3, 4 ], "targets": 2 }
+                    ],
+                    "language": {
+                    "info": "Mostrando página _PAGE_ de _PAGES_",
+                    "infoEmpty": "",
+                    "infoFiltered": "filtrando de _MAX_ registros",
+                    "emptyTable": "No se encontraron registros",
+                    "paginate": { 
+                        "next": "Siguiente",
+                        "previous": "Anterior"
+                    },
+                    "processing": "Procesando petición...",
+                    "search": "Buscar registros:",
+                    "lengthMenu": "Mostrar _MENU_ registros"
+                }, 
+                    
+                });
+        
+        
+        //Oculta el filtro de las tablas
+        $('#datatables1_filter, #datatables2_filter').hide();
+        //Oculta la tabla paquete
+        //$('#tabla2').hide();
+        //$('#tabla2').hide();
+        $('#filterDatatables2').hide();
+        $('#filterDatatables1, #filterDatatables2').val('');
+        
+        
+        
+        //alert(data0);
+        Morris.Donut({
+            element: 'donut-example',
+            data: [
+
+                { label: "Tratamiento 1", value: 40}
+            ],
+            formatter:function (y, data) { return y + '%' }
         });
-        
-        
-        //Oculta el filtro de la tabla
-        $('#datatables1_filter').hide();
-        $('#filterDatatables1').val('');
-        
-        
-        
         
     });//Fin document ready
         

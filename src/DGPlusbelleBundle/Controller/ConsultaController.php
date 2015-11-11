@@ -548,20 +548,22 @@ class ConsultaController extends Controller
     /**
      * Lista todas las consultas de un paciente
      *
-     * @Route("/historialconsulta/{id}", name="admin_historial_consulta")
+     * @Route("/historialconsulta/", name="admin_historial_consulta")
      * @Method("GET")
      * @Template()
      */
-    public function historialConsultaAction($id){
+    public function historialConsultaAction(){
         $em = $this->getDoctrine()->getManager();
-        //$entity = new Consulta();
-        $entity = $em->getRepository('DGPlusbelleBundle:Consulta')->find($id);
         
+        //Recuperación del id
+        $request = $this->getRequest();
+        $idPaciente= $request->get('id');    
         //var_dump($entity->getPaciente()->getExpediente());
-        $idPaciente = $entity->getPaciente()->getId();
-        $consultas = $em->getRepository('DGPlusbelleBundle:Consulta')->findBy(array('paciente'=>$idPaciente));
+        $entity = $em->getRepository('DGPlusbelleBundle:Consulta')->findBy(array('paciente'=>$idPaciente));
+        //$idPaciente = $entity->getPaciente()->getId();
         
-        $fecha = $entity->getPaciente()->getFechaNacimiento()->format("Y-m-d");
+        //var_dump($entity[0]->getPaciente());
+        $fecha = $entity[0]->getPaciente()->getFechaNacimiento()->format("Y-m-d");
         //var_dump($fecha);
         //Calculo de la edad
         list($Y,$m,$d) = explode("-",$fecha);
@@ -569,10 +571,23 @@ class ConsultaController extends Controller
         
         
         //Obtener el numero de sesiones de los tratamientos
-        $dql = "SELECT s.nuFROM DGPlusbelleBundle:Paciente p"
-                . "JOIN ";
+        $dql = "SELECT c FROM DGPlusbelleBundle:Consulta c"
+               . " JOIN vp.paquete paq";
+        //$dias = $em->createQuery($dql)
+                //->setParameter('idEmp', $idEmp)
+                //->getArrayResult();
+        //var_dump($consultas);
+        /*$stmt = $this->getDoctrine()->getEntityManager()
+            ->getConnection()
+             ->prepare('select paquete.id, paquete.nombre, paquete_tratamiento.num_sesiones from paciente natural join persona natural join venta_paquete natural join paquete natural join paquete_tratamiento where paciente.id = 1');
+        $stmt->execute();
+        $result = $stmt->fetchAll();
+        */
+        //echo $idPaciente;
         
-        
+        $paquetes = $em->getRepository('DGPlusbelleBundle:VentaPaquete')->findBy(array('paciente'=>$idPaciente));
+        //var_dump($paquetes);
+        //var_dump($dias);
         
 // Formato: dd-mm-yy
 //echo calcular_edad(“01-10-1989″); // Resultado: 21
@@ -580,17 +595,12 @@ class ConsultaController extends Controller
             //'entities' => $entities,
             'entity' => $entity,
             'edad' => $edad,
-            'consultas' => $consultas,
+            'consultas' => $entity,
+            'paquetes' => $paquetes,
         );
     }
     
     
-    public function calcularEdad($fecha){
-        
-        
-        
-        return $edad;
-    }
     
     
     
