@@ -1,122 +1,115 @@
-{#{% extends 'DGPlusbelleBundle:Layout:layout.html.twig' %}#}
+{#{% extends 'DGPlusbelleBundle:Layout:general.html.twig' %}#}
+{% extends 'DGPlusbelleBundle:Layout:layout2.html.twig' %}
+
+{% block css %}
+    {#{{parent()}}#}
+    <style>
+        
+        //Posicion del boton agregar
+        .placas>div:last-child {
+            position:absolute;
+        }
+        .addItem{
+            position: absolute;
+            height: 50px;
+            float: right;
+            margin-bottom: 50px;
+            padding-bottom: 100px;
+            top: -65px;
+            left: -2px;
+        }
+        
+            .addItem div {
+                position: absolute;
+            }
+        
+        .col-md-4{
+            padding-top: 40px;
+        }
+        
+        div + label{
+            display: none;
+        }
+    </style>
+    
+{% endblock %}
 
 {% block contenido -%}
     
     
 <div class="panel panel-default">
     <div class="panel-heading">
-        <p>Modificar consulta</p>
+        <p>Registrar consulta</p>
     </div>
-    <br>
+    
     <div class="panel-body">
     {{ form_start(edit_form) }}
         {{ form_errors(edit_form) }}
             {#  {{ form(form) }}  #}
             
-                <div class="row">
-                    <div class="col-md-12">
-                        <h3 class="text-center">Paciente</h3>
-                        <br>
-                    </div>
-                </div>
-                {# Formulario de persona #}
-
-                <div class="row">
-                    <div class="col-md-3">
-                        {{ form_row(edit_form.paciente.persona.primerNombre) }}
-                    </div>
-                   <div class="col-md-3">
-                        {{ form_row(edit_form.paciente.persona.primerApellido) }}
-                    </div>
-                    
                 
-                    <div class="col-md-5">
-                        {{ form_row(edit_form.paciente.persona.direccion) }}
-                    </div>
-                    <div class="col-md-1">
-                        {{ form_row(edit_form.paciente.persona.telefono) }}
-                    </div>
-                    <div class="col-md-2">
-                        {{ form_row(edit_form.paciente.persona.email) }}
-                    </div>
-
-                {# Formulario de paciente #}
-                    <div class="col-md-1">
-                        {{ form_row(edit_form.paciente.dui) }}
-                    </div>
-                    
-               
-                        <div class="col-md-3">
-                            {{ form_row(edit_form.paciente.referidoPor) }}
-                        </div>
-                        <div class="col-md-2">
-                            {{ form_row(edit_form.paciente.fechaNacimiento) }}
-                        </div>
-                        <div class="col-md-2">
-                            {{ form_row(edit_form.paciente.estadoCivil) }}
-                        </div>
-                        <div class="col-md-2">
-                            {{ form_row(edit_form.paciente.sexo) }}
-                        </div>
-                       
-                    </div>
-                        
-                    
-                    <div class="row">   
-                        <div class="col-md-1">
-                            {{ form_row(edit_form.paciente.telefonoEmergencia) }}
-                        </div>
-                        <div class="col-md-3">
-                            {{ form_row(edit_form.paciente.ocupacion) }}
-                        </div>
-                        <div class="col-md-3">
-                            {{ form_row(edit_form.paciente.lugarTrabajo) }}
-                        </div>
-                        <div class="col-md-3">
-                            {{ form_row(edit_form.paciente.personaEmergencia) }}
-                        </div>
-                    </div>
                         
                 <div class="row">
-                    <br>
-                    <hr>
+                    
+                    
                     <div class="col-md-12">
                         <h3 class="text-center">Consulta</h3>
+                        <hr>
                     </div>
                 </div>
-            
+            {# Paciente #}
+            <div class="row">
+                
+                <div class="col-md-5">{{ form_row(edit_form.paciente) }}</div>
+                
+            </div>
             {# Formulario de consulta#}
             <div class="row">
                 <br>
-                 <div class="col-md-1">
-                    {{ form_row(edit_form.incapacidad) }}
-                </div>
-                
-                <div class="col-md-2">
-                    {{ form_row(edit_form.tratamiento) }}
-                </div>
                 <div class="col-md-2">
                     {{ form_row(edit_form.fechaConsulta) }}
                 </div>
                 
-                <div class="col-md-1">
+                <div class="col-md-3">
+                    {{ form_row(edit_form.tratamiento) }}
+                </div>
+                
+                <div class="col-md-2">
                     {{ form_row(edit_form.horaInicio) }}
                 </div>
                 
-                <div class="col-md-1">
+                <div class="col-md-2">
                     {{ form_row(edit_form.horaFin) }}
                 </div>
-                {#<div class="col-md-3">
+                
+                <div class="col-md-1">
+                    {{ form_row(edit_form.incapacidad) }}
+                </div>
+
+            </div>
+            <div class="row">
+                <div class="col-md-3">
                     {{ form_row(edit_form.tipoConsulta) }}
                 </div>
-                #}
-               
                 <div class="col-md-5">
                     {{ form_row(edit_form.observacion) }}
                 </div>
-                
-            </div>
+            </div>  
             
+            <div class="row">
+                    
+                    
+                    <div class="col-md-12">
+                        <h3 class="text-left">Producto</h3>
+                        <hr>
+                        <br>
+                    </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <br><br>
+                </div>
+            </div>
             
             <div class="row">  
                  <div id="listadoa">
@@ -140,47 +133,22 @@
                       
             </div>   
             </div>
-            {#
-        <ul class="record_actions">
-    <li>
-        <a href="{{ path('admin_consulta') }}">
-            Back to the list
-        </a>
-    </li>
-</ul>#}
             
             <br>
             <div class="form-grouphide"> 
-                 <a href="{{ path('admin_sucursal') }}" class="btn btn-default btn-sm" id="cancelarModificar">Cancelar</a>
-                    {{ form_widget(edit_form._token) }}
-                    {{ form_widget(edit_form.submit) }}
-            </div>
+                 <a href="{{path('admin_consulta')}}" class="btn btn-default btn-sm" id="cancelarNuevo">Cancelar</a>
+                 {{ form_widget(edit_form._token) }}
+                 
+                {{ form_widget(edit_form.submit) }}
+             </div>
 	        
         
      
  </div>
-
+{{ form_widget(edit_form._token) }}
 </div>  
 {{ form_end(edit_form) }}   
             
-{% endblock %}
-
-
-{% block jquery %}
-<script>
-    $(document).ready(function(){
-        //Accion cancelar del boton modificar
-        $("#cancelarModificar").click(function(){
-            $("#edit-datatables1").click();
-            return false;
-        });
-        
-        
-    });
-    
-    
-   
-</script>
 {% endblock %}
 
 
@@ -214,9 +182,7 @@ jQuery(document).ready(function() {
                 });
 
     $('select[id$=dgplusbellebundle_consulta_placas_]').selectBoxIt();
-    
-    
-    
+
     collectionHolder.find('li').each(function() {
         addTagFormDeleteLink($(this));
 
@@ -306,10 +272,26 @@ function addTagFormDeleteLink($tagFormLi) {
 }
 
 
+$('#editar_usuario')
+            .on('mouseover','div', function(){
+                $(this).find('a.link').css('visibility','visible');
+            })
+            .on('mouseout','div', function(){ 
+                $(this).find('a.link').css('visibility','hidden'); 
+            });
 
+$('#editar_usuario')
+            .on('mouseover','li:first-child', function(){
+                $(this).find('a.link').css('visibility','hidden');
+            });
 
 
     
-</script>
+var editar=$('div.placas').attr('id');
+if(editar!='editar_usuario'){
+    // $('#hnr_sircimbundle_usuariotype_placas_0_usroPredeterminado').prop('checked', true);//Se carga el radiobutton seleccionado
+}
+
+ </script>
 
 {% endblock %} 

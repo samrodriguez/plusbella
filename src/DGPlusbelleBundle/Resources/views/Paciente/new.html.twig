@@ -42,7 +42,7 @@
   
    
              <div class="form-grouphide col-sm-9">
-                <a href="{{ path('admin_paciente') }}" class="btn btn-default btn-sm" id="cancelarNuevo">Cancelar</a>
+                <a href="{{ path('admin_paciente') }}" class="btn btn-default btn-sm" id="cancelarModificar">Cancelar</a>
                 {{ form_widget(form.submit) }}
               </div>
             
@@ -54,5 +54,20 @@
 </div>
     
     
+    
+{% endblock %}
+
+
+{% block javascript_step %}
+    
+    <script>
+        
+            //Accion cancelar del boton modificar
+            $("#cancelarModificar").click(function(){
+                $("#edit-datatables1").click();
+                return false;
+            });
+        
+    </script>
     
 {% endblock %}
