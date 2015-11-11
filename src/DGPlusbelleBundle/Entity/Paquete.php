@@ -3,6 +3,7 @@
 namespace DGPlusbelleBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * Paquete
@@ -71,6 +72,11 @@ class Paquete
      * )
      */
     private $sucursal;
+     
+     /**
+     * @ORM\OneToMany(targetEntity="PaqueteTratamiento", mappedBy="paquete", cascade={"persist", "remove"})
+     */
+    protected $placas;
 
     /**
      * Constructor
@@ -79,6 +85,7 @@ class Paquete
     {
         $this->tratamiento = new \Doctrine\Common\Collections\ArrayCollection();
         $this->sucursal = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->placas = new ArrayCollection();
     }
 
 
@@ -234,5 +241,17 @@ class Paquete
     
     public function __toString() {
     return $this->nombre.'   $'.$this->costo;
+    }
+    
+    public function getPlacas()
+    {
+        return $this->placas;
+    }
+    public function setPlacas(\Doctrine\Common\Collections\Collection $placas)
+    {
+        $this->placas = $placas;
+        foreach ($placas as $placa) {
+            $placa->setPaquete($this);
+        }
     }
 }

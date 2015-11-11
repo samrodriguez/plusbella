@@ -1,4 +1,4 @@
-{% extends 'DGPlusbelleBundle:Layout:layout.html.twig' %}  
+{% extends 'DGPlusbelleBundle:Layout:layout2.html.twig' %}  
 {% block css -%}
 {{parent()}}
 <link rel="stylesheet" href="{{ asset('Resources/cropper/css/cropper.min.css') }}">
@@ -12,7 +12,7 @@
 {%- endblock %}
 
 {% block contenido -%}
-<div class="container" id="crop-avatar">
+<div class="well" id="crop-avatar">
     <!-- Current avatar -->
     <div class="avatar-view" title="Cambiar foto">
       <img src="{{ asset('Resources/img/avatar.png')}}" alt="Foto">

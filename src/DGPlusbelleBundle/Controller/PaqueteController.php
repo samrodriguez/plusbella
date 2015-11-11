@@ -8,7 +8,9 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use DGPlusbelleBundle\Entity\Paquete;
+use DGPlusbelleBundle\Entity\PaqueteTratamiento;
 use DGPlusbelleBundle\Form\PaqueteType;
+use DGPlusbelleBundle\Form\PaqueteTratamientoType;
 
 /**
  * Paquete controller.
@@ -32,6 +34,7 @@ class PaqueteController extends Controller
         $em = $this->getDoctrine()->getManager();
 
         $entities = $em->getRepository('DGPlusbelleBundle:Paquete')->findAll();
+        var_dump($entities);
 
         return array(
             'entities' => $entities,
@@ -49,7 +52,7 @@ class PaqueteController extends Controller
     public function createAction(Request $request)
     {
         $entity = new Paquete();
-         $entity->setEstado(true);
+        $entity->setEstado(true);
         $form = $this->createCreateForm($entity);
         $form->handleRequest($request);
 
