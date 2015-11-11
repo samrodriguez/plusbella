@@ -21,7 +21,7 @@ class CitaType extends AbstractType
                         'widget' => 'single_text',
                         'attr'   => array('class' => 'form-control input-sm'),
                        ))
-            ->add('horaInicio', null,
+            ->add('horaCita', null,
                   array('label'  => 'Hora cita',
                         'attr'   => array('class' => 'hora'),
                        ))
@@ -64,7 +64,7 @@ class CitaType extends AbstractType
                          )
                        ))
             ->add('tratamiento', null, 
-                  array( 'label'         => 'Paquete',
+                  array( 'label'         => 'Tratamiento',
                          'empty_value'   => 'Seleccione un tratamiento...',
                          'class'         => 'DGPlusbelleBundle:Tratamiento',
                          'attr'=>array(

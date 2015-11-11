@@ -93,6 +93,11 @@ class Persona
      * @ORM\OneToMany(targetEntity="Empleado", mappedBy="persona", cascade={"persist", "remove"})
      */
     private $empleado;
+    
+    /**
+     * @ORM\OneToMany(targetEntity="VentaPaquete", mappedBy="persona", cascade={"persist", "remove"})
+     */
+    private $ventapaquete;
 
     function getPaciente() {
         return $this->paciente;
@@ -100,6 +105,14 @@ class Persona
 
     function setPaciente($paciente) {
         $this->paciente = $paciente;
+    }
+    
+    function getVentaPaquete() {
+        return $this->ventapaciente;
+    }
+
+    function setVentaPaquete($ventapaquete) {
+        $this->ventapaciente = $ventapaquete;
     }
 
         /**

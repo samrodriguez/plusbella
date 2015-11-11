@@ -75,6 +75,17 @@ class Paquete
      
     
 
+    
+    /**
+     * @var \Persona
+     *
+     * @ORM\ManyToOne(targetEntity="Persona", inversedBy="paquete", cascade={"persist", "remove"})
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="persona", referencedColumnName="id")
+     * })
+     */
+    //private $persona;
+    
     /**
      * Constructor
      */
