@@ -2,6 +2,7 @@
 
 namespace DGPlusbelleBundle\Controller;
 
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
@@ -252,5 +253,29 @@ class TratamientoController extends Controller
             ->add('submit', 'submit', array('label' => 'Delete'))
             ->getForm()
         ;
+    }
+    
+    /**
+     * Deletes a Tratamiento entity.
+     *
+     * @Route("/desactivar_tratamiento/{id}", name="admin_tratamiento_desactivar", options={"expose"=true})
+     * @Method("GET")
+     */
+    public function desactivarAction(Request $request, $id)
+    {
+        //$form = $this->createDeleteForm($id);
+        //$form->handleRequest($request);
+
+        $em = $this->getDoctrine()->getManager();
+        $entity = $em->getRepository('DGPlusbelleBundle:Tratamiento')->find($id);
+        $entity->setEstado(0);
+        
+        $em->persist($entity);
+        $em->flush();
+        
+        $exito['regs']=0;
+        
+        return new Response(json_encode($exito));
+        
     }
 }
