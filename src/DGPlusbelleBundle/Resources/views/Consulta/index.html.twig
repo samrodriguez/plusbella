@@ -117,7 +117,7 @@
                     <tr id="{{entity.id}}">
                         <td>{{key+1}}</td>
                             
-                            <td>{{ entity.paciente.persona.primernombre }}  {{entity.paciente.persona.primerapellido}}</td>
+                            <td>{{ entity.paciente.persona.nombres }}  {{entity.paciente.persona.apellidos}}</td>
                             <td>{{ entity.tipoConsulta}}</td>
                             <td>{% if entity.fechaConsulta %}{{ entity.fechaConsulta|date('d/m/Y') }}{% endif %}</td>
                             <td>{{ entity.horaInicio|date('H:i') }}</td>
