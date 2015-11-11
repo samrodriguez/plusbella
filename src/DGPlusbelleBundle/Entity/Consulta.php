@@ -56,6 +56,13 @@ class Consulta
      * @ORM\Column(name="incapacidad", type="boolean", nullable=false)
      */
     private $incapacidad;
+    
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="reporte_plantilla", type="boolean", nullable=false)
+     */
+    private $reportePlantilla;
 
     /**
      * @var \Cita
@@ -87,6 +94,16 @@ class Consulta
      */
     private $tipoConsulta;
 
+    /**
+     * @var \Empleado
+     *
+     * @ORM\ManyToOne(targetEntity="Empleado")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="empleado", referencedColumnName="id")
+     * })
+     */
+    private $empleado;
+    
     /**
      * @var \Tratamiento
      *
@@ -228,6 +245,30 @@ class Consulta
     {
         return $this->incapacidad;
     }
+    
+    /**
+     * Set reportePlantilla
+     *
+     * @param boolean $reportePlantilla
+     *
+     * @return Consulta
+     */
+    public function setReportePlantilla($reportePlantilla)
+    {
+        $this->reportePlantilla = $reportePlantilla;
+
+        return $this;
+    }
+
+    /**
+     * Get reportePlantilla
+     *
+     * @return boolean
+     */
+    public function getReportePlantilla()
+    {
+        return $this->reportePlantilla;
+    }
 
     /**
      * Set cita
@@ -299,6 +340,30 @@ class Consulta
     public function getTipoConsulta()
     {
         return $this->tipoConsulta;
+    }
+    
+    /**
+     * Set empleado
+     *
+     * @param \DGPlusbelleBundle\Entity\Empleado $empleado
+     *
+     * @return Consulta
+     */
+    public function setEmpleado(\DGPlusbelleBundle\Entity\Empleado $empleado = null)
+    {
+        $this->empleado = $empleado;
+
+        return $this;
+    }
+
+    /**
+     * Get empleado
+     *
+     * @return \DGPlusbelleBundle\Entity\Empleado
+     */
+    public function getEmpleado()
+    {
+        return $this->empleado;
     }
 
     /**

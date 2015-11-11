@@ -392,7 +392,7 @@ class CitaController extends Controller
         $empleado=$entity->getEmpleado();
         //var_dump($empleado->getId());
         //$entityDuplicada = $em->getRepository('DGPlusbelleBundle:Cita')->findBy(array('empleado'=>$empleado->getId(),'horaInicio'=>$entity->getHoraInicio()));
-        $horaInicial = $entity->getHoraInicio();
+        $horaInicial = $entity->getHoraCita();
         //var_dump($dql);
         $time = strtotime($fecha);
         //var_dump($entity->getFechaCita());
@@ -405,19 +405,19 @@ class CitaController extends Controller
                 
             
                 //var_dump($entity);
-                $hora = $entity->getHoraInicio()->format("H:i");
+                $hora = $entity->getHoraCita()->format("H:i");
 
                 $horaTime = strtotime($hora);
                 $horaNueva = date("H:i", strtotime($delta.' minutes', $horaTime));
                 //var_dump($horaNueva);
-                $entity->setHoraInicio(new \DateTime($horaNueva));
+                $entity->setHoraCita(new \DateTime($horaNueva));
                 //echo "hora nueva: ";
                 //var_dump($entity->getHoraInicio());
                 $dql = "SELECT c
                     FROM DGPlusbelleBundle:Cita c
-                    WHERE c.empleado =:idEmp AND c.horaInicio =:hora AND c.fechaCita=:fecha AND c.id <>:id";
+                    WHERE c.empleado =:idEmp AND c.horaCita =:hora AND c.fechaCita=:fecha AND c.id <>:id";
                 $entityDuplicada = $em->createQuery($dql)
-                                    ->setParameters(array('idEmp'=>$empleado->getId(),'hora'=>$entity->getHoraInicio()->format('H:i'),'fecha'=>$newformat,'id'=>$entity->getId()))
+                                    ->setParameters(array('idEmp'=>$empleado->getId(),'hora'=>$entity->getHoraCita()->format('H:i'),'fecha'=>$newformat,'id'=>$entity->getId()))
                                     ->getArrayResult();
                 if(count($entityDuplicada)==0){
                     //$hoy = new \DateTime('now');
@@ -470,9 +470,9 @@ class CitaController extends Controller
         
         $em = $this->getDoctrine()->getEntityManager();
         
-        $dql = "SELECT exp.numero, pac.primerNombre, pac.primerApellido, t.nombre as nombreTratamiento,
-                per.primerNombre as primerNombreEmp, per.primerApellido as primerApellidoEmp, 
-                c.fechaCita, c.horaInicio, c.estado
+        $dql = "SELECT exp.numero, pac.nombres, pac.apellidos, t.nombre as nombreTratamiento,
+                per.nombres as primerNombreEmp, per.apellidos as primerApellidoEmp, 
+                c.fechaCita, c.horaCita, c.estado
                     FROM DGPlusbelleBundle:Cita c
                     JOIN c.empleado emp
                     JOIN c.tratamiento t
@@ -487,13 +487,13 @@ class CitaController extends Controller
         
         //var_dump($cita);
         $cita['regs'][0]["numero"] = strtoupper($cita['regs'][0]["numero"]);
-        $cita['regs'][0]["primerNombre"] = ucwords($cita['regs'][0]["primerNombre"]);
-        $cita['regs'][0]["primerApellido"] = ucwords($cita['regs'][0]["primerApellido"]);
+        $cita['regs'][0]["nombres"] = ucwords($cita['regs'][0]["nombres"]);
+        $cita['regs'][0]["apellidos"] = ucwords($cita['regs'][0]["apellidos"]);
         $cita['regs'][0]["nombreTratamiento"] = ucwords($cita['regs'][0]["nombreTratamiento"]);
         $cita['regs'][0]["primerNombreEmp"] = ucwords($cita['regs'][0]["primerNombreEmp"]);
         $cita['regs'][0]["primerApellidoEmp"] = ucwords($cita['regs'][0]["primerApellidoEmp"]);
         $cita['regs'][0]["fechaCita"] = $cita['regs'][0]["fechaCita"]->format("Y-m-d");
-        $cita['regs'][0]["horaInicio"] = $cita['regs'][0]["horaInicio"]->format("H:i");
+        $cita['regs'][0]["horaCita"] = $cita['regs'][0]["horaCita"]->format("H:i");
         
         switch ($cita['regs'][0]["estado"]){
             case "A":
