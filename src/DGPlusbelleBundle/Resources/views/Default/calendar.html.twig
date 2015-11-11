@@ -149,11 +149,11 @@ $(document).ready(function() {
                           mensaje += "<div class='col-md-12'><hr></div></div>";
                           mensaje += "<div class='col-md-6 text-right'><b>Estado: </b></div><div class='col-md-6'>"+data.regs[0].estado+"</div>";
                           mensaje += "<div class='col-md-6 text-right'><b>Expediente: </b></div><div class='col-md-6'>"+data.regs[0].numero+"</div>";
-                          mensaje += "<div class='col-md-6 text-right'><b>Nombre del paciente: </b></div><div class='col-md-6'>"+data.regs[0].primerNombre+" "+data.regs[0].primerApellido+"</div>";
+                          mensaje += "<div class='col-md-6 text-right'><b>Nombre del paciente: </b></div><div class='col-md-6'>"+data.regs[0].nombres+" "+data.regs[0].apellidos+"</div>";
                           mensaje += "<div class='col-md-6 text-right'><b>Doctor del paciente: </b></div><div class='col-md-6'>"+data.regs[0].primerNombreEmp+" "+data.regs[0].primerApellidoEmp+"</div>";
                           mensaje += "<div class='col-md-6 text-right'><b>Tratamiento: </b></div><div class='col-md-6'>"+data.regs[0].nombreTratamiento+"</div>";
                           mensaje += "<div class='col-md-6 text-right'><b>Fecha: </b></div><div class='col-md-6'>"+data.regs[0].fechaCita+"</div>";
-                          mensaje += "<div class='col-md-6 text-right'><b>Hora: </b></div><div class='col-md-6'>"+data.regs[0].horaInicio+"</div>";
+                          mensaje += "<div class='col-md-6 text-right'><b>Hora: </b></div><div class='col-md-6'>"+data.regs[0].horaCita+"</div>";
                           mensaje += "</div>"
                           
                           bootbox.alert(mensaje, function() {

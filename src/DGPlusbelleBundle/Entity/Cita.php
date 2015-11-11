@@ -84,7 +84,7 @@ class Cita
      *   @ORM\JoinColumn(name="horario", referencedColumnName="id")
      * })
      */
-    private $horario;
+    //private $horario;
 
     /**
      * @var \Paciente
@@ -293,22 +293,22 @@ class Cita
      *
      * @return Cita
      */
-    public function setHorario(\DGPlusbelleBundle\Entity\Horario $horario = null)
+ /*   public function setHorario(\DGPlusbelleBundle\Entity\Horario $horario = null)
     {
         $this->horario = $horario;
 
         return $this;
-    }
+    } */
 
     /**
      * Get horario
      *
      * @return \DGPlusbelleBundle\Entity\Horario
      */
-    public function getHorario()
+ /*   public function getHorario()
     {
         return $this->horario;
-    }
+    }*/
 
     /**
      * Set paciente

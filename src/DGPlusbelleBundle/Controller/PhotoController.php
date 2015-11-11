@@ -29,7 +29,7 @@ class PhotoController extends Controller
     public function testAction(Request $request)
     {
         $em = $this->getDoctrine()->getManager();
-        $entity = $em->getRepository('DGPlusbelleBundle:Empleado')->find(1);
+        $entity = $em->getRepository('DGPlusbelleBundle:Empleado')->find(2);
 
         return array(
             'entity' => $entity,

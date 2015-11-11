@@ -1,4 +1,4 @@
-
+{% extends 'DGPlusbelleBundle:Layout:layout.html.twig' %}
 
 {% block contenido -%}
     
@@ -17,13 +17,35 @@
      {{ form_row(form.costo) }}
      </div>
       <div class="col-xs-12 col-sm-8">
-     {{ form_row(form.tratamiento) }}
+   {#  {{ form_row(form.tratamiento) }} #}
      </div>
      </div>
       <div class="col-xs-12 col-sm-8">
      {{ form_row(form.sucursal) }} 
      </div>
      {#{{ form_row(form.estado) }} #}
+     
+      <div class="row">
+                    
+                    
+                    <div class="col-md-12">
+                        <h3 class="text-left">Tratamientos</h3>
+                        <hr>
+                    </div>
+                </div>
+            <div class="row">  
+                 <div id="listadoa">
+                            <div class="listado col-md-2">
+                                <ul class="placas" data-prototype="{{ form_widget(form.placas.vars.prototype)|e }}">
+                                    {{ form_widget(form.placas) }}
+                                </ul>
+                            </div>
+                 </div>
+     
+            </div>     
+ 
+            
+            <br>
 
 
       <div class="form-grouphide col-sm-9"> 
@@ -38,3 +60,140 @@
 {{ form_end(form) }}  
     
 {% endblock %}
+
+
+{% block javascripts_step %}
+  
+<script>
+
+// Get the ul that holds the collection of tags
+var collectionHolder = $('ul.placas');
+var col=$('#hnr_sircimbundle_estudioradiologicotype_placas');
+// setup an "add a tag" link
+var $addTagLink = $('<a href="#" class="add_placa_link">+</a>');
+var $removeTagLink = $('<a href="#" class="remove_placa_link">x</a>');
+var $newLinkLi = $('<li></li>').append($addTagLink);
+var $delLinkLi = $('#hnr_sircimbundle_estudioradiologicotype_placas.required').append($removeTagLink);
+
+
+
+
+
+jQuery(document).ready(function() {
+
+
+
+    collectionHolder.find('li').each(function() {
+        addTagFormDeleteLink($(this));
+
+    });
+
+    
+
+    // add the "add a tag" anchor and li to the tags ul
+    collectionHolder.append($newLinkLi);
+
+    // count the current form inputs we have (e.g. 2), use that as the new
+    // index when inserting a new item (e.g. 2)
+    collectionHolder.data('index', collectionHolder.find(':input').length);
+    
+    //Identificar que form esta activo
+    var editar=$('ul.placas').attr('id');
+    if(editar!='editar_usuario'){
+        addTagForm(collectionHolder, $newLinkLi);   //Muestra un formulario en la carga de la página nuevo
+    }
+    
+
+
+    $addTagLink.on('click', function(e) {
+        // prevent the link from creating a "#" on the URL
+        e.preventDefault();
+
+        // add a new tag form (see next code block)
+        addTagForm(collectionHolder, $newLinkLi);
+        // $('.btn_radio').attr('name', 'rol_predet');
+    });
+
+
+    
+});
+
+
+function addTagForm(collectionHolder, $newLinkLi) {
+    // Get the data-prototype explained earlier
+    var prototype = collectionHolder.data('prototype');
+
+    // get the new index
+    var index = collectionHolder.data('index');
+
+    // Replace '__name__' in the prototype's HTML to
+    // instead be a number based on how many items we have
+    var newForm = prototype.replace(/__name__/g, index);
+
+    // increase the index with one for the next item
+    collectionHolder.data('index', index + 1);
+
+    // Display the form in the page in an li, before the "Add a tag" link li
+    var $newFormLi = $('<li></li>').append(newForm);
+    $newLinkLi.before($newFormLi);
+    
+
+
+    // add a delete link to the new form
+    addTagFormDeleteLink($newFormLi);
+    $('.btn_radio').click(function(event) {
+        /* Act on the event */
+        var id = $(this).attr('id');
+        // alert(id);
+        $('.btn_radio').prop('checked', false);
+        $('#'+id).prop('checked', true);
+        $('.btn_radio').removeClass('errorform');
+    });
+}
+
+function addTagFormDeleteLink($tagFormLi) {
+    var $removeFormA = $('<a class="link" href="#">x</a>');
+    $tagFormLi.append($removeFormA);
+
+    $removeFormA.on('click', function(e) {
+        // prevent the link from creating a "#" on the URL
+        e.preventDefault();
+
+        // remove the li for the tag form
+        $('input[name="rol_predet"]:checked').each(function() {
+            //$(this).val() es el valor del checkbox correspondiente
+           // alert('chequeado'); 
+           $('#hnr_sircimbundle_usuariotype_placas_0_usroPredeterminado').prop('checked', true);
+        });
+
+        $tagFormLi.remove();
+        
+    });
+}
+
+
+$('#editar_usuario')
+            .on('mouseover','li', function(){
+                $(this).find('a.link').css('visibility','visible');
+            })
+            .on('mouseout','li', function(){ 
+                $(this).find('a.link').css('visibility','hidden'); 
+            });
+
+$('#editar_usuario')
+            .on('mouseover','li:first-child', function(){
+                $(this).find('a.link').css('visibility','hidden');
+            });
+
+
+    
+var editar=$('ul.placas').attr('id');
+if(editar!='editar_usuario'){
+    // $('#hnr_sircimbundle_usuariotype_placas_0_usroPredeterminado').prop('checked', true);//Se carga el radiobutton seleccionado
+}
+
+ </script>
+ 
+ 
+
+{% endblock %} 
