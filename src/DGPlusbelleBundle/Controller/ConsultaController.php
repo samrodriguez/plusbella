@@ -119,8 +119,8 @@ class ConsultaController extends Controller
             $paciente = $entity->getPaciente();
             $paciente->setEstado(true);
             
-            $apellido = $paciente->getPersona()->getPrimerApellido();
-            $nombre= $paciente->getPersona()->getPrimerNombre();
+            $apellido = $paciente->getPersona()->getApellidos();
+            $nombre= $paciente->getPersona()->getNombres();
             
             //Generacion del numero de expediente
             $numeroExp = $nombre[0].$apellido[0].date("Y");
@@ -157,7 +157,7 @@ class ConsultaController extends Controller
             $em->persist($entity);
             $em->flush();
             
-          /*  if($producto){
+            /*  if($producto){
                 $this->establecerConsultaProducto($entity, $producto, $indicaciones);
             } */
 
@@ -563,6 +563,7 @@ class ConsultaController extends Controller
         //$idPaciente = $entity->getPaciente()->getId();
         
         //var_dump($entity[0]->getPaciente());
+        //var_dump($entity);
         $fecha = $entity[0]->getPaciente()->getFechaNacimiento()->format("Y-m-d");
         //var_dump($fecha);
         //Calculo de la edad

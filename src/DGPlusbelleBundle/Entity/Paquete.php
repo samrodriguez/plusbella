@@ -87,7 +87,7 @@ class Paquete
      *   @ORM\JoinColumn(name="persona", referencedColumnName="id")
      * })
      */
-    private $persona;
+    //private $persona;
     
     /**
      * Constructor

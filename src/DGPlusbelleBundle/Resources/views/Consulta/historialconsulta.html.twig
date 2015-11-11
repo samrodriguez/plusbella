@@ -122,6 +122,9 @@
             </div><!-- /.panel-body -->
             <div class="row" id="tabla1">
                 <div class="col-md-12">
+                    Tratamientos
+                </div>
+                <div class="col-md-12">
                     <table id = "datatables1" class="table table-noborder table-hover bordered-top dataTable" role="grid" aria-describedby="datatables1_info">
                         <thead>
                             <tr row="role">
@@ -153,7 +156,10 @@
                     </table>
                 </div>
             </div>
-            <div class="row hide" id="tabla2">
+            <div class="row" id="tabla2">
+                <div class="col-md-12">
+                    Paquetes vendidos
+                </div>
                 <div class="col-md-12"> 
                     <table id = "datatables2" class="table table-noborder table-hover bordered-top dataTable" role="grid" aria-describedby="datatables1_info">
                         <thead>
@@ -250,25 +256,28 @@
                 
                 $("#tratamientos-datatables1").click(function(){
                     //alert("tratamiento");
-                    if($('#tabla2').hasClass("hide")){
-                        alert('oculto tabla2');
-                        $("#tabla1").addClass("hide");
-                        $("#tabla2").removeClass("hide");
-                        $('#filterDatatables2').show();
-                        $('#filterDatatables1').hide();
-                    }
-
+                    //alert('oculto tabla2');
+                    $("#tabla1").show();
+                    $("#tabla2").hide();
+                    
+                    $('#filterDatatables1').show();            
+                    $('#filterDatatables2').hide();
+                    
+                    $('#filterDatatables1').val('');
+                    
                 });
                 
                 $("#ventapaquetes-datatables2").click(function(){
                     //alert("paquete");
-                    if($('#tabla1').hasClass("hide")){
-                            alert('oculto tabla1');
-                            $("#tabla1").addClass("hide");
-                            $("#tabla2").removeClass("hide");
-                            $('#filterDatatables1').hide();
-                            $('#filterDatatables2').show();
-                        }
+                    //alert('oculto tabla1');
+                    $("#tabla1").hide();
+                    $("#tabla2").show();
+                    
+                    $('#filterDatatables1').hide();
+                    $('#filterDatatables2').show();
+                    
+                    $('#filterDatatables2').val('');
+                    
                 });
                 /*
                 $("#dgplusbellebundle_sucursal_submit").click(function(){
@@ -350,6 +359,7 @@
         //$('#tabla2').hide();
         //$('#tabla2').hide();
         $('#filterDatatables2').hide();
+        $('#tabla2').hide();
         $('#filterDatatables1, #filterDatatables2').val('');
         
         
