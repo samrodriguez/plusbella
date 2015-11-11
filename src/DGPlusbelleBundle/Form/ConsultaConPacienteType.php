@@ -56,6 +56,14 @@ class ConsultaConPacienteType extends AbstractType
                          'class'=>'form-control'
                          )
                        ))
+                
+            ->add('reportePlantilla', 'choice', array(
+                    'label'=> 'Requiere plantilla',
+                    'choices'  => array('1' => 'Sí', '0' => 'No'),
+                    'multiple' => false,
+                'expanded'=>'true',
+                    'required' => true,
+                ))
             ->add('tratamiento','entity', array( 'label' => 'Tratamiento',
                          'empty_value'   => 'Seleccione un tratamiento...',
                          'class'         => 'DGPlusbelleBundle:Tratamiento',
