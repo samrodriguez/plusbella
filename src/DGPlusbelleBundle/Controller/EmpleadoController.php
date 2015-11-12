@@ -296,12 +296,18 @@ class EmpleadoController extends Controller
 
         $em = $this->getDoctrine()->getManager();
         $entity = $em->getRepository('DGPlusbelleBundle:Empleado')->find($id);
-        $entity->setEstado(0);
+        
+         if($entity->getEstado()==0){
+            $entity->setEstado(1);
+            $exito['regs']=1;//registro activado
+        }
+        else{
+            $entity->setEstado(0);
+            $exito['regs']=0;//registro desactivado
+        }
         
         $em->persist($entity);
         $em->flush();
-        
-        $exito['regs']=0;
         
         return new Response(json_encode($exito));
         
