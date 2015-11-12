@@ -97,7 +97,7 @@ class Persona
     /**
      * @ORM\OneToMany(targetEntity="VentaPaquete", mappedBy="persona", cascade={"persist", "remove"})
      */
-    private $ventapaquete;
+   // private $ventapaquete;
 
     function getPaciente() {
         return $this->paciente;
@@ -107,13 +107,13 @@ class Persona
         $this->paciente = $paciente;
     }
     
-    function getVentaPaquete() {
+ /*   function getVentaPaquete() {
         return $this->ventapaciente;
     }
 
     function setVentaPaquete($ventapaquete) {
         $this->ventapaciente = $ventapaquete;
-    }
+    }  */
 
         /**
      * Get id
