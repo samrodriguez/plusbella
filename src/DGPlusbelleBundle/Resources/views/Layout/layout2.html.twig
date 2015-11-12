@@ -57,10 +57,52 @@
             </div><!-- /.content-body -->
                          
         {%- endblock %}  
+        
+        
     </body>
 </html>
 {% block js -%}
+    <!-- VENDORS : jQuery & Bootstrap -->
+    <script src="{{ asset('Resources/wrapkit/scripts/vendor.js') }}"></script>
+    <!-- END VENDORS -->
+    <!-- DEPENDENCIES : Required plugins -->
+    <script src="{{ asset('Resources/wrapkit/scripts/dependencies.js') }}"></script>
+    <!-- END DEPENDENCIES -->
+    <!-- WRAPKIT -->
+    <script src="{{ asset('Resources/wrapkit/scripts/wrapkit.js') }}"></script>
+    <!-- END WRAPKIT -->
+    <!-- WRAPKIT SETUPS -->
+    <script src="{{ asset('Resources/wrapkit/scripts/wrapkit-setup.js') }}"></script>
+    <!-- end WRAPKIT SETUPS -->
+    <!-- PLUGIN SETUPS: vendors & dependencies setups -->
+    <script src="{{ asset('Resources/wrapkit/scripts/plugin-setups.js') }}"></script>
+    <!-- END PLUGIN SETUPS -->
     
+    <!-- COMPONENTS -->
+    <script src="{{ asset('Resources/wrapkit/scripts/morris.bundle.js') }}"></script>
+    <script src="{{ asset('Resources/wrapkit/scripts/jquery.sparkline.js') }}"></script>
+    <script src="{{ asset('Resources/wrapkit/scripts/jquery.tagsinput.js') }}"></script>
+    <script src="{{ asset('Resources/wrapkit/scripts/jquery.mask.js') }}"></script>
+    <script src="{{ asset('Resources/wrapkit/scripts/select2.js') }}"></script>
+    <script src="{{ asset('Resources/wrapkit/scripts/jquery.selectBoxit.js') }}"></script>
+    <script src="{{ asset('Resources/wrapkit/scripts/moment.js') }}"></script>
+    <script src="{{ asset('Resources/wrapkit/scripts/daterangepicker.js') }}"></script>
+    <script src="{{ asset('Resources/wrapkit/scripts/jquery-minicolors.js') }}"></script>
+    <script src="{{ asset('Resources/wrapkit/scripts/moment.js') }}"></script>
+    <script src="{{ asset('Resources/wrapkit/scripts/fullcalendar.js') }}"></script>
+    <script src="{{ asset('Resources/wrapkit/scripts/clndr.js') }}"></script>
+    <script src="{{ asset('Resources/wrapkit/scripts/dataTables.bootstrap.js') }}"></script>
+    <script src="{{ asset('Resources/wrapkit/scripts/dataTables.tableTools.js') }}"></script>
+    <script src="{{ asset('Resources/wrapkit/scripts/jquery.validate.js') }}"></script>
+    <script src="{{ asset('Resources/wrapkit/scripts/bootbox.js') }}"></script>
+    <script src="{{ asset('Resources/wrapkit/scripts/toastr.js') }}"></script>
+    <script src="{{ asset('Resources/wrapkit/scripts/bootstrap-editable.js') }}"></script>
+    <script src="{{ asset('Resources/ptTimeSelect/js/jquery.ptTimeSelect.js') }}"></script>
+    <script src="{{ asset('Resources/zebra/js/zebra_datepicker.js') }}"></script>
+    <script src="{{ asset('bundles/fosjsrouting/js/router.js') }}"></script>
+    <script src="{{ path('fos_js_routing_js', {'callback': 'fos.Router.setData'}) }}"></script>
+    <script type="text/javascript" src="{{ asset('bundles/adesignscalendar/js/fullcalendar/jquery.fullcalendar.min.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('Resources/jquery-ui/ui/jquery-ui.js') }}"></script> 
     
     
     

@@ -8,6 +8,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use DGPlusbelleBundle\Entity\Paciente;
+use DGPlusbelleBundle\Entity\Expediente;
 use DGPlusbelleBundle\Form\PacienteType;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Query\ResultSetMapping;
@@ -87,6 +88,7 @@ class PacienteController extends Controller
            //$entity->setEstado(TRUE);
             $em = $this->getDoctrine()->getManager();
             $em->persist($entity);
+            $this->generarExpediente($entity);
             $em->flush();
 
             return $this->redirect($this->generateUrl('admin_paciente', array('id' => $entity->getId())));
@@ -285,5 +287,57 @@ class PacienteController extends Controller
             ->add('submit', 'submit', array('label' => 'Delete'))
             ->getForm()
         ;
+    }
+    
+    /**
+     * Metodo que sirve para generar el expediente del paciente
+     *
+     * @param \DGPlusbelleBundle\Entity\Paciente $paciente
+     *
+     */
+    private function generarExpediente(Paciente $paciente)
+    {
+        $em = $this->getDoctrine()->getManager();
+        
+        $expediente = new Expediente();
+        $user = $this->get('security.token_storage')->getToken()->getUser();
+        
+        // Obtencion del apellidos  y nombres del paciente
+        $apellido = $paciente->getPersona()->getApellidos();
+        $nombre = $paciente->getPersona()->getNombres();
+
+        //Generacion del numero de expediente
+        $numeroExp = $nombre[0].$apellido[0].date("Y");
+
+        $dql = "SELECT COUNT(exp)+1 FROM DGPlusbelleBundle:Expediente exp WHERE exp.numero LIKE :numero";
+
+        $num = $em->createQuery($dql)
+                   ->setParameter('numero','%'.$numeroExp.'%')
+                   ->getResult();
+        //var_dump($user);
+        $numString = $num[0]["1"];
+        //var_dump($numString);
+
+        switch($numString){
+            case 1:
+                    $numeroExp .= "00".$numString;
+                break;
+            case 2:
+                    $numeroExp .= "0".$numString;
+                break;
+            case 3:
+                    $numeroExp .= $numString;
+                break;
+        }
+        
+        //Seteo de valores del expediente
+        $expediente->setFechaCreacion(new \DateTime('now'));
+        $expediente->setHoraCreacion(new \DateTime('now'));
+        $expediente->setEstado(true);
+        $expediente->setNumero($numeroExp);
+        $expediente->setPaciente($paciente);
+        $expediente->setUsuario($user);
+
+        $em->persist($expediente);
     }
 }

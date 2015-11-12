@@ -2,6 +2,7 @@
 
 namespace DGPlusbelleBundle\Controller;
 
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
@@ -224,10 +225,21 @@ class SucursalController extends Controller
      */
     public function deleteAction(Request $request, $id)
     {
-        $form = $this->createDeleteForm($id);
-        $form->handleRequest($request);
+        //$form = $this->createDeleteForm($id);
+        //$form->handleRequest($request);
 
-        if ($form->isValid()) {
+        $em = $this->getDoctrine()->getManager();
+        $entity = $em->getRepository('DGPlusbelleBundle:Sucursal')->find($id);
+        $entity->setEstado(0);
+        
+        $em->persist($entity);
+        $em->flush();
+        
+        $exito['regs']=0;
+        
+        return new Response(json_encode($exito));
+        
+       /* if ($form->isValid()) {
             $em = $this->getDoctrine()->getManager();
             $entity = $em->getRepository('DGPlusbelleBundle:Sucursal')->find($id);
 
@@ -239,7 +251,7 @@ class SucursalController extends Controller
             $em->flush();
         }
 
-        return $this->redirect($this->generateUrl('admin_sucursal'));
+        return $this->redirect($this->generateUrl('admin_sucursal'));  */
     }
 
     /**
@@ -257,5 +269,29 @@ class SucursalController extends Controller
             ->add('submit', 'submit', array('label' => 'Delete'))
             ->getForm()
         ;
+    }
+    
+    /**
+     * Deletes a Sucursal entity.
+     *
+     * @Route("/desactivar_sucursal/{id}", name="admin_sucursal_desactivar", options={"expose"=true})
+     * @Method("GET")
+     */
+    public function desactivarAction(Request $request, $id)
+    {
+        //$form = $this->createDeleteForm($id);
+        //$form->handleRequest($request);
+
+        $em = $this->getDoctrine()->getManager();
+        $entity = $em->getRepository('DGPlusbelleBundle:Sucursal')->find($id);
+        $entity->setEstado(0);
+        
+        $em->persist($entity);
+        $em->flush();
+        
+        $exito['regs']=0;
+        
+        return new Response(json_encode($exito));
+        
     }
 }

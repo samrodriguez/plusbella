@@ -119,8 +119,8 @@ class ConsultaController extends Controller
             $paciente = $entity->getPaciente();
             $paciente->setEstado(true);
             
-            $apellido = $paciente->getPersona()->getPrimerApellido();
-            $nombre= $paciente->getPersona()->getPrimerNombre();
+            $apellido = $paciente->getPersona()->getApellidos();
+            $nombre= $paciente->getPersona()->getNombres();
             
             //Generacion del numero de expediente
             $numeroExp = $nombre[0].$apellido[0].date("Y");
@@ -157,7 +157,7 @@ class ConsultaController extends Controller
             $em->persist($entity);
             $em->flush();
             
-          /*  if($producto){
+            /*  if($producto){
                 $this->establecerConsultaProducto($entity, $producto, $indicaciones);
             } */
 
@@ -548,49 +548,69 @@ class ConsultaController extends Controller
     /**
      * Lista todas las consultas de un paciente
      *
-     * @Route("/historialconsulta/{id}", name="admin_historial_consulta")
+     * @Route("/historialconsulta/", name="admin_historial_consulta")
      * @Method("GET")
      * @Template()
      */
-    public function historialConsultaAction($id){
+    public function historialConsultaAction(){
         $em = $this->getDoctrine()->getManager();
-        //$entity = new Consulta();
-        $entity = $em->getRepository('DGPlusbelleBundle:Consulta')->find($id);
         
+        //Recuperación del id
+        $request = $this->getRequest();
+        $idPaciente= $request->get('id');    
         //var_dump($entity->getPaciente()->getExpediente());
-        $idPaciente = $entity->getPaciente()->getId();
-        $consultas = $em->getRepository('DGPlusbelleBundle:Consulta')->findBy(array('paciente'=>$idPaciente));
+        $entity = $em->getRepository('DGPlusbelleBundle:Consulta')->findBy(array('paciente'=>$idPaciente));
+        //$idPaciente = $entity->getPaciente()->getId();
         
-        $fecha = $entity->getPaciente()->getFechaNacimiento()->format("Y-m-d");
+        //var_dump($entity[0]->getPaciente());
+        //var_dump($entity);
+        $fecha = $entity[0]->getPaciente()->getFechaNacimiento()->format("Y-m-d");
         //var_dump($fecha);
         //Calculo de la edad
         list($Y,$m,$d) = explode("-",$fecha);
-        $edad = date("md") < $m.$d ? date("Y")-$Y-1 : date("Y")-$Y;
+        $edad = date("md") < $m.$d ? date("Y")-$Y-1 : date("Y")-$Y;        
+        //$dias = $em->createQuery($dql)
+                //->setParameter('idEmp', $idEmp)
+                //->getArrayResult();
+        //var_dump($consultas);
+        /*$stmt = $this->getDoctrine()->getEntityManager()
+            ->getConnection()
+             ->prepare('select paquete.id, paquete.nombre, paquete_tratamiento.num_sesiones from paciente natural join persona natural join venta_paquete natural join paquete natural join paquete_tratamiento where paciente.id = 1');
+        $stmt->execute();
+        $result = $stmt->fetchAll();
+        */
+        //echo $idPaciente;
         
+        $paquetes = $em->getRepository('DGPlusbelleBundle:VentaPaquete')->findBy(array('paciente'=>$idPaciente));
         
-        //Obtener el numero de sesiones de los tratamientos
-        $dql = "SELECT s.nuFROM DGPlusbelleBundle:Paciente p"
-                . "JOIN ";
+        $dql = "SELECT count(vp) FROM DGPlusbelleBundle:VentaPaquete vp"
+               . " WHERE vp.paciente=:paciente";
+        $totalPaquetes = $em->createQuery($dql)
+                ->setParameter('paciente', $idPaciente)
+                ->getArrayResult();
         
-        
+        $dql = "SELECT count(c) FROM DGPlusbelleBundle:Consulta c"
+               . " WHERE c.paciente=:paciente";
+        $totalTratamientos = $em->createQuery($dql)
+                ->setParameter('paciente', $idPaciente)
+                ->getArrayResult();
+        //var_dump($totalPaquetes[0][1]);
+        //var_dump($totalTratamientos[0][1]);
         
 // Formato: dd-mm-yy
 //echo calcular_edad(“01-10-1989″); // Resultado: 21
         return array(
             //'entities' => $entities,
             'entity' => $entity,
+            'totalTratamientos'=> $totalTratamientos[0][1],
+            'totalPaquetes'=> $totalPaquetes[0][1],
             'edad' => $edad,
-            'consultas' => $consultas,
+            'consultas' => $entity,
+            'paquetes' => $paquetes,
         );
     }
     
     
-    public function calcularEdad($fecha){
-        
-        
-        
-        return $edad;
-    }
     
     
     

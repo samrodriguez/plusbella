@@ -3,6 +3,7 @@
 namespace DGPlusbelleBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * Paquete
@@ -71,7 +72,20 @@ class Paquete
      * )
      */
     private $sucursal;
+     
+    
 
+    
+    /**
+     * @var \Persona
+     *
+     * @ORM\ManyToOne(targetEntity="Persona", inversedBy="paquete", cascade={"persist", "remove"})
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="persona", referencedColumnName="id")
+     * })
+     */
+    //private $persona;
+    
     /**
      * Constructor
      */
@@ -79,6 +93,7 @@ class Paquete
     {
         $this->tratamiento = new \Doctrine\Common\Collections\ArrayCollection();
         $this->sucursal = new \Doctrine\Common\Collections\ArrayCollection();
+       
     }
 
 
@@ -235,4 +250,6 @@ class Paquete
     public function __toString() {
     return $this->nombre.'   $'.$this->costo;
     }
+    
+   
 }

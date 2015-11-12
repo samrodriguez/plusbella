@@ -35,9 +35,9 @@ class EmpleadoController extends Controller
         $rsm = new ResultSetMapping();
         $em = $this->getDoctrine()->getManager();
         
-        $sql = "select per.primer_nombre as pnombre, per.primer_apellido as papellido,  "
+        $sql = "select per.nombres as pnombre, per.apellidos as papellido,  "
                 . "per.direccion as direccion, per.telefono as tel, per.email as email, emp.id as idemp, emp.cargo as cargo, emp.foto as foto, emp.sucursal as sucursal "
-                . "from empleado emp inner join persona per on emp.persona = per.id order by per.primer_apellido";
+                . "from empleado emp inner join persona per on emp.persona = per.id order by per.apellidos";
         
         $rsm->addScalarResult('idemp','idemp');
         $rsm->addScalarResult('pnombre','pnombre');

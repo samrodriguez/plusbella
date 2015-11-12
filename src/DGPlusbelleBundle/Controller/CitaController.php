@@ -56,7 +56,7 @@ class CitaController extends Controller
     {
         $entity = new Cita();
         $entity->setFechaRegistro(new \DateTime('now'));
-        $entity->setEstado('A');
+        $entity->setEstado('P');
         $form = $this->createCreateForm($entity);
         $form->handleRequest($request);
 
@@ -65,7 +65,7 @@ class CitaController extends Controller
             $em->persist($entity);
             $em->flush();
 
-            return $this->redirect($this->generateUrl('admin_cita_show', array('id' => $entity->getId())));
+            return $this->redirect($this->generateUrl('admin_cita'));
         }
 
         return array(

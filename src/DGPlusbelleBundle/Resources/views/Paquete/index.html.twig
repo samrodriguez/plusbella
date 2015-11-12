@@ -25,7 +25,7 @@
                   <button id="edit-datatables1" data-toggle="tooltip" data-container="body" title="Modificar paquete" class="btn btn-default datatables1-actions disabled" role="button">
                     <i class="fa fa-edit"></i>
                   </button>
-                  <button id="delete-datatables1" data-toggle="tooltip" data-container="body" title="delete record(s)" class="btn btn-default datatables1-actions disabled" role="button">
+                  <button id="delete-datatables1" data-toggle="tooltip" data-container="body" title="Desactivar paquete" class="btn btn-default datatables1-actions disabled" role="button">
                     <i class="fa fa-trash-o"></i>
                   </button>
                 </div>
@@ -50,7 +50,7 @@
 
    <!--    <a href="{{ path('admin_paquete_new') }}" class="btn btn-success"> Crear nuevo paquete</a>  -->
 
-    <table id = "datatables1" class="table table-bordered table-hover display dt-responsive" >
+    <table id = "datatables1" class="table table-noborder table-hover bordered-top" >
         <thead>
             <tr>
                <th>N°</th>
@@ -93,17 +93,16 @@
         {% endfor %}
         </tbody>
     </table>
-        
-        
-         <!-- Template Setups -->
+      </div><!-- /.content -->
+      
+       <!-- Template Setups -->
         <div class="modal fade" id="templateSetup">
           <div class="modal-dialog">
             <!-- modal-content -->
             <div class="modal-content"></div>
           </div><!-- /.modal-dialog -->
         </div><!-- /.templateSetup -->
-
-      </div><!-- /.content -->
+      
        </div><!-- /.panel -->
         
         
@@ -112,7 +111,7 @@
       
        <script>
             $(document).ready(function(){
-                
+                  var link=0;
                 //Seleccionar un registro
                 $('#datatables1>tbody>tr').on('click', function(event) {
                     //Se limpia los otros que esten activos
@@ -128,7 +127,7 @@
                     //var link=$('#datatables1>tbody>tr>td>a').attr("href");
                     //var link=$(this).children("td:first").children().attr("href");
                     //Obtener el id del registro
-                    var link=$(this).attr("id");
+                    link=$(this).attr("id");
                     //alert(link);
                     //Carga del form modificar
                     $("#editFormContainer").load(link+"/edit");
@@ -153,6 +152,23 @@
                     }
 
                 });
+                
+                     $("#delete-datatables1").click(function(){
+                        $.getJSON(Routing.generate('admin_paquete_desactivar', { id: link}), 
+                          function(data) {
+                          if(data.regs==0){
+                            bootbox.alert('Paquete desactivado con exito', function() {
+                                //Example.show("Hello world callback");
+                          });
+                            $('#'+link + ' > td:nth-child(4)').html('<center>Inactivo</center>');
+                            //$('#datatables1>tbody>tr>td:nth-child(5)').html('Inactivo');
+                          }
+                         
+                           
+                       // alert(link);
+                      }); 
+
+                 }); 
                 
                 //Accion cancelar del boton nuevo
                 $("#cancelarNuevo").click(function(){
@@ -219,7 +235,7 @@
                     "search": "Buscar registros:",
                     "lengthMenu": "Mostrar _MENU_ registros"
                 },          
-                    
+                //"bDestroy": true   
         });
         
         $('#datatables1>tr>td').on('click', function(event) {
