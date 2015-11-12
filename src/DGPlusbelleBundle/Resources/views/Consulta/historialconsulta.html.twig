@@ -184,6 +184,27 @@
                     </table>
                 </div>
             </div>
+                        
+            
+            {% for key, empleado in empleados %}
+                <div data-init-panel="true" class="panel bg-grd-dark text-light fade in panel-default panel-fill" data-fill-color="true">
+                    <div class="panel-body">
+                      <div class="pull-left mr-2x">
+                        <span class="kit-avatar kit-avatar-64 kit-avatar-square no-border">
+                          <img class="media-object" src="{{ asset('Photos/Empleado/') }}{{empleado.foto}}" alt="Foto perfil">
+                        </span>
+                      </div>
+                      <p class="lead mb-1x">{{empleado.nombres}} {{empleado.apellidos}}</p>
+                      <div class="progress progress-xs no-margin">
+                            <div class="progress-bar" style="width:{{empleado.porcentaje}}%"></div>
+                      </div>
+                      <p>
+                        <small class="pull-left">0 %</small>
+                        <small class="pull-right">100 %</small>
+                      </p>
+                    </div><!-- /.panel-body -->
+                </div>
+            {% endfor %}
                 
             
           </div><!-- /.panel -->
@@ -201,9 +222,7 @@
     
     
     {% block javascripts_step %}
-        <script src="{{ asset('Resources/wrapkit/scripts/dataTables.bootstrap.js') }}"></script>
-        <script src="{{ asset('Resources/wrapkit/scripts/dataTables.tableTools.js') }}"></script>
-        <script src="{{ asset('Resources/wrapkit/scripts/dataTables.tableTools.js') }}"></script>
+        
        
         <script>
             $(document).ready(function(){
@@ -242,13 +261,6 @@
                     //Obtener el id del registro
                     var link=$(this).attr("id");
                     //alert(link);
-                    //Carga del form modificar
-                    //$("#progressTratamiento").load(link+"/edit");
-                    //alert(data0);
-                    
-                    //var href=link.attr("href");
-                    //alert(object);
-                    
                     
                 });
                 
