@@ -217,19 +217,30 @@
                 
                 
                  $("#delete-datatables1").click(function(){
-                        $.getJSON(Routing.generate('admin_sucursal_desactivar', { id: link}), 
-                          function(data) {
-                          if(data.regs==0){
-                            bootbox.alert('Sucursal desactivado con exito', function() {
-                                //Example.show("Hello world callback");
-                          });
-                            $('#'+link + ' > td:nth-child(5)').html('Inactivo');
-                            //$('#datatables1>tbody>tr>td:nth-child(5)').html('Inactivo');
-                          }
-                         
-                           
-                       // alert(link);
-                 }); 
+                    bootbox.confirm("¿Desea cambiar el estado de este registro?", function(result) {
+                        if(result){
+                            $.getJSON(Routing.generate('admin_sucursal_desactivar', { id: link}), 
+                                function(data) {
+                                    var mensaje="";
+                                    if(data.regs==0){
+                                        mensaje ="Sucursal desactivado con exito";
+                                        $('#'+link + ' > td:nth-child(5)').html('Inactivo');
+                                    //$('#datatables1>tbody>tr>td:nth-child(5)').html('Inactivo');
+                                    }
+                                    if(data.regs==1){
+                                        mensaje ="Sucursal activada con exito";
+                                        $('#'+link + ' > td:nth-child(5)').html('Activo');
+                                    }
+                                    bootbox.alert(mensaje, function() {
+                                        //Example.show("Hello world callback");
+                                    });
+                                    
+                                // alert(link);
+                            }); 
+                        }
+                                    
+                    });     
+                        
 
                 }); 
                 
