@@ -1,0 +1,150 @@
+<aside class="sidebar" role="complementary">
+<!-- profile -->
+<div class="sidebar-block">
+  <div class="media">
+    <div class="media-left">
+      <a href="page-profile.html">
+        <span class="status dotted dotted-primary" data-toggle="tooltip" data-container="body" title="available"></span>
+        {% block imagenPerfil %}
+        <img class="media-object img-circle" src="{{ asset('Resources/img/empleados/dr.jpg') }}" alt="photo profile">
+        {% endblock %}
+      </a>
+    </div>
+    <div class="media-body">
+      <h4 class="media-heading">Juan Carlos Pacheco</h4>  <!-- nombre de usuario conectado -->
+      <p class="text-muted">
+        <small>Cirujano</small>
+      </p>
+    </div>
+  </div>
+</div><!-- /.sidebar-block -->
+<!-- /profile -->
+
+<!-- /navigation -->
+<div class="nav-wrapper">
+  <ul class="nav nav-stacked" role="navigation">
+    <li class="nav-item" role="presentation">
+      <a href="{{path('dashboard')}}">
+        <span class="nav-icon"><i class="fa fa-object-group"></i></span>
+        <span class="nav-text">Dashboard</span>
+      </a>
+    </li>
+
+    <li class="divider"></li>
+    <li class="nav-header" role="presentation">ACCESO RAPIDO</li>
+    <li class="nav-item" role="presentation">
+      <a href="{{path('admin_paciente')}}">
+        <span class="nav-icon"><i class="fa fa-briefcase"></i></span>
+        <span class="nav-text">Venta de paquetes</span>
+      </a>
+    </li>
+    <li class="nav-item" role="presentation">
+      <a href="#">
+        <span class="nav-icon"><i class="fa fa-cubes"></i></span>
+        <span class="nav-text">Expediente de pacientes</span>
+      </a>
+    </li>
+    <li class="nav-item" role="presentation">
+      <a href="{{path('admin_cita')}}">
+        <span class="nav-icon"><i class="fa fa-puzzle-piece"></i></span>
+        <span class="nav-text">Nueva cita de paciente</span>
+      </a>
+    </li>
+    <li class="nav-item" role="presentation">
+      <a href="{{path('admin_consulta_new')}}">
+        <span class="nav-icon"><i class="fa fa-puzzle-piece"></i></span>
+        <span class="nav-text">Consultas de emergencia</span>
+      </a>
+    </li>
+    <li class="nav-item" role="presentation">
+      <a href="{{path('admin_paciente')}}">
+        <span class="nav-icon"><i class="fa fa-puzzle-piece"></i></span>
+        <span  class="nav-text">Gestión de pacientes</span>
+      </a>
+    </li>
+    <li class="divider"></li>
+    <li class="nav-header" role="presentation">MENU</li>
+    <li class="nav-item" role="presentation">
+      <a href="#" data-toggle="nav-child">
+        <span class="nav-icon"><i class="fa fa-briefcase"></i></span>
+        <span class="nav-text">Pacientes</span>
+      </a>
+      <ul class="nav nav-child level-1 nav-stacked nav-pills" role="menu">
+        <li role="presentation"><a role="menuitem" tabindex="-1" href="{{ path('admin_paciente') }}"><span class="nav-text">Gestionar paciente</span></a></li>
+      </ul>
+    </li>
+    <li class="nav-item" role="presentation">
+      <a href="#" data-toggle="nav-child">
+        <span class="nav-icon"><i class="fa fa-check-square"></i></span>
+        <span class="nav-text">Consultas</span>
+      </a>
+      <ul class="nav nav-child level-1 nav-stacked nav-pills" role="menu">
+        <li role="presentation"><a role="menuitem" tabindex="-1" href="{{ path('admin_tipoconsulta') }}"><span class="nav-text">Nuevo tipo de consulta</span></a></li>
+      </ul>
+    </li>
+    <li class="nav-item" role="presentation">
+      <a href="#" data-toggle="nav-child">
+        <span class="nav-icon"><i class="fa fa-line-chart"></i></span>
+        <span class="nav-text">Tratamientos</span>
+      </a>
+      <ul class="nav nav-child level-1 nav-stacked nav-pills" role="menu">
+        <li role="presentation"><a role="menuitem" tabindex="-1" href="{{ path('admin_tratamiento') }}"><span class="nav-text">Gestionar tratamiento</span></a></li>
+      </ul>
+      <ul class="nav nav-child level-1 nav-stacked nav-pills" role="menu">
+        <li role="presentation"><a role="menuitem" tabindex="-1" href="{{ path('admin_categoria') }}"><span class="nav-text">Gestionar categoria</span></a></li>
+      </ul>
+    </li>
+    <li class="nav-item" role="presentation">
+      <a href="#" data-toggle="nav-child">
+        <span class="nav-icon"><i class="fa fa-briefcase"></i></span>
+        <span class="nav-text">Paquetes</span>
+      </a>
+      <ul class="nav nav-child level-1 nav-stacked nav-pills" role="menu">
+        <li role="presentation"><a role="menuitem" tabindex="-1" href="{{ path('admin_paquete') }}"><span class="nav-text">Gestionar paquete</span></a></li>
+      </ul>
+    </li>
+    <li class="nav-item" role="presentation">
+      <a href="#" data-toggle="nav-child">
+        <span class="nav-icon"><i class="fa fa-database"></i></span>
+        <span class="nav-text">Inventario</span>
+      </a>
+      <ul class="nav nav-child level-1 nav-stacked nav-pills" role="menu">
+        <li role="presentation"><a role="menuitem" tabindex="-1" href="{{ path('admin_producto') }}"><span class="nav-text">Gestionar productos</span></a></li>
+      </ul>
+    </li>
+    <li class="nav-item" role="presentation">
+      <a href="#" data-toggle="nav-child">
+        <span class="nav-icon"><i class="fa fa-plug"></i></span>
+        <span class="nav-text">Empleados</span>
+      </a>
+      <ul class="nav nav-child level-1 nav-stacked nav-pills" role="menu">
+        <li role="presentation"><a role="menuitem" tabindex="-1" href="{{ path('admin_empleado') }}"><span class="nav-text">Gestionar empleado</span></a></li>
+        <li role="presentation"><a role="menuitem" tabindex="-1" href="{{ path('admin_comision') }}"><span class="nav-text">Gestionar meta</span></a></li>
+      </ul>
+    </li>
+    <li class="nav-item" role="presentation">
+      <a href="#" data-toggle="nav-child">
+        <span class="nav-icon"><i class="fa fa-file-text-o"></i></span>
+        <span class="nav-text">Sucursal</span>
+      </a>
+      <ul class="nav nav-child level-1 nav-stacked nav-pills" role="menu">
+        <li role="presentation"><a role="menuitem" tabindex="-1" href="{{ path('admin_sucursal') }}"><span class="nav-text">Gestionar sucursal</span></a></li>
+      </ul>
+    </li>
+    <li class="nav-item" role="presentation">
+      <a href="#" data-toggle="nav-child">
+        <span class="nav-icon"><i class="fa fa-file-text-o"></i></span>
+        <span class="nav-text">Reportes</span>
+      </a>
+      <ul class="nav nav-child level-1 nav-stacked nav-pills" role="menu">
+        <li role="presentation"><a role="menuitem" tabindex="-1" href="page-signin.html"><span class="nav-text">Signin</span></a></li>
+      </ul>
+    </li>
+    <li class="collapse-item" role="presentation">
+      <a href="#" data-sidebar="toggleCollapse">
+        <i class="fa fa-angle-double-left"></i>
+      </a>
+    </li>
+  </ul>
+</div>
+</aside><!-- /.SIDEBAR -->
