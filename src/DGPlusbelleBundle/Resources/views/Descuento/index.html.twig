@@ -32,8 +32,8 @@
                   <button id="edit-datatables1" data-toggle="tooltip" data-container="body" title="Modificar descuento" class="btn btn-default datatables1-actions disabled" role="button">
                     <i class="fa fa-edit"></i>
                   </button>
-                  <button id="delete-datatables1" data-toggle="tooltip" data-container="body" title="delete record(s)" class="btn btn-default datatables1-actions disabled" role="button">
-                    <i class="fa fa-trash-o"></i>
+                  <button id="delete-datatables1" data-toggle="tooltip" data-container="body" title="Cambiar estado" class="btn btn-default datatables1-actions disabled" role="button">
+                    <i class="fa fa-toggle-on"></i>
                   </button>
                 </div>
                 <div class="btn-group pull-left">
@@ -113,7 +113,8 @@
       
        <script>
             $(document).ready(function(){
-                
+                 var link=0;
+                 var estadoPrevio = "";
                 //Seleccionar un registro
                 $('#datatables1>tbody>tr').on('click', function(event) {
                     //Se limpia los otros que esten activos
@@ -129,12 +130,23 @@
                     //var link=$('#datatables1>tbody>tr>td>a').attr("href");
                     //var link=$(this).children("td:first").children().attr("href");
                     //Obtener el id del registro
-                    var link=$(this).attr("id");
+                    link=$(this).attr("id");
                     //alert(link);
                     //Carga del form modificar
                     $("#editFormContainer").load(link+"/edit");
                     
                     
+                     //Hay que cambiar el numero de la columna para las otras tablas
+                    estadoPrevio = $(this).children('td:nth-child(4)').children().html();
+                    estadoPrevio = estadoPrevio.trim();
+                    if(estadoPrevio==="Inactivo"){//se muestran los iconos de desactivado
+                        $('#delete-datatables1').children().removeClass("fa fa-toggle-on");
+                        $('#delete-datatables1').children().addClass("fa fa-toggle-off");
+                    }
+                    else{//se muestran los iconos de activado
+                        $('#delete-datatables1').children().removeClass("fa fa-toggle-off");
+                        $('#delete-datatables1').children().addClass("fa fa-toggle-on");
+                    }
                     //var href=link.attr("href");
                     //alert(object);
                     
@@ -154,6 +166,40 @@
                     }
 
                 });
+                
+                 $("#delete-datatables1").click(function(){
+                        bootbox.confirm("¿Desea cambiar el estado de este registro?", function(result) {
+                        if(result){
+                        $.getJSON(Routing.generate('admin_descuento_desactivar', { id: link}), 
+                          function(data) {
+                           var mensaje="";
+                                    if(data.regs==0){
+                                        //Se cambia a desactivado
+                                        mensaje ="Descuento desactivado con exito";
+                                        $('#'+link + ' > td:nth-child(4)').html('Inactivo');
+                                        $('#delete-datatables1').children().removeClass("fa fa-toggle-on");
+                                        $('#delete-datatables1').children().addClass("fa fa-toggle-off");
+                                    //$('#datatables1>tbody>tr>td:nth-child(5)').html('Inactivo');
+                                    }
+                                    if(data.regs==1){
+                                        //Se cambia a activado
+                                        mensaje ="Descuento activada con exito";
+                                        $('#'+link + ' > td:nth-child(4)').html('Activo');
+                                        $('#delete-datatables1').children().removeClass("fa fa-toggle-off");
+                                        $('#delete-datatables1').children().addClass("fa fa-toggle-on");
+                                    }
+                                    bootbox.alert(mensaje, function() {
+                                        //Example.show("Hello world callback");
+                                    });
+                                    
+                                // alert(link);
+                            }); 
+                        }
+                                    
+                    });     
+                        
+
+                }); 
                 
                 //Accion cancelar del boton nuevo
                 $("#cancelarNuevo").click(function(){
