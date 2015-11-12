@@ -3,487 +3,137 @@
     <head>
     {%block head -%} 
         {% block title -%}<title>:{% block titlename -%}::: La Plus Belle :::{% endblock %}</title>{% endblock %}
-
         {% block meta -%}
-            <meta content="text/html;charset=utf-8" http-equiv="Content-Type">
-            <meta content="utf-8" http-equiv="encoding">
-            <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-            <meta name="viewport" content="initial-scale=1,minimum-scale=1,maximum-scale=1,width=device-width,height=device-height,target-densitydpi=device-dpi,user-scalable=yes">
-            
-            <!-- favicon.ico and apple-touch-icon.png -->
-            <link rel="apple-touch-icon" sizes="57x57" href="{{ asset('Resources/wrapkit/images/favicons/apple-touch-icon-57x57.png') }}">
-            <link rel="apple-touch-icon" sizes="60x60" href="{{ asset('Resources/wrapkit/images/favicons/apple-touch-icon-60x60.png') }}">
-            <link rel="apple-touch-icon" sizes="72x72" href="{{ asset('Resources/wrapkit/images/favicons/apple-touch-icon-72x72.png') }}">
-            <link rel="apple-touch-icon" sizes="76x76" href="{{ asset('Resources/wrapkit/images/favicons/apple-touch-icon-76x76.png') }}">
-            <link rel="apple-touch-icon" sizes="114x114" href="{{ asset('Resources/wrapkit/images/favicons/apple-touch-icon-114x114.png') }}">
-            <link rel="apple-touch-icon" sizes="120x120" href="{{ asset('Resources/wrapkit/images/favicons/apple-touch-icon-120x120.png') }}">
-            <link rel="apple-touch-icon" sizes="144x144" href="{{ asset('Resources/wrapkit/images/favicons/apple-touch-icon-144x144.png') }}">
-            <link rel="apple-touch-icon" sizes="152x152" href="{{ asset('Resources/wrapkit/images/favicons/apple-touch-icon-152x152.png') }}">
-            <link rel="icon" type="image/png" href="{{ asset('Resources/wrapkit/images/favicons/favicon-32x32.png') }}" sizes="32x32">
-            <link rel="icon" type="image/png" href="{{ asset('Resources/wrapkit/images/favicons/favicon-96x96.png') }}" sizes="96x96">
-            <link rel="icon" type="image/png" href="{{ asset('Resources/wrapkit/images/favicons/favicon-16x16.png') }}" sizes="16x16">
-            <link rel="manifest" href="{{ asset('Resources/wrapkit/images/favicons/manifest.json') }}">
-            <meta name="msapplication-TileColor" content="#2d89ef">
-            <meta name="msapplication-TileImage" content="{{ asset('Resources/wrapkit/images/favicons/mstile-144x144.png') }}">
-            <meta name="theme-color" content="#ffffff">
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <meta name="viewport" content="initial-scale=1,minimum-scale=1,maximum-scale=1,width=device-width,height=device-height,target-densitydpi=device-dpi,user-scalable=yes">
+        <meta name="theme-color" content="#ffffff">
         {% endblock %}
         
         {% block css -%}
-            <link href="http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,400,700,600,300" rel="stylesheet" type="text/css">
-            <link rel="stylesheet" href="{{ asset('Resources/wrapkit/styles/bootstrap.css') }}">
-            <link rel="stylesheet" href="{{ asset('Resources/wrapkit/styles/dependencies.css') }}">
-            <link rel="stylesheet" href="{{ asset('Resources/wrapkit/styles/components.css') }}">
-            <link rel="stylesheet" href="{{ asset('Resources/wrapkit/styles/wrapkit.css') }}">
-            <link rel="stylesheet" href="{{ asset('Resources/wrapkit/styles/demo.css') }}">
-            <link rel="stylesheet" href="{{ asset('Resources/ptTimeSelect/css/jquery.ptTimeSelect.css') }}">
-            <link rel="stylesheet" href="{{ asset('Resources/zebra/css/bootstrap.css') }}">
-            <link rel="stylesheet" href="{{ asset('bundles/adesignscalendar/css/fullcalendar/fullcalendar.css') }}" />
-            <link rel="stylesheet" href="{{ asset('Resources/fullcalendar/css/fullcalendar.print.css') }}" media="print"/>
-        {%- endblock %}
-        {#{% block js -%}
-            <script type="text/javascript" src="{{ asset('Resources/bootstrap-3/js/jquery.min.js') }}"></script>  
-            <script type="text/javascript" src="{{ asset('Resources/bootstrap-3/js/bootstrap.js') }}"></script>  
-        {%- endblock %}#}
+        <!-- Bootstrap -->
+        <link rel="stylesheet" href="{{ asset('Resources/wrapkit/styles/bootstrap.css') }}">
+        <!-- Bootstrap -->
+        <!-- Dependencies -->
+        <link rel="stylesheet" href="{{ asset('Resources/wrapkit/styles/dependencies.css') }}">
+        <!-- endDependencies -->
+        <!-- Wrapkit -->
+        <link rel="stylesheet" href="{{ asset('Resources/wrapkit/styles/wrapkit.css') }}">
+        <!-- endWrapkit -->
 
-        {% block jquery -%}
-        {% endblock %}  
-        {% endblock %}
+        <link rel="stylesheet" href="{{ asset('Resources/wrapkit/styles/components.css') }}">
+
+        <link rel="stylesheet" href="{{ asset('Resources/ptTimeSelect/css/jquery.ptTimeSelect.css') }}">
+        <link rel="stylesheet" href="{{ asset('Resources/zebra/css/bootstrap.css') }}">
+
+        <!-- fullcalendar -->
+        <link rel="stylesheet" href="{{ asset('bundles/adesignscalendar/css/fullcalendar/fullcalendar.css') }}" />
+        <link rel="stylesheet" href="{{ asset('Resources/fullcalendar/css/fullcalendar.print.css') }}" media="print"/>
+        <!-- fullcalendar -->
+        {%- endblock %}
+        
+        
+        
+    {% endblock %}
     </head>
     <body {% block htmlbody %}{% endblock %}>
-        {% block body -%}
+    {% block body -%}
+        <main class="wrapkit-wrapper" id="wrapper">
+        {% block bodycontenido -%}
+            <!-- ============================================
+            HEADER SECTION
+            =============================================== -->
+            {% block navigation -%}
+            {% include 'DGPlusbelleBundle:Layout:navigation.html.twig'%} 
+            {% endblock %}
             
-            <main class="wrapkit-wrapper" id="wrapper">
-                {% block bodycontenido -%}
-                    <!-- ============================================
-                    HEADER SECTION
-                    =============================================== -->
-                    {% block navigation -%}
-                        <nav class="header navbar">
-                            <div class="container-fluid">
-                              <!-- use .pull-*, couse we need this float on any screen size -->
-                              <div class="pull-left">
-                                <a class="navbar-brand" href="" role="logo" aria-label="Logo">
-                                  <img class="logo" src="{{ asset('Resources/wrapkit/images/logo/brand-text-dark.png') }}" alt="Brand"> <!--  nombre de la clinica  la plus belle-->
-                                   
-                                </a>
-                                <button data-sidebar="toggleVisible" class="btn btn-icon navbar-btn">
-                                  <i class="fa fa-bars"></i>
-                                  <i class="fa fa-caret-down"></i>
-                                </button>
-                              </div>
-
-                                <!-- use .pull-*, couse we need this float on any screen size -->
-                                <div class="pull-right" role="navigation">
-                                  <a aria-label="Search" id="brandSearchNav" class="btn btn-icon navbar-btn" href="#"><i class="fa fa-search"></i></a>
-
-                                  <div class="dropdown-ext">
-                                    <a aria-label="notifications" class="btn btn-icon navbar-btn dropdown-toggle" data-toggle="dropdown" href="#">
-                                      <i class="fa fa-inbox"></i>
-                                      <span class="dotted dotted-danger"></span>
-                                    </a>
-                                    <div class="dropdown-menu dropdown-menu-ext dropdown-menu-right" role="menu">
-                                      <div class="dd-head">
-                                        <div class="dd-head-actions">
-                                          <a href="#" class="btn btn-xs btn-default">Compose</a>
-                                        </div>
-                                        <p><a href="#">Inbox (2)</a></p>
-                                      </div>
-                                      <div class="dd-body">
-                                        <ul class="media-list">
-                                          <li class="media unread">
-                                            <a href="#">
-                                              <div class="media-left">
-                                                <img class="media-object img-circle" width="32" src="{{ asset('Resources/wrapkit/images/dummy/profile.jpg') }}" alt="user">
-                                              </div>
-                                              <div class="media-body">
-                                                <p class="pull-right"><small>6m</small></p>
-                                                <h4 class="media-heading body-text">Stilearning</h4>
-                                                <p>Newest Themes & Templates - Et est, sed mattis, donec hac</p>
-                                              </div>
-                                            </a>
-                                            <span class="dd-actions">
-                                              <a href="#" title="mark as read" data-toggle="tooltip" data-container="body" data-placement="bottom"><i class="fa fa-circle-o"></i></a>
-                                            </span>
-                                          </li>
-                                          <li class="media">
-                                            <a href="#">
-                                              <div class="media-left">
-                                                <img class="media-object img-circle" width="32" src="{{ asset('Resources/wrapkit/images/dummy/uifaces7.jpg') }}" alt="user">
-                                              </div>
-                                              <div class="media-body">
-                                                <p class="pull-right"><small>Today, 03:11am</small></p>
-                                                <h4 class="media-heading body-text">Eugene Barnett</h4>
-                                                <p>Service Update: added support for Angular - Sed ultricies nibh, in feugiat</p>
-                                              </div>
-                                            </a>
-                                            <span class="dd-actions">
-                                              <a href="#" title="mark as unread" data-toggle="tooltip" data-container="body" data-placement="bottom"><i class="fa fa-circle"></i></a>
-                                            </span>
-                                          </li>
-                                          <li class="media">
-                                            <a href="#">
-                                              <div class="media-left">
-                                                <img class="media-object img-circle" width="32" src="{{ asset('Resources/wrapkit/images/dummy/uifaces4.jpg') }}" alt="user">
-                                              </div>
-                                              <div class="media-body">
-                                                <p class="pull-right"><small>Today, 02:47am</small></p>
-                                                <h4 class="media-heading body-text">bent10@stilearning.com</h4>
-                                                <p>Spread the Word & Earn! - Dapibus nec. Integer sed purus</p>
-                                              </div>
-                                            </a>
-                                            <span class="dd-actions">
-                                              <a href="#" title="mark as unread" data-toggle="tooltip" data-container="body" data-placement="bottom"><i class="fa fa-circle"></i></a>
-                                            </span>
-                                          </li>
-                                          <li class="media unread">
-                                            <a href="#">
-                                              <div class="media-left">
-                                                <img class="media-object img-circle" width="32" src="{{ asset('Resources/wrapkit/images/dummy/uifaces3.jpg') }}" alt="user">
-                                              </div>
-                                              <div class="media-body">
-                                                <p class="pull-right"><small>Yesterday, 11:41pm</small></p>
-                                                <h4 class="media-heading body-text">David Lloyd</h4>
-                                                <p>Say thanks for your awesome works! - Viverra fermentum ac. Litora mauris elit</p>
-                                              </div>
-                                            </a>
-                                            <span class="dd-actions">
-                                              <a href="#" title="mark as read" data-toggle="tooltip" data-container="body" data-placement="bottom"><i class="fa fa-circle"></i></a>
-                                            </span>
-                                          </li>
-                                          <li class="media">
-                                            <a href="#">
-                                              <div class="media-left">
-                                                <img class="media-object img-circle" width="32" src="{{ asset('Resources/wrapkit/images/dummy/unknown-profile.jpg') }}" alt="user">
-                                              </div>
-                                              <div class="media-body">
-                                                <p class="pull-right"><small>Yesterday, 10:04pm</small></p>
-                                                <h4 class="media-heading body-text">Dribbble</h4>
-                                                <p>Design brief from Apple - Quis in nonummy. Ut augue, proident habitant</p>
-                                              </div>
-                                            </a>
-                                            <span class="dd-actions">
-                                              <a href="#" title="mark as unread" data-toggle="tooltip" data-container="body" data-placement="bottom"><i class="fa fa-circle-o"></i></a>
-                                            </span>
-                                          </li>
-                                          <li class="media">
-                                            <a href="#">
-                                              <div class="media-left">
-                                                <img class="media-object img-circle" width="32" src="{{ asset('Resources/wrapkit/images/dummy/uifaces16.jpg') }}" alt="user">
-                                              </div>
-                                              <div class="media-body">
-                                                <p class="pull-right"><small>Yesterday, 08:55pm</small></p>
-                                                <h4 class="media-heading body-text">Olivia Gonzales</h4>
-                                                <p>Updating some of the designs! - Commodo non ac, sem netus adipiscing</p>
-                                              </div>
-                                            </a>
-                                            <span class="dd-actions">
-                                              <a href="#" title="mark as unread" data-toggle="tooltip" data-container="body" data-placement="bottom"><i class="fa fa-circle"></i></a>
-                                            </span>
-                                          </li>
-                                          <li class="media">
-                                            <a href="#">
-                                              <div class="media-left">
-                                                <img class="media-object img-circle" width="32" src="{{ asset('Resources/wrapkit/images/dummy/uifaces20.jpg') }}" alt="user">
-                                              </div>
-                                              <div class="media-body">
-                                                <p class="pull-right"><small>Yesterday, 03:57pm</small></p>
-                                                <h4 class="media-heading body-text">Marco Auer</h4>
-                                                <p>Request custom designs! - Adipiscing pellentesque cum, proin luctus</p>
-                                              </div>
-                                            </a>
-                                            <span class="dd-actions">
-                                              <a href="#" title="mark as unread" data-toggle="tooltip" data-container="body" data-placement="bottom"><i class="fa fa-circle"></i></a>
-                                            </span>
-                                          </li>
-                                        </ul>
-                                      </div><!-- /.dd-body -->
-                                    </div><!-- /.dropdown-menu -->
-                                  </div><!-- /.dropdown -->
-
-                                  <div class="dropdown">
-                                    <a aria-label="More" class="btn btn-icon navbar-btn dropdown-toggle" data-toggle="dropdown" href="#">
-                                      <i class="fa fa-ellipsis-v"></i>
-                                    </a>
-                                    <ul class="dropdown-menu dropdown-menu-right" role="menu">
-                                      <li role="presentation"><a role="menuitem" tabindex="-1" href="page-profile.html"><span class="pull-right"><i class="fa fa-user text-muted"></i></span>Perfil</a></li>
-                                      {#<li role="presentation"><a role="menuitem" tabindex="-1" href="page-timeline.html"><span class="pull-right"><i class="fa fa-clock-o text-muted"></i></span>Timeline</a></li>#}
-                                      <li class="divider"></li>
-                                      <li role="presentation"><a role="menuitem" tabindex="-1" href="page-help.html"><span class="pull-right"><i class="fa fa-question-circle text-muted"></i></span>Ayuda</a></li>
-                                      <li class="divider"></li>
-                                      <li role="presentation"><a role="menuitem" tabindex="-1" href="page-locked.html"><span class="pull-right"><i class="fa fa-lock text-muted"></i></span>Locked</a></li>
-                                      <li role="presentation"><a role="menuitem" tabindex="-1" href="{{path('plusbelle_logout')}}"><span class="pull-right"><i class="fa fa-sign-out text-muted"></i></span> Cerrar sesión</a></li>
-                                    </ul>
-                                  </div><!-- /.dropdown -->
-                                </div><!-- /navigation -->
-
-                                <div class="brand-search" id="brandSearchFrm">
-                                  <form action="#" role="search">
-                                    <a href="#" class="search-close">&times;</a>
-                                    <input class="search-field" placeholder="Search for everything you want..." tabindex="-1">
-                                  </form>
-                                </div><!-- /.brand-search -->
-                            </div><!-- /.container-fluid -->
-                        </nav><!-- /navigation -->
-                    {% endblock %}
-                    {% block sidebar %}
-                        <!-- ============================================
-                        SIDEBAR SECTION
-                        =============================================== -->
-                        <aside class="sidebar" role="complementary">
-
-                        <!-- profile -->
-                        <div class="sidebar-block">
-                          <div class="media">
-                            <div class="media-left">
-                              <a href="page-profile.html">
-                                <span class="status dotted dotted-primary" data-toggle="tooltip" data-container="body" title="available"></span>
-                                {% block imagenPerfil %}
-                                <img class="media-object img-circle" src="{{ asset('Resources/img/empleados/dr.jpg') }}" alt="photo profile">
-                                {% endblock %}
-                              </a>
-                            </div>
-                            <div class="media-body">
-                              <h4 class="media-heading">Juan Carlos Pacheco</h4>  <!-- nombre de usuario conectado -->
-                              <p class="text-muted">
-                                <small>Cirujano</small>
-                              </p>
-                            </div>
-                          </div>
-                        </div><!-- /.sidebar-block -->
-                        <!-- /profile -->
-
-                        <!-- /navigation -->
-                        <div class="nav-wrapper">
-                          <ul class="nav nav-stacked" role="navigation">
-                            <li class="nav-item" role="presentation">
-                              <a href="{{path('dashboard')}}">
-                                <span class="nav-icon"><i class="fa fa-object-group"></i></span>
-                                <span class="nav-text">Dashboard</span>
-                              </a>
-                            </li>
-
-                            <li class="divider"></li>
-                            <li class="nav-header" role="presentation">ACCESO RAPIDO</li>
-                            <li class="nav-item" role="presentation">
-                              <a href="{{path('admin_paciente')}}">
-                                <span class="nav-icon"><i class="fa fa-briefcase"></i></span>
-                                <span class="nav-text">Venta de paquetes</span>
-                              </a>
-                            </li>
-                            <li class="nav-item" role="presentation">
-                              <a href="#">
-                                <span class="nav-icon"><i class="fa fa-cubes"></i></span>
-                                <span class="nav-text">Expediente de pacientes</span>
-                              </a>
-                            </li>
-                            <li class="nav-item" role="presentation">
-                              <a href="{{path('admin_cita')}}">
-                                <span class="nav-icon"><i class="fa fa-puzzle-piece"></i></span>
-                                <span class="nav-text">Nueva cita de paciente</span>
-                              </a>
-                            </li>
-                            <li class="nav-item" role="presentation">
-                              <a href="{{path('admin_consulta_new')}}">
-                                <span class="nav-icon"><i class="fa fa-puzzle-piece"></i></span>
-                                <span class="nav-text">Consultas de emergencia</span>
-                              </a>
-                            </li>
-                            <li class="nav-item" role="presentation">
-                              <a href="{{path('admin_paciente')}}">
-                                <span class="nav-icon"><i class="fa fa-puzzle-piece"></i></span>
-                                <span  class="nav-text">Gestión de pacientes</span>
-                              </a>
-                            </li>
-                            <li class="divider"></li>
-                            <li class="nav-header" role="presentation">MENU</li>
-                            <li class="nav-item" role="presentation">
-                              <a href="#" data-toggle="nav-child">
-                                <span class="nav-icon"><i class="fa fa-briefcase"></i></span>
-                                <span class="nav-text">Pacientes</span>
-                              </a>
-                              <ul class="nav nav-child level-1 nav-stacked nav-pills" role="menu">
-                                <li role="presentation"><a role="menuitem" tabindex="-1" href="{{ path('admin_paciente') }}"><span class="nav-text">Gestionar paciente</span></a></li>
-                              </ul>
-                            </li>
-                            <li class="nav-item" role="presentation">
-                              <a href="#" data-toggle="nav-child">
-                                <span class="nav-icon"><i class="fa fa-check-square"></i></span>
-                                <span class="nav-text">Consultas</span>
-                              </a>
-                              <ul class="nav nav-child level-1 nav-stacked nav-pills" role="menu">
-                                <li role="presentation"><a role="menuitem" tabindex="-1" href="{{ path('admin_tipoconsulta') }}"><span class="nav-text">Nuevo tipo de consulta</span></a></li>
-                              </ul>
-                            </li>
-                            <li class="nav-item" role="presentation">
-                              <a href="#" data-toggle="nav-child">
-                                <span class="nav-icon"><i class="fa fa-line-chart"></i></span>
-                                <span class="nav-text">Tratamientos</span>
-                              </a>
-                              <ul class="nav nav-child level-1 nav-stacked nav-pills" role="menu">
-                                <li role="presentation"><a role="menuitem" tabindex="-1" href="{{ path('admin_tratamiento') }}"><span class="nav-text">Gestionar tratamiento</span></a></li>
-                              </ul>
-                              <ul class="nav nav-child level-1 nav-stacked nav-pills" role="menu">
-                                <li role="presentation"><a role="menuitem" tabindex="-1" href="{{ path('admin_categoria') }}"><span class="nav-text">Gestionar categoria</span></a></li>
-                              </ul>
-                            </li>
-                            <li class="nav-item" role="presentation">
-                              <a href="#" data-toggle="nav-child">
-                                <span class="nav-icon"><i class="fa fa-briefcase"></i></span>
-                                <span class="nav-text">Paquetes</span>
-                              </a>
-                              <ul class="nav nav-child level-1 nav-stacked nav-pills" role="menu">
-                                <li role="presentation"><a role="menuitem" tabindex="-1" href="{{ path('admin_paquete') }}"><span class="nav-text">Gestionar paquete</span></a></li>
-                              </ul>
-                            </li>
-                            <li class="nav-item" role="presentation">
-                              <a href="#" data-toggle="nav-child">
-                                <span class="nav-icon"><i class="fa fa-database"></i></span>
-                                <span class="nav-text">Inventario</span>
-                              </a>
-                              <ul class="nav nav-child level-1 nav-stacked nav-pills" role="menu">
-                                <li role="presentation"><a role="menuitem" tabindex="-1" href="{{ path('admin_producto') }}"><span class="nav-text">Gestionar productos</span></a></li>
-                              </ul>
-                            </li>
-                            <li class="nav-item" role="presentation">
-                              <a href="#" data-toggle="nav-child">
-                                <span class="nav-icon"><i class="fa fa-plug"></i></span>
-                                <span class="nav-text">Empleados</span>
-                              </a>
-                              <ul class="nav nav-child level-1 nav-stacked nav-pills" role="menu">
-                                <li role="presentation"><a role="menuitem" tabindex="-1" href="{{ path('admin_empleado') }}"><span class="nav-text">Gestionar empleado</span></a></li>
-                                <li role="presentation"><a role="menuitem" tabindex="-1" href="{{ path('admin_comision') }}"><span class="nav-text">Gestionar meta</span></a></li>
-                              </ul>
-                            </li>
-                            <li class="nav-item" role="presentation">
-                              <a href="#" data-toggle="nav-child">
-                                <span class="nav-icon"><i class="fa fa-file-text-o"></i></span>
-                                <span class="nav-text">Sucursal</span>
-                              </a>
-                              <ul class="nav nav-child level-1 nav-stacked nav-pills" role="menu">
-                                <li role="presentation"><a role="menuitem" tabindex="-1" href="{{ path('admin_sucursal') }}"><span class="nav-text">Gestionar sucursal</span></a></li>
-                              </ul>
-                            </li>
-                             <li class="nav-item" role="presentation">
-                              <a href="#" data-toggle="nav-child">
-                                <span class="nav-icon"><i class="fa fa-file-text-o"></i></span>
-                                <span class="nav-text">Descuento</span>
-                              </a>
-                              <ul class="nav nav-child level-1 nav-stacked nav-pills" role="menu">
-                                <li role="presentation"><a role="menuitem" tabindex="-1" href="{{ path('admin_descuento') }}"><span class="nav-text">Gestionar descuentos</span></a></li>
-                              </ul>
-                            </li>
-                            <li class="nav-item" role="presentation">
-                              <a href="#" data-toggle="nav-child">
-                                <span class="nav-icon"><i class="fa fa-file-text-o"></i></span>
-                                <span class="nav-text">Reportes</span>
-                              </a>
-                              <ul class="nav nav-child level-1 nav-stacked nav-pills" role="menu">
-                                <li role="presentation"><a role="menuitem" tabindex="-1" href="page-signin.html"><span class="nav-text">Signin</span></a></li>
-                              </ul>
-                            </li>
-                            <li class="collapse-item" role="presentation">
-                              <a href="#" data-sidebar="toggleCollapse">
-                                <i class="fa fa-angle-double-left"></i>
-                              </a>
-                            </li>
-                          </ul>
-                        </div>
-                      </aside><!-- /.SIDEBAR -->
-                    {% endblock %}
+            <!-- ============================================
+            SIDEBAR SECTION
+            =============================================== -->
+            {% block sidebar %}
+            {% include 'DGPlusbelleBundle:Layout:sidebar.html.twig'%}
+            {% endblock %}
                     
-                    <section class="content-wrapper" role="main">
-                        <div class="content">
-                          <div class="content-bar">
-                            {#  <div class="pull-right" role="group">
-                                <a data-toggle="modal" href="#" data-scripts="{{ asset('Resources/wrapkit/_includes/setups.js') }}" data-target="#templateSetup" title="Template Setups" aria-label="template setups" class="btn btn-nofill btn-sm btn-default" href="#"><span class="icon-settings fa-lg text-muted"></span></a>
-                              </div> #}
-                               {% block bar %}  
-                                    <ul class="breadcrumb breadcrumb-angle">
-                                        <li><a href="#" aria-label="home"><i class="fa fa-home"></i></a></li>
-                                        <li class="active">Dashboard</li>
-                                    </ul>
-                              {% endblock %}   
-                            </div><!-- /.content-bar -->
+            <section class="content-wrapper" role="main">
+                <div class="content">
+                <div class="content-bar">
+                    <div class="pull-right" role="group">
+                      <a data-toggle="modal" href="#" data-scripts="{{ asset('Resources/wrapkit/_includes/setups.js') }}" data-target="#templateSetup" title="Template Setups" aria-label="template setups" class="btn btn-nofill btn-sm btn-default" href="#"><span class="icon-settings fa-lg text-muted"></span></a>
+                    </div>
+                    {% block bar %}  
+                    <ul class="breadcrumb breadcrumb-angle">
+                        <li><a href="#" aria-label="home"><i class="fa fa-home"></i></a></li>
+                        <li class="active">Dashboard</li>
+                    </ul>
+                    {% endblock %}   
+                </div><!-- /.content-bar -->
+                <div class="content-body">
+                    {% block contenido %}{% endblock %} 
+                </div><!-- /.content-body -->
+                <!-- Template Setups -->
+                <div class="modal fade" id="templateSetup">
+                  <div class="modal-dialog">
+                    <!-- modal-content -->
+                    <div class="modal-content"></div>
+                  </div><!-- /.modal-dialog -->
+                </div><!-- /.templateSetup -->
+                </div><!-- /.content -->
+            </section><!-- /MAIN -->
+        {% endblock %}
+        {% block footer -%} 
+        {% include 'DGPlusbelleBundle:Layout:footer.html.twig'%} 
+        {% endblock %}
+        </main>    
+    {%- endblock %}  
                         
 
-                          <div class="content-body">
-                            {% block contenido %}{% endblock %} 
-                         </div><!-- /.content-body -->
-
-
-                          
-
-
-                    <!-- Template Setups -->
-   {#                 <div class="modal fade" id="templateSetup">
-                      <div class="modal-dialog">
-                        <!-- modal-content -->
-                        <div class="modal-content"></div>
-                      </div><!-- /.modal-dialog -->
-                    </div><!-- /.templateSetup -->
-#}
-
-                  </div><!-- /.content -->
-                </section><!-- /MAIN -->
-                {% endblock %}
-                {% block footer -%} 
-                    <footer class="footer-wrapper" role="contentinfo">
-                        <div class="footer">
-                            <div class="pull-right text-muted"><small>Currently v1.2</small></div>
-                            <div>Digitality Garage  &copy; 2015</div>
-                        </div>
-                   </footer><!-- /.FOOTER -->
-                {% endblock %}
-            </main>    
-        {%- endblock %}  
-     {#   {% include 'DGPlusbelleBundle:Layout:setups.html.twig' %} #}
-    </body>
-</html>
-{% block js -%}
-    <!-- VENDORS : jQuery & Bootstrap -->
-    <script src="{{ asset('Resources/wrapkit/scripts/vendor.js') }}"></script>
-    <!-- END VENDORS -->
-    <!-- DEPENDENCIES : Required plugins -->
-    <script src="{{ asset('Resources/wrapkit/scripts/dependencies.js') }}"></script>
-    <!-- END DEPENDENCIES -->
-    <!-- WRAPKIT -->
-    <script src="{{ asset('Resources/wrapkit/scripts/wrapkit.js') }}"></script>
-    <!-- END WRAPKIT -->
-    <!-- WRAPKIT SETUPS -->
-    <script src="{{ asset('Resources/wrapkit/scripts/wrapkit-setup.js') }}"></script>
-    <!-- end WRAPKIT SETUPS -->
-    <!-- PLUGIN SETUPS: vendors & dependencies setups -->
-    <script src="{{ asset('Resources/wrapkit/scripts/plugin-setups.js') }}"></script>
-    <!-- END PLUGIN SETUPS -->
+    {% block js -%}
+        <!-- VENDORS : jQuery & Bootstrap -->
+        <script src="{{ asset('Resources/wrapkit/scripts/vendor.js') }}"></script>
+        <!-- END VENDORS -->
+        <!-- DEPENDENCIES : Required plugins -->
+        <script src="{{ asset('Resources/wrapkit/scripts/dependencies.js') }}"></script>
+        <!-- END DEPENDENCIES -->
     
-    <!-- COMPONENTS -->
-    <script src="{{ asset('Resources/wrapkit/scripts/morris.bundle.js') }}"></script>
-    <script src="{{ asset('Resources/wrapkit/scripts/jquery.sparkline.js') }}"></script>
-    <script src="{{ asset('Resources/wrapkit/scripts/jquery.tagsinput.js') }}"></script>
-    <script src="{{ asset('Resources/wrapkit/scripts/jquery.mask.js') }}"></script>
-    <script src="{{ asset('Resources/wrapkit/scripts/select2.js') }}"></script>
-    <script src="{{ asset('Resources/wrapkit/scripts/jquery.selectBoxit.js') }}"></script>
-    <script src="{{ asset('Resources/wrapkit/scripts/moment.js') }}"></script>
-    <script src="{{ asset('Resources/wrapkit/scripts/daterangepicker.js') }}"></script>
-    <script src="{{ asset('Resources/wrapkit/scripts/jquery-minicolors.js') }}"></script>
-    <script src="{{ asset('Resources/wrapkit/scripts/moment.js') }}"></script>
-    <script src="{{ asset('Resources/wrapkit/scripts/fullcalendar.js') }}"></script>
-    <script src="{{ asset('Resources/wrapkit/scripts/clndr.js') }}"></script>
-    <script src="{{ asset('Resources/wrapkit/scripts/dataTables.bootstrap.js') }}"></script>
-    <script src="{{ asset('Resources/wrapkit/scripts/dataTables.tableTools.js') }}"></script>
-    <script src="{{ asset('Resources/wrapkit/scripts/jquery.validate.js') }}"></script>
-    <script src="{{ asset('Resources/wrapkit/scripts/bootbox.js') }}"></script>
-    <script src="{{ asset('Resources/wrapkit/scripts/toastr.js') }}"></script>
-    <script src="{{ asset('Resources/wrapkit/scripts/bootstrap-editable.js') }}"></script>
-    <script src="{{ asset('Resources/ptTimeSelect/js/jquery.ptTimeSelect.js') }}"></script>
-    <script src="{{ asset('Resources/zebra/js/zebra_datepicker.js') }}"></script>
-    <script src="{{ asset('bundles/fosjsrouting/js/router.js') }}"></script>
-    <script src="{{ path('fos_js_routing_js', {'callback': 'fos.Router.setData'}) }}"></script>
-    <script type="text/javascript" src="{{ asset('bundles/adesignscalendar/js/fullcalendar/jquery.fullcalendar.min.js') }}"></script>
-    <script type="text/javascript" src="{{ asset('Resources/jquery-ui/ui/jquery-ui.js') }}"></script>
+        <!-- WRAPKIT -->
+        <script src="{{ asset('Resources/wrapkit/scripts/wrapkit.js') }}"></script>
+        <!-- END WRAPKIT -->
+        <!-- WRAPKIT SETUPS -->
+        <script src="{{ asset('Resources/wrapkit/scripts/wrapkit-setup.js') }}"></script>
+        <!-- end WRAPKIT SETUPS -->
+        
+        <script src="{{ asset('Resources/wrapkit/scripts/morris.bundle.js') }}"></script>
+        <script src="{{ asset('Resources/wrapkit/scripts/jquery.sparkline.js') }}"></script>
+        <script src="{{ asset('Resources/wrapkit/scripts/jquery.tagsinput.js') }}"></script>
+        <script src="{{ asset('Resources/wrapkit/scripts/jquery.mask.js') }}"></script>
+        <script src="{{ asset('Resources/wrapkit/scripts/select2.js') }}"></script>
+        <script src="{{ asset('Resources/wrapkit/scripts/jquery.selectBoxit.js') }}"></script>
+        <script src="{{ asset('Resources/wrapkit/scripts/moment.js') }}"></script>
+        <script src="{{ asset('Resources/wrapkit/scripts/daterangepicker.js') }}"></script>
+        <script src="{{ asset('Resources/wrapkit/scripts/jquery-minicolors.js') }}"></script>
+        <script src="{{ asset('Resources/wrapkit/scripts/moment.js') }}"></script>
+        <script src="{{ asset('Resources/wrapkit/scripts/fullcalendar.js') }}"></script>
+        <script src="{{ asset('Resources/wrapkit/scripts/clndr.js') }}"></script>
+        <script src="{{ asset('Resources/wrapkit/scripts/dataTables.bootstrap.js') }}"></script>
+        <script src="{{ asset('Resources/wrapkit/scripts/dataTables.tableTools.js') }}"></script>
+        <script src="{{ asset('Resources/wrapkit/scripts/jquery.validate.js') }}"></script>
+        <script src="{{ asset('Resources/wrapkit/scripts/bootbox.js') }}"></script>
+        <script src="{{ asset('Resources/wrapkit/scripts/toastr.js') }}"></script>
+        <script src="{{ asset('Resources/wrapkit/scripts/bootstrap-editable.js') }}"></script>
+
+         <!-- fullcalendar -->
+        <script src="{{ asset('bundles/fosjsrouting/js/router.js') }}"></script>
+        <script src="{{ path('fos_js_routing_js', {'callback': 'fos.Router.setData'}) }}"></script>
+        <script src="{{ asset('bundles/adesignscalendar/js/fullcalendar/jquery.fullcalendar.min.js') }}"></script>
+        <script src="{{ asset('Resources/jquery-ui/ui/jquery-ui.js') }}"></script>
+        <!-- fullcalendar -->
+        
+        <!-- COMPONENTS -->
+        <script src="{{ asset('Resources/ptTimeSelect/js/jquery.ptTimeSelect.js') }}"></script>  
+        <!-- END COMPONENTS -->
     
-    <!-- END COMPONENTS -->
-    
+    {% endblock %}  
+    {% block javascripts -%}
     <!-- Aspectos generales de la plantilla -->
     <script>
         $(document).ready(function(){
@@ -498,16 +148,13 @@
             
         });
     </script>
-{% endblock %}    
+    {% endblock %}  
+    {% block jquery -%}
+    {% endblock %} 
+    </body>
+</html>
+  
 
 {% block javascripts_step %}
-    <!-- Google Analytics: change UA-48454066-1 to be your site's ID. -->
-    <script>
-        (function(b,o,i,l,e,r){b.GoogleAnalyticsObject=l;b[l]||(b[l]=
-          function(){(b[l].q=b[l].q||[]).push(arguments)});b[l].l=+new Date;
-        e=o.createElement(i);r=o.getElementsByTagName(i)[0];
-        e.src='//www.google-analytics.com/analytics.js';
-        r.parentNode.insertBefore(e,r)}(window,document,'script','ga'));
-        ga('create','UA-48454066-1');ga('send','pageview');
-    </script>
+   
 {% endblock %}
