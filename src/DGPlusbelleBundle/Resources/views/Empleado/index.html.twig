@@ -25,7 +25,7 @@
                   <button id="edit-datatables1" data-toggle="tooltip" data-container="body" title="Modificar empleado" class="btn btn-default datatables1-actions disabled" role="button">
                     <i class="fa fa-edit"></i>
                   </button>
-                  <button id="delete-datatables1" data-toggle="tooltip" data-container="body" title="delete record(s)" class="btn btn-default datatables1-actions disabled" role="button">
+                  <button id="delete-datatables1" data-toggle="tooltip" data-container="body" title="Desactivar empleado" class="btn btn-default datatables1-actions disabled" role="button">
                     <i class="fa fa-trash-o"></i>
                   </button>
                 </div>
@@ -54,6 +54,7 @@
                <th>Cargo</th>
                 <th>Foto</th>
                 <th>Sucursal</th>
+                <th>Estado</th>
              {# <th>Actions</th>  #}
             </tr>
         </thead>
@@ -64,7 +65,15 @@
                 <td>{{ entity.pnombre }} {#{{ entity.snombre }}#} {{ entity.papellido }} {#{{ entity.sapellido }} #}</td>
                 <td>{{ entity.cargo }}</td>
                 <td>{{ entity.foto }}</td>
-                <td>{{ entity.sucursal }}</td>   
+                <td>{{ entity.sucursal }}</td>
+                <td>
+                    {% if entity.estado == 1 %}
+                        Activo
+                    {% else %}
+                        Inactivo
+                    {% endif %}
+                    
+                </td>
            <!--      <td>
                 <ul>
                     <li>
@@ -82,12 +91,12 @@
         </div><!-- /.panel -->
 
 <!-- Template Setups -->
-        <div class="modal fade" id="templateSetup">
+    {#    <div class="modal fade" id="templateSetup">
           <div class="modal-dialog">
             <!-- modal-content -->
             <div class="modal-content"></div>
           </div><!-- /.modal-dialog -->
-        </div><!-- /.templateSetup -->
+        </div><!-- /.templateSetup -->  #}
 
       </div><!-- /.content -->
    
@@ -98,7 +107,7 @@
       
        <script>
             $(document).ready(function(){
-                
+                var link=0;
                  $('#dgplusbellebundle_paciente_fechaNacimiento').daterangepicker({
                     singleDatePicker: true,
                     showDropdowns: true,
@@ -122,7 +131,7 @@
                     //var link=$('#datatables1>tbody>tr>td>a').attr("href");
                     //var link=$(this).children("td:first").children().attr("href");
                     //Obtener el id del registro
-                    var link=$(this).attr("id");
+                    link=$(this).attr("id");
                     //alert(link);
                     //Carga del form modificar
                     $("#editFormContainer").load(link+"/edit");
@@ -147,6 +156,23 @@
                     }
 
                 });
+                
+                 $("#delete-datatables1").click(function(){
+                        $.getJSON(Routing.generate('admin_empleado_desactivar', { id: link}), 
+                          function(data) {
+                          if(data.regs==0){
+                            bootbox.alert('Empleado desactivado con exito', function() {
+                                //Example.show("Hello world callback");
+                          });
+                            $('#'+link + ' > td:nth-child(5)').html('Inactivo');
+                            //$('#datatables1>tbody>tr>td:nth-child(5)').html('Inactivo');
+                          }
+                         
+                           
+                       // alert(link);
+                 }); 
+
+                }); 
                 
                 //Accion cancelar del boton nuevo
                 $("#cancelarNuevo").click(function(){
