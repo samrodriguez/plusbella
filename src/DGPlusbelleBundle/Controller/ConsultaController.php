@@ -568,12 +568,7 @@ class ConsultaController extends Controller
         //var_dump($fecha);
         //Calculo de la edad
         list($Y,$m,$d) = explode("-",$fecha);
-        $edad = date("md") < $m.$d ? date("Y")-$Y-1 : date("Y")-$Y;
-        
-        
-        //Obtener el numero de sesiones de los tratamientos
-        $dql = "SELECT c FROM DGPlusbelleBundle:Consulta c"
-               . " JOIN vp.paquete paq";
+        $edad = date("md") < $m.$d ? date("Y")-$Y-1 : date("Y")-$Y;        
         //$dias = $em->createQuery($dql)
                 //->setParameter('idEmp', $idEmp)
                 //->getArrayResult();
@@ -587,14 +582,28 @@ class ConsultaController extends Controller
         //echo $idPaciente;
         
         $paquetes = $em->getRepository('DGPlusbelleBundle:VentaPaquete')->findBy(array('paciente'=>$idPaciente));
-        //var_dump($paquetes);
-        //var_dump($dias);
+        
+        $dql = "SELECT count(vp) FROM DGPlusbelleBundle:VentaPaquete vp"
+               . " WHERE vp.paciente=:paciente";
+        $totalPaquetes = $em->createQuery($dql)
+                ->setParameter('paciente', $idPaciente)
+                ->getArrayResult();
+        
+        $dql = "SELECT count(c) FROM DGPlusbelleBundle:Consulta c"
+               . " WHERE c.paciente=:paciente";
+        $totalTratamientos = $em->createQuery($dql)
+                ->setParameter('paciente', $idPaciente)
+                ->getArrayResult();
+        //var_dump($totalPaquetes[0][1]);
+        //var_dump($totalTratamientos[0][1]);
         
 // Formato: dd-mm-yy
 //echo calcular_edad(“01-10-1989″); // Resultado: 21
         return array(
             //'entities' => $entities,
             'entity' => $entity,
+            'totalTratamientos'=> $totalTratamientos[0][1],
+            'totalPaquetes'=> $totalPaquetes[0][1],
             'edad' => $edad,
             'consultas' => $entity,
             'paquetes' => $paquetes,

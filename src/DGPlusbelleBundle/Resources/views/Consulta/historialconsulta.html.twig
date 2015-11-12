@@ -90,6 +90,7 @@
                             <p class="text-muted"><i class="fa fa-fw"></i><div class="col-md-4">Edad: </div><div class="col-md-8">{{ edad }} años </div> </p>
                           <div class="clearfix"></div>
                           
+                          
                         </div><!-- /.panel-body -->
                     </div>
                 </div>
@@ -122,7 +123,9 @@
             </div><!-- /.panel-body -->
             <div class="row" id="tabla1">
                 <div class="col-md-12">
-                    Tratamientos
+                    <h3 class="modal-title" id="myModalLabel">Tratamientos</h3>
+                    
+                    <hr>
                 </div>
                 <div class="col-md-12">
                     <table id = "datatables1" class="table table-noborder table-hover bordered-top dataTable" role="grid" aria-describedby="datatables1_info">
@@ -158,15 +161,15 @@
             </div>
             <div class="row" id="tabla2">
                 <div class="col-md-12">
-                    Paquetes vendidos
+                    <h3 class="modal-title" id="myModalLabel">Paquetes vendidos</h3>
+                    <hr>
                 </div>
-                <div class="col-md-12"> 
+                <div class="col-md-12">
                     <table id = "datatables2" class="table table-noborder table-hover bordered-top dataTable" role="grid" aria-describedby="datatables1_info">
                         <thead>
                             <tr row="role">
                                 <th>N°</th>
                                 <th>Paquete</th>
-
                             </tr>
                         </thead>
                         <tbody>
@@ -205,6 +208,12 @@
         <script>
             $(document).ready(function(){
                 
+                var totalTratamientos = {{totalTratamientos}};
+                var totalPaquetes = {{totalPaquetes}};
+                
+                //alert(totalTratamientos);
+                //alert(totalPaquetes);
+                
                 $('#dgplusbellebundle_consulta_fechaConsulta').daterangepicker({
                     singleDatePicker: true,
                     showDropdowns: true,
@@ -232,7 +241,7 @@
                     //var link=$(this).children("td:first").children().attr("href");
                     //Obtener el id del registro
                     var link=$(this).attr("id");
-                    alert(link);
+                    //alert(link);
                     //Carga del form modificar
                     //$("#progressTratamiento").load(link+"/edit");
                     $('#donut-example').remove();
@@ -369,9 +378,10 @@
             element: 'donut-example',
             data: [
 
-                { label: "Tratamiento 1", value: 40}
+                { label: "Tratamientos", value: totalTratamientos },
+                { label: "Paquetes", value: totalPaquetes}
             ],
-            formatter:function (y, data) { return y + '%' }
+            //formatter:function (y, data) { return y + '%' }
         });
         
     });//Fin document ready
