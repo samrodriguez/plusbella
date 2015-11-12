@@ -385,9 +385,9 @@
                     <section class="content-wrapper" role="main">
                         <div class="content">
                           <div class="content-bar">
-                              <div class="pull-right" role="group">
+                            {#  <div class="pull-right" role="group">
                                 <a data-toggle="modal" href="#" data-scripts="{{ asset('Resources/wrapkit/_includes/setups.js') }}" data-target="#templateSetup" title="Template Setups" aria-label="template setups" class="btn btn-nofill btn-sm btn-default" href="#"><span class="icon-settings fa-lg text-muted"></span></a>
-                              </div>
+                              </div> #}
                                {% block bar %}  
                                     <ul class="breadcrumb breadcrumb-angle">
                                         <li><a href="#" aria-label="home"><i class="fa fa-home"></i></a></li>
@@ -406,13 +406,13 @@
 
 
                     <!-- Template Setups -->
-                    <div class="modal fade" id="templateSetup">
+   {#                 <div class="modal fade" id="templateSetup">
                       <div class="modal-dialog">
                         <!-- modal-content -->
                         <div class="modal-content"></div>
                       </div><!-- /.modal-dialog -->
                     </div><!-- /.templateSetup -->
-
+#}
 
                   </div><!-- /.content -->
                 </section><!-- /MAIN -->
@@ -427,6 +427,7 @@
                 {% endblock %}
             </main>    
         {%- endblock %}  
+     {#   {% include 'DGPlusbelleBundle:Layout:setups.html.twig' %} #}
     </body>
 </html>
 {% block js -%}
