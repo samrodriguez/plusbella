@@ -2,6 +2,7 @@
 
 namespace DGPlusbelleBundle\Controller;
 
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
@@ -36,8 +37,8 @@ class EmpleadoController extends Controller
         $em = $this->getDoctrine()->getManager();
         
         $sql = "select per.nombres as pnombre, per.apellidos as papellido,  "
-                . "per.direccion as direccion, per.telefono as tel, per.email as email, emp.id as idemp, emp.cargo as cargo, emp.foto as foto, emp.sucursal as sucursal "
-                . "from empleado emp inner join persona per on emp.persona = per.id order by per.apellidos";
+                . "per.direccion as direccion, per.telefono as tel, per.email as email, emp.id as idemp, emp.cargo as cargo, emp.foto as foto, suc.nombre as sucursal , emp.estado as estado "
+                . "from empleado emp inner join persona per on emp.persona = per.id inner join sucursal suc on suc.id=emp.sucursal order by per.apellidos";
         
         $rsm->addScalarResult('idemp','idemp');
         $rsm->addScalarResult('pnombre','pnombre');
@@ -51,6 +52,7 @@ class EmpleadoController extends Controller
         $rsm->addScalarResult('cargo','cargo');
         $rsm->addScalarResult('foto','foto');
         $rsm->addScalarResult('sucursal','sucursal');
+        $rsm->addScalarResult('estado','estado');
 
        
         $empleados = $em->createNativeQuery($sql, $rsm)
@@ -279,5 +281,29 @@ class EmpleadoController extends Controller
             ->add('submit', 'submit', array('label' => 'Delete'))
             ->getForm()
         ;
+    }
+    
+    /**
+     * Deletes a Empleado entity.
+     *
+     * @Route("/desactivar_empleado/{id}", name="admin_empleado_desactivar", options={"expose"=true})
+     * @Method("GET")
+     */
+    public function desactivarAction(Request $request, $id)
+    {
+        //$form = $this->createDeleteForm($id);
+        //$form->handleRequest($request);
+
+        $em = $this->getDoctrine()->getManager();
+        $entity = $em->getRepository('DGPlusbelleBundle:Empleado')->find($id);
+        $entity->setEstado(0);
+        
+        $em->persist($entity);
+        $em->flush();
+        
+        $exito['regs']=0;
+        
+        return new Response(json_encode($exito));
+        
     }
 }
