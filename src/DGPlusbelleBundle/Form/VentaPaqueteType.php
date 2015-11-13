@@ -27,6 +27,9 @@ class VentaPaqueteType extends AbstractType
                   array( 'label'         => 'Paquete',
                          'empty_value'   => 'Seleccione un paquete...',
                          'class'         => 'DGPlusbelleBundle:Paquete',
+                         'query_builder' => function(EntityRepository $repository) {
+                           return $repository->obtenerpaqActivo();
+                         },
                          'attr'=>array(
                          'class'=>'form-control'
                          )
@@ -50,9 +53,10 @@ class VentaPaqueteType extends AbstractType
                          'class'         => 'DGPlusbelleBundle:Persona',
                          'query_builder' => function(EntityRepository $r){
                                                 return $r->createQueryBuilder('e')
-                                                        ->innerJoin('e.empleado', 'p');
+                                                        ->innerJoin('e.empleado', 'p')
+                                                        ->where('p.estado = true');
                                                 //return $r->seleccionarEmpleadosPersonasActivos();
-                                            } ,  
+                                            } ,
                          'attr'=>array(
                             'class'=>'form-control'
                          )

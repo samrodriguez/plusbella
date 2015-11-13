@@ -5,6 +5,9 @@ namespace DGPlusbelleBundle\Form;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+use DGPlusbelleBundle\Entity\Sucursal;
+use DGPlusbelleBundle\Entity\Tratamiento;
+use Doctrine\ORM\EntityRepository;
 
 class PaqueteType extends AbstractType
 {
@@ -25,14 +28,22 @@ class PaqueteType extends AbstractType
                     )))
          //->add('estado')
             ->add('tratamiento','entity',array('label' => 'Tratamientos',
-                'class'=>'DGPlusbelleBundle:Tratamiento','property'=>'nombre',
+                'class'=>'DGPlusbelleBundle:Tratamiento',
+                'query_builder' => function(EntityRepository $repository) {
+                  return $repository->obtenerTratActivo();
+                },
+                'property'=>'nombre',
                 'multiple'=>true,
                 'expanded'=>true,
                     'attr'=>array(
                     'class'=>''
                     ))) 
            ->add('sucursal','entity',array('label' => 'Sucursales',
-                'class'=>'DGPlusbelleBundle:Sucursal','property'=>'nombre',
+                'class'=>'DGPlusbelleBundle:Sucursal',
+                'query_builder' => function(EntityRepository $repository) {
+                  return $repository->obtenerSucActivo();
+                },
+                'property'=>'nombre',
                 'multiple'=>true,
                 'expanded'=>true,
                     'attr'=>array(

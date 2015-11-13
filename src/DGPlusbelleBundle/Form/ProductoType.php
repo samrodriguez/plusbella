@@ -5,6 +5,8 @@ namespace DGPlusbelleBundle\Form;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+use DGPlusbelleBundle\Entity\Categoria;
+use Doctrine\ORM\EntityRepository;
 
 class ProductoType extends AbstractType
 {
@@ -15,10 +17,15 @@ class ProductoType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-             ->add('categoria',null,array('label' => 'Categoria','empty_value'=>'Seleccione categoria',
-                    'attr'=>array(
-                    'class'=>'form-control input-sm'
-                    )))    
+            ->add('categoria',null,array('label' => 'Categoria',
+                'class'=>'DGPlusbelleBundle:Categoria',
+                'query_builder' => function(EntityRepository $repository) {
+                   return $repository->obtenerCatActivo();
+                 },
+                 'empty_value'=>'Seleccione Categoria',
+                 'attr'=>array(
+                 'class'=>'form-control input-sm'
+               )))       
             ->add('nombre','text',array('label' => 'Nombre',
                     'attr'=>array(
                     'class'=>'form-control input-sm'

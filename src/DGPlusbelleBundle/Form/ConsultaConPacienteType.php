@@ -5,6 +5,9 @@ namespace DGPlusbelleBundle\Form;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+use DGPlusbelleBundle\Entity\TipoConsulta;
+use DGPlusbelleBundle\Entity\Tratamiento;
+use Doctrine\ORM\EntityRepository;
 
 class ConsultaConPacienteType extends AbstractType
 {
@@ -51,6 +54,9 @@ class ConsultaConPacienteType extends AbstractType
             ->add('tipoConsulta','entity', array( 'label' => 'Tipo de consulta',
                          'empty_value'   => 'Seleccione un tipo de consulta...',
                          'class'         => 'DGPlusbelleBundle:TipoConsulta',
+            'query_builder' => function(EntityRepository $repository) {
+                return $repository->obtenerTipoConsActivo();
+            },
                          
                          'attr'=>array(
                          'class'=>'form-control'
@@ -67,6 +73,9 @@ class ConsultaConPacienteType extends AbstractType
             ->add('tratamiento','entity', array( 'label' => 'Tratamiento',
                          'empty_value'   => 'Seleccione un tratamiento...',
                          'class'         => 'DGPlusbelleBundle:Tratamiento',
+            'query_builder' => function(EntityRepository $repository) {
+                return $repository->obtenerTratActivo();
+            },
                          
                          'attr'=>array(
                          'class'=>'form-control input-sm'

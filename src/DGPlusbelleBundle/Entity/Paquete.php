@@ -9,7 +9,7 @@ use Doctrine\Common\Collections\ArrayCollection;
  * Paquete
  *
  * @ORM\Table(name="paquete")
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="DGPlusbelleBundle\Repository\CatalogoPaqueteRepository")
  */
 class Paquete
 {
