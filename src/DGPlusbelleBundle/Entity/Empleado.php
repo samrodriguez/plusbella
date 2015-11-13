@@ -41,6 +41,15 @@ class Empleado
      * @ORM\Column(name="estado", type="boolean", nullable=false)
      */
     private $estado;
+    
+    
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="comision_completa", type="boolean", nullable=false)
+     */
+    private $comisionCompleta;
+    
 
     /**
      * @var \Persona
@@ -189,7 +198,6 @@ class Empleado
     {
         return $this->estado;
     }
-
     /**
      * Set persona
      *
@@ -304,6 +312,28 @@ class Empleado
     public function getTratamiento()
     {
         return $this->tratamiento;
+    }
+    
+    /**
+     * Set comisionCompleta
+     *
+     * @param string $comisionCompleta
+     *
+     * @return Empleado
+     */
+    public function setComisionCompleta($comisionCompleta)
+    {
+        $this->comisionCompleta = $comisionCompleta;
+    }
+
+    /**
+     * Get comisionCompleta
+     *
+     * @return string
+     */
+    public function getComisionCompleta()
+    {
+        return $this->comisionCompleta;
     }
     
     public function __toString() {

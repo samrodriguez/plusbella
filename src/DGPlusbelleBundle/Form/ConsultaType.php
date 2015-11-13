@@ -41,6 +41,13 @@ class ConsultaType extends AbstractType
                 
                 ))
             //->add('cita')
+            ->add('reportePlantilla', 'choice', array(
+                    'label'=> 'Requiere plantilla',
+                    'choices'  => array('1' => 'Sí', '0' => 'No'),
+                    'multiple' => false,
+                'expanded'=>'true',
+                    'required' => true,
+                ))
             ->add('paciente',new PacienteType())
             /*->add('tipoConsulta','entity', array( 'label' => 'Tipo de consulta',
                          'empty_value'   => 'Seleccione un tipo de consulta...',

@@ -22,7 +22,7 @@ use DGPlusbelleBundle\Form\ConsultaProductoType;
  */
 class ConsultaController extends Controller
 {
-
+    public  $tipo=0;
     /**
      * Lists all Consulta de emergencia entities.
      *
@@ -34,7 +34,8 @@ class ConsultaController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
         $entity = new Consulta();
-        $form   = $this->createCreateForm($entity,1);
+        $this->tipo=1;
+        $form   = $this->createCreateForm($entity,$this->tipo);
         $entities = $em->getRepository('DGPlusbelleBundle:Consulta')->findAll();
 
         return array(
@@ -56,7 +57,8 @@ class ConsultaController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
         $entity = new Consulta();
-        $form   = $this->createCreateForm($entity);
+        $this->tipo=2;
+        $form   = $this->createCreateForm($entity,$this->tipo);
         //$entities = $em->getRepository('DGPlusbelleBundle:Consulta')->findAll();
         $dql = "SELECT c FROM DGPlusbelleBundle:Consulta c WHERE c.tipoConsulta= :tipo";
         $entities = $em->createQuery($dql)
@@ -83,6 +85,8 @@ class ConsultaController extends Controller
         $entity = new Consulta();
         $em = $this->getDoctrine()->getManager();
         //Obtiene el usuario
+        $id = $request->get('id');
+        
         $user = $this->get('security.token_storage')->getToken()->getUser();
         //Entidades para insertar en el proceso de la consulta de emergencia
         $historial = new HistorialClinico();
@@ -108,7 +112,9 @@ class ConsultaController extends Controller
         //var_dump($tipoConsulta);
                //die();
         $entity->setTipoConsulta($tipoConsulta);
-        $form = $this->createCreateForm($entity,2);
+        //var_dump($this->tipo);
+        
+        $form = $this->createCreateForm($entity,$id);
         $form->handleRequest($request);
         
        // $producto = $form->get('producto')->getData();
@@ -122,59 +128,73 @@ class ConsultaController extends Controller
             $apellido = $paciente->getPersona()->getApellidos();
             $nombre= $paciente->getPersona()->getNombres();
             
-            //Generacion del numero de expediente
-            $numeroExp = $nombre[0].$apellido[0].date("Y");
             
-            $dql = "SELECT COUNT(exp)+1 FROM DGPlusbelleBundle:Expediente exp WHERE exp.numero LIKE :numero";
-            
-            $num = $em->createQuery($dql)
-                       ->setParameter('numero','%'.$numeroExp.'%')
+            $dql = "SELECT p.id, exp.numero FROM DGPlusbelleBundle:Paciente p "
+                    . "JOIN p.expediente exp WHERE p.id=:id ";
+            $exp = $em->createQuery($dql)
+                       ->setParameter('id',$paciente->getId())
                        ->getResult();
-            //var_dump($user);
-            $numString = $num[0]["1"];
-            //var_dump($numString);
             
-            switch($numString){
-                case 1:
-                        $numeroExp .= "00".$numString;
-                    break;
-                case 2:
-                        $numeroExp .= "0".$numString;
-                    break;
-                case 3:
-                        $numeroExp .= $numString;
-                    break;
+            //var_dump($exp);
+            //$paciente
+            //die();
+            if(count($exp)==0){
+                //Generacion del numero de expediente
+                $numeroExp = $nombre[0].$apellido[0].date("Y");
+                $dql = "SELECT COUNT(exp)+1 FROM DGPlusbelleBundle:Expediente exp WHERE exp.numero LIKE :numero";
+
+                $num = $em->createQuery($dql)
+                           ->setParameter('numero','%'.$numeroExp.'%')
+                           ->getResult();
+                //var_dump($user);
+                $numString = $num[0]["1"];
+                //var_dump($numString);
+
+                switch($numString){
+                    case 1:
+                            $numeroExp .= "00".$numString;
+                        break;
+                    case 2:
+                            $numeroExp .= "0".$numString;
+                        break;
+                    case 3:
+                            $numeroExp .= $numString;
+                        break;
+                }
+                //var_dump($numeroExp);
+                //die();
+                $expediente->setNumero($numeroExp);
+                $expediente->setPaciente($paciente);
+                $expediente->setUsuario($user);
+                $em->persist($expediente);
             }
             
-            $expediente->setNumero($numeroExp);
-            $expediente->setPaciente($paciente);
-            $expediente->setUsuario($user);
-            
+            $usuario= $this->get('security.token_storage')->getToken()->getUser();
+            $empleado = $em->getRepository('DGPlusbelleBundle:Empleado')->findBy(array('persona'=>$usuario->getPersona()->getId()));
+            $entity->setEmpleado($empleado[0]);
+
             //$historial->setConsulta($consulta);
             //$historial->setExpediente($expediente);
-            $em->persist($expediente);
             
             $em->persist($entity);
-            $em->flush();
+            //$em->flush();
             
             /*  if($producto){
                 $this->establecerConsultaProducto($entity, $producto, $indicaciones);
             } */
-
-            $usuario= $this->get('security.token_storage')->getToken()->getUser();
             
-            $dql = "SELECT sum(t.costo)"
-                    . " FROM "
-                    . " DGPlusbelleBundle:Consulta c"
-                    . " JOIN c.tratamiento t"
-                    . " JOIN c.empleado emp"
-                    . " WHERE emp.id =:idEmpleado";
-                    
-            $comision = $em->createQuery($dql)
-                       ->setParameter('idEmpleado',$usuario->getId())
-                       ->getResult();
+            $empleados=$this->verificarComision($usuario);
             
-            return $this->redirect($this->generateUrl('admin_consulta' ));
+            if($empleados[0]['suma'] >= $empleados[0]['meta'] && !$empleados[0]['comisionCompleta']){
+                $this->get('envio_correo')->sendEmail($empleados[0]['email'],"","","","cumplio su objetivo");
+                $empComision = $em->getRepository('DGPlusbelleBundle:Empleado')->find($empleado[0]->getId());
+                $empComision->setComisionCompleta(1);
+                //var_dump($empComision);
+                //die();
+                $em->persist($empComision);
+                $em->flush();
+            }
+            return $this->redirect($this->generateUrl('admin_consulta'));
         }
 
         return array(
@@ -194,13 +214,13 @@ class ConsultaController extends Controller
     {
         if($tipo==1){
             $form = $this->createForm(new ConsultaType(), $entity, array(
-                'action' => $this->generateUrl('admin_consulta_create'),
+                'action' => $this->generateUrl('admin_consulta_create', array('id' => 1)),
                 'method' => 'POST',
             ));
         }
         else{
             $form = $this->createForm(new ConsultaConPacienteType(), $entity, array(
-                'action' => $this->generateUrl('admin_consulta_create'),
+                'action' => $this->generateUrl('admin_consulta_create', array('id' => 2)),
                 'method' => 'POST',
             ));
         }
@@ -611,49 +631,7 @@ class ConsultaController extends Controller
         //var_dump($totalTratamientos[0][1]);
         
         
-        $usuario= $this->get('security.token_storage')->getToken()->getUser();
-        
-        $empleados= $em->getRepository('DGPlusbelleBundle:Empleado')->findBy(array('estado'=>true));
-        
-        $dql = "SELECT emp.id, com.meta, emp.foto, p.nombres, p.apellidos FROM DGPlusbelleBundle:Empleado emp JOIN emp.persona p JOIN emp.comision com WHERE emp.estado=true AND emp.id =:idEmpleado";
-        
-        $empleados= $em->createQuery($dql)
-                   ->setParameter('idEmpleado',$usuario->getId())
-                   ->getResult();
-        
-        //var_dump($empleados);
-        $mes= date('m');
-        if($mes<10){
-            $mes = "0".$mes;
-        }
-        //$mes = '02';
-        foreach($empleados as $key=>$empleado){
-            //var_dump($empleado);
-            $dql = "SELECT sum(t.costo)"
-                . " FROM"
-                . " DGPlusbelleBundle:Consulta c"
-                . " JOIN c.tratamiento t"
-                . " JOIN c.empleado emp"
-                . " WHERE c.fechaConsulta LIKE :mes AND emp.estado=true AND emp.id=:idEmpleado";
-            $comision = $em->createQuery($dql)
-                   ->setParameters(array('idEmpleado'=>$empleado['id'],'mes'=>'_____'.$mes.'___'))
-                   ->getResult();
-            
-            //var_dump($comision);
-            $empleados[$key]['suma']= $comision[0][1];
-            $porcentaje = 0;
-            if($empleados[$key]['suma']!=null){
-                if($empleados[$key]['meta']>=$empleados[$key]['suma'] ){
-                    $porcentaje = ($empleados[$key]['suma']/$empleados[$key]['meta'])*100;
-                }
-                else{
-                    if($empleados[$key]['meta']<$empleados[$key]['suma']){
-                        $porcentaje = 100; 
-                    }
-                }
-            }
-            $empleados[$key]['porcentaje']= $porcentaje;
-        }
+        $empleados=$this->verificarComision(null);
         
         
         
@@ -661,7 +639,7 @@ class ConsultaController extends Controller
         
         //var_dump();
         //sendEmail($to, $cc, $bcc,$replay, $body){
-        $this->get('envio_correo')->sendEmail("elman@digitalitygarage.com","","","","'Yo por ganarme unas moneditas...'");
+        
         
         
         //$comision;
@@ -677,6 +655,85 @@ class ConsultaController extends Controller
             'paquetes' => $paquetes,
             'empleados' => $empleados,
             );
+    }
+    
+    
+    function verificarComision($id){
+        $em = $this->getDoctrine()->getManager();
+        if($id!=null){//Un empleado especifico
+            $dql = "SELECT emp.id, com.meta, emp.foto, p.nombres, p.apellidos,emp.comisionCompleta,p.email "
+                    . "FROM DGPlusbelleBundle:Empleado emp "
+                    . "JOIN emp.persona p "
+                    . "JOIN emp.comision com "
+                    . "WHERE emp.estado=true "
+                    . "AND emp.id =:idEmpleado";
+            $empleados= $em->createQuery($dql)
+                       ->setParameter('idEmpleado',$id)
+                       ->getResult();
+        }
+        else{//Todos los empleados
+            $dql = "SELECT emp.id, com.meta, emp.foto, p.nombres, p.apellidos,emp.comisionCompleta,p.email "
+                    . "FROM DGPlusbelleBundle:Empleado emp "
+                    . "JOIN emp.persona p "
+                    . "JOIN emp.comision com "
+                    . "WHERE emp.estado=true ";
+            $empleados= $em->createQuery($dql)
+                        ->getResult();
+        }
+            //$empleados= $em->getRepository('DGPlusbelleBundle:Empleado')->findBy(array('estado'=>true));
+
+            //var_dump($empleados);
+            $mes= date('m');
+            if($mes<10){
+                $mes = "0".$mes;
+            }
+            //$mes = '02';
+            foreach($empleados as $key=>$empleado){
+                //var_dump($empleado);
+                $dql = "SELECT sum(t.costo)"
+                    . " FROM"
+                    . " DGPlusbelleBundle:Consulta c"
+                    . " JOIN c.tratamiento t"
+                    . " JOIN c.empleado emp"
+                    . " WHERE c.fechaConsulta LIKE :mes AND emp.estado=true AND emp.id=:idEmpleado";
+                $comision = $em->createQuery($dql)
+                       ->setParameters(array('idEmpleado'=>$empleado['id'],'mes'=>'_____'.$mes.'___'))
+                       ->getResult();
+
+                //var_dump($comision);
+                $empleados[$key]['suma']= $comision[0][1];
+                $porcentaje = 0;
+                if($empleados[$key]['suma']!=null){
+                    if($empleados[$key]['meta']>=$empleados[$key]['suma'] ){
+                        $porcentaje = ($empleados[$key]['suma']/$empleados[$key]['meta'])*100;
+                    }
+                    else{
+                        if($empleados[$key]['meta']<$empleados[$key]['suma']){
+                            $porcentaje = 100; 
+                        }
+                    }
+                }
+                $empleados[$key]['porcentaje']= $porcentaje;
+                //Se verifica que el empleado ya cumplio con la meta y si el correo ya fue enviado
+                //if($empleados[$key]['suma'] >= $empleados[$key]['meta'] && !$empleados[$key]['comisionCompleta'] && $id!=null){
+                    //$this->get('envio_correo')->sendEmail("77456982@sms.claro.com.sv","","","","prueba1");
+                    //$this->get('envio_correo')->sendEmail($empleados[$key]['email'],"","","","");
+                //}
+                
+            }
+            
+            //Envio de sms desde correo
+            /*
+                $this->get('envio_correo')->sendEmail("75061915@sms.claro.com.sv","","","","prueba1");
+                $this->get('envio_correo')->sendEmail("71727845@sms.claro.com.sv","","","","prueba1");
+                $this->get('envio_correo')->sendEmail("70550768@sms.claro.com.sv","","","","prueba1");
+            */
+            $usuario= $this->get('security.token_storage')->getToken()->getUser();
+            //var_dump($usuario->getPersona()->getId());
+            //var_dump($empleados);
+            /**/
+        
+        return $empleados;
     }
     
     

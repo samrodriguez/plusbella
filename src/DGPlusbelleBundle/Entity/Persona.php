@@ -107,6 +107,14 @@ class Persona
         $this->paciente = $paciente;
     }
     
+    function getEmpleado() {
+        return $this->empleado;
+    }
+
+    function setEmpleado($empleado) {
+        $this->empleado = $empleado;
+    }
+    
  /*   function getVentaPaquete() {
         return $this->ventapaciente;
     }
