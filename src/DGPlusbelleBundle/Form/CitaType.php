@@ -5,6 +5,9 @@ namespace DGPlusbelleBundle\Form;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+use DGPlusbelleBundle\Entity\Empleado;
+use DGPlusbelleBundle\Entity\Tratamiento;
+use DGPlusbelleBundle\Entity\Descuento;
 use Doctrine\ORM\EntityRepository;
 
 class CitaType extends AbstractType
@@ -32,6 +35,9 @@ class CitaType extends AbstractType
                   array( 'label'         => 'Descuento',
                          'empty_value'   => 'Seleccione un descuento...',
                          'class'         => 'DGPlusbelleBundle:Descuento',
+                         'query_builder' => function(EntityRepository $repository) {
+                           return $repository->obtenerDescActivo();
+                       },
                          'attr'=>array(
                          'class'=>'form-control'
                          )
@@ -39,11 +45,14 @@ class CitaType extends AbstractType
             ->add('empleado','entity', array( 'label' => 'Empleado',
                          'empty_value'   => 'Seleccione un empleado...',
                          'class'         => 'DGPlusbelleBundle:Empleado',
-                         'query_builder' => function(EntityRepository $r){
+                        /* 'query_builder' => function(EntityRepository $r){
                                                 return $r->createQueryBuilder('emp')
                                                         ->innerJoin('emp.horario', 'h');
                                                 //return $r->seleccionarEmpleadosPersonasActivos();
-                                            } ,  
+                                            }, */
+                         'query_builder' => function(EntityRepository $repository) {
+                                                return $repository->obtenerEmpActivo();
+                                             },  
                          'attr'=>array(
                          'class'=>'form-control busqueda'
                          )
@@ -63,12 +72,14 @@ class CitaType extends AbstractType
                          'class'=>'form-control'
                          )
                        ))
-            ->add('tratamiento', null, 
-                  array( 'label'         => 'Tratamiento',
+            ->add('tratamiento','entity', array( 'label' => 'Tratamiento',
                          'empty_value'   => 'Seleccione un tratamiento...',
                          'class'         => 'DGPlusbelleBundle:Tratamiento',
+                         'query_builder' => function(EntityRepository $repository) {
+                            return $repository->obtenerTratActivo();
+                       },     
                          'attr'=>array(
-                         'class'=>'form-control'
+                         'class'=>'form-control input-sm'
                          )
                        ))
         ;

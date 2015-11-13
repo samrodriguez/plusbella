@@ -5,6 +5,8 @@ namespace DGPlusbelleBundle\Form;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+use DGPlusbelleBundle\Entity\Sucursal;
+use Doctrine\ORM\EntityRepository;
 
 class TratamientoType extends AbstractType
 {
@@ -16,10 +18,15 @@ class TratamientoType extends AbstractType
     {
         $builder
                 
-            ->add('categoria',null,array('label' => 'Categoria', 'empty_value'=>'Seleccione Categoria',
-                    'attr'=>array(
-                    'class'=>'form-control input-sm'
-                    )))    
+            ->add('categoria',null,array('label' => 'Categoria',
+                'class'=>'DGPlusbelleBundle:Categoria',
+                'query_builder' => function(EntityRepository $repository) {
+                  return $repository->obtenerCatActivo();
+                }, 
+                'empty_value'=>'Seleccione Categoria',
+                'attr'=>array(
+                'class'=>'form-control input-sm'
+              )))    
             ->add('nombre','text',array('label' => 'Nombre',
                     'attr'=>array(
                     'class'=>'form-control input-sm'
@@ -33,7 +40,11 @@ class TratamientoType extends AbstractType
             //->add('empleado')
            //->add('paquete')
            ->add('sucursal','entity',array('label' => 'Sucursales',
-                'class'=>'DGPlusbelleBundle:Sucursal','property'=>'nombre',
+                'class'=>'DGPlusbelleBundle:Sucursal',
+                'query_builder' => function(EntityRepository $repository) {
+                  return $repository->obtenerSucActivo();
+                },
+                'property'=>'nombre',
                 'multiple'=>true,
                 'expanded'=>true,
                     'attr'=>array(
