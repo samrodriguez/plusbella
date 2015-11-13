@@ -161,6 +161,19 @@ class ConsultaController extends Controller
                 $this->establecerConsultaProducto($entity, $producto, $indicaciones);
             } */
 
+            $usuario= $this->get('security.token_storage')->getToken()->getUser();
+            
+            $dql = "SELECT sum(t.costo)"
+                    . " FROM "
+                    . " DGPlusbelleBundle:Consulta c"
+                    . " JOIN c.tratamiento t"
+                    . " JOIN c.empleado emp"
+                    . " WHERE emp.id =:idEmpleado";
+                    
+            $comision = $em->createQuery($dql)
+                       ->setParameter('idEmpleado',$usuario->getId())
+                       ->getResult();
+            
             return $this->redirect($this->generateUrl('admin_consulta' ));
         }
 
@@ -597,17 +610,77 @@ class ConsultaController extends Controller
         //var_dump($totalPaquetes[0][1]);
         //var_dump($totalTratamientos[0][1]);
         
+        
+        $usuario= $this->get('security.token_storage')->getToken()->getUser();
+        
+        $empleados= $em->getRepository('DGPlusbelleBundle:Empleado')->findBy(array('estado'=>true));
+        
+        $dql = "SELECT emp.id, com.meta, emp.foto, p.nombres, p.apellidos FROM DGPlusbelleBundle:Empleado emp JOIN emp.persona p JOIN emp.comision com WHERE emp.estado=true AND emp.id =:idEmpleado";
+        
+        $empleados= $em->createQuery($dql)
+                   ->setParameter('idEmpleado',$usuario->getId())
+                   ->getResult();
+        
+        //var_dump($empleados);
+        $mes= date('m');
+        if($mes<10){
+            $mes = "0".$mes;
+        }
+        $mes = '02';
+        foreach($empleados as $key=>$empleado){
+            //var_dump($empleado);
+            $dql = "SELECT sum(t.costo)"
+                . " FROM"
+                . " DGPlusbelleBundle:Consulta c"
+                . " JOIN c.tratamiento t"
+                . " JOIN c.empleado emp"
+                . " WHERE c.fechaConsulta LIKE :mes AND emp.estado=true AND emp.id=:idEmpleado";
+            $comision = $em->createQuery($dql)
+                   ->setParameters(array('idEmpleado'=>$empleado['id'],'mes'=>'_____'.$mes.'___'))
+                   ->getResult();
+            
+            //var_dump($comision);
+            $empleados[$key]['suma']= $comision[0][1];
+            $porcentaje = 0;
+            if($empleados[$key]['suma']!=null){
+                
+
+                if($empleados[$key]['meta']>=$empleados[$key]['suma'] ){
+                    $porcentaje = ($empleados[$key]['suma']/$empleados[$key]['meta'])*100;
+                }
+                else{
+                    if($empleados[$key]['meta']<$empleados[$key]['suma']){
+                        $porcentaje = 100; 
+                    }
+                }
+                
+            }
+            $empleados[$key]['porcentaje']= $porcentaje;
+            //var_dump($comision[0][1]);
+            
+        }
+        
+        
+        //var_dump($empleados);
+        
+        //var_dump();
+        
+        
+        
+        
+        //$comision;
 // Formato: dd-mm-yy
 //echo calcular_edad(“01-10-1989″); // Resultado: 21
         return array(
             //'entities' => $entities,
             'entity' => $entity,
-            'totalTratamientos'=> $totalTratamientos[0][1],
-            'totalPaquetes'=> $totalPaquetes[0][1],
+            'totalTratamientos'=> $totalTratamientos[0][1],//grafica de estadisticas
+            'totalPaquetes'=> $totalPaquetes[0][1],//grafica de estadisticas
             'edad' => $edad,
             'consultas' => $entity,
             'paquetes' => $paquetes,
-        );
+            'empleados' => $empleados,
+            );
     }
     
     

@@ -2,6 +2,7 @@
 
 namespace DGPlusbelleBundle\Controller;
 
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
@@ -252,5 +253,36 @@ class DescuentoController extends Controller
             ->add('submit', 'submit', array('label' => 'Delete'))
             ->getForm()
         ;
+    }
+    
+          
+    /**
+     * Deletes a Descuento entity.
+     *
+     * @Route("/desactivar_descuento/{id}", name="admin_descuento_desactivar", options={"expose"=true})
+     * @Method("GET")
+     */
+    public function desactivarAction(Request $request, $id)
+    {
+        //$form = $this->createDeleteForm($id);
+        //$form->handleRequest($request);
+
+        $em = $this->getDoctrine()->getManager();
+        $entity = $em->getRepository('DGPlusbelleBundle:Descuento')->find($id);
+        
+         if($entity->getEstado()==0){
+            $entity->setEstado(1);
+            $exito['regs']=1;//registro activado
+        }
+        else{
+            $entity->setEstado(0);
+            $exito['regs']=0;//registro desactivado
+        }
+        
+        $em->persist($entity);
+        $em->flush();
+        
+        return new Response(json_encode($exito));
+        
     }
 }

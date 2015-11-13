@@ -58,6 +58,16 @@ class Comision
      * })
      */
     private $empleado;
+    
+    /**
+     * @var \Comision
+     *
+     * @ORM\ManyToOne(targetEntity="Empleado", inversedBy="comision", cascade={"persist", "remove"})
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="empleado", referencedColumnName="id")
+     * })
+     */
+    private $empleado_comision;
 
 
 

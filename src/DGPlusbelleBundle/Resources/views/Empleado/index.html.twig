@@ -25,8 +25,8 @@
                   <button id="edit-datatables1" data-toggle="tooltip" data-container="body" title="Modificar empleado" class="btn btn-default datatables1-actions disabled" role="button">
                     <i class="fa fa-edit"></i>
                   </button>
-                  <button id="delete-datatables1" data-toggle="tooltip" data-container="body" title="Desactivar empleado" class="btn btn-default datatables1-actions disabled" role="button">
-                    <i class="fa fa-trash-o"></i>
+                  <button id="delete-datatables1" data-toggle="tooltip" data-container="body" title="Cambiar estado" class="btn btn-default datatables1-actions disabled" role="button">
+                    <i class="fa fa-toggle-off"></i>
                   </button>
                 </div>
                 <div class="btn-group pull-left">
@@ -49,7 +49,7 @@
     <table id = "datatables1" class="table table-bordered table-hover display dt-responsive" style="margin-top: 30px">
         <thead>
             <tr>
-               {#  <th>Id</th>  #}
+                 <th>N°</th>  
                <th>Empleado</th> 
                <th>Cargo</th>
                 <th>Foto</th>
@@ -61,6 +61,9 @@
         <tbody>
          {% for key, entity in empleados %}
                <tr id="{{entity.idemp}}">
+                <td>
+                    {{key+1}}
+                </td>    
           {#       <td><a href="{{ path('admin_empleado_show', { 'id': entity.id }) }}">{{ entity.id }}</a></td> #}
                 <td>{{ entity.pnombre }} {#{{ entity.snombre }}#} {{ entity.papellido }} {#{{ entity.sapellido }} #}</td>
                 <td>{{ entity.cargo }}</td>
@@ -107,7 +110,8 @@
       
        <script>
             $(document).ready(function(){
-                var link=0;
+                 var link=0;
+                 var estadoPrevio = "";
                  $('#dgplusbellebundle_paciente_fechaNacimiento').daterangepicker({
                     singleDatePicker: true,
                     showDropdowns: true,
@@ -137,6 +141,17 @@
                     $("#editFormContainer").load(link+"/edit");
                     
                     
+                     //Hay que cambiar el numero de la columna para las otras tablas
+                    estadoPrevio = $(this).children('td:nth-child(6)').html();
+                    estadoPrevio = estadoPrevio.trim();
+                    if(estadoPrevio==="Inactivo"){//se muestran los iconos de desactivado
+                        $('#delete-datatables1').children().removeClass("fa fa-toggle-on");
+                        $('#delete-datatables1').children().addClass("fa fa-toggle-off");
+                    }
+                    else{//se muestran los iconos de activado
+                        $('#delete-datatables1').children().removeClass("fa fa-toggle-off");
+                        $('#delete-datatables1').children().addClass("fa fa-toggle-on");
+                    }
                     //var href=link.attr("href");
                     //alert(object);
                     
@@ -158,19 +173,36 @@
                 });
                 
                  $("#delete-datatables1").click(function(){
+                     bootbox.confirm("¿Desea cambiar el estado de este registro?", function(result) {
+                        if(result){
                         $.getJSON(Routing.generate('admin_empleado_desactivar', { id: link}), 
                           function(data) {
-                          if(data.regs==0){
-                            bootbox.alert('Empleado desactivado con exito', function() {
-                                //Example.show("Hello world callback");
-                          });
-                            $('#'+link + ' > td:nth-child(5)').html('Inactivo');
-                            //$('#datatables1>tbody>tr>td:nth-child(5)').html('Inactivo');
-                          }
-                         
-                           
-                       // alert(link);
-                 }); 
+                          var mensaje="";
+                                    if(data.regs==0){
+                                        //Se cambia a desactivado
+                                        mensaje ="Empleado desactivado con exito";
+                                        $('#'+link + ' > td:nth-child(6)').html('Inactivo');
+                                        $('#delete-datatables1').children().removeClass("fa fa-toggle-on");
+                                        $('#delete-datatables1').children().addClass("fa fa-toggle-off");
+                                    //$('#datatables1>tbody>tr>td:nth-child(5)').html('Inactivo');
+                                    }
+                                    if(data.regs==1){
+                                        //Se cambia a activado
+                                        mensaje ="Empleado activada con exito";
+                                        $('#'+link + ' > td:nth-child(6)').html('Activo');
+                                        $('#delete-datatables1').children().removeClass("fa fa-toggle-off");
+                                        $('#delete-datatables1').children().addClass("fa fa-toggle-on");
+                                    }
+                                    bootbox.alert(mensaje, function() {
+                                        //Example.show("Hello world callback");
+                                    });
+                                    
+                                // alert(link);
+                            }); 
+                        }
+                                    
+                    });     
+                        
 
                 }); 
                 
@@ -222,7 +254,8 @@
                     "columnDefs": [
                            { "orderable": false, "targets": 0 },
                            { "orderable": false, "targets": 2 },
-                           { "orderable": false, "targets": 3 }
+                           { "orderable": false, "targets": 3 },
+                           { "orderable": false, "targets": 4 }
                         
 
                            
