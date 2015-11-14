@@ -76,7 +76,7 @@
     <table id = "datatables1" class="table table-bordered table-hover display dt-responsive" style="margin-top: 30px">
         <thead>
             <tr>
-            {#      <th>#</th>  #} 
+                <th>N°</th>  
                 <th>Paciente</th>
                 <th>Dui</th>
                 <th>Direccion</th>
@@ -94,7 +94,9 @@
          {% for key, entity in pacientes %}
                 <tr id="{{entity.idpac}}">
              {# <td>{{ entity.idpac }}</td>  #}
-
+                <td>
+                    {{key+1}}
+                </td> 
                 <td>{{ entity.pnombre }} {{ entity.papellido }}</td>
                 <td>{{ entity.dui }}</td>
                 <td>{{ entity.direccion }}</td>
@@ -270,7 +272,8 @@
                            { "orderable": false, "targets": 5 },
                            { "orderable": false, "targets": 6 },
                            { "orderable": false, "targets": 7 },
-                           { "orderable": false, "targets": 8 }
+                           { "orderable": false, "targets": 8 },
+                           { "orderable": false, "targets": 9 }
                                  
                        
                            
