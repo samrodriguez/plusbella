@@ -92,6 +92,7 @@
     {% block js -%}
         <!-- VENDORS : jQuery & Bootstrap -->
         <script src="{{ asset('Resources/wrapkit/scripts/vendor.js') }}"></script>
+        
         <!-- END VENDORS -->
         <!-- DEPENDENCIES : Required plugins -->
         <script src="{{ asset('Resources/wrapkit/scripts/dependencies.js') }}"></script>
@@ -104,7 +105,7 @@
         <script src="{{ asset('Resources/wrapkit/scripts/wrapkit-setup.js') }}"></script>
         <!-- end WRAPKIT SETUPS -->
         <!-- PLUGIN SETUPS: vendors & dependencies setups -->
-        <script src="{{ asset('Resources/wrapkit/scripts/plugin-setups.js') }}"></script>
+        {#<script src="{{ asset('Resources/wrapkit/scripts/plugin-setups_1.js') }}"></script>#}
         <!-- END PLUGIN SETUPS -->
         
         <script src="{{ asset('Resources/wrapkit/scripts/morris.bundle.js') }}"></script>
@@ -136,11 +137,17 @@
         <!-- COMPONENTS -->
         <script src="{{ asset('Resources/ptTimeSelect/js/jquery.ptTimeSelect.js') }}"></script>  
         <!-- END COMPONENTS -->
+        
+        <script src="{{ asset('Resources/bootstrap-3/js/bootstrap.min.js') }}"></script> 
+        
     
     {% endblock %}  
     {% block javascripts -%}
     <!-- Aspectos generales de la plantilla -->
     <script>
+        $(function () {
+            $("[data-toggle='tooltip']").tooltip();
+        });
         $(document).ready(function(){
             {#$('[data-toggle="tooltip"]').tooltip('show');#}
             $('select').each(function(index, val) {    
