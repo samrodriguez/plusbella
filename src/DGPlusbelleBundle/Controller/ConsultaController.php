@@ -626,7 +626,7 @@ class ConsultaController extends Controller
         if($mes<10){
             $mes = "0".$mes;
         }
-        $mes = '02';
+        //$mes = '02';
         foreach($empleados as $key=>$empleado){
             //var_dump($empleado);
             $dql = "SELECT sum(t.costo)"
@@ -643,8 +643,6 @@ class ConsultaController extends Controller
             $empleados[$key]['suma']= $comision[0][1];
             $porcentaje = 0;
             if($empleados[$key]['suma']!=null){
-                
-
                 if($empleados[$key]['meta']>=$empleados[$key]['suma'] ){
                     $porcentaje = ($empleados[$key]['suma']/$empleados[$key]['meta'])*100;
                 }
@@ -653,19 +651,17 @@ class ConsultaController extends Controller
                         $porcentaje = 100; 
                     }
                 }
-                
             }
             $empleados[$key]['porcentaje']= $porcentaje;
-            //var_dump($comision[0][1]);
-            
         }
+        
         
         
         //var_dump($empleados);
         
         //var_dump();
-        
-        
+        //sendEmail($to, $cc, $bcc,$replay, $body){
+        $this->get('envio_correo')->sendEmail("elman@digitalitygarage.com","","","","'Yo por ganarme unas moneditas...'");
         
         
         //$comision;
