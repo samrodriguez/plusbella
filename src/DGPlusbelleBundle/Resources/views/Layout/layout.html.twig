@@ -11,18 +11,20 @@
         {% endblock %}
         
         {% block css -%}
+        <link href="http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,400,700,600,300" rel="stylesheet" type="text/css">
+   
         <!-- Bootstrap -->
         <link rel="stylesheet" href="{{ asset('Resources/wrapkit/styles/bootstrap.css') }}">
         <!-- Bootstrap -->
         <!-- Dependencies -->
         <link rel="stylesheet" href="{{ asset('Resources/wrapkit/styles/dependencies.css') }}">
         <!-- endDependencies -->
+        <link rel="stylesheet" href="{{ asset('Resources/wrapkit/styles/components.css') }}">
         <!-- Wrapkit -->
         <link rel="stylesheet" href="{{ asset('Resources/wrapkit/styles/wrapkit.css') }}">
         <!-- endWrapkit -->
 
-        <link rel="stylesheet" href="{{ asset('Resources/wrapkit/styles/components.css') }}">
-
+        <link rel="stylesheet" href="{{ asset('Resources/wrapkit/styles/demo.css') }}">
         <link rel="stylesheet" href="{{ asset('Resources/ptTimeSelect/css/jquery.ptTimeSelect.css') }}">
         <link rel="stylesheet" href="{{ asset('Resources/zebra/css/bootstrap.css') }}">
 
@@ -101,6 +103,9 @@
         <!-- WRAPKIT SETUPS -->
         <script src="{{ asset('Resources/wrapkit/scripts/wrapkit-setup.js') }}"></script>
         <!-- end WRAPKIT SETUPS -->
+        <!-- PLUGIN SETUPS: vendors & dependencies setups -->
+        <script src="{{ asset('Resources/wrapkit/scripts/plugin-setups.js') }}"></script>
+        <!-- END PLUGIN SETUPS -->
         
         <script src="{{ asset('Resources/wrapkit/scripts/morris.bundle.js') }}"></script>
         <script src="{{ asset('Resources/wrapkit/scripts/jquery.sparkline.js') }}"></script>
@@ -137,6 +142,7 @@
     <!-- Aspectos generales de la plantilla -->
     <script>
         $(document).ready(function(){
+            {#$('[data-toggle="tooltip"]').tooltip('show');#}
             $('select').each(function(index, val) {    
                 if (!$(this).hasClass("busqueda") ){
                    $(this).selectBoxIt();
