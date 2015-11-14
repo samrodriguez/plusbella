@@ -9,9 +9,9 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use DGPlusbelleBundle\Entity\Paquete;
-use DGPlusbelleBundle\Entity\PaqueteTratamiento;
+//use DGPlusbelleBundle\Entity\PaqueteTratamiento;
 use DGPlusbelleBundle\Form\PaqueteType;
-use DGPlusbelleBundle\Form\PaqueteTratamientoType;
+//use DGPlusbelleBundle\Form\PaqueteTratamientoType;
 
 /**
  * Paquete controller.

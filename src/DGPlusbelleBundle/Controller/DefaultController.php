@@ -110,6 +110,15 @@ class DefaultController extends Controller
         return $this->render('DGPlusbelleBundle:Default:index.html.twig', array('name' => 'samuel'));
     }
 
-
+    /**
+     * Lists all Cita entities.
+     *
+     * @Route("/pdf", name="admin_pdf")
+     * 
+     */
+    public function pdfAction()
+    {
+        $pdf = $this->get('fpdf_printer')->toPdf();
+    }
 
 }
