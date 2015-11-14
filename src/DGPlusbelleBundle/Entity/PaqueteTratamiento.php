@@ -41,14 +41,12 @@ class PaqueteTratamiento {
     /**
      * @var \Tratamiento
      *
-     * @ORM\ManyToOne(targetEntity="Tratamiento")
+     * @ORM\ManyToOne(targetEntity="Tratamiento", inversedBy="placas", cascade={"persist", "remove"})
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="tratamiento", referencedColumnName="id")
      * })
      */
     private $tratamiento;
-
-
 
     /**
      * Get id
@@ -130,5 +128,39 @@ class PaqueteTratamiento {
     public function getTratamiento()
     {
         return $this->tratamiento;
+    }
+    
+     /**
+     * Add sucursal
+     *
+     * @param \DGPlusbelleBundle\Entity\Sucursal $sucursal
+     *
+     * @return Paquete
+     */
+    public function addSucursal(\DGPlusbelleBundle\Entity\Sucursal $sucursal)
+    {
+        $this->sucursal[] = $sucursal;
+
+        return $this;
+    }
+
+    /**
+     * Remove sucursal
+     *
+     * @param \DGPlusbelleBundle\Entity\Sucursal $sucursal
+     */
+    public function removeSucursal(\DGPlusbelleBundle\Entity\Sucursal $sucursal)
+    {
+        $this->sucursal->removeElement($sucursal);
+    }
+
+    /**
+     * Get sucursal
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getSucursal()
+    {
+        return $this->sucursal;
     }
 }
