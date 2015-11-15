@@ -167,6 +167,7 @@ class ConsultaController extends Controller
                 $expediente->setPaciente($paciente);
                 $expediente->setUsuario($user);
                 $em->persist($expediente);
+                $em->flush();
             }
             
             $usuario= $this->get('security.token_storage')->getToken()->getUser();
@@ -177,7 +178,7 @@ class ConsultaController extends Controller
             //$historial->setExpediente($expediente);
             
             $em->persist($entity);
-            //$em->flush();
+            $em->flush();
             
             /*  if($producto){
                 $this->establecerConsultaProducto($entity, $producto, $indicaciones);
