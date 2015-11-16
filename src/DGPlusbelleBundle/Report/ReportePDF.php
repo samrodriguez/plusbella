@@ -2,16 +2,16 @@
 
 namespace DGPlusbelleBundle\Report;
 
-class ReportePDF {
+class ReportePDF  extends \FPDF_FPDF {
     // Enabezado
     function Header(){
          $this->SetFont('Arial','B',15);
         // Move to the right
-        $this->Cell(80);
+       // $this->Cell(80);
         // Title
-        $this->Cell(30,10,'Title',1,0,'C');
+       // $this->Cell(30,10,'Title',0,0,'C');
         // Line break
-        $this->Ln(20);
+       //$this->Ln(0);
     }
     
     // Pie de página
@@ -20,9 +20,10 @@ class ReportePDF {
         // Posición: a 1,5 cm del final
         $this->SetY(-15);
         // Arial italic 8
-        $this->SetFont('Arial','I',8);
+        $this->SetFont('Arial','I',6);
         // Número de página
-        $this->Cell(0,10,'Pagina '.$this->PageNo(),0,0,'C');
+        //$this->Cell(0,10,'Pagina '.$this->PageNo(),0,0,'C');
+        $this->Cell(0, 10, 'San Salvador, Colonia Escalon, Calle Cuscatlan, No. 448. entre la 83 Av. y 85 Av. Sur. Tel. 2519-2857.',1,0, 'C');
     }
 
     function SetWidths($w)
@@ -125,5 +126,44 @@ class ReportePDF {
                 $i++;
         }
         return $nl;
+    }
+    
+    function RoundedRect($x, $y, $w, $h, $r, $style = '')
+    {
+        $k = $this->k;
+        $hp = $this->h;
+        if($style=='F')
+            $op='f';
+        elseif($style=='FD' || $style=='DF')
+            $op='B';
+        else
+            $op='S';
+        $MyArc = 4/3 * (sqrt(2) - 1);
+        $this->_out(sprintf('%.2F %.2F m',($x+$r)*$k,($hp-$y)*$k ));
+        $xc = $x+$w-$r ;
+        $yc = $y+$r;
+        $this->_out(sprintf('%.2F %.2F l', $xc*$k,($hp-$y)*$k ));
+
+        $this->_Arc($xc + $r*$MyArc, $yc - $r, $xc + $r, $yc - $r*$MyArc, $xc + $r, $yc);
+        $xc = $x+$w-$r ;
+        $yc = $y+$h-$r;
+        $this->_out(sprintf('%.2F %.2F l',($x+$w)*$k,($hp-$yc)*$k));
+        $this->_Arc($xc + $r, $yc + $r*$MyArc, $xc + $r*$MyArc, $yc + $r, $xc, $yc + $r);
+        $xc = $x+$r ;
+        $yc = $y+$h-$r;
+        $this->_out(sprintf('%.2F %.2F l',$xc*$k,($hp-($y+$h))*$k));
+        $this->_Arc($xc - $r*$MyArc, $yc + $r, $xc - $r, $yc + $r*$MyArc, $xc - $r, $yc);
+        $xc = $x+$r ;
+        $yc = $y+$r;
+        $this->_out(sprintf('%.2F %.2F l',($x)*$k,($hp-$yc)*$k ));
+        $this->_Arc($xc - $r, $yc - $r*$MyArc, $xc - $r*$MyArc, $yc - $r, $xc, $yc - $r);
+        $this->_out($op);
+    }
+
+    function _Arc($x1, $y1, $x2, $y2, $x3, $y3)
+    {
+        $h = $this->h;
+        $this->_out(sprintf('%.2F %.2F %.2F %.2F %.2F %.2F c ', $x1*$this->k, ($h-$y1)*$this->k,
+            $x2*$this->k, ($h-$y2)*$this->k, $x3*$this->k, ($h-$y3)*$this->k));
     }
 }
