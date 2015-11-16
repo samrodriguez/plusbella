@@ -27,7 +27,7 @@ class PaqueteType extends AbstractType
                     'class'=>'form-control input-sm'
                     )))
          //->add('estado')
-      /*      ->add('tratamiento','entity',array('label' => 'Tratamientos',
+            ->add('tratamiento','entity',array('label' => 'Tratamientos',
                 'class'=>'DGPlusbelleBundle:Tratamiento',
                 'query_builder' => function(EntityRepository $repository) {
                   return $repository->obtenerTratActivo();
@@ -37,8 +37,8 @@ class PaqueteType extends AbstractType
                 'expanded'=>true,
                     'attr'=>array(
                     'class'=>''
-                    ))) */
-         ->add('sucursal','entity',array('label' => 'Sucursales',
+                    ))) 
+           ->add('sucursal','entity',array('label' => 'Sucursales',
                 'class'=>'DGPlusbelleBundle:Sucursal',
                 'query_builder' => function(EntityRepository $repository) {
                   return $repository->obtenerSucActivo();
@@ -49,15 +49,6 @@ class PaqueteType extends AbstractType
                     'attr'=>array(
                     'class'=>''
                     ))) 
-  
-                        
-                ->add('placas','collection',array(
-                'type' => new PaqueteTratamientoType(),
-                'label'=>' ',
-                'by_reference' => false,
-                'allow_add' => true,
-                'allow_delete' => true,
-                ))    
                 
          
         ;

@@ -42,7 +42,22 @@ class Paquete
      * @ORM\Column(name="estado", type="boolean", nullable=false)
      */
     private $estado;
-    
+
+    /**
+     * @var \Doctrine\Common\Collections\Collection
+     *
+     * @ORM\ManyToMany(targetEntity="Tratamiento", inversedBy="paquete")
+     * @ORM\JoinTable(name="paquete_tratamiento",
+     *   joinColumns={
+     *     @ORM\JoinColumn(name="paquete", referencedColumnName="id")
+     *   },
+     *   inverseJoinColumns={
+     *     @ORM\JoinColumn(name="tratamiento", referencedColumnName="id")
+     *   }
+     * )
+     */
+    private $tratamiento;
+
      /**
      * @var \Doctrine\Common\Collections\Collection
      *
@@ -57,8 +72,10 @@ class Paquete
      * )
      */
     private $sucursal;
+     
+    
 
- 
+    
     /**
      * @var \Persona
      *
@@ -72,13 +89,13 @@ class Paquete
     /**
      * Constructor
      */
-  /*  public function __construct()
+    public function __construct()
     {
-        //$this->tratamiento = new \Doctrine\Common\Collections\ArrayCollection();
-        //$this->sucursal = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->tratamiento = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->sucursal = new \Doctrine\Common\Collections\ArrayCollection();
        
     }
-*/
+
 
     /**
      * Get id
@@ -162,7 +179,40 @@ class Paquete
         return $this->estado;
     }
 
-   
+    /**
+     * Add tratamiento
+     *
+     * @param \DGPlusbelleBundle\Entity\Tratamiento $tratamiento
+     *
+     * @return Paquete
+     */
+    public function addTratamiento(\DGPlusbelleBundle\Entity\Tratamiento $tratamiento)
+    {
+        $this->tratamiento[] = $tratamiento;
+
+        return $this;
+    }
+
+    /**
+     * Remove tratamiento
+     *
+     * @param \DGPlusbelleBundle\Entity\Tratamiento $tratamiento
+     */
+    public function removeTratamiento(\DGPlusbelleBundle\Entity\Tratamiento $tratamiento)
+    {
+        $this->tratamiento->removeElement($tratamiento);
+    }
+
+    /**
+     * Get tratamiento
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getTratamiento()
+    {
+        return $this->tratamiento;
+    }
+
     /**
      * Add sucursal
      *
@@ -196,37 +246,10 @@ class Paquete
     {
         return $this->sucursal;
     }
-
     
     public function __toString() {
     return $this->nombre.'   $'.$this->costo;
     }
-    
-    
-     /**
-     * @ORM\OneToMany(targetEntity="PaqueteTratamiento", mappedBy="tratamiento", cascade={"persist", "remove"})
-     */
-    protected $placas;
-    
-    public function __construct()
-    {
-        $this->placas = new ArrayCollection();
-        $this->sucursal = new \Doctrine\Common\Collections\ArrayCollection();
-      
-    }           
-    public function getPlacas()
-    {
-        return $this->placas;
-    }
-    public function setPlacas(\Doctrine\Common\Collections\Collection $placas)
-    {
-        $this->placas = $placas;
-        foreach ($placas as $placa) {
-            $placa->setPaquete($this);
-        }
-    }
-    
-    
     
    
 }
