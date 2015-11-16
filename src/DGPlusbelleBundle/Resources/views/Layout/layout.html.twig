@@ -31,6 +31,7 @@
         <!-- fullcalendar -->
         <link rel="stylesheet" href="{{ asset('bundles/adesignscalendar/css/fullcalendar/fullcalendar.css') }}" />
         <link rel="stylesheet" href="{{ asset('Resources/fullcalendar/css/fullcalendar.print.css') }}" media="print"/>
+        <link href="{{ asset('Resources/bValidator-0.71/themes/bvalidator.theme.red.css') }}" rel="stylesheet" type="text/css" />
         <!-- fullcalendar -->
         {%- endblock %}
         
@@ -126,6 +127,7 @@
         <script src="{{ asset('Resources/wrapkit/scripts/bootbox.js') }}"></script>
         <script src="{{ asset('Resources/wrapkit/scripts/toastr.js') }}"></script>
         <script src="{{ asset('Resources/wrapkit/scripts/bootstrap-editable.js') }}"></script>
+        
 
          <!-- fullcalendar -->
         <script src="{{ asset('bundles/fosjsrouting/js/router.js') }}"></script>
@@ -139,6 +141,10 @@
         <!-- END COMPONENTS -->
         
         <script src="{{ asset('Resources/bootstrap-3/js/bootstrap.min.js') }}"></script> 
+        
+        <script type="text/javascript" src="{{ asset('Resources/bValidator-0.71/jquery.bvalidator.js')}}"></script>
+        <script type="text/javascript" src="{{ asset('Resources/bValidator-0.71/bvalidator.lang.es.js')}}" ></script>
+        <script src="{{ asset('Resources/js/Sucursal.js') }}"></script>
         
     
     {% endblock %}  
