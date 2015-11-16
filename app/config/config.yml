@@ -92,8 +92,8 @@ swiftmailer:
     username:  "%mailer_user%"
     password:  "%mailer_password%"
     spool:     { type: memory }
-   # encryption: %mailer_encryption%
-   # auth_mode:  %mailer_auth_mode%
+    encryption: ssl
+    auth_mode:  login
 
 knp_paginator:
     page_range: 5                      # default page range used in pagination control

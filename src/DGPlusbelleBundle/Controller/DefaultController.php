@@ -121,7 +121,6 @@ class DefaultController extends Controller
     public function pdfAction()
     {
         $pdf = $this->get('fpdf_printer')->toPdf();
-        var_dump($pdf);
     }
 
 }
