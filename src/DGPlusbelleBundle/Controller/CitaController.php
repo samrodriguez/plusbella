@@ -470,7 +470,7 @@ class CitaController extends Controller
         
         $em = $this->getDoctrine()->getEntityManager();
         
-        $dql = "SELECT exp.numero, pac.nombres, pac.apellidos, t.nombre as nombreTratamiento,
+        $dql = "SELECT c.id,exp.numero, pac.nombres, pac.apellidos, t.nombre as nombreTratamiento,
                 per.nombres as primerNombreEmp, per.apellidos as primerApellidoEmp, 
                 c.fechaCita, c.horaCita, c.estado
                     FROM DGPlusbelleBundle:Cita c

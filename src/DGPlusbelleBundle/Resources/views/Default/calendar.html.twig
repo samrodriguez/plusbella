@@ -1,8 +1,14 @@
 {% extends "DGPlusbelleBundle:Layout:calendar.html.twig" %}
 
 {% block bodycontenido -%}
+    <style>
+        .modal-footer{
+            border-top:none;
+        }
+    </style>
 {% include 'ADesignsCalendarBundle::calendar.html.twig' %}
 {% endblock %}
+
 
 {% block jquery -%}
 <script type="text/javascript">     
@@ -145,8 +151,8 @@ $(document).ready(function() {
                           //var dt = data.regs[0].fechaCita;
                           //var hr = data.regs[0].horaInicio;
                           var mensaje = "";
-                          mensaje += "<div class='row'><div class='col-md-12'><h3 class='text-center'>Información de la cita </h3></div><div class='row'>";
-                          mensaje += "<div class='col-md-12'><hr></div></div>";
+                          mensaje += "<div class='row'></div>";
+                          //mensaje += "<div class='col-md-12'><hr></div></div>";
                           mensaje += "<div class='col-md-6 text-right'><b>Estado: </b></div><div class='col-md-6'>"+data.regs[0].estado+"</div>";
                           mensaje += "<div class='col-md-6 text-right'><b>Expediente: </b></div><div class='col-md-6'>"+data.regs[0].numero+"</div>";
                           mensaje += "<div class='col-md-6 text-right'><b>Nombre del paciente: </b></div><div class='col-md-6'>"+data.regs[0].nombres+" "+data.regs[0].apellidos+"</div>";
@@ -154,11 +160,51 @@ $(document).ready(function() {
                           mensaje += "<div class='col-md-6 text-right'><b>Tratamiento: </b></div><div class='col-md-6'>"+data.regs[0].nombreTratamiento+"</div>";
                           mensaje += "<div class='col-md-6 text-right'><b>Fecha: </b></div><div class='col-md-6'>"+data.regs[0].fechaCita+"</div>";
                           mensaje += "<div class='col-md-6 text-right'><b>Hora: </b></div><div class='col-md-6'>"+data.regs[0].horaCita+"</div>";
-                          mensaje += "</div>"
+                          mensaje += "</div>";
+                          if(data.regs[0].estado=="Pendiente"){
+                              bootbox.dialog({
+                                message: mensaje,
+                                title: "Información de la cita",
+                                buttons: {
+                                  success: {
+                                    label: "Registrar consulta",
+                                    className: "btn-success",
+                                    callback: function() {
+                                        window.location.href = "../consulta/newconcita?id=C"+data.regs[0].id;
+                                                                                
+                                    }
+                                  },
+                                  main: {
+                                    label: "Aceptar",
+                                    className: "btn-primary",
+                                    callback: function() {
+
+                                    }
+                                  }
+                                }
+                            });
+                          }
+                          else{
+                              bootbox.dialog({
+                                message: mensaje,
+                                title: "Información de la cita",
+                                buttons: {
+                                  main: {
+                                    label: "Aceptar",
+                                    className: "btn-primary",
+                                    callback: function() {
+
+                                    }
+                                  }
+                                }
+                            });
+                          }
                           
-                          bootbox.alert(mensaje, function() {
+                            
+                            
+                          //bootbox.alert(mensaje, function() {
                                 //Example.show("Hello world callback");
-                          });
+                          //});
             }); 
            
         },

@@ -92,7 +92,7 @@
         </thead>
         <tbody>
          {% for key, entity in pacientes %}
-                <tr id="{{entity.idpac}}">
+                <tr id="P{{entity.idpac}}">
              {# <td>{{ entity.idpac }}</td>  #}
                 <td>
                     {{key+1}}
@@ -295,9 +295,7 @@
                     
         });
         
-        $('#datatables1>tr>td').on('click', function(event) {
-            alert('dsv');
-        });
+        
         //Oculta el filtro de la tabla
         $('#datatables1_filter').hide();
         $('#filterDatatables1').val('');

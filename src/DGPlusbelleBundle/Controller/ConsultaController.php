@@ -35,7 +35,7 @@ class ConsultaController extends Controller
         $em = $this->getDoctrine()->getManager();
         $entity = new Consulta();
         $this->tipo=1;
-        $form   = $this->createCreateForm($entity,$this->tipo);
+        $form   = $this->createCreateForm($entity,$this->tipo,0);
         $entities = $em->getRepository('DGPlusbelleBundle:Consulta')->findAll();
 
         return array(
@@ -58,7 +58,7 @@ class ConsultaController extends Controller
         $em = $this->getDoctrine()->getManager();
         $entity = new Consulta();
         $this->tipo=2;
-        $form   = $this->createCreateForm($entity,$this->tipo);
+        $form   = $this->createCreateForm($entity,$this->tipo,0);
         //$entities = $em->getRepository('DGPlusbelleBundle:Consulta')->findAll();
         $dql = "SELECT c FROM DGPlusbelleBundle:Consulta c WHERE c.tipoConsulta= :tipo";
         $entities = $em->createQuery($dql)
@@ -85,7 +85,18 @@ class ConsultaController extends Controller
         $entity = new Consulta();
         $em = $this->getDoctrine()->getManager();
         //Obtiene el usuario
-        $id = $request->get('id');
+        $id= $request->get('id');
+        
+        $cadena= $request->get('identidad');
+        
+        //Obtener del parametro el valor que se debe usar para programar la consulta
+        $accion = $cadena[0];
+        //Obtener el id del parametro
+        $idEntidad = substr($cadena, 1);
+        
+        
+        
+        
         
         $user = $this->get('security.token_storage')->getToken()->getUser();
         //Entidades para insertar en el proceso de la consulta de emergencia
@@ -103,7 +114,7 @@ class ConsultaController extends Controller
         
         //Tipo de consulta actica, emergencia
         $dql = "SELECT tc FROM DGPlusbelleBundle:TipoConsulta tc WHERE tc.estado = :estado AND tc.id=:id";
-        $tipoConsulta= $em->createQuery($dql)
+        $tipoConsulta = $em->createQuery($dql)
                        ->setParameters(array('estado'=>1,'id'=>1))
                        ->getResult();
                //var_dump($tipoConsulta[0]);
@@ -114,14 +125,30 @@ class ConsultaController extends Controller
         $entity->setTipoConsulta($tipoConsulta);
         //var_dump($this->tipo);
         
-        $form = $this->createCreateForm($entity,$id);
+        $form = $this->createCreateForm($entity,$id,$idEntidad);
         $form->handleRequest($request);
         
        // $producto = $form->get('producto')->getData();
        // $indicaciones = $form->get('indicaciones')->getData();
-        
+        var_dump($cadena);
+        //die();
         if ($form->isValid()) {
             $em = $this->getDoctrine()->getManager();
+            switch ($accion){
+                case 'C':
+                    $cita = $em->getRepository('DGPlusbelleBundle:Cita')->find($idEntidad);
+                    $cita->setEstado("A");
+                    
+                    $entity->setCita($cita);
+                    $em->persist($cita);
+                    $em->flush();
+                    break;
+                case 'P':
+                    //$entity->setCita(null);
+                    break;
+            }
+        
+            
             $paciente = $entity->getPaciente();
             $paciente->setEstado(true);
             
@@ -177,7 +204,7 @@ class ConsultaController extends Controller
             //$historial->setExpediente($expediente);
             
             $em->persist($entity);
-            //$em->flush();
+            $em->flush();
             
             /*  if($producto){
                 $this->establecerConsultaProducto($entity, $producto, $indicaciones);
@@ -194,7 +221,15 @@ class ConsultaController extends Controller
                 $em->persist($empComision);
                 $em->flush();
             }
-            return $this->redirect($this->generateUrl('admin_consulta'));
+            switch($accion){
+                case 'C';
+                    return $this->redirect($this->generateUrl('admin_cita'));
+                    break;
+                case 'P';
+                    return $this->redirect($this->generateUrl('admin_consulta'));
+                    break;
+            }
+            
         }
 
         return array(
@@ -210,17 +245,17 @@ class ConsultaController extends Controller
      *
      * @return \Symfony\Component\Form\Form The form
      */
-    private function createCreateForm(Consulta $entity,$tipo)
+    private function createCreateForm(Consulta $entity,$tipo,$identidad)
     {
         if($tipo==1){
             $form = $this->createForm(new ConsultaType(), $entity, array(
-                'action' => $this->generateUrl('admin_consulta_create', array('id' => 1)),
+                'action' => $this->generateUrl('admin_consulta_create', array('id' => 1,'identidad'=>$identidad)),
                 'method' => 'POST',
             ));
         }
         else{
             $form = $this->createForm(new ConsultaConPacienteType(), $entity, array(
-                'action' => $this->generateUrl('admin_consulta_create', array('id' => 2)),
+                'action' => $this->generateUrl('admin_consulta_create', array('id' => 2,'identidad'=>$identidad)),
                 'method' => 'POST',
             ));
         }
@@ -241,8 +276,11 @@ class ConsultaController extends Controller
      */
     public function newAction()
     {
-        $entity = new Consulta();
-        $form   = $this->createCreateForm($entity,1);
+        
+        //Recuperación del paciente
+        $request = $this->getRequest();
+        $identidad= $request->get('identidad');
+        $form   = $this->createCreateForm($entity,1,$id,$identidad);
 
         return array(
             'entity' => $entity,
@@ -262,20 +300,64 @@ class ConsultaController extends Controller
      */
     public function newConPacienteAction()
     {
+        //Metodo para consulta nueva con id de paciente
         $entity = new Consulta();
         
         $em = $this->getDoctrine()->getManager();
         
         //Recuperación del paciente
         $request = $this->getRequest();
-        $id= $request->get('id');
+        $cadena= $request->get('id');
+        //Obtener el id del parametro
+        $idEntidad = substr($cadena, 1);
+        
+        //$identidad= $request->get('identidad');
+        //Busqueda del paciente
+        $paciente = $em->getRepository('DGPlusbelleBundle:Paciente')->find($idEntidad);
+        //Seteo del paciente en la entidad
+        $entity->setPaciente($paciente);
+        //var_dump($paciente);
+        $form   = $this->createCreateForm($entity,2,$cadena);
+        $entity->setPaciente($paciente);
+        return array(
+            'entity' => $entity,
+            'form'   => $form->createView(),
+        );
+    }
+    
+    
+    /**
+     * Displays a form to create a new Consulta entity.
+     *
+     * @Route("/newconcita", name="admin_consulta_nueva_cita")
+     * @Method("GET")
+     * @Template("DGPlusbelleBundle:Consulta:newconpaciente.html.twig")
+     */
+    public function newConCitaAction()
+    {
+        //Metodo para consulta nueva con el id de cita
+        $entity = new Consulta();
+        
+        $em = $this->getDoctrine()->getManager();
+        
+        //Recuperación del id
+        $request = $this->getRequest();
+        $cadena= $request->get('id');
+        //$identidad= $request->get('identidad');
+        //Obtener el id del parametro
+        $idEntidad = substr($cadena, 1);
+        $cita = $em->getRepository('DGPlusbelleBundle:Cita')->find($idEntidad);
+        //var_dump($cadena);
+        //var_dump($cita);
+        
+        $idpaciente=$cita->getPaciente()->getId();
         
         //Busqueda del paciente
-        $paciente = $em->getRepository('DGPlusbelleBundle:Paciente')->find($id);
+        $paciente = $em->getRepository('DGPlusbelleBundle:Paciente')->find($idpaciente);
         //Seteo del paciente en la entidad
         $entity->setPaciente($paciente);
         
-        $form   = $this->createCreateForm($entity,2);
+        $form   = $this->createCreateForm($entity,2,$cadena);
 
         return array(
             'entity' => $entity,
