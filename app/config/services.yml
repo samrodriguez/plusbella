@@ -10,3 +10,10 @@ services:
     envio_correo:
         class: DGPlusbelleBundle\Service\EmailService
         arguments: ["@mailer",""]
+        
+    reporte_pdf:
+        class: DGPlusbelleBundle\Report\ReportePDF
+
+    fpdf_printer:
+        class: DGPlusbelleBundle\Service\FPDFService    
+        arguments: ["@reporte_pdf"]

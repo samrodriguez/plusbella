@@ -338,6 +338,21 @@
         $('#filterDatatables1').val('');
         
         
+      // Validando formulario sucursal  
+        $('#dgplusbellebundle_sucursal_nombre').
+        attr('data-bvalidator', 'between[0:1],required');
+ 
+        $('#dgplusbellebundle_sucursal_direccion').
+        attr('data-bvalidator', 'between[0:10],required');
+ 
+       //Opciones del validador
+       var optionsRed = { 
+        classNamePrefix: 'bvalidator_red_', 
+        lang: 'es'
+    };
+ 
+    //Validar el formulario
+    $('form').bValidator(optionsRed);
         
         
     });//Fin document ready

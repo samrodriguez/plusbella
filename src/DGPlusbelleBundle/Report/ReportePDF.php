@@ -1,7 +1,8 @@
 <?php
 
+namespace DGPlusbelleBundle\Report;
 
-class ReportePDF extends FPDF {
+class ReportePDF {
     // Enabezado
     function Header(){
          $this->SetFont('Arial','B',15);
