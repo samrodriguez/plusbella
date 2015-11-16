@@ -59,19 +59,42 @@ class CitaController extends Controller
         $entity->setEstado('P');
         $form = $this->createCreateForm($entity);
         $form->handleRequest($request);
-
-        if ($form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
-            $em->persist($entity);
-            $em->flush();
-
-            return $this->redirect($this->generateUrl('admin_cita'));
+        
+        
+        $idEmpleado = $entity->getEmpleado()->getId();
+        $horaCita = $entity->getHoraCita();
+        $fechaCita = $entity->getFechaCita();
+        
+        //var_dump($entity->getEmpleado()->getId());
+        //var_dump($entity->getHoraCita());
+        
+        $em = $this->getDoctrine()->getManager();
+        $cita = $em->getRepository('DGPlusbelleBundle:Cita')->findBy(array('empleado'=>$idEmpleado,'horaCita'=>$horaCita,'fechaCita'=>$fechaCita));
+        
+        //var_dump($cita);
+        if(count($cita)==0){
+            if ($form->isValid()) {
+                $usuario= $this->get('security.token_storage')->getToken()->getUser();
+                $em = $this->getDoctrine()->getManager();
+                $em->persist($entity);
+                $em->flush();
+                $this->get('bitacora')->escribirbitacora("Se creo una nueva cita",$usuario->getId());
+                return $this->redirect($this->generateUrl('admin_cita'));
+            }
         }
+        else{
+            
+            return array(
+                'entity' => $entity,
+                'form'   => $form->createView(),
+                'mensaje'=> 'Ya hay una cita programada en ese fecha y hora',
+            );
+        }
+        
+        
+            
 
-        return array(
-            'entity' => $entity,
-            'form'   => $form->createView(),
-        );
+        
     }
 
     /**
@@ -110,7 +133,13 @@ class CitaController extends Controller
         
         //Recuperación del paciente
         $request = $this->getRequest();
-        $id= $request->get('id');
+        
+        $cadena= $request->get('id');
+        
+        $id = substr($cadena, 1);
+        
+        
+        
         
         //Busqueda del paciente
         $paciente = $em->getRepository('DGPlusbelleBundle:Paciente')->find($id);
@@ -124,6 +153,7 @@ class CitaController extends Controller
         return array(
             'entity' => $entity,
             'form'   => $form->createView(),
+            'mensaje'=> ' ',
         );
     }
 

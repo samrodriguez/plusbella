@@ -64,8 +64,11 @@
     </div>
          
              <div class="form-grouphide"> 
-                 <a href="{{ path('admin_paciente') }}" class="btn btn-default btn-sm" id="cancelarNuevo">Cancelar</a>
-                {{ form_widget(form.submit) }}
+                <a href="{{ path('admin_paciente') }}" class="btn btn-default btn-sm" id="cancelarNuevo">Cancelar</a>
+                    {{ form_widget(form.submit) }} 
+                <label style="color:red; ">
+                    {{ mensaje }}
+                </label>
              </div>
         
    
@@ -95,6 +98,13 @@
     </style>
         <script>
             $(document).ready(function(){
+                
+                //$("#dgplusbellebundle_cita_submit" ).on( "click", function() {
+                    //var idEmpleado = $('#dgplusbellebundle_cita_empleado').val();
+                    //var fechaCita= $('#dgplusbellebundle_cita_fechaCita').val();
+                    //var horaCita = $('#dgplusbellebundle_cita_horaCita_hour').val();
+                    //alert(idEmpleado);
+                //});
                 //Generación de calendario zebra
                 //$('#dgplusbellebundle_cita_fechaCita').Zebra_DatePicker(//{
                     /*onSelect:

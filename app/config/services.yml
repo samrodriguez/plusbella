@@ -2,6 +2,7 @@
 # http://symfony.com/doc/current/book/service_container.html
 parameters:
 #    parameter_name: value
+    mi_bitacora.class:  DGPlusbelleBundle\Service\GuardarBitacora
 
 services:
 #    service_name:
@@ -15,5 +16,9 @@ services:
         class: DGPlusbelleBundle\Report\ReportePDF
 
     fpdf_printer:
-        class: DGPlusbelleBundle\Service\FPDFService    
+        class: DGPlusbelleBundle\Service\FPDFService
         arguments: ["@reporte_pdf"]
+        
+    bitacora:
+        class:  "%mi_bitacora.class%"
+        arguments:  ["@doctrine.orm.entity_manager"]
