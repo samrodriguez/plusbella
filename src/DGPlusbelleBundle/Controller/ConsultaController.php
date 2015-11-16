@@ -716,13 +716,15 @@ class ConsultaController extends Controller
                 }
                 $empleados[$key]['porcentaje']= $porcentaje;
                 //Se verifica que el empleado ya cumplio con la meta y si el correo ya fue enviado
+                //var_dump($empleado);
+                
                 //if($empleados[$key]['suma'] >= $empleados[$key]['meta'] && !$empleados[$key]['comisionCompleta'] && $id!=null){
-                    //$this->get('envio_correo')->sendEmail("77456982@sms.claro.com.sv","","","","prueba1");
+                    //$this->get('envio_correo')->sendEmail($empleados[$key]['email'],"","","","prueba1");
                     //$this->get('envio_correo')->sendEmail($empleados[$key]['email'],"","","","");
                 //}
                 
             }
-            
+            //$this->get('envio_correo')->sendEmail("mario@digitalitygarage.com","","","","prueba1");
             //Envio de sms desde correo
             /*
                 $this->get('envio_correo')->sendEmail("75061915@sms.claro.com.sv","","","","prueba1");
