@@ -677,6 +677,7 @@ class ConsultaController extends Controller
         //var_dump($idPaciente);
         //var_dump($entity->getPaciente()->getExpediente());
         $entity = $em->getRepository('DGPlusbelleBundle:Consulta')->findBy(array('paciente'=>$idPaciente));
+        $paciente = $em->getRepository('DGPlusbelleBundle:Paciente')->find($idPaciente);
         $edad="";
         if(count($entity)!=0){
             

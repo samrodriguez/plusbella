@@ -5,7 +5,7 @@ $('#dgplusbellebundle_comision_descripcion').
         attr('data-bvalidator', 'required,required');
 		
 $('#dgplusbellebundle_comision_porcentaje').
-        attr('data-bvalidator', 'between[0:100],required,required');
+        attr('data-bvalidator', 'rangelength[1:5],between[0:100],required,required');
 
 $('#dgplusbellebundle_comision_meta').
         attr('data-bvalidator', 'number,required,required');		

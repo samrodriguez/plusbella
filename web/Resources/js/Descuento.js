@@ -4,7 +4,7 @@ $('#dgplusbellebundle_descuento_nombre').
         attr('data-bvalidator', 'required,required');
  
     $('#dgplusbellebundle_descuento_porcentaje').
-        attr('data-bvalidator', 'between[0:100],required,required');
+        attr('data-bvalidator', 'rangelength[1:5],between[0:100],required,required');
 
     //Opciones del validador
     var optionsRed = { 

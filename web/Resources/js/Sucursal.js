@@ -7,7 +7,7 @@ $('#dgplusbellebundle_sucursal_nombre').
         attr('data-bvalidator', 'required,required');
 		
 	$('#dgplusbellebundle_sucursal_telefono').
-        attr('data-bvalidator', 'number,required,required');	
+        attr('data-bvalidator', 'minlength[9],required,required');	
 		
 	$('#dgplusbellebundle_sucursal_slug').
         attr('data-bvalidator', 'required,required');		

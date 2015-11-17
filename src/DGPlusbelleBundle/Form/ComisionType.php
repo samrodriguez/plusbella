@@ -22,7 +22,7 @@ class ComisionType extends AbstractType
                     'class'=>'form-control input-sm'
                     )))
             ->add('porcentaje','text',array('label' => 'Porcentaje %','required'=>false,
-                    'attr'=>array(
+                    'attr'=>array('maxlength' => 5,
                     'class'=>'form-control input-sm'
                     )))
             ->add('meta','text',array('label' => 'Meta $','required'=>false,

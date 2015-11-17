@@ -17,12 +17,12 @@
             <div class="panel-body">
               <div class="btn-toolbar clearfix" role="toolbar">
                 
-
+              <!--
                 <div class="btn-group btn-group-sm pull-left">
                   <button data-toggle="tooltip" data-container="body" title="Nueva venta de paquete" id="add-datatables1" class="btn btn-default" role="button">
                     <i class="fa fa-plus"></i>
                   </button>
-                </div>
+                </div>  -->
                 <div class="btn-group btn-group-sm pull-left">
                   <button id="edit-datatables1" data-toggle="tooltip" data-container="body" title="Editar venta de paquete" class="btn btn-default datatables1-actions disabled" role="button">
                     <i class="fa fa-edit"></i>
@@ -37,13 +37,13 @@
               </div><!-- /btn-toolbar -->
             </div><!-- /.panel-body -->
             
-            <div class="panel-body hide" id="addFormContainer">
-              {% include 'DGPlusbelleBundle:VentaPaquete:new.html.twig' %}
-            </div>
-            
+            <!--    <div class="panel-body hide" id="addFormContainer">
+             {# {% include 'DGPlusbelleBundle:VentaPaquete:new.html.twig' %} #}
+            </div> -->
+          
             <div class="panel-body hide" id="editFormContainer">
               {#{% include 'DGPlusbelleBundle:Sucursal:edit.html.twig' %}#}
-            </div>
+            </div> 
 
             <!-- datatables1 -->
             <table id = "datatables1" class="table table-noborder table-hover bordered-top dataTable" role="grid" aria-describedby="datatables1_info">
@@ -60,7 +60,7 @@
                     {% for key, entity in entities %}
                         <tr id="{{entity.id}}">
                             <td>{{key+1 }}</td>
-                            <td>{{ entity.empleado.primernombre }}  {{entity.empleado.primerapellido}} 
+                            <td>{{ entity.empleado.nombres }}  {{entity.empleado.apellidos}} 
                             <td style="text-align: right; padding-right: 20px">$ {{ entity.paquete.costo|number_format(2, '.', ',') }}
                             <td style="text-align: right; padding-right: 20px">{% if entity.fechaVenta %}{{ entity.fechaVenta|date('d/m/Y') }}{% endif %}</td>
 
