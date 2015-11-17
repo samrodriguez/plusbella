@@ -227,7 +227,7 @@
 
 			var pos = _getErrMsgPosition(element, tooltip); 
 
-			tooltip.css({visibility: 'visible', position: 'absolute', top: pos.top, left: pos.left}).fadeIn(options.showErrMsgSpeed);
+			tooltip.css({visibility: 'visible', position: 'absolute', top: pos.top, left: 0}).fadeIn(options.showErrMsgSpeed);
 
 			if(options.scrollToError){
 				// get most top tolltip
