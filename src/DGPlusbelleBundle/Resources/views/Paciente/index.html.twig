@@ -308,11 +308,11 @@
     //Definición de funciones
     function limpiarCampos(){
         //Limpiar los campos de tipo text
-        $("input[type=text]").each(function(index, val) {
+        $("#add-datatables1 input[type=text]").each(function(index, val) {
             $(this).val("");
         });
         //Seleccionar el primer elemento de los dropdown
-        $('select option').each( function(index, val) {
+        $('add-datatables1 select option').each( function(index, val) {
             if(index == 0){
                 $(this).attr("selected","selected");
             }
