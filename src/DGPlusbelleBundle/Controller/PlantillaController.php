@@ -28,11 +28,16 @@ class PlantillaController extends Controller
     public function indexAction()
     {
         $em = $this->getDoctrine()->getManager();
-
+        
+        $entity = new Plantilla();
+        $form = $this->createCreateForm($entity);
+        
         $entities = $em->getRepository('DGPlusbelleBundle:Plantilla')->findAll();
 
         return array(
             'entities' => $entities,
+            'entity' => $entity,
+            'form'   => $form->createView(),
         );
     }
     /**
@@ -76,7 +81,7 @@ class PlantillaController extends Controller
             'method' => 'POST',
         ));
 
-        $form->add('submit', 'submit', array('label' => 'Create'));
+        $form->add('submit', 'submit', array('label' => 'Guardar'));
 
         return $form;
     }

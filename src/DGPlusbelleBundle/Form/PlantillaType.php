@@ -17,7 +17,7 @@ class PlantillaType extends AbstractType
         $builder
             ->add('nombre')
             ->add('descripcion')
-            ->add('estado')
+        //    ->add('estado')
         ;
     }
     
