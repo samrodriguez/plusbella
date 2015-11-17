@@ -672,13 +672,15 @@ class ConsultaController extends Controller
         
         //Recuperación del id
         $request = $this->getRequest();
-        $idPaciente= $request->get('id');    
+        $idPaciente= $request->get('id');  
+        $idPaciente=  substr($idPaciente, 1);
+         var_dump($idPaciente);
         //var_dump($entity->getPaciente()->getExpediente());
         $entity = $em->getRepository('DGPlusbelleBundle:Consulta')->findBy(array('paciente'=>$idPaciente));
         //$idPaciente = $entity->getPaciente()->getId();
         
         //var_dump($entity[0]->getPaciente());
-        //var_dump($entity);
+        var_dump($entity);
         $fecha = $entity[0]->getPaciente()->getFechaNacimiento()->format("Y-m-d");
         //var_dump($fecha);
         //Calculo de la edad
