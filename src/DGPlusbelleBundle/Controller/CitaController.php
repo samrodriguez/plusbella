@@ -545,4 +545,31 @@ class CitaController extends Controller
         return new Response(json_encode($cita));
     }
     
+    
+    
+    /**
+     * @Route("/verificarcoincidenciacita/get/{idempleado}/{fecha}/{hora}", name="get_existeCita", options={"expose"=true})
+     * @Method("GET")
+     */
+    public function exitsteCitaAction(Request $request, $idempleado, $fecha, $hora) {
+        
+        $request = $this->getRequest();
+        
+        $em = $this->getDoctrine()->getEntityManager();
+        
+        $dql = "SELECT c.id FROM DGPlusbelleBundle:Cita c WHERE c.empleado =:empleado AND c.fechaCita=:fecha AND c.horaCita=:hora ";
+        $cita['regs'] = $em->createQuery($dql)
+                ->setParameters(array('empleado'=>$idempleado,'fecha'=>$fecha,'hora'=>$hora))
+                ->getArrayResult();
+        
+        //var_dump($cita);
+        
+        
+        
+        //var_dump($cita['regs'][0]["primerNombre"]);
+        //var_dump($cita);
+        
+        return new Response(json_encode($cita));
+    }
+    
 }
