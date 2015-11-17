@@ -746,6 +746,7 @@ class ConsultaController extends Controller
             'consultas' => $entity,
             'paquetes' => $paquetes,
             'empleados' => $empleados,
+            'paciente' => $paciente,
             );
     }
     
