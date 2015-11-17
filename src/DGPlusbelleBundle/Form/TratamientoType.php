@@ -18,7 +18,7 @@ class TratamientoType extends AbstractType
     {
         $builder
                 
-            ->add('categoria',null,array('label' => 'Categoria',
+            ->add('categoria',null,array('label' => 'Categoria','required'=>false,
                 'class'=>'DGPlusbelleBundle:Categoria',
                 'query_builder' => function(EntityRepository $repository) {
                   return $repository->obtenerCatActivo();
@@ -27,11 +27,11 @@ class TratamientoType extends AbstractType
                 'attr'=>array(
                 'class'=>'form-control input-sm'
               )))    
-            ->add('nombre','text',array('label' => 'Nombre',
+            ->add('nombre','text',array('label' => 'Nombre','required'=>false,
                     'attr'=>array(
                     'class'=>'form-control input-sm'
                     )))
-            ->add('costo','text',array('label' => 'Costo $',
+            ->add('costo','text',array('label' => 'Costo $','required'=>false,
                     'attr'=>array(
                     'class'=>'form-control input-sm'
                     )))

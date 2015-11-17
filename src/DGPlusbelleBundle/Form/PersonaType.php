@@ -15,7 +15,7 @@ class PersonaType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('nombres','text',array('label' => 'Nombres',
+            ->add('nombres','text',array('label' => 'Nombres','required'=>false,
                     'attr'=>array(
                     'class'=>'form-control input-sm'
                     )))
@@ -23,7 +23,7 @@ class PersonaType extends AbstractType
                     'attr'=>array(
                     'class'=>'form-control input-sm'
                     )))*/
-            ->add('apellidos','text',array('label' => 'Apellidos',
+            ->add('apellidos','text',array('label' => 'Apellidos','required'=>false,
                     'attr'=>array(
                     'class'=>'form-control input-sm'
                     )))
@@ -35,15 +35,15 @@ class PersonaType extends AbstractType
                     'attr'=>array(
                     'class'=>'form-control input-sm'
                     )))*/
-            ->add('direccion','text',array('label' => 'Dirección',
+            ->add('direccion','text',array('label' => 'Dirección','required'=>false,
                     'attr'=>array(
                     'class'=>'form-control input-sm'
                     )))
-            ->add('telefono','number',array('label' => 'Telefono',
+            ->add('telefono','number',array('label' => 'Telefono','required'=>false,
                     'attr'=>array(
                         'class'=>'form-control input-sm'
                     )))
-            ->add('email','text',array('label' => 'Correo',
+            ->add('email','text',array('label' => 'Correo','required'=>false,
                     'attr'=>array(
                     'class'=>'form-control input-sm'
                     )))
