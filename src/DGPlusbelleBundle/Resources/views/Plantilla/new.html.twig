@@ -1,15 +1,28 @@
-{% extends '::base.html.twig' %}
 
-{% block body -%}
-    <h1>Plantilla creation</h1>
+{% block contenido -%}
+    <div class="panel panel-default">
+  <!-- Default panel contents -->
+        <div class="panel-heading"><p>Nueva plantilla</p></div>
+        <div class="panel-body">
+            {{ form_start(form) }}
+            {{ form_errors(form) }}
 
-    {{ form(form) }}
+                <div class="col-xs-12 col-sm-4">
+                    {{ form_row(form.nombre) }}
+                </div>
+                <div class="col-xs-12 col-sm-8">
+                    {{ form_row(form.descripcion) }}
+                </div>
 
-        <ul class="record_actions">
-    <li>
-        <a href="{{ path('admin_plantilla') }}">
-            Back to the list
-        </a>
-    </li>
-</ul>
+                <div class="form-grouphide col-sm-9">
+                    <a href="{{ path('admin_plantilla') }}" class="btn btn-default btn-sm" id="cancelarModificar">Cancelar</a>
+                    {{ form_widget(form.submit) }}
+                </div>
+            
+   
+            {{ form_end(form) }}
+        </div>
+
+
+    </div>
 {% endblock %}
