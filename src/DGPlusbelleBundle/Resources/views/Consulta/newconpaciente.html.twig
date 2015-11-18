@@ -141,10 +141,10 @@
                         <hr>
                         <br>
                     </div>
-                    <div class="col-md-4">
+                    <div class="col-md-3 col-md-offset-1">
                         {{ form_row(form.reportePlantilla) }}
                     </div>
-                    <div class="col-md-4">
+                    <div class="col-md-3">
                         <div id="lista_plantilla">
                             {{ form_row(form.plantilla) }}
                         </div>
@@ -152,6 +152,15 @@
                 </div>
             </div>  
             
+            <div id="camposPlantilla" class="camposPlantilla" style="margin-top: 40px">
+                <div class="row">
+                    <div class="col-md-1"></div>
+                    <div id="campos" class="col-md-11 campos">
+                        
+                    </div>
+                </div>
+            </div> 
+                
             <br>
             <div class="form-grouphide"> 
                 <hr>
@@ -188,12 +197,76 @@
         $(function () { 
             $( "#dgplusbellebundle_consulta_plantilla" ).on( "change", function() {
                 var id = $( this ).val();
+                $('#campos div').html('');
                 $.post( "{{path('admin_busqueda_parametros')}}", { id: id }, function( data ) {
-                    
+                    console.log( data );
+                    var par = new Array();
+                    par = data.query;
+                    if(par.length !== 0){
+                        //$("#tablahead").show("slow");
+                        mostrarCampos(data.query);
+                    }
+                    else{
+                        //$("#msjnodata").show("slow");
+                        console.log( 'Esta plantilla no tiene campos que mostrar' );
+                    }
                 }, "json");
                 
             });
+            
+            
         });
+        
+        function mostrarCampos(data) {
+            var div = document.getElementById('campos');
+            var form = $("form");
+            console.log(form);
+            //var form = document.createElement('form');
+            //form.setAttribute('action', '{# {{path('admin_set_campos')}} #}');
+            //form.setAttribute('method', 'POST');
+            /*-----------*/
+            var appm = document.createElement('div');
+            appm.appendChild(document.createTextNode('Save This'));
+            appm.setAttribute('class', 'appm');
+            /*-----------*/
+            
+            var input = new Array();
+            var label = new Array();
+            var campos = new Array();
+            var etiqueta = new Array();
+            
+            $.each( data, function( key, value ) {
+                //console.log( key + ": " + value.nombre );
+                var t = document.createTextNode(value.nombre);
+                
+                campos[key] = document.createElement('div');
+                campos[key].setAttribute('class', 'col-md-4');
+                
+                input[key] = document.createElement('input');
+                input[key].setAttribute('type', 'text');
+                input[key].setAttribute('placeholder', value.nombre);
+                input[key].setAttribute('class', 'form-control');
+                input[key].setAttribute('style', 'margin-bottom: 5px');
+                input[key].setAttribute('name', value.id);
+                input[key].setAttribute('id', value.id);
+                
+                etiqueta[key] = document.createElement('p');
+                etiqueta[key].setAttribute('style', 'color: #646473; font-size: 13px; font-weight: 700;');
+                etiqueta[key].appendChild(t);
+                
+                label[key] = document.createElement('label');
+                label[key].appendChild(etiqueta[key]);
+                
+                campos[key].appendChild(label[key]);
+                campos[key].appendChild(input[key]);
+            });
+            
+             $.each( data, function( key, value ) {
+                div.appendChild(campos[key]);
+            });
+            
+            //div.appendChild(form);
+        }
     </script> 
     <script>
 

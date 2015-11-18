@@ -121,7 +121,9 @@ class DefaultController extends Controller
     public function pdfAction()
     {
         $titulo = 'Reporte de Videoendoscopia';
-        $pdf = $this->get('fpdf_printer')->toPdf($titulo);
+        $logo = $this->getParameter('plusbelle.logo');
+       // var_dump($logo);
+        $pdf = $this->get('fpdf_printer')->toPdf($titulo, $logo);
         
         var_dump($pdf);
      

@@ -843,17 +843,25 @@ class ConsultaController extends Controller
         if($isAjax){
             $plantillaid = $this->get('request')->request->get('id');
              
-            $em = $this->getDoctrine()->getManager();
-             
+            $em = $this->getDoctrine()->getManager();            
+            $dql = "SELECT det.id, det.nombre "
+                    . "FROM DGPlusbelleBundle:DetallePlantilla det "
+                    . "JOIN det.plantilla pla "
+                    . "WHERE pla.id =  :plantillaid";
+            
+            $parametros = $em->createQuery($dql)
+                        ->setParameter('plantillaid', $plantillaid)
+                        ->getResult();
+            
             $response = new JsonResponse();
-             
-             
-           } 
-       else
-            {    $response = new JsonResponse();
-                 return $response->setData(array('val'=>0));
-                
-            }  
+            $response->setData(array(
+                                'query' => $parametros
+                            )); 
+            
+            return $response; 
+        } else {    
+            return new Response('0');              
+        }  
     }
     
     
