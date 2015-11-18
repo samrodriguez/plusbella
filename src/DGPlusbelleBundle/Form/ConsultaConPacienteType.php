@@ -70,6 +70,12 @@ class ConsultaConPacienteType extends AbstractType
                 'expanded'=>'true',
                     'required' => true,
                 ))
+            ->add('plantilla', 'entity', array(
+                    'label'         =>  'Plantilla',
+                    'empty_value'=>'Seleccione una plantilla',
+                    'class'         =>  'DGPlusbelleBundle:Plantilla',
+                    'mapped' => false
+                ))        
             ->add('tratamiento','entity', array( 'label' => 'Tratamiento',
                          'empty_value'   => 'Seleccione un tratamiento...',
                          'class'         => 'DGPlusbelleBundle:Tratamiento',
