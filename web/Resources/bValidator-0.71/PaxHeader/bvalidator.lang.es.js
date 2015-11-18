@@ -1,4 +1,0 @@
-20 ctime=1362680695
-20 atime=1362680696
-112 LIBARCHIVE.xattr.user.xdg.referrer.url=aHR0cHM6Ly9jb2RlLmdvb2dsZS5jb20vcC9idmFsaWRhdG9yL2Rvd25sb2Fkcy9saXN0
-124 LIBARCHIVE.xattr.user.xdg.origin.url=aHR0cHM6Ly9idmFsaWRhdG9yLmdvb2dsZWNvZGUuY29tL2ZpbGVzL2J2YWxpZGF0b3IubGFuZy5lcy5qcw

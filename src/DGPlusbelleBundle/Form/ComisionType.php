@@ -17,26 +17,25 @@ class ComisionType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('descripcion','text',array('label' => 'Descripción',
+            ->add('descripcion','text',array('label' => 'Descripción','required'=>false,
                     'attr'=>array(
                     'class'=>'form-control input-sm'
                     )))
-            ->add('porcentaje','text',array('label' => 'Porcentaje %',
+            ->add('porcentaje','text',array('label' => 'Porcentaje %','required'=>false,
                     'attr'=>array(
                     'class'=>'form-control input-sm'
                     )))
-            ->add('meta','text',array('label' => 'Meta $',
+            ->add('meta','text',array('label' => 'Meta $','required'=>false,
                     'attr'=>array(
                     'class'=>'form-control input-sm'
                     )))
            // ->add('estado')
-            ->add('empleado',null,array('label' => 'Empleado',
-                    'empty_value'   => 'Seleccione un tipo de consulta...',
+            ->add('empleado','entity',array('label' => 'Empleado','required'=>false,
+                   'empty_value'=>'Seleccione empleado',
                     'class'         => 'DGPlusbelleBundle:Empleado',
                     'query_builder' => function(EntityRepository $repository) {
                       return $repository->obtenerEmpActivo();
                     }, 
-                    'empty_value'=>'Seleccione empleado',
                     'attr'=>array(
                     'class'=>'form-control input-sm'
                     )))

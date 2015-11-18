@@ -29,7 +29,7 @@
         <!-- fullcalendar -->
         <link rel="stylesheet" href="{{ asset('bundles/adesignscalendar/css/fullcalendar/fullcalendar.css') }}" />
         <link rel="stylesheet" href="{{ asset('Resources/fullcalendar/css/fullcalendar.print.css') }}" media="print"/>
-        <link href="{{ asset('Resources/bValidator-0.71/themes/bvalidator.theme.red.css') }}" rel="stylesheet" type="text/css" />
+        <link rel="stylesheet" href="{{ asset('Resources/bValidator-0.73/themes/bvalidator.theme.bootstrap.rt.css') }}" />
         <!-- fullcalendar -->
         {%- endblock %}
         
@@ -136,9 +136,13 @@
         
         <script src="{{ asset('Resources/bootstrap-3/js/bootstrap.min.js') }}"></script> 
         
-        <script type="text/javascript" src="{{ asset('Resources/bValidator-0.71/jquery.bvalidator.js')}}"></script>
-        <script type="text/javascript" src="{{ asset('Resources/bValidator-0.71/bvalidator.lang.es.js')}}" ></script>
+        <script type="text/javascript" src="{{ asset('Resources/bValidator-0.73/jquery.bvalidator.js')}}"></script>
+        <script type="text/javascript" src="{{ asset('Resources/bValidator-0.73/bvalidator.lang.es.js')}}" ></script>
         
+        <!-- VALIDATOR: js -->
+        {% block validator -%} 
+        {% include 'DGPlusbelleBundle:Layout:validator.html.twig'%} 
+        {% endblock %} 
         
     
     {% endblock %}  
@@ -148,10 +152,10 @@
         $(document).ready(function(){
             $('select').each(function(index, val) {    
                 if (!$(this).hasClass("busqueda") ){
-                   $(this).selectBoxIt();
+                   //$(this).selectBoxIt();
                 }
                 else{
-                    $(this).select2();
+                    //$(this).select2();
                 }
             });
             
