@@ -120,7 +120,12 @@ class DefaultController extends Controller
      */
     public function pdfAction()
     {
-        $pdf = $this->get('fpdf_printer')->toPdf();
+        $titulo = 'Reporte de Videoendoscopia';
+        $pdf = $this->get('fpdf_printer')->toPdf($titulo);
+        
+        var_dump($pdf);
+     
+     
     }
 
 }
