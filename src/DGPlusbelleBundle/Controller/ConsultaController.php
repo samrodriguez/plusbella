@@ -276,11 +276,11 @@ class ConsultaController extends Controller
      */
     public function newAction()
     {
-        
+        $entity = new Consulta();
         //Recuperación del paciente
         $request = $this->getRequest();
         $identidad= $request->get('identidad');
-        $form   = $this->createCreateForm($entity,1,$id,$identidad);
+        $form   = $this->createCreateForm($entity,1,$identidad);
 
         return array(
             'entity' => $entity,
