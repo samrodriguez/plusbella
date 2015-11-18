@@ -18,7 +18,7 @@
                 <div class="col-md-2" >
                     {{ form_row(form.paquete)}}
 		</div>			
-	        <div class="form-group col-md-1" >
+	        <div class="form-group col-md-2" >
                   {{ form_row(form.fechaVenta)}} 
                 </div>  
             </div>
@@ -86,7 +86,7 @@
                 });*/ 
                 var seleccionado="";
                 //Eliminar options del select de pacientes
-                $('#dgplusbellebundle_cita_paciente option').each(function(index, val) {
+                $('#dgplusbellebundle_ventapaquete_paciente option').each(function(index, val) {
                     
                     seleccionado = $(this).attr('selected');
                     if (!seleccionado){

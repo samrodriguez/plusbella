@@ -71,7 +71,7 @@
             {# Paciente #}
             <div class="row">
                 
-                <div class="col-md-5">{{ form_row(form.paciente) }}</div>
+                <div class="col-md-2">{{ form_row(form.paciente) }}</div>
                 
             </div>
             {# Formulario de consulta#}
@@ -81,7 +81,7 @@
                     {{ form_row(form.fechaConsulta) }}
                 </div>
                 
-                <div class="col-md-3">
+                <div class="col-md-2">
                     {{ form_row(form.tratamiento) }}
                 </div>
                 
@@ -99,7 +99,7 @@
 
             </div>
             <div class="row">
-                <div class="col-md-3">
+                <div class="col-md-2">
                     {{ form_row(form.tipoConsulta) }}
                 </div>
                 <div class="col-md-2">
@@ -188,6 +188,16 @@ jQuery(document).ready(function() {
         addTagFormDeleteLink($(this));
 
     });
+    
+                var seleccionado="";
+                //Eliminar options del select de pacientes
+                $('#dgplusbellebundle_consulta_paciente option').each(function(index, val) {
+                    
+                    seleccionado = $(this).attr('selected');
+                    if (!seleccionado){
+                        $(this).remove();
+                    }
+                });
 
     
 

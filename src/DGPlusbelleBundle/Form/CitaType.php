@@ -20,7 +20,7 @@ class CitaType extends AbstractType
     {
         $builder
             ->add('fechaCita', null,
-                  array('label'  => 'Fecha cita',
+                  array('label'  => 'Fecha cita','required'=>false,
                         'widget' => 'single_text',
                         'attr'   => array('class' => 'form-control input-sm'),
                        ))
@@ -32,7 +32,7 @@ class CitaType extends AbstractType
            // ->add('fechaRegistro')
             //->add('estado')
             ->add('descuento', null, 
-                  array( 'label'         => 'Descuento',
+                  array( 'label'         => 'Descuento','required'=>false,
                          'empty_value'   => 'Seleccione un descuento...',
                          'class'         => 'DGPlusbelleBundle:Descuento',
                          'query_builder' => function(EntityRepository $repository) {
@@ -42,7 +42,7 @@ class CitaType extends AbstractType
                          'class'=>'form-control'
                          )
                        ))
-            ->add('empleado','entity', array( 'label' => 'Empleado',
+            ->add('empleado','entity', array( 'label' => 'Empleado','required'=>false,
                          'empty_value'   => 'Seleccione un empleado...',
                          'class'         => 'DGPlusbelleBundle:Empleado',
                         /* 'query_builder' => function(EntityRepository $r){
@@ -72,7 +72,7 @@ class CitaType extends AbstractType
                          'class'=>'form-control'
                          )
                        ))
-            ->add('tratamiento','entity', array( 'label' => 'Tratamiento',
+            ->add('tratamiento','entity', array( 'label' => 'Tratamiento','required'=>false,
                          'empty_value'   => 'Seleccione un tratamiento...',
                          'class'         => 'DGPlusbelleBundle:Tratamiento',
                          'query_builder' => function(EntityRepository $repository) {

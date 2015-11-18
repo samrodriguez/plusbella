@@ -13,25 +13,26 @@
         {{ form_errors(edit_form) }}
         <div class="row">
         
-	        <div class="col-md-6" >
+	        <div class="col-md-2" >
                     {{ form_row(edit_form.paciente)}}
                 </div>
-                <div class="col-md-6" >
+                <div class="col-md-2" >
                     {{ form_row(edit_form.empleado)}}
 		</div>
-                <div class="col-md-6" >
+                <div class="col-md-2" >
                     {{ form_row(edit_form.paquete)}}
                 </div>
-		<div class="form-group col-md-6" >
+		<div class="form-group col-md-2" >
                     {{ form_row(edit_form.fechaVenta)}}
                 </div>
             </div>
         <div class="form-grouphide"> 
             <a href="{{ path('admin_ventapaquete') }}" class="btn btn-default btn-sm" id="cancelarModificar">Cancelar</a>
+            {{ form_widget(edit_form._token) }}
             {{ form_widget(edit_form.submit) }}
         </div>
         </div>
-            {{ form_widget(edit_form._token) }}
+            
     </div>  
             {{ form_end(edit_form) }}     
 

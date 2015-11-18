@@ -102,7 +102,7 @@ class Empleado
     private $tratamiento;
     
     /**
-     * @ORM\OneToMany(targetEntity="Comision", mappedBy="empleado_comision", cascade={"persist", "remove"})
+     * @ORM\OneToMany(targetEntity="Comision", mappedBy="empleado", cascade={"persist", "remove"})
      */
     private $comision;
 

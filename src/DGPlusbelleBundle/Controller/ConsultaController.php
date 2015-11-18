@@ -95,7 +95,7 @@ class ConsultaController extends Controller
         $idEntidad = substr($cadena, 1);
         
         
-        
+        //var_dump($cadena);
         
         
         $user = $this->get('security.token_storage')->getToken()->getUser();
@@ -130,7 +130,7 @@ class ConsultaController extends Controller
         
        // $producto = $form->get('producto')->getData();
        // $indicaciones = $form->get('indicaciones')->getData();
-        var_dump($cadena);
+        //var_dump($cadena);
         //die();
         if ($form->isValid()) {
             $em = $this->getDoctrine()->getManager();
@@ -672,18 +672,29 @@ class ConsultaController extends Controller
         
         //Recuperación del id
         $request = $this->getRequest();
-        $idPaciente= $request->get('id');    
+        $idPaciente= $request->get('id');  
+        $idPaciente=  substr($idPaciente, 1);
+        //var_dump($idPaciente);
         //var_dump($entity->getPaciente()->getExpediente());
         $entity = $em->getRepository('DGPlusbelleBundle:Consulta')->findBy(array('paciente'=>$idPaciente));
+        $paciente = $em->getRepository('DGPlusbelleBundle:Paciente')->find($idPaciente);
+        $edad="";
+        if(count($entity)!=0){
+            
+            $fecha = $entity[0]->getPaciente()->getFechaNacimiento()->format("Y-m-d");
+            //var_dump($fecha);
+            //Calculo de la edad
+            list($Y,$m,$d) = explode("-",$fecha);
+            $edad = date("md") < $m.$d ? date("Y")-$Y-1 : date("Y")-$Y;        
+        }
+        else{
+            $entity=null;
+        }
         //$idPaciente = $entity->getPaciente()->getId();
         
         //var_dump($entity[0]->getPaciente());
         //var_dump($entity);
-        $fecha = $entity[0]->getPaciente()->getFechaNacimiento()->format("Y-m-d");
-        //var_dump($fecha);
-        //Calculo de la edad
-        list($Y,$m,$d) = explode("-",$fecha);
-        $edad = date("md") < $m.$d ? date("Y")-$Y-1 : date("Y")-$Y;        
+        
         //$dias = $em->createQuery($dql)
                 //->setParameter('idEmp', $idEmp)
                 //->getArrayResult();
@@ -736,6 +747,7 @@ class ConsultaController extends Controller
             'consultas' => $entity,
             'paquetes' => $paquetes,
             'empleados' => $empleados,
+            'paciente' => $paciente,
             );
     }
     

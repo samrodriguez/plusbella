@@ -83,10 +83,16 @@ class PacienteController extends Controller
         $entity->setEstado(true);
         $form = $this->createCreateForm($entity);
         $form->handleRequest($request);
+        
+        $nombres = $entity->getPersona()->getNombres();
+        $apellidos = $entity->getPersona()->getApellidos();
 
         if ($form->isValid()) {
            //$entity->setEstado(TRUE);
             $em = $this->getDoctrine()->getManager();
+            $entity->getPersona()->setNombres(ucfirst($nombres));
+            $entity->getPersona()->setApellidos(ucfirst($apellidos));
+            
             $em->persist($entity);
             $this->generarExpediente($entity);
             $em->flush();
@@ -176,7 +182,7 @@ class PacienteController extends Controller
     public function editAction($id)
     {
         $em = $this->getDoctrine()->getManager();
-
+        $id= substr($id, 1);
         $entity = $em->getRepository('DGPlusbelleBundle:Paciente')->find($id);
 
         if (!$entity) {
@@ -318,7 +324,7 @@ class PacienteController extends Controller
         $numString = $num[0]["1"];
         //var_dump($numString);
 
-        switch($numString){
+        switch(strlen($numString)){
             case 1:
                     $numeroExp .= "00".$numString;
                 break;

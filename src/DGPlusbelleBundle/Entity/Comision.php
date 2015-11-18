@@ -67,7 +67,7 @@ class Comision
      *   @ORM\JoinColumn(name="empleado", referencedColumnName="id")
      * })
      */
-    private $empleado_comision;
+    //private $empleado_comision;
 
 
 

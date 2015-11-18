@@ -17,7 +17,7 @@ class ProductoType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('categoria',null,array('label' => 'Categoria',
+            ->add('categoria',null,array('label' => 'Categoria','required'=>false,
                 'class'=>'DGPlusbelleBundle:Categoria',
                 'query_builder' => function(EntityRepository $repository) {
                    return $repository->obtenerCatActivo();
@@ -26,21 +26,21 @@ class ProductoType extends AbstractType
                  'attr'=>array(
                  'class'=>'form-control input-sm'
                )))       
-            ->add('nombre','text',array('label' => 'Nombre',
+            ->add('nombre','text',array('label' => 'Nombre','required'=>false,
                     'attr'=>array(
                     'class'=>'form-control input-sm'
                     )))
-            ->add('costo','text',array('label' => 'Costo $',
+            ->add('costo','text',array('label' => 'Costo $','required'=>false,
                     'attr'=>array(
                     'class'=>'form-control input-sm'
                     )))
             ->add('fechaCompra', null,
-                  array('label'  => 'Fecha de compra',
+                  array('label'  => 'Fecha de compra','required'=>false,
                         'widget' => 'single_text',
                         'attr'   => array('class' => 'form-control input-sm'),
                        ))
             ->add('fechaVencimiento', null,
-                  array('label'  => 'Fecha de vencimiento',
+                  array('label'  => 'Fecha de vencimiento','required'=>false,
                         'widget' => 'single_text',
                         'attr'   => array('class' => 'form-control input-sm'),
                        ))

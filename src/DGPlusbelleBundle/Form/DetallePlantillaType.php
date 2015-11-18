@@ -17,7 +17,7 @@ class DetallePlantillaType extends AbstractType
         $builder
             ->add('nombre')
             ->add('descripcion')
-            ->add('plantilla')
+            //->add('plantilla')
         ;
     }
     

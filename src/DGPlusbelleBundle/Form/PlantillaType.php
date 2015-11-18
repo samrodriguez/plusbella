@@ -17,7 +17,13 @@ class PlantillaType extends AbstractType
         $builder
             ->add('nombre')
             ->add('descripcion')
-            ->add('estado')
+            ->add('placas','collection',array(
+                'type' => new DetallePlantillaType(),
+                'label'=>' ',
+                'by_reference' => false,
+                'allow_add' => true,
+                'allow_delete' => true,
+                ))    
         ;
     }
     

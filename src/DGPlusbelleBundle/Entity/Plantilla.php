@@ -3,6 +3,7 @@
 namespace DGPlusbelleBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * Plantilla
@@ -127,5 +128,31 @@ class Plantilla
     
      public function __toString() {
         return $this->nombre;
+    }
+    
+    /**
+     * @ORM\OneToMany(targetEntity="DetallePlantilla", mappedBy="plantilla", cascade={"persist", "remove"})
+     */
+    protected $placas;
+    
+    public function __construct()
+    {
+        //$this->placas = array(new EstudioRadTamPlaca(), new EstudioRadTamPlaca());
+        $this->placas = new ArrayCollection();
+    }    
+    
+    public function getPlacas()
+    {
+        return $this->placas;
+    }
+    
+    public function setPlacas(\Doctrine\Common\Collections\Collection $placas)
+    {
+        $this->placas = $placas;
+        
+        foreach ($placas as $placa) {
+            $placa->setPlantilla($this);
+            //$placa->s
+        }
     }
 }

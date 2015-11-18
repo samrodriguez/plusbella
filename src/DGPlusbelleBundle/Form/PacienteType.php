@@ -22,39 +22,39 @@ class PacienteType extends AbstractType
                     'attr'=>array(
                     'class'=>'form-control input-sm'
                     )))
-            ->add('estadoCivil','choice',array('label' => 'Estado Civil', 'empty_value'=>'Seleccione estado civil...',
+            ->add('estadoCivil','choice',array('label' => 'Estado Civil','required'=>false, 'empty_value'=>'Seleccione estado civil...',
                     'choices'  => array('s' => 'Soltero', 'c' => 'Casado', 'e' => 'Estudiante'),
                     'attr'=>array(
                     'class'=>'form-control input-sm'
                     )))
-            ->add('sexo','choice',array('label' => 'Sexo','required' => true,'empty_value'=>'Seleccione sexo...',
+            ->add('sexo','choice',array('label' => 'Sexo','required' => false,'empty_value'=>'Seleccione sexo...',
                     'choices'  => array('m' => 'Masculino', 'f' => 'Femenino'),
                     'attr'=>array(
                     'class'=>'form-control input-sm'
                     )))
             
-            ->add('ocupacion','text',array('label' => 'Ocupación',
+            ->add('ocupacion','text',array('label' => 'Ocupación','required'=>false,
                     'attr'=>array(
                     'class'=>'form-control input-sm'
                     )))
-            ->add('lugarTrabajo','text',array('label' => 'Lugar de Trabajo',
+            ->add('lugarTrabajo','text',array('label' => 'Lugar de Trabajo','required' => false,
                     'attr'=>array(
                     'class'=>'form-control input-sm'
                     )))
             ->add('fechaNacimiento', null,
-                  array('label'  => 'Fecha nacimiento',
+                  array('label'  => 'Fecha nacimiento','required'=>false,
                         'widget' => 'single_text',
                         'attr'   => array('class' => 'form-control input-sm'),
                        ))
-            ->add('referidoPor','text',array('label' => 'Referido por',
+            ->add('referidoPor','text',array('label' => 'Referido por','required' => false,
                     'attr'=>array(
                     'class'=>'form-control input-sm'
                     )))
-            ->add('personaEmergencia','text',array('label' => 'En caso de Emergencia llamar a',
+            ->add('personaEmergencia','text',array('label' => 'En caso de Emergencia llamar a','required' => false,
                     'attr'=>array(
                     'class'=>'form-control input-sm'
                     )))
-            ->add('telefonoEmergencia','text',array('label' => 'Al telefono',
+            ->add('telefonoEmergencia','text',array('label' => 'Al telefono','required' => false,
                     'attr'=>array(
                     'class'=>'form-control input-sm'
                     )))

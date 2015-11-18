@@ -28,11 +28,17 @@ class PlantillaController extends Controller
     public function indexAction()
     {
         $em = $this->getDoctrine()->getManager();
-
+        
+        $entity = new Plantilla();
+        $form = $this->createCreateForm($entity);        
         $entities = $em->getRepository('DGPlusbelleBundle:Plantilla')->findAll();
-
+        $parametros = $em->getRepository('DGPlusbelleBundle:DetallePlantilla')->findAll();
+       // var_dump($parametros);
         return array(
             'entities' => $entities,
+            'parametros' => $parametros,
+            'entity' => $entity,
+            'form'   => $form->createView(),
         );
     }
     /**
@@ -45,6 +51,7 @@ class PlantillaController extends Controller
     public function createAction(Request $request)
     {
         $entity = new Plantilla();
+        $entity->setEstado(true);
         $form = $this->createCreateForm($entity);
         $form->handleRequest($request);
 
@@ -53,7 +60,7 @@ class PlantillaController extends Controller
             $em->persist($entity);
             $em->flush();
 
-            return $this->redirect($this->generateUrl('admin_plantilla_show', array('id' => $entity->getId())));
+            return $this->redirect($this->generateUrl('admin_plantilla', array('id' => $entity->getId())));
         }
 
         return array(
@@ -76,7 +83,11 @@ class PlantillaController extends Controller
             'method' => 'POST',
         ));
 
-        $form->add('submit', 'submit', array('label' => 'Create'));
+        $form->add('submit', 'submit', array('label' => 'Guardar',
+                                               'attr'=>
+                                                        array('class'=>'btn btn-success btn-sm')
+            
+            ));
 
         return $form;
     }
@@ -165,7 +176,9 @@ class PlantillaController extends Controller
             'method' => 'PUT',
         ));
 
-        $form->add('submit', 'submit', array('label' => 'Update'));
+        $form->add('submit', 'submit',array('label' => 'Modificar',
+                                               'attr'=>
+                                                        array('class'=>'btn btn-success btn-sm')));
 
         return $form;
     }
@@ -193,7 +206,7 @@ class PlantillaController extends Controller
         if ($editForm->isValid()) {
             $em->flush();
 
-            return $this->redirect($this->generateUrl('admin_plantilla_edit', array('id' => $id)));
+             return $this->redirect($this->generateUrl('admin_plantilla'));
         }
 
         return array(

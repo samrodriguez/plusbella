@@ -130,7 +130,7 @@ class VentaPaqueteController extends Controller
         //Recuperación del paciente
         $request = $this->getRequest();
         $id= $request->get('id');
-        
+        $id = substr($id, 1);
         //Busqueda del paciente
         $paciente = $em->getRepository('DGPlusbelleBundle:Paciente')->find($id);
         //Seteo del paciente en la entidad
@@ -261,7 +261,7 @@ class VentaPaqueteController extends Controller
         if ($editForm->isValid()) {
             $em->flush();
 
-            return $this->redirect($this->generateUrl('admin_ventapaquete_edit', array('id' => $id)));
+            return $this->redirect($this->generateUrl('admin_ventapaquete'));
         }
 
         return array(
