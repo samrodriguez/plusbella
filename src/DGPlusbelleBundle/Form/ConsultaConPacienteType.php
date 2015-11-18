@@ -19,7 +19,7 @@ class ConsultaConPacienteType extends AbstractType
     {
         $builder
             ->add('fechaConsulta', null,
-                  array('label'  => 'Fecha consulta',
+                  array('label'  => 'Fecha consulta','required'=>false,
                         'widget' => 'single_text',
                         'attr'   => array('class' => 'form-control input-sm'),
                        ))
@@ -31,15 +31,16 @@ class ConsultaConPacienteType extends AbstractType
                     'attr'=>array(
                     'class'=>' '
                     )))
-            ->add('observacion','textarea',array('label' => 'Observación',
+            ->add('observacion','textarea',array('label' => 'Observación','required'=>false,
                     'attr'=>array(
                     'class'=>'form-control input-sm'
                     )))
             ->add('incapacidad', 'choice', array(
                     'choices'  => array('1' => 'Sí', '0' => 'No'),
                     'multiple' => false,
-                'expanded'=>'true',
-                    'required' => true,
+                    'expanded'=>'true'
+                  
+                    
                     
                 
                 ))
@@ -51,7 +52,7 @@ class ConsultaConPacienteType extends AbstractType
                          'class'=>'form-control input-sm'
                          )
                        ))
-            ->add('tipoConsulta','entity', array( 'label' => 'Tipo de consulta',
+            ->add('tipoConsulta','entity', array( 'label' => 'Tipo de consulta','required'=>false,
                          'empty_value'   => 'Seleccione un tipo de consulta...',
                          'class'         => 'DGPlusbelleBundle:TipoConsulta',
             'query_builder' => function(EntityRepository $repository) {
@@ -67,8 +68,9 @@ class ConsultaConPacienteType extends AbstractType
                     'label'=> 'Requiere plantilla',
                     'choices'  => array('1' => 'Sí', '0' => 'No'),
                     'multiple' => false,
-                'expanded'=>'true',
-                    'required' => true,
+                    'expanded'=>'true'
+                   
+                  
                 ))
             ->add('plantilla', 'entity', array(
                     'label'         =>  'Plantilla',

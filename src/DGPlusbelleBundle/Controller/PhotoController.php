@@ -59,8 +59,8 @@ class PhotoController extends Controller
         $file =  $request->files->get('avatar_file');
         $id   =  $request->request->get('id');
         
-        
-        $photo->cropping($src,$data,$file,$id,$empleado,$tmp);
+        $random = $this->randomNumberText();
+        $photo->cropping($src,$data,$file,$id,$empleado,$tmp,$random);
         
 
         return new JsonResponse(array(
@@ -68,5 +68,16 @@ class PhotoController extends Controller
             'message' => $photo->getMsg(),
             'result' =>  $photo->getResult()
           ));
+    }
+    
+    
+    public function randomNumberText(){
+        $str = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890";
+        $aleatorio = "";
+        for($i=0;$i<12;$i++) {
+            $aleatorio .= substr($str,rand(0,62),1);
+        }
+        return $aleatorio;
+        
     }
 }
