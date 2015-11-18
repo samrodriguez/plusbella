@@ -20,7 +20,7 @@ class DescuentoType extends AbstractType
                     'class'=>'form-control'
                     )))
             ->add('porcentaje','text',array('label' => 'Porcentaje %','required'=>false,
-                    'attr'=>array(
+                    'attr'=>array('maxlength' => 5,
                     'class'=>'form-control'
                     )))
             //->add('estado')

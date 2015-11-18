@@ -261,7 +261,7 @@ class VentaPaqueteController extends Controller
         if ($editForm->isValid()) {
             $em->flush();
 
-            return $this->redirect($this->generateUrl('admin_ventapaquete_edit', array('id' => $id)));
+            return $this->redirect($this->generateUrl('admin_ventapaquete'));
         }
 
         return array(

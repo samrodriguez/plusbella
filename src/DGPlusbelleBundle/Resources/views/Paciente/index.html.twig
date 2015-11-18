@@ -156,6 +156,13 @@
                     }
                 }); 
                 
+                
+              // validando campos  
+              $('#dgplusbellebundle_paciente_dui').mask('00000000-0');  
+              $('#dgplusbellebundle_paciente_persona_telefono').mask('0000-0000'); 
+              $('#dgplusbellebundle_paciente_telefonoEmergencia').mask('0000-0000'); 
+              
+              
                 //Seleccionar un registro
                 $('#datatables1>tbody>tr').on('click', function(event) {
                     //Se limpia los otros que esten activos

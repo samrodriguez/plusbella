@@ -18,13 +18,13 @@ class VentaPaqueteType extends AbstractType
     {
         $builder
         ->add('fechaVenta', null,
-                  array('label'  => 'Fecha de venta',
+                  array('label'  => 'Fecha de venta','required'=>false,
                         'widget' => 'single_text',
                         'attr'   => array('class' => 'form-control input-sm'),
                        )) 
             //->add('fechaRegistro')
             ->add('paquete', 'entity', 
-                  array( 'label'         => 'Paquete',
+                  array( 'label'         => 'Paquete','required'=>false,
                          'empty_value'   => 'Seleccione un paquete...',
                          'class'         => 'DGPlusbelleBundle:Paquete',
                          'query_builder' => function(EntityRepository $repository) {
@@ -48,7 +48,7 @@ class VentaPaqueteType extends AbstractType
                          'class'=>'form-control'
                          )
                        ))
-            ->add('empleado','entity', array( 'label' => 'Vendido por',
+            ->add('empleado','entity', array( 'label' => 'Vendido por','required'=>false,
                          'empty_value'   => 'Seleccione un empleado...',
                          'class'         => 'DGPlusbelleBundle:Persona',
                          'query_builder' => function(EntityRepository $r){
