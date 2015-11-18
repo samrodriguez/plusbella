@@ -64,7 +64,7 @@ class Tratamiento
      *
      * @ORM\ManyToMany(targetEntity="Paquete", mappedBy="tratamiento")
      */
-    private $paquete;
+   private $paquete;
 
      /**
      * @var \Doctrine\Common\Collections\Collection
@@ -239,7 +239,7 @@ class Tratamiento
      *
      * @return Tratamiento
      */
-    public function addPaquete(\DGPlusbelleBundle\Entity\Paquete $paquete)
+   public function addPaquete(\DGPlusbelleBundle\Entity\Paquete $paquete)
     {
         $this->paquete[] = $paquete;
 
@@ -261,7 +261,7 @@ class Tratamiento
      *
      * @return \Doctrine\Common\Collections\Collection
      */
-    public function getPaquete()
+  public function getPaquete()
     {
         return $this->paquete;
     }

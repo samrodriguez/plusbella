@@ -17,13 +17,39 @@
      {{ form_row(form.costo) }}
      </div>
       <div class="col-xs-12 col-sm-8">
-     {{ form_row(form.tratamiento) }}
+    {# {{ form_row(form.tratamiento) }} #}
      </div>
-     </div>
+ 
+     
+      <div class="row">
+                    
+                    
+                    <div class="col-md-12">
+                        <h3 class="text-left">Tratamiento</h3>
+                        <hr>
+                    </div>
+                </div>
+            <div class="row">  
+                 <div id="listadoa">
+                            <div class="listado col-md-6">
+                               {# <div class="placas" data-prototype="{{ form_widget(form.placas.vars.prototype)|e }}"> #}
+                               <div class="placas" data-prototype="{% filter escape %}  {% include 'DGPlusbelleBundle:Prototype:paquete.html.twig' with { 'form': form.placas.vars.prototype} %}   {% endfilter  %}"> 
+                                    {{ form_widget(form.placas) }}
+                                </div>
+                            </div>
+                 </div>
+     
+            </div>     
+ 
+            
+            <br>
+     
       <div class="col-xs-12 col-sm-8">
      {{ form_row(form.sucursal) }} 
      </div>
      {#{{ form_row(form.estado) }} #}
+     
+     
 
 
       <div class="form-grouphide col-sm-9"> 
@@ -38,3 +64,4 @@
 {{ form_end(form) }}  
     
 {% endblock %}
+
