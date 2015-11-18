@@ -95,7 +95,7 @@ class ConsultaController extends Controller
         $idEntidad = substr($cadena, 1);
         
         
-        
+        //var_dump($cadena);
         
         
         $user = $this->get('security.token_storage')->getToken()->getUser();
@@ -130,7 +130,7 @@ class ConsultaController extends Controller
         
        // $producto = $form->get('producto')->getData();
        // $indicaciones = $form->get('indicaciones')->getData();
-        var_dump($cadena);
+        //var_dump($cadena);
         //die();
         if ($form->isValid()) {
             $em = $this->getDoctrine()->getManager();

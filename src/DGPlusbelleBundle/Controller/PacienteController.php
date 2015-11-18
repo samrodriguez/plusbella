@@ -176,7 +176,7 @@ class PacienteController extends Controller
     public function editAction($id)
     {
         $em = $this->getDoctrine()->getManager();
-
+        $id= substr($id, 1);
         $entity = $em->getRepository('DGPlusbelleBundle:Paciente')->find($id);
 
         if (!$entity) {
