@@ -66,7 +66,7 @@
              <div class="form-grouphide"> 
                 <a href="{{ path('admin_paciente') }}" class="btn btn-default btn-sm" id="cancelarNuevo">Cancelar</a>
                     {{ form_widget(form.submit) }} 
-                <label style="color:red; ">
+                <label style="color:#F00; ">
                     {{ mensaje }}
                 </label>
              </div>
@@ -99,31 +99,7 @@
         <script>
             $(document).ready(function(){
                 //Llamada ajax para validar la fecha y hora de una cita
-                $("#dgplusbellebundle_cita_submit" ).on( "click", function() {
-                    var idEmpleado = $('#dgplusbellebundle_cita_empleado').val();
-                    var fechaCita= $('#dgplusbellebundle_cita_fechaCita').val();
-                    var horaCita = $('#dgplusbellebundle_cita_horaCita_hour').val()+":"+$('#dgplusbellebundle_cita_horaCita_minute').val();
-                    //alert(idEmpleado);
-                    
-                    $.getJSON(Routing.generate('get_existeCita', { idempleado: idEmpleado,fecha:fechaCita,hora:horaCita}), 
-                        function(data) {
-                            //alert(data.regs.length);
-                            //return false;
-                            if(data.regs.length==0){
-                                $('form').submit();
-                            }
-                            else{
-                                var mensaje = "";
-                                mensaje += "<div class='row'><div class='col-md-12'><b><p class='text-left'>Error...</p></b></div></div>";
-                                mensaje += "<div class='row'><hr></div>";
-                                mensaje += "<div class='row'><div class='col-md-12'>Ya existe una cita programada para ese doctor en ese dia y esa hora</div></div>"
-                                bootbox.alert(mensaje, function() {
-                                
-                                });
-                            }
-                        });        
-                        return false;
-                    });
+                
                     
                 
                 //Generación de calendario zebra
@@ -176,45 +152,12 @@
                 
                 //$('#dgplusbellebundle_cita_horaInicio').ptTimeSelect();
 
-                var idEmp = 0;
+
                 
                 //Cargar los horarios al inicio
                 //$('#dgplusbellebundle_cita_empleado').change();
                 //Modificar horarios al cmabiar dropdown
-                $('#dgplusbellebundle_cita_empleado').on('change', function() {
-                    var idEmp = $(this).val();
-                    //alert(idEmp);
-                    var datepicker = $('#dgplusbellebundle_cita_fechaCita').data('Zebra_DatePicker');
-                    if(idEmp==""){
-                        idEmp = 0;
-                    }
-                    
-                    $.getJSON(Routing.generate('get_dias', { idEmp: idEmp}), 
-                    function(data) {
-                        var numRegistros = data.regs.length;
-                        var x='1,2,3,4,5,6,0,';
-                        $.each(data.regs, function(indice, reg) {
-                            //alert(indice);
-                            switch(reg.diaHorario){
-                                case 'Lunes'    : index = x.indexOf('1'); break;
-                                case 'Martes'   : index = x.indexOf('2'); break;
-                                case 'Miercoles': index = x.indexOf('3'); break;
-                                case 'Jueves'   : index = x.indexOf('4'); break;
-                                case 'Viernes'  : index = x.indexOf('5'); break; 
-                                case 'Sabado'   : index = x.indexOf('6'); break; 
-                                case 'Domingo'  : index = x.indexOf('0'); break;
-                            }
-                            x = x.substring(0, index) + x.substring(index+2, x.length);   
-                            
-
-                            //alert(deshabilitar);
-                            datepicker.update({
-                                direction: true,
-                                disabled_dates: ['* * * '+x] 
-                            });
-                        });        
-                    }); 
-                });     
+                
         });
         </script>
 {% endblock %}

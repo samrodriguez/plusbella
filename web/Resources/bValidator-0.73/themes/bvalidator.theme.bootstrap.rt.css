@@ -24,6 +24,7 @@
 	-moz-box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
 	box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
 	z-index:1010;
+        color:#F00;
 }
 /* close icon */
 .bvalidator_bootstraprt_errmsg .bvalidator_bootstraprt_close_icon {
