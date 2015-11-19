@@ -16,13 +16,24 @@
      <div class="col-xs-12 col-sm-2">
      {{ form_row(form.costo) }}
      </div>
-      <div class="col-xs-12 col-sm-8">
+     {# <div class="col-xs-12 col-sm-8">
      {{ form_row(form.tratamiento) }}
-     </div>
+     </div>#}
      </div>
       <div class="col-xs-12 col-sm-8">
      {{ form_row(form.sucursal) }} 
      </div>
+     
+     <div class="row">  
+                    <div id="listadoa">
+                           <div class="listado col-md-12">
+                               <div class="placas" data-prototype="{{ form_widget(form.placas.vars.prototype)|e }}">
+                                   {{ form_widget(form.placas) }}
+                               </div>
+                           </div>
+                    </div>
+
+                </div> 
      {#{{ form_row(form.estado) }} #}
 
 
