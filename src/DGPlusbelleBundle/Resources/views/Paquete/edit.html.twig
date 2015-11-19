@@ -19,8 +19,26 @@
      {{ form_row(edit_form.costo) }} 
     </div>
      <div class="col-xs-12 col-sm-8">
-     {{ form_row(edit_form.tratamiento) }}
+  {#   {{ form_row(edit_form.tratamiento) }} #}
      </div>
+     
+      <div class="row">
+         
+      </div>
+            <div class="row">  
+                 <div id="listadoa">
+                            <div class="listado col-md-2">          
+                               <div class="placas" data-prototype="{% filter escape %}  {% include 'DGPlusbelleBundle:Prototype:paquete.html.twig' with { 'form': edit_form.placas.vars.prototype} %}   {% endfilter  %}"> 
+                                    {{ form_widget(edit_form.placas) }}
+                                </div>
+                            </div>
+                 </div>
+     
+            </div>     
+ 
+            
+            <br>
+     
      <div class="col-xs-12 col-sm-8">
      {{ form_row(edit_form.sucursal) }} 
      </div>

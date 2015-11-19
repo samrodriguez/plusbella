@@ -77,6 +77,7 @@ class EmpleadoController extends Controller
     {
         $entity = new Empleado();
         $entity->setEstado(true);
+        $entity->setComisionCompleta(0);
         $form = $this->createCreateForm($entity);
         $form->handleRequest($request);
 

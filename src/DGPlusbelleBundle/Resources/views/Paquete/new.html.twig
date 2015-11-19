@@ -3,7 +3,7 @@
 {% block contenido -%}
     
     
-    <div class="panel panel-default">
+  <div class="panel panel-default">
   <!-- Default panel contents -->
   <div class="panel-heading"><p>Nuevo paquete</p></div>
   <div class="panel-body">
@@ -21,18 +21,13 @@
      </div>
  
      
+
       <div class="row">
-                    
-                    
-                    <div class="col-md-12">
-                        <h3 class="text-left">Tratamiento</h3>
-                        <hr>
-                    </div>
-                </div>
+         
+      </div>
             <div class="row">  
                  <div id="listadoa">
-                            <div class="listado col-md-6">
-                               {# <div class="placas" data-prototype="{{ form_widget(form.placas.vars.prototype)|e }}"> #}
+                            <div class="listado col-md-12">          
                                <div class="placas" data-prototype="{% filter escape %}  {% include 'DGPlusbelleBundle:Prototype:paquete.html.twig' with { 'form': form.placas.vars.prototype} %}   {% endfilter  %}"> 
                                     {{ form_widget(form.placas) }}
                                 </div>
