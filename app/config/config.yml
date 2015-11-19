@@ -10,6 +10,7 @@ parameters:
     photo.empleado: %kernel.root_dir%/../web/Photos/Empleado/
     photo.paciente: %kernel.root_dir%/../web/Photos/Paciente/
     photo.tmp: %kernel.root_dir%/../web/Photos/Tmp/
+    plusbelle.logo: %kernel.root_dir%/../web/Resources/img/dgplusbelle/images/
 
 framework:
     #esi:             ~

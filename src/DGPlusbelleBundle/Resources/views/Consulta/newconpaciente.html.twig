@@ -64,14 +64,14 @@
                     
                     
                     <div class="col-md-12">
-                        <h3 class="text-center">Consulta</h3>
+                        <h3>Información general de consulta</h3>
                         <hr>
                     </div>
                 </div>
             {# Paciente #}
             <div class="row">
                 
-                <div class="col-md-5">{{ form_row(form.paciente) }}</div>
+                <div class="col-md-2">{{ form_row(form.paciente) }}</div>
                 
             </div>
             {# Formulario de consulta#}
@@ -81,7 +81,7 @@
                     {{ form_row(form.fechaConsulta) }}
                 </div>
                 
-                <div class="col-md-3">
+                <div class="col-md-2">
                     {{ form_row(form.tratamiento) }}
                 </div>
                 
@@ -99,17 +99,16 @@
 
             </div>
             <div class="row">
-                <div class="col-md-3">
+                <div class="col-md-4">
                     {{ form_row(form.tipoConsulta) }}
                 </div>
-                <div class="col-md-2">
-                    {{ form_row(form.reportePlantilla) }}
-                </div>
-                <div class="col-md-3">
+                
+                <div class="col-md-4">
                     {{ form_row(form.observacion) }}
                 </div>
+                
             </div>  
-            
+               
             <div class="row">
                     
                     
@@ -135,12 +134,38 @@
                  </div>
      
             </div>     
- 
+            <div id="plantilla" class="plantilla">
+                <div class="row">
+                    <div class="col-md-12">
+                        <h3 class="text-left">Reporte de consulta</h3>
+                        <hr>
+                        <br>
+                    </div>
+                    <div class="col-md-3 col-md-offset-1">
+                        {{ form_row(form.reportePlantilla) }}
+                    </div>
+                    <div class="col-md-3">
+                        <div id="lista_plantilla">
+                            {{ form_row(form.plantilla) }}
+                        </div>
+                    </div>                   
+                </div>
+            </div>  
             
+            <div id="camposPlantilla" class="camposPlantilla" style="margin-top: 40px">
+                <div class="row">
+                    <div class="col-md-1"></div>
+                    <div id="campos" class="col-md-11 campos">
+                        
+                    </div>
+                </div>
+            </div> 
+                
             <br>
             <div class="form-grouphide"> 
-                 <a href="{{path('dashboard')}}" class="btn btn-default btn-sm" id="cancelarNuevo">Cancelar</a>
-                {{ form_widget(form.submit) }}
+                <hr>
+                <p class="text-center"><a href="{{path('dashboard')}}" class="btn btn-default btn-sm" id="cancelarNuevo">Cancelar</a>
+                {{ form_widget(form.submit) }}</p>
              </div>
 	        
         
@@ -154,40 +179,142 @@
 
 
 {% block javascripts_step %}
-      
-<script>
+    <script>
+        $(function () { 
+            $( "#dgplusbellebundle_consulta_reportePlantilla_0" ).on( "click", function() {
+                $("#lista_plantilla").show();
+            });
+        });
+    </script> 
+    <script>
+        $(function () { 
+            $( "#dgplusbellebundle_consulta_reportePlantilla_1" ).on( "click", function() {
+                $("#lista_plantilla").hide();
+            });
+        });
+    </script>
+    <script>
+        $(function () { 
+            $( "#dgplusbellebundle_consulta_plantilla" ).on( "change", function() {
+                var id = $( this ).val();
+                $('#campos div').html('');
+                $.post( "{{path('admin_busqueda_parametros')}}", { id: id }, function( data ) {
+                    console.log( data );
+                    var par = new Array();
+                    par = data.query;
+                    if(par.length !== 0){
+                        //$("#tablahead").show("slow");
+                        mostrarCampos(data.query);
+                    }
+                    else{
+                        //$("#msjnodata").show("slow");
+                        console.log( 'Esta plantilla no tiene campos que mostrar' );
+                    }
+                }, "json");
+                
+            });
+            
+            
+        });
+        
+        function mostrarCampos(data) {
+            var div = document.getElementById('campos');
+            var form = $("form");
+            console.log(form);
+            //var form = document.createElement('form');
+            //form.setAttribute('action', '{# {{path('admin_set_campos')}} #}');
+            //form.setAttribute('method', 'POST');
+            /*-----------*/
+            var appm = document.createElement('div');
+            appm.appendChild(document.createTextNode('Save This'));
+            appm.setAttribute('class', 'appm');
+            /*-----------*/
+            
+            var input = new Array();
+            var label = new Array();
+            var campos = new Array();
+            var etiqueta = new Array();
+            
+            $.each( data, function( key, value ) {
+                //console.log( key + ": " + value.nombre );
+                var t = document.createTextNode(value.nombre);
+                
+                campos[key] = document.createElement('div');
+                campos[key].setAttribute('class', 'col-md-4');
+                
+                input[key] = document.createElement('input');
+                input[key].setAttribute('type', 'text');
+                input[key].setAttribute('placeholder', value.nombre);
+                input[key].setAttribute('class', 'form-control');
+                input[key].setAttribute('style', 'margin-bottom: 5px');
+                input[key].setAttribute('name', value.id);
+                input[key].setAttribute('id', value.id);
+                
+                etiqueta[key] = document.createElement('p');
+                etiqueta[key].setAttribute('style', 'color: #646473; font-size: 13px; font-weight: 700;');
+                etiqueta[key].appendChild(t);
+                
+                label[key] = document.createElement('label');
+                label[key].appendChild(etiqueta[key]);
+                
+                campos[key].appendChild(label[key]);
+                campos[key].appendChild(input[key]);
+            });
+            
+             $.each( data, function( key, value ) {
+                div.appendChild(campos[key]);
+            });
+            
+            //div.appendChild(form);
+        }
+    </script> 
+    <script>
 
-// Get the ul that holds the collection of tags
-var collectionHolder = $('div.placas');
-var col=$('#hnr_sircimbundle_estudioradiologicotype_placas');
-// setup an "add a tag" link
-var $addTagLink = $('<div class="row"><div class="col-md-2"><a href="#" class="add_placa_link btn btn-primary">Agregar</a></div></div>');
-var $removeTagLink = $('<a href="#" class="remove_placa_link btn btn-danger">Eliminar</a>');
-var $newLinkLi = $('<div class="col-md-12 addItem"></div>').append($addTagLink);
-var $delLinkLi = $('#hnr_sircimbundle_estudioradiologicotype_placas.required').append($removeTagLink);
+    // Get the ul that holds the collection of tags
+    var collectionHolder = $('div.placas');
+    var col=$('#hnr_sircimbundle_estudioradiologicotype_placas');
+    // setup an "add a tag" link
+    var $addTagLink = $('<div class="row"><div class="col-md-2"><a href="#" class="add_placa_link btn btn-primary">Agregar</a></div></div>');
+    var $removeTagLink = $('<a href="#" class="remove_placa_link btn btn-danger">Eliminar</a>');
+    var $newLinkLi = $('<div class="col-md-12 addItem"></div>').append($addTagLink);
+    var $delLinkLi = $('#hnr_sircimbundle_estudioradiologicotype_placas.required').append($removeTagLink);
 
 
 
 
 
-jQuery(document).ready(function() {
+    jQuery(document).ready(function() {
 
-    $("#dgplusbellebundle_consulta_pacienteSelectBoxItOptions li").remove();
+        $("#dgplusbellebundle_consulta_pacienteSelectBoxItOptions li").remove();
+        $("#dgplusbellebundle_consulta_reportePlantilla_1").prop("checked", true);
+        $("#lista_plantilla").hide();
+        $('#dgplusbellebundle_consulta_fechaConsulta').daterangepicker({
+                        singleDatePicker: true,
+                        showDropdowns: true,
+                        locale: {
+                            format: 'YYYY-MM-DD'
+                        },
+                    });
 
-    $('#dgplusbellebundle_consulta_fechaConsulta').daterangepicker({
-                    singleDatePicker: true,
-                    showDropdowns: true,
-                    locale: {
-                        format: 'YYYY-MM-DD'
-                    },
-                });
+        $('select[id$=dgplusbellebundle_consulta_placas_]').selectBoxIt();
 
-    $('select[id$=dgplusbellebundle_consulta_placas_]').selectBoxIt();
+        collectionHolder.find('li').each(function() {
+            addTagFormDeleteLink($(this));
 
     collectionHolder.find('li').each(function() {
         addTagFormDeleteLink($(this));
 
     });
+    
+                var seleccionado="";
+                //Eliminar options del select de pacientes
+                $('#dgplusbellebundle_consulta_paciente option').each(function(index, val) {
+                    
+                    seleccionado = $(this).attr('selected');
+                    if (!seleccionado){
+                        $(this).remove();
+                    }
+                });
 
     
 
@@ -267,32 +394,110 @@ function addTagFormDeleteLink($tagFormLi) {
            $('#hnr_sircimbundle_usuariotype_placas_0_usroPredeterminado').prop('checked', true);
         });
 
-        $tagFormLi.remove();
-        
+
+
+        // add the "add a tag" anchor and li to the tags ul
+        collectionHolder.append($newLinkLi);
+
+        // count the current form inputs we have (e.g. 2), use that as the new
+        // index when inserting a new item (e.g. 2)
+        collectionHolder.data('index', collectionHolder.find(':input').length);
+
+        //Identificar que form esta activo
+        var editar=$('div.placas').attr('id');
+        if(editar!='editar_usuario'){
+            //addTagForm(collectionHolder, $newLinkLi);   //Muestra un formulario en la carga de la página nuevo
+        }
+
+
+
+        $addTagLink.on('click', function(e) {
+            // prevent the link from creating a "#" on the URL
+            e.preventDefault();
+
+            // add a new tag form (see next code block)
+            addTagForm(collectionHolder, $newLinkLi);
+            // $('.btn_radio').attr('name', 'rol_predet');
+        });
+
+
+
     });
+
 }
+    function addTagForm(collectionHolder, $newLinkLi) {
+        // Get the data-prototype explained earlier
+        var prototype = collectionHolder.data('prototype');
+
+        // get the new index
+        var index = collectionHolder.data('index');
+
+        // Replace '__name__' in the prototype's HTML to
+        // instead be a number based on how many items we have
+        var newForm = prototype.replace(/__name__/g, index);
+
+        // increase the index with one for the next item
+        collectionHolder.data('index', index + 1);
+
+        // Display the form in the page in an li, before the "Add a tag" link li
+        var $newFormLi = $('<div class="col-md-4"></div>').append(newForm);
+        $newLinkLi.before($newFormLi);
 
 
-$('#editar_usuario')
-            .on('mouseover','div', function(){
-                $(this).find('a.link').css('visibility','visible');
-            })
-            .on('mouseout','div', function(){ 
-                $(this).find('a.link').css('visibility','hidden'); 
+
+        // add a delete link to the new form
+        addTagFormDeleteLink($newFormLi);
+        $('.btn_radio').click(function(event) {
+            /* Act on the event */
+            var id = $(this).attr('id');
+            // alert(id);
+            $('.btn_radio').prop('checked', false);
+            $('#'+id).prop('checked', true);
+            $('.btn_radio').removeClass('errorform');
+        });
+    }
+
+    function addTagFormDeleteLink($tagFormLi) {
+        var $removeFormA = $('<div class="row"><div class="col-md-2"><a class="link btn btn-danger" href="#">Eliminar</a></div></div>');
+        $tagFormLi.append($removeFormA);
+
+        $removeFormA.on('click', function(e) {
+            // prevent the link from creating a "#" on the URL
+            e.preventDefault();
+
+            // remove the li for the tag form
+            $('input[name="rol_predet"]:checked').each(function() {
+                //$(this).val() es el valor del checkbox correspondiente
+               // alert('chequeado'); 
+               $('#hnr_sircimbundle_usuariotype_placas_0_usroPredeterminado').prop('checked', true);
             });
 
-$('#editar_usuario')
-            .on('mouseover','li:first-child', function(){
-                $(this).find('a.link').css('visibility','hidden');
-            });
+            $tagFormLi.remove();
+
+        });
+    }
 
 
-    
-var editar=$('div.placas').attr('id');
-if(editar!='editar_usuario'){
-    // $('#hnr_sircimbundle_usuariotype_placas_0_usroPredeterminado').prop('checked', true);//Se carga el radiobutton seleccionado
-}
+    $('#editar_usuario')
+                .on('mouseover','div', function(){
+                    $(this).find('a.link').css('visibility','visible');
+                })
+                .on('mouseout','div', function(){ 
+                    $(this).find('a.link').css('visibility','hidden'); 
+                });
 
- </script>
+    $('#editar_usuario')
+                .on('mouseover','li:first-child', function(){
+                    $(this).find('a.link').css('visibility','hidden');
+                });
+
+
+
+    var editar=$('div.placas').attr('id');
+    if(editar!='editar_usuario'){
+        // $('#hnr_sircimbundle_usuariotype_placas_0_usroPredeterminado').prop('checked', true);//Se carga el radiobutton seleccionado
+    }
+});
+     </script>
 
 {% endblock %} 

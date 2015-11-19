@@ -3,6 +3,8 @@
 namespace DGPlusbelleBundle\Controller;
 
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -830,7 +832,37 @@ class ConsultaController extends Controller
         return $empleados;
     }
     
-    
+   /**
+    * Ajax utilizado para buscar los parametros del reporte de una plantilla
+    *  
+    * @Route("/buscarParametrosPlantilla", name="admin_busqueda_parametros")
+    */
+    public function buscarParametrosPlantillaAction()
+    {
+        $isAjax = $this->get('Request')->isXMLhttpRequest();
+        if($isAjax){
+            $plantillaid = $this->get('request')->request->get('id');
+             
+            $em = $this->getDoctrine()->getManager();            
+            $dql = "SELECT det.id, det.nombre "
+                    . "FROM DGPlusbelleBundle:DetallePlantilla det "
+                    . "JOIN det.plantilla pla "
+                    . "WHERE pla.id =  :plantillaid";
+            
+            $parametros = $em->createQuery($dql)
+                        ->setParameter('plantillaid', $plantillaid)
+                        ->getResult();
+            
+            $response = new JsonResponse();
+            $response->setData(array(
+                                'query' => $parametros
+                            )); 
+            
+            return $response; 
+        } else {    
+            return new Response('0');              
+        }  
+    }
     
     
     

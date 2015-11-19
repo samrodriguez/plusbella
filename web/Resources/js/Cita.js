@@ -12,6 +12,12 @@ attr('data-bvalidator', 'required,required');
 
 $('#dgplusbellebundle_cita_tratamiento').
 attr('data-bvalidator', 'required,required');
+
+$('#dgplusbellebundle_consulta_incapacidad').
+attr('data-bvalidator', 'required,required');
+
+$('#dgplusbellebundle_consulta_reportePlantilla').
+attr('data-bvalidator', 'required,required');
 	
  
     //Opciones del validador
