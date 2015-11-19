@@ -142,7 +142,14 @@
                 });
                 var seleccionado="";
                 //Eliminar options del select de pacientes
-                //$('#dgplusbellebundle_cita_paciente option').each(function(index, val) {
+               //Eliminar options del select de pacientes
+                $('#dgplusbellebundle_cita_paciente option').each(function(index, val) {
+                    
+                    seleccionado = $(this).attr('selected');
+                    if (!seleccionado){
+                        $(this).remove();
+                    }
+                });
                     
                    
                 //Eliminar las opciones de la lista creada por el selectBoxIt

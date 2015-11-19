@@ -1,12 +1,16 @@
 
 $(document).ready(function(){
-$('#dgplusbellebundle_ventapaquete_empleado').
+
+$('#dgplusbellebundle_cita_empleado').
 attr('data-bvalidator', 'required,required');
 
-$('#dgplusbellebundle_ventapaquete_paquete').
+$('#dgplusbellebundle_cita_fechaCita').
 attr('data-bvalidator', 'required,required');
 
-$('#dgplusbellebundle_ventapaquete_fechaVenta').
+$('#dgplusbellebundle_cita_descuento').
+attr('data-bvalidator', 'required,required');
+
+$('#dgplusbellebundle_cita_tratamiento').
 attr('data-bvalidator', 'required,required');
 	
  
