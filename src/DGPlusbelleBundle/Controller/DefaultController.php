@@ -122,12 +122,7 @@ class DefaultController extends Controller
     {
         $titulo = 'Reporte de Videoendoscopia';
         $logo = $this->getParameter('plusbelle.logo');
-       // var_dump($logo);
-        $pdf = $this->get('fpdf_printer')->toPdf($titulo, $logo);
-        
-        var_dump($pdf);
-     
-     
+        $this->get('fpdf_printer')->toPdf($titulo, $logo);
     }
 
 }

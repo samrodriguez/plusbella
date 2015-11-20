@@ -70,14 +70,27 @@ class ConsultaConPacienteType extends AbstractType
                     'multiple' => false,
                     'expanded'=>'true'
                    
-                  
+                 
                 ))
+            ->add('costoConsulta', 'text', array(
+                    'attr'=>array(
+                         'class'=>'form-control'
+                         )
+                       ))
             ->add('plantilla', 'entity', array(
                     'label'         =>  'Plantilla',
                     'empty_value'=>'Seleccione una plantilla',
                     'class'         =>  'DGPlusbelleBundle:Plantilla',
                     'mapped' => false
-                ))        
+                ))   
+          /*  ->add('campos', 'choice', array(
+                    'multiple'  => true,
+                    'expanded'  => false,
+                    'attr' => array('style' => 'height:150px'),
+                    'mapped'    => false,
+                    'required' => false
+                )) */
+                    
             ->add('tratamiento','entity', array( 'label' => 'Tratamiento',
                          'empty_value'   => 'Seleccione un tratamiento...',
                          'class'         => 'DGPlusbelleBundle:Tratamiento',
