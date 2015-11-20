@@ -21,16 +21,29 @@ class ReporteController extends Controller
     /**
      * 
      *
-     * @Route("/", name="admin_reporte", options={"expose"=true})
+     * @Route("/ingresopaquete", name="admin_reporte_paquete", options={"expose"=true})
      * @Method("GET")
      * @Template()
      */
     public function ingresosPaqueteAction()
     {
-        
-        
-        //var_dump($ingresos);
-        
+        return array(
+            //'empleados'=>$empleados,
+            //'ingresos' => $ingresos[0],
+        );
+    }
+    
+    
+    
+    /**
+     * 
+     *
+     * @Route("/ingresoemergencia", name="admin_reporte_emergencia", options={"expose"=true})
+     * @Method("GET")
+     * @Template()
+     */
+    public function ingresosEmergenciaAction()
+    {
         return array(
             //'empleados'=>$empleados,
             //'ingresos' => $ingresos[0],
@@ -40,14 +53,71 @@ class ReporteController extends Controller
     /**
      * 
      *
-     * @Route("/bar_grafico", name="admin_reporte_bar", options={"expose"=true})
+     * @Route("/bar_graficoingresopaquete", name="admin_reporte_paquete_grafico", options={"expose"=true})
      * @Method("GET")
      * @Template()
      */
-    public function bargraficoAction(Request $request){
+    public function barGraficoPaqueteAction(Request $request){
         $em = $this->getDoctrine()->getManager();
         $mes= date('m');
-        $anioUser = $request->get('anioUser');
+        $anioInicioUser = $request->get('anioInicioUser');
+        $anioFinUser = $request->get('anioFinUser');
+        if(!isset($anioInicioUser)){
+            $year = date('Y');
+        }
+        else{
+            $year = $anioInicioUser;
+        }
+                
+        $ingresos = array();
+        //var_dump($mes);
+            //echo $i."\n";
+            $dql = "SELECT p.nombre as paquete, sum(p.costo) as total FROM DGPlusbelleBundle:VentaPaquete vp "
+                . "JOIN vp.paquete p "
+                . "WHERE vp.fechaVenta BETWEEN :fechainicio AND :fechafin group by 'paquete'";
+                   
+            $ingresosprev=array();
+            
+            $ingresosprev = $em->createQuery($dql)
+                       ->setParameters(array('fechainicio'=>$anioInicioUser,'fechafin'=>$anioFinUser))
+                       //->setParameter('mes','_____0'.'1'.'___')
+                       ->getResult();
+            
+            if( count($ingresosprev)!=0){
+                //echo "sdacd";
+                //array_push($ingresosprev[0], $mesLabel[($mes-1)]);
+                array_push($ingresos, $ingresosprev);
+                
+                return array(
+                    //'empleados'=>$empleados,
+                    'ingresos' => $ingresos[0],
+                );
+                  
+            }  
+            else{
+                return array(
+                    //'empleados'=>$empleados,
+                    'ingresos' => $ingresos,
+                );
+            }
+            
+          
+    }
+    
+    
+    
+    /**
+     * 
+     *
+     * @Route("/bar_graficoingresoemergencia", name="admin_reporte_emergencia_grafico", options={"expose"=true})
+     * @Method("GET")
+     * @Template()
+     */
+    public function barGraficoEmergenciaAction(Request $request){
+        $em = $this->getDoctrine()->getManager();
+        $mes= date('m');
+        $anioInicioUser = $request->get('anioInicioUser');
+        $anioFinUser = $request->get('anioFinUser');
         //var_dump($anioUser);
         if(!isset($anioUser)){
             $year = date('Y');
@@ -55,37 +125,20 @@ class ReporteController extends Controller
         else{
             $year = $anioUser;
         }
-        //var_dump($year);
-        //$mes= "01";
-        //var_dump($year);
+        
         $mesint = intval($mes);
         $mesLabel = array("Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre");
-        
-        $entities = $em->getRepository('DGPlusbelleBundle:Usuario')->findAll();
-        $empleados = $em->getRepository('DGPlusbelleBundle:Empleado')->findBy(array('estado'=>true));
-        //var_dump($empleado);
-        
-        /*$dql = "SELECT sum(t.costo)"
-                    . " FROM"
-                    . " DGPlusbelleBundle:Consulta c"
-                    . " JOIN c.tratamiento t"
-                    . " JOIN c.empleado emp"
-                    . " WHERE c.fechaConsulta LIKE :mes AND emp.estado=true AND emp.id=:idEmpleado";
-                $comision = $em->createQuery($dql)
-                       ->setParameters(array('idEmpleado'=>$empleado['id'],'mes'=>'_____'.$mes.'___'))
-                       ->getResult();
-          */      
                 
         $ingresos = array();
         //var_dump($mes);
             //echo $i."\n";
-            $dql = "SELECT MONTH(vp.fechaVenta) as mes, sum(p.costo) as total FROM DGPlusbelleBundle:VentaPaquete vp "
-                . "JOIN vp.paquete p "
-                . "WHERE vp.fechaVenta LIKE :year group by vp.fechaVenta";
+            $dql = "SELECT MONTH(c.fechaConsulta) as mes, sum(c.costoConsulta) as total FROM DGPlusbelleBundle:Consulta c "
+                . "JOIN c.tipoConsulta tc "
+                . "WHERE c.fechaConsulta BETWEEN :fechainicio AND :fechafin AND tc.nombre = 'Emergencia' group by 'mes'";
             $ingresosprev=array();
             
             $ingresosprev = $em->createQuery($dql)
-                       ->setParameter('year',$year.'______')
+                       ->setParameters(array('fechainicio'=>$anioInicioUser,'fechafin'=>$anioFinUser))
                        //->setParameter('mes','_____0'.'1'.'___')
                        ->getResult();
             
@@ -95,22 +148,22 @@ class ReporteController extends Controller
                     $ingresosprev[$key]['mesnombre']=$mesLabel[$indexMes-1];
                 
             }
-            //var_dump(count($ingresosprev));
+            //var_dump($ingresosprev);
             //var_dump($ingresosprev);
             if( count($ingresosprev)!=0){
                 //echo "sdacd";
-                array_push($ingresosprev[0], $mesLabel[($mes-1)]);
+                //array_push($ingresosprev[0], $mesLabel[($mes-1)]);
                 array_push($ingresos, $ingresosprev);
                 
                 return array(
-                    'empleados'=>$empleados,
+                    //'empleados'=>$empleados,
                     'ingresos' => $ingresos[0],
                 );
                   
             }  
             else{
                 return array(
-                    'empleados'=>$empleados,
+                    //'empleados'=>$empleados,
                     'ingresos' => $ingresos,
                 );
             }
@@ -118,6 +171,177 @@ class ReporteController extends Controller
           
     }
     
+    
+    
+    
+    //////////////////////////////CONSOLIDADO DE PAQUETES///////////////////////
+    
+    /**
+     * 
+     *
+     * @Route("/consolidadopaquete", name="admin_reporte_consolidado_paquete", options={"expose"=true})
+     * @Method("GET")
+     * @Template()
+     */
+    public function consolidadoPaqueteAction()
+    {
+        return array(
+            //'empleados'=>$empleados,
+            //'ingresos' => $ingresos[0],
+        );
+    }
+    
+    
+    /**
+     * 
+     *
+     * @Route("/bar_graficoconsolidadopaquete", name="admin_reporte_consolidado_grafico", options={"expose"=true})
+     * @Method("GET")
+     * @Template()
+     */
+    public function barGraficoConsolidadoPaqueteAction(Request $request){
+        $em = $this->getDoctrine()->getManager();
+        $mes= date('m');
+        $anioInicioUser = $request->get('anioInicioUser');
+        $anioFinUser = $request->get('anioFinUser');
+        //var_dump($anioUser);
+        if(!isset($anioUser)){
+            $year = date('Y');
+        }
+        else{
+            $year = $anioUser;
+        }
+        
+        $mesint = intval($mes);
+        $mesLabel = array("Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre");
+                
+        $ingresos = array();
+        //var_dump($mes);
+            //echo $i."\n";
+            $dql = "SELECT p.nombre as paquete, count(vp.id) as total FROM DGPlusbelleBundle:VentaPaquete vp "
+                . "JOIN vp.paquete p "
+                . "WHERE vp.fechaVenta BETWEEN :fechainicio AND :fechafin group by 'paquete'";
+            $ingresosprev=array();
+            
+            $ingresosprev = $em->createQuery($dql)
+                       ->setParameters(array('fechainicio'=>$anioInicioUser,'fechafin'=>$anioFinUser))
+                       //->setParameter('mes','_____0'.'1'.'___')
+                       ->getResult();
+            /*
+            foreach ($ingresosprev as $key=>$ingreso){
+                //var_dump($ingreso);
+                $indexMes=$ingresosprev[$key]['mes'];
+                    $ingresosprev[$key]['mesnombre']=$mesLabel[$indexMes-1];
+                
+            }*/
+            //var_dump($ingresosprev);
+            //var_dump($ingresosprev);
+            if( count($ingresosprev)!=0){
+                //echo "sdacd";
+                //array_push($ingresosprev[0], $mesLabel[($mes-1)]);
+                array_push($ingresos, $ingresosprev);
+                
+                return array(
+                    //'empleados'=>$empleados,
+                    'ingresos' => $ingresos[0],
+                );
+                  
+            }  
+            else{
+                return array(
+                    //'empleados'=>$empleados,
+                    'ingresos' => $ingresos,
+                );
+            }
+            
+          
+    }
+    
+    
+    
+    /**
+     * 
+     *
+     * @Route("/tratamientofrecuente", name="admin_reporte_tratamiento_frecuente", options={"expose"=true})
+     * @Method("GET")
+     * @Template()
+     */
+    public function tratamientoFrecuenteAction()
+    {
+        return array(
+            //'empleados'=>$empleados,
+            //'ingresos' => $ingresos[0],
+        );
+    }
+    
+    
+    ///////Tratamiento mas frecuente en consulta de emergencia
+    
+    /**
+     * 
+     *
+     * @Route("/bar_graficotratamientofrecuente", name="admin_reporte_tratamiento_frecuente_grafico", options={"expose"=true})
+     * @Method("GET")
+     * @Template()
+     */
+    public function barGraficoTratamientoFrecuenteAction(Request $request){
+        $em = $this->getDoctrine()->getManager();
+        $mes= date('m');
+        $anioInicioUser = $request->get('anioInicioUser');
+        $anioFinUser = $request->get('anioFinUser');
+        //var_dump($anioUser);
+        if(!isset($anioUser)){
+            $year = date('Y');
+        }
+        else{
+            $year = $anioUser;
+        }
+        
+        //$mesint = intval($mes);
+        //$mesLabel = array("Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre");
+                
+        $ingresos = array();
+        //var_dump($mes);
+            //echo $i."\n";
+            $dql = "SELECT t.nombre as tratamiento, count(c.tratamiento) as total FROM DGPlusbelleBundle:Consulta c "
+                . "JOIN c.tratamiento t "
+                . "JOIN c.tipoConsulta tc "
+                . "WHERE c.fechaConsulta BETWEEN :fechainicio AND :fechafin AND tc.nombre = 'Emergencia' group by 'tratamiento'";
+            $ingresosprev=array();
+            
+            $ingresosprev = $em->createQuery($dql)
+                       ->setParameters(array('fechainicio'=>$anioInicioUser,'fechafin'=>$anioFinUser))
+                       //->setParameter('mes','_____0'.'1'.'___')
+                       ->getResult();
+            /*
+            foreach ($ingresosprev as $key=>$ingreso){
+                //var_dump($ingreso);
+                $indexMes=$ingresosprev[$key]['mes'];
+                    $ingresosprev[$key]['mesnombre']=$mesLabel[$indexMes-1];
+                
+            }*/
+            //var_dump($ingresosprev);
+            //var_dump($ingresosprev);
+            if( count($ingresosprev)!=0){
+                //echo "sdacd";
+                //array_push($ingresosprev[0], $mesLabel[($mes-1)]);
+                array_push($ingresos, $ingresosprev);
+                
+                return array(
+                    //'empleados'=>$empleados,
+                    'ingresos' => $ingresos[0],
+                );
+                  
+            }  
+            else{
+                return array(
+                    //'empleados'=>$empleados,
+                    'ingresos' => $ingresos,
+                );
+            }
+            
+          
+    }
     
     
 }

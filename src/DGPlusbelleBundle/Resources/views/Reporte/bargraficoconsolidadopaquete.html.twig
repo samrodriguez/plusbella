@@ -1,0 +1,50 @@
+{% block contenido -%}
+                <div id="contenedorGrafico">
+                </div>
+   {% endblock %}
+
+  {% block javascripts_step %}
+      
+        <script src="{{ asset('Resources/wrapkit/scripts/chartjs.js') }}"></script>
+          
+       <script>
+    $(document).ready(function(){
+                
+        {% if ingresos %}
+                $('canvas').show();
+                
+                var data = {
+                labels: [
+                        {% for key, ingreso in ingresos %}
+                            "{{ingresos[key]['paquete']}}",
+                        {% endfor %}
+                ],
+                datasets: [
+                    {
+                        label: "My Second dataset",
+                        fillColor: "rgba(151,187,205,0.2)",
+                        strokeColor: "rgba(151,187,205,1)",
+                        pointColor: "rgba(151,187,205,1)",
+                        pointStrokeColor: "#fff",
+                        pointHighlightFill: "#fff",
+                        pointHighlightStroke: "rgba(151,187,205,1)",
+                        data: [
+                                {% for key, ingreso in ingresos %}
+                                    {{ingresos[key]['total']|number_format(2, '.', ',')}},
+                                {% endfor %}
+                        ],
+                    }
+                ]
+            };
+            var ctx = $("#myChart").get(0).getContext("2d");
+            var myLineChart = new Chart(ctx).Line(data);
+
+        {% else %}
+            bootbox.alert("No hay datos para ese intervalo", function() {});
+            $('canvas').hide();
+        {% endif %}
+                
+    });//Fin document ready
+        </script>
+
+    {% endblock %} 

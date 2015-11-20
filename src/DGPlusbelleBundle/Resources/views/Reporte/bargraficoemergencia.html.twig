@@ -1,5 +1,6 @@
 {% block contenido -%}
-                
+                <div id="contenedorGrafico">
+                </div>
    {% endblock %}
 
   {% block javascripts_step %}
@@ -39,18 +40,9 @@
             var myLineChart = new Chart(ctx).Line(data);
 
         {% else %}
-
-            bootbox.alert("No hay datos para ese año", function() {
-                
-            });
+            bootbox.alert("No hay datos para ese intervalo", function() {});
             $('canvas').hide();
         {% endif %}
-                
-              
-                    
-        
-        
-        
         
     });//Fin document ready
         </script>
