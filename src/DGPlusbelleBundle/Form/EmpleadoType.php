@@ -18,22 +18,23 @@ class EmpleadoType extends AbstractType
         $builder
             ->add('persona', new PersonaType())
                 
-            ->add('cargo','text',array('label' => 'Cargo',
+            ->add('cargo','choice',array('label' => 'Cargo','required'=>false, 'empty_value'=>'Seleccione cargo...',
+                    'choices'  => array('Esteticista' => 'Esteticista', 'Medico' => 'Medico', 'Secretaria' => 'Secretaria'),
                     'attr'=>array(
                     'class'=>'form-control input-sm'
                     )))
-            ->add('foto','text',array('label' => 'Foto',
+        /*    ->add('foto','text',array('label' => 'Foto',
                     'attr'=>array(
                     'class'=>'form-control '
                       
-                    )))
+                    )))  */
             //->add('persona')
-            ->add('sucursal',null,array('label' => 'Sucursal','empty_value'=>'Seleccione Sucursal',
+            ->add('sucursal',null,array('label' => 'Sucursal','required'=>false,'empty_value'=>'Seleccione Sucursal...',
                     'attr'=>array(
                     'class'=>'form-control input-sm'
                     )))
             //->add('horario')
-            ->add('tratamiento','entity',array('label' => 'Tratamientos que realiza',
+            ->add('tratamiento','entity',array('label' => 'Tratamientos que realiza','required'=>false,
                 'class'=>'DGPlusbelleBundle:Tratamiento','property'=>'nombre',
                 'multiple'=>true,
                 'expanded'=>true,

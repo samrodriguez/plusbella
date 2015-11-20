@@ -95,9 +95,9 @@ class Persona
     private $empleado;
     
     /**
-     * @ORM\OneToMany(targetEntity="VentaPaquete", mappedBy="persona", cascade={"persist", "remove"})
+     * @ORM\OneToMany(targetEntity="VentaPaquete", mappedBy="paciente", cascade={"persist", "remove"})
      */
-   // private $ventapaquete;
+    private $ventapaquete;
 
     function getPaciente() {
         return $this->paciente;
