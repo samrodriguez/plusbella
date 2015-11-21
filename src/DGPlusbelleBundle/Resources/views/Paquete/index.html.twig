@@ -1,5 +1,50 @@
 {% extends 'DGPlusbelleBundle:Layout:layout.html.twig' %}
 
+{% block css %}
+    {{parent()}}
+    <style>
+        
+        //Posicion del boton agregar
+        .placas>div:last-child {
+            position:absolute;
+        }
+        .addItem{
+            position: absolute;
+            height: 50px;
+            float: right;
+            margin-bottom: 50px;
+            padding-bottom: 100px;
+            top: -5px;
+            left: -2px;
+        }
+        
+            .addItem div {
+                position: absolute;
+            }
+        
+        .col-md-4{
+            padding-top: 40px;
+        }
+        
+        #dgplusbellebundle_consulta_horaInicio_hourSelectBoxItContainer, #dgplusbellebundle_consulta_horaInicio_minuteSelectBoxItContainer,
+        #dgplusbellebundle_consulta_horaFin_hourSelectBoxItContainer, #dgplusbellebundle_consulta_horaFin_minuteSelectBoxItContainer{
+            width:75px;
+        }
+        
+            #dgplusbellebundle_consulta_horaInicio_hourSelectBoxItContainer,#dgplusbellebundle_consulta_horaFin_hourSelectBoxItContainer {
+                float: left;
+            }
+            #dgplusbellebundle_consulta_horaInicio_minuteSelectBoxItContainer, #dgplusbellebundle_consulta_horaFin_minuteSelectBoxItContainer {
+                float: right;
+            }
+            #dgplusbellebundle_consulta_horaInicio, #dgplusbellebundle_consulta_horaFin{
+                width: 155px;
+            }
+    </style>
+    
+{% endblock %}
+
+
 {% block contenido -%}
 
         <div class="content-body">
@@ -165,6 +210,7 @@
                 });
                 
                      $("#delete-datatables1").click(function(){
+                        if(!$(this).hasClass('disabled')){     
                         bootbox.confirm("¿Desea cambiar el estado de este registro?", function(result) {
                         if(result){
                         $.getJSON(Routing.generate('admin_paquete_desactivar', { id: link}), 
@@ -194,7 +240,7 @@
                         }
                                     
                     });     
-                        
+                        }
 
                 }); 
                 
@@ -306,7 +352,7 @@
 var collectionHolder = $('div.placas');
 var col=$('#hnr_sircimbundle_estudioradiologicotype_placas');
 // setup an "add a tag" link
-var $addTagLink = $('<div class="row"><div class="col-md-2"><a href="#" class="btn btn-bordered btn-primary btn-sm">Agregar tratamiento</a></div></div>');
+var $addTagLink = $('<div class="row"><div class="col-md-2"><a href="#" class="btn btn-primary ">Agregar tratamiento</a></div></div>');
 var $removeTagLink = $('<a href="#" class="remove_placa_link btn btn-danger">Eliminar</a>');
 var $newLinkLi = $('<div class="col-md-12 addItem"></div>').append($addTagLink);
 var $delLinkLi = $('#hnr_sircimbundle_estudioradiologicotype_placas.required').append($removeTagLink);

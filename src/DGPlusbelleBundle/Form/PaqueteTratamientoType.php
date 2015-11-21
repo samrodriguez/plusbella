@@ -19,7 +19,7 @@ class PaqueteTratamientoType extends AbstractType
                     'attr'=>array(
                     'class'=>'form-control input-sm'
                     )))   
-            ->add('numSesiones','text',array('label' => 'Cantidad de Sesiones',
+            ->add('numSesiones','text',array('label' => '# Sesiones',
                     'attr'=>array(
                     'class'=>'form-control input-sm'
                     )))   
