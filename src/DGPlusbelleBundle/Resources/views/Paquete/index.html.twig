@@ -210,6 +210,7 @@
                 });
                 
                      $("#delete-datatables1").click(function(){
+                        if(!$(this).hasClass('disabled')){     
                         bootbox.confirm("¿Desea cambiar el estado de este registro?", function(result) {
                         if(result){
                         $.getJSON(Routing.generate('admin_paquete_desactivar', { id: link}), 
@@ -239,7 +240,7 @@
                         }
                                     
                     });     
-                        
+                        }
 
                 }); 
                 
