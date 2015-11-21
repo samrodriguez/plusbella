@@ -19,7 +19,7 @@
                 
                 <div class="btn-group btn-group-sm pull-left">
                     
-                    <button id="exportar-pdf" data-toggle="tooltip" data-container="body" title="Exportar a PDF" class="btn btn-default datatables1-actions disabled opciones" role="button">
+                    <button id="exportar-pdf" data-toggle="tooltip" data-container="body" title="Exportar a PDF" class="btn btn-default datatables1-actions opciones" role="button">
                         <i class="fa fa-file-pdf-o"></i><a href=""> </a>
                     </button>
                 </div>
@@ -92,7 +92,7 @@
                                             
                 },
                 onClear: function(){
-                    $('canvas').hide();
+                    $('canvas').remove();
                 },
                 pair: $('#fecha-fin')
             });

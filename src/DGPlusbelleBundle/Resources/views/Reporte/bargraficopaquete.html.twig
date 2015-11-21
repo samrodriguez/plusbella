@@ -1,17 +1,16 @@
 {% block contenido -%}
-                <div id="contenedorGrafico">
-                </div>
+                
    {% endblock %}
 
   {% block javascripts_step %}
       
-        <script src="{{ asset('Resources/wrapkit/scripts/chartjs.js') }}"></script>
+        
           
        <script>
     $(document).ready(function(){
                 
         {% if ingresos %}
-                $('canvas').show();
+                $('canvas').remove();
                 
                 var data = {
                 labels: [
@@ -36,12 +35,13 @@
                     }
                 ]
             };
+            $('#contenedorGrafico').append('<canvas id="myChart" width="900%" height="400%"><canvas>');
             var ctx = $("#myChart").get(0).getContext("2d");
             var myLineChart = new Chart(ctx).Line(data);
-
+            
         {% else %}
             bootbox.alert("No hay datos para ese intervalo", function() {});
-            $('canvas').hide();
+            $('canvas').remove();
         {% endif %}
                 
     });//Fin document ready
