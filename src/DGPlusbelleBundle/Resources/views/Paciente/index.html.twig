@@ -144,6 +144,7 @@
     
        
   {% block javascripts_step %}
+       <script src="{{ asset('Resources/js/Paciente.js') }}"></script>
         <script type="text/javascript" src="{{ asset('Resources/zebra/inicializacioncalendarios.js')}}" ></script>
         <script>
            
@@ -303,7 +304,7 @@
         $('#filterDatatables1').val('');
         
         
-        
+           validarPaciente();  
         
     });//Fin document ready
         

@@ -107,6 +107,7 @@
 {% endblock %}
      
   {% block javascripts_step %}
+       <script src="{{ asset('Resources/js/Empleado.js') }}"></script>
       
        <script>
             $(document).ready(function(){
@@ -288,7 +289,7 @@
         $('#filterDatatables1').val('');
         
         
-        
+        validarEmpleado(); 
         
     });//Fin document ready
         

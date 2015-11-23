@@ -21,7 +21,7 @@ class EmpleadoType extends AbstractType
             ->add('cargo','choice',array('label' => 'Cargo','required'=>false, 'empty_value'=>'Seleccione cargo...',
                     'choices'  => array('Esteticista' => 'Esteticista', 'Medico' => 'Medico', 'Secretaria' => 'Secretaria'),
                     'attr'=>array(
-                    'class'=>'form-control input-sm'
+                    'class'=>'form-control input-sm cargoEmpleado'
                     )))
         /*    ->add('foto','text',array('label' => 'Foto',
                     'attr'=>array(
@@ -31,7 +31,7 @@ class EmpleadoType extends AbstractType
             //->add('persona')
             ->add('sucursal',null,array('label' => 'Sucursal','required'=>false,'empty_value'=>'Seleccione Sucursal...',
                     'attr'=>array(
-                    'class'=>'form-control input-sm'
+                    'class'=>'form-control input-sm sucursalEmpleado'
                     )))
             //->add('horario')
             ->add('tratamiento','entity',array('label' => 'Tratamientos que realiza','required'=>false,
@@ -39,7 +39,7 @@ class EmpleadoType extends AbstractType
                 'multiple'=>true,
                 'expanded'=>true,
                     'attr'=>array(
-                    'class'=>''
+                    'class'=>'tratamientoEmpleado'
                     ))) 
         ;
     }
