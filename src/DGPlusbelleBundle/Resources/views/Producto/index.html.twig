@@ -136,6 +136,28 @@
                 }); 
                 
                 
+                //alert("prueba");
+                $(document).on("change","#dgplusbellebundle_producto_cantidad",function(){
+                    //alert("prueba");
+                    if($(this).val()==0 || $(this).val()<=0){
+                        $(this).val('0');
+                    }
+                    else{
+                        var cantidad = $(this).val();
+                        $.getJSON(Routing.generate('admin_actualizar_cantidad_producto', { id: link,cantidad:cantidad}), 
+                          function(data) {
+                           var mensaje="Producto modificado exitosamente";
+                                    if(data.regs==1){
+                                        bootbox.alert(mensaje, function() {
+                                        
+                                        });
+                                    }
+                            }); 
+                    }
+                   
+
+                });
+                
                 //Seleccionar un registro
                 $('#datatables1>tbody>tr').on('click', function(event) {
                     //Se limpia los otros que esten activos
@@ -193,7 +215,7 @@
                         bootbox.confirm("¿Desea cambiar el estado de este registro?", function(result) {
                         if(result){
                         $.getJSON(Routing.generate('admin_producto_desactivar', { id: link}), 
-                          function(data) {   
+                          function(data) {
                            var mensaje="";
                                     if(data.regs==0){
                                         //Se cambia a desactivado

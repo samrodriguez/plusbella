@@ -342,7 +342,7 @@ class ConsultaController extends Controller
      * @Method("GET")
      * @Template()
      */
-    public function newConPacienteAction()
+    public function newconpacienteAction()
     {
         //Metodo para consulta nueva con id de paciente
         $entity = new Consulta();
@@ -486,7 +486,7 @@ class ConsultaController extends Controller
      * @Method("GET")
      * @Template()
      */
-    public function editConPacienteAction($id)
+    public function editconpacienteAction($id)
     {
         $em = $this->getDoctrine()->getManager();
 
@@ -711,7 +711,7 @@ class ConsultaController extends Controller
      * @Method("GET")
      * @Template()
      */
-    public function historialConsultaAction(){
+    public function historialconsultaAction(){
         $em = $this->getDoctrine()->getManager();
         
         //Recuperación del id

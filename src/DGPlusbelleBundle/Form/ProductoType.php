@@ -44,6 +44,10 @@ class ProductoType extends AbstractType
                         'widget' => 'single_text',
                         'attr'   => array('class' => 'form-control input-sm'),
                        ))
+            ->add('cantidad',null,array('label' => 'Cantidad','required'=>false,
+                    'attr'=>array(
+                    'class'=>'form-control input-sm'
+                    )))             
             //->add('estado')
            
         ;

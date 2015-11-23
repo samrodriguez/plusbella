@@ -285,4 +285,30 @@ class ProductoController extends Controller
         return new Response(json_encode($exito));
         
     }
+    
+    
+    /**
+     * Deletes a Producto entity.
+     *
+     * @Route("/actualizar_cantidad_producto/{id}/{cantidad}", name="admin_actualizar_cantidad_producto", options={"expose"=true})
+     * @Method("GET")
+     */
+    public function actualizarCantidadAction(Request $request, $id, $cantidad)
+    {
+        //$form = $this->createDeleteForm($id);
+        //$form->handleRequest($request);
+
+        $em = $this->getDoctrine()->getManager();
+        $entity = $em->getRepository('DGPlusbelleBundle:Producto')->find($id);
+        
+        $entity->setCantidad($cantidad);
+        $exito['regs']=1;//registro actualizado
+       
+        
+        $em->persist($entity);
+        $em->flush();
+        
+        return new Response(json_encode($exito));
+        
+    }
 }

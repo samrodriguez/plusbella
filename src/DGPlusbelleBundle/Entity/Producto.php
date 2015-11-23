@@ -66,7 +66,12 @@ class Producto
      */
     private $categoria;
 
-
+    /**
+     * @var \Cantidad
+     *
+     * @ORM\Column(name="cantidad", type="integer", nullable=false)
+     */
+    private $cantidad;
 
     /**
      * Get id
@@ -220,6 +225,31 @@ class Producto
     public function getCategoria()
     {
         return $this->categoria;
+    }
+    
+    
+    /**
+     * Set cantidad
+     *
+     * @param string $cantidad
+     *
+     * @return Producto
+     */
+    public function setCantidad($cantidad)
+    {
+        $this->cantidad= $cantidad;
+
+        return $this;
+    }
+
+    /**
+     * Get cantidad
+     *
+     * @return integer
+     */
+    public function getCantidad()
+    {
+        return $this->cantidad;
     }
     
     public function __toString() {
