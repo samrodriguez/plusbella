@@ -1,6 +1,54 @@
 {#{% extends 'DGPlusbelleBundle:Layout:general.html.twig' %}#}
 {% extends 'DGPlusbelleBundle:Layout:layout.html.twig' %}
 
+
+{% block css %}
+    {{parent()}}
+    <style>
+        
+        //Posicion del boton agregar
+        .placas>div:last-child {
+            position:absolute;
+        }
+        .addItem{
+            position: absolute;
+            height: 50px;
+            float: right;
+            margin-bottom: 50px;
+            padding-bottom: 100px;
+            top: -55px;
+            left: -2px;
+        }
+        
+            .addItem div {
+                position: absolute;
+            }
+        
+        .col-md-4{
+            padding-top: 10px;
+        }
+        
+        #dgplusbellebundle_consulta_horaInicio_hourSelectBoxItContainer, #dgplusbellebundle_consulta_horaInicio_minuteSelectBoxItContainer,
+        #dgplusbellebundle_consulta_horaFin_hourSelectBoxItContainer, #dgplusbellebundle_consulta_horaFin_minuteSelectBoxItContainer{
+            width:75px;
+        }
+        
+            #dgplusbellebundle_consulta_horaInicio_hourSelectBoxItContainer,#dgplusbellebundle_consulta_horaFin_hourSelectBoxItContainer {
+                float: left;
+            }
+            #dgplusbellebundle_consulta_horaInicio_minuteSelectBoxItContainer, #dgplusbellebundle_consulta_horaFin_minuteSelectBoxItContainer {
+                float: right;
+            }
+            #dgplusbellebundle_consulta_horaInicio, #dgplusbellebundle_consulta_horaFin{
+                width: 155px;
+            }
+    </style>
+    
+{% endblock %}
+
+
+
+
 {% block contenido -%}
     
     
@@ -126,33 +174,29 @@
             
             
              <div class="row">
-                    
-                    
                     <div class="col-md-12">
                         <h3 class="text-left">Producto</h3>
                         <hr>
+                        <br><br>
                     </div>
-                </div>
+             </div>
             <div class="row">  
                  <div id="listadoa">
-                            <div class="listado col-md-2">
-                                <ul class="placas" data-prototype="{{ form_widget(form.placas.vars.prototype)|e }}">
+                            <div class="listado col-md-12">          
+                               <div class="placas" data-prototype="{% filter escape %}  {% include 'DGPlusbelleBundle:Prototype:producto.html.twig' with { 'form': form.placas.vars.prototype} %}   {% endfilter  %}"> 
                                     {{ form_widget(form.placas) }}
-                                </ul>
+                                </div>
                             </div>
                  </div>
      
-            </div>     
- 
-            
-            <br>
+            </div>      
+
+            <br> <br>
             <div class="form-grouphide"> 
                  <a href="{{path('dashboard')}}" class="btn btn-default btn-sm" id="cancelarNuevo">Cancelar</a>
                 {{ form_widget(form.submit) }}
-             </div>
-	        
-        
-     
+            </div>
+
  </div>
 {{ form_widget(form._token) }}
 </div>  
@@ -175,29 +219,49 @@
                 });
             });
 </script>   
-<script>
+ <script>
 
-// Get the ul that holds the collection of tags
-var collectionHolder = $('ul.placas');
-var col=$('#hnr_sircimbundle_estudioradiologicotype_placas');
-// setup an "add a tag" link
-var $addTagLink = $('<a href="#" class="add_placa_link">+</a>');
-var $removeTagLink = $('<a href="#" class="remove_placa_link">x</a>');
-var $newLinkLi = $('<li></li>').append($addTagLink);
-var $delLinkLi = $('#hnr_sircimbundle_estudioradiologicotype_placas.required').append($removeTagLink);
-
-
+    // Get the ul that holds the collection of tags
+    var collectionHolder = $('div.placas');
+    var col=$('#hnr_sircimbundle_estudioradiologicotype_placas');
+    // setup an "add a tag" link
+    var $addTagLink = $('<div class="row"><div class="col-md-2"><a href="#" class="add_placa_link btn btn-primary">Agregar producto</a></div></div>');
+    var $removeTagLink = $('<a href="#" class="remove_placa_link btn btn-danger">Eliminar</a>');
+    var $newLinkLi = $('<div class="col-md-12 addItem"></div>').append($addTagLink);
+    var $delLinkLi = $('#hnr_sircimbundle_estudioradiologicotype_placas.required').append($removeTagLink);
 
 
 
-jQuery(document).ready(function() {
 
 
+    jQuery(document).ready(function() {
 
-    collectionHolder.find('li').each(function() {
-        addTagFormDeleteLink($(this));
+        $("#dgplusbellebundle_consulta_pacienteSelectBoxItOptions li").remove();
+        $("#dgplusbellebundle_consulta_reportePlantilla_1").prop("checked", true);
+        $("#lista_plantilla").hide();
+        $('#dgplusbellebundle_consulta_fechaConsulta').daterangepicker({
+                        singleDatePicker: true,
+                        showDropdowns: true,
+                        locale: {
+                            format: 'YYYY-MM-DD'
+                        },
+                    });
 
+        $('select[id$=dgplusbellebundle_consulta_placas_]').selectBoxIt();
+
+        collectionHolder.find('li').each(function() {
+            addTagFormDeleteLink($(this));
     });
+    
+                var seleccionado="";
+                //Eliminar options del select de pacientes
+                $('#dgplusbellebundle_consulta_paciente option').each(function(index, val) {
+                    
+                    seleccionado = $(this).attr('selected');
+                    if (!seleccionado){
+                        $(this).remove();
+                    }
+                });
 
     
 
@@ -209,9 +273,9 @@ jQuery(document).ready(function() {
     collectionHolder.data('index', collectionHolder.find(':input').length);
     
     //Identificar que form esta activo
-    var editar=$('ul.placas').attr('id');
+    var editar=$('div.placas').attr('id');
     if(editar!='editar_usuario'){
-        addTagForm(collectionHolder, $newLinkLi);   //Muestra un formulario en la carga de la página nuevo
+        //addTagForm(collectionHolder, $newLinkLi);   //Muestra un formulario en la carga de la página nuevo
     }
     
 
@@ -230,8 +294,6 @@ jQuery(document).ready(function() {
 });
 
 
-                
-
 function addTagForm(collectionHolder, $newLinkLi) {
     // Get the data-prototype explained earlier
     var prototype = collectionHolder.data('prototype');
@@ -247,7 +309,7 @@ function addTagForm(collectionHolder, $newLinkLi) {
     collectionHolder.data('index', index + 1);
 
     // Display the form in the page in an li, before the "Add a tag" link li
-    var $newFormLi = $('<li></li>').append(newForm);
+    var $newFormLi = $('<div class="col-md-4"></div>').append(newForm);
     $newLinkLi.before($newFormLi);
     
 
@@ -265,7 +327,7 @@ function addTagForm(collectionHolder, $newLinkLi) {
 }
 
 function addTagFormDeleteLink($tagFormLi) {
-    var $removeFormA = $('<a class="link" href="#">x</a>');
+    var $removeFormA = $('<div class="row"><div class="col-md-2"><a class="link btn btn-danger" href="#">Eliminar</a></div></div>');
     $tagFormLi.append($removeFormA);
 
     $removeFormA.on('click', function(e) {
@@ -286,10 +348,10 @@ function addTagFormDeleteLink($tagFormLi) {
 
 
 $('#editar_usuario')
-            .on('mouseover','li', function(){
+            .on('mouseover','div', function(){
                 $(this).find('a.link').css('visibility','visible');
             })
-            .on('mouseout','li', function(){ 
+            .on('mouseout','div', function(){ 
                 $(this).find('a.link').css('visibility','hidden'); 
             });
 
@@ -300,12 +362,12 @@ $('#editar_usuario')
 
 
     
-var editar=$('ul.placas').attr('id');
+var editar=$('div.placas').attr('id');
 if(editar!='editar_usuario'){
     // $('#hnr_sircimbundle_usuariotype_placas_0_usroPredeterminado').prop('checked', true);//Se carga el radiobutton seleccionado
 }
+     </script>
 
- </script>
  
  
 

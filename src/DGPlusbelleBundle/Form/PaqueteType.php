@@ -20,11 +20,11 @@ class PaqueteType extends AbstractType
         $builder
             ->add('nombre','text',array('label' => 'Nombre','required'=>false,
                     'attr'=>array(
-                    'class'=>'form-control input-sm'
+                    'class'=>'form-control input-sm nombrePaquete'
                     )))
             ->add('costo','text',array('label' => 'Costo $','required'=>false,
                     'attr'=>array(
-                    'class'=>'form-control input-sm'
+                    'class'=>'form-control input-sm costoPaquete'
                     )))
          //->add('estado')
        /*     ->add('tratamiento','entity',array('label' => 'Tratamientos',
@@ -40,7 +40,7 @@ class PaqueteType extends AbstractType
                     ))) 
              */    
                 
-          ->add('sucursal','entity',array('label' => 'Sucursales',
+          ->add('sucursal','entity',array('label' => 'Seleccione sucursales','required'=>false,
                 'class'=>'DGPlusbelleBundle:Sucursal',
                 'query_builder' => function(EntityRepository $repository) {
                   return $repository->obtenerSucActivo();
@@ -49,7 +49,7 @@ class PaqueteType extends AbstractType
                 'multiple'=>true,
                 'expanded'=>true,
                     'attr'=>array(
-                    'class'=>''
+                    'class'=>'sucursalPaquete'
                     )))      
               
             ->add('placas','collection',array(

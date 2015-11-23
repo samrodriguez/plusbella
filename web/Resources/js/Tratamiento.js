@@ -1,13 +1,16 @@
 
-$(document).ready(function(){
-$('#dgplusbellebundle_tratamiento_categoria').
+ function validarTratamiento(){
+$('.categoriaTratamiento').
         attr('data-bvalidator', 'required,required');
  
-    $('#dgplusbellebundle_tratamiento_nombre').
+$('.nombreTratamiento').
         attr('data-bvalidator', 'required,required');
 
-     $('#dgplusbellebundle_tratamiento_costo').
-        attr('data-bvalidator', 'number,required,required');		
+$('.costoTratamiento').
+        attr('data-bvalidator', 'number,required,required');
+
+$('.sucursalTratamiento').
+        attr('data-bvalidator', 'number,required,required');	
 
     //Opciones del validador
     var optionsRed = { 
@@ -18,5 +21,5 @@ $('#dgplusbellebundle_tratamiento_categoria').
     //Validar el formulario
     $('form').bValidator(optionsRed);
 	
- });//Fin document ready	
+ }	
 	

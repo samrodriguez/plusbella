@@ -25,21 +25,21 @@ class TratamientoType extends AbstractType
                 }, 
                 'empty_value'=>'Seleccione Categoria',
                 'attr'=>array(
-                'class'=>'form-control input-sm'
+                'class'=>'form-control input-sm categoriaTratamiento'
               )))    
             ->add('nombre','text',array('label' => 'Nombre','required'=>false,
                     'attr'=>array(
-                    'class'=>'form-control input-sm'
+                    'class'=>'form-control input-sm nombreTratamiento'
                     )))
             ->add('costo','text',array('label' => 'Costo $','required'=>false,
                     'attr'=>array(
-                    'class'=>'form-control input-sm'
+                    'class'=>'form-control input-sm costoTratamiento'
                     )))
            // ->add('estado')
             
             //->add('empleado')
            //->add('paquete')
-           ->add('sucursal','entity',array('label' => 'Sucursales',
+           ->add('sucursal','entity',array('label' => 'Sucursales','required'=>false,
                 'class'=>'DGPlusbelleBundle:Sucursal',
                 'query_builder' => function(EntityRepository $repository) {
                   return $repository->obtenerSucActivo();
@@ -48,7 +48,7 @@ class TratamientoType extends AbstractType
                 'multiple'=>true,
                 'expanded'=>true,
                     'attr'=>array(
-                    'class'=>''
+                    'class'=>'sucursalTratamiento'
                     ))) 
         ;
     }

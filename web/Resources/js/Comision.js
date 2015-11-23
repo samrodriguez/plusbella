@@ -1,16 +1,16 @@
 
-$(document).ready(function(){
+ function validarComision(){
 	
-$('#dgplusbellebundle_comision_descripcion').
+$('.descripcionComision').
         attr('data-bvalidator', 'required,required');
 		
-$('#dgplusbellebundle_comision_porcentaje').
+$('.porcentajeComision').
         attr('data-bvalidator', 'rangelength[1:5],between[0:100],required,required');
 
-$('#dgplusbellebundle_comision_meta').
+$('.metaComision').
         attr('data-bvalidator', 'number,required,required');		
 	
-$('#dgplusbellebundle_comision_empleado').
+$('.empleadoComision').
         attr('data-bvalidator', 'required,required');
  
     //Opciones del validador
@@ -22,5 +22,5 @@ $('#dgplusbellebundle_comision_empleado').
     //Validar el formulario
     $('form').bValidator(optionsRed);
 	
- });//Fin document ready	
+ }	
 	

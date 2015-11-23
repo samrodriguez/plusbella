@@ -1,6 +1,6 @@
 
-$(document).ready(function(){
-$('#dgplusbellebundle_categoria_nombre').
+function validarCategoria(){
+$('.nombreCategoria').
         attr('data-bvalidator', 'required,required');
 	
  
@@ -13,5 +13,5 @@ $('#dgplusbellebundle_categoria_nombre').
     //Validar el formulario
     $('form').bValidator(optionsRed);
 	
- });//Fin document ready	
+ }	
 	
