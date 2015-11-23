@@ -13,9 +13,8 @@ class FPDFService {
         $this->pdf = $pdf;
     }
     
-    public function toPdf($urlLogo, $consulta)
+    public function toPdf($titulo, $consulta, $encabezado)
     {
-        $logo = $urlLogo.'sonodigest.jpg';
         
         $this->pdf->FPDF('P','mm','Letter');
 	$this->pdf->SetTopMargin(20);
@@ -25,17 +24,16 @@ class FPDFService {
         $this->pdf->SetFillColor(255);
         
         $this->pdf->SetFont('Arial','B',16);
-        $this->pdf->Cell(120,32,'$consulta[0]->getDetallePlantilla()->getPlantilla()->getNombre()');
+        $this->pdf->Cell(180,32,$titulo, 0, 0, 'C');
         
         
-        $this->pdf->Line(20, 25.5, 200, 25.5);
-        $this->pdf->Line(20, 26, 200, 26);
+        
         
         $this->pdf->SetFont('Arial','B',13);
         $this->pdf->Ln(26);
         
-        $this->pdf->Cell(32,27,'Informacion general del paciente');
-        $this->pdf->Line(20, 43, 200, 43);
+        //$this->pdf->Cell(32,27,'Informacion general del paciente');
+       // $this->pdf->Line(20, 43, 200, 43);
         
         $this->pdf->Ln(15);
         //$this->mostrarCelda($pdf, 32, 'Fecha: ', $consulta[0]->getConsulta()->getFechaConsulta()->format("d/m/Y"));

@@ -173,9 +173,10 @@ class DefaultController extends Controller
         
         
         
-        $logo = $this->getParameter('plusbelle.logo');
+        $titulo = 'Listado de pacientes'; 
+        $encabezadoTabla = array('Nombre de Paciente', 'Direccion', 'Edad', 'Telefono');
        
-        $this->get('fpdf_printer')->toPdf($logo, $consulta);
+        $this->get('fpdf_printer')->toPdf($titulo, $consulta, $encabezadoTabla);
     }
 
 }
