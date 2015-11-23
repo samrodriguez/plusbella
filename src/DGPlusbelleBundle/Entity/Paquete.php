@@ -56,7 +56,7 @@ class Paquete
      *   }
      * )
      */
-    private $tratamiento;
+  //  private $tratamiento;
 
      /**
      * @var \Doctrine\Common\Collections\Collection
@@ -89,13 +89,15 @@ class Paquete
     /**
      * Constructor
      */
-    public function __construct()
+   public function __construct()
     {
-        $this->tratamiento = new \Doctrine\Common\Collections\ArrayCollection();
+       // $this->tratamiento = new \Doctrine\Common\Collections\ArrayCollection();
         $this->sucursal = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->placas = new ArrayCollection();
        
     }
 
+    
 
     /**
      * Get id
@@ -186,29 +188,29 @@ class Paquete
      *
      * @return Paquete
      */
-    public function addTratamiento(\DGPlusbelleBundle\Entity\Tratamiento $tratamiento)
+ /*  public function addTratamiento(\DGPlusbelleBundle\Entity\Tratamiento $tratamiento)
     {
         $this->tratamiento[] = $tratamiento;
 
         return $this;
     }
-
+*/
     /**
      * Remove tratamiento
      *
      * @param \DGPlusbelleBundle\Entity\Tratamiento $tratamiento
      */
-    public function removeTratamiento(\DGPlusbelleBundle\Entity\Tratamiento $tratamiento)
+/*  public function removeTratamiento(\DGPlusbelleBundle\Entity\Tratamiento $tratamiento)
     {
         $this->tratamiento->removeElement($tratamiento);
     }
-
+*/
     /**
      * Get tratamiento
      *
      * @return \Doctrine\Common\Collections\Collection
      */
-    public function getTratamiento()
+ /* public function getTratamiento()
     {
         return $this->tratamiento;
     }
@@ -249,6 +251,29 @@ class Paquete
     
     public function __toString() {
     return $this->nombre.'   $'.$this->costo;
+    }
+    
+    
+     /**
+     * @ORM\OneToMany(targetEntity="PaqueteTratamiento", mappedBy="paquete", cascade={"persist", "remove"})
+     */
+    protected $placas;
+ /*   public function __construct()
+    {
+       // $this->tratamiento = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->sucursal = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->placas = new ArrayCollection();
+    }     */      
+    public function getPlacas()
+    {
+        return $this->placas;
+    }
+    public function setPlacas(\Doctrine\Common\Collections\Collection $placas)
+    {
+        $this->placas = $placas;
+        foreach ($placas as $placa) {
+            $placa->setPaquete($this);
+        }
     }
     
    

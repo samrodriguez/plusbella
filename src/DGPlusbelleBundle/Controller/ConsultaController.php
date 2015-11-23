@@ -3,6 +3,8 @@
 namespace DGPlusbelleBundle\Controller;
 
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -10,6 +12,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use DGPlusbelleBundle\Entity\Consulta;
 use DGPlusbelleBundle\Entity\Expediente;
 use DGPlusbelleBundle\Entity\HistorialClinico;
+use DGPlusbelleBundle\Entity\HistorialConsulta;
 use DGPlusbelleBundle\Entity\ConsultaProducto;
 use DGPlusbelleBundle\Form\ConsultaType;
 use DGPlusbelleBundle\Form\ConsultaConPacienteType;
@@ -78,7 +81,7 @@ class ConsultaController extends Controller
      *
      * @Route("/", name="admin_consulta_create")
      * @Method("POST")
-     * @Template("DGPlusbelleBundle:Consulta:new.html.twig")
+     * @Template("DGPlusbelleBundle:Consulta:newconpaciente.html.twig")
      */
     public function createAction(Request $request)
     {
@@ -128,9 +131,14 @@ class ConsultaController extends Controller
         $form = $this->createCreateForm($entity,$id,$idEntidad);
         $form->handleRequest($request);
         
-       // $producto = $form->get('producto')->getData();
+        //$campos = $form->get('campos')->getData();
        // $indicaciones = $form->get('indicaciones')->getData();
-        //var_dump($cadena);
+        $parameters = $request->request->all();
+       // foreach($parameters as $p){
+       //     $campos = $parameters->campos;
+        //}
+        
+        //var_dump($parameters['dgplusbellebundle_consulta']['campos']);
         //die();
         if ($form->isValid()) {
             $em = $this->getDoctrine()->getManager();
@@ -177,7 +185,7 @@ class ConsultaController extends Controller
                 $numString = $num[0]["1"];
                 //var_dump($numString);
 
-                switch($numString){
+                switch(strlen($numString)){
                     case 1:
                             $numeroExp .= "00".$numString;
                         break;
@@ -206,6 +214,37 @@ class ConsultaController extends Controller
             $em->persist($entity);
             $em->flush();
             
+            $plantillaid = $parameters['dgplusbellebundle_consulta']['plantilla'];
+            
+            $dql = "SELECT det.id, det.nombre "
+                    . "FROM DGPlusbelleBundle:DetallePlantilla det "
+                    . "JOIN det.plantilla pla "
+                    . "WHERE pla.id =  :plantillaid";
+            
+            $parametros = $em->createQuery($dql)
+                        ->setParameter('plantillaid', $plantillaid)
+                        ->getResult();
+            //$valores = array(); 
+             //var_dump($parameters); 
+            
+            foreach($parametros as $key => $p){
+                $dataReporte = new HistorialConsulta;
+                $detalle = $em->getRepository('DGPlusbelleBundle:DetallePlantilla')->find($p['id']);
+                
+                $dataReporte->setDetallePlantilla($detalle);       
+                $dataReporte->setConsulta($entity);
+                $dataReporte->setValorDetalle($parameters[$p['nombre']]);
+                
+                $em->persist($dataReporte);
+                $em->flush();
+            }
+            
+            //var_dump($dataReporte);
+           //var_dump($entity->getId());
+            //var_dump($parametros);
+            //var_dump($valores);
+            
+            //$f = $gg;
             /*  if($producto){
                 $this->establecerConsultaProducto($entity, $producto, $indicaciones);
             } */
@@ -221,6 +260,9 @@ class ConsultaController extends Controller
                 $em->persist($empComision);
                 $em->flush();
             }
+            
+            
+            
             switch($accion){
                 case 'C';
                     return $this->redirect($this->generateUrl('admin_cita'));
@@ -259,6 +301,8 @@ class ConsultaController extends Controller
                 'method' => 'POST',
             ));
         }
+        
+        
 
         $form->add('submit', 'submit', array('label' => 'Guardar',
                                                'attr'=>
@@ -830,7 +874,37 @@ class ConsultaController extends Controller
         return $empleados;
     }
     
-    
+   /**
+    * Ajax utilizado para buscar los parametros del reporte de una plantilla
+    *  
+    * @Route("/buscarParametrosPlantilla", name="admin_busqueda_parametros")
+    */
+    public function buscarParametrosPlantillaAction()
+    {
+        $isAjax = $this->get('Request')->isXMLhttpRequest();
+        if($isAjax){
+            $plantillaid = $this->get('request')->request->get('id');
+             
+            $em = $this->getDoctrine()->getManager();            
+            $dql = "SELECT det.id, det.nombre "
+                    . "FROM DGPlusbelleBundle:DetallePlantilla det "
+                    . "JOIN det.plantilla pla "
+                    . "WHERE pla.id =  :plantillaid";
+            
+            $parametros = $em->createQuery($dql)
+                        ->setParameter('plantillaid', $plantillaid)
+                        ->getResult();
+            
+            $response = new JsonResponse();
+            $response->setData(array(
+                                'query' => $parametros
+                            )); 
+            
+            return $response; 
+        } else {    
+            return new Response('0');              
+        }  
+    }
     
     
     

@@ -64,6 +64,13 @@ class Consulta
      */
     private $reportePlantilla;
 
+   /**
+     * @var float
+     *
+     * @ORM\Column(name="costo_consulta", type="float", nullable=false)
+     */
+    private $costoConsulta; 
+    
     /**
      * @var \Cita
      *
@@ -222,6 +229,30 @@ class Consulta
         return $this->observacion;
     }
 
+    /**
+     * Set costoConsulta
+     *
+     * @param float $costoConsulta
+     *
+     * @return Consulta
+     */
+    public function setCostoConsulta($costoConsulta)
+    {
+        $this->costoConsulta = $costoConsulta;
+
+        return $this;
+    }
+
+    /**
+     * Get costoConsulta
+     *
+     * @return float
+     */
+    public function getCostoConsulta()
+    {
+        return $this->costoConsulta;
+    }
+    
     /**
      * Set incapacidad
      *

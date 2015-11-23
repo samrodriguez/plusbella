@@ -15,11 +15,11 @@ class PaqueteTratamientoType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('tratamiento','text',array('label' => 'Tratamientos',
+            ->add('tratamiento',null,array('label' => 'Tratamiento','empty_value'=>'Seleccione tratamiento',
                     'attr'=>array(
                     'class'=>'form-control input-sm'
                     )))   
-            ->add('numSesiones','text',array('label' => 'Cantidad de Sesiones',
+            ->add('numSesiones','text',array('label' => '# Sesiones',
                     'attr'=>array(
                     'class'=>'form-control input-sm'
                     )))   

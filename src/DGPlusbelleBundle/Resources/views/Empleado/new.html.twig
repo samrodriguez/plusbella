@@ -1,16 +1,4 @@
-{% extends 'DGPlusbelleBundle:Layout:layout2.html.twig' %}  
-{% block css -%}
-    {{parent()}}
-<link rel="stylesheet" href="{{ asset('Resources/cropper/css/cropper.min.css') }}">
-<link rel="stylesheet" href="{{ asset('Resources/cropper/css/main.css') }}">
-{%- endblock %}
-
-{% block js -%}
-    {{parent()}}
-<script type="text/javascript" src="{{ asset('Resources/bootstrap-3/js/jquery.min.js') }}"></script>  
-<script type="text/javascript" src="{{ asset('Resources/cropper/js/cropper.min.js') }}"></script>  
-<script type="text/javascript" src="{{ asset('Resources/cropper/js/main.js') }}"></script>  
-{%- endblock %}
+{% extends 'DGPlusbelleBundle:Layout:layout.html.twig' %}  
 
 {% block contenido -%}
  <div class="panel panel-default">
@@ -33,8 +21,8 @@
         {# {{ form_row(form.estado) }}#}
         </div>
          <div class="col-xs-12 col-sm-3">
-       {% include 'DGPlusbelleBundle:Photo:test.html.twig' %}
-        {{ form_row(form.foto) }} 
+     {#  {% include 'DGPlusbelleBundle:Photo:test.html.twig' %}  #}
+     {#   {{ form_row(form.foto) }} #}
          </div>
          <div class="col-xs-12 col-sm-12">
         {{ form_row(form.tratamiento) }}

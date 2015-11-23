@@ -155,7 +155,12 @@
         <span class="nav-text">Reportes</span>
       </a>
       <ul class="nav nav-child level-1 nav-stacked nav-pills" role="menu">
-        <li role="presentation"><a role="menuitem" tabindex="-1" href="page-signin.html"><span class="nav-text">Signin</span></a></li>
+        <li role="presentation"><a role="menuitem" tabindex="-1" href="{{ path('admin_reporte_paquete') }}"><span class="nav-text">Ingresos por paquete</span></a></li>
+        <li role="presentation"><a role="menuitem" tabindex="-1" href="{{ path('admin_reporte_emergencia') }}"><span class="nav-text">Ingresos por consulta emergencia</span></a></li>
+        <li role="presentation"><a role="menuitem" tabindex="-1" href="{{ path('admin_reporte_consolidado_paquete') }}"><span class="nav-text">Consolidado de paquetes</span></a></li>
+        <li role="presentation"><a role="menuitem" tabindex="-1" href="{{ path('admin_reporte_tratamiento_frecuente') }}"><span class="nav-text">Tratamiento mas frecuente en consulta de emergencia</span></a></li>
+        
+        
       </ul>
     </li>
     <li class="collapse-item" role="presentation">

@@ -1,5 +1,50 @@
 {% extends 'DGPlusbelleBundle:Layout:layout.html.twig' %}
 
+{% block css %}
+    {{parent()}}
+    <style>
+        
+        //Posicion del boton agregar
+        .placas>div:last-child {
+            position:absolute;
+        }
+        .addItem{
+            position: absolute;
+            height: 50px;
+            float: right;
+            margin-bottom: 50px;
+            padding-bottom: 100px;
+            top: -5px;
+            left: -2px;
+        }
+        
+            .addItem div {
+                position: absolute;
+            }
+        
+        .col-md-4{
+            padding-top: 40px;
+        }
+        
+        #dgplusbellebundle_consulta_horaInicio_hourSelectBoxItContainer, #dgplusbellebundle_consulta_horaInicio_minuteSelectBoxItContainer,
+        #dgplusbellebundle_consulta_horaFin_hourSelectBoxItContainer, #dgplusbellebundle_consulta_horaFin_minuteSelectBoxItContainer{
+            width:75px;
+        }
+        
+            #dgplusbellebundle_consulta_horaInicio_hourSelectBoxItContainer,#dgplusbellebundle_consulta_horaFin_hourSelectBoxItContainer {
+                float: left;
+            }
+            #dgplusbellebundle_consulta_horaInicio_minuteSelectBoxItContainer, #dgplusbellebundle_consulta_horaFin_minuteSelectBoxItContainer {
+                float: right;
+            }
+            #dgplusbellebundle_consulta_horaInicio, #dgplusbellebundle_consulta_horaFin{
+                width: 155px;
+            }
+    </style>
+    
+{% endblock %}
+
+
 {% block contenido -%}
 
         <div class="content-body">
@@ -165,6 +210,7 @@
                 });
                 
                      $("#delete-datatables1").click(function(){
+                        if(!$(this).hasClass('disabled')){     
                         bootbox.confirm("¿Desea cambiar el estado de este registro?", function(result) {
                         if(result){
                         $.getJSON(Routing.generate('admin_paquete_desactivar', { id: link}), 
@@ -194,7 +240,7 @@
                         }
                                     
                     });     
-                        
+                        }
 
                 }); 
                 
@@ -297,7 +343,148 @@
 	});             
     };
         </script>
+        
 
+
+        <script>
+
+// Get the ul that holds the collection of tags
+var collectionHolder = $('div.placas');
+var col=$('#hnr_sircimbundle_estudioradiologicotype_placas');
+// setup an "add a tag" link
+var $addTagLink = $('<div class="row"><div class="col-md-2"><a href="#" class="btn btn-primary ">Agregar tratamiento</a></div></div>');
+var $removeTagLink = $('<a href="#" class="remove_placa_link btn btn-danger">Eliminar</a>');
+var $newLinkLi = $('<div class="col-md-12 addItem"></div>').append($addTagLink);
+var $delLinkLi = $('#hnr_sircimbundle_estudioradiologicotype_placas.required').append($removeTagLink);
+
+
+
+
+
+jQuery(document).ready(function() {
+
+    //$("#dgplusbellebundle_consulta_pacienteSelectBoxItOptions li").remove();
+
+  /*  $('#dgplusbellebundle_consulta_fechaConsulta').daterangepicker({
+                    singleDatePicker: true,
+                    showDropdowns: true,
+                    locale: {
+                        format: 'YYYY-MM-DD'
+                    },
+                });*/
+
+   //$('input[id$=dgplusbellebundle_plantilla_placas_]').selectBoxIt;
+
+    collectionHolder.find('li').each(function() {
+        addTagFormDeleteLink($(this));
+
+    });
+
+    
+
+    // add the "add a tag" anchor and li to the tags ul
+    collectionHolder.append($newLinkLi);
+
+    // count the current form inputs we have (e.g. 2), use that as the new
+    // index when inserting a new item (e.g. 2)
+    collectionHolder.data('index', collectionHolder.find(':input').length);
+    
+    //Identificar que form esta activo
+    var editar=$('div.placas').attr('id');
+    if(editar!='editar_usuario'){
+        //addTagForm(collectionHolder, $newLinkLi);   //Muestra un formulario en la carga de la página nuevo
+    }
+    
+
+
+    $addTagLink.on('click', function(e) {
+        // prevent the link from creating a "#" on the URL
+        e.preventDefault();
+
+        // add a new tag form (see next code block)
+        addTagForm(collectionHolder, $newLinkLi);
+        // $('.btn_radio').attr('name', 'rol_predet');
+    });
+
+
+    
+});
+
+
+function addTagForm(collectionHolder, $newLinkLi) {
+    // Get the data-prototype explained earlier
+    var prototype = collectionHolder.data('prototype');
+
+    // get the new index
+    var index = collectionHolder.data('index');
+
+    // Replace '__name__' in the prototype's HTML to
+    // instead be a number based on how many items we have
+    var newForm = prototype.replace(/__name__/g, index);
+
+    // increase the index with one for the next item
+    collectionHolder.data('index', index + 1);
+
+    // Display the form in the page in an li, before the "Add a tag" link li
+    var $newFormLi = $('<div class="col-md-4"></div>').append(newForm);
+    $newLinkLi.before($newFormLi);
+    
+
+
+    // add a delete link to the new form
+    addTagFormDeleteLink($newFormLi);
+    $('.btn_radio').click(function(event) {
+        /* Act on the event */
+        var id = $(this).attr('id');
+        // alert(id);
+        $('.btn_radio').prop('checked', false);
+        $('#'+id).prop('checked', true);
+        $('.btn_radio').removeClass('errorform');
+    });
+}
+
+function addTagFormDeleteLink($tagFormLi) {
+    var $removeFormA = $('<div class="row"><div class="col-md-2"><a class="link btn btn-danger" href="#">Eliminar</a></div></div>');
+    $tagFormLi.append($removeFormA);
+
+    $removeFormA.on('click', function(e) {
+        // prevent the link from creating a "#" on the URL
+        e.preventDefault();
+
+        // remove the li for the tag form
+        $('input[name="rol_predet"]:checked').each(function() {
+            //$(this).val() es el valor del checkbox correspondiente
+           // alert('chequeado'); 
+           $('#hnr_sircimbundle_usuariotype_placas_0_usroPredeterminado').prop('checked', true);
+        });
+
+        $tagFormLi.remove();
+        
+    });
+}
+
+
+$('#editar_usuario')
+            .on('mouseover','div', function(){
+                $(this).find('a.link').css('visibility','visible');
+            })
+            .on('mouseout','div', function(){ 
+                $(this).find('a.link').css('visibility','hidden'); 
+            });
+
+$('#editar_usuario')
+            .on('mouseover','li:first-child', function(){
+                $(this).find('a.link').css('visibility','hidden');
+            });
+
+
+    
+var editar=$('div.placas').attr('id');
+if(editar!='editar_usuario'){
+    // $('#hnr_sircimbundle_usuariotype_placas_0_usroPredeterminado').prop('checked', true);//Se carga el radiobutton seleccionado
+}
+
+ </script>
 
     {% endblock %} 
   

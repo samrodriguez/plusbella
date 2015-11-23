@@ -23,7 +23,7 @@ class ReportePDF  extends \FPDF_FPDF {
         $this->SetFont('Arial','I',6);
         // Número de página
         //$this->Cell(0,10,'Pagina '.$this->PageNo(),0,0,'C');
-        $this->Cell(0, 10, 'San Salvador, Colonia Escalon, Calle Cuscatlan, No. 448. entre la 83 Av. y 85 Av. Sur. Tel. 2519-2857.',1,0, 'C');
+        $this->Cell(0, 10, 'San Salvador, Colonia Escalon, Calle Cuscatlan, No. 448. entre la 83 Av. y 85 Av. Sur. Tel. 2519-2857.',0,0, 'C');
     }
 
     function SetWidths($w)
