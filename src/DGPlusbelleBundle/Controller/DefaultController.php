@@ -120,9 +120,62 @@ class DefaultController extends Controller
      */
     public function pdfAction()
     {
-        $titulo = 'Reporte de Videoendoscopia';
+        $em = $this->getDoctrine()->getManager();
+        
+        $dql = "SELECT hc, con, pac, exp, per1, per2, emp, det, pla "
+                    . "FROM DGPlusbelleBundle:HistorialConsulta hc "
+                    . "JOIN hc.consulta con "
+                    . "JOIN con.paciente pac "
+                    . "JOIN pac.expediente exp "
+                    . "JOIN pac.persona per1 "
+                    . "JOIN con.empleado emp "
+                    . "JOIN emp.persona per2 "
+                    . "JOIN hc.detallePlantilla det "
+                    . "JOIN det.plantilla pla "
+                    . "WHERE con.id =  :idconsulta";
+            
+        $consulta = $em->createQuery($dql)
+                    ->setParameter('idconsulta', 46)
+                    ->getResult();
+        
+        //$titulo = 'Reporte de Videoendoscopia';
+        
+        
+        $medico = array(
+                    "nombre" => "Dr. Juan Carlos Pacheco",
+                    "cargo" => "Cirujano Endoscopista",
+                    "codigo" => "JVPM 7370",
+                );
+        
         $logo = $this->getParameter('plusbelle.logo');
-        $this->get('fpdf_printer')->toPdf($titulo, $logo);
+       
+        $this->get('fpdf_printer')->generarPlantilla($logo, $consulta, $medico);
+    }
+    
+    /**
+     * Lists all Cita entities.
+     *
+     * @Route("/reporte", name="reporte_pdf")
+     * 
+     */
+    public function reporteEjemploAction()
+    {
+        $em = $this->getDoctrine()->getManager();
+        
+        $dql = "SELECT per, pac "
+                    . "FROM DGPlusbelleBundle:Paciente pac "
+                    . "JOIN pac.persona per "
+                    . "WHERE pac.id =  :idpaciente";
+            
+        $consulta = $em->createQuery($dql)
+                    ->setParameter('idpaciente', 46)
+                    ->getResult();
+        
+        
+        
+        $logo = $this->getParameter('plusbelle.logo');
+       
+        $this->get('fpdf_printer')->toPdf($logo, $consulta);
     }
 
 }

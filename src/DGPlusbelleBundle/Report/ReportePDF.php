@@ -7,23 +7,33 @@ class ReportePDF  extends \FPDF_FPDF {
     function Header(){
          $this->SetFont('Arial','B',15);
         // Move to the right
-       // $this->Cell(80);
+        $this->Cell(80);
+        //$urlLogo = $this->getParameter('plusbelle.logo');
+        //$logo = $urlLogo.'sonodigest.jpg';
+        // $this->Image($logo, 150, 5, 50, 20);
         // Title
-       // $this->Cell(30,10,'Title',0,0,'C');
+        $this->Cell(30,10,'Title',0,0,'C');
         // Line break
-       //$this->Ln(0);
+       $this->Ln(0);
     }
     
     // Pie de página
     function Footer()
     {
         // Posición: a 1,5 cm del final
-        $this->SetY(-15);
+        $this->SetY(-20);
         // Arial italic 8
         $this->SetFont('Arial','I',6);
         // Número de página
-        //$this->Cell(0,10,'Pagina '.$this->PageNo(),0,0,'C');
-        $this->Cell(0, 10, 'San Salvador, Colonia Escalon, Calle Cuscatlan, No. 448. entre la 83 Av. y 85 Av. Sur. Tel. 2519-2857.',0,0, 'C');
+        
+        $this->Line(20, 260.5, 200, 260.5);
+        $this->Line(20, 261, 200, 261);
+        
+        $this->Cell(0, 10, 'San Salvador, Colonia Escalon, Calle Cuscatlan, No. 448. entre la 83 Av. y 85 Av. Sur. Tel. 2519-2857.',0,0);
+        
+        $tot = count($this->pages);
+        $this->SetX(-35);
+        $this->Cell(0,10,'Pagina '.$this->PageNo().' de '. $tot, 0, 0, 'C'); 
     }
 
     function SetWidths($w)
