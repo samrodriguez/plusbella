@@ -105,7 +105,7 @@
                
                 <td>{{ entity.ocupacion }}</td>
                 <td>{{ entity.lugarTrabajo }}</td>
-                <td>{% if entity.fechaNacimiento %}{{ entity.fechaNacimiento|date('d-m-Y') }}{% endif %}</td>
+                <td>{% if entity.fechaNacimiento %}{{ entity.fechaNacimiento|date('Y-m-d') }}{% endif %}</td>
                 <td>{{ entity.referidoPor }}</td>
                 {#<td>{{ entity.personaEmergencia }}</td>
                 <td>{{ entity.telefonoEmergencia }}</td>#}

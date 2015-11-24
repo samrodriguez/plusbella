@@ -72,8 +72,8 @@
                 <td>{{ entity.categoria }}</td>
                 <td>{{ entity.nombre }}</td>
                 <td style="text-align: right; padding-right: 20px">$ {{ entity.costo |number_format(2, '.', ',')}}</td>
-                <td><center>{% if entity.fechaCompra %}{{ entity.fechaCompra|date('Y-m-d H:i:s') }}{% endif %}</center></td>
-                <td><center>{% if entity.fechaVencimiento %}{{ entity.fechaVencimiento|date('Y-m-d') }}{% endif %}</center></td>
+                <td>{% if entity.fechaCompra %}{{ entity.fechaCompra|date('Y-m-d') }}{% endif %}</td>
+                <td>{% if entity.fechaVencimiento %}{{ entity.fechaVencimiento|date('Y-m-d') }}{% endif %}</td>
                 <td><center>
                     {% if entity.estado == 1 %}
                         Activo
@@ -114,12 +114,12 @@
  {% endblock %}
  
   {% block javascripts_step %}
-      
-       <script>
+        <script type="text/javascript" src="{{ asset('Resources/zebra/inicializacioncalendarios.js')}}" ></script>
+        <script>
             $(document).ready(function(){
                  var link=0;
                  var estadoPrevio = "";
-                 $('#dgplusbellebundle_producto_fechaCompra').daterangepicker({
+                 /*$('#dgplusbellebundle_producto_fechaCompra').daterangepicker({
                     singleDatePicker: true,
                     showDropdowns: true,
                     locale: {
@@ -134,7 +134,7 @@
                         format: 'YYYY-MM-DD'
                     },
                 }); 
-                
+                */
                 
                 //alert("prueba");
                 $(document).on("change","#dgplusbellebundle_producto_cantidad",function(){
