@@ -75,11 +75,11 @@
         $(document).ready(function(){
                 
         var anioInicioUser = $('#fecha-inicio').val();
-        var aniofinUser = $('#fecha-fin').val();
+        var anioFinUser = $('#fecha-fin').val();
         var url = "{{ path('admin_reporte_emergencia_grafico') }}";
             if(anioInicioUser!=""){
-                if(aniofinUser!=""){
-                    url+="?anioInicioUser="+anioInicioUser+"&anioFinUser="+aniofinUser;
+                if(anioFinUser!=""){
+                    url+="?anioInicioUser="+anioInicioUser+"&anioFinUser="+anioFinUser;
                     $('#contenedorGrafico').load(url);
                 }
             }       
@@ -88,20 +88,23 @@
         var datepickerFin= $('#fecha-fin').data('Zebra_DatePicker');
         datepickerInicio.update({
             onSelect: function(){
-                    $('#fecha-fin').val('');
                     anioInicioUser = $('#fecha-inicio').val();
-                                            
+                    anioFinUser = $('#fecha-fin').val();
+                    if(anioFinUser!==""){
+                    var url = "{{ path('admin_reporte_emergencia_grafico') }}";
+                    url+="?anioInicioUser="+anioInicioUser+"&anioFinUser="+anioFinUser;
+                    $('#contenedorGrafico').load(url);
+                }           
             }
         });  
         
         datepickerFin.update({
             onSelect: function(){   
                 if(anioInicioUser!==""){
-                    var aniofinUser = $('#fecha-fin').val();
+                    anioFinUser = $('#fecha-fin').val();
                     var url = "{{ path('admin_reporte_emergencia_grafico') }}";
-                    url+="?anioInicioUser="+anioInicioUser+"&anioFinUser="+aniofinUser;
+                    url+="?anioInicioUser="+anioInicioUser+"&anioFinUser="+anioFinUser;
                     $('#contenedorGrafico').load(url);
-                        //myLineChart.update();    
                 }
             }
         });  
