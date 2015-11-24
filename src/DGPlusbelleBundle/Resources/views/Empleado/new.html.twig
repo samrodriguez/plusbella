@@ -13,17 +13,42 @@
       {#  </div> #}
      
         {% include 'DGPlusbelleBundle:Persona:form.html.twig' with { 'form': form.persona }%}  
+        
+         
+          <div class="row">
+               <div class="col-md-12">
+                  <h3 class="text">Meta</h3>
+                  <hr>
+                </div>
+          </div>
+        
+         <div class="col-xs-12 col-sm-2">
+        {{ form_row(form.porcentaje) }}
+         </div> 
+         <div class="col-xs-12 col-sm-2">
+        {{ form_row(form.meta) }}
+         </div>  
         <div class="col-xs-12 col-sm-2">
         {{ form_row(form.cargo) }}
          </div>
-        <div class="col-xs-12 col-sm-2">
+          <div class="col-xs-12 col-sm-2">
         {{ form_row(form.sucursal) }}
         {# {{ form_row(form.estado) }}#}
-        </div>
+        </div> 
+       
+       
          <div class="col-xs-12 col-sm-3">
      {#  {% include 'DGPlusbelleBundle:Photo:test.html.twig' %}  #}
      {#   {{ form_row(form.foto) }} #}
          </div>
+         
+          <div class="row">
+               <div class="col-md-12">
+                  <h3 class="text">Tratamiento</h3>
+                  <hr>
+                </div>
+          </div>
+         
          <div class="col-xs-12 col-sm-12">
         {{ form_row(form.tratamiento) }}
          </div>

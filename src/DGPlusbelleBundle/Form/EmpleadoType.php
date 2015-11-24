@@ -28,6 +28,15 @@ class EmpleadoType extends AbstractType
                     'class'=>'form-control '
                       
                     )))  */
+                
+            ->add('porcentaje','text',array('label' => 'Porcentaje %','required'=>false,
+                    'attr'=>array(
+                    'class'=>'form-control input-sm porcentajeEmpleado'
+                    )))  
+            ->add('meta','text',array('label' => 'Meta $','required'=>false,
+                    'attr'=>array(
+                    'class'=>'form-control input-sm metaEmpleado'
+                    )))  
             //->add('persona')
             ->add('sucursal',null,array('label' => 'Sucursal','required'=>false,'empty_value'=>'Seleccione Sucursal...',
                     'attr'=>array(

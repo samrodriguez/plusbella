@@ -15,6 +15,12 @@ $('.direccionPersona').
 $('.emailPersona').
   attr('data-bvalidator', 'email,required,required'); 
 
+$('.porcentajeEmpleado').
+        attr('data-bvalidator', 'rangelength[1:5],between[0:100],required,required');
+
+$('.metaEmpleado').
+        attr('data-bvalidator', 'number,required,required');	
+
 $('.cargoEmpleado').
   attr('data-bvalidator', 'required,required');  
 
