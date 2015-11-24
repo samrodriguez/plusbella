@@ -5,7 +5,7 @@
  */
     $(document).ready(function(){
 
-        $('#fecha-inicio').Zebra_DatePicker({
+        $('#fecha-inicio,.calZebra').Zebra_DatePicker({
             months:['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
             days: ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'],
             format: 'Y-m-d',
@@ -26,7 +26,6 @@
             months:['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
             days: ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'],
             direction: 1,
-            months:[],
             show_clear_date:false,
             show_select_today: "Hoy",
             onSelect: function(){

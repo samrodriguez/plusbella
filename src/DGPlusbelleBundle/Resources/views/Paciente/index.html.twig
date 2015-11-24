@@ -144,17 +144,12 @@
     
        
   {% block javascripts_step %}
-      
-       <script>
+        <script type="text/javascript" src="{{ asset('Resources/zebra/inicializacioncalendarios.js')}}" ></script>
+        <script>
+           
             $(document).ready(function(){
                 var idPaciente = 0;
-                 $('#dgplusbellebundle_paciente_fechaNacimiento').daterangepicker({
-                    singleDatePicker: true,
-                    showDropdowns: true,
-                    locale: {
-                        format: 'YYYY-MM-DD'
-                    }
-                }); 
+               
                 
                 
               // validando campos  
@@ -330,6 +325,7 @@
          
 	});             
     };
+    
         </script>
 
     {% endblock %} 
