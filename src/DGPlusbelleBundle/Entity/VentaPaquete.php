@@ -68,7 +68,7 @@ class VentaPaquete
     /**
      * @var \Persona
      *
-     * @ORM\ManyToOne(targetEntity="Persona")
+     * @ORM\ManyToOne(targetEntity="Empleado")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="empleado", referencedColumnName="id")
      * })

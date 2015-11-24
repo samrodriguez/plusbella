@@ -768,7 +768,7 @@ class ConsultaController extends Controller
         //var_dump($totalTratamientos[0][1]);
         
         
-        $empleados=$this->verificarComision(null);
+        $empleados=$this->verificarComision(null,null);
         
         
         
@@ -796,10 +796,10 @@ class ConsultaController extends Controller
     }
     
     
-    function verificarComision($id){
+    function verificarComision($id,$fecha){
         $em = $this->getDoctrine()->getManager();
         if($id!=null){//Un empleado especifico
-            $dql = "SELECT emp.id, com.meta, emp.foto, p.nombres, p.apellidos,emp.comisionCompleta,p.email "
+            $dql = "SELECT emp.id, com.meta, emp.foto, p.nombres, p.apellidos,emp.comisionCompleta,p.email,emp.porcentaje as por "
                     . "FROM DGPlusbelleBundle:Empleado emp "
                     . "JOIN emp.persona p "
                     . "JOIN emp.comision com "
@@ -810,32 +810,32 @@ class ConsultaController extends Controller
                        ->getResult();
         }
         else{//Todos los empleados
-            $dql = "SELECT emp.id, com.meta, emp.foto, p.nombres, p.apellidos,emp.comisionCompleta,p.email "
+            $dql = "SELECT emp.id, emp.meta, emp.foto, p.nombres, p.apellidos,emp.comisionCompleta,p.email,emp.porcentaje as por  "
                     . "FROM DGPlusbelleBundle:Empleado emp "
                     . "JOIN emp.persona p "
-                    . "JOIN emp.comision com "
                     . "WHERE emp.estado=true ";
             $empleados= $em->createQuery($dql)
                         ->getResult();
         }
             //$empleados= $em->getRepository('DGPlusbelleBundle:Empleado')->findBy(array('estado'=>true));
-
-            //var_dump($empleados);
-            $mes= date('m');
-            if($mes<10){
-                $mes = "0".$mes;
-            }
+        if($fecha==null){
+            $fecha= date('Y-m');
+        }
+        //var_dump($fecha);
+            /*if($fecha<10){
+                $fecha = "0".$fecha;
+            }*/
             //$mes = '02';
             foreach($empleados as $key=>$empleado){
                 //var_dump($empleado);
-                $dql = "SELECT sum(t.costo)"
+                $dql = "SELECT sum(p.costo)"
                     . " FROM"
-                    . " DGPlusbelleBundle:Consulta c"
-                    . " JOIN c.tratamiento t"
-                    . " JOIN c.empleado emp"
-                    . " WHERE c.fechaConsulta LIKE :mes AND emp.estado=true AND emp.id=:idEmpleado";
+                    . " DGPlusbelleBundle:VentaPaquete vp"
+                    . " JOIN vp.paquete p"
+                    . " JOIN vp.empleado emp"
+                    . " WHERE vp.fechaVenta LIKE :mes AND emp.estado=true AND emp.id=:idEmpleado";
                 $comision = $em->createQuery($dql)
-                       ->setParameters(array('idEmpleado'=>$empleado['id'],'mes'=>'_____'.$mes.'___'))
+                       ->setParameters(array('mes'=>$fecha.'___','idEmpleado'=>$empleado['id']))
                        ->getResult();
 
                 //var_dump($comision);
@@ -844,12 +844,19 @@ class ConsultaController extends Controller
                 if($empleados[$key]['suma']!=null){
                     if($empleados[$key]['meta']>=$empleados[$key]['suma'] ){
                         $porcentaje = ($empleados[$key]['suma']/$empleados[$key]['meta'])*100;
+                        $empleados[$key]['bono']="No";
                     }
                     else{
                         if($empleados[$key]['meta']<$empleados[$key]['suma']){
+                            $empleados[$key]['bono']="Si";
                             $porcentaje = 100; 
                         }
                     }
+                    $empleados[$key]['comision'] = ($empleados[$key]['suma']*$empleados[$key]['por'])/100;
+                }
+                else{
+                    $empleados[$key]['comision'] = "";
+                    $empleados[$key]['bono']="No";
                 }
                 $empleados[$key]['porcentaje']= $porcentaje;
                 //Se verifica que el empleado ya cumplio con la meta y si el correo ya fue enviado
@@ -859,14 +866,13 @@ class ConsultaController extends Controller
                 //}
                 
             }
-            
             //Envio de sms desde correo
             /*
                 $this->get('envio_correo')->sendEmail("75061915@sms.claro.com.sv","","","","prueba1");
                 $this->get('envio_correo')->sendEmail("71727845@sms.claro.com.sv","","","","prueba1");
                 $this->get('envio_correo')->sendEmail("70550768@sms.claro.com.sv","","","","prueba1");
             */
-            $usuario= $this->get('security.token_storage')->getToken()->getUser();
+            //$usuario= $this->get('security.token_storage')->getToken()->getUser();
             //var_dump($usuario->getPersona()->getId());
             //var_dump($empleados);
             /**/
@@ -904,6 +910,48 @@ class ConsultaController extends Controller
         } else {    
             return new Response('0');              
         }  
+    }
+    
+    
+    
+    
+    
+    /**
+     * Lista todos los empleados con su respectivo progreso de ventas
+     *
+     * @Route("/progresoempleadoventa/", name="admin_empleado_progreso_venta")
+     * @Method("GET")
+     * @Template()
+     */
+    public function progresoventaAction(){
+        //$fecha= $request->get('fecha');
+        //$empleados=$this->verificarComision(null,$fecha);
+        return array(
+            //'empleados' => $empleados,
+            //'fecha' => $fecha,
+        );
+    }
+    
+    
+    /**
+    * Ajax utilizado para buscar los antecedentes en ventas del empleado
+    *  
+    * @Route("/progresoempleadoventaajax/", name="admin_empleado_progreso_venta_ajax")
+    * @Method("GET")
+    * @Template("DGPlusbelleBundle:Consulta:progresoventaajax.html.twig")
+    */
+    public function progresoventaajaxAction(Request $request)
+    {
+        $fecha= $request->get('fecha');
+        
+        $empleados=$this->verificarComision(null,$fecha);
+        
+        //var_dump($empleados);
+        
+        return array(
+            'empleados' => $empleados,
+            'fecha' => $fecha,
+        );
     }
     
     

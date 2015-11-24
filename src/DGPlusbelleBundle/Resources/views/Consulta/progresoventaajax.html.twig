@@ -1,0 +1,52 @@
+<div class="row" style="margin-top:20px">
+{% for key, empleado in empleados %}
+    <div class="col-md-1"></div>
+    <div class="col-md-5">
+        <div data-init-panel="true" class="panel bg-grd-dark text-light fade in panel-default panel-fill" data-fill-color="true">
+            <div class="panel-body">
+              <div class="pull-left mr-2x">
+                <span class="kit-avatar kit-avatar-64 kit-avatar-square no-border">
+                  <img class="media-object" src="{{ asset('Photos/Empleado/') }}{{empleado.foto}}" alt="Foto perfil">
+                </span>
+              </div>
+              <p class="lead mb-1x">{{empleado.nombres}} {{empleado.apellidos}}</p>
+              <div class="progress progress-xs no-margin">
+                    <div class="progress-bar" style="width:{{empleado.porcentaje}}%"></div>
+              </div>
+              <p>
+                <small class="pull-left">0 %</small>
+                <small class="pull-right">100 %</small>
+              </p>
+                 <div class="row" style="margin-top:40px;">
+                    <div class="col-md-1"></div>
+                    <div class="col-md-5">
+                        <p>Total vendido: </p>
+                        <p>Comision:</p>
+                        <p>Meta:</p>
+                        <p>Recibe bono de meta:</p>
+                        <p>Porcentaje:</p>
+                    </div>
+                    <div class="col-md-4" style="margin-left:10px; text-align: right;">
+                        {#{% if empleado.suma  != null%}#}
+                            <p>$ {{empleado.suma|number_format(2, '.', ',')}} </p>
+                            <p>$ {{empleado.comision|number_format(2, '.', ',')}} </p>
+                            <p>$ {{empleado.meta|number_format(2, '.', ',')}} </p>
+                            <p>{{empleado.bono}}</p>
+                            <p>{{empleado.por|number_format(2, '.', ',')}} %</p>
+                        {#{% else %}#}
+                            {#<p> No hay ventas en el mes</p>
+                            <p>$ {{empleado.comision|number_format(2, '.', ',')}} </p>
+                            <p>{{empleado.bono}}</p>
+                            <p>{{empleado.por|number_format(2, '.', ',')}} %</p>#}
+                        {#{% endif %}#}
+                    </div>
+                    <div class="col-md-1"></div>
+                </div>
+            </div><!-- /.panel-body -->
+
+        </div>
+    </div>
+    <div class="col-md-1"></div>
+
+{% endfor %}
+ </div>

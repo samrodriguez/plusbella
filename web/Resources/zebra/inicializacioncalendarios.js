@@ -27,7 +27,7 @@
             days: ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'],
             direction: 1,
             show_clear_date:false,
-            show_select_today: "Hoy",
+            show_select_today: false,
             onSelect: function(){
                 if(anioInicioUser!==""){
                     var aniofinUser = $('#fecha-fin').val();

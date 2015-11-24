@@ -8,6 +8,9 @@
         .placas>div:last-child {
             position:absolute;
         }
+        div.placas > div:nth-child(2) > div:nth-child(2) > div > a{
+            display: none;
+        }
         .addItem{
             position: absolute;
             height: 50px;
@@ -434,6 +437,7 @@ function addTagForm(collectionHolder, $newLinkLi) {
 
     // add a delete link to the new form
     addTagFormDeleteLink($newFormLi);
+    validarPaquete(); 
     $('.btn_radio').click(function(event) {
         /* Act on the event */
         var id = $(this).attr('id');

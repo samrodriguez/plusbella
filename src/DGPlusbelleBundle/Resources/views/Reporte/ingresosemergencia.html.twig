@@ -87,6 +87,7 @@
         var datepickerInicio = $('#fecha-inicio').data('Zebra_DatePicker');
         var datepickerFin= $('#fecha-fin').data('Zebra_DatePicker');
         datepickerInicio.update({
+            show_select_today:"Hoy",
             onSelect: function(){
                     anioInicioUser = $('#fecha-inicio').val();
                     anioFinUser = $('#fecha-fin').val();
@@ -99,6 +100,7 @@
         });  
         
         datepickerFin.update({
+            
             onSelect: function(){   
                 if(anioInicioUser!==""){
                     anioFinUser = $('#fecha-fin').val();
