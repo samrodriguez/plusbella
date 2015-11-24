@@ -184,6 +184,8 @@
 
 
 {% block javascripts_step %}
+     <script src="{{ asset('Resources/js/ConsultaPaciente.js') }}"></script>
+    
     <script>
         $(function () { 
             $( "#dgplusbellebundle_consulta_reportePlantilla_0" ).on( "click", function() {
@@ -410,7 +412,7 @@
         // $('.btn_radio').attr('name', 'rol_predet');
     });
 
-
+ validarConsulta();
     
 });
 

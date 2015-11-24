@@ -56,6 +56,13 @@ class Empleado
      */
     private $meta;
     
+    /**
+     * @var float
+     *
+     * @ORM\Column(name="bono", type="float", nullable=false)
+     */
+    private $bono;
+    
     
     /**
      * @var boolean
@@ -262,6 +269,32 @@ class Empleado
     public function getMeta()
     {
         return $this->meta;
+    }
+    
+    
+    
+    /**
+     * Set bono
+     *
+     * @param float $bono
+     *
+     * @return empleado
+     */
+    public function setBono($bono)
+    {
+        $this->bono = $bono;
+
+        return $this;
+    }
+
+    /**
+     * Get bono
+     *
+     * @return float
+     */
+    public function getBono()
+    {
+        return $this->bono;
     }
     
     /**

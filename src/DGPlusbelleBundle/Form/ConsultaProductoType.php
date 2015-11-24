@@ -19,11 +19,11 @@ class ConsultaProductoType extends AbstractType
            // ->add('consulta')
             ->add('producto',null,array('label' => 'Producto','required' => false, 'empty_value'=>'Seleccione producto...',
                     'attr'=>array(
-                    'class'=>'form-control input-sm'
+                    'class'=>'form-control input-sm productoConsulta'
                     )))
                  ->add('indicaciones','textarea',array('label' => 'Indicaciones','required' => false,
                     'attr'=>array(
-                    'class'=>'form-control input-sm'
+                    'class'=>'form-control input-sm indicacionesConsulta'
                     )))
         ;
     }
