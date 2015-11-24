@@ -68,7 +68,7 @@
     
        
   {% block javascripts_step %}
-      
+       <script type="text/javascript" src="{{ asset('Resources/zebra/inicializacioncalendarios.js')}}" ></script>
        <script>
         $(document).ready(function(){
   
@@ -81,35 +81,28 @@
                     $('#contenedorGrafico').load(url);
                 }
             }
-            
-            $('#fecha-inicio').Zebra_DatePicker({
-                format: 'Y-m-d',
-                onSelect: function(){
-                    $('#fecha-fin').val('');
-                    anioInicioUser = $('#fecha-inicio').val();
-                },
-                onClear: function(){
-                    $('canvas').remove();
-                },
-                pair: $('#fecha-fin')
-            });
-            
-            $('#fecha-fin').Zebra_DatePicker({
-                direction: 1,
-                onSelect: function(){
-                    //$('canvas').html();
-                    $('#contenedorGrafico').html('');
-                    if(anioInicioUser!==""){
-                        var aniofinUser = $('#fecha-fin').val();
-                        var url = "{{ path('admin_reporte_tratamiento_frecuente_grafico') }}";
-                        url+="?anioInicioUser="+anioInicioUser+"&anioFinUser="+aniofinUser;
-                        $('#contenedorGrafico').load(url);
-                        //myLineChart.update();    
-                    }
+        var datepickerInicio = $('#fecha-inicio').data('Zebra_DatePicker');
+        var datepickerFin= $('#fecha-fin').data('Zebra_DatePicker');
+        datepickerInicio.update({
+            onSelect: function(){
+                $('#fecha-fin').val('');
+                anioInicioUser = $('#fecha-inicio').val();
+            }
+        });  
+        
+        
+        datepickerFin.update({
+            onSelect: function(){
+                $('#contenedorGrafico').html('');
+                if(anioInicioUser!==""){
+                    var aniofinUser = $('#fecha-fin').val();
+                    var url = "{{ path('admin_reporte_tratamiento_frecuente_grafico') }}";
+                    url+="?anioInicioUser="+anioInicioUser+"&anioFinUser="+aniofinUser;
+                    $('#contenedorGrafico').load(url);
                 }
-            });
-               
-              
+            }
+        });  
+                 
     });//Fin document ready
         
  

@@ -70,8 +70,8 @@
     
        
   {% block javascripts_step %}
-      
-       <script>
+        <script type="text/javascript" src="{{ asset('Resources/zebra/inicializacioncalendarios.js')}}" ></script>
+        <script>
         $(document).ready(function(){ 
                
         var anioInicioUser = $('#fecha-inicio').val();
@@ -84,22 +84,20 @@
                     $('#contenedorGrafico').load(url);
                 }
             }       
-            
-            $('#fecha-inicio').Zebra_DatePicker({
-                format: 'Y-m-d',
-                onSelect: function(){
+        
+        
+        
+        var datepickerInicio = $('#fecha-inicio').data('Zebra_DatePicker');
+        var datepickerFin= $('#fecha-fin').data('Zebra_DatePicker');
+        datepickerInicio.update({
+            onSelect: function(){
                     $('#fecha-fin').val('');
                     anioInicioUser = $('#fecha-inicio').val();
-                },
-                onClear: function(){
-                    $('canvas').remove();
-                },
-                pair: $('#fecha-fin')
-            });
-            
-            $('#fecha-fin').Zebra_DatePicker({
-                direction: 1,
-                onSelect: function(){
+            }
+        });  
+        
+        datepickerFin.update({
+            onSelect: function(){
                     
                     if(anioInicioUser!==""){
                         var aniofinUser = $('#fecha-fin').val();
@@ -109,7 +107,14 @@
                         //myLineChart.update();    
                     }
                 }
-            });
+        });  
+        
+        
+        
+        
+        
+            
+            
 
     });//Fin document ready
         

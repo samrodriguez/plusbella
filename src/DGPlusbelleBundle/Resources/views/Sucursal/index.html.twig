@@ -170,7 +170,7 @@
  {% endblock %}
  
   {% block javascripts_step %}
-      
+        <script src="{{ asset('Resources/js/Sucursal.js') }}"></script>
        <script>
             $(document).ready(function(){
                  var link=0;
@@ -341,7 +341,7 @@
         $('#datatables1_filter').hide();
         $('#filterDatatables1').val('');
         
-        
+        validarSucursal();
     });//Fin document ready
         
     //Definición de funciones

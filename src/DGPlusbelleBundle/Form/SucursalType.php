@@ -17,20 +17,20 @@ class SucursalType extends AbstractType
         $builder
             ->add('nombre','text',array('label' => 'Nombre','required'=>false,
                     'attr'=>array(
-                    'class'=>'form-control input-sm '
+                    'class'=>'form-control input-sm nombreSucursal'
                     )))
             ->add('direccion','text',array('label' => 'Dirección','required'=>false,
                     'attr'=>array(
-                    'class'=>'form-control input-sm'
+                    'class'=>'form-control input-sm direccionSucursal'
                     )))
             ->add('telefono','text',array('label' => 'Telefono','required'=>false,
                     'attr'=>array(
-                    'class'=>'form-control input-sm'
+                    'class'=>'form-control input-sm telefonoSucursal'
                     )))
            // ->add('estado')
             ->add('slug','text',array('label' => 'Slug','required'=>false,
                     'attr'=>array(
-                    'class'=>'form-control input-sm'
+                    'class'=>'form-control input-sm slugSucursal'
                     )))
         /*      ->add('paquete','entity',array('label' => 'Paquetes',
                 'class'=>'DGPlusbelleBundle:Paquete','property'=>'nombre',
