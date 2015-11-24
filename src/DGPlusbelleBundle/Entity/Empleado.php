@@ -42,6 +42,20 @@ class Empleado
      */
     private $estado;
     
+     /**
+     * @var float
+     *
+     * @ORM\Column(name="porcentaje", type="float", nullable=false)
+     */
+    private $porcentaje;
+    
+     /**
+     * @var float
+     *
+     * @ORM\Column(name="meta", type="float", nullable=false)
+     */
+    private $meta;
+    
     
     /**
      * @var boolean
@@ -198,6 +212,58 @@ class Empleado
     {
         return $this->estado;
     }
+    
+    
+    /**
+     * Set porcentaje
+     *
+     * @param float $porcentaje
+     *
+     * @return empleado
+     */
+    public function setPorcentaje($porcentaje)
+    {
+        $this->porcentaje = $porcentaje;
+
+        return $this;
+    }
+
+    /**
+     * Get porcentaje
+     *
+     * @return float
+     */
+    public function getPorcentaje()
+    {
+        return $this->porcentaje;
+    }
+    
+    
+    
+    /**
+     * Set meta
+     *
+     * @param float $meta
+     *
+     * @return empleado
+     */
+    public function setMeta($meta)
+    {
+        $this->meta = $meta;
+
+        return $this;
+    }
+
+    /**
+     * Get meta
+     *
+     * @return float
+     */
+    public function getMeta()
+    {
+        return $this->meta;
+    }
+    
     /**
      * Set persona
      *

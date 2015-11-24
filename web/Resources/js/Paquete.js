@@ -6,7 +6,13 @@ $('.nombrePaquete').
 $('.costoPaquete').
         attr('data-bvalidator', 'number,required,required');
 
- $('.sucursalPaquete').
+$('.tratamientoPaquete').
+        attr('data-bvalidator', 'required,required');
+
+$('.sesionesPaquete').
+        attr('data-bvalidator', 'number,required,required');
+
+ $('.sucursalPaquete > div > label > input').
         attr('data-bvalidator', 'required,required');
  
     //Opciones del validador
