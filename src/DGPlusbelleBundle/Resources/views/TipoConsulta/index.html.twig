@@ -105,6 +105,8 @@
  
   {% block javascripts_step %}
       
+       <script src="{{ asset('Resources/js/TipoConsulta.js') }}"></script>
+      
        <script>
             $(document).ready(function(){
                 var link=0;
@@ -277,7 +279,7 @@
         $('#filterDatatables1').val('');
         
         
-        
+           validarTipoConsulta(); 
         
     });//Fin document ready
         

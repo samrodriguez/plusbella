@@ -120,6 +120,8 @@
   
   {% block javascripts_step %}
       
+      <script src="{{ asset('Resources/js/Comision.js') }}"></script>
+      
        <script>
             $(document).ready(function(){
                  var link=0;
@@ -294,7 +296,7 @@
         $('#filterDatatables1').val('');
         
         
-        
+        validarComision(); 
         
     });//Fin document ready
         

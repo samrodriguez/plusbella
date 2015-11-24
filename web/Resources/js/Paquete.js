@@ -1,10 +1,13 @@
 
-$(document).ready(function(){
-$('#dgplusbellebundle_paquete_nombre').
+ function validarPaquete(){
+$('.nombrePaquete').
         attr('data-bvalidator', 'required,required');
  
-    $('#dgplusbellebundle_paquete_costo').
+$('.costoPaquete').
         attr('data-bvalidator', 'number,required,required');
+
+ $('.sucursalPaquete').
+        attr('data-bvalidator', 'required,required');
  
     //Opciones del validador
     var optionsRed = { 
@@ -15,5 +18,5 @@ $('#dgplusbellebundle_paquete_nombre').
     //Validar el formulario
     $('form').bValidator(optionsRed);
 	
- });//Fin document ready	
+ }	
 	

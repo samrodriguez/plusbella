@@ -153,6 +153,7 @@
   {% endblock %}      
 
   {% block javascripts_step %}
+        <script src="{{ asset('Resources/js/Paquete.js') }}"></script>
       
        <script>
             $(document).ready(function(){
@@ -320,7 +321,7 @@
         $('#filterDatatables1').val('');
         
         
-        
+      
         
     });//Fin document ready
         
@@ -406,7 +407,7 @@ jQuery(document).ready(function() {
         // $('.btn_radio').attr('name', 'rol_predet');
     });
 
-
+ validarPaquete(); 
     
 });
 

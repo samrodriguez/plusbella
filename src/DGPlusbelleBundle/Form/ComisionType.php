@@ -19,15 +19,15 @@ class ComisionType extends AbstractType
         $builder
             ->add('descripcion','text',array('label' => 'Descripción','required'=>false,
                     'attr'=>array(
-                    'class'=>'form-control input-sm'
+                    'class'=>'form-control input-sm descripcionComision'
                     )))
             ->add('porcentaje','text',array('label' => 'Porcentaje %','required'=>false,
                     'attr'=>array('maxlength' => 5,
-                    'class'=>'form-control input-sm'
+                    'class'=>'form-control input-sm porcentajeComision'
                     )))
             ->add('meta','text',array('label' => 'Meta $','required'=>false,
                     'attr'=>array(
-                    'class'=>'form-control input-sm'
+                    'class'=>'form-control input-sm metaComision'
                     )))
            // ->add('estado')
             ->add('empleado','entity',array('label' => 'Empleado','required'=>false,
@@ -37,7 +37,7 @@ class ComisionType extends AbstractType
                       return $repository->obtenerEmpActivo();
                     }, 
                     'attr'=>array(
-                    'class'=>'form-control input-sm'
+                    'class'=>'form-control input-sm empleadoComision'
                     )))
         ;
     }

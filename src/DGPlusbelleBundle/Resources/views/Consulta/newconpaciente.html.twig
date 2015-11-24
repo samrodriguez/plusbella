@@ -102,24 +102,22 @@
 
             </div>
             <div class="row">
-                <div class="col-md-4">
+                <div class="col-md-3">
                     {{ form_row(form.tipoConsulta) }}
                 </div>
                 
-                <div class="col-md-4">
+                <div class="col-md-5">
                     {{ form_row(form.observacion) }}
                 </div>
                 
             </div>  
                
             <div class="row">
-                    
-                    
-                    <div class="col-md-12">
-                        <h3 class="text-left">Producto</h3>
-                        <hr>
-                        <br>
-                    </div>
+               <div class="col-md-12">
+                  <h3 class="text-left">Producto</h3>
+                  <hr>
+                  <br>
+                </div>
             </div>
             <div class="row">
                 <div class="col-md-12">
@@ -127,16 +125,17 @@
                 </div>
             </div>
             
-            <div class="row">  
+           <div class="row">  
                  <div id="listadoa">
-                            <div class="listado col-md-12">
-                                <div class="placas" data-prototype="{{ form_widget(form.placas.vars.prototype)|e }}">
+                            <div class="listado col-md-12">          
+                               <div class="placas" data-prototype="{% filter escape %}  {% include 'DGPlusbelleBundle:Prototype:producto.html.twig' with { 'form': form.placas.vars.prototype} %}   {% endfilter  %}"> 
                                     {{ form_widget(form.placas) }}
                                 </div>
                             </div>
                  </div>
      
-            </div>     
+            </div>    
+           <br>
             <div id="plantilla" class="plantilla">
                 <div class="row">
                     <div class="col-md-12">
@@ -174,7 +173,7 @@
                 {{ form_widget(form.submit) }}</p>
              </div>
 	        
-        
+      </div>   
      
  </div>
 {{ form_widget(form._token) }}
@@ -347,7 +346,7 @@
     var collectionHolder = $('div.placas');
     var col=$('#hnr_sircimbundle_estudioradiologicotype_placas');
     // setup an "add a tag" link
-    var $addTagLink = $('<div class="row"><div class="col-md-2"><a href="#" class="add_placa_link btn btn-primary">Agregar</a></div></div>');
+    var $addTagLink = $('<div class="row"><div class="col-md-2"><a href="#" class="add_placa_link btn btn-primary">Agregar producto</a></div></div>');
     var $removeTagLink = $('<a href="#" class="remove_placa_link btn btn-danger">Eliminar</a>');
     var $newLinkLi = $('<div class="col-md-12 addItem"></div>').append($addTagLink);
     var $delLinkLi = $('#hnr_sircimbundle_estudioradiologicotype_placas.required').append($removeTagLink);

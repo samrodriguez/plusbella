@@ -1,6 +1,6 @@
 
-$(document).ready(function(){
-$('#dgplusbellebundle_tipoconsulta_nombre').
+function validarTipoConsulta(){
+$('.nombreTipoConsulta').
         attr('data-bvalidator', 'required,required');
 	
  
@@ -13,5 +13,5 @@ $('#dgplusbellebundle_tipoconsulta_nombre').
     //Validar el formulario
     $('form').bValidator(optionsRed);
 	
- });//Fin document ready	
+ }	
 	
