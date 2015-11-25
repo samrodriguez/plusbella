@@ -8,8 +8,10 @@
    {% endblock %}
    <title>{% block title %} Plus Belle {% endblock %}</title>
    {% block css -%}
-   <link href="{{ asset('Resources/bootstrap-3/css/bootstrap.css') }}" rel="stylesheet" media="all"> 
-   <link href="{{ asset('Resources/bootstrap-3/css/docs.css') }}" rel="stylesheet" media="all">
+       <link rel="stylesheet" href="{{ asset('Resources/wrapkit/styles/bootstrap.css') }}">
+        <link rel="stylesheet" href="{{ asset('Resources/wrapkit/styles/dependencies.css') }}">
+        <link rel="stylesheet" href="{{ asset('Resources/wrapkit/styles/wrapkit.css') }}">
+        <link rel="stylesheet" href="{{ asset('Resources/wrapkit/styles/pages.css') }}">
    {% endblock %}
    
    {% block js -%}
@@ -43,9 +45,53 @@
    </style>
 {% endblock %}
 </head>
-<body class="view-login">
+<body class="bg-grd-blue">
 <div class="container-fluid">
 {% block body -%}
+    
+    <main class="signin-wrapper">
+    <div class="tab-content">
+      <p class="text-center p-4x">
+        {#<img src="images/logo/brand-text-color.png" alt="wrapkit" height="28px">#}
+        
+      </p>
+      <div class="tab-pane fade in active" id="signin">
+        
+          
+        <form action="{% block form_action %}{{ path("plusbelle_security_check") }}{% endblock %}" method="post" id="frmLogin">    
+          <p class="lead">La plus belle</p>
+          <div class="form-group">
+                {% block alert -%}
+                    {% if error %}
+                        <div style="color:red;margin-bottom: 20px;">{{ error.message }}</div>
+                    {% endif %}
+                {% endblock %}    
+            <div class="input-group input-group-in">
+                <span class="input-group-addon"><i class="icon-user"></i></span>
+                <input class="form-control" type="text" id="username" name="_username" value="{{ last_username }}" placeholder="Username" />
+            </div>
+          </div><!-- /.form-group -->
+          <div class="form-group">
+            <div class="input-group input-group-in">
+              <span class="input-group-addon"><i class="icon-lock"></i></span>
+              {#<input name="passwd" id="passwd" class="form-control" placeholder="Password" type="password">#}
+              <input class="form-control" type="password" id="password" name="_password" placeholder="Password"/>
+            </div>
+          </div><!-- /.form-group -->
+          <div class="form-group clearfix">
+            <div class="animated-hue pull-right">
+              <button id="btnSignin" type="submit" class="btn btn-primary">Iniciar sesión</button>
+            </div>
+          </div><!-- /.form-group -->
+          <hr>
+        </form><!-- /#signinForm -->
+      </div><!-- /.tab-pane -->
+
+     
+    </div><!-- /.tab-content -->
+  </main>
+              {#
+{#
   <div class="row">
     <div class="col-xs-offset-3 cols-sm-offset-8 col-md-offset-8 col col-lg-offset-8 col-xs-9 cols-sm-4 col-md-4 col col-lg-4">
     <div class="row login-form">
@@ -94,6 +140,7 @@
     </div>
     </div>
    </div>    
+#}
 {% endblock %}
 </div>
 

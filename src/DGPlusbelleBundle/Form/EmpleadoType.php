@@ -49,7 +49,10 @@ class EmpleadoType extends AbstractType
                 'expanded'=>true,
                     'attr'=>array(
                     'class'=>'tratamientoEmpleado'
-                    ))) 
+                    )))
+            ->add('file',null, array('label'=>'Foto de perfil',
+                    'attr'=>array('class'=>'tratamientoEmpleado'
+                    )))
         ;
     }
     

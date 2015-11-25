@@ -179,7 +179,8 @@ class EmpleadoController extends Controller
 
         $editForm = $this->createEditForm($entity);
         $deleteForm = $this->createDeleteForm($id);
-
+        
+        //$editForm = $editForm->add('name')->add('file')->getForm();
         return array(
             'entity'      => $entity,
             'edit_form'   => $editForm->createView(),
@@ -228,7 +229,28 @@ class EmpleadoController extends Controller
         $deleteForm = $this->createDeleteForm($id);
         $editForm = $this->createEditForm($entity);
         $editForm->handleRequest($request);
+        //var_dump($_POST);
+        //$nombre =$_FILES["fileToUpload"]["name"];
+        //$nombre2 =$_FILES['foto_perfil2'];
+        //var_dump($nombre);
+        //var_dump($nombre2);
+        
+        //Manejo del archivo
+        $path = $this->container->getParameter('photo.empleado');
+        
+        $fecha = date('Y-m-d His');
+        $extension = $entity->getFile()->getClientOriginalExtension();
+        $nombreArchivo = $entity->getId()."-".$fecha.".".$extension;
+        
+        //var_dump($path.$nombreArchivo);
+        
+        $entity->setFoto($nombreArchivo);
+        
+        
+        $entity->getFile()->move($path,$nombreArchivo);
+        //var_dump($entity->getFile());
 
+        //die();
         if ($editForm->isValid()) {
             $em->flush();
 

@@ -14,13 +14,42 @@
     {{ form_errors(edit_form) }}
  
    {% include 'DGPlusbelleBundle:Persona:edit_form.html.twig' with { 'edit_form': edit_form.persona }%} 
-    <div class="col-xs-12 col-sm-2">
-        {{ form_row(edit_form.cargo) }}
-         </div>
         <div class="col-xs-12 col-sm-2">
-        {{ form_row(edit_form.sucursal) }}
-        {# {{ form_row(form.estado) }}#}
+            {{ form_row(edit_form.cargo) }}
         </div>
+        <div class="col-xs-12 col-sm-2">
+            {{ form_row(edit_form.sucursal) }}
+            {# {{ form_row(form.estado) }}#}
+        </div>
+        <div class="col-xs-12 col-sm-2">
+        {{ form_row(edit_form.porcentaje) }}
+         </div> 
+         <div class="col-xs-12 col-sm-2">
+        {{ form_row(edit_form.meta) }}
+         </div>  
+        <div class="col-xs-12 col-sm-4">
+            <label class="control-label" for="dgplusbellebundle_empleado_sucursal">Foto de perfil</label>
+            
+            
+            <div class="form-group">
+                <div class="fileinput input-group fileinput-exists" data-provides="fileinput">
+                    <div class="form-control" data-trigger="fileinput"><i class="glyphicon glyphicon-file fileinput-exists"></i> <span class="fileinput-filename"></span></div>
+                    <div class="input-group-btn">
+                        <span class="btn btn-default btn-file"><span class="fileinput-new">Examinar...</span><span class="fileinput-exists">Cambiar</span>
+                            
+                                {{ form_widget(edit_form.file) }}
+                                {# {{ form_row(form.estado) }}#}
+                            
+                        </span>
+                        <a href="#" class="btn btn-danger fileinput-exists" data-dismiss="fileinput">Quitar</a>
+                    </div>
+                </div><!-- /.fileinput -->
+            </div>
+           
+                        
+        </div> 
+        
+        
          <div class="col-xs-12 col-sm-3">
       {#  {{ form_row(edit_form.foto) }} #}
          </div>
