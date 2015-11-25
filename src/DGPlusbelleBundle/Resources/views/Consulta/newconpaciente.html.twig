@@ -320,7 +320,7 @@
                 input[key] = document.createElement('input');
                 input[key].setAttribute('type', 'text');
                 input[key].setAttribute('placeholder', value.nombre);
-                input[key].setAttribute('class', 'form-control');
+                input[key].setAttribute('class', 'form-control classPlantilla');
                 input[key].setAttribute('style', 'margin-bottom: 5px');
                 input[key].setAttribute('name', value.nombre);
                 input[key].setAttribute('id', value.id);
@@ -339,7 +339,7 @@
                 campos[key].appendChild(input[key]);
                 div.appendChild(campos[key]);
             });
-            
+            validarConsulta();
         } // Fin de mostrarCampos
     </script> 
     <script>
@@ -398,7 +398,7 @@
     //Identificar que form esta activo
     var editar=$('div.placas').attr('id');
     if(editar!='editar_usuario'){
-        //addTagForm(collectionHolder, $newLinkLi);   //Muestra un formulario en la carga de la página nuevo
+        addTagForm(collectionHolder, $newLinkLi);   //Muestra un formulario en la carga de la página nuevo
     }
     
 
@@ -439,6 +439,7 @@ function addTagForm(collectionHolder, $newLinkLi) {
 
     // add a delete link to the new form
     addTagFormDeleteLink($newFormLi);
+     validarConsulta();
     $('.btn_radio').click(function(event) {
         /* Act on the event */
         var id = $(this).attr('id');
@@ -450,7 +451,7 @@ function addTagForm(collectionHolder, $newLinkLi) {
 }
 
 function addTagFormDeleteLink($tagFormLi) {
-    var $removeFormA = $('<div class="row"><div class="col-md-2"><a class="link btn btn-danger" href="#">Eliminar</a></div></div>');
+    var $removeFormA = $('<div class="col-md-1"><a class="link btn btn-danger" href="#">Eliminar</a></div>');
     $tagFormLi.append($removeFormA);
 
     $removeFormA.on('click', function(e) {

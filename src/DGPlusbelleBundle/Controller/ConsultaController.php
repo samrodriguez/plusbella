@@ -249,7 +249,7 @@ class ConsultaController extends Controller
                 $this->establecerConsultaProducto($entity, $producto, $indicaciones);
             } */
             
-            $empleados=$this->verificarComision($usuario);
+            $empleados=$this->verificarComision($usuario,null);
             
             if($empleados[0]['suma'] >= $empleados[0]['meta'] && !$empleados[0]['comisionCompleta']){
                 $this->get('envio_correo')->sendEmail($empleados[0]['email'],"","","","cumplio su objetivo");

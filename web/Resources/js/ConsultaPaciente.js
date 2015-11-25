@@ -20,7 +20,10 @@ $('.productoConsulta').
   attr('data-bvalidator', 'required,required');  
   
 $('.indicacionesConsulta').
-  attr('data-bvalidator', 'required,required');    
+  attr('data-bvalidator', 'required,required');  
+  
+$('.classPlantilla').
+  attr('data-bvalidator', 'required,required');       
    
     //Opciones del validador
     var optionsRed = { 

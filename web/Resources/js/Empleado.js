@@ -26,6 +26,10 @@ $('.bonoEmpleado').
 
 $('.cargoEmpleado').
   attr('data-bvalidator', 'required,required');  
+  
+$('.fotoEmpleado').
+  attr('data-bvalidator', 'extension[jpg:png],required');    
+  
 
 $('.sucursalEmpleado').
   attr('data-bvalidator', 'required,required'); 

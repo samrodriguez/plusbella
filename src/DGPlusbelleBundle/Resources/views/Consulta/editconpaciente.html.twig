@@ -30,6 +30,7 @@
         div + label{
             display: none;
         }
+        .productoConsulta{width: 50% }
     </style>
     
 {% endblock %}
@@ -53,14 +54,14 @@
                     
                     
                     <div class="col-md-12">
-                        <h3 class="text-center">Consulta</h3>
+                        <h3 class="text">Información general de consulta</h3>
                         <hr>
                     </div>
                 </div>
             {# Paciente #}
             <div class="row">
                 
-                <div class="col-md-5">{{ form_row(edit_form.paciente) }}</div>
+                <div class="col-md-2">{{ form_row(edit_form.paciente) }}</div>
                 
             </div>
             {# Formulario de consulta#}
@@ -70,7 +71,7 @@
                     {{ form_row(edit_form.fechaConsulta) }}
                 </div>
                 
-                <div class="col-md-3">
+                <div class="col-md-2">
                     {{ form_row(edit_form.tratamiento) }}
                 </div>
                 
@@ -84,6 +85,9 @@
                 
                 <div class="col-md-1">
                     {{ form_row(edit_form.incapacidad) }}
+                </div>
+                 <div class="col-md-2">
+                    {{ form_row(edit_form.costoConsulta) }}
                 </div>
 
             </div>
@@ -111,28 +115,57 @@
                 </div>
             </div>
             
-            <div class="row">  
-                 <div id="listadoa">
-                            <div class="listado col-md-12">
-                                <div class="placas" data-prototype="{{ form_widget(edit_form.placas.vars.prototype)|e }}">
+                <div class="row">  
+             
+                 <div class="listado col-md-12">
+                    <div class="placas" data-prototype="{% filter escape %}  {% include 'DGPlusbelleBundle:Prototype:producto.html.twig' with { 'form': edit_form.placas.vars.prototype} %}   {% endfilter  %}"> 
 
-                                    {% for placa in edit_form.placas %}
-                                        <div class="col-md-4"> 
+                      {% for placa in edit_form.placas %}
+                                        
+                       <div class="col-md-4">
+                         <div class="panel bg-grd-light" data-fill-color="true">
+                            <div class="panel-body">
 
-                                             {{ form_row(placa) }} 
-                                             {# {{ form_row(placa) }}  #}
-                                            {# <a class="link" href="#" style="visibility: hidden;width:5px;">x</a> #}
-
-                                        </div>
-                                    {% endfor %}
-
-                                    {# {{ form_widget(edit_form.placas) }}
-                                    <a class="link" href="#" style="visibility: visible;">x</a> #}
+                                  {{ form_row(placa) }} 
+ 
+                            </div>
+                         </div>
+                       </div>        
+                       {% endfor %}
+                    </div>
+                 </div>  
+              
+            </div>
+                    
+                     <div id="plantilla" class="plantilla">
+                <div class="row">
+                    <div class="col-md-12">
+                        <h3 class="text-left">Reporte de consulta</h3>
+                        <hr>
+                        <br>
+                    </div>
+                    <div class="col-md-3 col-md-offset-1">
+                        {{ form_row(edit_form.reportePlantilla) }}
+                    </div>
+                    <div class="col-md-3">
+                        <div id="lista_plantilla">
+                            {{ form_row(edit_form.plantilla) }}
+                        </div>
+                    </div>  
+                    <div class="col-md-11 col-md-offset-1 ">
+                    {#    {{ form_row(form.campos) }} #}
+                    </div>    
+                </div>
+            </div>  
+            
+            <div id="camposPlantilla" class="camposPlantilla" style="margin-top: 30px">
+                <div class="row">
+                    <div class="col-md-1"></div>
+                    <div id="campos" class="col-md-11 campos">
+                        
                     </div>
                 </div>
-                      
-            </div>   
-            </div>
+            </div>         
             
             <br>
             <div class="form-grouphide"> 
@@ -141,9 +174,7 @@
                  
                 {{ form_widget(edit_form.submit) }}
              </div>
-	        
-        
-     
+
  </div>
 {{ form_widget(edit_form._token) }}
 </div>  
@@ -153,6 +184,8 @@
 
 
 {% block javascripts_step %}
+    
+<script src="{{ asset('Resources/js/ConsultaPaciente.js') }}"></script>
       
 <script>
 
@@ -160,7 +193,7 @@
 var collectionHolder = $('div.placas');
 var col=$('#hnr_sircimbundle_estudioradiologicotype_placas');
 // setup an "add a tag" link
-var $addTagLink = $('<div class="row"><div class="col-md-2"><a href="#" class="add_placa_link btn btn-primary">Agregar</a></div></div>');
+var $addTagLink = $('<div class="row"><div class="col-md-2"><a href="#" class="add_placa_link btn btn-primary">Agregar otro producto</a></div></div>');
 var $removeTagLink = $('<a href="#" class="remove_placa_link btn btn-danger">Eliminar</a>');
 var $newLinkLi = $('<div class="col-md-12 addItem"></div>').append($addTagLink);
 var $delLinkLi = $('#hnr_sircimbundle_estudioradiologicotype_placas.required').append($removeTagLink);
@@ -170,6 +203,8 @@ var $delLinkLi = $('#hnr_sircimbundle_estudioradiologicotype_placas.required').a
 
 
 jQuery(document).ready(function() {
+    
+    $('div[id*="dgplusbellebundle_consulta_placas_"]').siblings().remove(); // Ocultar id de producto  
 
     $("#dgplusbellebundle_consulta_pacienteSelectBoxItOptions li").remove();
 
@@ -214,7 +249,7 @@ jQuery(document).ready(function() {
         // $('.btn_radio').attr('name', 'rol_predet');
     });
 
-
+    validarConsulta();
     
 });
 
@@ -241,6 +276,7 @@ function addTagForm(collectionHolder, $newLinkLi) {
 
     // add a delete link to the new form
     addTagFormDeleteLink($newFormLi);
+    validarConsulta();
     $('.btn_radio').click(function(event) {
         /* Act on the event */
         var id = $(this).attr('id');
@@ -252,7 +288,7 @@ function addTagForm(collectionHolder, $newLinkLi) {
 }
 
 function addTagFormDeleteLink($tagFormLi) {
-    var $removeFormA = $('<div class="row"><div class="col-md-2"><a class="link btn btn-danger" href="#">Eliminar</a></div></div>');
+    var $removeFormA = $('<div class="col-md-1"><a class="link btn btn-danger" href="#">Eliminar</a></div>');
     $tagFormLi.append($removeFormA);
 
     $removeFormA.on('click', function(e) {

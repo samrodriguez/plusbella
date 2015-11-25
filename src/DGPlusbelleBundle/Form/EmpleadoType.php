@@ -40,7 +40,7 @@ class EmpleadoType extends AbstractType
             ->add('bono','text',array('label' => 'Bono $','required'=>false,
                     'attr'=>array(
                     'class'=>'form-control input-sm bonoEmpleado'
-                    )))      
+                    ))) 
             //->add('persona')
             ->add('sucursal',null,array('label' => 'Sucursal','required'=>false,'empty_value'=>'Seleccione Sucursal...',
                     'attr'=>array(
@@ -54,8 +54,8 @@ class EmpleadoType extends AbstractType
                     'attr'=>array(
                     'class'=>'tratamientoEmpleado'
                     )))
-            ->add('file',null, array('label'=>'Foto de perfil',
-                    'attr'=>array('class'=>'tratamientoEmpleado'
+            ->add('file',null, array('label'=>'Foto de perfil','required'=>false,
+                    'attr'=>array('class'=>'fotoEmpleado'
                     )))
         ;
     }

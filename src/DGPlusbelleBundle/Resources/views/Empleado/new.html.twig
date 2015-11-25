@@ -47,13 +47,13 @@
                 <div class="fileinput input-group fileinput-exists" data-provides="fileinput">
                     <div class="form-control" data-trigger="fileinput"><i class="glyphicon glyphicon-file fileinput-exists"></i> <span class="fileinput-filename"></span></div>
                     <div class="input-group-btn">
-                        <span class="btn btn-default btn-file"><span class="fileinput-new">Examinar...</span><span class="fileinput-exists">Cambiar</span>
+                        <span ><span >Examinar...</span> {# <span class="fileinput-exists">Cambiar</span> #}
                             
                                 {{ form_widget(form.file) }}
                                 {# {{ form_row(form.estado) }}#}
                             
                         </span>
-                        <a href="#" class="btn btn-danger fileinput-exists" data-dismiss="fileinput">Quitar</a>
+                        <a href="#" class="btn btn-danger fileinput-exists" data-dismiss="fileinput">Quitar</a> 
                     </div>
                 </div><!-- /.fileinput -->
             </div>
