@@ -19,6 +19,9 @@ $('.porcentajeEmpleado').
         attr('data-bvalidator', 'rangelength[1:5],between[0:100],required,required');
 
 $('.metaEmpleado').
+        attr('data-bvalidator', 'number,required,required');
+
+$('.bonoEmpleado').
         attr('data-bvalidator', 'number,required,required');	
 
 $('.cargoEmpleado').

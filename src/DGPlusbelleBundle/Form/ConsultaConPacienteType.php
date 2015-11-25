@@ -21,35 +21,36 @@ class ConsultaConPacienteType extends AbstractType
             ->add('fechaConsulta', null,
                   array('label'  => 'Fecha consulta','required'=>false,
                         'widget' => 'single_text',
-                        'attr'   => array('class' => 'form-control input-sm'),
+                        'attr'   => array('class' => 'form-control input-sm fechaConsulta'),
                        ))
             ->add('horaInicio','time',array('label' => 'Hora Inicio',
                     'attr'=>array(
-                    'class'=>' '
+                    'class'=>'horaInicioConsulta '
                     )))
             ->add('horaFin','time',array('label' => 'Hora Fin',
                     'attr'=>array(
-                    'class'=>' '
+                    'class'=>'horaFinConsulta '
                     )))
             ->add('observacion','textarea',array('label' => 'Observación','required'=>false,
                     'attr'=>array(
-                    'class'=>'form-control input-sm'
+                    'class'=>'form-control input-sm observacionConsulta'
                     )))
             ->add('incapacidad', 'choice', array(
                     'choices'  => array('1' => 'Sí', '0' => 'No'),
                     'multiple' => false,
-                    'expanded'=>'true'
+                    'expanded'=>'true',
+                    'empty_data'=>null
                   
                     
                     
                 
                 ))
             //->add('cita')
-            ->add('paciente','entity', array( 'label' => 'Paciente',
+            ->add('paciente','entity', array( 'label' => 'Paciente','required'=>false,
                          'empty_value'   => 'Seleccione un paciente...',
                          'class'         => 'DGPlusbelleBundle:Paciente',
                          'attr'=>array(
-                         'class'=>'form-control input-sm'
+                         'class'=>'form-control input-sm pacienteConsulta'
                          )
                        ))
             ->add('tipoConsulta','entity', array( 'label' => 'Tipo de consulta','required'=>false,
@@ -60,7 +61,7 @@ class ConsultaConPacienteType extends AbstractType
             },
                          
                          'attr'=>array(
-                         'class'=>'form-control'
+                         'class'=>'form-control tipoConsulta'
                          )
                        ))
                 
@@ -72,12 +73,12 @@ class ConsultaConPacienteType extends AbstractType
                    
                  
                 ))
-            ->add('costoConsulta', 'text', array(
+            ->add('costoConsulta', 'text', array('required'=>false,
                     'attr'=>array(
-                         'class'=>'form-control'
+                         'class'=>'form-control costoConsulta'
                          )
                        ))
-            ->add('plantilla', 'entity', array(
+            ->add('plantilla', 'entity', array('required'=>false,
                     'label'         =>  'Plantilla',
                     'empty_value'=>'Seleccione una plantilla',
                     'class'         =>  'DGPlusbelleBundle:Plantilla',
@@ -91,7 +92,7 @@ class ConsultaConPacienteType extends AbstractType
                     'required' => false
                 )) */
                     
-            ->add('tratamiento','entity', array( 'label' => 'Tratamiento',
+            ->add('tratamiento','entity', array( 'label' => 'Tratamiento','required'=>false,
                          'empty_value'   => 'Seleccione un tratamiento...',
                          'class'         => 'DGPlusbelleBundle:Tratamiento',
             'query_builder' => function(EntityRepository $repository) {
@@ -99,7 +100,7 @@ class ConsultaConPacienteType extends AbstractType
             },
                          
                          'attr'=>array(
-                         'class'=>'form-control input-sm'
+                         'class'=>'form-control input-sm tratamientoConsulta'
                          )
                        ))
           /*      
