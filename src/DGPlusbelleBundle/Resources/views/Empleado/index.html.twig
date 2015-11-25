@@ -1,7 +1,14 @@
 {% extends 'DGPlusbelleBundle:Layout:layout.html.twig' %}
 
-{% block contenido -%}
 
+    
+    {% block imagenPerfil %}
+        <img class="media-object img-circle" src="{{ asset('Photos/Empleado/') }}{{foto}}" alt="photo profile">
+    {% endblock %}
+
+
+{% block contenido -%}
+    
         <div class="content-body">
           <div class="panel" data-fill-color="true">
             <div class="panel-heading">

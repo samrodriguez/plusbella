@@ -57,13 +57,15 @@ class EmpleadoController extends Controller
        
         $empleados = $em->createNativeQuery($sql, $rsm)
                     ->getResult();
-        
+        $usuario= $this->get('security.token_storage')->getToken()->getUser();
+        $foto = $usuario->getPersona()->getEmpleado()[0]->getFoto();
 
         return array(
             //'entities' => $entities,
             'empleados' => $empleados,
             'entity' => $entity,
             'form'   => $form->createView(),
+            'foto' => $foto,
         );
     }
     /**
@@ -81,11 +83,33 @@ class EmpleadoController extends Controller
         $form = $this->createCreateForm($entity);
         $form->handleRequest($request);
 
+        
+        
+        
+        
         if ($form->isValid()) {
             $em = $this->getDoctrine()->getManager();
             $em->persist($entity);
             $em->flush();
+            
+            //$entity = $em->getRepository('DGPlusbelleBundle:Empleado')->find($entity->getId());
+            
+            if($entity->getFile()!=null){
+            $path = $this->container->getParameter('photo.empleado');
 
+            $fecha = date('Y-m-d His');
+            $extension = $entity->getFile()->getClientOriginalExtension();
+            $nombreArchivo = $entity->getId()."-".$fecha.".".$extension;
+            $em->persist($entity);
+            $em->flush();
+            //var_dump($path.$nombreArchivo);
+
+            $entity->setFoto($nombreArchivo);
+            $entity->getFile()->move($path,$nombreArchivo);
+            $em->persist($entity);
+            $em->flush();
+        }
+            
             return $this->redirect($this->generateUrl('admin_empleado', array('id' => $entity->getId())));
         }
 
@@ -236,18 +260,22 @@ class EmpleadoController extends Controller
         //var_dump($nombre2);
         
         //Manejo del archivo
-        $path = $this->container->getParameter('photo.empleado');
-        
-        $fecha = date('Y-m-d His');
-        $extension = $entity->getFile()->getClientOriginalExtension();
-        $nombreArchivo = $entity->getId()."-".$fecha.".".$extension;
-        
-        //var_dump($path.$nombreArchivo);
-        
-        $entity->setFoto($nombreArchivo);
-        
-        
-        $entity->getFile()->move($path,$nombreArchivo);
+        /*var_dump($entity->getFile());
+        die();*/
+        if($entity->getFile()!=null){
+            $path = $this->container->getParameter('photo.empleado');
+
+            $fecha = date('Y-m-d His');
+            $extension = $entity->getFile()->getClientOriginalExtension();
+            $nombreArchivo = $entity->getId()."-".$fecha.".".$extension;
+
+            //var_dump($path.$nombreArchivo);
+
+            $entity->setFoto($nombreArchivo);
+
+
+            $entity->getFile()->move($path,$nombreArchivo);
+        }
         //var_dump($entity->getFile());
 
         //die();
