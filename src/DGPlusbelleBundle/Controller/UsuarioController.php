@@ -50,7 +50,7 @@ class UsuarioController extends Controller
         $entity = new Usuario();
         $form = $this->createCreateForm($entity);
         $form->handleRequest($request);
-
+        $entity->setEstado(1);
         if ($form->isValid()) {
             $em = $this->getDoctrine()->getManager();
             $this->setSecurePassword($entity);
