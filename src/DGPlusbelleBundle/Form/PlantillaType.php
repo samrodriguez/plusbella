@@ -17,13 +17,13 @@ class PlantillaType extends AbstractType
         $builder
             ->add('nombre','text',array('label' => 'Nombre','required' => false,
                     'attr'=>array(
-                    'class'=>'form-control input-sm'
+                    'class'=>'form-control input-sm nombrePlantilla'
                     )))
             ->add('descripcion','text',array('label' => 'Descripción','required' => false,
                     'attr'=>array(
-                    'class'=>'form-control input-sm'
+                    'class'=>'form-control input-sm descripcionPlantilla'
                     )))
-            ->add('placas','collection',array(
+            ->add('placas','collection',array('required' => false,
                 'type' => new DetallePlantillaType(),
                 'label'=>' ',
                 'by_reference' => false,

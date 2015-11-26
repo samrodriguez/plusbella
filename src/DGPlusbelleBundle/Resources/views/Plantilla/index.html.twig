@@ -1,5 +1,24 @@
 {% extends 'DGPlusbelleBundle:Layout:layout.html.twig' %}
 
+
+{% block css %}
+    {{parent()}}
+    <style>
+        
+        //Posicion del boton agregar
+        .placas>div:last-child {
+            position:absolute;
+        }
+        div.placas > div:nth-child(2) > div:nth-child(2) > a{
+            display: none;
+        }
+       
+    </style>
+    
+{% endblock %}
+
+
+
 {% block contenido -%}
     <div class="content-body">
           <div class="panel" data-fill-color="true">
@@ -86,7 +105,7 @@
    {% endblock %}
    
    {% block javascripts_step %}
-      
+       <script src="{{ asset('Resources/js/Plantilla.js') }}"></script>
        <script>
             $(document).ready(function(){
                 
@@ -230,8 +249,8 @@
         $('#filterDatatables1').val('');
         
         
-        
-        
+      
+    validarPlantilla();    
     });//Fin document ready
         
     //Definición de funciones
@@ -299,7 +318,7 @@ jQuery(document).ready(function() {
     //Identificar que form esta activo
     var editar=$('div.placas').attr('id');
     if(editar!='editar_usuario'){
-        //addTagForm(collectionHolder, $newLinkLi);   //Muestra un formulario en la carga de la página nuevo
+        addTagForm(collectionHolder, $newLinkLi);   //Muestra un formulario en la carga de la página nuevo
     }
     
 
@@ -314,7 +333,7 @@ jQuery(document).ready(function() {
     });
 
 
-    
+ validarPlantilla(); 
 });
 
 
@@ -340,6 +359,7 @@ function addTagForm(collectionHolder, $newLinkLi) {
 
     // add a delete link to the new form
     addTagFormDeleteLink($newFormLi);
+     validarPlantilla();   
     $('.btn_radio').click(function(event) {
         /* Act on the event */
         var id = $(this).attr('id');
@@ -351,7 +371,7 @@ function addTagForm(collectionHolder, $newLinkLi) {
 }
 
 function addTagFormDeleteLink($tagFormLi) {
-    var $removeFormA = $('<div class="row"><div class="col-md-2"><a class="link btn btn-danger" href="#">Eliminar</a></div></div>');
+    var $removeFormA = $('<div class="col-md-1"><a class="link btn btn-danger" href="#">Eliminar</a></div>');
     $tagFormLi.append($removeFormA);
 
     $removeFormA.on('click', function(e) {

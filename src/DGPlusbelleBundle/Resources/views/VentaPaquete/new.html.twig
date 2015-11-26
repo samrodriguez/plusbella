@@ -35,7 +35,7 @@
 
 {% block javascripts_step %}
         
-        
+    <script src="{{ asset('Resources/js/VentaPaquete.js') }}"></script>     
         <script>
             $(document).ready(function(){
                 
@@ -144,7 +144,7 @@
                 });
                 */
                 
-                
+                validarVentaPaquete(); 
             });
         </script>
 {% endblock %}

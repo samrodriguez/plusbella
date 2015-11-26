@@ -9,6 +9,11 @@
         .placas>div:last-child {
             position:absolute;
         }
+        
+        div.placas > div:nth-child(2) > div:nth-child(2) > a{
+            display: none;
+        }
+        
         .addItem{
             position: absolute;
             height: 50px;
@@ -41,6 +46,8 @@
             #dgplusbellebundle_consulta_horaInicio, #dgplusbellebundle_consulta_horaFin{
                 width: 155px;
             }
+            
+            .productoConsulta{width: 50% }
     </style>
     
 {% endblock %}
@@ -130,7 +137,7 @@
                             <div class="listado col-md-12">          
                                <div class="placas" data-prototype="{% filter escape %}  {% include 'DGPlusbelleBundle:Prototype:producto.html.twig' with { 'form': form.placas.vars.prototype} %}   {% endfilter  %}"> 
                                     {{ form_widget(form.placas) }}
-                                </div>
+                               </div>
                             </div>
                  </div>
      

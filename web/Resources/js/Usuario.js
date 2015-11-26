@@ -1,12 +1,9 @@
 
-function validarVentaPaquete(){
-$('.empleadoVentaPaquete').
-attr('data-bvalidator', 'required,required');
-
-$('.paqueteVenta').
-attr('data-bvalidator', 'required,required');
-
-
+function validarCategoria(){
+$('.nombreCategoria').
+        attr('data-bvalidator', 'required,required');
+	
+ 
     //Opciones del validador
     var optionsRed = { 
         classNamePrefix: 'bvalidator_bootstraprt_', 
