@@ -32,142 +32,174 @@
 
     <li class="divider"></li>
     <li class="nav-header" role="presentation">ACCESO RAPIDO</li>
-    <li class="nav-item" role="presentation">
-      <a href="{{path('admin_paciente')}}">
-        <span class="nav-icon"><i class="fa fa-briefcase"></i></span>
-        <span class="nav-text">Venta de paquetes</span>
-      </a>
-    </li>
-    <li class="nav-item" role="presentation">
-      <a href="#">
-        <span class="nav-icon"><i class="fa fa-cubes"></i></span>
-        <span class="nav-text">Expediente de pacientes</span>
-      </a>
-    </li>
-    <li class="nav-item" role="presentation">
-      <a href="{{path('admin_cita')}}">
-        <span class="nav-icon"><i class="fa fa-puzzle-piece"></i></span>
-        <span class="nav-text">Calendario de citas</span>
-      </a>
-    </li>
-    <li class="nav-item" role="presentation">
-      <a href="{{path('admin_paciente')}}">
-        <span class="nav-icon"><i class="fa fa-puzzle-piece"></i></span>
-        <span class="nav-text">Consultas de emergencia</span>
-      </a>
-    </li>
-    <li class="nav-item" role="presentation">
-      <a href="{{path('admin_paciente')}}">
-        <span class="nav-icon"><i class="fa fa-puzzle-piece"></i></span>
-        <span  class="nav-text">Gestión de pacientes</span>
-      </a>
-    </li>
+    {% if is_granted('ROLE_ADMIN') %}
+        <li class="nav-item" role="presentation">
+            <a href="{{path('admin_paciente')}}">
+                <span class="nav-icon"><i class="fa fa-briefcase"></i></span>
+                <span class="nav-text">Venta de paquetes</span>
+            </a>
+        </li>
+    {% endif %}
+    {% if is_granted('ROLE_ADMIN') %}
+        <li class="nav-item" role="presentation">
+            <a href="#">
+              <span class="nav-icon"><i class="fa fa-cubes"></i></span>
+              <span class="nav-text">Expediente de pacientes</span>
+            </a>        
+        </li>
+    {% endif %}
+    {% if is_granted('ROLE_ADMIN') %}        
+        <li class="nav-item" role="presentation">    
+            <a href="{{path('admin_cita')}}">
+              <span class="nav-icon"><i class="fa fa-puzzle-piece"></i></span>
+              <span class="nav-text">Calendario de citas</span>
+            </a>
+        </li>
+    {% endif %}
+    {% if is_granted('ROLE_ADMIN') %}
+        <li class="nav-item" role="presentation">
+        
+            <a href="{{path('admin_paciente')}}">
+              <span class="nav-icon"><i class="fa fa-puzzle-piece"></i></span>
+              <span class="nav-text">Consultas de emergencia</span>
+            </a>
+        </li>
+    {% endif %}
+    {% if is_granted('ROLE_ADMIN') %}
+        <li class="nav-item" role="presentation">
+            <a href="{{path('admin_paciente')}}">
+              <span class="nav-icon"><i class="fa fa-puzzle-piece"></i></span>
+              <span  class="nav-text">Gestión de pacientes</span>
+            </a>
+        </li>
+    {% endif %}
     <li class="divider"></li>
     <li class="nav-header" role="presentation">MENU</li>
-    <li class="nav-item" role="presentation">
-      <a href="#" data-toggle="nav-child">
-        <span class="nav-icon"><i class="fa fa-briefcase"></i></span>
-        <span class="nav-text">Pacientes</span>
-      </a>
-      <ul class="nav nav-child level-1 nav-stacked nav-pills" role="menu">
-        <li role="presentation"><a role="menuitem" tabindex="-1" href="{{ path('admin_paciente') }}"><span class="nav-text">Gestionar paciente</span></a></li>
-      </ul>
-    </li>
-    <li class="nav-item" role="presentation">
-      <a href="#" data-toggle="nav-child">
-        <span class="nav-icon"><i class="fa fa-check-square"></i></span>
-        <span class="nav-text">Consultas</span>
-      </a>
-      <ul class="nav nav-child level-1 nav-stacked nav-pills" role="menu">
-        <li role="presentation"><a role="menuitem" tabindex="-1" href="{{ path('admin_tipoconsulta') }}"><span class="nav-text">Nuevo tipo de consulta</span></a></li>
-      </ul>
-    </li>
-    <li class="nav-item" role="presentation">
-      <a href="#" data-toggle="nav-child">
-        <span class="nav-icon"><i class="fa fa-line-chart"></i></span>
-        <span class="nav-text">Tratamientos</span>
-      </a>
-      <ul class="nav nav-child level-1 nav-stacked nav-pills" role="menu">
-        <li role="presentation"><a role="menuitem" tabindex="-1" href="{{ path('admin_tratamiento') }}"><span class="nav-text">Gestionar tratamiento</span></a></li>
-      </ul>
-      <ul class="nav nav-child level-1 nav-stacked nav-pills" role="menu">
-        <li role="presentation"><a role="menuitem" tabindex="-1" href="{{ path('admin_categoria') }}"><span class="nav-text">Gestionar categoria</span></a></li>
-      </ul>
-    </li>
-    <li class="nav-item" role="presentation">
-      <a href="#" data-toggle="nav-child">
-        <span class="nav-icon"><i class="fa fa-briefcase"></i></span>
-        <span class="nav-text">Paquetes</span>
-      </a>
-      <ul class="nav nav-child level-1 nav-stacked nav-pills" role="menu">
-        <li role="presentation"><a role="menuitem" tabindex="-1" href="{{ path('admin_paquete') }}"><span class="nav-text">Gestionar paquete</span></a></li>
-      </ul>
-    </li>
-    <li class="nav-item" role="presentation">
-      <a href="#" data-toggle="nav-child">
-        <span class="nav-icon"><i class="fa fa-database"></i></span>
-        <span class="nav-text">Inventario</span>
-      </a>
-      <ul class="nav nav-child level-1 nav-stacked nav-pills" role="menu">
-        <li role="presentation"><a role="menuitem" tabindex="-1" href="{{ path('admin_producto') }}"><span class="nav-text">Gestionar productos</span></a></li>
-      </ul>
-    </li>
-    <li class="nav-item" role="presentation">
-      <a href="#" data-toggle="nav-child">
-        <span class="nav-icon"><i class="fa fa-plug"></i></span>
-        <span class="nav-text">Empleados</span>
-      </a>
-      <ul class="nav nav-child level-1 nav-stacked nav-pills" role="menu">
-        <li role="presentation"><a role="menuitem" tabindex="-1" href="{{ path('admin_empleado') }}"><span class="nav-text">Gestionar empleado</span></a></li>
-        <li role="presentation"><a role="menuitem" tabindex="-1" href="{{ path('admin_empleado_progreso_venta') }}"><span class="nav-text">Progreso de empleado</span></a></li>
-      </ul>
-    </li>
-    <li class="nav-item" role="presentation">
-      <a href="#" data-toggle="nav-child">
-        <span class="nav-icon"><i class="fa fa-university"></i></span>
-        <span class="nav-text">Sucursal</span>
-      </a>
-      <ul class="nav nav-child level-1 nav-stacked nav-pills" role="menu">
-        <li role="presentation"><a role="menuitem" tabindex="-1" href="{{ path('admin_sucursal') }}"><span class="nav-text">Gestionar sucursal</span></a></li>
-      </ul>
-    </li>
-     <li class="nav-item" role="presentation">
-      <a href="#" data-toggle="nav-child">
-        <span class="nav-icon"><i class="fa fa-magic"></i></span>
-        <span class="nav-text">Descuento</span>
-      </a>
-      <ul class="nav nav-child level-1 nav-stacked nav-pills" role="menu">
-        <li role="presentation"><a role="menuitem" tabindex="-1" href="{{ path('admin_descuento') }}"><span class="nav-text">Gestionar descuento</span></a></li>
-      </ul>
-    </li>
-    <li class="nav-item" role="presentation">
-      <a href="#" data-toggle="nav-child">
-        <span class="nav-icon"><i class="fa fa-list-ul"></i></span>
-        <span class="nav-text">Plantilla</span>
-      </a>
-      <ul class="nav nav-child level-1 nav-stacked nav-pills" role="menu">
-        <li role="presentation"><a role="menuitem" tabindex="-1" href="{{ path('admin_plantilla') }}"><span class="nav-text">Gestionar plantilla</span></a></li>
-      </ul>
-    </li>
-    <li class="nav-item" role="presentation">
-      <a href="#" data-toggle="nav-child">
-        <span class="nav-icon"><i class="fa fa-file-text-o"></i></span>
-        <span class="nav-text">Reportes</span>
-      </a>
-      <ul class="nav nav-child level-1 nav-stacked nav-pills" role="menu">
-        <li role="presentation"><a role="menuitem" tabindex="-1" href="{{ path('admin_reporte_paquete') }}"><span class="nav-text">Ingresos por paquete</span></a></li>
-        <li role="presentation"><a role="menuitem" tabindex="-1" href="{{ path('admin_reporte_emergencia') }}"><span class="nav-text">Ingresos por consulta emergencia</span></a></li>
-        <li role="presentation"><a role="menuitem" tabindex="-1" href="{{ path('admin_reporte_consolidado_paquete') }}"><span class="nav-text">Consolidado de paquetes</span></a></li>
-        <li role="presentation"><a role="menuitem" tabindex="-1" href="{{ path('admin_reporte_tratamiento_frecuente') }}"><span class="nav-text">Tratamiento mas frecuente en consulta de emergencia</span></a></li>
-        
-        
-      </ul>
-    </li>
-    <li class="collapse-item" role="presentation">
-      <a href="#" data-sidebar="toggleCollapse">
-        <i class="fa fa-angle-double-left"></i>
-      </a>
-    </li>
+    {% if is_granted('ROLE_ADMIN') %}
+        <li class="nav-item" role="presentation">
+          <a href="#" data-toggle="nav-child">
+            <span class="nav-icon"><i class="fa fa-briefcase"></i></span>
+            <span class="nav-text">Pacientes</span>
+          </a>
+          <ul class="nav nav-child level-1 nav-stacked nav-pills" role="menu">
+            <li role="presentation"><a role="menuitem" tabindex="-1" href="{{ path('admin_paciente') }}"><span class="nav-text">Gestionar paciente</span></a></li>
+          </ul>
+        </li>
+    {% endif %}
+    {% if is_granted('ROLE_ADMIN') %}
+        <li class="nav-item" role="presentation">
+          <a href="#" data-toggle="nav-child">
+            <span class="nav-icon"><i class="fa fa-check-square"></i></span>
+            <span class="nav-text">Consultas</span>
+          </a>
+          <ul class="nav nav-child level-1 nav-stacked nav-pills" role="menu">
+            <li role="presentation"><a role="menuitem" tabindex="-1" href="{{ path('admin_tipoconsulta') }}"><span class="nav-text">Nuevo tipo de consulta</span></a></li>
+          </ul>
+        </li>
+    {% endif %}
+    {% if is_granted('ROLE_ADMIN') %}
+        <li class="nav-item" role="presentation">
+          <a href="#" data-toggle="nav-child">
+            <span class="nav-icon"><i class="fa fa-line-chart"></i></span>
+            <span class="nav-text">Tratamientos</span>
+          </a>
+          <ul class="nav nav-child level-1 nav-stacked nav-pills" role="menu">
+            <li role="presentation"><a role="menuitem" tabindex="-1" href="{{ path('admin_tratamiento') }}"><span class="nav-text">Gestionar tratamiento</span></a></li>
+          </ul>
+          <ul class="nav nav-child level-1 nav-stacked nav-pills" role="menu">
+            <li role="presentation"><a role="menuitem" tabindex="-1" href="{{ path('admin_categoria') }}"><span class="nav-text">Gestionar categoria</span></a></li>
+          </ul>
+        </li>
+    {% endif %}
+    {% if is_granted('ROLE_ADMIN') %}
+        <li class="nav-item" role="presentation">
+          <a href="#" data-toggle="nav-child">
+            <span class="nav-icon"><i class="fa fa-briefcase"></i></span>
+            <span class="nav-text">Paquetes</span>
+          </a>
+          <ul class="nav nav-child level-1 nav-stacked nav-pills" role="menu">
+            <li role="presentation"><a role="menuitem" tabindex="-1" href="{{ path('admin_paquete') }}"><span class="nav-text">Gestionar paquete</span></a></li>
+          </ul>
+        </li>
+    {% endif %}
+    {% if is_granted('ROLE_ADMIN') %}
+        <li class="nav-item" role="presentation">
+          <a href="#" data-toggle="nav-child">
+            <span class="nav-icon"><i class="fa fa-database"></i></span>
+            <span class="nav-text">Inventario</span>
+          </a>
+          <ul class="nav nav-child level-1 nav-stacked nav-pills" role="menu">
+            <li role="presentation"><a role="menuitem" tabindex="-1" href="{{ path('admin_producto') }}"><span class="nav-text">Gestionar productos</span></a></li>
+          </ul>
+        </li>
+    {% endif %}
+    {% if is_granted('ROLE_ADMIN') %}
+        <li class="nav-item" role="presentation">
+          <a href="#" data-toggle="nav-child">
+            <span class="nav-icon"><i class="fa fa-plug"></i></span>
+            <span class="nav-text">Empleados</span>
+          </a>
+          <ul class="nav nav-child level-1 nav-stacked nav-pills" role="menu">
+            <li role="presentation"><a role="menuitem" tabindex="-1" href="{{ path('admin_empleado') }}"><span class="nav-text">Gestionar empleado</span></a></li>
+            <li role="presentation"><a role="menuitem" tabindex="-1" href="{{ path('admin_empleado_progreso_venta') }}"><span class="nav-text">Progreso de empleado</span></a></li>
+          </ul>
+        </li>
+    {% endif %}
+    {% if is_granted('ROLE_ADMIN') %}
+        <li class="nav-item" role="presentation">
+          <a href="#" data-toggle="nav-child">
+            <span class="nav-icon"><i class="fa fa-university"></i></span>
+            <span class="nav-text">Sucursal</span>
+          </a>
+          <ul class="nav nav-child level-1 nav-stacked nav-pills" role="menu">
+            <li role="presentation"><a role="menuitem" tabindex="-1" href="{{ path('admin_sucursal') }}"><span class="nav-text">Gestionar sucursal</span></a></li>
+          </ul>
+        </li>
+    {% endif %}
+    {% if is_granted('ROLE_ADMIN') %}    
+        <li class="nav-item" role="presentation">
+          <a href="#" data-toggle="nav-child">
+            <span class="nav-icon"><i class="fa fa-magic"></i></span>
+            <span class="nav-text">Descuento</span>
+          </a>
+          <ul class="nav nav-child level-1 nav-stacked nav-pills" role="menu">
+            <li role="presentation"><a role="menuitem" tabindex="-1" href="{{ path('admin_descuento') }}"><span class="nav-text">Gestionar descuento</span></a></li>
+          </ul>
+        </li>
+    {% endif %}
+    {% if is_granted('ROLE_ADMIN') %}    
+        <li class="nav-item" role="presentation">
+          <a href="#" data-toggle="nav-child">
+            <span class="nav-icon"><i class="fa fa-list-ul"></i></span>
+            <span class="nav-text">Plantilla</span>
+          </a>
+          <ul class="nav nav-child level-1 nav-stacked nav-pills" role="menu">
+            <li role="presentation"><a role="menuitem" tabindex="-1" href="{{ path('admin_plantilla') }}"><span class="nav-text">Gestionar plantilla</span></a></li>
+          </ul>
+        </li>
+    {% endif %}
+    {% if is_granted('ROLE_ADMIN') %}
+        <li class="nav-item" role="presentation">
+          <a href="#" data-toggle="nav-child">
+            <span class="nav-icon"><i class="fa fa-file-text-o"></i></span>
+            <span class="nav-text">Reportes</span>
+          </a>
+          <ul class="nav nav-child level-1 nav-stacked nav-pills" role="menu">
+            <li role="presentation"><a role="menuitem" tabindex="-1" href="{{ path('admin_reporte_paquete') }}"><span class="nav-text">Ingresos por paquete</span></a></li>
+            <li role="presentation"><a role="menuitem" tabindex="-1" href="{{ path('admin_reporte_emergencia') }}"><span class="nav-text">Ingresos por consulta emergencia</span></a></li>
+            <li role="presentation"><a role="menuitem" tabindex="-1" href="{{ path('admin_reporte_consolidado_paquete') }}"><span class="nav-text">Consolidado de paquetes</span></a></li>
+            <li role="presentation"><a role="menuitem" tabindex="-1" href="{{ path('admin_reporte_tratamiento_frecuente') }}"><span class="nav-text">Tratamiento mas frecuente en consulta de emergencia</span></a></li>
+          </ul>
+        </li>
+    {% endif %}
+    {% if is_granted('ROLE_ADMIN') %}
+        <li class="collapse-item" role="presentation">
+          <a href="#" data-sidebar="toggleCollapse">
+            <i class="fa fa-angle-double-left"></i>
+          </a>
+        </li>
+    {% endif %}
+    
   </ul>
 </div>
 </aside><!-- /.SIDEBAR -->

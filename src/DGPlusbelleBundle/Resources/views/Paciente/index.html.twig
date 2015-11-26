@@ -78,9 +78,9 @@
             <tr>
                 <th>N°</th>  
                 <th>Paciente</th>
-                <th>Dui</th>
-                <th>Direccion</th>
-                <th>Telefono</th>
+                <th>DUI</th>
+                <th>Dirección</th>
+                <th>Teléfono</th>
                 <th>Email</th>
                 <th>Ocupación</th>
                 <th>Lugar de trabajo</th>
@@ -145,7 +145,7 @@
        
   {% block javascripts_step %}
        <script src="{{ asset('Resources/js/Paciente.js') }}"></script>
-        <script type="text/javascript" src="{{ asset('Resources/zebra/inicializacioncalendarios.js')}}" ></script>
+        
         <script>
            
             $(document).ready(function(){
@@ -197,6 +197,13 @@
                     if($("#addFormContainer").hasClass("hide")){
                         $("#addFormContainer").removeClass("hide");
                         $("#editFormContainer").addClass("hide");
+                        $('.calZebra').Zebra_DatePicker({
+                            months:['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
+                            days: ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'],
+                            format: 'Y-m-d',
+                            show_clear_date:false,
+                            show_select_today: "Hoy",
+                        });
                     }
                     else{
                         $("#addFormContainer").addClass("hide");
@@ -241,6 +248,13 @@
                         if($("#editFormContainer").hasClass("hide")){
                             $("#addFormContainer").addClass("hide");
                             $("#editFormContainer").removeClass("hide");
+                            $('.calZebra').Zebra_DatePicker({
+                                months:['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
+                                days: ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'],
+                                format: 'Y-m-d',
+                                show_clear_date:false,
+                                show_select_today: "Hoy",
+                            });
                         }
                         else{
                             //$("#addFormContainer").removeClass("hide");

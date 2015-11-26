@@ -46,6 +46,10 @@ $('.tratamientoEmpleado > div > label > input').
  
     //Validar el formulario
     $('form').bValidator(optionsRed);
+    $('.fotoEmpleado').bValidator().css('margin-top','30px');
+    //$('.fotoEmpleado').bValidator().css('position','absolute');
+    //$('.fotoEmpleado').bValidator().css('width','50px');
+    //$('.btn-file').css('width','200px');
 	
  }	
 	

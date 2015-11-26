@@ -944,6 +944,19 @@ class ConsultaController extends Controller
     {
         $fecha= $request->get('fecha');
         
+        //var_dump($fecha);
+        
+        $time = new \DateTime('01-'.$fecha);
+        
+        $timestamp = $time->getTimestamp(); // Unix timestamp
+        
+        //var_dump($timestamp);
+        
+        $fecha = $time->format('Y-m'); // 2003-10-16
+        
+        //var_dump($time);
+        //$fecha = date('Y-m',$time);
+        //var_dump($fecha);
         $empleados=$this->verificarComision(null,$fecha);
         
         //var_dump($empleados);

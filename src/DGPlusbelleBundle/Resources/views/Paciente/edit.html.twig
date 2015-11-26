@@ -68,14 +68,7 @@
             $("#edit-datatables1").click();
             return false;
         });
-        $('.calZebra').Zebra_DatePicker({
-            months:['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
-            days: ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'],
-            format: 'Y-m-d',
-            show_clear_date:false,
-            show_select_today: "Hoy",
-            show_icon: true
-        });
+        
         
         
          // validando campos  
@@ -85,6 +78,14 @@
         
         
          validarPaciente();  
+         $('.calZebra').Zebra_DatePicker({
+            months:['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
+            days: ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'],
+            format: 'Y-m-d',
+            show_clear_date:false,
+            show_select_today: "Hoy",
+            
+        });
     });
 </script>
 {% endblock %}
