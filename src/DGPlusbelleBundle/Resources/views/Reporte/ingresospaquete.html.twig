@@ -20,7 +20,7 @@
                 <div class="btn-group btn-group-sm pull-left">
                     
                     <button id="exportar-pdf" data-toggle="tooltip" data-container="body" title="Exportar a PDF" class="btn btn-default datatables1-actions opciones" role="button">
-                        <i class="fa fa-file-pdf-o"></i><a href=""> </a>
+                        <i class="fa fa-file-pdf-o"></i>
                     </button>
                 </div>
                 
@@ -113,16 +113,27 @@
                     }
                 }
         });  
-        
-        
-        
-        
-        
-            
-            
-
     });//Fin document ready
         
-        </script>
-
+    </script>    
+    <script>  
+        $(document).ready(function(){          
+            $('.opciones').click(function(){
+                var fechaInicio = $("#fecha-inicio").val();
+                var fechaFin = $("#fecha-fin").val();
+                if( fechaInicio != '' && fechaFin != '' ){
+                    var url = Routing.generate('admin_ingresopaquete_pdf', {'fechaInicio': fechaInicio, 'fechaFin': fechaFin});
+                    window.open(url,'_blank');
+                }
+                else {
+                    var fecha = new Date();
+                    var ano = fecha.getFullYear();
+                    
+                    var url = Routing.generate('admin_ingresopaquete_pdf', {'fechaInicio': ano + '-01-01', 'fechaFin': ano + '-12-31'});
+                    window.open(url,'_blank');
+                }
+                
+                });    
+        });//Fin document ready        
+    </script>
     {% endblock %} 

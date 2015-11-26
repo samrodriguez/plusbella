@@ -2,7 +2,12 @@
 
 namespace DGPlusbelleBundle\Service;
 
+include_once ('../web/Resources/jpgraph/src/jpgraph.php');
+include_once '../web/Resources/jpgraph/src/jpgraph_bar.php';
+//include_once '../web/Resources/jpgraph/src/jpgraph_bar.php';
+
 use DGPlusbelleBundle\Report\ReportePDF;
+
 
 class FPDFService {
     
@@ -13,7 +18,7 @@ class FPDFService {
         $this->pdf = $pdf;
     }
     
-    public function toPdf($titulo, $consulta, $encabezado)
+    public function generarPdfPorRango($titulo, $encabezado, $anchoCol, $consulta, $sangria, $fechaInicio, $fechaFin)
     {
         
         $this->pdf->FPDF('P','mm','Letter');
@@ -23,22 +28,41 @@ class FPDFService {
         $this->pdf->AddPage();
         $this->pdf->SetFillColor(255);
         
-        $this->pdf->SetFont('Arial','B',16);
+        $this->pdf->SetFont('Times','B',16);
         $this->pdf->Cell(180,32,$titulo, 0, 0, 'C');
         
+        $this->pdf->SetFont('Times','B',13);
+        $this->pdf->Ln(8);
         
+        if ( $fechaInicio != null && $fechaFin != null){
+            $fechaini = explode('-', $fechaInicio);
+            $fechf = explode('-', $fechaFin);
+
+            $this->pdf->Cell(180,32, 'Del periodo de '.$fechaini[2].'/'.$fechaini[1].'/'.$fechaini[0].' al '.$fechf[2].'/'.$fechf[1].'/'.$fechf[0], 0, 0, 'C');
+        } else {
+            $this->pdf->Cell(180,32, 'Del periodo de 01/01/2015 al 31/12/2015', 0, 0, 'C');
+        }
+        $this->pdf->Ln(30);
+        $this->pdf->SetFont('Times','B',11);
         
+        $this->pdf->Cell($sangria);
+        $this->pdf->SetWidths($anchoCol);
         
-        $this->pdf->SetFont('Arial','B',13);
-        $this->pdf->Ln(26);
+	$this->pdf->Row($encabezado);
+        $this->pdf->SetFont('Times','',11);
         
-        //$this->pdf->Cell(32,27,'Informacion general del paciente');
-       // $this->pdf->Line(20, 43, 200, 43);
-        
-        $this->pdf->Ln(15);
-        //$this->mostrarCelda($pdf, 32, 'Fecha: ', $consulta[0]->getConsulta()->getFechaConsulta()->format("d/m/Y"));
-        
-        
+        foreach ($consulta as $fila) {
+            $data = array();
+            $cont = 0;
+            $this->pdf->Cell($sangria);
+            
+           foreach ($fila as $valor) {
+               $data[$cont] = $valor;
+               $cont++;
+            }
+            
+            $this->pdf->Row($data);
+        }
         
         $this->pdf->Output();
         return $this->pdf;

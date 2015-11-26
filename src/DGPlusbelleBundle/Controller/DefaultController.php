@@ -9,7 +9,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Ob\HighchartsBundle\Highcharts\Highchart;
 use Symfony\Component\HttpFoundation\Response;
-
+use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 /**
  * @Route("/default")
  */
@@ -155,7 +155,7 @@ class DefaultController extends Controller
     /**
      * Lists all Cita entities.
      *
-     * @Route("/reporte", name="reporte_pdf")
+     * @Route("/reporte", name="reporte_pdf", options ={"expose" = true})
      * 
      */
     public function reporteEjemploAction()
@@ -173,10 +173,13 @@ class DefaultController extends Controller
         
         
         
-        $titulo = 'Listado de pacientes'; 
+        $titulo = 'Grafico'; 
         $encabezadoTabla = array('Nombre de Paciente', 'Direccion', 'Edad', 'Telefono');
-       
         $this->get('fpdf_printer')->toPdf($titulo, $consulta, $encabezadoTabla);
+        //$pdf = $this->get('fpdf_printer')->toPdf($titulo, $consulta, $encabezadoTabla);
+        
+        //return new Response($pdf->Output(), 200, array(
+        //    'Content-Type' => 'application/pdf'));
     }
 
 }
