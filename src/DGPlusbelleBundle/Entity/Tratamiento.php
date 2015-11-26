@@ -62,7 +62,7 @@ class Tratamiento
     /**
      * @var \Doctrine\Common\Collections\Collection
      *
-     * @ORM\ManyToMany(targetEntity="Paquete", mappedBy="tratamiento")
+     * @ORM\ManyToMany(targetEntity="Paquete")
      */
    private $paquete;
 

@@ -59,7 +59,7 @@
                 <div class="content">
                 <div class="content-bar">
                     <div class="pull-right" role="group">
-                      <a data-toggle="modal" href="#" data-scripts="{{ asset('Resources/wrapkit/_includes/setups.js') }}" data-target="#templateSetup" title="Template Setups" aria-label="template setups" class="btn btn-nofill btn-sm btn-default" href="#"><span class="icon-settings fa-lg text-muted"></span></a>
+                      {#<a data-toggle="modal" href="#" data-scripts="{{ asset('Resources/wrapkit/_includes/setups.js') }}" data-target="#templateSetup" title="Template Setups" aria-label="template setups" class="btn btn-nofill btn-sm btn-default" href="#"><span class="icon-settings fa-lg text-muted"></span></a>#}
                     </div>
                     {% block bar %}  
                     <ul class="breadcrumb breadcrumb-angle">
@@ -101,6 +101,7 @@
         <!-- END WRAPKIT -->
         <!-- WRAPKIT SETUPS -->
         <script src="{{ asset('Resources/wrapkit/scripts/wrapkit-setup.js') }}"></script>
+        
         <!-- end WRAPKIT SETUPS -->
         
         <script src="{{ asset('Resources/wrapkit/scripts/morris.bundle.js') }}"></script>
@@ -150,7 +151,7 @@
     <!-- Aspectos generales de la plantilla -->
     <script>
         $(document).ready(function(){
-            $('select').each(function(index, val) {    
+            $('select').each(function(index, val) {
                 if (!$(this).hasClass("busqueda") ){
                    //$(this).selectBoxIt();
                 }

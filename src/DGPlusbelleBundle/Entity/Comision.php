@@ -52,7 +52,7 @@ class Comision
     /**
      * @var \Empleado
      *
-     * @ORM\ManyToOne(targetEntity="Empleado")
+     * @ORM\ManyToOne(targetEntity="Empleado", inversedBy="comision")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="empleado", referencedColumnName="id")
      * })

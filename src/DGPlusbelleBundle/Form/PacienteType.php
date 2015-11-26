@@ -44,7 +44,7 @@ class PacienteType extends AbstractType
             ->add('fechaNacimiento', null,
                   array('label'  => 'Fecha nacimiento','required'=>false,
                         'widget' => 'single_text',
-                        'attr'   => array('class' => 'form-control input-sm calZebra'),
+                        'attr'   => array('class' => 'form-control input-md calZebra'),
                        ))
             ->add('referidoPor','text',array('label' => 'Referido por','required' => false,
                     'attr'=>array(

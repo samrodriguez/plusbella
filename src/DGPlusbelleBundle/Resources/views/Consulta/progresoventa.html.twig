@@ -72,7 +72,7 @@
             <div class="panel-body">
               <div class="btn-toolbar clearfix" role="toolbar">
                 <div class="btn-group pull-left">
-                    <input id="fecha-inicio" class="form-control input-sm" placeholder="Filtrar fechar...">
+                    <input id="fecha" class="form-control input-sm" placeholder="Filtrar fecha...">
                 </div>
               </div><!-- /btn-toolbar -->
             </div><!-- /.panel-body -->  
@@ -91,13 +91,13 @@
     <script type="text/javascript" src="{{ asset('Resources/zebra/inicializacioncalendarios.js')}}" ></script>
     <script>
         $(document).ready(function(){
-            var fecha = $('#fecha-inicio').val();
-            var datepickerInicio = $('#fecha-inicio').data('Zebra_DatePicker');
+            var fecha = $('#fecha').val();
+            var datepickerInicio = $('#fecha').data('Zebra_DatePicker');
             datepickerInicio.update({
-                format: 'Y-m',
+                format: 'm-Y',
                 onSelect: function(){
                     $('#contenedorEmpleados').html('');
-                    fecha = $('#fecha-inicio').val();
+                    fecha = $('#fecha').val();
                     var url = "{{ path('admin_empleado_progreso_venta_ajax') }}";
                     url+="?fecha="+fecha;
                     $('#contenedorEmpleados').load(url);        

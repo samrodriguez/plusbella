@@ -3,6 +3,7 @@
 namespace DGPlusbelleBundle\Controller;
 
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -28,11 +29,13 @@ class UsuarioController extends Controller
     public function indexAction()
     {
         $em = $this->getDoctrine()->getManager();
-
+        $entity = new Usuario();
+        $form = $this->createCreateForm($entity);
         $entities = $em->getRepository('DGPlusbelleBundle:Usuario')->findAll();
 
         return array(
             'entities' => $entities,
+            'form'   => $form->createView(),
         );
     }
     /**
@@ -77,7 +80,7 @@ class UsuarioController extends Controller
             'method' => 'POST',
         ));
 
-        $form->add('submit', 'submit', array('label' => 'Create'));
+        $form->add('submit', 'submit', array('label' => 'Guardar','attr'=>array('class'=>'btn btn-success btn-sm')));
 
         return $form;
     }
@@ -166,7 +169,7 @@ class UsuarioController extends Controller
             'method' => 'PUT',
         ));
 
-        $form->add('submit', 'submit', array('label' => 'Update'));
+        $form->add('submit', 'submit', array('label' => 'Modificar','attr'=>array('class'=>'btn btn-success btn-sm')));
 
         return $form;
     }
@@ -258,5 +261,43 @@ class UsuarioController extends Controller
         $password = $encoder->encodePassword($entity->getPassword(), $entity->getSalt());
         $entity->setPassword($password);
     }
+    
+    
+    
+    /**
+     * 
+     *
+     * @Route("/desactivar_usuario/{id}", name="admin_usuario_desactivar", options={"expose"=true})
+     * @Method("GET")
+     */
+    public function desactivarAction(Request $request, $id)
+    {
+        //$form = $this->createDeleteForm($id);
+        //$form->handleRequest($request);
+
+        $em = $this->getDoctrine()->getManager();
+        $entity = $em->getRepository('DGPlusbelleBundle:Usuario')->find($id);
+        if($entity->getId()!=1){
+            if($entity->getEstado()==0){
+                $entity->setEstado(1);
+                $exito['regs']=1;//registro activado
+            }
+            else{
+                $entity->setEstado(0);
+                $exito['regs']=0;//registro desactivado
+            }
+        }
+        else{
+            $exito['regs']=2;//admin no puede ser desactivado
+        }
+        $em->persist($entity);
+        $em->flush();
+        
+        return new Response(json_encode($exito));
+        
+    }
+    
+    
+    
 }
 

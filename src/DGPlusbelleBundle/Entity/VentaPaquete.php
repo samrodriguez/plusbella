@@ -58,7 +58,7 @@ class VentaPaquete
     /**
      * @var \Persona
      *
-     * @ORM\ManyToOne(targetEntity="Persona")
+     * @ORM\ManyToOne(targetEntity="Persona", inversedBy="ventapaquete")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="paciente", referencedColumnName="id")
      * })
@@ -68,7 +68,7 @@ class VentaPaquete
     /**
      * @var \Persona
      *
-     * @ORM\ManyToOne(targetEntity="Empleado")
+     * @ORM\ManyToOne(targetEntity="Persona")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="empleado", referencedColumnName="id")
      * })
