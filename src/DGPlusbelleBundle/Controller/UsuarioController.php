@@ -190,6 +190,9 @@ class UsuarioController extends Controller
             throw $this->createNotFoundException('Unable to find Usuario entity.');
         }
 
+        $passOriginal = $entity->getPassword();
+        
+        
         $deleteForm = $this->createDeleteForm($id);
         $editForm = $this->createEditForm($entity);
         //obtiene la contraseña actual 
@@ -197,6 +200,10 @@ class UsuarioController extends Controller
         
         $editForm->handleRequest($request);
 
+        if($entity->getPassword()==""){
+            $entity->setPassword($passOriginal);
+        }
+        
         if ($editForm->isValid()) {
             if ($current_pass != $entity->getPassword()) {
                 $this->setSecurePassword($entity);
