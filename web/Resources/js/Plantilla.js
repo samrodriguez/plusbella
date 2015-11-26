@@ -1,11 +1,16 @@
 
-$(document).ready(function(){
-$('#dgplusbellebundle_plantilla_nombre').
+function validarPlantilla(){
+$('.nombrePlantilla').
         attr('data-bvalidator', 'required,required');
  
-    $('#dgplusbellebundle_plantilla_descripcion').
+$('.descripcionPlantilla').
         attr('data-bvalidator', 'required,required');
-		
+
+$('.nombreDetalle').
+        attr('data-bvalidator', 'required,required');
+
+$('.descripcionDetalle').
+        attr('data-bvalidator', 'required,required');    
 
     //Opciones del validador
     var optionsRed = { 
@@ -16,5 +21,5 @@ $('#dgplusbellebundle_plantilla_nombre').
     //Validar el formulario
     $('form').bValidator(optionsRed);
 	
- });//Fin document ready	
+ }	
 	

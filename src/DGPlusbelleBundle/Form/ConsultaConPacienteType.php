@@ -39,11 +39,8 @@ class ConsultaConPacienteType extends AbstractType
                     'choices'  => array('1' => 'Sí', '0' => 'No'),
                     'multiple' => false,
                     'expanded'=>'true',
-                    'empty_data'=>null
-                  
-                    
-                    
-                
+                    'preferred_choices' => array(0),  
+                    'data'=>0
                 ))
             //->add('cita')
             ->add('paciente','entity', array( 'label' => 'Paciente','required'=>false,

@@ -31,7 +31,7 @@ class VentaPaqueteType extends AbstractType
                            return $repository->obtenerpaqActivo();
                          },
                          'attr'=>array(
-                         'class'=>'form-control'
+                         'class'=>'form-control paqueteVenta'
                          )
                        ))
 
@@ -58,7 +58,7 @@ class VentaPaqueteType extends AbstractType
                                                 //return $r->seleccionarEmpleadosPersonasActivos();
                                             } ,
                          'attr'=>array(
-                            'class'=>'form-control'
+                            'class'=>'form-control empleadoVentaPaquete'
                          )
                        ))
             //->add('usuario')
