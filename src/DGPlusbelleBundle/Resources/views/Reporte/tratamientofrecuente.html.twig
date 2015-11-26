@@ -76,8 +76,8 @@
         var anioFinUser = $('#fecha-fin').val();
         var url = "{{ path('admin_reporte_tratamiento_frecuente_grafico') }}";
             if(anioInicioUser!=""){
-                if(aniofinUser!=""){
-                    url+="?anioInicioUser="+anioInicioUser+"&anioFinUser="+aniofinUser;
+                if(anioFinUser!=""){
+                    url+="?anioInicioUser="+anioInicioUser+"&anioFinUser="+anioFinUser;
                     $('#contenedorGrafico').load(url);
                 }
             }
@@ -115,5 +115,24 @@
         
  
         </script>
-
+    <script>  
+        $(document).ready(function(){          
+            $('.opciones').click(function(){
+                var fechaInicio = $("#fecha-inicio").val();
+                var fechaFin = $("#fecha-fin").val();
+                if( fechaInicio != '' && fechaFin != '' ){
+                    var url = Routing.generate('admin_tratamientofrecuenteemergencia_pdf', {'fechaInicio': fechaInicio, 'fechaFin': fechaFin});
+                    window.open(url,'_blank');
+                }
+                else {
+                    var fecha = new Date();
+                    var ano = fecha.getFullYear();
+                    
+                    var url = Routing.generate('admin_tratamientofrecuenteemergencia_pdf', {'fechaInicio': ano + '-01-01', 'fechaFin': ano + '-12-31'});
+                    window.open(url,'_blank');
+                }
+                
+                });    
+        });//Fin document ready        
+    </script>
     {% endblock %} 
