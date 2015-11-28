@@ -7,38 +7,45 @@
   <div class="panel-body">
   {{ form_start(form) }}
     {{ form_errors(form) }}
-  
+    <div class="row">
       <!--    <div class="col-xs-12 col-sm-6">   -->
         {% include 'DGPlusbelleBundle:Persona:form.html.twig' with { 'form': form.persona }%}
     <!--     </div> -->
-        <div class="col-xs-12 col-sm-1">
+     </div>
+    <div class="row">
+        <div class="col-md-3">
         {{ form_row(form.dui) }}
         </div>
-        <div class="col-xs-12 col-sm-2">
+        <div class="col-md-3">
         {{ form_row(form.estadoCivil) }}
          </div>
-        <div class="col-xs-12 col-sm-2">
+        <div class="col-md-3">
         {{ form_row(form.sexo) }}
          </div>
-        <div class="col-xs-12 col-sm-2">
+        <div class="col-md-3">
         {{ form_row(form.ocupacion) }}
          </div>
-        <div class="col-xs-12 col-sm-3">
+    </div>
+    <div class="row">
+        <div class="col-md-3">
         {{ form_row(form.lugarTrabajo) }}
-         </div>
-        <div class="col-md-2">
+        </div>
+        <div class="col-md-3">
         {{ form_row(form.fechaNacimiento) }}
         </div>
-        <div class="col-xs-12 col-sm-2">
+        <div class="col-md-3">
         {{ form_row(form.referidoPor) }}
          </div>
-        <div class="col-xs-12 col-sm-2">
+    </div>
+    <div class="row">
+        <div class="col-md-5">
         {{ form_row(form.personaEmergencia) }}
-         </div>
-        <div class="col-xs-12 col-sm-1">
+        </div>
+        <div class="col-md-4">
         {{ form_row(form.telefonoEmergencia) }}
         {# {{ form_row(form.estado) }}#}
         </div>
+    </div>
   
    
              <div class="form-grouphide col-sm-9">

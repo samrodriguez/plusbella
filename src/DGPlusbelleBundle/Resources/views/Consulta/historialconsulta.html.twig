@@ -106,7 +106,7 @@
             <div class="panel-body">
               <div class="btn-toolbar clearfix" role="toolbar">
                 <div class="btn-group btn-group-sm pull-left">
-                    <button data-toggle="tooltip" data-container="body" title="Consultas realizadas" id="consultas-datatables1" class="btn btn-default" role="button">
+                    <button data-toggle="tooltip" data-container="body" title="Consultas realizadas" id="consultas-datatables3" class="btn btn-default" role="button">
                         <i class="fa fa-medkit"></i>
                     </button>
                 </div>  
@@ -199,16 +199,31 @@
                         <thead>
                             <tr row="role">
                                 <th>N°</th>
-                                <th>Paquete</th>
+                                <th>Tratamiento</th>
+                                <th>Tipo consulta</th>
+                                <th>Atendido por</th>
+                                <th>Fecha</th>
+                                <th>Hora de consulta</th>
+                                <th>Costo ($)</th>
+                                
                             </tr>
                         </thead>
                         <tbody>
-                        {% for key, entity in paquetes %}
-                            <tr id="{{entity.tratamiento.id}}">
-                                <td>{{key+1}}</td>
+                        {% set corr = 1 %}    
+                        {% for key, entity in consultas %}
+                            <tr >
+                                <td>{{ corr }}</td>
                                     <td>{{ entity.tratamiento}}</td>
                                     <td>{{ entity.tipoConsulta}}</td>
+                                    <td>{{ entity.empleado}}</td>
+                                    <td>{% if entity.fechaConsulta %}{{ entity.fechaConsulta|date('d/m/Y') }}{% endif %}</td>
+                                    <td>{% if entity.horaInicio %}
+                                            {{ entity.horaInicio|date('H:i') }} - {{ entity.horaFin|date('H:i') }}
+                                        {% endif %}
+                                    </td>
+                                    <td>{{ entity.costoConsulta}}</td>
                             </tr>
+                            {% set corr = corr + 1 %}
                         {% endfor %}
                         </tbody>
                     </table>
@@ -323,6 +338,21 @@
                     $('#filterDatatables2').val('');
                     
                 });
+                
+                $("#consultas-datatables3").click(function(){
+                    //alert("paquete");
+                    //alert('oculto tabla1');
+                    $("#tabla1").hide();
+                    $("#tabla3").show();
+                    $("#tabla2").hide();
+                    
+                    $('#filterDatatables1').hide();
+                    $('#filterDatatables3').show();
+                    $('#filterDatatables2').hide();
+                    
+                    $('#filterDatatables3').val('');
+                    
+                });
                 /*
                 $("#dgplusbellebundle_sucursal_submit").click(function(){
                     $(".icon-refresh").click();
@@ -344,33 +374,39 @@
                     $('#datatables2_filter>label>input').keyup();
                 });
                 
+                $('#filterDatatables3').on('keyup', function(event) {
+                    var filtro = $(this).val(); 
+                    //alert(filtro);
+                    $('#datatables3_filter>label>input').val($(this).val());
+                    $('#datatables3_filter>label>input').keyup();
+                });
                 
                 $('#datatables1').DataTable({ 
                     searching:true,
-                    "order":[[0, "desc"],[1,"desc"]],
-                    "columnDefs": [
-                           { "orderable": false, "targets": 0 },
-                           { "orderable": false, "targets": 2 },
-                           { "orderable": false, "targets": 3 },
-                           { "orderable": false, "targets": 4 },
-                           { "orderable": false, "targets": 5 }
-                           //{ "orderData": [ 2, 3, 4 ], "targets": 2 }
-                    ],
-                    "language": {
-                    "info": "Mostrando página _PAGE_ de _PAGES_",
-                    "infoEmpty": "",
-                    "infoFiltered": "filtrando de _MAX_ registros",
-                    "emptyTable": "No se encontraron registros",
-                    "paginate": { 
-                        "next": "Siguiente",
-                        "previous": "Anterior"
-                    },
-                    "processing": "Procesando petición...",
-                    "search": "Buscar registros:",
-                    "lengthMenu": "Mostrar _MENU_ registros"
-                }, 
-                    
-                });
+                        "order":[[0, "desc"],[1,"desc"]],
+                        "columnDefs": [
+                               { "orderable": false, "targets": 0 },
+                               { "orderable": false, "targets": 2 },
+                               { "orderable": false, "targets": 3 },
+                               { "orderable": false, "targets": 4 },
+                               { "orderable": false, "targets": 5 }
+                               //{ "orderData": [ 2, 3, 4 ], "targets": 2 }
+                        ],
+                        "language": {
+                        "info": "Mostrando página _PAGE_ de _PAGES_",
+                        "infoEmpty": "",
+                        "infoFiltered": "filtrando de _MAX_ registros",
+                        "emptyTable": "No se encontraron registros",
+                        "paginate": { 
+                            "next": "Siguiente",
+                            "previous": "Anterior"
+                        },
+                        "processing": "Procesando petición...",
+                        "search": "Buscar registros:",
+                        "lengthMenu": "Mostrar _MENU_ registros"
+                    }, 
+
+                    });
                 
                 
                 $('#datatables2').DataTable({ 
@@ -395,7 +431,33 @@
                 }, 
                     
                 });
-        
+                
+                $('#datatables3').DataTable({ 
+                    searching:true,
+                        "order":[[0, "asc"],[1,"asc"]],
+                        "columnDefs": [
+                               { "orderable": false, "targets": 0 },
+                               { "orderable": false, "targets": 2 },
+                               { "orderable": false, "targets": 3 },
+                               { "orderable": false, "targets": 4 },
+                               { "orderable": false, "targets": 5 }
+                               //{ "orderData": [ 2, 3, 4 ], "targets": 2 }
+                        ],
+                        "language": {
+                        "info": "Mostrando página _PAGE_ de _PAGES_",
+                        "infoEmpty": "",
+                        "infoFiltered": "filtrando de _MAX_ registros",
+                        "emptyTable": "No se encontraron registros",
+                        "paginate": { 
+                            "next": "Siguiente",
+                            "previous": "Anterior"
+                        },
+                        "processing": "Procesando petición...",
+                        "search": "Buscar registros:",
+                        "lengthMenu": "Mostrar _MENU_ registros"
+                    }, 
+
+                    });
         
         //Oculta el filtro de las tablas
         $('#datatables1_filter, #datatables2_filter').hide();

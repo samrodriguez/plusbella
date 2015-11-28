@@ -31,6 +31,24 @@
         <link rel="stylesheet" href="{{ asset('Resources/fullcalendar/css/fullcalendar.print.css') }}" media="print"/>
         <link rel="stylesheet" href="{{ asset('Resources/bValidator-0.73/themes/bvalidator.theme.bootstrap.rt.css') }}" />
         <!-- fullcalendar -->
+        <style>
+            {# Hace los encabezados mas grandes#}
+            .panel-title{
+                font-size: 22px;
+                font-weight: bold;
+            }
+            .panel-heading{
+                
+                font-size: 18px;
+                font-weight: bold;
+            }
+            
+                .panel-heading p{
+                    margin-top:10px;
+                }
+            
+            
+        </style>
         {%- endblock %}
         
         
@@ -113,8 +131,8 @@
         <script src="{{ asset('Resources/wrapkit/scripts/moment.js') }}"></script>
         <script src="{{ asset('Resources/wrapkit/scripts/daterangepicker.js') }}"></script>
         <script src="{{ asset('Resources/wrapkit/scripts/jquery-minicolors.js') }}"></script>
-        <script src="{{ asset('Resources/wrapkit/scripts/moment.js') }}"></script>
-        <script src="{{ asset('Resources/wrapkit/scripts/fullcalendar.js') }}"></script>
+        {#<script src="{{ asset('Resources/wrapkit/scripts/fullcalendar.js') }}"></script>#}
+
         <script src="{{ asset('Resources/wrapkit/scripts/clndr.js') }}"></script>
         <script src="{{ asset('Resources/wrapkit/scripts/dataTables.bootstrap.js') }}"></script>
         <script src="{{ asset('Resources/wrapkit/scripts/dataTables.tableTools.js') }}"></script>
@@ -164,7 +182,8 @@
     </script>
     <script type="text/javascript">
         $(function () {
-          $('[data-toggle="tooltip"]').tooltip()
+          $('[data-toggle="tooltip"]').tooltip();
+          $('.dropdown-toggle').dropdown();
         })
     </script>
     {% endblock %}  

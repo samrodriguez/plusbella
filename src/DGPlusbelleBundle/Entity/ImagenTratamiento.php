@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * ImagenTratamiento
  *
- * @ORM\Table(name="imagen_tratamiento", indexes={@ORM\Index(name="id_historial_consulta", columns={"historial_consulta"})})
+ * @ORM\Table(name="imagen_tratamiento")
  * @ORM\Entity
  */
 class ImagenTratamiento {
@@ -26,16 +26,6 @@ class ImagenTratamiento {
      * @ORM\Column(name="nombre_imagen", type="string", length=255, nullable=false)
      */
     private $nombreImagen;
-    
-    /**
-     * @var \HistorialConsulta
-     *
-     * @ORM\ManyToOne(targetEntity="HistorialConsulta")
-     * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="historial_consulta", referencedColumnName="id")
-     * })
-     */
-    private $historialConsulta;
     
     /**
      * Get id
@@ -69,29 +59,5 @@ class ImagenTratamiento {
     public function getNombreImagen()
     {
         return $this->nombreImagen;
-    }
-
-    /**
-     * Set historialConsulta
-     *
-     * @param \DGPlusbelleBundle\Entity\HistorialConsulta $historialConsulta
-     *
-     * @return ImagenTratamiento
-     */
-    public function setHistorialConsulta(\DGPlusbelleBundle\Entity\HistorialConsulta $historialConsulta = null)
-    {
-        $this->historialConsulta = $historialConsulta;
-
-        return $this;
-    }
-
-    /**
-     * Get historialConsulta
-     *
-     * @return \DGPlusbelleBundle\Entity\HistorialConsulta
-     */
-    public function getHistorialConsulta()
-    {
-        return $this->historialConsulta;
     }
 }

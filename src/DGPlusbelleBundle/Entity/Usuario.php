@@ -53,7 +53,7 @@ class Usuario implements AdvancedUserInterface, \Serializable
     /**
      * @var \Persona
      *
-     * @ORM\ManyToOne(targetEntity="Persona")
+     * @ORM\ManyToOne(targetEntity="Persona", inversedBy="usuario")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="persona", referencedColumnName="id")
      * })
