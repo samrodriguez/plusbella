@@ -95,20 +95,20 @@ class EmpleadoController extends Controller
             //$entity = $em->getRepository('DGPlusbelleBundle:Empleado')->find($entity->getId());
             
             if($entity->getFile()!=null){
-            $path = $this->container->getParameter('photo.empleado');
+                $path = $this->container->getParameter('photo.empleado');
 
-            $fecha = date('Y-m-d His');
-            $extension = $entity->getFile()->getClientOriginalExtension();
-            $nombreArchivo = $entity->getId()."-".$fecha.".".$extension;
-            $em->persist($entity);
-            $em->flush();
-            //var_dump($path.$nombreArchivo);
+                $fecha = date('Y-m-d His');
+                $extension = $entity->getFile()->getClientOriginalExtension();
+                $nombreArchivo = $entity->getId()."-".$fecha.".".$extension;
+                $em->persist($entity);
+                $em->flush();
+                //var_dump($path.$nombreArchivo);
 
-            $entity->setFoto($nombreArchivo);
-            $entity->getFile()->move($path,$nombreArchivo);
-            $em->persist($entity);
-            $em->flush();
-        }
+                $entity->setFoto($nombreArchivo);
+                $entity->getFile()->move($path,$nombreArchivo);
+                $em->persist($entity);
+                $em->flush();
+            }
             
             return $this->redirect($this->generateUrl('admin_empleado', array('id' => $entity->getId())));
         }
