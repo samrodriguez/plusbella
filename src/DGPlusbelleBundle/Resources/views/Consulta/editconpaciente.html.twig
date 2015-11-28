@@ -201,7 +201,7 @@ var $delLinkLi = $('#hnr_sircimbundle_estudioradiologicotype_placas.required').a
 // Al seleccionar SI en el radioButton 
         $(function () { 
             $( "#dgplusbellebundle_consulta_reportePlantilla_0" ).on( "click", function() {
-                alert('llego aqui');
+                //alert('llego aqui');
                 // Se muestra el combobox donde se selecciona la plantilla
                 $("#lista_plantilla").show();
             });
@@ -210,7 +210,7 @@ var $delLinkLi = $('#hnr_sircimbundle_estudioradiologicotype_placas.required').a
         // Al seleccionar NO en el radioButton 
         $(function () { 
             $( "#dgplusbellebundle_consulta_reportePlantilla_1" ).on( "click", function() {
-                alert('llego aqui');
+                //alert('llego aqui');
                 // Se obtiene todos elementos que contengan la clase parametro
                 var elements = document.getElementsByClassName('parametro');
 
@@ -410,7 +410,9 @@ if(editar!='editar_usuario'){
                 validarConsulta();    
                     
             {% else %}   
-                
+                // Se oculta el combobox donde se selecciona la plantilla
+                $("#lista_plantilla").hide();
+                $('input:radio[id=dgplusbellebundle_consulta_reportePlantilla_1]').prop('checked', true);
             {% endif %}        
         });//Fin document ready     
         

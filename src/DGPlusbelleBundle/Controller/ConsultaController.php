@@ -605,11 +605,6 @@ class ConsultaController extends Controller
                    
                 // remove the relationship between the tag and the Task 
                     foreach ($originalTags as $tag) { 
-                    // remove the Task from the Tag // 
-                    //$tag->getPlacas()->removeElement($task);
-                
-                        // if it were a ManyToOne relationship, remove the relationship like this // 
-                        //$tag->setTask(null);
                 
                          // if you wanted to delete the Tag entirely, you can also do that 
                         $em->remove($tag);
@@ -617,9 +612,10 @@ class ConsultaController extends Controller
             }
             
             $em->flush();
-            
+           
              $plantillaid = $parameters['dgplusbellebundle_consulta']['plantilla'];
-            
+             //var_dump($plantillaid);
+             
             $dql = "SELECT det.id, det.nombre "
                     . "FROM DGPlusbelleBundle:DetallePlantilla det "
                     . "JOIN det.plantilla pla "
@@ -628,22 +624,31 @@ class ConsultaController extends Controller
             $parametros = $em->createQuery($dql)
                         ->setParameter('plantillaid', $plantillaid)
                         ->getResult();
-   /*         
+            
             $query = $em->createQuery(
                             'SELECT hc
                                FROM DGPlusbelleBundle:HistorialConsulta hc
-                               INNERJ
-                              WHERE hc.consulta.id
-                           ORDER BY p.price ASC'
-                        )->setParameter('price', '19.99');
-*/
+                               JOIN hc.consulta c
+                              WHERE c.id = :consulta
+                           ORDER BY c.id ASC'
+                        )->setParameter('consulta', $id);
+
             $detalleP = $query->getResult();
             
-            //$detalle = $em->getRepository('DGPlusbelleBundle:HistorialConsulta')->find($id);
-            
+            foreach($detalleP as $key1 => $det){
+                $historialConsulta = $em->getRepository('DGPlusbelleBundle:HistorialConsulta')->find($det->getId());
+                
+                if (!$historialConsulta) {
+                    throw $this->createNotFoundException('Unable to find HistorialConsulta entity.');
+                }
+                
+                $em->remove($historialConsulta);
+                $em->flush();
+            }
+           
+                
+            //$o = $e;
             foreach($parametros as $key => $p){
-                
-                
                 
                 $dataReporte = new HistorialConsulta;
                 $detalle = $em->getRepository('DGPlusbelleBundle:DetallePlantilla')->find($p['id']);
