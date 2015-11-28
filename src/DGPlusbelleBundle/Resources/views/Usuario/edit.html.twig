@@ -46,3 +46,24 @@
 </div>        
 
 {% endblock %}
+
+{% block javascripts_step %}
+      <script src="{{ asset('Resources/js/Usuario.js') }}"></script>  
+      
+       <script>
+            $(document).ready(function(){
+           var seleccionado="";
+                //Eliminar options del select de usuario
+                $('#dgplusbellebundle_usuario_persona option').each(function(index, val) {
+                    
+                    seleccionado = $(this).attr('selected');
+                    if (!seleccionado){
+                        $(this).remove();
+                    }
+                });    
+                
+        validarUsuario();            
+                
+          });//Fin document ready
+            
+ {% endblock %}      
