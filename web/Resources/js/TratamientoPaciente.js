@@ -14,7 +14,7 @@ $('.costoConsulta').
         attr('data-bvalidator', 'number,required,required');
 
 $('.sesionesTratamiento').
-        attr('data-bvalidator', 'min[0],number,required,required');  
+        attr('data-bvalidator', 'min[1],number,required,required');  
 
 $('#dgplusbellebundle_personatratamiento_fechaVenta').
         attr('data-bvalidator', 'required,required');
