@@ -1,0 +1,41 @@
+{% extends 'DGPlusbelleBundle:Layout:layout.html.twig' %}
+
+{% block contenido -%}
+    <div class="panel panel-default">
+        <div class="panel-heading"><p>Registrar nueva venta de tratamiento</p></div>
+        <div class="panel-body">
+            {# {{ form(form) }} #}
+            {{ form_start(form) }}
+            {{ form_errors(form) }}
+            <div class="row">
+        
+	        <div class="col-md-3" >
+                    {{ form_row(form.paciente)}}
+                </div>
+                <div class="col-md-3" >
+                    {{ form_row(form.empleado)}}
+		</div>
+                <div class="col-md-3" >
+                    {{ form_row(form.tratamiento)}}
+		</div>			
+            </div>
+            <div class="row">
+                    <div class="col-md-3" >
+                  {{ form_row(form.costoConsulta)}} 
+                </div>  
+                <div class="col-md-3" >
+                  {{ form_row(form.numSesiones)}} 
+                </div>  
+                <div class="col-md-3" >
+                  {{ form_row(form.fechaVenta)}} 
+                </div>  
+            </div>
+            <div class="form-grouphide"> 
+                <a href="{{path('dashboard')}}" class="btn btn-default btn-sm" id="cancelarNuevo">Cancelar</a>
+                {{ form_widget(form.submit) }}
+            </div>
+        </div>
+            {{ form_widget(form._token) }}
+    </div>  
+            {{ form_end(form) }}    
+{% endblock %}

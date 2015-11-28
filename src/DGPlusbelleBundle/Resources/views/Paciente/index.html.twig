@@ -43,6 +43,10 @@
                     <button id="vender-paquete" data-toggle="tooltip" data-container="body" title="Vender paquete" class="btn btn-default datatables1-actions disabled opciones" role="button">
                         <i class="fa fa-briefcase"></i><a href="{{ path('admin_ventapaquete_new') }}"> </a>
                     </button> 
+                    <button id="vender-tratamiento" data-toggle="tooltip" data-container="body" title="Vender tratamiento" class="btn btn-default datatables1-actions disabled opciones" role="button">
+                        <i class="fa fa-briefcase"></i><a href="{{ path('admin_personatratamiento_new') }}"> </a>
+                    </button> 
+                    
                 </div>
                 <div class="btn-group btn-group-sm pull-left">
                   <button id="edit-datatables1" data-toggle="tooltip" data-container="body" title="Modificar paciente" class="btn btn-default datatables1-actions disabled" role="button">
@@ -174,6 +178,7 @@
                     $("#nueva-consulta").removeClass("disabled");
                     $("#nuevo-abono").removeClass("disabled");
                     $("#vender-paquete").removeClass("disabled");
+                    $("#vender-tratamiento").removeClass("disabled");
                     $("#ver-expediente").removeClass("disabled");
         
                     //var link=$('#datatables1>tbody>tr>td>a').attr("href");
