@@ -324,4 +324,8 @@ class Usuario implements AdvancedUserInterface, \Serializable
         $this->isEnabled  = false;
         return  $this->isEnabled;
     }
+    
+     public function __toString() {
+    return $this->username ? $this->username : '';
+    }
 }

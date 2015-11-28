@@ -8,7 +8,7 @@ use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 use DGPlusbelleBundle\Repository\PersonaRepository;
 use Doctrine\ORM\EntityRepository;
 
-class UsuarioType extends AbstractType
+class EditUsuarioType extends AbstractType
 {
     /**
      * @param FormBuilderInterface $builder
@@ -41,13 +41,9 @@ class UsuarioType extends AbstractType
                          'empty_value'   => 'Seleccione empleado...',
                          'class'         => 'DGPlusbelleBundle:Persona',
                          'query_builder' => function(EntityRepository $r){
-                                                return $r->createQueryBuilder('e')
+                                               return $r->createQueryBuilder('e')
                                                         ->innerJoin('e.empleado', 'p')
-                                                        ->leftJoin('e.usuario', 'u')
-                                                        ->where('p.estado = true')
-                                                        ->andWhere('u.persona is null');
-                                                       // ->andWhere('u.persona = 2');
-                                                //return $r->seleccionarEmpleadosPersonasActivos();
+                                                        ->where('p.estado = true');
                                             } ,
                          'attr'=>array(
                             'class'=>'form-control empleadoUsuario'

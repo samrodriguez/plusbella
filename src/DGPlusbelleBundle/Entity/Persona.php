@@ -8,7 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
  * Persona
  *
  * @ORM\Table(name="persona")
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="DGPlusbelleBundle\Repository\UsuarioRepository")
  */
 class Persona
 {
@@ -95,6 +95,11 @@ class Persona
     private $empleado;
     
     /**
+     * @ORM\OneToMany(targetEntity="Usuario", mappedBy="persona", cascade={"persist", "remove"})
+     */
+    private $usuario;
+    
+    /**
      * @ORM\OneToMany(targetEntity="VentaPaquete", mappedBy="paciente", cascade={"persist", "remove"})
      */
     private $ventapaquete;
@@ -113,6 +118,14 @@ class Persona
 
     function setEmpleado($empleado) {
         $this->empleado = $empleado;
+    }
+    
+    function getUsuario() {
+        return $this->usuario;
+    }
+
+    function setUsuario($usuario) {
+        $this->usuario = $usuario;
     }
     
  /*   function getVentaPaquete() {

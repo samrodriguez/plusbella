@@ -1,6 +1,15 @@
 
-function validarCategoria(){
-$('.nombreCategoria').
+function validarUsuario(){
+$('.rolUsuario > div > label > input').
+        attr('data-bvalidator', 'required,required');
+
+$('.nombreUsuario').
+        attr('data-bvalidator', 'required,required');
+
+$('.firstPassword').
+        attr('data-bvalidator', 'required,required');
+
+$('.secondPassword').
         attr('data-bvalidator', 'required,required');
 	
  

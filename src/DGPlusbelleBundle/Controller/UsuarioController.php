@@ -10,6 +10,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use DGPlusbelleBundle\Entity\Usuario;
 use DGPlusbelleBundle\Form\UsuarioType;
+use DGPlusbelleBundle\Form\EditUsuarioType;
 
 /**
  * Usuario controller.
@@ -48,6 +49,7 @@ class UsuarioController extends Controller
     public function createAction(Request $request)
     {
         $entity = new Usuario();
+        $entity->setEstado(true);
         $form = $this->createCreateForm($entity);
         $form->handleRequest($request);
 
@@ -164,7 +166,7 @@ class UsuarioController extends Controller
     */
     private function createEditForm(Usuario $entity)
     {
-        $form = $this->createForm(new UsuarioType(), $entity, array(
+        $form = $this->createForm(new EditUsuarioType(), $entity, array(
             'action' => $this->generateUrl('admin_usuario_update', array('id' => $entity->getId())),
             'method' => 'PUT',
         ));
