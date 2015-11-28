@@ -153,7 +153,7 @@
                         </div>
                     </div>  
                     <div class="col-md-11 col-md-offset-1 ">
-                    {#    {{ form_row(form.campos) }} #}
+                    
                     </div>    
                 </div>
             </div>  
@@ -198,16 +198,45 @@ var $removeTagLink = $('<a href="#" class="remove_placa_link btn btn-danger">Eli
 var $newLinkLi = $('<div class="col-md-12 addItem"></div>').append($addTagLink);
 var $delLinkLi = $('#hnr_sircimbundle_estudioradiologicotype_placas.required').append($removeTagLink);
 
+// Al seleccionar SI en el radioButton 
+        $(function () { 
+            $( "#dgplusbellebundle_consulta_reportePlantilla_0" ).on( "click", function() {
+                alert('llego aqui');
+                // Se muestra el combobox donde se selecciona la plantilla
+                $("#lista_plantilla").show();
+            });
+        });
+            
+        // Al seleccionar NO en el radioButton 
+        $(function () { 
+            $( "#dgplusbellebundle_consulta_reportePlantilla_1" ).on( "click", function() {
+                alert('llego aqui');
+                // Se obtiene todos elementos que contengan la clase parametro
+                var elements = document.getElementsByClassName('parametro');
 
+                // Se borran todos los elementohtmls que se encuentran en el div con id = campos
+                $('#campos div').html('');
+
+                // Se oculta el combobox donde se selecciona la plantilla
+                $("#lista_plantilla").hide();
+
+                // Se borran todos los elementos que contengan la clase = parametro
+                while(elements.length > 0){
+                    elements[0].parentNode.removeChild(elements[0]);
+                }
+
+                $('#dgplusbellebundle_consulta_campos option').each(function(index, option) {
+                    $(option).remove();
+                });
+            });
+        });
 
 
 
 jQuery(document).ready(function() {
     
     $('div[id*="dgplusbellebundle_consulta_placas_"]').siblings().remove(); // Ocultar id de producto  
-
     $("#dgplusbellebundle_consulta_pacienteSelectBoxItOptions li").remove();
-
     $('#dgplusbellebundle_consulta_fechaConsulta').daterangepicker({
                     singleDatePicker: true,
                     showDropdowns: true,
@@ -220,10 +249,7 @@ jQuery(document).ready(function() {
 
     collectionHolder.find('li').each(function() {
         addTagFormDeleteLink($(this));
-
     });
-
-    
 
     // add the "add a tag" anchor and li to the tags ul
     collectionHolder.append($newLinkLi);
@@ -238,8 +264,6 @@ jQuery(document).ready(function() {
         //addTagForm(collectionHolder, $newLinkLi);   //Muestra un formulario en la carga de la página nuevo
     }
     
-
-
     $addTagLink.on('click', function(e) {
         // prevent the link from creating a "#" on the URL
         e.preventDefault();
@@ -329,5 +353,153 @@ if(editar!='editar_usuario'){
 }
 
  </script>
+    <script>  
+        
+        
+        $(document).ready(function(){          
+                   
+            {% if plantilla %}
+                // Se obtiene elemento div con id = campos    
+                var div = document.getElementById('campos');
+                
+                // Se generar arreglos para elementos a crear
+                var input = new Array();
+                var label = new Array();
+                var campos = new Array();
+                var etiqueta = new Array();
+                
+                // Se setea el combobox con la plantilla recuperada
+                $("#dgplusbellebundle_consulta_plantilla").val('{{ plantilla[0].detallePlantilla.plantilla.id }}');
+                var key = 0;
+                
+                // Se recorren todos los parametros de la plantilla recuperada
+                {% for valor in plantilla %}
+                    var t = document.createTextNode('{{ valor.detallePlantilla.nombre }}');
 
+                    // Se crea un div donde se muestran los parametros
+                    campos[key] = document.createElement('div');
+                    campos[key].setAttribute('class', 'parametro col-md-4');
+
+                    // Se crea el campo de texto del parametro de la plantilla
+                    input[key] = document.createElement('input');
+                    input[key].setAttribute('type', 'text');
+                    input[key].setAttribute('placeholder', '{{ valor.detallePlantilla.nombre }}');
+                    input[key].setAttribute('class', 'form-control classPlantilla');
+                    input[key].setAttribute('style', 'margin-bottom: 5px');
+                    input[key].setAttribute('name', '{{ valor.detallePlantilla.nombre }}');
+                    input[key].setAttribute('id', '{{ valor.detallePlantilla.id }}');
+                 
+                    // Se crea el label del parametro de la plantilla
+                    etiqueta[key] = document.createElement('p');
+                    etiqueta[key].setAttribute('style', 'color: #646473; font-size: 13px; font-weight: 700;');
+                    etiqueta[key].appendChild(t);
+
+                    label[key] = document.createElement('label');
+
+                    // Se introducen los elementos en el div con id = campos
+                    label[key].appendChild(etiqueta[key]);
+                    campos[key].appendChild(label[key]);
+                    campos[key].appendChild(input[key]);
+                    div.appendChild(campos[key]);
+                    
+                    // Se setea el parametro con el valor de la plantilla recuperada
+                     $("#{{ valor.detallePlantilla.id }}").val('{{ valor.valorDetalle }}');
+                    
+                    key++;
+                {% endfor %}  
+                validarConsulta();    
+                    
+            {% else %}   
+                
+            {% endif %}        
+        });//Fin document ready     
+        
+        $(function () { 
+            $( "#dgplusbellebundle_consulta_plantilla" ).on( "change", function() {
+                // Se obtiene el id de la plantilla
+                var id = $( this ).val();
+                
+                // Se obtiene todos elementos que contengan la clase parametro
+                var elements = document.getElementsByClassName('parametro');
+                
+                // Se borran todos los elementos que se encuentran en el div con id = campos
+                $('#campos div').html('');
+                
+                // Se borran todos los elementos que contengan la clase = parametro
+                while(elements.length > 0){
+                    elements[0].parentNode.removeChild(elements[0]);
+                }
+                
+                $('#dgplusbellebundle_consulta_campos option').each(function(index, option) {
+                    $(option).remove();
+                });
+                
+                // Se obtienen los campos necesarios para la plantilla seleccionada
+                $.post( "{{path('admin_busqueda_parametros')}}", { id: id }, function( data ) {
+                    var par = new Array();
+                    par = data.query;
+                    
+                    // Si la plantilla contiene campos
+                    if(par.length !== 0){
+                        mostrarCampos(data.query);
+                    }
+                    else{
+                        console.log( 'Esta plantilla no tiene campos que mostrar' );
+                    }
+                }, "json");
+                
+            });
+         }); 
+         
+        
+        // Funcion que muestra los campos de texto de la plantilla seleccionada
+        function mostrarCampos(data) {
+            var div = document.getElementById('campos');
+            var form = $("form");
+           
+            //var form = document.createElement('form');
+            //form.setAttribute('action', '{# {{path('admin_set_campos')}} #}');
+            //form.setAttribute('method', 'POST');
+            /*-----------*/
+            
+            var input = new Array();
+            var label = new Array();
+            var campos = new Array();
+            var etiqueta = new Array();
+            
+            // Se recorre el array para mostrar los campos
+            $.each( data, function( key, value ) {
+                var t = document.createTextNode(value.nombre);
+                
+                // Se crea un div donde se muestran los parametros
+                campos[key] = document.createElement('div');
+                campos[key].setAttribute('class', 'parametro col-md-4');
+                
+                // Se crea el campo de texto del parametro de la plantilla
+                input[key] = document.createElement('input');
+                input[key].setAttribute('type', 'text');
+                input[key].setAttribute('placeholder', value.nombre);
+                input[key].setAttribute('class', 'form-control classPlantilla');
+                input[key].setAttribute('style', 'margin-bottom: 5px');
+                input[key].setAttribute('name', value.nombre);
+                input[key].setAttribute('id', value.id);
+             //   input[key].setAttribute('onblur', 'setCamposPlantilla(' + value.id + ')');
+                
+                // Se crea el label del parametro de la plantilla
+                etiqueta[key] = document.createElement('p');
+                etiqueta[key].setAttribute('style', 'color: #646473; font-size: 13px; font-weight: 700;');
+                etiqueta[key].appendChild(t);
+                
+                label[key] = document.createElement('label');
+                
+                // Se introducen los elementos en el div con id = campos
+                label[key].appendChild(etiqueta[key]);
+                campos[key].appendChild(label[key]);
+                campos[key].appendChild(input[key]);
+                div.appendChild(campos[key]);
+            });
+            validarConsulta();
+        } // Fin de mostrarCampos
+        
+    </script>
 {% endblock %} 
