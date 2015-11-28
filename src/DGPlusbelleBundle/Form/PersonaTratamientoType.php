@@ -18,11 +18,14 @@ class PersonaTratamientoType extends AbstractType
         $builder
             ->add('costoConsulta', 'text', array('label'=>'Costo $', 'required'=>false,
                     'attr'=>array(
-                         'class'=>'form-control costoConsulta'
+                         'class'=>'form-control input-sm costoConsulta'
                          )
                        ))
-            ->add('numSesiones')
-            ->add('paciente','entity', array( 'label' => 'Paciente',
+            ->add('numSesiones', null,
+                  array('label'  => '# Sesiones','required'=>false,
+                        'attr'   => array('class' => 'form-control input-sm sesionesTratamiento'),
+                       )) 
+            ->add('paciente','entity', array( 'label' => 'Paciente','required'=>false,
                          'empty_value'   => 'Seleccione un paciente...',
                          'class'         => 'DGPlusbelleBundle:Persona',
                          'query_builder' => function(EntityRepository $r){
@@ -31,7 +34,7 @@ class PersonaTratamientoType extends AbstractType
                                                 //return $r->seleccionarEmpleadosPersonasActivos();
                                             } ,  
                          'attr'=>array(
-                         'class'=>'form-control'
+                         'class'=>'form-control input-sm pacienteTratamiento'
                          )
                        ))
             ->add('empleado','entity', array( 'label' => 'Vendido por','required'=>false,
@@ -44,7 +47,7 @@ class PersonaTratamientoType extends AbstractType
                                                 //return $r->seleccionarEmpleadosPersonasActivos();
                                             } ,
                          'attr'=>array(
-                            'class'=>'form-control empleadoVentaPaquete'
+                            'class'=>'form-control input-sm empleadoVentaPaquete'
                          )
                        ))
             ->add('tratamiento','entity', array( 'label' => 'Tratamiento','required'=>false,
@@ -54,13 +57,13 @@ class PersonaTratamientoType extends AbstractType
                             return $repository->obtenerTratActivo();
                        },     
                          'attr'=>array(
-                         'class'=>'form-control input-sm'
+                         'class'=>'form-control input-sm tratamientoPaciente'
                          )
                        ))
             ->add('fechaVenta', null,
                   array('label'  => 'Fecha de venta','required'=>false,
                         'widget' => 'single_text',
-                        'attr'   => array('class' => 'form-control input-sm'),
+                        'attr'   => array('class' => 'form-control input-sm calZebra'),
                        )) 
         ;
     }

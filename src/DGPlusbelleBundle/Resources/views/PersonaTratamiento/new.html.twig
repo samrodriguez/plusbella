@@ -39,3 +39,34 @@
     </div>  
             {{ form_end(form) }}    
 {% endblock %}
+
+{% block javascripts_step %}
+      <script src="{{ asset('Resources/js/TratamientoPaciente.js') }}"></script>  
+      
+       <script>
+            $(document).ready(function(){
+            var seleccionado="";
+                //Eliminar options del select de usuario
+             $('#dgplusbellebundle_personatratamiento_paciente option').each(function(index, val) {
+                    
+                    seleccionado = $(this).attr('selected');
+                    if (!seleccionado){
+                        $(this).remove();
+                    }
+                });  
+                
+                
+              $(document).on("change","#dgplusbellebundle_personatratamiento_numSesiones",function(){
+                    //alert("prueba");
+                    if($(this).val()==0 || $(this).val()<=0){
+                        $(this).val('0');
+                    }
+
+                });
+           
+                
+        validarTratamientoPaciente();            
+                
+          });//Fin document ready
+      </script>      
+ {% endblock %}    

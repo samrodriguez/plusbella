@@ -99,7 +99,7 @@
  
  {% block javascripts_step %}
        
-      
+     <script type="text/javascript" src="{{ asset('Resources/zebra/inicializacioncalendarios.js')}}" ></script>
        <script>
             $(document).ready(function(){
                  var link=0;
@@ -265,6 +265,20 @@
         //Oculta el filtro de la tabla
         $('#datatables1_filter').hide();
         $('#filterDatatables1').val('');
+        
+        
+        /* var seleccionado="";
+                //Eliminar options del select de usuario
+                $('#dgplusbellebundle_personatratamiento_paciente option').each(function(index, val) {
+                    
+                    seleccionado = $(this).attr('selected');
+                    if (!seleccionado){
+                        $(this).remove();
+                    }
+                });    */
+        
+        
+        
         
         
         //validarEmpleado(); 

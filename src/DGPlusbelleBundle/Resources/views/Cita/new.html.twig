@@ -81,7 +81,9 @@
 
 
 {% block javascripts_step %}
-        
+    
+   <script src="{{ asset('Resources/js/Cita.js') }}"></script>  
+   
     <style>
         #dgplusbellebundle_cita_horaInicio{
             width: 160px;
@@ -197,7 +199,9 @@
                 //Cargar los horarios al inicio
                 //$('#dgplusbellebundle_cita_empleado').change();
                 //Modificar horarios al cmabiar dropdown
-                
+              
+        
+              validarCita(); 
         });
         </script>
 {% endblock %}
