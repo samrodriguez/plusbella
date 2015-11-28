@@ -227,22 +227,24 @@
                 
                 
                 $("#edit-datatables1").click(function(){
-                    if(link != 1){
-                        if(!$("#edit-datatables1").hasClass("disabled")){
-                            if($("#editFormContainer").hasClass("hide")){
-                                $("#addFormContainer").addClass("hide");
-                                $("#editFormContainer").removeClass("hide");
-                            }
-                            else{
-                                //$("#addFormContainer").removeClass("hide");
-                                $("#editFormContainer").addClass("hide");
+                    if(!$(this).hasClass('disabled')){
+                        if(link != 1){
+                            if(!$("#edit-datatables1").hasClass("disabled")){
+                                if($("#editFormContainer").hasClass("hide")){
+                                    $("#addFormContainer").addClass("hide");
+                                    $("#editFormContainer").removeClass("hide");
+                                }
+                                else{
+                                    //$("#addFormContainer").removeClass("hide");
+                                    $("#editFormContainer").addClass("hide");
+                                }
                             }
                         }
-                    }
-                    else{
-                        bootbox.alert("Administrador no se puede editar", function() {
-                                        //Example.show("Hello world callback");
-                                    });
+                        else{
+                            bootbox.alert("Administrador no se puede editar", function() {
+                                            //Example.show("Hello world callback");
+                                        });
+                        }
                     }
                 });
                 /*

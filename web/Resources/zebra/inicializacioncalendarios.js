@@ -5,6 +5,15 @@
  */
 
 
+        $('#dgplusbellebundle_cita_fechaCita').Zebra_DatePicker({
+            months:['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
+            days: ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'],
+            direction:true,
+            show_clear_date:false,
+            show_select_today: "Hoy",
+            default_position: "below",
+            offset:[-142,40]
+        });
         
         
         $('#fecha').Zebra_DatePicker({

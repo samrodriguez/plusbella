@@ -96,6 +96,7 @@
                 float:right;
             }
     </style>
+    <script type="text/javascript" src="{{ asset('Resources/zebra/inicializacioncalendarios.js')}}" ></script>
         <script>
             $(document).ready(function(){
                 //Llamada ajax para validar la fecha y hora de una cita
@@ -130,11 +131,9 @@
                     //alert(error);
                     if(error == 0){
                         return false;
-                    }
-                    
+                    }                    
                 });
-                    
-                
+
                 //Generación de calendario zebra
                 //$('#dgplusbellebundle_cita_fechaCita').Zebra_DatePicker(//{
                     /*onSelect:
@@ -166,13 +165,13 @@
                /* }*///);
                
                 
-                $('#dgplusbellebundle_cita_fechaCita').daterangepicker({
+                {#$('#dgplusbellebundle_cita_fechaCita').daterangepicker({
                     singleDatePicker: true,
                     showDropdowns: true,
                     locale: {
                         format: 'YYYY-MM-DD'
                     },
-                });
+                });#}
                 var seleccionado="";
                 //Eliminar options del select de pacientes
                //Eliminar options del select de pacientes
