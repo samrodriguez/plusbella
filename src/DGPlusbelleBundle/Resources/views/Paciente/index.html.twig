@@ -18,13 +18,16 @@
               <div class="btn-toolbar clearfix" role="toolbar">
                
                 <div class="btn-group btn-group-sm pull-left">
-                   <button data-toggle="tooltip" data-container="body" title="Nuevo paciente" id="add-datatables1" class="btn btn-default" role="button">
-                    <i class="icon-user-follow"></i>
-                      </button> 
+                    <button data-toggle="tooltip" data-container="body" title="Nuevo paciente" id="add-datatables1" class="btn btn-default" role="button">
+                        <i class="icon-user-follow"></i>
+                    </button> 
+                    <button data-toggle="tooltip" data-container="body" title="Detalles paciente" id="detalle-datatables1" class="btn btn-default disabled" role="button">
+                        <i class="fa fa-bars"></i>
+                    </button> 
                 </div>
                 <div class="btn-group btn-group-sm pull-left">
-                    <button id="ver-expediente" data-toggle="tooltip" data-container="body" title="Ver expediente" class="btn btn-default datatables1-actions disabled opciones" role="button">
-                        <i class="fa fa-book"></i><a href="{{ path('admin_historial_consulta') }}"> </a>
+                    <button id="detalle-paciente" data-toggle="tooltip" data-container="body" title="Ver expediente" class="btn btn-default datatables1-actions disabled" role="button">
+                        <i class="fa fa-book"></i>
                     </button> 
                 </div>
                 <div class="btn-group btn-group-sm pull-left">
@@ -85,10 +88,10 @@
                 <th>DUI</th>
                 <th>Dirección</th>
                 <th>Teléfono</th>
-                <th>Email</th>
+                {#<th>Email</th>#}
                 {#<th>Ocupación</th>#}
                 <th>Lugar de trabajo</th>
-                <th>Fecha de nacimiento</th>
+                <th>F. Nacimiento</th>
                 {#<th>Referido por</th>#}
                 
                 {#<th>Acciones</th>#}
@@ -103,7 +106,7 @@
                 </td> 
                 <td>{{ entity.pnombre }} {{ entity.papellido }}</td>
                 <td>{{ entity.dui }}</td>
-                <td>{{ entity.direccion }}</td>
+                {#<td>{{ entity.direccion }}</td>#}
                 <td>{{ entity.tel}}</td>
                 <td>{{ entity.email }}</td>
                
@@ -180,6 +183,7 @@
                     $("#vender-paquete").removeClass("disabled");
                     $("#vender-tratamiento").removeClass("disabled");
                     $("#ver-expediente").removeClass("disabled");
+                    $("#detalle-datatables1").removeClass("disabled");
         
                     //var link=$('#datatables1>tbody>tr>td>a').attr("href");
                     //var link=$(this).children("td:first").children().attr("href");
@@ -197,6 +201,16 @@
                     
                 });
                 
+                
+                
+                $("#detalle-datatables1").click(function(){
+                    $.getJSON(Routing.generate('get_nuevaHora', { id: id, delta:dayDelta, fecha:date}), 
+                function(data) {
+                });
+                
+                    
+
+                });
                 
                 $("#add-datatables1").click(function(){
                     if($("#addFormContainer").hasClass("hide")){
@@ -236,7 +250,6 @@
                     //$("#edit-datatables1").click();
                     var href = $(this).children("a").attr("href")+"?id="+idPaciente;
                     
-                    //alert();
                     if( !$(this).hasClass("disabled") ){
                         //$("#opcionesFormContainer").load(href);
                         window.location=href;
@@ -287,15 +300,12 @@
                     searching:true,
                     "order":[[0, "desc"],[1,"desc"]],
                     "columnDefs": [
-                           { "orderable": false, "targets": 1 },
+                           { "orderable": false, "targets": 0 },
                            { "orderable": false, "targets": 2 },
                            { "orderable": false, "targets": 3 },
                            { "orderable": false, "targets": 4 },
                            { "orderable": false, "targets": 5 },
-                           { "orderable": false, "targets": 6 },
-                           { "orderable": false, "targets": 7 }
-                                 
-                       
+                           { "orderable": false, "targets": 6 }
                            
                            
                            //{ "orderData": [ 2, 3, 4 ], "targets": 2 }
