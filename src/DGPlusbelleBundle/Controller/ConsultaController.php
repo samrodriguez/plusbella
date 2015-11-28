@@ -496,8 +496,6 @@ class ConsultaController extends Controller
             throw $this->createNotFoundException('Unable to find Consulta entity.');
         }
 
-        
-        
          // Create an array of the current Tag objects in the database 
         foreach ($entity->getPlacas() as $placa) { $originalPlacas[] = $placa; }
         $editForm = $this->createForm(new ConsultaType(), $entity); 
@@ -510,13 +508,26 @@ class ConsultaController extends Controller
                     
                 } } }
 
-        
-        
         $editForm = $this->createEditForm($entity,2);
         $deleteForm = $this->createDeleteForm($id);
-
+        
+        $dql = "SELECT hc, con, det, pla "
+                    . "FROM DGPlusbelleBundle:HistorialConsulta hc "
+                    . "JOIN hc.consulta con "
+                    . "JOIN hc.detallePlantilla det "
+                    . "JOIN det.plantilla pla "
+                    . "WHERE hc.consulta =  :idconsulta";
+            
+        $plantilla = $em->createQuery($dql)
+                    ->setParameter('idconsulta', $id)
+                    ->getResult();
+            
+            //var_dump($plantilla[0]);
+        //$plantilla = "";
+        
         return array(
             'entity'      => $entity,
+            'plantilla'      => $plantilla,
             'edit_form'   => $editForm->createView(),
             'delete_form' => $deleteForm->createView(),
         );
@@ -577,7 +588,8 @@ class ConsultaController extends Controller
         $deleteForm = $this->createDeleteForm($id);
         $editForm = $this->createEditForm($entity,2);
         $editForm->handleRequest($request);
-
+        $parameters = $request->request->all();
+        
         if ($editForm->isValid()) {
             
             // filter $originalTags to contain tags no longer present 
@@ -590,43 +602,65 @@ class ConsultaController extends Controller
                             } 
                         } 
                     }
-                   // die();
-                    // remove the relationship between the tag and the Task
-                    /*foreach ($originalTags as $tag) {
-                        if (false === $entity->getPlacas()->contains($tag)) {
-                            // remove the Task from the Tag
-                            //$tag->getConsulta()->removeElement($entity);
-                            unset($originalTags[$key]); 
-                            // if it was a many-to-one relationship, remove the relationship like this
-                            // $tag->setTask(null);
-
-                            $em->persist($tag);
-
-                            // if you wanted to delete the Tag entirely, you can also do that
-                            // $em->remove($tag);
-                        }
-                    }
-                */
+                   
                 // remove the relationship between the tag and the Task 
                     foreach ($originalTags as $tag) { 
-                    // remove the Task from the Tag // 
-                    //$tag->getPlacas()->removeElement($task);
                 
-        // if it were a ManyToOne relationship, remove the relationship like this // 
-                    //$tag->setTask(null);
-                
-                        
-                        
                          // if you wanted to delete the Tag entirely, you can also do that 
                         $em->remove($tag);
-                        //$em->persist($tag);
-                        
+                        //$em->persist($tag);          
+            }
             
-            
-                        
-            
-        }
             $em->flush();
+           
+             $plantillaid = $parameters['dgplusbellebundle_consulta']['plantilla'];
+             //var_dump($plantillaid);
+             
+            $dql = "SELECT det.id, det.nombre "
+                    . "FROM DGPlusbelleBundle:DetallePlantilla det "
+                    . "JOIN det.plantilla pla "
+                    . "WHERE pla.id =  :plantillaid";
+            
+            $parametros = $em->createQuery($dql)
+                        ->setParameter('plantillaid', $plantillaid)
+                        ->getResult();
+            
+            $query = $em->createQuery(
+                            'SELECT hc
+                               FROM DGPlusbelleBundle:HistorialConsulta hc
+                               JOIN hc.consulta c
+                              WHERE c.id = :consulta
+                           ORDER BY c.id ASC'
+                        )->setParameter('consulta', $id);
+
+            $detalleP = $query->getResult();
+            
+            foreach($detalleP as $key1 => $det){
+                $historialConsulta = $em->getRepository('DGPlusbelleBundle:HistorialConsulta')->find($det->getId());
+                
+                if (!$historialConsulta) {
+                    throw $this->createNotFoundException('Unable to find HistorialConsulta entity.');
+                }
+                
+                $em->remove($historialConsulta);
+                $em->flush();
+            }
+           
+                
+            //$o = $e;
+            foreach($parametros as $key => $p){
+                
+                $dataReporte = new HistorialConsulta;
+                $detalle = $em->getRepository('DGPlusbelleBundle:DetallePlantilla')->find($p['id']);
+                
+                $dataReporte->setDetallePlantilla($detalle);       
+                $dataReporte->setConsulta($entity);
+                $dataReporte->setValorDetalle($parameters[$p['nombre']]);
+                
+                $em->persist($dataReporte);
+                $em->flush();
+            }
+            
             return $this->redirect($this->generateUrl('admin_consulta'));
         }
 
@@ -778,7 +812,7 @@ class ConsultaController extends Controller
         //sendEmail($to, $cc, $bcc,$replay, $body){
         
         
-        
+        //var_dump($entity);
         //$comision;
 // Formato: dd-mm-yy
 //echo calcular_edad(“01-10-1989″); // Resultado: 21
@@ -833,7 +867,8 @@ class ConsultaController extends Controller
                     . " DGPlusbelleBundle:VentaPaquete vp"
                     . " JOIN vp.paquete p"
                     . " JOIN vp.empleado emp"
-                    . " WHERE vp.fechaVenta LIKE :mes AND emp.estado=true AND emp.id=:idEmpleado";
+                    . " JOIN emp.empleado em"
+                    . " WHERE vp.fechaVenta LIKE :mes AND em.estado=true AND em.id=:idEmpleado";
                 $comision = $em->createQuery($dql)
                        ->setParameters(array('mes'=>$fecha.'___','idEmpleado'=>$empleado['id']))
                        ->getResult();

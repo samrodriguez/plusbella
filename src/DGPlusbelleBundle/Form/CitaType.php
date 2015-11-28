@@ -22,11 +22,11 @@ class CitaType extends AbstractType
             ->add('fechaCita', null,
                   array('label'  => 'Fecha cita','required'=>false,
                         'widget' => 'single_text',
-                        'attr'   => array('class' => 'form-control input-sm'),
+                        'attr'   => array('class' => 'form-control input-sm fechaCita'),
                        ))
             ->add('horaCita', null,
                   array('label'  => 'Hora cita',
-                        'attr'   => array('class' => 'hora'),
+                        'attr'   => array('class' => 'input-sm hora'),
                        ))
             //->add('horaFin')
            // ->add('fechaRegistro')
@@ -39,7 +39,7 @@ class CitaType extends AbstractType
                            return $repository->obtenerDescActivo();
                        },
                          'attr'=>array(
-                         'class'=>'form-control'
+                         'class'=>'form-control input-sm descuentoCita'
                          )
                        ))
             ->add('empleado','entity', array( 'label' => 'Empleado','required'=>false,
@@ -54,7 +54,7 @@ class CitaType extends AbstractType
                                                 return $repository->obtenerEmpActivo();
                                              },  
                          'attr'=>array(
-                         'class'=>'form-control busqueda'
+                         'class'=>'form-control input-sm busqueda'
                          )
                        ))
             /*->add('horario', null, 
@@ -69,7 +69,7 @@ class CitaType extends AbstractType
                          'empty_value'   => 'Seleccione un paciente...',
                          'class'         => 'DGPlusbelleBundle:Paciente',
                          'attr'=>array(
-                         'class'=>'form-control'
+                         'class'=>'form-control input-sm pacienteCita'
                          )
                        ))
             ->add('tratamiento','entity', array( 'label' => 'Tratamiento','required'=>false,
@@ -79,7 +79,7 @@ class CitaType extends AbstractType
                             return $repository->obtenerTratActivo();
                        },     
                          'attr'=>array(
-                         'class'=>'form-control input-sm'
+                         'class'=>'form-control input-sm tratamientoCita'
                          )
                        ))
         ;

@@ -357,7 +357,7 @@ class ReporteController extends Controller
         
         $sql = "SELECT p.nombre as paquete, cast(sum(p.costo) as decimal(36,2)) as total "
                 . "from venta_paquete vp INNER JOIN paquete p on vp.paquete = p.id "
-                . "WHERE  vp.fecha_venta BETWEEN '$fechaInicio' and  '$fechaFin' order by sum(p.costo)";
+                . "WHERE  vp.fecha_venta BETWEEN '$fechaInicio' and  '$fechaFin' group by p.nombre order by sum(p.costo) desc";
         
         $query = $em->createNativeQuery($sql, $rsm);
         $consulta = $query->getResult();

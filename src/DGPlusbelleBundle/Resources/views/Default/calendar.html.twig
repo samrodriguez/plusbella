@@ -6,6 +6,7 @@
             border-top:none;
         }
     </style>
+    
 {% include 'ADesignsCalendarBundle::calendar.html.twig' %}
 {% endblock %}
 
@@ -42,6 +43,11 @@ $(document).ready(function() {
             week:     'Semana',
             day:      'Día'
         },
+        default: "es",
+        monthNames: ['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'],
+        monthNamesShort: ['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'],
+        dayNames: ['Domingo','Lunes','Martes','Miércoles','Jueves','Viernes','Sábado'],
+        dayNamesShort: ['Dom','Lun','Mar','Mié','Jue','Vie','Sáb'],
         lazyFetching: true,
         defaultView: 'agendaDay',
         editable: true,

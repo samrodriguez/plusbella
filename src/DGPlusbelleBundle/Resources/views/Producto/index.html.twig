@@ -114,6 +114,7 @@
  {% endblock %}
  
   {% block javascripts_step %}
+        <script src="{{ asset('Resources/js/Producto.js') }}"></script>  
         <script type="text/javascript" src="{{ asset('Resources/zebra/inicializacioncalendarios.js')}}" ></script>
         <script>
             $(document).ready(function(){
@@ -325,7 +326,7 @@
         $('#filterDatatables1').val('');
         
         
-        
+        validarProducto();    
         
     });//Fin document ready
         

@@ -1,17 +1,21 @@
 
-$(document).ready(function(){
-$('#dgplusbellebundle_producto_categoria').
+ function validarProducto(){
+$('.categoriaProducto').
         attr('data-bvalidator', 'required,required');
  
-    $('#dgplusbellebundle_producto_nombre').
+$('.nombreProducto').
         attr('data-bvalidator', 'required,required');
 
-     $('#dgplusbellebundle_producto_costo').
-        attr('data-bvalidator', 'number,required,required');	
+$('.costoProducto').
+        attr('data-bvalidator', 'number,required,required');
 
-     $('#dgplusbellebundle_producto_fechaCompra').
-        attr('data-bvalidator', 'required,required');	
-     $('#dgplusbellebundle_producto_fechaVencimiento').
+$('.cantidadProducto').
+        attr('data-bvalidator', 'number,required,required');
+
+$('#dgplusbellebundle_producto_fechaCompra').
+        attr('data-bvalidator', 'required,required');
+        
+$('#dgplusbellebundle_producto_fechaVencimiento').
         attr('data-bvalidator', 'required,required');			
 
     //Opciones del validador
@@ -23,5 +27,5 @@ $('#dgplusbellebundle_producto_categoria').
     //Validar el formulario
     $('form').bValidator(optionsRed);
 	
- });//Fin document ready	
+ }	
 	

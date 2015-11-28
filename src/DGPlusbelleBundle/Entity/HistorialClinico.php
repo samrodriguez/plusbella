@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * HistorialClinico
  *
- * @ORM\Table(name="historial_clinico", indexes={@ORM\Index(name="fk_historial_clinico_expediente1_idx", columns={"expediente"}), @ORM\Index(name="fk_historial_clinico_consulta1_idx", columns={"consulta"}), @ORM\Index(name="fk_historial_clinico_empleado1_idx", columns={"empleado"})})
+ * @ORM\Table(name="historial_clinico", indexes={@ORM\Index(name="fk_historial_clinico_expediente1_idx", columns={"expediente"}), @ORM\Index(name="fk_historial_clinico_empleado1_idx", columns={"empleado"})})
  * @ORM\Entity
  */
 class HistorialClinico
@@ -27,16 +27,6 @@ class HistorialClinico
      * @ORM\Column(name="nota", type="string", length=200, nullable=false)
      */
     private $nota;
-
-    /**
-     * @var \Consulta
-     *
-     * @ORM\ManyToOne(targetEntity="Consulta")
-     * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="consulta", referencedColumnName="id")
-     * })
-     */
-    // private $consulta;
 
     /**
      * @var \Empleado
@@ -93,30 +83,6 @@ class HistorialClinico
     {
         return $this->nota;
     }
-
-    /**
-     * Set consulta
-     *
-     * @param \DGPlusbelleBundle\Entity\Consulta $consulta
-     *
-     * @return HistorialClinico
-     */
-    /*  public function setConsulta(\DGPlusbelleBundle\Entity\Consulta $consulta = null)
-    {
-        $this->consulta = $consulta;
-
-        return $this;
-    } */
-
-    /**
-     * Get consulta
-     *
-     * @return \DGPlusbelleBundle\Entity\Consulta
-     */
-   /* public function getConsulta()
-    {
-        return $this->consulta;
-    }*/
 
     /**
      * Set empleado

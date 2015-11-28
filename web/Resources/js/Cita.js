@@ -1,25 +1,18 @@
 
-$(document).ready(function(){
+function validarCita(){
 
-$('#dgplusbellebundle_cita_empleado').
+$('.busqueda').
 attr('data-bvalidator', 'required,required');
 
-$('#dgplusbellebundle_cita_fechaCita').
+$('.fechaCita').
 attr('data-bvalidator', 'required,required');
 
-$('#dgplusbellebundle_cita_descuento').
+$('.descuentoCita').
 attr('data-bvalidator', 'required,required');
 
-$('#dgplusbellebundle_cita_tratamiento').
+$('.tratamientoCita').
 attr('data-bvalidator', 'required,required');
 
-$('#dgplusbellebundle_consulta_incapacidad').
-attr('data-bvalidator', 'required,required');
-
-$('#dgplusbellebundle_consulta_reportePlantilla').
-attr('data-bvalidator', 'required,required');
-	
- 
     //Opciones del validador
     var optionsRed = { 
         classNamePrefix: 'bvalidator_bootstraprt_', 
@@ -30,5 +23,5 @@ attr('data-bvalidator', 'required,required');
     //Validar el formulario
     $('form').bValidator(optionsRed);
 	
- });//Fin document ready	
+ }	
 	
