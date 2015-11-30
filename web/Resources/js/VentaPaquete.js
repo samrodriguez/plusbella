@@ -6,6 +6,11 @@ attr('data-bvalidator', 'required,required');
 $('.paqueteVenta').
 attr('data-bvalidator', 'required,required');
 
+$('.cuotas').
+attr('data-bvalidator', 'required,required');
+
+$('.calZebra').
+attr('data-bvalidator', 'required,required');
 
     //Opciones del validador
     var optionsRed = { 

@@ -84,6 +84,13 @@ class VentaPaquete
      * })
      */
     private $usuario;
+    
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="cuotas", type="integer", nullable=false)
+     */
+    private $cuotas;
 
 
 
@@ -263,5 +270,30 @@ class VentaPaquete
     public function getUsuario()
     {
         return $this->usuario;
+    }
+    
+    
+    /**
+     * Set cuotas
+     *
+     * @param integer $cuotas
+     *
+     * 
+     */
+    public function setCuotas($cuotas)
+    {
+        $this->cuotas = $cuotas;
+
+        return $this;
+    }
+
+    /**
+     * Get numSesiones
+     *
+     * @return integer
+     */
+    public function getCuotas()
+    {
+        return $this->cuotas;
     }
 }
