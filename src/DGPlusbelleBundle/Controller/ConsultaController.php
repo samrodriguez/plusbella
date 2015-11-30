@@ -225,19 +225,37 @@ class ConsultaController extends Controller
                         ->setParameter('plantillaid', $plantillaid)
                         ->getResult();
             //$valores = array(); 
-             //var_dump($parameters); 
+            // var_dump($usuario); 
             
-            foreach($parametros as $key => $p){
+            foreach($parametros as $p){
                 $dataReporte = new HistorialConsulta;
                 $detalle = $em->getRepository('DGPlusbelleBundle:DetallePlantilla')->find($p['id']);
                 
                 $dataReporte->setDetallePlantilla($detalle);       
                 $dataReporte->setConsulta($entity);
-                $dataReporte->setValorDetalle($parameters[$p['nombre']]);
+                
+                $nparam = explode(" ", $p['nombre']);
+                //var_dump(count($nparam)); 
+                $lon = count($nparam);
+                if($lon > 1){
+                    $pnombre = $nparam[0];
+                    foreach($nparam as $key => $par){
+                        //var_dump($key);
+                        if($key +1 != $lon){
+                            //var_dump($lon);
+                            $pnombre .= '_'.$nparam[$key + 1];
+                        }    
+                    }
+                    $dataReporte->setValorDetalle($parameters[$pnombre]);
+                } else {
+                    $dataReporte->setValorDetalle($parameters[$p['nombre']]);
+                }
+               //var_dump($p['nombre']); 
+                
                 
                 $em->persist($dataReporte);
                 $em->flush();
-            }
+            }   
             
             //var_dump($dataReporte);
            //var_dump($entity->getId());
@@ -655,7 +673,27 @@ class ConsultaController extends Controller
                 
                 $dataReporte->setDetallePlantilla($detalle);       
                 $dataReporte->setConsulta($entity);
-                $dataReporte->setValorDetalle($parameters[$p['nombre']]);
+                
+                $nparam = explode(" ", $p['nombre']);
+                //var_dump(count($nparam)); 
+                $lon = count($nparam);
+                if($lon > 1){
+                    $pnombre = $nparam[0];
+                    foreach($nparam as $key => $par){
+                        //var_dump($key);
+                        if($key +1 != $lon){
+                            //var_dump($lon);
+                            $pnombre .= '_'.$nparam[$key + 1];
+                        }    
+                    }
+                    $dataReporte->setValorDetalle($parameters[$pnombre]);
+                } else {
+                    $dataReporte->setValorDetalle($parameters[$p['nombre']]);
+                }
+                
+                
+                
+                //$dataReporte->setValorDetalle($parameters[$p['nombre']]);
                 
                 $em->persist($dataReporte);
                 $em->flush();
@@ -842,6 +880,8 @@ class ConsultaController extends Controller
             $empleados= $em->createQuery($dql)
                        ->setParameter('idEmpleado',$id)
                        ->getResult();
+                       var_dump($empleados);
+     
         }
         else{//Todos los empleados
             $dql = "SELECT emp.id, emp.meta, emp.foto, p.nombres, p.apellidos,emp.comisionCompleta,p.email,emp.porcentaje as por  "
