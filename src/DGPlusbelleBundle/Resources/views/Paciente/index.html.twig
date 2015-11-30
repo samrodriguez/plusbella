@@ -48,7 +48,7 @@
                     {#<button id="nueva-consulta" data-toggle="tooltip" data-container="body" title="Nueva consulta emergencia" class="btn btn-default datatables1-actions disabled opciones" role="button">
                         <i class="fa fa-folder-open"></i><a href="{{ path('admin_consulta_nueva_paciente') }}"> </a>
                     </button>#}
-                    <button id="nuevo-abono" data-toggle="tooltip" data-container="body" title="Nuevo abono" class="btn btn-default datatables1-actions disabled opciones" role="button">
+                    <button id="nueva-devolucion" data-toggle="tooltip" data-container="body" title="Nueva devolucion" class="btn btn-default datatables1-actions disabled opciones" role="button">
                         <i class="fa fa-money"></i><a href="{{ path('admin_devolucion_new') }}"> </a>
                     </button> 
                     <button id="vender-paquete" data-toggle="tooltip" data-container="body" title="Vender paquete" class="btn btn-default datatables1-actions disabled opciones" role="button">
@@ -56,6 +56,9 @@
                     </button> 
                     <button id="vender-tratamiento" data-toggle="tooltip" data-container="body" title="Vender tratamiento" class="btn btn-default datatables1-actions disabled opciones" role="button">
                         <i class="fa fa-briefcase"></i><a href="{{ path('admin_personatratamiento_new') }}"> </a>
+                    </button> 
+                     <button id="nuevo-abono" data-toggle="tooltip" data-container="body" title="Nuevo abono" class="btn btn-default datatables1-actions disabled opciones" role="button">
+                        <i class="fa fa-briefcase"></i><a href="{{ path('admin_abono_new') }}"> </a>
                     </button> 
                     
                 </div>
@@ -268,10 +271,11 @@
                         $("#delete-datatables1").removeClass("disabled");
                         $("#nueva-cita").removeClass("disabled");
                         $("#nueva-consulta").removeClass("disabled");
-                        $("#nuevo-abono").removeClass("disabled");
+                        $("#nueva-devolucion").removeClass("disabled");
                         $("#vender-paquete").removeClass("disabled");
                         $("#vender-tratamiento").removeClass("disabled");
                         $("#ver-expediente").removeClass("disabled");
+                        $("#nuevo-abono").removeClass("disabled");
                         $("#detalle-datatables1").removeClass("disabled");
 
                         //var link=$('#datatables1>tbody>tr>td>a').attr("href");

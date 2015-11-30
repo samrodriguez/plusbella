@@ -264,4 +264,8 @@ class VentaPaquete
     {
         return $this->usuario;
     }
+    
+    public function __toString() {
+    return $this->paquete->getNombre() ? $this->paquete->getNombre() .' $'.$this->paquete->getCosto() : '';
+    }
 }
