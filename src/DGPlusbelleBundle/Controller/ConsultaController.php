@@ -225,19 +225,37 @@ class ConsultaController extends Controller
                         ->setParameter('plantillaid', $plantillaid)
                         ->getResult();
             //$valores = array(); 
-             //var_dump($parameters); 
+            // var_dump($usuario); 
             
-            foreach($parametros as $key => $p){
+            foreach($parametros as $p){
                 $dataReporte = new HistorialConsulta;
                 $detalle = $em->getRepository('DGPlusbelleBundle:DetallePlantilla')->find($p['id']);
                 
                 $dataReporte->setDetallePlantilla($detalle);       
                 $dataReporte->setConsulta($entity);
-                $dataReporte->setValorDetalle($parameters[$p['nombre']]);
+                
+                $nparam = explode(" ", $p['nombre']);
+                //var_dump(count($nparam)); 
+                $lon = count($nparam);
+                if($lon > 1){
+                    $pnombre = $nparam[0];
+                    foreach($nparam as $key => $par){
+                        //var_dump($key);
+                        if($key +1 != $lon){
+                            //var_dump($lon);
+                            $pnombre .= '_'.$nparam[$key + 1];
+                        }    
+                    }
+                    $dataReporte->setValorDetalle($parameters[$pnombre]);
+                } else {
+                    $dataReporte->setValorDetalle($parameters[$p['nombre']]);
+                }
+               //var_dump($p['nombre']); 
+                
                 
                 $em->persist($dataReporte);
                 $em->flush();
-            }
+            }   
             
             //var_dump($dataReporte);
            //var_dump($entity->getId());
@@ -248,9 +266,10 @@ class ConsultaController extends Controller
             /*  if($producto){
                 $this->establecerConsultaProducto($entity, $producto, $indicaciones);
             } */
-            
-            $empleados=$this->verificarComision($usuario,null);
-            
+            $idEmpleado = $usuario->getPersona()->getEmpleado()[0]->getId();
+            var_dump($idEmpleado);
+            $empleados=$this->verificarComision($idEmpleado,null);
+            var_dump($empleados);
             if($empleados[0]['suma'] >= $empleados[0]['meta'] && !$empleados[0]['comisionCompleta']){
                 $this->get('envio_correo')->sendEmail($empleados[0]['email'],"","","","cumplio su objetivo");
                 $empComision = $em->getRepository('DGPlusbelleBundle:Empleado')->find($empleado[0]->getId());
@@ -655,7 +674,27 @@ class ConsultaController extends Controller
                 
                 $dataReporte->setDetallePlantilla($detalle);       
                 $dataReporte->setConsulta($entity);
-                $dataReporte->setValorDetalle($parameters[$p['nombre']]);
+                
+                $nparam = explode(" ", $p['nombre']);
+                //var_dump(count($nparam)); 
+                $lon = count($nparam);
+                if($lon > 1){
+                    $pnombre = $nparam[0];
+                    foreach($nparam as $key => $par){
+                        //var_dump($key);
+                        if($key +1 != $lon){
+                            //var_dump($lon);
+                            $pnombre .= '_'.$nparam[$key + 1];
+                        }    
+                    }
+                    $dataReporte->setValorDetalle($parameters[$pnombre]);
+                } else {
+                    $dataReporte->setValorDetalle($parameters[$p['nombre']]);
+                }
+                
+                
+                
+                //$dataReporte->setValorDetalle($parameters[$p['nombre']]);
                 
                 $em->persist($dataReporte);
                 $em->flush();
@@ -821,6 +860,7 @@ class ConsultaController extends Controller
             'entity' => $entity,
             'totalTratamientos'=> $totalTratamientos[0][1],//grafica de estadisticas
             'totalPaquetes'=> $totalPaquetes[0][1],//grafica de estadisticas
+            'totalConsultas'=> count($entity),//grafica de estadisticas
             'edad' => $edad,
             'consultas' => $entity,
             'paquetes' => $paquetes,
@@ -833,15 +873,16 @@ class ConsultaController extends Controller
     function verificarComision($id,$fecha){
         $em = $this->getDoctrine()->getManager();
         if($id!=null){//Un empleado especifico
-            $dql = "SELECT emp.id, com.meta, emp.foto, p.nombres, p.apellidos,emp.comisionCompleta,p.email,emp.porcentaje as por "
+            $dql = "SELECT emp.id, emp.meta, emp.foto, p.nombres, p.apellidos,emp.comisionCompleta,p.email,emp.porcentaje as por "
                     . "FROM DGPlusbelleBundle:Empleado emp "
                     . "JOIN emp.persona p "
-                    . "JOIN emp.comision com "
                     . "WHERE emp.estado=true "
                     . "AND emp.id =:idEmpleado";
             $empleados= $em->createQuery($dql)
                        ->setParameter('idEmpleado',$id)
                        ->getResult();
+                       var_dump($empleados);
+     
         }
         else{//Todos los empleados
             $dql = "SELECT emp.id, emp.meta, emp.foto, p.nombres, p.apellidos,emp.comisionCompleta,p.email,emp.porcentaje as por  "
