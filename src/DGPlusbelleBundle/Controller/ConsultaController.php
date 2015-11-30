@@ -248,9 +248,10 @@ class ConsultaController extends Controller
             /*  if($producto){
                 $this->establecerConsultaProducto($entity, $producto, $indicaciones);
             } */
-            
-            $empleados=$this->verificarComision($usuario,null);
-            
+            $idEmpleado = $usuario->getPersona()->getEmpleado()[0]->getId();
+            var_dump($idEmpleado);
+            $empleados=$this->verificarComision($idEmpleado,null);
+            var_dump($empleados);
             if($empleados[0]['suma'] >= $empleados[0]['meta'] && !$empleados[0]['comisionCompleta']){
                 $this->get('envio_correo')->sendEmail($empleados[0]['email'],"","","","cumplio su objetivo");
                 $empComision = $em->getRepository('DGPlusbelleBundle:Empleado')->find($empleado[0]->getId());
@@ -821,6 +822,7 @@ class ConsultaController extends Controller
             'entity' => $entity,
             'totalTratamientos'=> $totalTratamientos[0][1],//grafica de estadisticas
             'totalPaquetes'=> $totalPaquetes[0][1],//grafica de estadisticas
+            'totalConsultas'=> count($entity),//grafica de estadisticas
             'edad' => $edad,
             'consultas' => $entity,
             'paquetes' => $paquetes,
@@ -833,10 +835,9 @@ class ConsultaController extends Controller
     function verificarComision($id,$fecha){
         $em = $this->getDoctrine()->getManager();
         if($id!=null){//Un empleado especifico
-            $dql = "SELECT emp.id, com.meta, emp.foto, p.nombres, p.apellidos,emp.comisionCompleta,p.email,emp.porcentaje as por "
+            $dql = "SELECT emp.id, emp.meta, emp.foto, p.nombres, p.apellidos,emp.comisionCompleta,p.email,emp.porcentaje as por "
                     . "FROM DGPlusbelleBundle:Empleado emp "
                     . "JOIN emp.persona p "
-                    . "JOIN emp.comision com "
                     . "WHERE emp.estado=true "
                     . "AND emp.id =:idEmpleado";
             $empleados= $em->createQuery($dql)

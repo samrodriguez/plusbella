@@ -20,7 +20,7 @@ class VentaPaqueteType extends AbstractType
         ->add('fechaVenta', null,
                   array('label'  => 'Fecha de venta','required'=>false,
                         'widget' => 'single_text',
-                        'attr'   => array('class' => 'form-control input-sm'),
+                        'attr'   => array('class' => 'form-control input-sm calZebra'),
                        )) 
             //->add('fechaRegistro')
             ->add('paquete', 'entity', 
@@ -61,6 +61,10 @@ class VentaPaqueteType extends AbstractType
                             'class'=>'form-control empleadoVentaPaquete'
                          )
                        ))
+            ->add('cuotas', null,
+                  array('label'  => 'Cuotas','required'=>false,
+                        'attr'   => array('class' => 'form-control input-sm cuotas'),
+                       )) 
             //->add('usuario')
         ;
     }
