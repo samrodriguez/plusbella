@@ -110,6 +110,9 @@ class EmpleadoController extends Controller
                 $em->flush();
             }
             
+            $usuario= $this->get('security.token_storage')->getToken()->getUser();
+            $this->get('bitacora')->escribirbitacora("Se registro un nuevo empleado",$usuario->getId());
+            
             return $this->redirect($this->generateUrl('admin_empleado', array('id' => $entity->getId())));
         }
 
@@ -281,7 +284,10 @@ class EmpleadoController extends Controller
         //die();
         if ($editForm->isValid()) {
             $em->flush();
-
+            
+            $usuario= $this->get('security.token_storage')->getToken()->getUser();
+            $this->get('bitacora')->escribirbitacora("Se actualizo informacion de un empleado",$usuario->getId());
+            
             return $this->redirect($this->generateUrl('admin_empleado'));
         }
 
