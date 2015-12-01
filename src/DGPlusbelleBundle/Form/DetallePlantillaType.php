@@ -15,8 +15,14 @@ class DetallePlantillaType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('nombre')
-            ->add('descripcion')
+             ->add('nombre','text',array('label' => 'Nombre','required' => false,
+                    'attr'=>array(
+                    'class'=>'form-control input-sm nombreDetalle'
+                    )))
+            ->add('descripcion','text',array('label' => 'Descripción','required' => false,
+                    'attr'=>array(
+                    'class'=>'form-control input-sm descripcionDetalle'
+                    )))
             //->add('plantilla')
         ;
     }

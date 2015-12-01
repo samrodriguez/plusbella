@@ -12,21 +12,25 @@
     <div class="panel-body">
     {{ form_start(edit_form) }}
     {{ form_errors(edit_form) }}
-    
-    <div class="col-xs-12 col-sm-2">
-     {{ form_row(edit_form.categoria) }} 
-    </div>
-    <div class="col-xs-12 col-sm-3">
-     {{ form_row(edit_form.nombre) }} 
-    </div>
-    <div class="col-xs-12 col-sm-1">
-     {{ form_row(edit_form.costo) }} 
-    </div>
-     <div class="col-xs-12 col-sm-3">
-     {{ form_row(edit_form.fechaCompra) }} 
-    </div>
-     <div class="col-xs-12 col-sm-3">
-     {{ form_row(edit_form.fechaVencimiento) }} 
+    <div class="row">
+        <div class="col-md-2">
+         {{ form_row(edit_form.categoria) }} 
+        </div>
+        <div class="col-md-2">
+         {{ form_row(edit_form.nombre) }} 
+        </div>
+        <div class="col-md-2">
+         {{ form_row(edit_form.costo) }} 
+        </div>
+        <div class="col-md-2">
+            {{ form_row(edit_form.cantidad) }}
+        </div>
+        <div class="col-md-2">
+         {{ form_row(edit_form.fechaCompra) }} 
+        </div>
+        <div class="col-md-2">
+         {{ form_row(edit_form.fechaVencimiento) }} 
+        </div>
     </div>
 
         <div class="form-grouphide col-sm-9"> 
@@ -49,7 +53,34 @@
             return false;
         });
         
+        $('#dgplusbellebundle_producto_cantidad').on("change",function(){
+        if($(this).val()==0 || $(this).val()<=0){
+            $(this).val('0');
+        }
+        else{
+            $.getJSON(Routing.generate('admin_actualizar_cantidad_producto', { id: link}), 
+            function(data) {
+                var mensaje="";
+                    if(data.regs==1){
+                        bootbox.alert(mensaje, function() {
+
+                        });
+                    }
+            }); 
+        }
+
+
+        });
+
+        $('.calZebra').Zebra_DatePicker({
+            months:['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
+            days: ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'],
+            format: 'Y-m-d',
+            show_clear_date:false,
+            show_select_today: "Hoy"
+        });
         
+         validarProducto();  
     });
    
 </script>

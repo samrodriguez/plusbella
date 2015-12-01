@@ -1,45 +1,45 @@
 
-$(document).ready(function(){
-$('#dgplusbellebundle_paciente_persona_nombres').
+function validarPaciente(){
+$('.nombresPersona').
   attr('data-bvalidator', 'required,required');
   
-$('#dgplusbellebundle_paciente_persona_apellidos').
+$('.apellidosPersona').
   attr('data-bvalidator', 'required,required');  
   
-$('#dgplusbellebundle_paciente_persona_direccion').
+$('.direccionPersona').
   attr('data-bvalidator', 'required,required');  
 
-$('#dgplusbellebundle_paciente_persona_telefono').
+$('.telefonoPersona').
   attr('data-bvalidator', 'minlength[9],required,required'); 
 
-$('#dgplusbellebundle_paciente_persona_email').
+$('.emailPersona').
   attr('data-bvalidator', 'email,required,required'); 
 
-$('#dgplusbellebundle_paciente_dui').
+$('.duiPaciente').
   attr('data-bvalidator', 'minlength[10],required,required');  
 
-$('#dgplusbellebundle_paciente_estadoCivil').
+$('.estadocivilPaciente').
   attr('data-bvalidator', 'required,required');  
 
-$('#dgplusbellebundle_paciente_sexo').
+$('.sexoPaciente').
   attr('data-bvalidator', 'required,required'); 
 
-$('#dgplusbellebundle_paciente_ocupacion').
+$('.ocupacionPaciente').
   attr('data-bvalidator', 'required,required');   
 
-$('#dgplusbellebundle_paciente_lugarTrabajo').
+$('.lugarTrabajoPaciente').
   attr('data-bvalidator', 'required,required'); 
 
 $('#dgplusbellebundle_paciente_fechaNacimiento').
   attr('data-bvalidator', 'required,required');  
 
-$('#dgplusbellebundle_paciente_referidoPor').
+$('.referidoPorPaciente').
   attr('data-bvalidator', 'required,required');   
 
-$('#dgplusbellebundle_paciente_personaEmergencia').
+$('.emergenciaPaciente').
   attr('data-bvalidator', 'required,required'); 
 
-$('#dgplusbellebundle_paciente_telefonoEmergencia').
+$('.telefonoemerPaciente').
   attr('data-bvalidator', 'minlength[9],required,required');     
 	
  
@@ -52,5 +52,5 @@ $('#dgplusbellebundle_paciente_telefonoEmergencia').
     //Validar el formulario
     $('form').bValidator(optionsRed);
 	
- });//Fin document ready	
+ }	
 	

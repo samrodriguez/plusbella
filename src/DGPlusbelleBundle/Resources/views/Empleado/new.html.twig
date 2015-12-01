@@ -1,4 +1,4 @@
-{% extends 'DGPlusbelleBundle:Layout:layout.html.twig' %}  
+{#{% extends 'DGPlusbelleBundle:Layout:layout.html.twig' %}  #}
 
 {% block contenido -%}
  <div class="panel panel-default">
@@ -13,17 +13,68 @@
       {#  </div> #}
      
         {% include 'DGPlusbelleBundle:Persona:form.html.twig' with { 'form': form.persona }%}  
+        
+         
+          <div class="row">
+               <div class="col-md-12">
+                  <h3 class="text">Meta</h3>
+                  <hr>
+                </div>
+          </div>
+        
+         <div class="col-xs-12 col-sm-2">
+        {{ form_row(form.porcentaje) }}
+         </div> 
+         <div class="col-xs-12 col-sm-2">
+        {{ form_row(form.meta) }}
+         </div>  
+         <div class="col-xs-12 col-sm-2">
+        {{ form_row(form.bono) }}
+         </div>  
         <div class="col-xs-12 col-sm-2">
         {{ form_row(form.cargo) }}
          </div>
         <div class="col-xs-12 col-sm-2">
         {{ form_row(form.sucursal) }}
         {# {{ form_row(form.estado) }}#}
-        </div>
+        </div> 
+        
+        <div class="col-xs-12 col-sm-4">
+            <label class="control-label" for="dgplusbellebundle_empleado_sucursal">Foto de perfil</label>
+            
+            
+            {#<div class="form-group">
+                <div class="fileinput input-group fileinput-exists" data-provides="fileinput">
+                    <div class="form-control" data-trigger="fileinput"><i class="glyphicon glyphicon-file fileinput-exists"></i> <span class="fileinput-filename"></span></div>
+                    <div class="input-group-btn">
+                        <span class="btn btn-default btn-file"><span >Examinar...</span> {# <span class="fileinput-exists">Cambiar</span> #}
+                            
+                                {{ form_widget(form.file) }}
+                                {# {{ form_row(form.estado) }}#}
+              {#              
+                        </span>
+                        <a href="#" class="btn btn-danger fileinput-exists" data-dismiss="fileinput">Quitar</a> 
+                    </div>
+                </div><!-- /.fileinput -->
+            </div>
+           #}
+                        
+        </div> 
+       
+       
          <div class="col-xs-12 col-sm-3">
      {#  {% include 'DGPlusbelleBundle:Photo:test.html.twig' %}  #}
      {#   {{ form_row(form.foto) }} #}
+     
          </div>
+         
+          <div class="row">
+               <div class="col-md-12">
+                  <h3 class="text">Tratamiento</h3>
+                  <hr>
+                </div>
+          </div>
+         
          <div class="col-xs-12 col-sm-12">
         {{ form_row(form.tratamiento) }}
          </div>

@@ -58,7 +58,7 @@ class VentaPaquete
     /**
      * @var \Persona
      *
-     * @ORM\ManyToOne(targetEntity="Persona")
+     * @ORM\ManyToOne(targetEntity="Persona", inversedBy="ventapaquete")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="paciente", referencedColumnName="id")
      * })
@@ -84,6 +84,13 @@ class VentaPaquete
      * })
      */
     private $usuario;
+    
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="cuotas", type="integer", nullable=false)
+     */
+    private $cuotas;
 
 
 
@@ -263,5 +270,34 @@ class VentaPaquete
     public function getUsuario()
     {
         return $this->usuario;
+    }
+    
+    
+    /**
+     * Set cuotas
+     *
+     * @param integer $cuotas
+     *
+     * 
+     */
+    public function setCuotas($cuotas)
+    {
+        $this->cuotas = $cuotas;
+
+        return $this;
+    }
+
+    /**
+     * Get numSesiones
+     *
+     * @return integer
+     */
+    public function getCuotas()
+    {
+        return $this->cuotas;
+    }
+    
+     public function __toString() {
+   return $this->paquete->getNombre() ? $this->paquete->getNombre() .' $'.$this->paquete->getCosto() : '';
     }
 }

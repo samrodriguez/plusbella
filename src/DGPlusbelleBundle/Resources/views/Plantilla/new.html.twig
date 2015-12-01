@@ -45,21 +45,20 @@
 
                 <div class="row">
                     <div class="col-md-12">
-                        <h3 class="text-left">Parametros para plantilla del reporte</h3>
+                        <h3 class="text">Parametros para plantilla del reporte</h3>
                         <hr>
                         <br>
                     </div>
                 </div>
                 <div class="row">  
                     <div id="listadoa">
-                           <div class="listado col-md-12">
-                               <div class="placas" data-prototype="{{ form_widget(form.placas.vars.prototype)|e }}">
-                                   {{ form_widget(form.placas) }}
-                               </div>
+                       <div class="listado col-md-12">          
+                           <div class="placas" data-prototype="{% filter escape %}  {% include 'DGPlusbelleBundle:Prototype:plantilla.html.twig' with { 'form': form.placas.vars.prototype} %}   {% endfilter  %}"> 
+                              {{ form_widget(form.placas) }}
                            </div>
+                       </div>
                     </div>
-
-                </div> 
+                </div>   
                    
                 <div class="form-grouphide col-sm-9" style ="margin-top: 30px">
                     <a href="{{ path('admin_plantilla') }}" class="btn btn-default btn-sm" id="cancelarNuevo">Cancelar</a>

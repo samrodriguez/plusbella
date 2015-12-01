@@ -10,9 +10,11 @@ class ReportePDF  extends \FPDF_FPDF {
         $this->Cell(80);
         //$urlLogo = $this->getParameter('plusbelle.logo');
         //$logo = $urlLogo.'sonodigest.jpg';
-        // $this->Image($logo, 150, 5, 50, 20);
+         $this->Image('../web/Resources/img/dgplusbelle/images/laplusbelle.jpg', 150, 5, 50, 20);
+         $this->Line(20, 25.5, 200, 25.5);
+         $this->Line(20, 26, 200, 26);
         // Title
-        $this->Cell(30,10,'Title',0,0,'C');
+        //$this->Cell(30,10,'Title',0,0,'C');
         // Line break
        $this->Ln(0);
     }

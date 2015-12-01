@@ -20,43 +20,43 @@ class PacienteType extends AbstractType
                 
             ->add('dui','text',array('label' => 'DUI','required' => false,
                     'attr'=>array(
-                    'class'=>'form-control input-sm'
+                    'class'=>'form-control input-sm duiPaciente'
                     )))
             ->add('estadoCivil','choice',array('label' => 'Estado Civil','required'=>false, 'empty_value'=>'Seleccione estado civil...',
                     'choices'  => array('s' => 'Soltero', 'c' => 'Casado', 'e' => 'Estudiante'),
                     'attr'=>array(
-                    'class'=>'form-control input-sm'
+                    'class'=>'form-control input-sm estadocivilPaciente'
                     )))
             ->add('sexo','choice',array('label' => 'Sexo','required' => false,'empty_value'=>'Seleccione sexo...',
                     'choices'  => array('m' => 'Masculino', 'f' => 'Femenino'),
                     'attr'=>array(
-                    'class'=>'form-control input-sm'
+                    'class'=>'form-control input-sm sexoPaciente'
                     )))
             
             ->add('ocupacion','text',array('label' => 'Ocupación','required'=>false,
                     'attr'=>array(
-                    'class'=>'form-control input-sm'
+                    'class'=>'form-control input-sm ocupacionPaciente'
                     )))
             ->add('lugarTrabajo','text',array('label' => 'Lugar de Trabajo','required' => false,
                     'attr'=>array(
-                    'class'=>'form-control input-sm'
+                    'class'=>'form-control input-sm lugartrabajoPaciente'
                     )))
             ->add('fechaNacimiento', null,
                   array('label'  => 'Fecha nacimiento','required'=>false,
                         'widget' => 'single_text',
-                        'attr'   => array('class' => 'form-control input-sm calZebra'),
+                        'attr'   => array('class' => 'form-control input-md calZebra'),
                        ))
             ->add('referidoPor','text',array('label' => 'Referido por','required' => false,
                     'attr'=>array(
-                    'class'=>'form-control input-sm'
+                    'class'=>'form-control input-sm referidoporPaciente'
                     )))
             ->add('personaEmergencia','text',array('label' => 'En caso de Emergencia llamar a','required' => false,
                     'attr'=>array(
-                    'class'=>'form-control input-sm'
+                    'class'=>'form-control input-sm emergenciaPaciente'
                     )))
             ->add('telefonoEmergencia','text',array('label' => 'Al telefono','required' => false,
                     'attr'=>array(
-                    'class'=>'form-control input-sm'
+                    'class'=>'form-control input-sm telefonoemerPaciente'
                     )))
             //->add('estado')
            // ->add('persona')

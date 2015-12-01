@@ -53,7 +53,7 @@ class Usuario implements AdvancedUserInterface, \Serializable
     /**
      * @var \Persona
      *
-     * @ORM\ManyToOne(targetEntity="Persona")
+     * @ORM\ManyToOne(targetEntity="Persona", inversedBy="usuario")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="persona", referencedColumnName="id")
      * })
@@ -323,5 +323,9 @@ class Usuario implements AdvancedUserInterface, \Serializable
         else
         $this->isEnabled  = false;
         return  $this->isEnabled;
+    }
+    
+     public function __toString() {
+    return $this->username ? $this->username : '';
     }
 }

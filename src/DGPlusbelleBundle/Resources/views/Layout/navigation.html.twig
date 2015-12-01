@@ -14,12 +14,12 @@
 
         <!-- use .pull-*, couse we need this float on any screen size -->
 <div class="pull-right" role="navigation">
-    <a aria-label="Search" id="brandSearchNav" class="btn btn-icon navbar-btn" href="#"><i class="fa fa-search"></i></a>
+    {#<a aria-label="Search" id="brandSearchNav" class="btn btn-icon navbar-btn" href="#"><i class="fa fa-search"></i></a>#}
     <div class="dropdown-ext">
-    <a aria-label="notifications" class="btn btn-icon navbar-btn dropdown-toggle" data-toggle="dropdown" href="#">
+    {#<a aria-label="notifications" class="btn btn-icon navbar-btn dropdown-toggle" data-toggle="dropdown" href="#">
       <i class="fa fa-inbox"></i>
       <span class="dotted dotted-danger"></span>
-    </a>
+    </a>#}
     <div class="dropdown-menu dropdown-menu-ext dropdown-menu-right" role="menu">
         <div class="dd-head">
           <div class="dd-head-actions">
@@ -69,12 +69,13 @@
         <i class="fa fa-ellipsis-v"></i>
       </a>
       <ul class="dropdown-menu dropdown-menu-right" role="menu">
-        <li role="presentation"><a role="menuitem" tabindex="-1" href="page-profile.html"><span class="pull-right"><i class="fa fa-user text-muted"></i></span>Perfil</a></li>
+        <li role="presentation"><a role="menuitem" tabindex="-1" href="{{ path('admin_usuario_edit', {'id':app.user.id})}}"><span class="pull-right"><i class="fa fa-user text-muted"></i></span>Perfil</a></li>
+        <li role="presentation"><a role="menuitem" tabindex="-1" href="{{ path('admin_bitacora')}}"><span class="pull-right"><i class="fa fa-book text-muted"></i></span>Mostrar bitacora</a></li>
         {#<li role="presentation"><a role="menuitem" tabindex="-1" href="page-timeline.html"><span class="pull-right"><i class="fa fa-clock-o text-muted"></i></span>Timeline</a></li>#}
         <li class="divider"></li>
-        <li role="presentation"><a role="menuitem" tabindex="-1" href="page-help.html"><span class="pull-right"><i class="fa fa-question-circle text-muted"></i></span>Ayuda</a></li>
+        {#<li role="presentation"><a role="menuitem" tabindex="-1" href="page-help.html"><span class="pull-right"><i class="fa fa-question-circle text-muted"></i></span>Ayuda</a></li>
         <li class="divider"></li>
-        <li role="presentation"><a role="menuitem" tabindex="-1" href="page-locked.html"><span class="pull-right"><i class="fa fa-lock text-muted"></i></span>Locked</a></li>
+        <li role="presentation"><a role="menuitem" tabindex="-1" href="page-locked.html"><span class="pull-right"><i class="fa fa-lock text-muted"></i></span>Locked</a></li>#}
         <li role="presentation"><a role="menuitem" tabindex="-1" href="{{path('plusbelle_logout')}}"><span class="pull-right"><i class="fa fa-sign-out text-muted"></i></span> Cerrar sesión</a></li>
       </ul>
     </div><!-- /.dropdown -->

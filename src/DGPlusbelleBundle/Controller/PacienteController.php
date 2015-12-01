@@ -3,6 +3,7 @@
 namespace DGPlusbelleBundle\Controller;
 
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -97,6 +98,9 @@ class PacienteController extends Controller
             $this->generarExpediente($entity);
             $em->flush();
 
+            $usuario= $this->get('security.token_storage')->getToken()->getUser();
+            $this->get('bitacora')->escribirbitacora("Se registro un nuevo paciente",$usuario->getId());
+            
             return $this->redirect($this->generateUrl('admin_paciente', array('id' => $entity->getId())));
         }
 
@@ -243,6 +247,9 @@ class PacienteController extends Controller
         if ($editForm->isValid()) {
             $em->flush();
 
+            $usuario= $this->get('security.token_storage')->getToken()->getUser();
+            $this->get('bitacora')->escribirbitacora("Se actualizo informacion de un paciente",$usuario->getId());
+            
             return $this->redirect($this->generateUrl('admin_paciente'));
         }
 
@@ -345,5 +352,41 @@ class PacienteController extends Controller
         $expediente->setUsuario($user);
 
         $em->persist($expediente);
+    }
+    
+    
+    /**
+     * @Route("/infopaciente/get/{id}", name="get_infopaciente", options={"expose"=true})
+     * @Method("GET")
+     */
+    public function getInfoPacienteAction(Request $request, $id) {
+        
+        $request = $this->getRequest();
+        
+        $em = $this->getDoctrine()->getEntityManager();
+        $id = substr($id, 1);
+        
+        $dql = "SELECT "
+                . "per.nombres,per.apellidos,per.telefono,per.email,p.dui,p.estadoCivil,p.sexo,p.ocupacion,p.lugarTrabajo, p.fechaNacimiento, p.referidoPor, p.personaEmergencia,p.telefonoEmergencia "
+                . "FROM DGPlusbelleBundle:Paciente p JOIN p.persona per WHERE per.id=p.persona AND p.id =:id";
+
+        $paciente['regs'] = $em->createQuery($dql)
+                   ->setParameter('id',$id)
+                   ->getResult();
+        
+        //$paciente['regs'] = $em->getRepository('DGPlusbelleBundle:Paciente')->find($id);
+        $fecha = $paciente['regs'][0]['fechaNacimiento'];
+        $paciente['regs'][0]['fechaNacimiento'] = $fecha->format("d-m-Y");
+        //var_dump($fecha->format("d-m-Y"));
+        //var_dump($paciente);
+        
+        
+        
+        
+        
+        //var_dump($cita['regs'][0]["primerNombre"]);
+        //var_dump($cita);
+        
+        return new Response(json_encode($paciente));
     }
 }

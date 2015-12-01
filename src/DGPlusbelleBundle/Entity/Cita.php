@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * Cita
  *
- * @ORM\Table(name="cita", indexes={@ORM\Index(name="fk_cita_horario1_idx", columns={"horario"}), @ORM\Index(name="fk_cita_paciente1_idx", columns={"paciente"}), @ORM\Index(name="fk_cita_empleado1_idx", columns={"empleado"}), @ORM\Index(name="fk_cita_tratamiento1_idx", columns={"tratamiento"}), @ORM\Index(name="fk_cita_descuento1_idx", columns={"descuento"})})
+ * @ORM\Table(name="cita", indexes={ @ORM\Index(name="fk_cita_paciente1_idx", columns={"paciente"}), @ORM\Index(name="fk_cita_empleado1_idx", columns={"empleado"}), @ORM\Index(name="fk_cita_tratamiento1_idx", columns={"tratamiento"}), @ORM\Index(name="fk_cita_descuento1_idx", columns={"descuento"})})
  * @ORM\Entity(repositoryClass="DGPlusbelleBundle\Repository\CitaRepository")
  */
 class Cita
@@ -76,15 +76,7 @@ class Cita
      */
     private $empleado;
 
-    /**
-     * @var \Horario
-     *
-     * @ORM\ManyToOne(targetEntity="Horario")
-     * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="horario", referencedColumnName="id")
-     * })
-     */
-    //private $horario;
+    
 
     /**
      * @var \Paciente
@@ -286,29 +278,7 @@ class Cita
         return $this->empleado;
     }
 
-    /**
-     * Set horario
-     *
-     * @param \DGPlusbelleBundle\Entity\Horario $horario
-     *
-     * @return Cita
-     */
- /*   public function setHorario(\DGPlusbelleBundle\Entity\Horario $horario = null)
-    {
-        $this->horario = $horario;
-
-        return $this;
-    } */
-
-    /**
-     * Get horario
-     *
-     * @return \DGPlusbelleBundle\Entity\Horario
-     */
- /*   public function getHorario()
-    {
-        return $this->horario;
-    }*/
+    
 
     /**
      * Set paciente

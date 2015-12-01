@@ -1,5 +1,13 @@
 {% extends 'DGPlusbelleBundle:Layout:layout.html.twig' %}
-
+{% block css %}
+    {{parent()}}
+    <style>
+        .detallePaciente{
+            cursor: pointer;
+            color: #4FC1E9;
+        }
+    </style>
+{% endblock %}
 {% block contenido -%}
 
 
@@ -18,9 +26,12 @@
               <div class="btn-toolbar clearfix" role="toolbar">
                
                 <div class="btn-group btn-group-sm pull-left">
-                   <button data-toggle="tooltip" data-container="body" title="Nuevo paciente" id="add-datatables1" class="btn btn-default" role="button">
-                    <i class="icon-user-follow"></i>
-                      </button> 
+                    <button data-toggle="tooltip" data-container="body" title="Nuevo paciente" id="add-datatables1" class="btn btn-default" role="button">
+                        <i class="icon-user-follow"></i>
+                    </button> 
+                    {#<button data-toggle="tooltip" data-container="body" title="Detalles paciente" id="detalle-datatables1" class="btn btn-default disabled" role="button">
+                        <i class="fa fa-bars"></i>
+                    </button> #}
                 </div>
                 <div class="btn-group btn-group-sm pull-left">
                     <button id="ver-expediente" data-toggle="tooltip" data-container="body" title="Ver expediente" class="btn btn-default datatables1-actions disabled opciones" role="button">
@@ -37,12 +48,19 @@
                     {#<button id="nueva-consulta" data-toggle="tooltip" data-container="body" title="Nueva consulta emergencia" class="btn btn-default datatables1-actions disabled opciones" role="button">
                         <i class="fa fa-folder-open"></i><a href="{{ path('admin_consulta_nueva_paciente') }}"> </a>
                     </button>#}
-                    <button id="nuevo-abono" data-toggle="tooltip" data-container="body" title="Nuevo abono" class="btn btn-default datatables1-actions disabled opciones" role="button">
+                    <button id="nueva-devolucion" data-toggle="tooltip" data-container="body" title="Nueva devolucion" class="btn btn-default datatables1-actions disabled opciones" role="button">
                         <i class="fa fa-money"></i><a href="{{ path('admin_devolucion_new') }}"> </a>
                     </button> 
                     <button id="vender-paquete" data-toggle="tooltip" data-container="body" title="Vender paquete" class="btn btn-default datatables1-actions disabled opciones" role="button">
                         <i class="fa fa-briefcase"></i><a href="{{ path('admin_ventapaquete_new') }}"> </a>
                     </button> 
+                    <button id="vender-tratamiento" data-toggle="tooltip" data-container="body" title="Vender tratamiento" class="btn btn-default datatables1-actions disabled opciones" role="button">
+                        <i class="fa fa-briefcase"></i><a href="{{ path('admin_personatratamiento_new') }}"> </a>
+                    </button> 
+                     <button id="nuevo-abono" data-toggle="tooltip" data-container="body" title="Nuevo abono" class="btn btn-default datatables1-actions disabled opciones" role="button">
+                        <i class="fa fa-briefcase"></i><a href="{{ path('admin_abono_new') }}"> </a>
+                    </button> 
+                    
                 </div>
                 <div class="btn-group btn-group-sm pull-left">
                   <button id="edit-datatables1" data-toggle="tooltip" data-container="body" title="Modificar paciente" class="btn btn-default datatables1-actions disabled" role="button">
@@ -78,14 +96,14 @@
             <tr>
                 <th>N°</th>  
                 <th>Paciente</th>
-                <th>Dui</th>
-                <th>Direccion</th>
-                <th>Telefono</th>
-                <th>Email</th>
-                <th>Ocupación</th>
+                <th>DUI</th>
+                <th>Dirección</th>
+                <th>Teléfono</th>
+                {#<th>Email</th>#}
+                {#<th>Ocupación</th>#}
                 <th>Lugar de trabajo</th>
-                <th>Fecha de nacimiento</th>
-                <th>Referido por</th>
+                <th>F. Nacimiento</th>
+                {#<th>Referido por</th>#}
                 
                 {#<th>Acciones</th>#}
             </tr>
@@ -97,16 +115,18 @@
                 <td>
                     {{key+1}}
                 </td> 
-                <td>{{ entity.pnombre }} {{ entity.papellido }}</td>
+                <td>
+                    <p class="detallePaciente">{{ entity.pnombre }} {{ entity.papellido }}</p>
+                </td>
                 <td>{{ entity.dui }}</td>
-                <td>{{ entity.direccion }}</td>
+                {#<td>{{ entity.direccion }}</td>#}
                 <td>{{ entity.tel}}</td>
                 <td>{{ entity.email }}</td>
                
-                <td>{{ entity.ocupacion }}</td>
+                {#<td>{{ entity.ocupacion }}</td>#}
                 <td>{{ entity.lugarTrabajo }}</td>
                 <td>{% if entity.fechaNacimiento %}{{ entity.fechaNacimiento|date('d-m-Y') }}{% endif %}</td>
-                <td>{{ entity.referidoPor }}</td>
+                {#<td>{{ entity.referidoPor }}</td>#}
                 {#<td>{{ entity.personaEmergencia }}</td>
                 <td>{{ entity.telefonoEmergencia }}</td>#}
                 
@@ -144,12 +164,13 @@
     
        
   {% block javascripts_step %}
-        <script type="text/javascript" src="{{ asset('Resources/zebra/inicializacioncalendarios.js')}}" ></script>
+       <script src="{{ asset('Resources/js/Paciente.js') }}"></script>
+        
         <script>
            
             $(document).ready(function(){
                 var idPaciente = 0;
-               
+                
                 
                 
               // validando campos  
@@ -157,45 +178,136 @@
               $('#dgplusbellebundle_paciente_persona_telefono').mask('0000-0000'); 
               $('#dgplusbellebundle_paciente_telefonoEmergencia').mask('0000-0000'); 
               
-              
-                //Seleccionar un registro
-                $('#datatables1>tbody>tr').on('click', function(event) {
-                    //Se limpia los otros que esten activos
-                    $('#datatables1>tbody>tr').each(function(index, val) {
-                        $(this).removeClass("active");
+        {#$(".detallePaciente").click(function(){
+                    $.getJSON(Routing.generate('get_infopaciente', { id: idPaciente}), 
+                    function(data) {
+                        var mensaje = "";
+                          mensaje += "<div class='row'></div>";
+                          //mensaje += "<div class='col-md-12'><hr></div></div>";
+                          
+                          mensaje += "<div class='col-md-6 text-right'><b>Nombre del paciente: </b></div><div class='col-md-6'>"+data.regs[0].nombres+" "+data.regs[0].apellidos+"</div>";
+                          mensaje += "<div class='col-md-6 text-right'><b>DUI: </b></div><div class='col-md-6'>"+data.regs[0].dui+"</div>";
+                          mensaje += "<div class='col-md-6 text-right'><b>Teléfono: </b></div><div class='col-md-6'>"+data.regs[0].telefono+"</div>";
+                          mensaje += "<div class='col-md-6 text-right'><b>Correo: </b></div><div class='col-md-6'>"+data.regs[0].email+"</div>";
+                          mensaje += "<div class='col-md-6 text-right'><b>Estado civil: </b></div><div class='col-md-6'>"+data.regs[0].estadoCivil+"</div>";
+                          
+                          mensaje += "<div class='col-md-6 text-right'><b>Sexo: </b></div><div class='col-md-6'>"+data.regs[0].sexo+"</div>";
+                          mensaje += "<div class='col-md-6 text-right'><b>Ocupación: </b></div><div class='col-md-6'>"+data.regs[0].ocupacion+"</div>";
+                          mensaje += "<div class='col-md-6 text-right'><b>Lugar de trabajo: </b></div><div class='col-md-6'>"+data.regs[0].lugarTrabajo+"</div>";
+                          mensaje += "<div class='col-md-6 text-right'><b>Fecha de nacimiento: </b></div><div class='col-md-6'>"+data.regs[0].fechaNacimiento+"</div>";
+                          mensaje += "<div class='col-md-6 text-right'><b>Referido por: </b></div><div class='col-md-6'>"+data.regs[0].referidoPor+"</div>";
+                          mensaje += "<div class='col-md-6 text-right'><b>En caso de emergencia llamar a: </b></div><div class='col-md-6'>"+data.regs[0].personaEmergencia+"</div>";
+                          mensaje += "<div class='col-md-6 text-right'><b>Teléfono: </b></div><div class='col-md-6'>"+data.regs[0].telefonoEmergencia+"</div>";
+                          mensaje += "</div>";
+                          bootbox.dialog({
+                                message: mensaje,
+                                title: "Información del paciente",
+                                buttons: {
+                                  main: {
+                                    label: "Aceptar",
+                                    className: "btn-primary",
+                                    callback: function() {
+
+                                    }
+                                  }
+                                }
+                            });
                     });
-                    //Se activa el registro en el que se hizo click
-                    $(this).addClass("active");
-                    //Se habilitan los botones de editar y borrar
-                    $("#edit-datatables1").removeClass("disabled");
-                    $("#delete-datatables1").removeClass("disabled");
-                    $("#nueva-cita").removeClass("disabled");
-                    $("#nueva-consulta").removeClass("disabled");
-                    $("#nuevo-abono").removeClass("disabled");
-                    $("#vender-paquete").removeClass("disabled");
-                    $("#ver-expediente").removeClass("disabled");
-        
-                    //var link=$('#datatables1>tbody>tr>td>a').attr("href");
-                    //var link=$(this).children("td:first").children().attr("href");
-                    //Obtener el id del registro
-                    idPaciente=$(this).attr("id");
-                    
-                    //alert(link);
-                    //Carga del form modificar
-                    $("#editFormContainer").load(idPaciente+"/edit");
-                    
-                    
-                    //var href=link.attr("href");
-                    //alert(object);
-                    
-                    
+                
                 });
+              #}
+                //Seleccionar un registro
+                $('#datatables1>tbody>tr,.detallePaciente').on('click', function(event) {
+                    idPaciente=$(this).attr("id");
+                    //alert($(this).prop("tagName"));
+                    if($(this).prop("tagName")=="P"){
+                        idPaciente=$(this).parent().parent().attr("id");
+                        //alert(idPaciente);
+                        $.getJSON(Routing.generate('get_infopaciente', { id: idPaciente}), 
+                        function(data) {
+                            var mensaje = "";
+                            mensaje += "<div class='row'></div>";
+                            //mensaje += "<div class='col-md-12'><hr></div></div>";
+
+                            mensaje += "<div class='col-md-6 text-right'><b>Nombre del paciente: </b></div><div class='col-md-6'>"+data.regs[0].nombres+" "+data.regs[0].apellidos+"</div>";
+                            mensaje += "<div class='col-md-6 text-right'><b>DUI: </b></div><div class='col-md-6'>"+data.regs[0].dui+"</div>";
+                            mensaje += "<div class='col-md-6 text-right'><b>Teléfono de contacto: </b></div><div class='col-md-6'>"+data.regs[0].telefono+"</div>";
+                            mensaje += "<div class='col-md-6 text-right'><b>Correo: </b></div><div class='col-md-6'>"+data.regs[0].email+"</div>";
+                            mensaje += "<div class='col-md-6 text-right'><b>Estado civil: </b></div><div class='col-md-6'>"+data.regs[0].estadoCivil+"</div>";
+
+                            mensaje += "<div class='col-md-6 text-right'><b>Sexo: </b></div><div class='col-md-6'>"+data.regs[0].sexo+"</div>";
+                            mensaje += "<div class='col-md-6 text-right'><b>Ocupación: </b></div><div class='col-md-6'>"+data.regs[0].ocupacion+"</div>";
+                            mensaje += "<div class='col-md-6 text-right'><b>Lugar de trabajo: </b></div><div class='col-md-6'>"+data.regs[0].lugarTrabajo+"</div>";
+                            mensaje += "<div class='col-md-6 text-right'><b>Fecha de nacimiento: </b></div><div class='col-md-6'>"+data.regs[0].fechaNacimiento+"</div>";
+                            mensaje += "<div class='col-md-6 text-right'><b>Referido por: </b></div><div class='col-md-6'>"+data.regs[0].referidoPor+"</div>";
+                            mensaje += "<div class='col-md-6 text-right'><b>En caso de emergencia llamar a: </b></div><div class='col-md-6'>"+data.regs[0].personaEmergencia+"</div>";
+                            mensaje += "<div class='col-md-6 text-right'><b>Teléfono: </b></div><div class='col-md-6'>"+data.regs[0].telefonoEmergencia+"</div>";
+                            mensaje += "</div>";
+                            bootbox.dialog({
+                                  message: mensaje,
+                                  title: "Información del paciente",
+                                  buttons: {
+                                    main: {
+                                      label: "Aceptar",
+                                      className: "btn-primary",
+                                      callback: function() {
+
+                                      }
+                                    }
+                                  }
+                            });
+                        });
+                    }
+                    else{
+                    
+                        //Se limpia los otros que esten activos
+                        $('#datatables1>tbody>tr').each(function(index, val) {
+                            $(this).removeClass("active");
+                        });
+                        //Se activa el registro en el que se hizo click
+                        $(this).addClass("active");
+                        //Se habilitan los botones de editar y borrar
+                        $("#edit-datatables1").removeClass("disabled");
+                        $("#delete-datatables1").removeClass("disabled");
+                        $("#nueva-cita").removeClass("disabled");
+                        $("#nueva-consulta").removeClass("disabled");
+                        $("#nueva-devolucion").removeClass("disabled");
+                        $("#vender-paquete").removeClass("disabled");
+                        $("#vender-tratamiento").removeClass("disabled");
+                        $("#ver-expediente").removeClass("disabled");
+                        $("#nuevo-abono").removeClass("disabled");
+                        $("#detalle-datatables1").removeClass("disabled");
+
+                        //var link=$('#datatables1>tbody>tr>td>a').attr("href");
+                        //var link=$(this).children("td:first").children().attr("href");
+                        //Obtener el id del registro
+
+
+                        //alert(link);
+                        //Carga del form modificar
+                        $("#editFormContainer").load(idPaciente+"/edit");
+
+
+                        //var href=link.attr("href");
+                        //alert(object);
+                    }
+                });
+                
+                
+                
                 
                 
                 $("#add-datatables1").click(function(){
                     if($("#addFormContainer").hasClass("hide")){
                         $("#addFormContainer").removeClass("hide");
                         $("#editFormContainer").addClass("hide");
+                        $('.calZebra').Zebra_DatePicker({
+                            months:['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
+                            days: ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'],
+                            format: 'Y-m-d',
+                            show_clear_date:false,
+                            show_select_today: "Hoy",
+                        });
                     }
                     else{
                         $("#addFormContainer").addClass("hide");
@@ -223,7 +335,6 @@
                     //$("#edit-datatables1").click();
                     var href = $(this).children("a").attr("href")+"?id="+idPaciente;
                     
-                    //alert();
                     if( !$(this).hasClass("disabled") ){
                         //$("#opcionesFormContainer").load(href);
                         window.location=href;
@@ -240,6 +351,13 @@
                         if($("#editFormContainer").hasClass("hide")){
                             $("#addFormContainer").addClass("hide");
                             $("#editFormContainer").removeClass("hide");
+                            $('.calZebra').Zebra_DatePicker({
+                                months:['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
+                                days: ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'],
+                                format: 'Y-m-d',
+                                show_clear_date:false,
+                                show_select_today: "Hoy",
+                            });
                         }
                         else{
                             //$("#addFormContainer").removeClass("hide");
@@ -267,17 +385,12 @@
                     searching:true,
                     "order":[[0, "desc"],[1,"desc"]],
                     "columnDefs": [
-                           { "orderable": false, "targets": 1 },
+                           { "orderable": false, "targets": 0 },
                            { "orderable": false, "targets": 2 },
                            { "orderable": false, "targets": 3 },
                            { "orderable": false, "targets": 4 },
                            { "orderable": false, "targets": 5 },
-                           { "orderable": false, "targets": 6 },
-                           { "orderable": false, "targets": 7 },
-                           { "orderable": false, "targets": 8 },
-                           { "orderable": false, "targets": 9 }
-                                 
-                       
+                           { "orderable": false, "targets": 6 }
                            
                            
                            //{ "orderData": [ 2, 3, 4 ], "targets": 2 }
@@ -303,7 +416,7 @@
         $('#filterDatatables1').val('');
         
         
-        
+           validarPaciente();  
         
     });//Fin document ready
         

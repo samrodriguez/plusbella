@@ -9,7 +9,7 @@ $('.nombreTratamiento').
 $('.costoTratamiento').
         attr('data-bvalidator', 'number,required,required');
 
-$('.sucursalTratamiento').
+$('.sucursalTratamiento > div > label > input').
         attr('data-bvalidator', 'number,required,required');	
 
     //Opciones del validador

@@ -1,25 +1,41 @@
 
-$(document).ready(function(){
-$('#dgplusbellebundle_empleado_persona_nombres').
+ function validarEmpleado(){
+$('.nombresPersona').
   attr('data-bvalidator', 'required,required');
   
-$('#dgplusbellebundle_empleado_persona_apellidos').
+$('.apellidosPersona').
   attr('data-bvalidator', 'required,required');  
   
-$('#dgplusbellebundle_empleado_persona_telefono').
+$('.telefonoPersona').
   attr('data-bvalidator', 'minlength[9],required,required');  
 
-$('#dgplusbellebundle_empleado_persona_direccion').
+$('.direccionPersona').
   attr('data-bvalidator', 'required,required'); 
 
-$('#dgplusbellebundle_empleado_persona_email').
+$('.emailPersona').
   attr('data-bvalidator', 'email,required,required'); 
 
-$('#dgplusbellebundle_empleado_cargo').
-  attr('data-bvalidator', 'required,required');  
+$('.porcentajeEmpleado').
+        attr('data-bvalidator', 'rangelength[1:5],between[0:100],required,required');
 
-$('#dgplusbellebundle_empleado_sucursal').
+$('.metaEmpleado').
+        attr('data-bvalidator', 'number,required,required');
+
+$('.bonoEmpleado').
+        attr('data-bvalidator', 'number,required,required');	
+
+$('.cargoEmpleado').
   attr('data-bvalidator', 'required,required');  
+  
+$('.fotoEmpleado').
+  attr('data-bvalidator', 'extension[jpg:png],required');    
+  
+
+$('.sucursalEmpleado').
+  attr('data-bvalidator', 'required,required'); 
+  
+$('.tratamientoEmpleado > div > label > input').
+  attr('data-bvalidator', 'required,required');   
 
  
     //Opciones del validador
@@ -30,6 +46,10 @@ $('#dgplusbellebundle_empleado_sucursal').
  
     //Validar el formulario
     $('form').bValidator(optionsRed);
+    $('.fotoEmpleado').bValidator().css('margin-top','30px');
+    //$('.fotoEmpleado').bValidator().css('position','absolute');
+    //$('.fotoEmpleado').bValidator().css('width','50px');
+    //$('.btn-file').css('width','200px');
 	
- });//Fin document ready	
+ }	
 	

@@ -85,6 +85,7 @@
         var datepickerInicio = $('#fecha-inicio').data('Zebra_DatePicker');
         var datepickerFin= $('#fecha-fin').data('Zebra_DatePicker');
         datepickerInicio.update({
+            show_select_today:"Hoy",
             onSelect: function(){
                     anioInicioUser = $('#fecha-inicio').val();   
                     anioFinUser = $('#fecha-fin').val();
@@ -97,6 +98,7 @@
         });  
         
         datepickerFin.update({
+        
             onSelect: function(){
                     if(anioInicioUser!==""){
                         anioFinUser = $('#fecha-fin').val();
@@ -110,6 +112,25 @@
             
     });//Fin document ready
         
-        </script>
-
+    </script>
+    <script>  
+        $(document).ready(function(){          
+            $('.opciones').click(function(){
+                var fechaInicio = $("#fecha-inicio").val();
+                var fechaFin = $("#fecha-fin").val();
+                if( fechaInicio != '' && fechaFin != '' ){
+                    var url = Routing.generate('admin_consolidadopaquete_pdf', {'fechaInicio': fechaInicio, 'fechaFin': fechaFin});
+                    window.open(url,'_blank');
+                }
+                else {
+                    var fecha = new Date();
+                    var ano = fecha.getFullYear();
+                    
+                    var url = Routing.generate('admin_consolidadopaquete_pdf', {'fechaInicio': ano + '-01-01', 'fechaFin': ano + '-12-31'});
+                    window.open(url,'_blank');
+                }
+                
+                });    
+        });//Fin document ready        
+    </script>
     {% endblock %} 

@@ -24,26 +24,30 @@ class ProductoType extends AbstractType
                  },
                  'empty_value'=>'Seleccione Categoria',
                  'attr'=>array(
-                 'class'=>'form-control input-sm'
+                 'class'=>'form-control input-sm categoriaProducto'
                )))       
             ->add('nombre','text',array('label' => 'Nombre','required'=>false,
                     'attr'=>array(
-                    'class'=>'form-control input-sm'
+                    'class'=>'form-control input-sm nombreProducto'
                     )))
             ->add('costo','text',array('label' => 'Costo $','required'=>false,
                     'attr'=>array(
-                    'class'=>'form-control input-sm'
+                    'class'=>'form-control input-sm costoProducto'
                     )))
             ->add('fechaCompra', null,
                   array('label'  => 'Fecha de compra','required'=>false,
                         'widget' => 'single_text',
-                        'attr'   => array('class' => 'form-control input-sm'),
+                        'attr'   => array('class' => 'form-control input-sm calZebra'),
                        ))
             ->add('fechaVencimiento', null,
                   array('label'  => 'Fecha de vencimiento','required'=>false,
                         'widget' => 'single_text',
-                        'attr'   => array('class' => 'form-control input-sm'),
+                        'attr'   => array('class' => 'form-control input-sm calZebra'),
                        ))
+            ->add('cantidad',null,array('label' => 'Cantidad','required'=>false,
+                    'attr'=>array(
+                    'class'=>'form-control input-sm cantidadProducto'
+                    )))             
             //->add('estado')
            
         ;

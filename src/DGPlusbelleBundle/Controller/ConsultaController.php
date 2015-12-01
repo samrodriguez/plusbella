@@ -225,19 +225,37 @@ class ConsultaController extends Controller
                         ->setParameter('plantillaid', $plantillaid)
                         ->getResult();
             //$valores = array(); 
-             //var_dump($parameters); 
+            // var_dump($usuario); 
             
-            foreach($parametros as $key => $p){
+            foreach($parametros as $p){
                 $dataReporte = new HistorialConsulta;
                 $detalle = $em->getRepository('DGPlusbelleBundle:DetallePlantilla')->find($p['id']);
                 
                 $dataReporte->setDetallePlantilla($detalle);       
                 $dataReporte->setConsulta($entity);
-                $dataReporte->setValorDetalle($parameters[$p['nombre']]);
+                
+                $nparam = explode(" ", $p['nombre']);
+                //var_dump(count($nparam)); 
+                $lon = count($nparam);
+                if($lon > 1){
+                    $pnombre = $nparam[0];
+                    foreach($nparam as $key => $par){
+                        //var_dump($key);
+                        if($key +1 != $lon){
+                            //var_dump($lon);
+                            $pnombre .= '_'.$nparam[$key + 1];
+                        }    
+                    }
+                    $dataReporte->setValorDetalle($parameters[$pnombre]);
+                } else {
+                    $dataReporte->setValorDetalle($parameters[$p['nombre']]);
+                }
+               //var_dump($p['nombre']); 
+                
                 
                 $em->persist($dataReporte);
                 $em->flush();
-            }
+            }   
             
             //var_dump($dataReporte);
            //var_dump($entity->getId());
@@ -248,9 +266,10 @@ class ConsultaController extends Controller
             /*  if($producto){
                 $this->establecerConsultaProducto($entity, $producto, $indicaciones);
             } */
-            
-            $empleados=$this->verificarComision($usuario);
-            
+            $idEmpleado = $usuario->getPersona()->getEmpleado()[0]->getId();
+            //var_dump($idEmpleado);
+            $empleados=$this->verificarComision($idEmpleado,null);
+            //var_dump($empleados);
             if($empleados[0]['suma'] >= $empleados[0]['meta'] && !$empleados[0]['comisionCompleta']){
                 $this->get('envio_correo')->sendEmail($empleados[0]['email'],"","","","cumplio su objetivo");
                 $empComision = $em->getRepository('DGPlusbelleBundle:Empleado')->find($empleado[0]->getId());
@@ -260,8 +279,8 @@ class ConsultaController extends Controller
                 $em->persist($empComision);
                 $em->flush();
             }
-            
-            
+            //$usuario= $this->get('security.token_storage')->getToken()->getUser();
+            $this->get('bitacora')->escribirbitacora("Se registro una nueva consulta",$usuario->getId());
             
             switch($accion){
                 case 'C';
@@ -342,7 +361,7 @@ class ConsultaController extends Controller
      * @Method("GET")
      * @Template()
      */
-    public function newConPacienteAction()
+    public function newconpacienteAction()
     {
         //Metodo para consulta nueva con id de paciente
         $entity = new Consulta();
@@ -486,7 +505,7 @@ class ConsultaController extends Controller
      * @Method("GET")
      * @Template()
      */
-    public function editConPacienteAction($id)
+    public function editconpacienteAction($id)
     {
         $em = $this->getDoctrine()->getManager();
 
@@ -496,8 +515,6 @@ class ConsultaController extends Controller
             throw $this->createNotFoundException('Unable to find Consulta entity.');
         }
 
-        
-        
          // Create an array of the current Tag objects in the database 
         foreach ($entity->getPlacas() as $placa) { $originalPlacas[] = $placa; }
         $editForm = $this->createForm(new ConsultaType(), $entity); 
@@ -510,13 +527,26 @@ class ConsultaController extends Controller
                     
                 } } }
 
-        
-        
         $editForm = $this->createEditForm($entity,2);
         $deleteForm = $this->createDeleteForm($id);
-
+        
+        $dql = "SELECT hc, con, det, pla "
+                    . "FROM DGPlusbelleBundle:HistorialConsulta hc "
+                    . "JOIN hc.consulta con "
+                    . "JOIN hc.detallePlantilla det "
+                    . "JOIN det.plantilla pla "
+                    . "WHERE hc.consulta =  :idconsulta";
+            
+        $plantilla = $em->createQuery($dql)
+                    ->setParameter('idconsulta', $id)
+                    ->getResult();
+            
+            //var_dump($plantilla[0]);
+        //$plantilla = "";
+        
         return array(
             'entity'      => $entity,
+            'plantilla'      => $plantilla,
             'edit_form'   => $editForm->createView(),
             'delete_form' => $deleteForm->createView(),
         );
@@ -577,7 +607,8 @@ class ConsultaController extends Controller
         $deleteForm = $this->createDeleteForm($id);
         $editForm = $this->createEditForm($entity,2);
         $editForm->handleRequest($request);
-
+        $parameters = $request->request->all();
+        
         if ($editForm->isValid()) {
             
             // filter $originalTags to contain tags no longer present 
@@ -590,43 +621,88 @@ class ConsultaController extends Controller
                             } 
                         } 
                     }
-                   // die();
-                    // remove the relationship between the tag and the Task
-                    /*foreach ($originalTags as $tag) {
-                        if (false === $entity->getPlacas()->contains($tag)) {
-                            // remove the Task from the Tag
-                            //$tag->getConsulta()->removeElement($entity);
-                            unset($originalTags[$key]); 
-                            // if it was a many-to-one relationship, remove the relationship like this
-                            // $tag->setTask(null);
-
-                            $em->persist($tag);
-
-                            // if you wanted to delete the Tag entirely, you can also do that
-                            // $em->remove($tag);
-                        }
-                    }
-                */
+                   
                 // remove the relationship between the tag and the Task 
                     foreach ($originalTags as $tag) { 
-                    // remove the Task from the Tag // 
-                    //$tag->getPlacas()->removeElement($task);
                 
-        // if it were a ManyToOne relationship, remove the relationship like this // 
-                    //$tag->setTask(null);
-                
-                        
-                        
                          // if you wanted to delete the Tag entirely, you can also do that 
                         $em->remove($tag);
-                        //$em->persist($tag);
-                        
+                        //$em->persist($tag);          
+            }
             
-            
-                        
-            
-        }
             $em->flush();
+           
+             $plantillaid = $parameters['dgplusbellebundle_consulta']['plantilla'];
+             //var_dump($plantillaid);
+             
+            $dql = "SELECT det.id, det.nombre "
+                    . "FROM DGPlusbelleBundle:DetallePlantilla det "
+                    . "JOIN det.plantilla pla "
+                    . "WHERE pla.id =  :plantillaid";
+            
+            $parametros = $em->createQuery($dql)
+                        ->setParameter('plantillaid', $plantillaid)
+                        ->getResult();
+            
+            $query = $em->createQuery(
+                            'SELECT hc
+                               FROM DGPlusbelleBundle:HistorialConsulta hc
+                               JOIN hc.consulta c
+                              WHERE c.id = :consulta
+                           ORDER BY c.id ASC'
+                        )->setParameter('consulta', $id);
+
+            $detalleP = $query->getResult();
+            
+            foreach($detalleP as $key1 => $det){
+                $historialConsulta = $em->getRepository('DGPlusbelleBundle:HistorialConsulta')->find($det->getId());
+                
+                if (!$historialConsulta) {
+                    throw $this->createNotFoundException('Unable to find HistorialConsulta entity.');
+                }
+                
+                $em->remove($historialConsulta);
+                $em->flush();
+            }
+           
+                
+            //$o = $e;
+            foreach($parametros as $key => $p){
+                
+                $dataReporte = new HistorialConsulta;
+                $detalle = $em->getRepository('DGPlusbelleBundle:DetallePlantilla')->find($p['id']);
+                
+                $dataReporte->setDetallePlantilla($detalle);       
+                $dataReporte->setConsulta($entity);
+                
+                $nparam = explode(" ", $p['nombre']);
+                //var_dump(count($nparam)); 
+                $lon = count($nparam);
+                if($lon > 1){
+                    $pnombre = $nparam[0];
+                    foreach($nparam as $key => $par){
+                        //var_dump($key);
+                        if($key +1 != $lon){
+                            //var_dump($lon);
+                            $pnombre .= '_'.$nparam[$key + 1];
+                        }    
+                    }
+                    $dataReporte->setValorDetalle($parameters[$pnombre]);
+                } else {
+                    $dataReporte->setValorDetalle($parameters[$p['nombre']]);
+                }
+                
+                
+                
+                //$dataReporte->setValorDetalle($parameters[$p['nombre']]);
+                
+                $em->persist($dataReporte);
+                $em->flush();
+            }
+            
+            $usuario= $this->get('security.token_storage')->getToken()->getUser();
+            $this->get('bitacora')->escribirbitacora("Se actualizo una consulta",$usuario->getId());
+            
             return $this->redirect($this->generateUrl('admin_consulta'));
         }
 
@@ -711,7 +787,7 @@ class ConsultaController extends Controller
      * @Method("GET")
      * @Template()
      */
-    public function historialConsultaAction(){
+    public function historialconsultaAction(){
         $em = $this->getDoctrine()->getManager();
         
         //Recuperación del id
@@ -768,7 +844,7 @@ class ConsultaController extends Controller
         //var_dump($totalTratamientos[0][1]);
         
         
-        $empleados=$this->verificarComision(null);
+        $empleados=$this->verificarComision(null,null);
         
         
         
@@ -778,7 +854,7 @@ class ConsultaController extends Controller
         //sendEmail($to, $cc, $bcc,$replay, $body){
         
         
-        
+        //var_dump($entity);
         //$comision;
 // Formato: dd-mm-yy
 //echo calcular_edad(“01-10-1989″); // Resultado: 21
@@ -787,6 +863,7 @@ class ConsultaController extends Controller
             'entity' => $entity,
             'totalTratamientos'=> $totalTratamientos[0][1],//grafica de estadisticas
             'totalPaquetes'=> $totalPaquetes[0][1],//grafica de estadisticas
+            'totalConsultas'=> count($entity),//grafica de estadisticas
             'edad' => $edad,
             'consultas' => $entity,
             'paquetes' => $paquetes,
@@ -796,46 +873,48 @@ class ConsultaController extends Controller
     }
     
     
-    function verificarComision($id){
+    function verificarComision($id,$fecha){
         $em = $this->getDoctrine()->getManager();
         if($id!=null){//Un empleado especifico
-            $dql = "SELECT emp.id, com.meta, emp.foto, p.nombres, p.apellidos,emp.comisionCompleta,p.email "
+            $dql = "SELECT emp.id, emp.meta, emp.foto, p.nombres, p.apellidos,emp.comisionCompleta,p.email,emp.porcentaje as por "
                     . "FROM DGPlusbelleBundle:Empleado emp "
                     . "JOIN emp.persona p "
-                    . "JOIN emp.comision com "
                     . "WHERE emp.estado=true "
                     . "AND emp.id =:idEmpleado";
             $empleados= $em->createQuery($dql)
                        ->setParameter('idEmpleado',$id)
                        ->getResult();
+                       var_dump($empleados);
+     
         }
         else{//Todos los empleados
-            $dql = "SELECT emp.id, com.meta, emp.foto, p.nombres, p.apellidos,emp.comisionCompleta,p.email "
+            $dql = "SELECT emp.id, emp.meta, emp.foto, p.nombres, p.apellidos,emp.comisionCompleta,p.email,emp.porcentaje as por  "
                     . "FROM DGPlusbelleBundle:Empleado emp "
                     . "JOIN emp.persona p "
-                    . "JOIN emp.comision com "
                     . "WHERE emp.estado=true ";
             $empleados= $em->createQuery($dql)
                         ->getResult();
         }
             //$empleados= $em->getRepository('DGPlusbelleBundle:Empleado')->findBy(array('estado'=>true));
-
-            //var_dump($empleados);
-            $mes= date('m');
-            if($mes<10){
-                $mes = "0".$mes;
-            }
+        if($fecha==null){
+            $fecha= date('Y-m');
+        }
+        //var_dump($fecha);
+            /*if($fecha<10){
+                $fecha = "0".$fecha;
+            }*/
             //$mes = '02';
             foreach($empleados as $key=>$empleado){
                 //var_dump($empleado);
-                $dql = "SELECT sum(t.costo)"
+                $dql = "SELECT sum(p.costo)"
                     . " FROM"
-                    . " DGPlusbelleBundle:Consulta c"
-                    . " JOIN c.tratamiento t"
-                    . " JOIN c.empleado emp"
-                    . " WHERE c.fechaConsulta LIKE :mes AND emp.estado=true AND emp.id=:idEmpleado";
+                    . " DGPlusbelleBundle:VentaPaquete vp"
+                    . " JOIN vp.paquete p"
+                    . " JOIN vp.empleado emp"
+                    . " JOIN emp.empleado em"
+                    . " WHERE vp.fechaVenta LIKE :mes AND em.estado=true AND em.id=:idEmpleado";
                 $comision = $em->createQuery($dql)
-                       ->setParameters(array('idEmpleado'=>$empleado['id'],'mes'=>'_____'.$mes.'___'))
+                       ->setParameters(array('mes'=>$fecha.'___','idEmpleado'=>$empleado['id']))
                        ->getResult();
 
                 //var_dump($comision);
@@ -844,12 +923,19 @@ class ConsultaController extends Controller
                 if($empleados[$key]['suma']!=null){
                     if($empleados[$key]['meta']>=$empleados[$key]['suma'] ){
                         $porcentaje = ($empleados[$key]['suma']/$empleados[$key]['meta'])*100;
+                        $empleados[$key]['bono']="No";
                     }
                     else{
                         if($empleados[$key]['meta']<$empleados[$key]['suma']){
+                            $empleados[$key]['bono']="Si";
                             $porcentaje = 100; 
                         }
                     }
+                    $empleados[$key]['comision'] = ($empleados[$key]['suma']*$empleados[$key]['por'])/100;
+                }
+                else{
+                    $empleados[$key]['comision'] = "";
+                    $empleados[$key]['bono']="No";
                 }
                 $empleados[$key]['porcentaje']= $porcentaje;
                 //Se verifica que el empleado ya cumplio con la meta y si el correo ya fue enviado
@@ -859,14 +945,13 @@ class ConsultaController extends Controller
                 //}
                 
             }
-            
             //Envio de sms desde correo
             /*
                 $this->get('envio_correo')->sendEmail("75061915@sms.claro.com.sv","","","","prueba1");
                 $this->get('envio_correo')->sendEmail("71727845@sms.claro.com.sv","","","","prueba1");
                 $this->get('envio_correo')->sendEmail("70550768@sms.claro.com.sv","","","","prueba1");
             */
-            $usuario= $this->get('security.token_storage')->getToken()->getUser();
+            //$usuario= $this->get('security.token_storage')->getToken()->getUser();
             //var_dump($usuario->getPersona()->getId());
             //var_dump($empleados);
             /**/
@@ -904,6 +989,61 @@ class ConsultaController extends Controller
         } else {    
             return new Response('0');              
         }  
+    }
+    
+    
+    
+    
+    
+    /**
+     * Lista todos los empleados con su respectivo progreso de ventas
+     *
+     * @Route("/progresoempleadoventa/", name="admin_empleado_progreso_venta")
+     * @Method("GET")
+     * @Template()
+     */
+    public function progresoventaAction(){
+        //$fecha= $request->get('fecha');
+        //$empleados=$this->verificarComision(null,$fecha);
+        return array(
+            //'empleados' => $empleados,
+            //'fecha' => $fecha,
+        );
+    }
+    
+    
+    /**
+    * Ajax utilizado para buscar los antecedentes en ventas del empleado
+    *  
+    * @Route("/progresoempleadoventaajax/", name="admin_empleado_progreso_venta_ajax")
+    * @Method("GET")
+    * @Template("DGPlusbelleBundle:Consulta:progresoventaajax.html.twig")
+    */
+    public function progresoventaajaxAction(Request $request)
+    {
+        $fecha= $request->get('fecha');
+        
+        //var_dump($fecha);
+        
+        $time = new \DateTime('01-'.$fecha);
+        
+        $timestamp = $time->getTimestamp(); // Unix timestamp
+        
+        //var_dump($timestamp);
+        
+        $fecha = $time->format('Y-m'); // 2003-10-16
+        
+        //var_dump($time);
+        //$fecha = date('Y-m',$time);
+        //var_dump($fecha);
+        $empleados=$this->verificarComision(null,$fecha);
+        
+        //var_dump($empleados);
+        
+        return array(
+            'empleados' => $empleados,
+            'fecha' => $fecha,
+        );
     }
     
     

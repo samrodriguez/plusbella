@@ -47,7 +47,7 @@
                     
                     
                     <div class="col-md-12">
-                        <h3 class="text-center">Plantilla</h3>
+                        <h3 class="text-left">Plantilla</h3>
                         <hr>
                     </div>
                 </div>
@@ -89,23 +89,27 @@
                 </div>
             </div>
             <div class="row">  
-                 <div id="listadoa">
-                            <div class="listado col-md-12">
-                                <div class="placas" data-prototype="{{ form_widget(edit_form.placas.vars.prototype)|e }}">
+             
+                 <div class="listado col-md-12">
+                    <div class="placas" data-prototype="{% filter escape %}  {% include 'DGPlusbelleBundle:Prototype:plantilla.html.twig' with { 'form': edit_form.placas.vars.prototype} %}   {% endfilter  %}"> 
 
-                                    {% for placa in edit_form.placas %}
-                                        <div class="col-md-4"> 
+                      {% for placa in edit_form.placas %}
+                                        
+                       <div class="col-md-4">
+                         <div class="panel bg-grd-light" data-fill-color="true">
+                            <div class="panel-body">
 
-                                             {{ form_row(placa) }} 
-                                             
-                                        </div>
-                                    {% endfor %}
-
+                                  {{ form_row(placa) }} 
+ 
+                            </div>
+                         </div>
+                       </div>        
+                       {% endfor %}
                     </div>
-                </div>
-                      
-            </div>   
-            </div>    
+                 </div>  
+              
+            </div>
+              <br>      
             <div class="form-grouphide"> 
                  <a href="{{path('admin_plantilla')}}" class="btn btn-default btn-sm" id="cancelarNuevo">Cancelar</a>
                  {{ form_widget(edit_form._token) }}
@@ -117,7 +121,9 @@
     </div>  
     {{ form_end(edit_form) }}       
 {% endblock %}
+
 {% block javascripts_step %}
+     <script src="{{ asset('Resources/js/VentaPaquete.js') }}"></script>
       
 <script>
 
@@ -125,7 +131,7 @@
 var collectionHolder = $('div.placas');
 var col=$('#hnr_sircimbundle_estudioradiologicotype_placas');
 // setup an "add a tag" link
-var $addTagLink = $('<div class="row"><div class="col-md-2"><a href="#" class="add_placa_link btn btn-primary">Agregar</a></div></div>');
+var $addTagLink = $('<div class="row"><div class="col-md-2"><a href="#" class="add_placa_link btn btn-primary">Agregar otro</a></div></div>');
 var $removeTagLink = $('<a href="#" class="remove_placa_link btn btn-danger">Eliminar</a>');
 var $newLinkLi = $('<div class="col-md-12 addItem"></div>').append($addTagLink);
 var $delLinkLi = $('#hnr_sircimbundle_estudioradiologicotype_placas.required').append($removeTagLink);
@@ -135,6 +141,8 @@ var $delLinkLi = $('#hnr_sircimbundle_estudioradiologicotype_placas.required').a
 
 
 jQuery(document).ready(function() {
+    
+     $('div[id*="dgplusbellebundle_plantilla_placas_"]').siblings().remove();   // Oculta el id de la colección
 
     $("#dgplusbellebundle_consulta_pacienteSelectBoxItOptions li").remove();
 
@@ -180,7 +188,7 @@ jQuery(document).ready(function() {
     });
 
 
-    
+     validarPlantilla(); 
 });
 
 
@@ -206,6 +214,7 @@ function addTagForm(collectionHolder, $newLinkLi) {
 
     // add a delete link to the new form
     addTagFormDeleteLink($newFormLi);
+     validarPlantilla(); 
     $('.btn_radio').click(function(event) {
         /* Act on the event */
         var id = $(this).attr('id');
@@ -217,7 +226,7 @@ function addTagForm(collectionHolder, $newLinkLi) {
 }
 
 function addTagFormDeleteLink($tagFormLi) {
-    var $removeFormA = $('<div class="row"><div class="col-md-2"><a class="link btn btn-danger" href="#">Eliminar</a></div></div>');
+    var $removeFormA = $('<div class="row"><div class="col-md-1"><a class="link btn btn-danger" href="#">Eliminar</a></div></div>');
     $tagFormLi.append($removeFormA);
 
     $removeFormA.on('click', function(e) {

@@ -11,7 +11,8 @@ parameters:
     photo.paciente: %kernel.root_dir%/../web/Photos/Paciente/
     photo.tmp: %kernel.root_dir%/../web/Photos/Tmp/
     plusbelle.logo: %kernel.root_dir%/../web/Resources/img/dgplusbelle/images/
-
+    plusbelle.graph: %kernel.root_dir%/../web/Resources/
+    
 framework:
     #esi:             ~
     #translator:      { fallbacks: ["%locale%"] }

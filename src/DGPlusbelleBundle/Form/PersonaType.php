@@ -17,7 +17,7 @@ class PersonaType extends AbstractType
         $builder
             ->add('nombres','text',array('label' => 'Nombres','required'=>false,
                     'attr'=>array(
-                    'class'=>'form-control input-sm'
+                    'class'=>'form-control input-sm nombresPersona'
                     )))
             /*->add('segundoNombre','text',array('label' => 'Segundo nombre',
                     'attr'=>array(
@@ -25,7 +25,7 @@ class PersonaType extends AbstractType
                     )))*/
             ->add('apellidos','text',array('label' => 'Apellidos','required'=>false,
                     'attr'=>array(
-                    'class'=>'form-control input-sm'
+                    'class'=>'form-control input-sm apellidosPersona'
                     )))
             /*->add('segundoApellido','text',array('label' => 'Segundo apellido',
                     'attr'=>array(
@@ -37,15 +37,15 @@ class PersonaType extends AbstractType
                     )))*/
             ->add('direccion','text',array('label' => 'Dirección','required'=>false,
                     'attr'=>array(
-                    'class'=>'form-control input-sm'
+                    'class'=>'form-control input-sm direccionPersona'
                     )))
             ->add('telefono','text',array('label' => 'Telefono','required'=>false,
                     'attr'=>array(
-                        'class'=>'form-control input-sm'
+                        'class'=>'form-control input-sm telefonoPersona'
                     )))
             ->add('email','text',array('label' => 'Correo','required'=>false,
                     'attr'=>array(
-                    'class'=>'form-control input-sm'
+                    'class'=>'form-control input-sm emailPersona'
                     )))
            
         ;

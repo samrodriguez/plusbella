@@ -5,6 +5,8 @@ namespace DGPlusbelleBundle\Form;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+use DGPlusbelleBundle\Repository\PersonaRepository;
+use Doctrine\ORM\EntityRepository;
 
 class UsuarioType extends AbstractType
 {
@@ -15,12 +17,49 @@ class UsuarioType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('username')
-            ->add('password')
+            ->add('username',null,array('label' => 'Usuario','required'=>false,
+                    'attr'=>array(
+                    'class'=>'form-control input-sm nombreUsuario'
+                    )))   
+            ->add('password','repeated', array(
+                    'type' => 'password',
+                    'invalid_message' => 'La contraseña no son iguales',
+                    'options' => array('attr' => array('class' => 'password-field')),
+                    'required' => false,
+                    'first_options'  => array('label' => 'Contraseña','required'=>false,
+                    'attr'=>array(
+                    'class'=>'form-control input-sm firstPassword'
+                    )),
+                    'second_options' => array('label' => 'Confirmar contraseña','required'=>false,
+                    'attr'=>array(
+                    'class'=>'form-control input-sm secondPassword'
+                    )),
+                ))
             //->add('salt')
-            ->add('estado')
-            ->add('persona')
-            ->add('rol')
+            //->add('estado')
+            ->add('persona','entity', array( 'label' => 'Empleado','required'=>false,
+                         'empty_value'   => 'Seleccione empleado...',
+                         'class'         => 'DGPlusbelleBundle:Persona',
+                         'query_builder' => function(EntityRepository $r){
+                                                return $r->createQueryBuilder('e')
+                                                        ->innerJoin('e.empleado', 'p')
+                                                        ->leftJoin('e.usuario', 'u')
+                                                        ->where('p.estado = true')
+                                                        ->andWhere('u.persona is null');
+                                                       // ->andWhere('u.persona = 2');
+                                                //return $r->seleccionarEmpleadosPersonasActivos();
+                                            } ,
+                         'attr'=>array(
+                            'class'=>'form-control empleadoUsuario'
+                         )
+                       ))
+            ->add('user_roles','entity',array('label' => 'Seleccione un rol','required'=>false,
+                'class'=>'DGPlusbelleBundle:Rol','property'=>'nombre',
+                'multiple'=>true,
+                'expanded'=>true,
+                    'attr'=>array(
+                    'class'=>'rolUsuario'
+                    )))
         ;
     }
     

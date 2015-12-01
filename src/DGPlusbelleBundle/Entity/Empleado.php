@@ -3,6 +3,8 @@
 namespace DGPlusbelleBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Empleado
@@ -41,6 +43,27 @@ class Empleado
      * @ORM\Column(name="estado", type="boolean", nullable=false)
      */
     private $estado;
+    
+     /**
+     * @var float
+     *
+     * @ORM\Column(name="porcentaje", type="float", nullable=false)
+     */
+    private $porcentaje;
+    
+     /**
+     * @var float
+     *
+     * @ORM\Column(name="meta", type="float", nullable=false)
+     */
+    private $meta;
+    
+    /**
+     * @var float
+     *
+     * @ORM\Column(name="bono", type="float", nullable=false)
+     */
+    private $bono;
     
     
     /**
@@ -105,6 +128,36 @@ class Empleado
      * @ORM\OneToMany(targetEntity="Comision", mappedBy="empleado", cascade={"persist", "remove"})
      */
     private $comision;
+    
+    
+    /**
+     * @Assert\File(maxSize="6000000")
+     */
+    private $file;
+
+    
+    /**
+     * Sets file.
+     *
+     * @param UploadedFile $file
+     */
+    public function setFile(UploadedFile $file = null)
+    {
+        $this->file = $file;
+    }
+
+    /**
+     * Get file.
+     *
+     * @return UploadedFile
+     */
+    public function getFile()
+    {
+        return $this->file;
+    }
+    
+    
+    
 
     /**
      * Constructor
@@ -198,6 +251,84 @@ class Empleado
     {
         return $this->estado;
     }
+    
+    
+    /**
+     * Set porcentaje
+     *
+     * @param float $porcentaje
+     *
+     * @return empleado
+     */
+    public function setPorcentaje($porcentaje)
+    {
+        $this->porcentaje = $porcentaje;
+
+        return $this;
+    }
+
+    /**
+     * Get porcentaje
+     *
+     * @return float
+     */
+    public function getPorcentaje()
+    {
+        return $this->porcentaje;
+    }
+    
+    
+    
+    /**
+     * Set meta
+     *
+     * @param float $meta
+     *
+     * @return empleado
+     */
+    public function setMeta($meta)
+    {
+        $this->meta = $meta;
+
+        return $this;
+    }
+
+    /**
+     * Get meta
+     *
+     * @return float
+     */
+    public function getMeta()
+    {
+        return $this->meta;
+    }
+    
+    
+    
+    /**
+     * Set bono
+     *
+     * @param float $bono
+     *
+     * @return empleado
+     */
+    public function setBono($bono)
+    {
+        $this->bono = $bono;
+
+        return $this;
+    }
+
+    /**
+     * Get bono
+     *
+     * @return float
+     */
+    public function getBono()
+    {
+        return $this->bono;
+    }
+    
     /**
      * Set persona
      *

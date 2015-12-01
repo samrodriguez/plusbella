@@ -9,6 +9,11 @@
         .placas>div:last-child {
             position:absolute;
         }
+        
+        div.placas > div:nth-child(2) > div:nth-child(2) > a{
+            display: none;
+        }
+        
         .addItem{
             position: absolute;
             height: 50px;
@@ -41,6 +46,8 @@
             #dgplusbellebundle_consulta_horaInicio, #dgplusbellebundle_consulta_horaFin{
                 width: 155px;
             }
+            
+            .productoConsulta{width: 50% }
     </style>
     
 {% endblock %}
@@ -130,7 +137,7 @@
                             <div class="listado col-md-12">          
                                <div class="placas" data-prototype="{% filter escape %}  {% include 'DGPlusbelleBundle:Prototype:producto.html.twig' with { 'form': form.placas.vars.prototype} %}   {% endfilter  %}"> 
                                     {{ form_widget(form.placas) }}
-                                </div>
+                               </div>
                             </div>
                  </div>
      
@@ -184,6 +191,8 @@
 
 
 {% block javascripts_step %}
+     <script src="{{ asset('Resources/js/ConsultaPaciente.js') }}"></script>
+    
     <script>
         $(function () { 
             $( "#dgplusbellebundle_consulta_reportePlantilla_0" ).on( "click", function() {
@@ -198,7 +207,7 @@
                 // Se obtiene todos elementos que contengan la clase parametro
                 var elements = document.getElementsByClassName('parametro');
                 
-                // Se borran todos los elementos que se encuentran en el div con id = campos
+                // Se borran todos los elementohtmls que se encuentran en el div con id = campos
                 $('#campos div').html('');
                 
                 // Se oculta el combobox donde se selecciona la plantilla
@@ -318,7 +327,7 @@
                 input[key] = document.createElement('input');
                 input[key].setAttribute('type', 'text');
                 input[key].setAttribute('placeholder', value.nombre);
-                input[key].setAttribute('class', 'form-control');
+                input[key].setAttribute('class', 'form-control classPlantilla');
                 input[key].setAttribute('style', 'margin-bottom: 5px');
                 input[key].setAttribute('name', value.nombre);
                 input[key].setAttribute('id', value.id);
@@ -337,7 +346,7 @@
                 campos[key].appendChild(input[key]);
                 div.appendChild(campos[key]);
             });
-            
+            validarConsulta();
         } // Fin de mostrarCampos
     </script> 
     <script>
@@ -396,7 +405,7 @@
     //Identificar que form esta activo
     var editar=$('div.placas').attr('id');
     if(editar!='editar_usuario'){
-        //addTagForm(collectionHolder, $newLinkLi);   //Muestra un formulario en la carga de la página nuevo
+        addTagForm(collectionHolder, $newLinkLi);   //Muestra un formulario en la carga de la página nuevo
     }
     
 
@@ -410,7 +419,7 @@
         // $('.btn_radio').attr('name', 'rol_predet');
     });
 
-
+ validarConsulta();
     
 });
 
@@ -437,6 +446,7 @@ function addTagForm(collectionHolder, $newLinkLi) {
 
     // add a delete link to the new form
     addTagFormDeleteLink($newFormLi);
+     validarConsulta();
     $('.btn_radio').click(function(event) {
         /* Act on the event */
         var id = $(this).attr('id');
@@ -448,7 +458,7 @@ function addTagForm(collectionHolder, $newLinkLi) {
 }
 
 function addTagFormDeleteLink($tagFormLi) {
-    var $removeFormA = $('<div class="row"><div class="col-md-2"><a class="link btn btn-danger" href="#">Eliminar</a></div></div>');
+    var $removeFormA = $('<div class="col-md-1"><a class="link btn btn-danger" href="#">Eliminar</a></div>');
     $tagFormLi.append($removeFormA);
 
     $removeFormA.on('click', function(e) {

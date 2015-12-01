@@ -8,13 +8,16 @@
         .placas>div:last-child {
             position:absolute;
         }
+        div.placas > div:nth-child(2) > div:nth-child(2) > div > a{
+            display: none;
+        }
         .addItem{
             position: absolute;
             height: 50px;
             float: right;
             margin-bottom: 50px;
             padding-bottom: 100px;
-            top: -5px;
+            top: -15px;
             left: -2px;
         }
         
@@ -40,6 +43,7 @@
             #dgplusbellebundle_consulta_horaInicio, #dgplusbellebundle_consulta_horaFin{
                 width: 155px;
             }
+          
     </style>
     
 {% endblock %}
@@ -392,9 +396,9 @@ jQuery(document).ready(function() {
     
     //Identificar que form esta activo
     var editar=$('div.placas').attr('id');
-    if(editar!='editar_usuario'){
-        //addTagForm(collectionHolder, $newLinkLi);   //Muestra un formulario en la carga de la página nuevo
-    }
+   // if(editar!='editar_usuario'){
+        addTagForm(collectionHolder, $newLinkLi);   //Muestra un formulario en la carga de la página nuevo
+   // }
     
 
 
@@ -434,6 +438,7 @@ function addTagForm(collectionHolder, $newLinkLi) {
 
     // add a delete link to the new form
     addTagFormDeleteLink($newFormLi);
+    validarPaquete(); 
     $('.btn_radio').click(function(event) {
         /* Act on the event */
         var id = $(this).attr('id');
@@ -445,7 +450,7 @@ function addTagForm(collectionHolder, $newLinkLi) {
 }
 
 function addTagFormDeleteLink($tagFormLi) {
-    var $removeFormA = $('<div class="row"><div class="col-md-2"><a class="link btn btn-danger" href="#">Eliminar</a></div></div>');
+    var $removeFormA = $('<div class="row"><div class="col-md-1"><a class="link btn btn-danger" href="#">Eliminar</a></div></div>');
     $tagFormLi.append($removeFormA);
 
     $removeFormA.on('click', function(e) {

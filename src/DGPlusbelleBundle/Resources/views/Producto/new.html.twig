@@ -8,22 +8,26 @@
   <div class="panel-body">
   {{ form_start(form) }}
     {{ form_errors(form) }}
-    
-        <div class="col-xs-12 col-sm-2">
+    <div class="row">
+        <div class="col-md-2">
         {{ form_row(form.categoria) }}
         </div>
-        <div class="col-xs-12 col-sm-3">
+        <div class="col-md-2">
         {{ form_row(form.nombre) }}
          </div>
-         <div class="col-xs-12 col-sm-1">
+         <div class="col-md-2">
         {{ form_row(form.costo) }}
          </div>
-         <div class="col-xs-12 col-sm-3">
+         <div class="col-md-2">
+        {{ form_row(form.cantidad) }}
+         </div>
+         <div class="col-md-2">
         {{ form_row(form.fechaCompra) }}
          </div>
-          <div class="col-xs-12 col-sm-3">
+          <div class="col-md-2">
         {{ form_row(form.fechaVencimiento) }}
          </div>
+    </div>
         {#{{ form_row(form.estado) }}#}
         
    

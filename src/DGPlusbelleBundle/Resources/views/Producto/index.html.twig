@@ -72,8 +72,8 @@
                 <td>{{ entity.categoria }}</td>
                 <td>{{ entity.nombre }}</td>
                 <td style="text-align: right; padding-right: 20px">$ {{ entity.costo |number_format(2, '.', ',')}}</td>
-                <td><center>{% if entity.fechaCompra %}{{ entity.fechaCompra|date('Y-m-d H:i:s') }}{% endif %}</center></td>
-                <td><center>{% if entity.fechaVencimiento %}{{ entity.fechaVencimiento|date('Y-m-d') }}{% endif %}</center></td>
+                <td>{% if entity.fechaCompra %}{{ entity.fechaCompra|date('Y-m-d') }}{% endif %}</td>
+                <td>{% if entity.fechaVencimiento %}{{ entity.fechaVencimiento|date('Y-m-d') }}{% endif %}</td>
                 <td><center>
                     {% if entity.estado == 1 %}
                         Activo
@@ -114,12 +114,13 @@
  {% endblock %}
  
   {% block javascripts_step %}
-      
-       <script>
+        <script src="{{ asset('Resources/js/Producto.js') }}"></script>  
+        <script type="text/javascript" src="{{ asset('Resources/zebra/inicializacioncalendarios.js')}}" ></script>
+        <script>
             $(document).ready(function(){
                  var link=0;
                  var estadoPrevio = "";
-                 $('#dgplusbellebundle_producto_fechaCompra').daterangepicker({
+                 /*$('#dgplusbellebundle_producto_fechaCompra').daterangepicker({
                     singleDatePicker: true,
                     showDropdowns: true,
                     locale: {
@@ -134,7 +135,29 @@
                         format: 'YYYY-MM-DD'
                     },
                 }); 
+                */
                 
+                //alert("prueba");
+                $(document).on("change","#dgplusbellebundle_producto_cantidad",function(){
+                    //alert("prueba");
+                    if($(this).val()==0 || $(this).val()<=0){
+                        $(this).val('0');
+                    }
+                    else{
+                        var cantidad = $(this).val();
+                        $.getJSON(Routing.generate('admin_actualizar_cantidad_producto', { id: link,cantidad:cantidad}), 
+                          function(data) {
+                           var mensaje="Producto modificado exitosamente";
+                                    if(data.regs==1){
+                                        bootbox.alert(mensaje, function() {
+                                        
+                                        });
+                                    }
+                            }); 
+                    }
+                   
+
+                });
                 
                 //Seleccionar un registro
                 $('#datatables1>tbody>tr').on('click', function(event) {
@@ -193,7 +216,7 @@
                         bootbox.confirm("¿Desea cambiar el estado de este registro?", function(result) {
                         if(result){
                         $.getJSON(Routing.generate('admin_producto_desactivar', { id: link}), 
-                          function(data) {   
+                          function(data) {
                            var mensaje="";
                                     if(data.regs==0){
                                         //Se cambia a desactivado
@@ -303,7 +326,7 @@
         $('#filterDatatables1').val('');
         
         
-        
+        validarProducto();    
         
     });//Fin document ready
         

@@ -8,18 +8,22 @@
             {{ form_start(form) }}
             {{ form_errors(form) }}
             <div class="row">
-        
-	        <div class="col-md-2" >
+	        <div class="col-md-4" >
                     {{ form_row(form.paciente)}}
                 </div>
-                <div class="col-md-2" >
+                <div class="col-md-4" >
                     {{ form_row(form.empleado)}}
 		</div>
-                <div class="col-md-2" >
+                <div class="col-md-4" >
                     {{ form_row(form.paquete)}}
-		</div>			
+		</div>	
+            </div>
+            <div class="row">
 	        <div class="form-group col-md-2" >
                   {{ form_row(form.fechaVenta)}} 
+                </div>  
+                <div class="form-group col-md-2" >
+                  {{ form_row(form.cuotas)}} 
                 </div>  
             </div>
             <div class="form-grouphide"> 
@@ -34,56 +38,13 @@
 
 
 {% block javascripts_step %}
-        
-        
+    <script type="text/javascript" src="{{ asset('Resources/zebra/inicializacioncalendarios.js')}}" ></script>
+    <script src="{{ asset('Resources/js/VentaPaquete.js') }}"></script>     
         <script>
             $(document).ready(function(){
                 
-                 $('#dgplusbellebundle_ventapaquete_fechaVenta').daterangepicker({
-                    singleDatePicker: true,
-                    showDropdowns: true,
-                    locale: {
-                        format: 'YYYY-MM-DD'
-                    },
-                }); 
                 
-                //Generación de calendario zebra
-                //$('#dgplusbellebundle_cita_fechaCita').Zebra_DatePicker(//{
-                    /*onSelect:
-                        $.getJSON(Routing.generate('get_horas', { idEmp: idEmp}), 
-                        function(data) {
-                            var numRegistros = data.regs.length;
-                            var x='1,2,3,4,5,6,0,';
-                            $.each(data.regs, function(indice, reg) {
-                                //alert(indice);
-                                switch(reg.diaHorario){
-                                    case 'Lunes'    : index = x.indexOf('1'); break;
-                                    case 'Martes'   : index = x.indexOf('2'); break;
-                                    case 'Miercoles': index = x.indexOf('3'); break;
-                                    case 'Jueves'   : index = x.indexOf('4'); break;
-                                    case 'Viernes'  : index = x.indexOf('5'); break; 
-                                    case 'Sabado'   : index = x.indexOf('6'); break; 
-                                    case 'Domingo'  : index = x.indexOf('0'); break;
-                                }
-                                x = x.substring(0, index) + x.substring(index+2, x.length);   
-
-
-                                //alert(deshabilitar);
-                                datepicker.update({
-                                    direction: true,
-                                    disabled_dates: ['* * * '+x] 
-                                });
-                            });        
-                        }); */
-               /* }*///);
                 
-                /*$('#dgplusbellebundle_cita_fechaCita').daterangepicker({
-                    singleDatePicker: true,
-                    showDropdowns: true,
-                    locale: {
-                        format: 'YYYY-MM-DD'
-                    },
-                });*/ 
                 var seleccionado="";
                 //Eliminar options del select de pacientes
                 $('#dgplusbellebundle_ventapaquete_paciente option').each(function(index, val) {
@@ -100,51 +61,18 @@
                 
                 //$('#dgplusbellebundle_cita_horaInicio').ptTimeSelect();
                 
-                
-                
-                var url = Routing.generate('get_dias', { idEmp: 10 });
-                var idEmp = 0;
-                
-                //Cargar los horarios al inicio
-                //$('#dgplusbellebundle_cita_empleado').change();
-                //Modificar horarios al cmabiar dropdown
-                /*$('#dgplusbellebundle_cita_empleado').on('change', function() {
-                    var idEmp = $(this).val();
-                    //alert(idEmp);
-                    var datepicker = $('#dgplusbellebundle_cita_fechaCita').data('Zebra_DatePicker');
-                    if(idEmp==""){
-                        idEmp = 0;
+                $(document).on("change","#dgplusbellebundle_ventapaquete_cuotas",function(){
+                    //alert("prueba");
+                    if($(this).val()==0 || $(this).val()<=0){
+                        $(this).val('0');
                     }
-                    var deshabilitar="* * * ";
-                    $.getJSON(Routing.generate('get_dias', { idEmp: idEmp}), 
-                    function(data) {
-                        var numRegistros = data.regs.length;
-                        var x='1,2,3,4,5,6,0,';
-                        $.each(data.regs, function(indice, reg) {
-                            //alert(indice);
-                            switch(reg.diaHorario){
-                                case 'Lunes'    : index = x.indexOf('1'); break;
-                                case 'Martes'   : index = x.indexOf('2'); break;
-                                case 'Miercoles': index = x.indexOf('3'); break;
-                                case 'Jueves'   : index = x.indexOf('4'); break;
-                                case 'Viernes'  : index = x.indexOf('5'); break; 
-                                case 'Sabado'   : index = x.indexOf('6'); break; 
-                                case 'Domingo'  : index = x.indexOf('0'); break;
-                            }
-                            x = x.substring(0, index) + x.substring(index+2, x.length);   
-                            
-
-                            //alert(deshabilitar);
-                            datepicker.update({
-                                direction: true,
-                                disabled_dates: ['* * * '+x] 
-                            });
-                        });        
-                    }); 
+                    
                 });
-                */
                 
                 
+                
+                
+                validarVentaPaquete(); 
             });
         </script>
 {% endblock %}

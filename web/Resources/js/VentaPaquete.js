@@ -1,15 +1,17 @@
 
-$(document).ready(function(){
-$('#dgplusbellebundle_ventapaquete_empleado').
+function validarVentaPaquete(){
+$('.empleadoVentaPaquete').
 attr('data-bvalidator', 'required,required');
 
-$('#dgplusbellebundle_ventapaquete_paquete').
+$('.paqueteVenta').
 attr('data-bvalidator', 'required,required');
 
-$('#dgplusbellebundle_ventapaquete_fechaVenta').
+$('.cuotas').
 attr('data-bvalidator', 'required,required');
-	
- 
+
+$('.calZebra').
+attr('data-bvalidator', 'required,required');
+
     //Opciones del validador
     var optionsRed = { 
         classNamePrefix: 'bvalidator_bootstraprt_', 
@@ -19,5 +21,5 @@ attr('data-bvalidator', 'required,required');
     //Validar el formulario
     $('form').bValidator(optionsRed);
 	
- });//Fin document ready	
+ }	
 	
