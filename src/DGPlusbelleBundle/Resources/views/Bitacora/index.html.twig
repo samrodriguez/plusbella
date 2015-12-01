@@ -52,6 +52,10 @@
         <thead>
             <tr>
                 <th>No.</th>
+                {% if usuario.id == 1 %}
+                    <th>Nombre de empleado</th>
+                    <th>Usuario</th>
+                {% endif %}
                 <th>Acción</th>
                 <th>Fecha</th>
             </tr>
@@ -61,6 +65,10 @@
         {% for entity in entities %}
             <tr>
                 <td>{{ corr }}</td>
+                {% if usuario.id == 1 %}
+                    <td>{{ entity.usuario.persona }}</td>
+                    <td>{{ entity.usuario }}</td>
+                {% endif %}
                 <td>{{ entity.accion }}</td>
                 <td>{% if entity.fechaAccion %}{{ entity.fechaAccion|date('d/m/Y H:i:s') }}{% endif %}</td>
             </tr>

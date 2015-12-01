@@ -28,13 +28,28 @@ class BitacoraController extends Controller
     public function indexAction()
     {
         $em = $this->getDoctrine()->getManager();
-
-        $entities = $em->getRepository('DGPlusbelleBundle:Bitacora')->findAll();
-
+        $usuario= $this->get('security.token_storage')->getToken()->getUser();
+        $entities = array(); 
+        $userId = $usuario->getId();
+        
+        if ($userId != 1) {
+            $dql = "SELECT bi FROM DGPlusbelleBundle:Bitacora bi "
+                    . "JOIN bi.usuario us "
+                    . "JOIN us.persona per "
+                    . "WHERE us.id = :id ";
+            $entities = $em->createQuery($dql)
+                       ->setParameter('id', $userId)
+                       ->getResult();
+        } else {
+            $entities = $em->getRepository('DGPlusbelleBundle:Bitacora')->findAll();
+        }
+        
         return array(
+            'usuario' => $usuario,
             'entities' => $entities,
         );
-    }
+    } 
+    
     /**
      * Creates a new Bitacora entity.
      *
