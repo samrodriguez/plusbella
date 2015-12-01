@@ -1,0 +1,49 @@
+{% extends 'DGPlusbelleBundle:Layout:layout.html.twig' %}
+
+{% block body -%}
+    
+    
+   <div class="panel panel-default">
+    <div class="panel-heading">
+        <p>Nuevo abono</p>
+    </div>
+    
+    <div class="panel-body">
+    {{ form_start(form) }}
+        {{ form_errors(form) }}
+        
+        
+     <div class="col-xs-12 col-sm-2" >
+     {{ form_row(form.paciente) }} 
+     </div>  
+     
+     <div class="col-xs-12 col-sm-2" >
+     {{ form_row(form.empleado) }} 
+     </div> 
+     
+      <div class="col-xs-12 col-sm-2" >
+     {{ form_row(form.ventaPaquete) }} 
+     </div> 
+     
+      <div class="col-xs-12 col-sm-1" >
+     {{ form_row(form.monto) }} 
+     </div> 
+      <div class="col-xs-12 col-sm-5" >
+     {{ form_row(form.descripcion) }} 
+     </div> 
+    
+     
+     
+     
+      <div class="form-grouphide col-sm-9"> 
+                 <a href="{{ path('admin_abono') }}" class="btn btn-default btn-sm" id="cancelarNuevo">Cancelar</a>
+                {{ form_widget(form.submit) }}
+      </div>
+          
+   </div>
+   {{ form_widget(form._token) }}
+</div>  
+   {{ form_end(form) }}    
+        
+
+{% endblock %}

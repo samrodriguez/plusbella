@@ -260,4 +260,8 @@ class PersonaTratamiento
     {
         return $this->numSesiones;
     }
+    
+    public function __toString() {
+    return $this->tratamiento->getNombre() ? $this->tratamiento->getNombre() : '';
+    }
 }
