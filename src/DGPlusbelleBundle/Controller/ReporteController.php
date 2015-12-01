@@ -25,7 +25,7 @@ class ReporteController extends Controller
      * @Method("GET")
      * @Template()
      */
-    public function ingresosPaqueteAction()
+    public function ingresospaqueteAction()
     {
         return array(
             //'empleados'=>$empleados,
@@ -42,7 +42,7 @@ class ReporteController extends Controller
      * @Method("GET")
      * @Template()
      */
-    public function ingresosEmergenciaAction()
+    public function ingresosemergenciaAction()
     {
         return array(
             //'empleados'=>$empleados,
@@ -57,7 +57,7 @@ class ReporteController extends Controller
      * @Method("GET")
      * @Template()
      */
-    public function barGraficoPaqueteAction(Request $request){
+    public function bargraficopaqueteAction(Request $request){
         $em = $this->getDoctrine()->getManager();
         $mes= date('m');
         $anioInicioUser = $request->get('anioInicioUser');
@@ -113,7 +113,7 @@ class ReporteController extends Controller
      * @Method("GET")
      * @Template()
      */
-    public function barGraficoEmergenciaAction(Request $request){
+    public function bargraficoemergenciaAction(Request $request){
         $em = $this->getDoctrine()->getManager();
         $mes= date('m');
         $anioInicioUser = $request->get('anioInicioUser');
@@ -183,7 +183,7 @@ class ReporteController extends Controller
      * @Method("GET")
      * @Template()
      */
-    public function consolidadoPaqueteAction()
+    public function consolidadopaqueteAction()
     {
         return array(
             //'empleados'=>$empleados,
@@ -199,7 +199,7 @@ class ReporteController extends Controller
      * @Method("GET")
      * @Template()
      */
-    public function barGraficoConsolidadoPaqueteAction(Request $request){
+    public function bargraficoconsolidadopaqueteAction(Request $request){
         $em = $this->getDoctrine()->getManager();
         $mes= date('m');
         $anioInicioUser = $request->get('anioInicioUser');
@@ -264,7 +264,7 @@ class ReporteController extends Controller
      * @Method("GET")
      * @Template()
      */
-    public function tratamientoFrecuenteAction()
+    public function tratamientofrecuenteAction()
     {
         return array(
             //'empleados'=>$empleados,
@@ -281,7 +281,7 @@ class ReporteController extends Controller
      * @Method("GET")
      * @Template()
      */
-    public function barGraficoTratamientoFrecuenteAction(Request $request){
+    public function bargraficotratamientofrecuenteAction(Request $request){
         $em = $this->getDoctrine()->getManager();
         $mes= date('m');
         $anioInicioUser = $request->get('anioInicioUser');

@@ -98,6 +98,20 @@ class DevolucionController extends Controller
     public function newAction()
     {
         $entity = new Devolucion();
+        $em = $this->getDoctrine()->getManager();
+        
+        //Recuperación del paciente
+        $request = $this->getRequest();
+        $id= $request->get('id');
+        $id = substr($id, 1);
+        //Busqueda del paciente
+        $paciente = $em->getRepository('DGPlusbelleBundle:Paciente')->find($id);
+        
+        //$persona=$paciente->getPersona();
+        ///var_dump($persona);
+        $entity->setPaciente($paciente);
+        
+        
         $form   = $this->createCreateForm($entity);
 
         return array(

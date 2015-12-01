@@ -1,5 +1,6 @@
+{% extends 'DGPlusbelleBundle:Layout:layout.html.twig' %}
 
-
+    
 {% block contenido -%}
 
   <div class="panel panel-default">
@@ -8,25 +9,39 @@
   <div class="panel-body">
   {{ form_start(form) }}
     {{ form_errors(form) }}
-   
-        <div class="col-xs-12 col-sm-2">
-        {{ form_row(form.empleado) }}
+        <div class="row">
+            <div class="col-md-3">
+            {{ form_row(form.empleado) }}
+            </div>
+            <div class="col-md-3">
+            {{ form_row(form.paciente) }}
+            </div>
+            <div class="col-md-2">
+            {{ form_row(form.monto) }}
+             </div>
+            <div class="col-md-4">
+            {{ form_row(form.motivo) }}
+            </div>
         </div>
-        <div class="col-xs-12 col-sm-2">
-        {{ form_row(form.paciente) }}
+        <div class="row">
+            <div class="col-md-3">
+            {{ form_row(form.flagDevolucion) }}
+            </div>
+            <div id="paquete" style="display:none;">
+                <div class="col-md-3">
+                {{ form_row(form.ventapaquete) }}
+                </div>
+            </div>
+            <div id="tratamiento" style="display:none;">
+                <div class="col-md-3">
+                {{ form_row(form.personatratamiento) }}
+                </div>
+            </div>
         </div>
-        <div class="col-xs-12 col-sm-1">
-        {{ form_row(form.monto) }}
-         </div>
-        <div class="col-xs-12 col-sm-6">
-        {{ form_row(form.motivo) }}
-        </div>
-   
-  
-             <div class="form-grouphide col-sm-9">
+            <div class="form-grouphide col-sm-9">
                 <a href="{{ path('admin_devolucion') }}" class="btn btn-default btn-sm" id="cancelarNuevo">Cancelar</a>
                 {{ form_widget(form.submit) }}
-              </div>
+            </div>
             
     
     {{ form_end(form) }}
@@ -36,3 +51,35 @@
 </div>        
     
 {% endblock %}
+
+{% block javascripts_step %}
+       
+    <script>
+        $(document).ready(function(){
+
+            
+
+            $(document).on("click","#dgplusbellebundle_devolucion_flagDevolucion_0", function(){
+                $("#paquete").show();
+                $("#tratamiento").hide();
+            });
+            
+            $(document).on("click","#dgplusbellebundle_devolucion_flagDevolucion_1", function(){
+                $("#tratamiento").show();
+                $("#paquete").hide(); 
+            });
+            
+            if($('#dgplusbellebundle_devolucion_flagDevolucion_0').is(':checked')){
+                $('#dgplusbellebundle_devolucion_flagDevolucion_0').click();
+                $('#dgplusbellebundle_devolucion_flagDevolucion_0').parent().click();
+            }
+            else{
+                $('#dgplusbellebundle_devolucion_flagDevolucion_1').click();
+                $('#dgplusbellebundle_devolucion_flagDevolucion_1').parent().click();
+            }
+
+        });//Fin document ready
+
+    </script>
+
+{% endblock %} 

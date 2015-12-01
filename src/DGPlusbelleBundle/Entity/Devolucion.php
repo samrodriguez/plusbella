@@ -61,8 +61,32 @@ class Devolucion
      * })
      */
     private $paciente;
+    
+    
+    /**
+     * @var \Ventapqeute
+     *
+     * @ORM\ManyToOne(targetEntity="VentaPaquete")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="venta_paquete", referencedColumnName="id")
+     * })
+     */
+    private $ventapaquete;
+    
+    
+    /**
+     * @var \PersonaTratamiento
+     *
+     * @ORM\ManyToOne(targetEntity="PersonaTratamiento")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="persona_tratamiento", referencedColumnName="id")
+     * })
+     */
+    private $personatratamiento;
 
 
+    private $flagDevolucion;
+    
 
     /**
      * Get id
@@ -192,5 +216,70 @@ class Devolucion
     public function getPaciente()
     {
         return $this->paciente;
+    }
+    
+    
+    
+    /**
+     * Set ventapaquete
+     *
+     * @param \DGPlusbelleBundle\Entity\VentaPaquete $ventapaquete
+     *
+     * @return Devolucion
+     */
+    public function setVentaPaquete(\DGPlusbelleBundle\Entity\VentaPaquete $ventapaquete = null)
+    {
+        $this->ventapaquete = $ventapaquete;
+
+        return $this;
+    }
+
+    /**
+     * Get ventapaquete
+     *
+     * @return \DGPlusbelleBundle\Entity\VentaPaquete
+     */
+    public function getVentaPaquete()
+    {
+        return $this->ventapaquete;
+    }
+    
+    
+    /**
+     * Set personatratamiento
+     *
+     * @param \DGPlusbelleBundle\Entity\PersonaTratamiento $personatratamiento
+     *
+     * @return Devolucion
+     */
+    public function setPersonaTratamiento(\DGPlusbelleBundle\Entity\PersonaTratamiento $personatratamiento = null)
+    {
+        $this->personatratamiento = $personatratamiento;
+
+        return $this;
+    }
+
+    /**
+     * Get personatratamiento
+     *
+     * @return \DGPlusbelleBundle\Entity\PersonaTratamiento
+     */
+    public function getPersonaTratamiento()
+    {
+        return $this->personatratamiento;
+    }
+    
+    
+    public function setFlagDevolucion($flagDevolucion)
+    {
+        $this->flagDevolucion = $flagDevolucion;
+
+        return $this;
+    }
+
+    
+    public function getFlagDevolucion()
+    {
+        return $this->flagDevolucion;
     }
 }
