@@ -267,9 +267,9 @@ class ConsultaController extends Controller
                 $this->establecerConsultaProducto($entity, $producto, $indicaciones);
             } */
             $idEmpleado = $usuario->getPersona()->getEmpleado()[0]->getId();
-            var_dump($idEmpleado);
+            //var_dump($idEmpleado);
             $empleados=$this->verificarComision($idEmpleado,null);
-            var_dump($empleados);
+            //var_dump($empleados);
             if($empleados[0]['suma'] >= $empleados[0]['meta'] && !$empleados[0]['comisionCompleta']){
                 $this->get('envio_correo')->sendEmail($empleados[0]['email'],"","","","cumplio su objetivo");
                 $empComision = $em->getRepository('DGPlusbelleBundle:Empleado')->find($empleado[0]->getId());
@@ -279,8 +279,8 @@ class ConsultaController extends Controller
                 $em->persist($empComision);
                 $em->flush();
             }
-            
-            
+            //$usuario= $this->get('security.token_storage')->getToken()->getUser();
+            $this->get('bitacora')->escribirbitacora("Se creo una nueva consulta",$usuario->getId());
             
             switch($accion){
                 case 'C';
@@ -699,6 +699,9 @@ class ConsultaController extends Controller
                 $em->persist($dataReporte);
                 $em->flush();
             }
+            
+            $usuario= $this->get('security.token_storage')->getToken()->getUser();
+            $this->get('bitacora')->escribirbitacora("Se actualizo una consulta",$usuario->getId());
             
             return $this->redirect($this->generateUrl('admin_consulta'));
         }
