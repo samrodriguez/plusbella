@@ -341,6 +341,47 @@ class ReporteController extends Controller
     }
     
     /**
+     * Generar reporte pdf de Detalle Plantilla consulta
+     *
+     * @Route("/{id}/ReporteConsulta", name="admin_reporteplantilla_pdf", options ={"expose" = true})
+     * @Method("GET")
+     * @Template()
+     */
+    public function DetallePlantillaPdfAction($id)
+    {
+        $em = $this->getDoctrine()->getManager();
+        
+        $dql = "SELECT hc, con, pac, exp, per1, per2, emp, det, pla "
+                    . "FROM DGPlusbelleBundle:HistorialConsulta hc "
+                    . "JOIN hc.consulta con "
+                    . "JOIN con.paciente pac "
+                    . "JOIN pac.expediente exp "
+                    . "JOIN pac.persona per1 "
+                    . "JOIN con.empleado emp "
+                    . "JOIN emp.persona per2 "
+                    . "JOIN hc.detallePlantilla det "
+                    . "JOIN det.plantilla pla "
+                    . "WHERE con.id =  :idconsulta";
+            
+        $consulta = $em->createQuery($dql)
+                    ->setParameter('idconsulta', $id)
+                    ->getResult();
+        
+        //$titulo = 'Reporte de Videoendoscopia';
+        
+        
+        $medico = array(
+                    "nombre" => "Dr. Juan Carlos Pacheco",
+                    "cargo" => "Cirujano Endoscopista",
+                    "codigo" => "JVPM 7370",
+                );
+        
+        $logo = '../web/Resources/img/dgplusbelle/images/';
+       
+        $this->get('fpdf_printer')->generarPlantilla($logo, $consulta, $medico);
+    }
+  
+    /**
      * Generar reporte pdf de Ingresos por Paquete
      *
      * @Route("/{fechaInicio}/{fechaFin}/IngresoPaquete", name="admin_ingresopaquete_pdf", options ={"expose" = true})

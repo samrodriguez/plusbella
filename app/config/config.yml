@@ -10,7 +10,9 @@ parameters:
     photo.empleado: %kernel.root_dir%/../web/Photos/Empleado/
     photo.paciente: %kernel.root_dir%/../web/Photos/Paciente/
     photo.tmp: %kernel.root_dir%/../web/Photos/Tmp/
-
+    plusbelle.logo: %kernel.root_dir%/../web/Resources/img/dgplusbelle/images/
+    plusbelle.graph: %kernel.root_dir%/../web/Resources/
+    
 framework:
     #esi:             ~
     #translator:      { fallbacks: ["%locale%"] }
@@ -82,6 +84,10 @@ doctrine:
                 connection:       default
                 mappings:
                     DGPlusbelleBundle: ~
+                dql:
+                    datetime_functions:
+                        MONTH: DoctrineExtensions\Query\Mysql\Month
+                        YEAR: DoctrineExtensions\Query\Mysql\Year
         auto_generate_proxy_classes: "%kernel.debug%"
         #naming_strategy: doctrine.orm.naming_strategy.underscore
         #auto_mapping: true

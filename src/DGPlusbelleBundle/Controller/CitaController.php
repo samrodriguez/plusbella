@@ -237,7 +237,7 @@ class CitaController extends Controller
     public function updateAction(Request $request, $id)
     {
         $em = $this->getDoctrine()->getManager();
-
+        $usuario= $this->get('security.token_storage')->getToken()->getUser();
         $entity = $em->getRepository('DGPlusbelleBundle:Cita')->find($id);
 
         if (!$entity) {
@@ -251,6 +251,7 @@ class CitaController extends Controller
         if ($editForm->isValid()) {
             $em->flush();
 
+            $this->get('bitacora')->escribirbitacora("Se actualizo una cita",$usuario->getId());
             return $this->redirect($this->generateUrl('admin_cita_edit', array('id' => $id)));
         }
 
@@ -270,7 +271,8 @@ class CitaController extends Controller
     {
         $form = $this->createDeleteForm($id);
         $form->handleRequest($request);
-
+        $usuario= $this->get('security.token_storage')->getToken()->getUser();
+        
         if ($form->isValid()) {
             $em = $this->getDoctrine()->getManager();
             $entity = $em->getRepository('DGPlusbelleBundle:Cita')->find($id);
@@ -281,6 +283,7 @@ class CitaController extends Controller
 
             $em->remove($entity);
             $em->flush();
+            $this->get('bitacora')->escribirbitacora("Se elimino una cita",$usuario->getId());
         }
 
         return $this->redirect($this->generateUrl('admin_cita'));
