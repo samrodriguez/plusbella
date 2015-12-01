@@ -53,7 +53,7 @@ class AbonoType extends AbstractType
                          'class'=>'form-control input-sm '
                          )
                        ))
-            //->add('personaTratamiento')
+            ->add('personaTratamiento')
         ;
     }
     

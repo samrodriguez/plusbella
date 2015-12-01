@@ -296,4 +296,8 @@ class VentaPaquete
     {
         return $this->cuotas;
     }
+    
+     public function __toString() {
+   return $this->paquete->getNombre() ? $this->paquete->getNombre() .' $'.$this->paquete->getCosto() : '';
+    }
 }
