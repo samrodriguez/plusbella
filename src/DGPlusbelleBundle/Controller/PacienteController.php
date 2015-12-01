@@ -98,6 +98,9 @@ class PacienteController extends Controller
             $this->generarExpediente($entity);
             $em->flush();
 
+            $usuario= $this->get('security.token_storage')->getToken()->getUser();
+            $this->get('bitacora')->escribirbitacora("Se registro un nuevo paciente",$usuario->getId());
+            
             return $this->redirect($this->generateUrl('admin_paciente', array('id' => $entity->getId())));
         }
 
@@ -244,6 +247,9 @@ class PacienteController extends Controller
         if ($editForm->isValid()) {
             $em->flush();
 
+            $usuario= $this->get('security.token_storage')->getToken()->getUser();
+            $this->get('bitacora')->escribirbitacora("Se actualizo informacion de un paciente",$usuario->getId());
+            
             return $this->redirect($this->generateUrl('admin_paciente'));
         }
 

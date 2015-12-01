@@ -61,6 +61,9 @@ class PaqueteController extends Controller
             $em->persist($entity);
             $em->flush();
 
+            $usuario= $this->get('security.token_storage')->getToken()->getUser();
+            $this->get('bitacora')->escribirbitacora("Se registro un nuevo paquete",$usuario->getId());
+            
             return $this->redirect($this->generateUrl('admin_paquete', array('id' => $entity->getId())));
         }
 
@@ -205,6 +208,9 @@ class PaqueteController extends Controller
         if ($editForm->isValid()) {
             $em->flush();
 
+            $usuario= $this->get('security.token_storage')->getToken()->getUser();
+            $this->get('bitacora')->escribirbitacora("Se actualizo informacion de un paquete",$usuario->getId());
+            
             return $this->redirect($this->generateUrl('admin_paquete'));
         }
 

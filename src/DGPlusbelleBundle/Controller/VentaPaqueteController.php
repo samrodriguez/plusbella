@@ -85,6 +85,9 @@ class VentaPaqueteController extends Controller
             $em->persist($entity);
             $em->flush();
 
+            $usuario= $this->get('security.token_storage')->getToken()->getUser();
+            $this->get('bitacora')->escribirbitacora("Se registro la venta de un paquete",$usuario->getId());
+            
             return $this->redirect($this->generateUrl('admin_ventapaquete'));
         }
 

@@ -59,6 +59,9 @@ class TratamientoController extends Controller
             $em->persist($entity);
             $em->flush();
 
+            $usuario= $this->get('security.token_storage')->getToken()->getUser();
+            $this->get('bitacora')->escribirbitacora("Se registro un nuevo tratamiento",$usuario->getId());
+            
             return $this->redirect($this->generateUrl('admin_tratamiento', array('id' => $entity->getId())));
         }
 
@@ -203,6 +206,9 @@ class TratamientoController extends Controller
         if ($editForm->isValid()) {
             $em->flush();
 
+            $usuario= $this->get('security.token_storage')->getToken()->getUser();
+            $this->get('bitacora')->escribirbitacora("Se actualizo informacion de un tratamiento",$usuario->getId());
+            
             return $this->redirect($this->generateUrl('admin_tratamiento'));
         }
 

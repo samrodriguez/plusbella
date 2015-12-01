@@ -280,7 +280,7 @@ class ConsultaController extends Controller
                 $em->flush();
             }
             //$usuario= $this->get('security.token_storage')->getToken()->getUser();
-            $this->get('bitacora')->escribirbitacora("Se creo una nueva consulta",$usuario->getId());
+            $this->get('bitacora')->escribirbitacora("Se registro una nueva consulta",$usuario->getId());
             
             switch($accion){
                 case 'C';

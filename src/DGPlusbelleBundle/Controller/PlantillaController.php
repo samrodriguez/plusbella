@@ -60,6 +60,9 @@ class PlantillaController extends Controller
             $em->persist($entity);
             $em->flush();
 
+            $usuario= $this->get('security.token_storage')->getToken()->getUser();
+            $this->get('bitacora')->escribirbitacora("Se creo una nueva plantilla de reporte",$usuario->getId());
+            
             return $this->redirect($this->generateUrl('admin_plantilla', array('id' => $entity->getId())));
         }
 
@@ -206,6 +209,9 @@ class PlantillaController extends Controller
         if ($editForm->isValid()) {
             $em->flush();
 
+            $usuario= $this->get('security.token_storage')->getToken()->getUser();
+            $this->get('bitacora')->escribirbitacora("Se actualizo informacion de un reporte de plantilla",$usuario->getId());
+            
              return $this->redirect($this->generateUrl('admin_plantilla'));
         }
 
