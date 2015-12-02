@@ -48,41 +48,39 @@
             <!-- datatables1 -->
             
             
-            <table id = "datatables1" class="table table-noborder table-hover bordered-top dataTable" role="grid" aria-describedby="datatables1_info">
-        <thead>
-            <tr>
-                <th>No.</th>
-                {% if usuario.id == 1 %}
-                    <th>Nombre de empleado</th>
-                    <th>Usuario</th>
-                {% endif %}
-                <th>Acción</th>
-                <th>Fecha</th>
-            </tr>
-        </thead>
-        <tbody>
-        {% set corr = 1 %}    
-        {% for entity in entities %}
-            <tr>
-                <td>{{ corr }}</td>
-                {% if usuario.id == 1 %}
-                    <td>{{ entity.usuario.persona }}</td>
-                    <td>{{ entity.usuario }}</td>
-                {% endif %}
-                <td>{{ entity.accion }}</td>
-                <td>{% if entity.fechaAccion %}{{ entity.fechaAccion|date('d/m/Y H:i:s') }}{% endif %}</td>
-            </tr>
-            {% set corr = corr + 1 %}
-        {% endfor %}
-        </tbody>
-    </table>
+            <table id = "datatables1" class="table table-bordered table-hover display dt-responsive" style="margin-top: 30px">
+                <thead>
+                    <tr>
+                        <th>No.</th>
+                        {% if usuario.id == 1 %}
+                            <th>Nombre de empleado</th>
+                            <th>Usuario</th>
+                        {% endif %}
+                        <th>Acción</th>
+                        <th>Fecha</th>
+                    </tr>
+                </thead>
+                <tbody>
+                {% set corr = 1 %}    
+                {% for entity in entities %}
+                    <tr>
+                        <td>{{ corr }}</td>
+                        {% if usuario.id == 1 %}
+                            <td>{{ entity.usuario.persona }}</td>
+                            <td>{{ entity.usuario }}</td>
+                        {% endif %}
+                        <td>{{ entity.accion }}</td>
+                        <td>{% if entity.fechaAccion %}{{ entity.fechaAccion|date('d/m/Y H:i:s') }}{% endif %}</td>
+                    </tr>
+                    {% set corr = corr + 1 %}
+                {% endfor %}
+                </tbody>
+            </table>
     </div><!-- /.panel -->
+    </div>
         
     {% endblock %}
 {% block javascripts_step %}
-    <script src="{{ asset('Resources/wrapkit/scripts/dataTables.bootstrap.js') }}"></script>
-    <script src="{{ asset('Resources/wrapkit/scripts/dataTables.tableTools.js') }}"></script>
-    <script src="{{ asset('Resources/wrapkit/scripts/dataTables.tableTools.js') }}"></script>         
        
         <script>
             
@@ -102,7 +100,9 @@
                     "order":[[0, "desc"],[1,"desc"]],
                     "columnDefs": [
                            { "orderable": false, "targets": 0 },
-                           { "orderable": false, "targets": 2 }
+                           { "orderable": false, "targets": 2 },
+                           { "orderable": false, "targets": 3 },
+                           { "orderable": false, "targets": 4 }
                            //{ "orderData": [ 2, 3, 4 ], "targets": 2 }
                     ],
                     "language": {
@@ -129,5 +129,6 @@
         
         
     });//Fin document ready
+    </script>
             
  {% endblock %}

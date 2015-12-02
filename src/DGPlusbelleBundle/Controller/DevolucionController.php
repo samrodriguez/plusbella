@@ -9,6 +9,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use DGPlusbelleBundle\Entity\Devolucion;
 use DGPlusbelleBundle\Form\DevolucionType;
+use Doctrine\ORM\EntityRepository;
 
 /**
  * Devolucion controller.
@@ -28,7 +29,7 @@ class DevolucionController extends Controller
     public function indexAction()
     {
         $entity = new Devolucion();
-        $form = $this->createCreateForm($entity);
+        //$form = $this->createCreateForm($entity);
         $em = $this->getDoctrine()->getManager();
 
         $entities = $em->getRepository('DGPlusbelleBundle:Devolucion')->findAll();
@@ -36,7 +37,7 @@ class DevolucionController extends Controller
         return array(
             'entities' => $entities,
             'entity' => $entity,
-            'form'   => $form->createView(),
+            //'form'   => $form->createView(),
         );
     }
     /**
@@ -49,10 +50,22 @@ class DevolucionController extends Controller
     public function createAction(Request $request)
     {
         $entity = new Devolucion();
+        
+        $idpaquetes = $request->get('paquete');
+        $idtratamientos = $request->get('tratamiento');
+        $paciente = $request->get('paciente');
+        
+        
         $entity->setfechaDevolucion(new \DateTime('now'));
-        $form = $this->createCreateForm($entity);
+        $form = $this->createCreateForm($entity,$paciente,$idpaquetes,$idtratamientos);
         $form->handleRequest($request);
 
+        if($entity->getFlagDevolucion()==0){
+            $entity->setPersonaTratamiento(null);
+        }
+        else{
+            $entity->setVentaPaquete(null);
+        }
         if ($form->isValid()) {
             $em = $this->getDoctrine()->getManager();
             $em->persist($entity);
@@ -74,12 +87,51 @@ class DevolucionController extends Controller
      *
      * @return \Symfony\Component\Form\Form The form
      */
-    private function createCreateForm(Devolucion $entity)
+    private function createCreateForm(Devolucion $entity,$paciente,$paquete,$tratamientos)
     {
         $form = $this->createForm(new DevolucionType(), $entity, array(
-            'action' => $this->generateUrl('admin_devolucion_create'),
+            'action' => $this->generateUrl('admin_devolucion_create', array('paciente' => $paciente, 'paquete' => $paquete, 'tratamiento' => $tratamientos)),
             'method' => 'POST',
         ));
+        
+             $form
+                ->add('ventapaquete', 'entity', 
+                  array( 'label'         => 'Paquetes','required'=>false,
+                         'empty_value'   => 'Seleccione un paquete...',
+                         'class'         => 'DGPlusbelleBundle:VentaPaquete',
+                         'query_builder' => function(EntityRepository $r) use ( $paciente, $paquete ){
+                                                return $r->createQueryBuilder('s')
+                                                         ->innerJoin('s.paquete', 'p')
+                                                         
+                                                        
+                                                        ->andWhere('s.id IN (:paquetes)')
+                                                        //->setParameter(':idpac', $paciente)
+                                                        ->setParameter('paquetes', $paquete)
+                                                    ;   
+                                            } ,
+                         'attr'=>array(
+                         'class'=>'form-control input-sm '
+                         )
+                       ))
+                ->add('personatratamiento', 'entity', 
+                  array( 'label'         => 'Tratamientos','required'=>false,
+                         'empty_value'   => 'Seleccione un tratamiento...',
+                         'class'         => 'DGPlusbelleBundle:PersonaTratamiento',
+                         'query_builder' => function(EntityRepository $r) use ( $paciente, $tratamientos ){
+                                                return $r->createQueryBuilder('s')
+                                                         ->innerJoin('s.tratamiento', 't')
+                                                         
+                                                        
+                                                        ->andWhere('t.id IN (:tratamientos)')
+                                                        //->setParameter(':idpac', $paciente)
+                                                        ->setParameter('tratamientos', $tratamientos)
+                                                    ;   
+                                            } ,
+                         'attr'=>array(
+                         'class'=>'form-control input-sm '
+                         )
+                       ));
+   
 
         $form->add('submit', 'submit', array('label' => 'Guardar',
                                                'attr'=>
@@ -107,12 +159,64 @@ class DevolucionController extends Controller
         //Busqueda del paciente
         $paciente = $em->getRepository('DGPlusbelleBundle:Paciente')->find($id);
         
+        $paquetes = $em->getRepository('DGPlusbelleBundle:VentaPaquete')->findBy(array('paciente'=>$paciente->getPersona()->getId()));
+        $tratamientos = $em->getRepository('DGPlusbelleBundle:PersonaTratamiento')->findBy(array('paciente'=>$paciente->getPersona()->getId()));
+        
+        //var_dump($paciente->getId());
+        $idpaquetes=array();
+        $idtratamientos=array();
+        foreach ($paquetes as $paq){
+            $idpaq=$paq->getId();
+            //var_dump($idpaq);
+            //$cuota=$paq->getCuotas();
+            $dql = "SELECT d FROM DGPlusbelleBundle:Devolucion d "
+                
+                . "WHERE d.ventapaquete=:id AND d.paciente=:idpaciente";
+                   
+            $abonos=array();
+            
+            $abonos = $em->createQuery($dql)
+                       ->setParameters(array('id'=>$idpaq,'idpaciente'=>$paciente->getId()))
+                       //->setParameter('mes','_____0'.'1'.'___')
+                       ->getResult();
+            //var_dump($abonos);
+            if(count($abonos)==0){
+                array_push($idpaquetes, $idpaq); 
+            }
+            //var_dump($idpaq);
+        }
+        //var_dump($abonos);
+        //var_dump($idpaquetes);
+        //var_dump($abonos);
+        //var_dump($paciente->getId());
+        //var_dump($paciente->getPersona()->getId());
+        foreach ($tratamientos as $tra){
+            $idtra=$tra->getId();
+            //var_dump($idpaq);
+            //$cuota=$paq->getCuotas();
+            $dql = "SELECT d FROM DGPlusbelleBundle:Devolucion d "
+                
+                . "WHERE d.personatratamiento=:id AND d.paciente=:idpaciente";
+                   
+            $id=array();
+            
+            $id= $em->createQuery($dql)
+                       ->setParameters(array('id'=>$idtra,'idpaciente'=>$paciente->getId()))
+                       //->setParameter('mes','_____0'.'1'.'___')
+                       ->getResult();
+            //var_dump($id);
+            if(count($id==0)){
+                array_push($idtratamientos, $idtra); 
+            }
+        }
+        
+        var_dump($id);
         //$persona=$paciente->getPersona();
         ///var_dump($persona);
         $entity->setPaciente($paciente);
         
-        
-        $form   = $this->createCreateForm($entity);
+        //var_dump($paciente);
+        $form   = $this->createCreateForm($entity,$paciente,$idpaquetes,$idtratamientos);
 
         return array(
             'entity' => $entity,

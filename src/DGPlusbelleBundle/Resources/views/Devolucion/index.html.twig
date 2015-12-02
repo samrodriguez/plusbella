@@ -24,17 +24,17 @@
               <div class="btn-toolbar clearfix" role="toolbar">
                
                 <div class="btn-group btn-group-sm pull-left">
-                   <button data-toggle="tooltip" data-container="body" title="Nueva devolución" id="add-datatables1" class="btn btn-default" role="button">
-                    <i class="fa fa-plus"></i>
-                      </button> 
+                   {#<button data-toggle="tooltip" data-container="body" title="Nueva devolución" id="add-datatables1" class="btn btn-default" role="button">
+                        <i class="fa fa-plus"></i>
+                    </button> #}
                 </div>
                 <div class="btn-group btn-group-sm pull-left">
-                  <button id="edit-datatables1" data-toggle="tooltip" data-container="body" title="Modificar devolución" class="btn btn-default datatables1-actions disabled" role="button">
+                  {#<button id="edit-datatables1" data-toggle="tooltip" data-container="body" title="Modificar devolución" class="btn btn-default datatables1-actions disabled" role="button">
                     <i class="fa fa-edit"></i>
-                  </button>
-                  <button id="delete-datatables1" data-toggle="tooltip" data-container="body" title="delete record(s)" class="btn btn-default datatables1-actions disabled" role="button">
+                  </button>#}
+                  {#<button id="delete-datatables1" data-toggle="tooltip" data-container="body" title="delete record(s)" class="btn btn-default datatables1-actions disabled" role="button">
                     <i class="fa fa-trash-o"></i>
-                  </button>
+                  </button>#}
                 </div>
                 <div class="btn-group pull-left">
                   <input id="filterDatatables1" class="form-control input-sm" placeholder="Buscar...">
@@ -43,7 +43,7 @@
             </div><!-- /.panel-body -->
 
             <div class="panel-body hide" id="addFormContainer">
-              {% include 'DGPlusbelleBundle:Devolucion:new.html.twig' %}
+              {#{% include 'DGPlusbelleBundle:Devolucion:new.html.twig' %}#}
             </div><!-- /.panel-body -->
 
             <div class="panel-body hide" id="editFormContainer">
@@ -62,7 +62,7 @@
                 <th>Paciente</th>
                 <th style="text-align: right; padding-right: 20px">Monto</th>
                 <th>Motivo</th>
-                <th><center>Fechadevolucion</center></th>
+                <th><center>Fecha devolucion</center></th>
              {#   <th>Actions</th> #}
             </tr>
         </thead>
@@ -79,7 +79,7 @@
                 <td>{{ entity.paciente }}</td>
                 <td style="text-align: right; padding-right: 20px">$ {{ entity.monto |number_format(2, '.', ',')  }}</td>
                 <td>{{ entity.motivo }}</td>
-                <td><center>{% if entity.fechaDevolucion %}{{ entity.fechaDevolucion|date('Y-m-d H:i:s') }}{% endif %}</center></td>
+                <td><center>{% if entity.fechaDevolucion %}{{ entity.fechaDevolucion|date('d-m-Y') }}{% endif %}</center></td>
              <!--   <td>
                 <ul>
                     <li>
@@ -108,6 +108,13 @@
    
 
 
+
+   {% endblock %}
+   
+   
+   
+   
+   
  
   {% block javascripts_step %}
       
@@ -203,34 +210,28 @@
                     "columnDefs": [
                            { "orderable": false, "targets": 0 },
                            { "orderable": false, "targets": 2 },
-                           { "orderable": false, "targets": 3 }
-                          
-                        
-                          
-                        
-                          
-                        
+                           { "orderable": false, "targets": 3 },
+                           { "orderable": false, "targets": 4 },
+                           { "orderable": false, "targets": 5 }
+
                       
                            //{ "orderData": [ 2, 3, 4 ], "targets": 2 }
                     ],
                     "language": {
-                    "info": "Mostrando página _PAGE_ de _PAGES_",
-                    "infoEmpty": "",
-                    "emptyTable": "No se encontraron afiliados",
-                    "paginate": { 
-                        "next": "Siguiente",
-                        "previous": "Antetior"
-                    },
-                    "processing": "Procesando petición...",
-                    "search": "Buscar registros:",
-                    "lengthMenu": "Mostrar _MENU_ registros"
-                },          
+                        "info": "Mostrando página _PAGE_ de _PAGES_",
+                        "infoEmpty": "",
+                        "emptyTable": "No se encontraron afiliados",
+                        "paginate": { 
+                            "next": "Siguiente",
+                            "previous": "Antetior"
+                        },
+                        "processing": "Procesando petición...",
+                        "search": "Buscar registros:",
+                        "lengthMenu": "Mostrar _MENU_ registros"
+                    }
                     
         });
-        
-        $('#datatables1>tr>td').on('click', function(event) {
-            alert('dsv');
-        });
+                
         //Oculta el filtro de la tabla
         $('#datatables1_filter').hide();
         $('#filterDatatables1').val('');
@@ -240,28 +241,9 @@
         
     });//Fin document ready
         
-    //Definición de funciones
-    function limpiarCampos(){
-        //Limpiar los campos de tipo text
-        $("input[type=text]").each(function(index, val) {
-            $(this).val("");
-        });
-        //Seleccionar el primer elemento de los dropdown
-        $('select option').each( function(index, val) {
-            if(index == 0){
-                $(this).attr("selected","selected");
-            }
-            else{
-                $(this).removeAttr("selected");
-            }
-            
-        
-	});             
-    };
+   
         </script>
 
 
     {% endblock %} 
   
-
-   {% endblock %}
