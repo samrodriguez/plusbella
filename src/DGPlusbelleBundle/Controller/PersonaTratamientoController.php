@@ -50,6 +50,7 @@ class PersonaTratamientoController extends Controller
         $entity = new PersonaTratamiento();
         $form = $this->createCreateForm($entity);
         $form->handleRequest($request);
+        $entity->setFechaRegistro(new \DateTime('now'));
 
         if ($form->isValid()) {
             $em = $this->getDoctrine()->getManager();

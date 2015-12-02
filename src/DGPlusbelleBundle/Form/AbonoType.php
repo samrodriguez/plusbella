@@ -49,14 +49,16 @@ class AbonoType extends AbstractType
                          )
                        ))
             ->add('ventaPaquete')
-            ->add('personaTratamiento', 'entity', 
-                  array( 'label'         => 'Tratamiento','required'=>false,
-                         'empty_value'   => 'Seleccione un tratamiento...',
-                         'class'         => 'DGPlusbelleBundle:PersonaTratamiento',
-                         'attr'=>array(
-                         'class'=>'form-control input-sm '
-                         )
-                       ))
+            ->add('personaTratamiento')
+            ->add('flagAbono', 'choice', array('label'=>'Aplicar abono a',
+                    'choices'  => array('0' => 'Paquete', '1' => 'Tratamiento'),
+                    'multiple' => false,
+                    'expanded'=>'true',
+                    'required' => true,
+                    'data' => 1
+                    
+                
+                ))                                         
         ;
     }
     

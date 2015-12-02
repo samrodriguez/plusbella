@@ -81,6 +81,8 @@ class Abono
      * })
      */
     private $personaTratamiento;
+    
+    private $flagAbono;
 
 
 
@@ -261,5 +263,18 @@ class Abono
     public function getPersonaTratamiento()
     {
         return $this->personaTratamiento;
+    }
+    
+     public function setFlagAbono($flagAbono)
+    {
+        $this->flagAbono = $flagAbono;
+
+        return $this;
+    }
+
+    
+    public function getFlagAbono()
+    {
+        return $this->flagAbono;
     }
 }

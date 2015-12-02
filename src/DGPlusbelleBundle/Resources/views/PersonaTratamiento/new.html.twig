@@ -9,23 +9,26 @@
             {{ form_errors(form) }}
             <div class="row">
         
-	        <div class="col-md-3" >
+	        <div class="col-md-2" >
                     {{ form_row(form.paciente)}}
                 </div>
-                <div class="col-md-3" >
+                <div class="col-md-2" >
                     {{ form_row(form.empleado)}}
 		</div>
-                <div class="col-md-3" >
+                <div class="col-md-2" >
                     {{ form_row(form.tratamiento)}}
 		</div>			
             </div>
             <div class="row">
-                    <div class="col-md-3" >
+                    <div class="col-md-2" >
                   {{ form_row(form.costoConsulta)}} 
                 </div>  
-                <div class="col-md-3" >
+                <div class="col-md-2" >
                   {{ form_row(form.numSesiones)}} 
                 </div>  
+                <div class="col-md-2" >
+                  {{ form_row(form.cuotas)}} 
+                </div> 
                 <div class="col-md-3" >
                   {{ form_row(form.fechaVenta)}} 
                 </div>  
