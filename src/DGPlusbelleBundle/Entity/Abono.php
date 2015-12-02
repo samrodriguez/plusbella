@@ -40,7 +40,7 @@ class Abono
      *
      * @ORM\Column(name="fecha_abono", type="datetime", nullable=false)
      */
-    private $fechaAbono = 'CURRENT_TIMESTAMP';
+    private $fechaAbono;
 
     /**
      * @var \Empleado

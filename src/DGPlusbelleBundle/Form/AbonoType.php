@@ -7,6 +7,7 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 use DGPlusbelleBundle\Entity\Empleado;
 use DGPlusbelleBundle\Entity\Paciente;
+use DGPlusbelleBundle\Entity\VentaPaquete;
 use Doctrine\ORM\EntityRepository;
 
 class AbonoType extends AbstractType
@@ -17,12 +18,14 @@ class AbonoType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
+        
+        
         $builder
             ->add('monto',null,array('label' => 'Monto',
                     'attr'=>array(
                     'class'=>'form-control input-sm '
                     )))
-            ->add('descripcion','text',array('label' => 'Descripción',
+            ->add('descripcion','textarea',array('label' => 'Descripción',
                     'attr'=>array(
                     'class'=>'form-control input-sm '
                     )))
@@ -45,15 +48,15 @@ class AbonoType extends AbstractType
                          'class'=>'form-control input-sm '
                          )
                        ))
-            ->add('ventaPaquete', 'entity', 
-                  array( 'label'         => 'Paquete','required'=>false,
-                         'empty_value'   => 'Seleccione un paquete...',
-                         'class'         => 'DGPlusbelleBundle:VentaPaquete',
+            ->add('ventaPaquete')
+            ->add('personaTratamiento', 'entity', 
+                  array( 'label'         => 'Tratamiento','required'=>false,
+                         'empty_value'   => 'Seleccione un tratamiento...',
+                         'class'         => 'DGPlusbelleBundle:PersonaTratamiento',
                          'attr'=>array(
                          'class'=>'form-control input-sm '
                          )
                        ))
-            ->add('personaTratamiento')
         ;
     }
     

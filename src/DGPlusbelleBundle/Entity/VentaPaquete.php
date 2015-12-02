@@ -8,7 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
  * VentaPaquete
  *
  * @ORM\Table(name="venta_paquete", indexes={@ORM\Index(name="fk_paquete_vendido_paquete1_idx", columns={"paquete"}), @ORM\Index(name="fk_paquete_vendido_sucursal1_idx", columns={"sucursal"}), @ORM\Index(name="fk_venta_paquete_persona1_idx", columns={"paciente"}), @ORM\Index(name="fk_venta_paquete_persona2_idx", columns={"empleado"}), @ORM\Index(name="fk_venta_paquete_usuario1_idx", columns={"usuario"})})
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="DGPlusbelleBundle\Repository\VentaPaqueteRepository")
  */
 class VentaPaquete
 {
@@ -298,6 +298,6 @@ class VentaPaquete
     }
     
      public function __toString() {
-   return $this->paquete->getNombre() ? $this->paquete->getNombre() .' $'.$this->paquete->getCosto() : '';
+   return $this->paquete->getNombre() ? $this->paquete->getNombre() .' $'.$this->paquete->getCosto().' '.$this->getFechaVenta()->format('d-m-Y') : '';
     }
 }

@@ -1,6 +1,6 @@
 {% extends 'DGPlusbelleBundle:Layout:layout.html.twig' %}
 
-{% block body -%}
+{% block contenido -%}
     
     
    <div class="panel panel-default">
@@ -24,11 +24,14 @@
       <div class="col-xs-12 col-sm-2" >
      {{ form_row(form.ventaPaquete) }} 
      </div> 
+      <div class="col-xs-12 col-sm-2" >
+     {{ form_row(form.personaTratamiento) }} 
+     </div> 
      
       <div class="col-xs-12 col-sm-1" >
      {{ form_row(form.monto) }} 
      </div> 
-      <div class="col-xs-12 col-sm-5" >
+      <div class="col-xs-12 col-sm-4" >
      {{ form_row(form.descripcion) }} 
      </div> 
     
@@ -47,3 +50,23 @@
         
 
 {% endblock %}
+
+{% block javascripts_step %}
+    
+ <script>   
+    jQuery(document).ready(function() {
+    
+                var seleccionado="";
+                //Eliminar options del select de pacientes
+                $('#dgplusbellebundle_abono_paciente option').each(function(index, val) {
+                    
+                    seleccionado = $(this).attr('selected');
+                    if (!seleccionado){
+                        $(this).remove();
+                    }
+                });
+    
+    });
+ </script> 
+ 
+{% endblock %}    

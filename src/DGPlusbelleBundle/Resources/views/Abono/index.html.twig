@@ -19,7 +19,7 @@
                 <td><a href="{{ path('admin_abono_show', { 'id': entity.id }) }}">{{ entity.id }}</a></td>
                 <td>{{ entity.monto }}</td>
                 <td>{{ entity.descripcion }}</td>
-                <td>{% if entity.fechaAbono %}{{ entity.fechaAbono|date('Y-m-d H:i:s') }}{% endif %}</td>
+                <td>{% if entity.fechaAbono %}{{ entity.fechaAbono|date('Y-m-d') }}{% endif %}</td>
                 <td>
                 <ul>
                     <li>

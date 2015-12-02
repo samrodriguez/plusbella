@@ -8,7 +8,9 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use DGPlusbelleBundle\Entity\Abono;
+use DGPlusbelleBundle\Entity\Paciente;
 use DGPlusbelleBundle\Form\AbonoType;
+use Doctrine\ORM\EntityRepository;
 
 /**
  * Abono controller.
@@ -45,7 +47,12 @@ class AbonoController extends Controller
     public function createAction(Request $request)
     {
         $entity = new Abono();
-        $form = $this->createCreateForm($entity);
+        
+        $request = $this->getRequest();
+        $idpaquetes = $request->get('paquete');
+        $paciente = $request->get('paciente');
+        $form   = $this->createCreateForm($entity, $paciente, $idpaquetes);
+        //$form = $this->createCreateForm($entity);
         $form->handleRequest($request);
         $entity->setFechaAbono(new \DateTime('now'));
 
@@ -70,13 +77,36 @@ class AbonoController extends Controller
      *
      * @return \Symfony\Component\Form\Form The form
      */
-    private function createCreateForm(Abono $entity)
+    private function createCreateForm(Abono $entity, $paciente, $paquete)
     {
+        var_dump($paquete);
         $form = $this->createForm(new AbonoType(), $entity, array(
-            'action' => $this->generateUrl('admin_abono_create'),
+            'action' => $this->generateUrl('admin_abono_create', array('paciente' => $paciente, 'paquete' => $paquete)),
             'method' => 'POST',
         ));
 
+        
+        
+        $form->add('ventaPaquete', 'entity', 
+                  array( 'label'         => 'Paquete','required'=>false,
+                         'empty_value'   => 'Seleccione un paquete...',
+                         'class'         => 'DGPlusbelleBundle:VentaPaquete',
+                         'query_builder' => function(EntityRepository $r) use ( $paciente, $paquete ){
+                                                return $r->createQueryBuilder('s')
+                                                         ->innerJoin('s.paquete', 'p')
+                                                         ->innerJoin('s.paciente', 'pac')
+                                                        ->where('s.cuotas > 0')
+                                                        ->andWhere('pac.id = :idpac')
+                                                        ->andWhere('s.id IN (:paquetes)')
+                                                        ->setParameter(':idpac', $paciente)
+                                                        ->setParameter('paquetes', $paquete)
+                                                    ;   
+                                            } ,
+                         'attr'=>array(
+                         'class'=>'form-control input-sm '
+                         )
+                       ));
+        
         $form->add('submit', 'submit', array('label' => 'Guardar',
                                                'attr'=>
                                                         array('class'=>'btn btn-success btn-sm')));
@@ -94,8 +124,42 @@ class AbonoController extends Controller
     public function newAction()
     {
         $entity = new Abono();
-        $form   = $this->createCreateForm($entity);
-
+         $em = $this->getDoctrine()->getManager();
+        
+        //Recuperación del paciente
+        $request = $this->getRequest();
+        $id= $request->get('id');
+        $id = substr($id, 1);
+        //Busqueda del paciente
+        $paciente = $em->getRepository('DGPlusbelleBundle:Paciente')->find($id);
+        //Seteo del paciente en la entidad
+       // $persona=$paciente->getPersona();
+        $paquetes = $em->getRepository('DGPlusbelleBundle:VentaPaquete')->findBy(array('paciente'=>$paciente->getPersona()->getId()));
+        //var_dump($paquetes);
+        $idpaquetes=array();
+        foreach ($paquetes as $paq){
+            $idpaq=$paq->getId();
+            $cuota=$paq->getCuotas();
+            $dql = "SELECT count(ab) FROM DGPlusbelleBundle:Abono ab "
+               
+                . "WHERE ab.ventaPaquete=:id ";
+                   
+            $abonos=array();
+            
+            $abonos = $em->createQuery($dql)
+                       ->setParameters(array('id'=>$idpaq))
+                       //->setParameter('mes','_____0'.'1'.'___')
+                       ->getResult();
+            //var_dump($abonos[0]);
+            if($abonos[0][1]<$cuota){
+                array_push($idpaquetes, $idpaq); 
+            }
+        }
+        //var_dump($idpaquetes);
+        $entity->setPaciente($paciente);
+        
+        $form   = $this->createCreateForm($entity, $paciente->getPersona()->getId(), $idpaquetes);
+        
         return array(
             'entity' => $entity,
             'form'   => $form->createView(),
