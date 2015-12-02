@@ -68,6 +68,8 @@
 
 {% block javascripts_step %}
     
+     <script src="{{ asset('Resources/js/Abono.js') }}"></script>  
+    
  <script>   
     jQuery(document).ready(function() {
     
@@ -100,7 +102,7 @@
                 $('#dgplusbellebundle_abono_flagAbono_1').parent().click();
             }
 
-    
+  validarAbono();    
     });//Fin document ready
  </script> 
  

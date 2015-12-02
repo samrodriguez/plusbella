@@ -21,13 +21,13 @@ class AbonoType extends AbstractType
         
         
         $builder
-            ->add('monto',null,array('label' => 'Monto',
+            ->add('monto',null,array('label' => 'Monto $','required'=>false,
                     'attr'=>array(
-                    'class'=>'form-control input-sm '
+                    'class'=>'form-control input-sm montoAbono'
                     )))
-            ->add('descripcion','textarea',array('label' => 'Descripción',
+            ->add('descripcion','textarea',array('label' => 'Descripción','required'=>false,
                     'attr'=>array(
-                    'class'=>'form-control input-sm '
+                    'class'=>'form-control input-sm descripcionAbono'
                     )))
             //->add('fechaAbono')
             ->add('empleado','entity', array( 'label' => 'Empleado','required'=>false,
@@ -37,7 +37,7 @@ class AbonoType extends AbstractType
                                                 return $repository->obtenerEmpActivo();
                                              },  
                          'attr'=>array(
-                         'class'=>'form-control input-sm '
+                         'class'=>'form-control input-sm empleadoAbono'
                          )
                        ))
             ->add('paciente', null, 
@@ -55,7 +55,7 @@ class AbonoType extends AbstractType
                     'multiple' => false,
                     'expanded'=>'true',
                     'required' => true,
-                    'data' => 1
+                    'data' => 0
                     
                 
                 ))                                         
