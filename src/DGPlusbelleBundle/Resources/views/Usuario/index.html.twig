@@ -49,8 +49,9 @@
     <table id = "datatables1" class="table table-bordered table-hover display dt-responsive" style="margin-top: 30px">
         <thead>
             <tr>
-                <th>N!</th>
-                <th>Username</th>
+                <th>No.</th>
+                <th>Nombre de empleado</th>
+                <th>Usuario</th>
                 {#<th>Password</th>
                 <th>Salt</th>#}
                 <th>Estado</th>
@@ -63,6 +64,7 @@
                 <td>
                     {{key+1}}
                 </td> 
+                <td>{{ entity.persona }}</td>
                 <td>{{ entity.username }}</td>
                 {#<td>{{ entity.password }}</td>
                 <td>{{ entity.salt }}</td>#}
