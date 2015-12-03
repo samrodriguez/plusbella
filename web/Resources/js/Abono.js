@@ -2,6 +2,12 @@
 function validarAbono(){
 $('.montoAbono').
         attr('data-bvalidator', 'number,required,required');
+
+$('.paqueteAbono').
+        attr('data-bvalidator', 'number,required,required');
+
+$('.tratamientoAbono').
+        attr('data-bvalidator', 'number,required,required');
 		
 $('.empleadoAbono').
         attr('data-bvalidator', 'required,required');				

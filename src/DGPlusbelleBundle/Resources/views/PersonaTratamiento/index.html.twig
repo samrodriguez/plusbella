@@ -71,8 +71,8 @@
                 <td>{{ entity.paciente }}</td>
                 <td>{{ entity.empleado }}</td>
                 <td>{{ entity.tratamiento }}</td>
-                <td>{{ entity.numSesiones}}</td>
-                <td style="text-align: right; padding-right: 20px">$ {{ entity.costotratamiento |number_format(2, '.', ',')}}</td>
+                <td><center>{{ entity.numSesiones}}</center></td>
+                <td style="text-align: right; padding-right: 20px">$ {{ entity.costoConsulta |number_format(2, '.', ',')}}</td>
                 
             </tr>
         {% endfor %}
