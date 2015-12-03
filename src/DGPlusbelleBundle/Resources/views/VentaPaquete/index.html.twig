@@ -52,6 +52,7 @@
                             <th>N°</th>
                             <th>Paciente</th>
                             <th>Empleado</th>
+                            <th>Paquete</th>
                             <th style="text-align: right; padding-right: 20px">Costo</th>
                             <th style="text-align: right; padding-right: 20px">Fecha venta</th>
                             {#<th>Acciones</th>#}
@@ -63,6 +64,7 @@
                             <td>{{key+1 }}</td>                      
                             <td>{{ entity.paciente.nombres }}  {{entity.paciente.apellidos}} 
                             <td>{{ entity.empleado.nombres }}  {{entity.empleado.apellidos}} 
+                            <td>{{ entity.paquete.nombre }}     
                             <td style="text-align: right; padding-right: 20px">$ {{ entity.paquete.costo|number_format(2, '.', ',') }}
                             <td style="text-align: right; padding-right: 20px">{% if entity.fechaVenta %}{{ entity.fechaVenta|date('d/m/Y') }}{% endif %}</td>
 

@@ -23,17 +23,17 @@
                     <div class="col-md-2" >
                   {{ form_row(form.costoConsulta)}} 
                 </div>  
-                <div class="col-md-2" >
+                <div class="col-md-1" >
                   {{ form_row(form.numSesiones)}} 
                 </div>  
-                <div class="col-md-2" >
+                <div class="col-md-1" >
                   {{ form_row(form.cuotas)}} 
                 </div> 
-                <div class="col-md-3" >
+                <div class="col-md-2" >
                   {{ form_row(form.fechaVenta)}} 
                 </div>  
             </div>
-            <div class="form-grouphide"> 
+            <div class="form-grouphide md-12"> 
                 <a href="{{path('dashboard')}}" class="btn btn-default btn-sm" id="cancelarNuevo">Cancelar</a>
                 {{ form_widget(form.submit) }}
             </div>
