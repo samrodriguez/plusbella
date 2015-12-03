@@ -845,9 +845,6 @@ class ConsultaController extends Controller
         
         
         $empleados=$this->verificarComision(null,null);
-        
-        
-        
         //var_dump($empleados);
         
         //var_dump();
@@ -913,12 +910,23 @@ class ConsultaController extends Controller
                     . " JOIN vp.empleado emp"
                     . " JOIN emp.empleado em"
                     . " WHERE vp.fechaVenta LIKE :mes AND em.estado=true AND em.id=:idEmpleado";
-                $comision = $em->createQuery($dql)
+                $ventaspaquete = $em->createQuery($dql)
+                       ->setParameters(array('mes'=>$fecha.'___','idEmpleado'=>$empleado['id']))
+                       ->getResult();
+                
+                $dql = "SELECT sum(t.costo)"
+                    . " FROM"
+                    . " DGPlusbelleBundle:PersonaTratamiento vp"
+                    . " JOIN vp.tratamiento t"
+                    . " JOIN vp.empleado emp"
+                    . " JOIN emp.empleado em"
+                    . " WHERE vp.fechaVenta LIKE :mes AND em.estado=true AND em.id=:idEmpleado";
+                $ventastratamientos = $em->createQuery($dql)
                        ->setParameters(array('mes'=>$fecha.'___','idEmpleado'=>$empleado['id']))
                        ->getResult();
 
                 //var_dump($comision);
-                $empleados[$key]['suma']= $comision[0][1];
+                $empleados[$key]['suma']= $ventaspaquete[0][1] + $ventastratamientos[0][1];
                 $porcentaje = 0;
                 if($empleados[$key]['suma']!=null){
                     if($empleados[$key]['meta']>=$empleados[$key]['suma'] ){

@@ -21,7 +21,16 @@ class DashboardController extends Controller
      */
     public function dashboardAction()
     {
-        return $this->render('DGPlusbelleBundle:Dashboard:dashboard.html.twig');     
+        $usuario= $this->get('security.token_storage')->getToken()->getUser();
+        $empleado = $usuario->getPersona()->getEmpleado()[0];
+        //var_dump($usuario->getPersona());
+        $foto= $this->getParameter('photo.empleado').$empleado->getFoto();
+        //var_dump($foto);
+        
+        //var_dump($usuario->getPersona()->getEmpleado()[0]->getFoto());
+        
+        
+        return $this->render('DGPlusbelleBundle:Dashboard:dashboard.html.twig'/*,array('foto'=>$foto,'empleado'=>$empleado)*/);     
         
     }
     

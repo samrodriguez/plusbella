@@ -161,7 +161,7 @@ class DevolucionController extends Controller
         
         $paquetes = $em->getRepository('DGPlusbelleBundle:VentaPaquete')->findBy(array('paciente'=>$paciente->getPersona()->getId()));
         $tratamientos = $em->getRepository('DGPlusbelleBundle:PersonaTratamiento')->findBy(array('paciente'=>$paciente->getPersona()->getId()));
-        
+        $entity->setPaciente($paciente);
         //var_dump($paciente->getId());
         $idpaquetes=array();
         $idtratamientos=array();
@@ -210,7 +210,7 @@ class DevolucionController extends Controller
             }
         }
         
-        var_dump($id);
+        //var_dump($id);
         //$persona=$paciente->getPersona();
         ///var_dump($persona);
         $entity->setPaciente($paciente);
