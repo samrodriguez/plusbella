@@ -57,7 +57,13 @@
     <script>
         $(document).ready(function(){
 
-            
+            $('#dgplusbellebundle_devolucion_paciente option').each(function(index, val) {
+                    
+                    seleccionado = $(this).attr('selected');
+                    if (!seleccionado){
+                        $(this).remove();
+                    }
+            });  
 
             $(document).on("click","#dgplusbellebundle_devolucion_flagDevolucion_0", function(){
                 $("#paquete").show();

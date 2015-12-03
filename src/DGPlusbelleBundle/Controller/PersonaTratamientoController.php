@@ -50,13 +50,14 @@ class PersonaTratamientoController extends Controller
         $entity = new PersonaTratamiento();
         $form = $this->createCreateForm($entity);
         $form->handleRequest($request);
+        $entity->setFechaRegistro(new \DateTime('now'));
 
         if ($form->isValid()) {
             $em = $this->getDoctrine()->getManager();
             $em->persist($entity);
             $em->flush();
 
-            return $this->redirect($this->generateUrl('admin_personatratamiento_show', array('id' => $entity->getId())));
+            return $this->redirect($this->generateUrl('admin_personatratamiento', array('id' => $entity->getId())));
         }
 
         return array(

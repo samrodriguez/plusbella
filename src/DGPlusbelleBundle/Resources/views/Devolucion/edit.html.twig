@@ -14,17 +14,34 @@
     {{ form_errors(edit_form) }}
     
  
-    <div class="col-xs-12 col-sm-2">
-     {{ form_row(edit_form.empleado) }} 
+    <div class="row">
+            <div class="col-md-3">
+            {{ form_row(edit_form.empleado) }}
+            </div>
+            <div class="col-md-3">
+            {{ form_row(edit_form.paciente) }}
+            </div>
+            <div class="col-md-2">
+            {{ form_row(edit_form.monto) }}
+             </div>
+            <div class="col-md-4">
+            {{ form_row(edit_form.motivo) }}
+            </div>
     </div>
-    <div class="col-xs-12 col-sm-2">
-     {{ form_row(edit_form.paciente) }} 
-    </div>
-    <div class="col-xs-12 col-sm-1">
-     {{ form_row(edit_form.monto) }} 
-    </div>
-     <div class="col-xs-12 col-sm-6">
-     {{ form_row(edit_form.motivo) }} 
+    <div class="row">
+        <div class="col-md-3">
+        {{ form_row(edit_form.flagDevolucion) }}
+        </div>
+        <div id="paquete" style="display:none;">
+            <div class="col-md-3">
+            {{ form_row(edit_form.ventapaquete) }}
+            </div>
+        </div>
+        <div id="tratamiento" style="display:none;">
+            <div class="col-md-3">
+            {{ form_row(edit_form.personatratamiento) }}
+            </div>
+        </div>
     </div>
 
         <div class="form-grouphide col-sm-9"> 
@@ -46,6 +63,25 @@
             $("#edit-datatables1").click();
             return false;
         });
+        
+        $(document).on("click","#dgplusbellebundle_devolucion_flagDevolucion_0", function(){
+            $("#paquete").show();
+            $("#tratamiento").hide();
+        });
+
+        $(document).on("click","#dgplusbellebundle_devolucion_flagDevolucion_1", function(){
+            $("#tratamiento").show();
+            $("#paquete").hide(); 
+        });
+
+        if($('#dgplusbellebundle_devolucion_flagDevolucion_0').is(':checked')){
+            $('#dgplusbellebundle_devolucion_flagDevolucion_0').click();
+            $('#dgplusbellebundle_devolucion_flagDevolucion_0').parent().click();
+        }
+        else{
+            $('#dgplusbellebundle_devolucion_flagDevolucion_1').click();
+            $('#dgplusbellebundle_devolucion_flagDevolucion_1').parent().click();
+        }
         
         
     });

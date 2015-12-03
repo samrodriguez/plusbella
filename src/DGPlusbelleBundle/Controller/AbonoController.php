@@ -50,18 +50,28 @@ class AbonoController extends Controller
         
         $request = $this->getRequest();
         $idpaquetes = $request->get('paquete');
+        $idtratamientos = $request->get('tratamiento');
         $paciente = $request->get('paciente');
-        $form   = $this->createCreateForm($entity, $paciente, $idpaquetes);
+        $form   = $this->createCreateForm($entity, $paciente, $idpaquetes, $idtratamientos);
+       // $form   = $this->createCreateForm($entity, $paciente, $idtratamientos);
         //$form = $this->createCreateForm($entity);
         $form->handleRequest($request);
         $entity->setFechaAbono(new \DateTime('now'));
+        
+        if($entity->getFlagAbono()==0){
+            $entity->setPersonaTratamiento(null);
+            
+        }
+        else{
+            $entity->setVentaPaquete(null); 
+        }
 
         if ($form->isValid()) {
             $em = $this->getDoctrine()->getManager();
             $em->persist($entity);
             $em->flush();
 
-            return $this->redirect($this->generateUrl('admin_abono_show', array('id' => $entity->getId())));
+            return $this->redirect($this->generateUrl('admin_abono', array('id' => $entity->getId())));
         }
 
         return array(
@@ -77,11 +87,11 @@ class AbonoController extends Controller
      *
      * @return \Symfony\Component\Form\Form The form
      */
-    private function createCreateForm(Abono $entity, $paciente, $paquete)
+    private function createCreateForm(Abono $entity, $paciente, $paquete, $tratamiento)
     {
-        var_dump($paquete);
+       // var_dump($paquete);
         $form = $this->createForm(new AbonoType(), $entity, array(
-            'action' => $this->generateUrl('admin_abono_create', array('paciente' => $paciente, 'paquete' => $paquete)),
+            'action' => $this->generateUrl('admin_abono_create', array('paciente' => $paciente, 'paquete' => $paquete, 'tratamiento' => $tratamiento)),
             'method' => 'POST',
         ));
 
@@ -103,9 +113,29 @@ class AbonoController extends Controller
                                                     ;   
                                             } ,
                          'attr'=>array(
-                         'class'=>'form-control input-sm '
+                         'class'=>'form-control input-sm paqueteAbono'
                          )
                        ));
+                                            
+         $form->add('personaTratamiento', 'entity', 
+                  array( 'label'         => 'Tratamiento','required'=>false,
+                         'empty_value'   => 'Seleccione un tratamiento...',
+                         'class'         => 'DGPlusbelleBundle:PersonaTratamiento',
+                         'query_builder' => function(EntityRepository $r) use ( $paciente, $tratamiento ){
+                                                return $r->createQueryBuilder('s')
+                                                         ->innerJoin('s.tratamiento', 'p')
+                                                        // ->innerJoin('s.paciente', 'pac')
+                                                        ->where('s.cuotas > 0')
+                                                       // ->andWhere('pac.id = :idpac')
+                                                        ->andWhere('s.id IN (:tratamientos)')
+                                                        //->setParameter(':idpac', $paciente)
+                                                        ->setParameter('tratamientos', $tratamiento)
+                                                    ;   
+                                            } ,
+                         'attr'=>array(
+                         'class'=>'form-control input-sm tratamientoAbono'
+                         )
+                       ));                                    
         
         $form->add('submit', 'submit', array('label' => 'Guardar',
                                                'attr'=>
@@ -135,8 +165,10 @@ class AbonoController extends Controller
         //Seteo del paciente en la entidad
        // $persona=$paciente->getPersona();
         $paquetes = $em->getRepository('DGPlusbelleBundle:VentaPaquete')->findBy(array('paciente'=>$paciente->getPersona()->getId()));
+        $tratamientos = $em->getRepository('DGPlusbelleBundle:PersonaTratamiento')->findBy(array('paciente'=>$paciente->getPersona()->getId()));
         //var_dump($paquetes);
         $idpaquetes=array();
+        $idtratamientos=array();
         foreach ($paquetes as $paq){
             $idpaq=$paq->getId();
             $cuota=$paq->getCuotas();
@@ -155,10 +187,33 @@ class AbonoController extends Controller
                 array_push($idpaquetes, $idpaq); 
             }
         }
+        
+        foreach ($tratamientos as $trat){
+            $idtrat=$trat->getId();
+            $cuota=$trat->getCuotas();
+           // var_dump($cuota);
+            $dql = "SELECT count(tt) FROM DGPlusbelleBundle:Abono tt "
+               
+                . "WHERE tt.personaTratamiento=:id and tt.paciente=:idpaciente";
+                   
+            $abonos=array();
+            
+            $abonos = $em->createQuery($dql)
+                       ->setParameters(array('id'=>$idtrat,'idpaciente'=>$paciente->getPersona()->getId()))
+                       //->setParameter('mes','_____0'.'1'.'___')
+                       ->getResult();
+          // var_dump($abonos[0]);
+            if($abonos[0][1]<$cuota){
+                array_push($idtratamientos, $idtrat); 
+            }
+        }
+        
+        
         //var_dump($idpaquetes);
         $entity->setPaciente($paciente);
         
-        $form   = $this->createCreateForm($entity, $paciente->getPersona()->getId(), $idpaquetes);
+        $form   = $this->createCreateForm($entity, $paciente->getPersona()->getId(), $idpaquetes, $idtratamientos);
+        //$form   = $this->createCreateForm($entity, $paciente->getPersona()->getId(), $idtratamientos);
         
         return array(
             'entity' => $entity,

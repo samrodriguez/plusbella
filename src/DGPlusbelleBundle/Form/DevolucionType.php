@@ -32,10 +32,10 @@ class DevolucionType extends AbstractType
                     'attr'=>array(
                     'class'=>'form-control input-sm'
                     )))
-            ->add('ventapaquete')
-            ->add('personatratamiento')
+            ->add('ventapaquete',null, array('label'=>'Paquetes'))
+            ->add('personatratamiento',null, array('label'=>'Tratamientos'))
             ->add('flagDevolucion', 'choice', array('label'=>'Aplicar devolución a',
-                    'choices'  => array('1' => 'Paquete', '0' => 'Tratamiento'),
+                    'choices'  => array('0' => 'Paquete', '1' => 'Tratamiento'),
                     'multiple' => false,
                     'expanded'=>'true',
                     'required' => true,

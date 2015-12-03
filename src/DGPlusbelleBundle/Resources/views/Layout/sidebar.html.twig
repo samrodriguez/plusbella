@@ -6,16 +6,19 @@
       <a href="page-profile.html">
         <span class="status dotted dotted-primary" data-toggle="tooltip" data-container="body" title="available"></span>
         {% block imagenPerfil %}
-        <img class="media-object img-circle" src="{{ asset('Resources/img/empleados/dr.jpg') }}" alt="photo profile">
+            <img class="media-object img-circle" src="{{ asset('Photos/Empleado/')}}{{app.user.persona.empleado[0].foto}}" alt="photo profile">
         {% endblock %}
       </a>
     </div>
-    <div class="media-body">
-      <h4 class="media-heading">Juan Carlos Pacheco</h4>  <!-- nombre de usuario conectado -->
-      <p class="text-muted">
-        <small>Cirujano</small>
-      </p>
-    </div>
+    {% block perfil %}
+        <div class="media-body">
+            <h4 class="media-heading">{{app.user.persona.nombres}} {{app.user.persona.apellidos}}</h4>  <!-- nombre de usuario conectado -->
+            <p class="text-muted">
+                <small>{{app.user.persona.empleado[0].cargo}}</small>
+            </p>
+        </div>
+
+    {% endblock %}
   </div>
 </div><!-- /.sidebar-block -->
 <!-- /profile -->

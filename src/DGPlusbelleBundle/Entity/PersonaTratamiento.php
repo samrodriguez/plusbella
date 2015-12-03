@@ -46,7 +46,7 @@ class PersonaTratamiento
      /**
      * @var \Tratamiento
      *
-     * @ORM\ManyToOne(targetEntity="Tratamiento", inversedBy="placas", cascade={"persist", "remove"})
+     * @ORM\ManyToOne(targetEntity="Tratamiento", cascade={"persist", "remove"})
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="tratamiento", referencedColumnName="id")
      * })
@@ -81,6 +81,13 @@ class PersonaTratamiento
      * @ORM\Column(name="fecha_registro", type="datetime", nullable=true)
      */
     private $fechaRegistro;
+    
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="cuotas", type="integer", nullable=false)
+     */
+    private $cuotas;
 
     /**
      * Get id
@@ -259,6 +266,31 @@ class PersonaTratamiento
     public function getNumSesiones()
     {
         return $this->numSesiones;
+    }
+    
+    
+     /**
+     * Set cuotas
+     *
+     * @param integer $cuotas
+     *
+     * @return PaqueteTratamiento
+     */
+    public function setCuotas($cuotas)
+    {
+        $this->cuotas = $cuotas;
+
+        return $this;
+    }
+
+    /**
+     * Get cuotas
+     *
+     * @return integer
+     */
+    public function getCuotas()
+    {
+        return $this->cuotas;
     }
     
     public function __toString() {
