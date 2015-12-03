@@ -65,7 +65,11 @@ class PersonaTratamientoType extends AbstractType
                         'widget' => 'single_text',
                         'attr'   => array('class' => 'form-control input-sm calZebra'),
                        )) 
-             ->add('cuotas')                   
+             ->add('cuotas', null, array('label'=>'Cuotas', 'required'=>false,
+                    'attr'=>array(
+                         'class'=>'form-control input-sm cuotasTratamiento'
+                         )
+                       ))                   
         ;
     }
     

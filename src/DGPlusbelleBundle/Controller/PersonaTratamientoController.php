@@ -57,7 +57,7 @@ class PersonaTratamientoController extends Controller
             $em->persist($entity);
             $em->flush();
 
-            return $this->redirect($this->generateUrl('admin_personatratamiento_show', array('id' => $entity->getId())));
+            return $this->redirect($this->generateUrl('admin_personatratamiento', array('id' => $entity->getId())));
         }
 
         return array(

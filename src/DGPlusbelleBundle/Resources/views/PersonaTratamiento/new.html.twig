@@ -44,6 +44,7 @@
 {% endblock %}
 
 {% block javascripts_step %}
+      <script type="text/javascript" src="{{ asset('Resources/zebra/inicializacioncalendarios.js')}}" ></script>    
       <script src="{{ asset('Resources/js/TratamientoPaciente.js') }}"></script>  
       
        <script>
@@ -62,7 +63,17 @@
               $(document).on("change","#dgplusbellebundle_personatratamiento_numSesiones",function(){
                     //alert("prueba");
                     if($(this).val()==0 || $(this).val()<=0){
-                        $(this).val('0');
+                        $(this).val('1');
+                    }
+
+                });
+                
+                
+                 //alert("prueba");
+                $(document).on("change","#dgplusbellebundle_personatratamiento_cuotas",function(){
+                    //alert("prueba");
+                    if($(this).val()==0 || $(this).val()<=0){
+                        $(this).val('1');
                     }
 
                 });

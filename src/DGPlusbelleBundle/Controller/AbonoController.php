@@ -71,7 +71,7 @@ class AbonoController extends Controller
             $em->persist($entity);
             $em->flush();
 
-            return $this->redirect($this->generateUrl('admin_abono_show', array('id' => $entity->getId())));
+            return $this->redirect($this->generateUrl('admin_abono', array('id' => $entity->getId())));
         }
 
         return array(
@@ -113,7 +113,7 @@ class AbonoController extends Controller
                                                     ;   
                                             } ,
                          'attr'=>array(
-                         'class'=>'form-control input-sm '
+                         'class'=>'form-control input-sm paqueteAbono'
                          )
                        ));
                                             
@@ -133,7 +133,7 @@ class AbonoController extends Controller
                                                     ;   
                                             } ,
                          'attr'=>array(
-                         'class'=>'form-control input-sm '
+                         'class'=>'form-control input-sm tratamientoAbono'
                          )
                        ));                                    
         

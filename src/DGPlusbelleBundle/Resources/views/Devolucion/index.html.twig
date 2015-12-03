@@ -57,9 +57,9 @@
     <table id = "datatables1" class="table table-bordered table-hover display dt-responsive" style="margin-top: 30px">
         <thead>
             <tr>
-                <th>N°</th> 
-                <th>Empleado</th>
+                <th>N°</th>
                 <th>Paciente</th>
+                <th>Empleado</th>
                 <th style="text-align: right; padding-right: 20px">Monto</th>
                 <th>Motivo</th>
                 <th><center>Fecha devolucion</center></th>
@@ -75,8 +75,8 @@
                       {#</a>#}
                   </td>
             {#    <td><a href="{{ path('admin_devolucion_show', { 'id': entity.id }) }}">{{ entity.id }}</a></td> #}
+                 <td>{{ entity.paciente }}</td>
                 <td>{{ entity.empleado }}</td>
-                <td>{{ entity.paciente }}</td>
                 <td style="text-align: right; padding-right: 20px">$ {{ entity.monto |number_format(2, '.', ',')  }}</td>
                 <td>{{ entity.motivo }}</td>
                 <td><center>{% if entity.fechaDevolucion %}{{ entity.fechaDevolucion|date('d-m-Y') }}{% endif %}</center></td>
