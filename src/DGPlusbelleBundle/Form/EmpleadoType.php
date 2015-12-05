@@ -42,10 +42,10 @@ class EmpleadoType extends AbstractType
                     'class'=>'form-control input-sm bonoEmpleado'
                     ))) 
             //->add('persona')
-            ->add('sucursal',null,array('label' => 'Sucursal','required'=>false,'empty_value'=>'Seleccione Sucursal...',
+       /*    ->add('sucursal',null,array('label' => 'Sucursal','required'=>false,'empty_value'=>'Seleccione Sucursal...',
                     'attr'=>array(
                     'class'=>'form-control input-sm sucursalEmpleado'
-                    )))
+                    )))  */
             //->add('horario')
             ->add('tratamiento','entity',array('label' => 'Tratamientos que realiza','required'=>false,
                 'class'=>'DGPlusbelleBundle:Tratamiento','property'=>'nombre',

@@ -60,7 +60,7 @@
                <th>Empleado</th> 
                <th>Cargo</th>
               {# <th>Foto</th> #}
-                <th>Sucursal</th>
+             {#   <th>Sucursal</th> #}
                 <th>Estado</th>
              {# <th>Actions</th>  #}
             </tr>
@@ -75,7 +75,7 @@
                 <td>{{ entity.pnombre }} {#{{ entity.snombre }}#} {{ entity.papellido }} {#{{ entity.sapellido }} #}</td>
                 <td>{{ entity.cargo }}</td>
                {# <td>{{ entity.foto }}</td> #}
-                <td>{{ entity.sucursal }}</td>
+              {#  <td>{{ entity.sucursal }}</td>  #}
                 <td>
                     {% if entity.estado == 1 %}
                         Activo
@@ -265,8 +265,8 @@
                     "order":[[0, "desc"],[1,"desc"]],
                     "columnDefs": [
                            { "orderable": false, "targets": 0 },
-                           { "orderable": false, "targets": 2 },
-                           { "orderable": false, "targets": 3 }
+                           { "orderable": false, "targets": 2 }
+                          
                           
                         
 
