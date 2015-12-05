@@ -71,6 +71,9 @@ class AbonoController extends Controller
             $em->persist($entity);
             $em->flush();
 
+            $usuario= $this->get('security.token_storage')->getToken()->getUser();
+            $this->get('bitacora')->escribirbitacora("Se registro un abono correctamente",$usuario->getId());
+            
             return $this->redirect($this->generateUrl('admin_abono', array('id' => $entity->getId())));
         }
 
