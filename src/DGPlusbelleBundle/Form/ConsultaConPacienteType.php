@@ -63,7 +63,7 @@ class ConsultaConPacienteType extends AbstractType
                        ))
                 
             ->add('reportePlantilla', 'choice', array(
-                    'label'=> 'Requiere plantilla',
+                    'label'=> 'Registro clínico',
                     'choices'  => array('1' => 'Sí', '0' => 'No'),
                     'multiple' => false,
                     'expanded'=>'true'
@@ -76,8 +76,8 @@ class ConsultaConPacienteType extends AbstractType
                          )
                        ))
             ->add('plantilla', 'entity', array('required'=>false,
-                    'label'         =>  'Plantilla',
-                    'empty_value'=>'Seleccione una plantilla',
+                    'label'         =>  'Historias clínicas',
+                    'empty_value'=>'Seleccione una opcion',
                     'class'         =>  'DGPlusbelleBundle:Plantilla',
                     'mapped' => false
                 ))   
