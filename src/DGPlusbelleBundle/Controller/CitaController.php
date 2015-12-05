@@ -31,6 +31,7 @@ class CitaController extends Controller
         $em = $this->getDoctrine()->getManager();
 
         $entities = $em->getRepository('DGPlusbelleBundle:Cita')->findAll();
+        $sucursales= $em->getRepository('DGPlusbelleBundle:Sucursal')->findAll();
         
         /*$dql = "SELECT exp.paciente"
                 . "FROM DGPlusbelleBundle:Cita c, DGPlusbelleBundle:Paciente p, DGPlusbelleBundle:Expediente exp"
@@ -43,6 +44,7 @@ class CitaController extends Controller
         */
         return array(
             'entities' => $entities,
+            'sucursales' => $sucursales,
         );
     }
     /**
@@ -469,15 +471,34 @@ class CitaController extends Controller
                         $exito['regs']=3;//Error, intenta reprogramar la cita a un dia anterior a "hoy"
                     }
                     else{
-                        if($entity->getEstado()=="P"){
-                            $entity->setFechaCita(new \DateTime($newformat));
-                            $em->persist($entity);
-                            $em->flush();   
-                            $exito['regs']=0; //Cita reprogramada con exito
+                        $var = date('H:i');
+                        //var_dump($var);
+                        
+                        if($horaNueva>=$var ){
+                        
+                            if($entity->getEstado()=="P"){
+                                $entity->setFechaCita(new \DateTime($newformat));
+                                $em->persist($entity);
+                                $em->flush();   
+                                $exito['regs']=0; //Cita reprogramada con exito
+                            }
+                            else{
+                                $exito['regs']=1;//Error, La cita tiene estado asistida o cancelada
+                            }
                         }
                         else{
-                            $exito['regs']=1;//Error, La cita tiene estado asistida o cancelada
+                            if ($fechaReprogramada > $today_dt) {
+                                $entity->setFechaCita(new \DateTime($newformat));
+                                $em->persist($entity);
+                                $em->flush();   
+                                $exito['regs']=0; //Cita reprogramada con exito
+                            }
+                            else{
+                                $exito['regs']=4;//Error, la hora es antes de la actual
+                            }
+                            
                         }
+                        
                     }
                 }
                 else{

@@ -118,7 +118,11 @@
                       {#</a>#}
                   </td>
               {#    <td><a href="{{ path('admin_paquete_show', { 'id': entity.id }) }}">{{ entity.id }}</a></td>  #}
-                <td>{{ entity.nombre }}</td>
+                <td> 
+                    <p class="detallePaciente">
+                        {{ entity.nombre }}
+                    </p>
+                </td>
                 <td style="text-align: right; padding-right: 20px">  $ {{ entity.costo|number_format(2, '.', ',') }}</td>
                <td><center>
                     {% if entity.estado == 1 %}

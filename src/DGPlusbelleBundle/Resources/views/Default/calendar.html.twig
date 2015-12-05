@@ -22,14 +22,30 @@ var source =
             filtro: 1
         },
         error: function() {
-            alert('There was an error while fetching Calendar!');
+            bootbox.alert('Se produjo un error al recuperar los datos del calendario, recargue la página!');
         }
         
     };
-    
+/*var sourceSuc = 
+    {
+        url: Routing.generate('fullcalendar_loader_suc'),
+        type: 'POST',
+        data: {
+            filtro: 1
+        },
+        error: function() {
+            bootbox.alert('Se produjo un error al recuperar los datos del calendario, recargue la página!');
+        }
+        
+    };
+  */  
 $(document).ready(function() {        
     // page is now ready, initialize the calendar...
     //var horaInicial=null;
+       
+    
+    
+    //alert(hoy);
     calendario = $('#calendar-holder').fullCalendar({
         
         header: {
@@ -134,6 +150,16 @@ $(document).ready(function() {
                             });
                             allDay();
                             break;
+                        case 4:
+                            var mensaje = "";
+                            mensaje += "<div class='row'><div class='col-md-12'><b><p class='text-left'>Error...</p></b></div></div>";
+                            mensaje += "<div class='row'><hr></div>";
+                            mensaje += "<div class='row'><div class='col-md-12'>Esta cita no puede ser reprogramada a un hora antes de la actual</div></div>"
+                            bootbox.alert(mensaje, function() {
+                                
+                            });
+                            allDay();
+                            break;
                     }
                     
                           
@@ -149,7 +175,21 @@ $(document).ready(function() {
             var endtm = $.fullCalendar.formatDate(event.end,'HH:mm');    
         },*/
         eventClick: function ( startDate, endDate, event, jsEvent, view )  {
-           
+            var hoy = new Date();
+            var dd = hoy.getDate();
+            var mm = hoy.getMonth()+1; //hoy es 0!
+            var yyyy = hoy.getFullYear();
+            //alert(view.name);
+            if(dd<10) {
+                dd='0'+dd
+            } 
+
+            if(mm<10) {
+                mm='0'+mm
+            } 
+
+            hoy = yyyy+'-'+mm+'-'+dd;
+            
             //alert("Información de la citra");
             $.getJSON(Routing.generate('get_infoCita', { id: startDate.id}), 
                 function(data) {
@@ -167,7 +207,8 @@ $(document).ready(function() {
                           mensaje += "<div class='col-md-6 text-right'><b>Fecha: </b></div><div class='col-md-6'>"+data.regs[0].fechaCita+"</div>";
                           mensaje += "<div class='col-md-6 text-right'><b>Hora: </b></div><div class='col-md-6'>"+data.regs[0].horaCita+"</div>";
                           mensaje += "</div>";
-                          if(data.regs[0].estado=="Pendiente"){
+                          
+                          if(data.regs[0].estado=="Pendiente" && data.regs[0].fechaCita==hoy){
                               bootbox.dialog({
                                 message: mensaje,
                                 title: "Información de la cita",
@@ -215,18 +256,43 @@ $(document).ready(function() {
            
         },
         
+        dayClick: function(date, jsEvent, view) {
+            //alert('Clicked on: '+date);
+            //alert('Coordinates: ' + jsEvent.pageX + ',' + jsEvent.pageY);
+
+            calendario.fullCalendar( 'changeView', 'agendaDay' );
+            calendario.fullCalendar('gotoDate', date);
+
+        },
+        
+        dblclick: function(date, jsEvent, view) {
+            //alert('Clicked on: '+date);
+            //alert('Coordinates: ' + jsEvent.pageX + ',' + jsEvent.pageY);
+            calendario.fullCalendar( 'changeView', 'agendaDay' );
+            calendario.fullCalendar('gotoDate', date);
+
+        },
         
         //eventSources: [ source ],
         eventRender: function(event, element) {
-           
+           element.bind('dblclick', function() {
+              alert('double click!');
+           });
+           	element.find('.fc-event-title').html(element.find('.fc-event-title').text());
         },
         eventAfterAllRender: function( view ) {
+            calendario.bind('dblclick', function() {
+              alert('double click!');
+            });
             
         }
+        
+        
 
         
     });//FIN DE LA CONFIGURACION DEL CALENDARIO
-    calendario.fullCalendar('addEventSource', source);    
+    calendario.fullCalendar('addEventSource', source); 
+    
 });//FIN
 </script> 
 {% endblock %}

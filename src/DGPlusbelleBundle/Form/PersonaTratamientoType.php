@@ -60,16 +60,27 @@ class PersonaTratamientoType extends AbstractType
                          'class'=>'form-control input-sm tratamientoPaciente'
                          )
                        ))
-            ->add('fechaVenta', null,
+            /*->add('fechaVenta', null,
                   array('label'  => 'Fecha de venta','required'=>false,
                         'widget' => 'single_text',
                         'attr'   => array('class' => 'form-control input-sm calZebra'),
-                       )) 
+                       )) */
              ->add('cuotas', null, array('label'=>'Cuotas', 'required'=>false,
                     'attr'=>array(
                          'class'=>'form-control input-sm cuotasTratamiento'
                          )
-                       ))                   
+                       ))
+             ->add('descuento', null, 
+                  array( 'label'         => 'Descuento','required'=>false,
+                         'empty_value'   => 'Seleccione un descuento...',
+                         'class'         => 'DGPlusbelleBundle:Descuento',
+                         'query_builder' => function(EntityRepository $repository) {
+                           return $repository->obtenerDescActivo();
+                       },
+                         'attr'=>array(
+                         'class'=>'form-control input-sm descuentoCita'
+                         )
+                       ))
         ;
     }
     

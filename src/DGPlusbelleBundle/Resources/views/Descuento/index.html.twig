@@ -111,7 +111,7 @@
    {% endblock %}
    
     {% block javascripts_step %}
-      
+        <script src="{{ asset('Resources/js/Descuento.js') }}"></script>
        <script>
             $(document).ready(function(){
                  var link=0;
@@ -138,7 +138,8 @@
                     
                     
                      //Hay que cambiar el numero de la columna para las otras tablas
-                    estadoPrevio = $(this).children('td:nth-child(4)').children().html();
+                    estadoPrevio = $(this).children('td:nth-child(4)').html();
+                    //alert(estadoPrevio);
                     estadoPrevio = estadoPrevio.trim();
                     if(estadoPrevio==="Inactivo"){//se muestran los iconos de desactivado
                         $('#delete-datatables1').children().removeClass("fa fa-toggle-on");
@@ -278,7 +279,7 @@
         $('#datatables1_filter').hide();
         $('#filterDatatables1').val('');
         
-        
+        validarDescuento();
         
         
     });//Fin document ready

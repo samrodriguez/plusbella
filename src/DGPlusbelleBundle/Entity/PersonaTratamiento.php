@@ -88,6 +88,17 @@ class PersonaTratamiento
      * @ORM\Column(name="cuotas", type="integer", nullable=false)
      */
     private $cuotas;
+    
+    /**
+     * @var \Descuento
+     *
+     * @ORM\ManyToOne(targetEntity="Descuento")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="descuento", referencedColumnName="id")
+     * })
+     */
+    private $descuento;
+    
 
     /**
      * Get id
@@ -295,5 +306,29 @@ class PersonaTratamiento
     
     public function __toString() {
     return $this->tratamiento->getNombre() ? $this->tratamiento->getNombre() : '';
+    }
+    
+    /**
+     * Set descuento
+     *
+     * @param \DGPlusbelleBundle\Entity\Descuento $descuento
+     *
+     * @return Cita
+     */
+    public function setDescuento(\DGPlusbelleBundle\Entity\Descuento $descuento = null)
+    {
+        $this->descuento = $descuento;
+
+        return $this;
+    }
+
+    /**
+     * Get descuento
+     *
+     * @return \DGPlusbelleBundle\Entity\Descuento
+     */
+    public function getDescuento()
+    {
+        return $this->descuento;
     }
 }

@@ -51,7 +51,7 @@ class PersonaTratamientoController extends Controller
         $form = $this->createCreateForm($entity);
         $form->handleRequest($request);
         $entity->setFechaRegistro(new \DateTime('now'));
-
+        $entity->setFechaVenta(new \DateTime('now'));
         if ($form->isValid()) {
             $em = $this->getDoctrine()->getManager();
             $em->persist($entity);

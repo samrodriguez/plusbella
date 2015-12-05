@@ -1,9 +1,52 @@
 {% extends 'DGPlusbelleBundle:Layout:layout.html.twig' %}  
 
 {% block contenido -%}
-    
+    <div class="col-md-1">
+        Sucursales
+    </div>
+    <div class="col-md-6">
+        <select class="col-md-6" id="filtroSucursales">
+            {% for sucursal in sucursales %}
+                <option value="{{sucursal.id}}"> {{sucursal.nombre}}</option>
+            {% endfor %}
+        </select>
+    </div>
+    <div class="clearfix"></div>
     <div class="col-md-12">
         {% include 'DGPlusbelleBundle:Default:calendar.html.twig' %}            
     </div>
         
+{% endblock %}
+
+
+{% block javascripts_step %}
+
+    <script>
+        $(document).ready(function(){
+
+            $(document).on('change','#filtroSucursales', function(){
+                var sucursal = $(this).val();
+                alert(Routing.generate('fullcalendar_loader')+'?sucursal='+sucursal);
+                var source = 
+                    {
+                        url: Routing.generate('fullcalendar_loader')+'?sucursales='+sucursal,
+                        type: 'POST',
+                        data: {
+                            filtro: 1
+                        },
+                        error: function() {
+                            bootbox.alert('Se produjo un error al recuperar los datos del calendario, recargue la página!');
+                        }
+
+                    };
+
+                alert('dcdsc');
+
+
+            });
+
+        });
+    
+    </script>
+    
 {% endblock %}

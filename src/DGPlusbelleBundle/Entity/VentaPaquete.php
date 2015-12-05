@@ -92,7 +92,15 @@ class VentaPaquete
      */
     private $cuotas;
 
-
+    /**
+     * @var \Descuento
+     *
+     * @ORM\ManyToOne(targetEntity="Descuento")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="descuento", referencedColumnName="id")
+     * })
+     */
+    private $descuento;
 
     /**
      * Get id
@@ -300,4 +308,30 @@ class VentaPaquete
      public function __toString() {
    return $this->paquete->getNombre() ? $this->paquete->getNombre() .' $'.$this->paquete->getCosto().' '.$this->getFechaVenta()->format('d-m-Y') : '';
     }
+    
+    
+    /**
+     * Set descuento
+     *
+     * @param \DGPlusbelleBundle\Entity\Descuento $descuento
+     *
+     * @return Cita
+     */
+    public function setDescuento(\DGPlusbelleBundle\Entity\Descuento $descuento = null)
+    {
+        $this->descuento = $descuento;
+
+        return $this;
+    }
+
+    /**
+     * Get descuento
+     *
+     * @return \DGPlusbelleBundle\Entity\Descuento
+     */
+    public function getDescuento()
+    {
+        return $this->descuento;
+    }
+    
 }

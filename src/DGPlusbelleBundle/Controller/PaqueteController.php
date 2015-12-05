@@ -293,4 +293,20 @@ class PaqueteController extends Controller
         return new Response(json_encode($exito));
         
     }
+    
+    
+    /**
+     * Detalle paquete.
+     *
+     * @Route("/detalle_paquete/{id}", name="admin_paquete_detalle", options={"expose"=true})
+     * @Method("GET")
+     */
+    public function detallepaqueteAction(Request $request, $id)
+    {
+        
+    }
+    
+    
+    
+    
 }

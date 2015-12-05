@@ -31,17 +31,7 @@ class CitaType extends AbstractType
             //->add('horaFin')
            // ->add('fechaRegistro')
             //->add('estado')
-            ->add('descuento', null, 
-                  array( 'label'         => 'Descuento','required'=>false,
-                         'empty_value'   => 'Seleccione un descuento...',
-                         'class'         => 'DGPlusbelleBundle:Descuento',
-                         'query_builder' => function(EntityRepository $repository) {
-                           return $repository->obtenerDescActivo();
-                       },
-                         'attr'=>array(
-                         'class'=>'form-control input-sm descuentoCita'
-                         )
-                       ))
+            
             ->add('empleado','entity', array( 'label' => 'Empleado','required'=>false,
                          'empty_value'   => 'Seleccione un empleado...',
                          'class'         => 'DGPlusbelleBundle:Empleado',

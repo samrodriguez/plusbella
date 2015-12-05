@@ -77,6 +77,7 @@ class VentaPaqueteController extends Controller
         //die();
 
         $entity->setFechaRegistro(new \DateTime('now'));
+        $entity->setFechaVenta(new \DateTime('now'));
         $form = $this->createCreateForm($entity);
         $form->handleRequest($request);
 

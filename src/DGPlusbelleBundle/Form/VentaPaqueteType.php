@@ -7,6 +7,8 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 use DGPlusbelleBundle\Repository\EmpleadoRepository;
 use Doctrine\ORM\EntityRepository;
+use DGPlusbelleBundle\Entity\Descuento;
+
 
 class VentaPaqueteType extends AbstractType
 {
@@ -17,11 +19,11 @@ class VentaPaqueteType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-        ->add('fechaVenta', null,
+        /*->add('fechaVenta', null,
                   array('label'  => 'Fecha de venta','required'=>false,
                         'widget' => 'single_text',
                         'attr'   => array('class' => 'form-control input-sm calZebra'),
-                       )) 
+                       )) */
             //->add('fechaRegistro')
             ->add('paquete', 'entity', 
                   array( 'label'         => 'Paquete','required'=>false,
@@ -64,7 +66,18 @@ class VentaPaqueteType extends AbstractType
             ->add('cuotas', null,
                   array('label'  => 'Cuotas','required'=>false,
                         'attr'   => array('class' => 'form-control input-sm cuotas'),
-                       )) 
+                       ))   
+            ->add('descuento', null, 
+                  array( 'label'         => 'Descuento','required'=>false,
+                         'empty_value'   => 'Seleccione un descuento...',
+                         'class'         => 'DGPlusbelleBundle:Descuento',
+                         'query_builder' => function(EntityRepository $repository) {
+                           return $repository->obtenerDescActivo();
+                       },
+                         'attr'=>array(
+                         'class'=>'form-control input-sm descuentoCita'
+                         )
+                       ))
             //->add('usuario')
         ;
     }
@@ -80,7 +93,11 @@ class VentaPaqueteType extends AbstractType
     }
 
     /**
-     * @return string
+     * 
+     *
+     * @Route("/", name="admin_ventapaquete_create")
+     * @Method("POST")
+     * @Template("DGPlusbelleBundle:VentaPaquete:new.html.twig")
      */
     public function getName()
     {
