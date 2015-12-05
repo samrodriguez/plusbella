@@ -15,25 +15,25 @@ class DevolucionType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('monto','text',array('label' => 'Monto $',
+            ->add('monto','text',array('label' => 'Monto $','required'=>false,
                     'attr'=>array(
-                    'class'=>'form-control input-sm'
+                    'class'=>'form-control input-sm montoDevolucion'
                     )))
-            ->add('motivo','text',array('label' => 'Motivo',
+            ->add('motivo','textarea',array('label' => 'Motivo','required'=>false,
                     'attr'=>array(
-                    'class'=>'form-control input-sm'
+                    'class'=>'form-control input-sm motivoDevolucion'
                     )))
            // ->add('fechaDevolucion')
-            ->add('empleado',null,array('label' => 'Empleado','empty_value'=>'Seleccione empleado',
+            ->add('empleado',null,array('label' => 'Empleado','empty_value'=>'Seleccione empleado','required'=>false,
                     'attr'=>array(
-                    'class'=>'form-control input-sm'
+                    'class'=>'form-control input-sm empleadoDevolucion'
                     )))
             ->add('paciente',null,array('label' => 'Paciente','empty_value'=>'Seleccione paciente',
                     'attr'=>array(
                     'class'=>'form-control input-sm'
                     )))
-            ->add('ventapaquete',null, array('label'=>'Paquetes'))
-            ->add('personatratamiento',null, array('label'=>'Tratamientos'))
+            ->add('ventapaquete',null, array('label'=>'Paquetes','required'=>false))
+            ->add('personatratamiento',null, array('label'=>'Tratamientos','required'=>false))
             ->add('flagDevolucion', 'choice', array('label'=>'Aplicar devolución a',
                     'choices'  => array('0' => 'Paquete', '1' => 'Tratamiento'),
                     'multiple' => false,

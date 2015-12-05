@@ -10,34 +10,37 @@
   {{ form_start(form) }}
     {{ form_errors(form) }}
         <div class="row">
-            <div class="col-md-3">
-            {{ form_row(form.empleado) }}
-            </div>
-            <div class="col-md-3">
+             <div class="col-md-2">
             {{ form_row(form.paciente) }}
             </div>
             <div class="col-md-2">
+            {{ form_row(form.empleado) }}
+            </div>
+            <div class="col-md-1">
             {{ form_row(form.monto) }}
              </div>
-            <div class="col-md-4">
-            {{ form_row(form.motivo) }}
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-md-3">
+             
+              <div class="row">
+            <div class="col-md-2">
             {{ form_row(form.flagDevolucion) }}
             </div>
             <div id="paquete" style="display:none;">
-                <div class="col-md-3">
+                <div class="col-md-2">
                 {{ form_row(form.ventapaquete) }}
                 </div>
             </div>
             <div id="tratamiento" style="display:none;">
-                <div class="col-md-3">
+                <div class="col-md-2">
                 {{ form_row(form.personatratamiento) }}
                 </div>
             </div>
         </div>
+             
+            <div class="col-md-4">
+            {{ form_row(form.motivo) }}
+            </div>
+        </div>
+       
             <div class="form-grouphide col-sm-9">
                 <a href="{{ path('admin_devolucion') }}" class="btn btn-default btn-sm" id="cancelarNuevo">Cancelar</a>
                 {{ form_widget(form.submit) }}
@@ -53,6 +56,7 @@
 {% endblock %}
 
 {% block javascripts_step %}
+      <script src="{{ asset('Resources/js/Devolucion.js') }}"></script>  
        
     <script>
         $(document).ready(function(){
@@ -83,6 +87,8 @@
                 $('#dgplusbellebundle_devolucion_flagDevolucion_1').click();
                 $('#dgplusbellebundle_devolucion_flagDevolucion_1').parent().click();
             }
+            
+             validarDevolucion();   
 
         });//Fin document ready
 

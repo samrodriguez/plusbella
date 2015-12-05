@@ -110,7 +110,7 @@ class DevolucionController extends Controller
                                                     ;   
                                             } ,
                          'attr'=>array(
-                         'class'=>'form-control input-sm '
+                         'class'=>'form-control input-sm paqueteDevolucion'
                          )
                        ))
                 ->add('personatratamiento', 'entity', 
@@ -128,7 +128,7 @@ class DevolucionController extends Controller
                                                     ;   
                                             } ,
                          'attr'=>array(
-                         'class'=>'form-control input-sm '
+                         'class'=>'form-control input-sm tratamientoDevolucion'
                          )
                        ));
    
