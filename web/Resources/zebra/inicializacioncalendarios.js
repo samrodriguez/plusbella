@@ -20,6 +20,7 @@
             months:['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
             days: ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'],
             direction:true,
+            format: 'd-m-Y',
             show_clear_date:false,
             show_select_today: "Hoy",
             default_position: "below",
@@ -41,7 +42,7 @@
         $('.calZebra').Zebra_DatePicker({
             months:['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
             days: ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'],
-            format: 'Y-m-d',
+            format: 'd-m-Y',
             show_clear_date:false,
             show_select_today: "Hoy",
         });
@@ -50,7 +51,7 @@
         $('#fecha-inicio').Zebra_DatePicker({
             months:['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
             days: ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'],
-            format: 'Y-m-d',
+            format: 'd-m-Y',
             show_clear_date:false,
             show_select_today: "Hoy",
             onSelect: function(){

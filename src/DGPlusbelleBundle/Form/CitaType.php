@@ -23,11 +23,18 @@ class CitaType extends AbstractType
                   array('label'  => 'Fecha cita','required'=>false,
                         'widget' => 'single_text',
                         'attr'   => array('class' => 'form-control input-sm fechaCita'),
+                        'format' => 'dd-MM-yyyy',
                        ))
-            ->add('horaCita', null,
+            /*->add('horaCita', null,
                   array('label'  => 'Hora cita',
                         'attr'   => array('class' => 'input-sm hora'),
-                       ))
+                       ))*/
+                ->add('horaCita', 'time', array(
+                    'input'  => 'datetime',
+                    'widget' => 'choice',
+                    'hours'=> array('6','7','8','9','10','11','12','13','14','15','16','17','18','19'),
+                    'minutes'=> array('0','30')
+                ))
             //->add('horaFin')
            // ->add('fechaRegistro')
             //->add('estado')
@@ -72,6 +79,10 @@ class CitaType extends AbstractType
                          'class'=>'form-control input-sm tratamientoCita'
                          )
                        ))
+            ->add('sucursal',null,array('label' => 'Sucursal','required'=>false,'empty_value'=>'Seleccione Sucursal...',
+                    'attr'=>array(
+                    'class'=>'form-control input-sm sucursalEmpleado'
+                    )))
         ;
     }
     

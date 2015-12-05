@@ -69,7 +69,14 @@ class CitaController extends Controller
         
         //var_dump($entity->getEmpleado()->getId());
         //var_dump($entity->getHoraCita());
+        //var_dump($idEmpleado);
+        //var_dump($horaCita);
+        //var_dump($fechaCita);
+        //echo gmdate("H:i", $horaCita);
+        //$horaCita = date_format($horaCita,'H:i');
         
+        //$horaCita = strtotime($horaCita);
+        var_dump($horaCita);
         $em = $this->getDoctrine()->getManager();
         $cita = $em->getRepository('DGPlusbelleBundle:Cita')->findBy(array('empleado'=>$idEmpleado,'horaCita'=>$horaCita,'fechaCita'=>$fechaCita));
         

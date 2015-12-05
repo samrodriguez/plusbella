@@ -344,46 +344,10 @@ class VentaPaqueteController extends Controller
         );
 
 
-
-
-
-
-
-
-
-
-
-
-
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    
+    
+    
 
 
 

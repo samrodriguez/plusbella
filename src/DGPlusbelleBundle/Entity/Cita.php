@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * Cita
  *
- * @ORM\Table(name="cita", indexes={ @ORM\Index(name="fk_cita_paciente1_idx", columns={"paciente"}), @ORM\Index(name="fk_cita_empleado1_idx", columns={"empleado"}), @ORM\Index(name="fk_cita_tratamiento1_idx", columns={"tratamiento"}), @ORM\Index(name="fk_cita_descuento1_idx", columns={"descuento"})})
+ * @ORM\Table(name="cita", indexes={ @ORM\Index(name="fk_cita_paciente1_idx", columns={"paciente"}), @ORM\Index(name="fk_cita_empleado1_idx", columns={"empleado"}), @ORM\Index(name="fk_cita_tratamiento1_idx", columns={"tratamiento"})})
  * @ORM\Entity(repositoryClass="DGPlusbelleBundle\Repository\CitaRepository")
  */
 class Cita
@@ -56,15 +56,7 @@ class Cita
      */
     private $estado;
 
-    /**
-     * @var \Descuento
-     *
-     * @ORM\ManyToOne(targetEntity="Descuento")
-     * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="descuento", referencedColumnName="id")
-     * })
-     */
-    private $descuento;
+    
 
     /**
      * @var \Empleado
@@ -76,6 +68,16 @@ class Cita
      */
     private $empleado;
 
+    
+    /**
+     * @var \Sucursal
+     *
+     * @ORM\ManyToOne(targetEntity="Sucursal")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="sucursal", referencedColumnName="id")
+     * })
+     */
+    private $sucursal;
     
 
     /**
@@ -231,30 +233,6 @@ class Cita
     }
 
     /**
-     * Set descuento
-     *
-     * @param \DGPlusbelleBundle\Entity\Descuento $descuento
-     *
-     * @return Cita
-     */
-    public function setDescuento(\DGPlusbelleBundle\Entity\Descuento $descuento = null)
-    {
-        $this->descuento = $descuento;
-
-        return $this;
-    }
-
-    /**
-     * Get descuento
-     *
-     * @return \DGPlusbelleBundle\Entity\Descuento
-     */
-    public function getDescuento()
-    {
-        return $this->descuento;
-    }
-
-    /**
      * Set empleado
      *
      * @param \DGPlusbelleBundle\Entity\Empleado $empleado
@@ -327,4 +305,30 @@ class Cita
     {
         return $this->tratamiento;
     }
+    
+    
+    /**
+     * Set sucursal
+     *
+     * @param \DGPlusbelleBundle\Entity\Sucursal $sucursal
+     *
+     * @return VentaPaquete
+     */
+    public function setSucursal(\DGPlusbelleBundle\Entity\Sucursal $sucursal = null)
+    {
+        $this->sucursal = $sucursal;
+
+        return $this;
+    }
+
+    /**
+     * Get sucursal
+     *
+     * @return \DGPlusbelleBundle\Entity\Sucursal
+     */
+    public function getSucursal()
+    {
+        return $this->sucursal;
+    }
+    
 }

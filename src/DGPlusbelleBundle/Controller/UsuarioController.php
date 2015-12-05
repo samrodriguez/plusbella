@@ -306,7 +306,56 @@ class UsuarioController extends Controller
         
     }
     
-    
+    /**
+     * 
+     *
+     * @Route("/autorizarmodventapaquete/", name="admin_autorizar_ventapaquete", options={"expose"=true})
+     * @Method("POST")
+     * @Template()
+     */
+    public function autorizarmodventapaqueteAction(){
+        $isAjax = $this->get('Request')->isXMLhttpRequest();
+        if($isAjax){    
+            $em = $this->getDoctrine()->getManager();
+            $username = $this->get('request')->request->get('username');
+            $password = $this->get('request')->request->get('password');
+            $entity = $em->getRepository('DGPlusbelleBundle:Usuario')->findBy(array('username'=>$username));
+            //var_dump($entity);
+            if(count($entity)!=0){
+                $entity = $entity[0];
+
+
+                $pass = $password;
+                $salt = $entity->getSalt();
+
+                $encoder = new \Symfony\Component\Security\Core\Encoder\MessageDigestPasswordEncoder('sha512', true, 10);
+                $password = $encoder->encodePassword($pass, $salt);
+                //$entity->setPassword($password);
+                //var_dump($pass);
+                //var_dump($salt);
+                $entity = $em->getRepository('DGPlusbelleBundle:Usuario')->findBy(array('password'=>$password));
+
+                //var_dump($entity);
+                //$this->setSecurePassword($entity);
+                //var_dump(count($entity));
+
+                if(count($entity)==1){
+                    $exito['regs']=0;   //Acceso permitido
+                }
+                else{
+                    $exito['regs']=1;   //Acceso no permitido
+                }
+            }
+            else{
+                $exito['regs']=2;   //No existe el usuario
+            }
+        } else {    
+            return new Response('0');              
+        }  
+        
+        return new Response(json_encode($exito));
+
+    }
     
 }
 

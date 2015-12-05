@@ -27,9 +27,9 @@
                   <button id="edit-datatables1" data-toggle="tooltip" data-container="body" title="Editar venta de paquete" class="btn btn-default datatables1-actions disabled" role="button">
                     <i class="fa fa-edit"></i>
                   </button>
-                  <button id="delete-datatables1" data-toggle="tooltip" data-container="body" title="Borrar venta de paquete" class="btn btn-default datatables1-actions disabled" role="button">
+                  {#<button id="delete-datatables1" data-toggle="tooltip" data-container="body" title="Borrar venta de paquete" class="btn btn-default datatables1-actions disabled" role="button">
                     <i class="fa fa-trash-o"></i>
-                  </button>
+                  </button>#}
                 </div>
                 <div class="btn-group pull-left">
                   <input id="filterDatatables1" class="form-control input-sm" placeholder="Buscar...">
@@ -94,10 +94,11 @@
             $(document).ready(function(){
                 //var calendario = document.getElementById("dgplusbellebundle_ventapaquete_fechaVenta"); 
                 
-                
+                var permitir=0;
             
                 //Seleccionar un registro
                 $('#datatables1>tbody>tr').on('click', function(event) {
+                    $("#editFormContainer").addClass("hide");
                     //Se limpia los otros que esten activos
                     $('#datatables1>tbody>tr').each(function(index, val) {
                         $(this).removeClass("active");
@@ -152,17 +153,122 @@
                 
                 
                 $("#edit-datatables1").click(function(){
-                    if(!$("#edit-datatables1").hasClass("disabled")){
-                        if($("#editFormContainer").hasClass("hide")){
-                            $("#addFormContainer").addClass("hide");
-                            $("#editFormContainer").removeClass("hide");
-                        }
-                        else{
-                            //$("#addFormContainer").removeClass("hide");
-                            $("#editFormContainer").addClass("hide");
-                        }
-                    }
+                    
+                    
+                    
+                    if($("#editFormContainer").hasClass("hide")){
+                            bootbox.dialog({
+                                title: "Esperando autorización...",
+                                message: 
+                                        '<div class="row">  ' +
 
+                                            '<div class="col-md-5 text-right">'+
+                                                '<label> Nombre de usuario </label>'+
+                                            '</div>'+
+                                            '<div class="col-md-5">'+
+                                                '<input id="nameUser" name="name" type="text" placeholder="" class="form-control input-md">'+
+                                            '</div>'+
+                                        '</div>'+
+                                        '<div class="row" style="margin-top:5px;">  ' +
+                                            '<div class="col-md-5 text-right">'+
+                                                '<label> Constraseña:</label>'+
+                                            '</div>'+
+                                            '<div class="col-md-5">'+
+                                                '<input id="namePass" name="name" type="password" placeholder="" class="form-control input-md">'+
+                                            '</div>'+
+                                        '</div>'
+                                        ,
+                                buttons: {
+                                    success: {
+                                        label: "Autorizar",
+                                        className: "btn-success",
+                                        callback: function () {
+                                            /*
+                                            if(!$("#edit-datatables1").hasClass("disabled")){
+                                                if($("#editFormContainer").hasClass("hide")){
+                                                    $("#addFormContainer").addClass("hide");
+                                                    $("#editFormContainer").removeClass("hide");
+                                                }
+                                                else{
+                                                    //$("#addFormContainer").removeClass("hide");
+                                                    $("#editFormContainer").addClass("hide");
+                                                }
+                                            }*/
+                                            
+                                            var nameUser=$('#nameUser').val();
+                                            var namePass=$('#namePass').val();
+                                            if(nameUser==""){
+                                                nameUser=0;
+                                            }
+                                            if(namePass==""){
+                                                namePass=0;
+                                            }
+                                            
+                                            // Se obtienen los campos necesarios para la plantilla seleccionada
+                                            $.post( "{{path('admin_autorizar_ventapaquete')}}", { username: nameUser,password:namePass,permitir:permitir }, function( data ) {
+                                                
+                                                
+                                                nameUser='as';
+                                                // Si la plantilla contiene campos
+                                                if(data.regs== 0){
+                                                    $("#addFormContainer").addClass("hide");
+                                                    $("#editFormContainer").removeClass("hide");
+                                                    
+                                                }
+                                                else{
+                                                    permitir=0;//denegar acceso
+                                                    $("#editFormContainer").addClass("hide");
+                                                    bootbox.alert("¡Acceso denegado!", function() {
+                                                    
+                                                    });
+                                                }
+                                            }, "json");
+                                            
+                                            
+                                            
+                                            /*$.getJSON(Routing.generate('admin_autorizar_ventapaquete', { username: nameUser,password:namePass}), 
+                                            function(data) {
+                                                //alert(data.regs.length);
+                                                //return false;
+                                                if(data.regs!=0){
+                                                    $('#namePass').attr('name',1);
+                                                }
+                                                else{
+                                                    $('#namePass').attr('name',0);
+                                                    //dialog.show();
+                                                    if($("#editFormContainer").hasClass("hide")){
+                                                        $("#addFormContainer").addClass("hide");
+                                                        $("#editFormContainer").removeClass("hide");
+                                                        
+                                                    }
+                                                    else{
+                                                        //$("#addFormContainer").removeClass("hide");
+                                                        $("#editFormContainer").addClass("hide");
+                                                    }
+                                                }
+                                                
+                                            });*/
+                                            
+                                            //return false;
+                                        }
+                                    }
+                                }
+                            });
+                }
+  /*                  
+                    if(!$("#edit-datatables1").hasClass("disabled")){
+                            if($("#editFormContainer").hasClass("hide")){
+                                $("#addFormContainer").addClass("hide");
+                                $("#editFormContainer").removeClass("hide");
+                            }
+                            else{
+                                //$("#addFormContainer").removeClass("hide");
+                                $("#editFormContainer").addClass("hide");
+                            }
+                        }
+
+*/
+                        
                 });
                 
                 $('#filterDatatables1').on('keyup', function(event) {
