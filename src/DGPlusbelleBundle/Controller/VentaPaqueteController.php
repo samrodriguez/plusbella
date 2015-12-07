@@ -7,6 +7,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
+use DGPlusbelleBundle\Entity\SeguimientoPaquete;
 use DGPlusbelleBundle\Entity\VentaPaquete;
 use DGPlusbelleBundle\Entity\Paciente;
 use DGPlusbelleBundle\Form\VentaPaqueteType;
@@ -86,6 +87,12 @@ class VentaPaqueteController extends Controller
             $em->persist($entity);
             $em->flush();
 
+            $seguimiento = new SeguimientoPaquete;
+            $seguimiento->setVentaPaquete($entity);
+            $seguimiento->setNumSesion(0);
+            $em->persist($seguimiento);
+            $em->flush();
+            
             $usuario= $this->get('security.token_storage')->getToken()->getUser();
             $this->get('bitacora')->escribirbitacora("Se registro la venta de un paquete",$usuario->getId());
             

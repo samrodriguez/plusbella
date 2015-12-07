@@ -826,15 +826,16 @@ class ConsultaController extends Controller
         $result = $stmt->fetchAll();
         */
         //echo $idPaciente;
+        $CompraPaciente = $em->getRepository('DGPlusbelleBundle:Paciente')->find($idPaciente);
         
-        $paquetes = $em->getRepository('DGPlusbelleBundle:VentaPaquete')->findBy(array('paciente'=>$idPaciente));
+        $paquetes = $em->getRepository('DGPlusbelleBundle:VentaPaquete')->findBy(array('paciente' => $CompraPaciente->getPersona()->getId()));
         
         $dql = "SELECT count(vp) FROM DGPlusbelleBundle:VentaPaquete vp"
                . " WHERE vp.paciente=:paciente";
         $totalPaquetes = $em->createQuery($dql)
-                ->setParameter('paciente', $idPaciente)
+                ->setParameter('paciente', $CompraPaciente->getPersona())
                 ->getArrayResult();
-        
+        //var_dump($paquetes);
         $dql = "SELECT count(c) FROM DGPlusbelleBundle:Consulta c"
                . " WHERE c.paciente=:paciente";
         $totalTratamientos = $em->createQuery($dql)
