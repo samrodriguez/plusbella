@@ -173,16 +173,40 @@
                     <table id = "datatables2" class="table table-noborder table-hover bordered-top dataTable" role="grid" aria-describedby="datatables1_info">
                         <thead>
                             <tr row="role">
-                                <th>N°</th>
-                                <th>Paquete</th>
+                                <th class = "text-center">N°</th>
+                                <th class = "text-center">Paquete</th>
+                                <th class = "text-center">Vendido por</th>
+                                <th class = "text-center">Fecha de venta</th>
+                                <th class = "text-center">Estado</th>
+                                <th class = "text-center">Acciones</th>
                             </tr>
                         </thead>
                         <tbody>
                         {% for key, entity in paquetes %}
-                            <tr id="{{entity.tratamiento.id}}">
-                                <td>{{key+1}}</td>
-                                    <td>{{ entity.tratamiento}}</td>
-                                    <td>{{ entity.tipoConsulta}}</td>
+                            <tr>
+                                <td class = "text-center">{{key+1}}</td>
+                                <td>{{ entity.paquete }}</td>
+                                <td>{{ entity.empleado }}</td>
+                                <td class = "text-center">{% if entity.fechaVenta %}{{ entity.fechaVenta|date('d/m/Y') }}{% endif %}</td>
+                                <td class = "text-center">Proceso</td>
+                                <td class="center-block">
+                                    <div class="row">
+                                        <div class="col-md-1 col-md-offset-3">
+                                            <div class="btn-group btn-group-sm pull-left">
+                                                <button id="seguimiento-paquete" data-toggle="tooltip" data-container="body" title="Registrar sesion de tratamiento" class="btn btn-default datatables1-actions opciones" role="button" onclick="seguimientoPaquete({{ entity.id }})">
+                                                    <i class="fa fa-pencil-square-o"></i><a href="{{ path('admin_ventapaquete_new') }}"> </a>
+                                                </button>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-1">
+                                            <div class="btn-group btn-group-sm pull-left">
+                                                <button id="seguimiento-paquete" data-toggle="tooltip" data-container="body" title="Seguimiento paquete" class="btn btn-default datatables1-actions opciones" role="button" onclick="seguimientoPaquete({{ entity.id }})">
+                                                    <i class="fa fa-history"></i><a href=""> </a>
+                                                </button>
+                                            </div>
+                                        </div>            
+                                    </div>
+                                </td>
                             </tr>
                         {% endfor %}
                         </tbody>
@@ -521,21 +545,13 @@
         </script>
         <script>  
         function exportarPDF(id){
-                //var id = ;
-                
-                //if( fechaInicio != '' && fechaFin != '' ){
-                    var url = Routing.generate('admin_reporteplantilla_pdf', {'id': id});
-                    window.open(url,'_blank');
-                //}
-                //else {
-                //    var fecha = new Date();
-                //    var ano = fecha.getFullYear();
-                    
-                //    var url = Routing.generate('admin_ingresoemergencia_pdf', {'fechaInicio': ano + '-01-01', 'fechaFin': ano + '-12-31'});
-                //    window.open(url,'_blank');
-                //}
-                
-               
+            var url = Routing.generate('admin_reporteplantilla_pdf', {'id': id});
+            window.open(url,'_blank');
+        }//Fin funcion
+    </script>
+     <script>  
+        function seguimientoPaquete(id){
+            
         }//Fin funcion
     </script>
     {% endblock %}
