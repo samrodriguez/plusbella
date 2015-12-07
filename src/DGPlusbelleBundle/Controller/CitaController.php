@@ -553,7 +553,7 @@ class CitaController extends Controller
         $cita['regs'][0]["nombreTratamiento"] = ucwords($cita['regs'][0]["nombreTratamiento"]);
         $cita['regs'][0]["primerNombreEmp"] = ucwords($cita['regs'][0]["primerNombreEmp"]);
         $cita['regs'][0]["primerApellidoEmp"] = ucwords($cita['regs'][0]["primerApellidoEmp"]);
-        $cita['regs'][0]["fechaCita"] = $cita['regs'][0]["fechaCita"]->format("Y-m-d");
+        $cita['regs'][0]["fechaCita"] = $cita['regs'][0]["fechaCita"]->format("d-m-Y");
         $cita['regs'][0]["horaCita"] = $cita['regs'][0]["horaCita"]->format("H:i");
         
         switch ($cita['regs'][0]["estado"]){
@@ -596,6 +596,36 @@ class CitaController extends Controller
         //var_dump($cita);
         
         
+        
+        //var_dump($cita['regs'][0]["primerNombre"]);
+        //var_dump($cita);
+        
+        return new Response(json_encode($cita));
+    }
+    
+    /**
+     * @Route("/cancelarcita/get/{id}", name="get_cancelarCita", options={"expose"=true})
+     * @Method("GET")
+     */
+    public function cancelarCitaAction(Request $request, $id) {
+        
+        $em = $this->getDoctrine()->getEntityManager();
+        
+        $entity = $em->getRepository('DGPlusbelleBundle:Cita')->find($id);
+        
+        //var_dump($entity);
+        if(count($entity)!=0){
+            
+            $entity->setEstado("C");
+            $em->persist($entity);
+            $em->flush();
+            $cita['regs'] = 0;  //Cita encontrada y modificada con éxito
+        }
+        else{
+            $cita['regs'] = 1;  //Cita no encontrada
+        }
+                 
+        //var_dump($cita);
         
         //var_dump($cita['regs'][0]["primerNombre"]);
         //var_dump($cita);

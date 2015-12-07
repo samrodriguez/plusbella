@@ -189,8 +189,10 @@ $(document).ready(function() {
                 mm='0'+mm
             } 
 
-            hoy = yyyy+'-'+mm+'-'+dd;
-            
+            //hoy = yyyy+'-'+mm+'-'+dd;
+            hoy = dd+'-'+mm+'-'+yyyy;
+            //alert('"'+hoy+'"');
+            //alert(startDate.id);
             //alert("Información de la citra");
             $.getJSON(Routing.generate('get_infoCita', { id: startDate.id}), 
                 function(data) {
@@ -198,7 +200,7 @@ $(document).ready(function() {
                           //var dt = data.regs[0].fechaCita;
                           //var hr = data.regs[0].horaInicio;
                           var mensaje = "";
-                          mensaje += "<div class='row'></div>";
+                          mensaje += "<div class='container-fluid'>";
                           //mensaje += "<div class='col-md-12'><hr></div></div>";
                           mensaje += "<div class='col-md-6 text-right'><b>Estado: </b></div><div class='col-md-6'>"+data.regs[0].estado+"</div>";
                           mensaje += "<div class='col-md-6 text-right'><b>Expediente: </b></div><div class='col-md-6'>"+data.regs[0].numero+"</div>";
@@ -208,27 +210,99 @@ $(document).ready(function() {
                           mensaje += "<div class='col-md-6 text-right'><b>Fecha: </b></div><div class='col-md-6'>"+data.regs[0].fechaCita+"</div>";
                           mensaje += "<div class='col-md-6 text-right'><b>Hora: </b></div><div class='col-md-6'>"+data.regs[0].horaCita+"</div>";
                           mensaje += "</div>";
-                          
+                          //alert('"'+data.regs[0].fechaCita+'"');
+                          /*if(data.regs[0].fechaCita==hoy){
+                              alert('iguales');
+                          }*/
                           if(data.regs[0].estado=="Pendiente" && data.regs[0].fechaCita==hoy){
                               bootbox.dialog({
                                 message: mensaje,
                                 title: "Información de la cita",
                                 buttons: {
-                                  success: {
-                                    label: "Registrar consulta",
-                                    className: "btn-success",
-                                    callback: function() {
-                                        window.location.href = "../consulta/newconcita?id=C"+data.regs[0].id;
-                                                                                
-                                    }
-                                  },
-                                  main: {
-                                    label: "Aceptar",
-                                    className: "btn-primary",
-                                    callback: function() {
+                                    
+                                //if(data.regs[0].estado=="Pendiente"){
+                                    danger: {
+                                        label: "Cancelar cita",
+                                        className: "btn-danger",
+                                        callback: function() {
+                                            var evento = calendario.fullCalendar('clientEvents',startDate.id);
+                                            var tituloEvento = "";
+                                            var eventoId = 0;
+                                            Object.keys(evento).forEach(function (key) {
+                                                tituloEvento = evento[key].title;
 
+                                                var subTituloEvento = tituloEvento.split(" | ");
+                                                var iconoX = '<div class="fa fa-close"></div> | ';
+                                                //console.log(subTituloEvento);
+                                                var nuevoTitulo = iconoX+subTituloEvento[1];
+                                                evento[key].title = nuevoTitulo;
+                                                $.getJSON(Routing.generate('get_cancelarCita', { id: evento[key].id}), 
+                                                function(data) {
+                                                    var mensaje = "";
+                                                    if(data.regs==0){
+                                                        mensaje += "<div class='row'><div class='col-md-12'><b><p class='text-left'>Actualización exitosa...</p></b></div></div>";
+                                                        mensaje += "<hr>";
+                                                        mensaje += "<div class='row'><div class='col-md-12'>¡Cita cancelada satisfactoriamente!</div></div>"
+                                                        calendario.fullCalendar('updateEvent', evento);
+                                                        bootbox.alert(mensaje, function() {
+
+                                                        });
+                                                    }
+                                                    else{
+                                                        mensaje += "<div class='row'><div class='col-md-12'><b><p class='text-left'>Error...</p></b></div></div>";
+                                                        mensaje += "<hr>";
+                                                        mensaje += "<div class='row'><div class='col-md-12'>¡La cita no pudo cancelarse, intente de nuevo!</div></div>"
+                                                        bootbox.alert(mensaje, function() {
+
+                                                        });
+                                                    }
+                                                });
+                                            });
+                                            
+                                            
+                                            //console.log('texto de prueba');
+                                            //console.log(evento.backgroundColor);
+                                            //console.log( JSON.stringify(evento['backgroundColor']) );
+                                            //alert(evento.id);
+                                            
+                                            
+                                            
+                                            
+                                            
+                                            
+                                            /*alert(evento.title);
+                                            alert(evento.allDay);
+                                            alert(evento.start);
+                                            
+                                            alert(evento.end);
+                                            alert(evento.url);
+                                            alert(evento.className);
+                                            
+                                            alert(evento.color);
+                                            alert(evento.backgroundColor);
+                                            alert(evento.borderColor);
+                                            alert(evento.textColor);*/
+
+                                            //calendario.fullCalendar('eventColor','#000');
+                                            /*bootbox.alert("uh oh, look out!");*/
+                                        }
+                                    },
+                                //}
+                                    success: {
+                                        label: "Registrar consulta",
+                                        className: "btn-success",
+                                        callback: function() {
+                                        window.location.href = "../consulta/newconcita?id=C"+data.regs[0].id;
+
+                                        }
+                                    },
+                                    main: {
+                                        label: "Aceptar",
+                                        className: "btn-primary",
+                                        callback: function() {
+                                            
+                                        }
                                     }
-                                  }
                                 }
                             });
                           }
@@ -266,21 +340,12 @@ $(document).ready(function() {
 
         },
         
-        dblclick: function(date, jsEvent, view) {
-            //alert('Clicked on: '+date);
-            //alert('Coordinates: ' + jsEvent.pageX + ',' + jsEvent.pageY);
-            calendario.fullCalendar( 'changeView', 'agendaDay' );
-            calendario.fullCalendar('gotoDate', date);
-
-        },
         
         //eventSources: [ source ],
         eventRender: function(event, element) {
-           element.bind('dblclick', function() {
-              alert('double click!');
-           });
-           	element.find('.fc-event-title').html(element.find('.fc-event-title').text());
+            element.find('.fc-event-title').html(element.find('.fc-event-title').text());
         },
+        
         eventAfterAllRender: function( view ) {
             calendario.bind('dblclick', function() {
               alert('double click!');
