@@ -18,11 +18,11 @@ class ConsultaConPacienteType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('fechaConsulta', null,
+            /*->add('fechaConsulta', null,
                   array('label'  => 'Fecha consulta','required'=>false,
                         'widget' => 'single_text',
                         'attr'   => array('class' => 'form-control input-sm fechaConsulta'),
-                       ))
+                       ))*/
             ->add('horaInicio','time',array('label' => 'Hora Inicio',
                     'attr'=>array(
                     'class'=>'horaInicioConsulta '

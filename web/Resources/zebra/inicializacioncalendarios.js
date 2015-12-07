@@ -68,7 +68,8 @@
         $('#fecha-fin').Zebra_DatePicker({
             months:['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
             days: ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'],
-            direction: 1,
+            direction: true,
+            format: 'd-m-Y',
             show_clear_date:false,
             show_select_today: false,
             onSelect: function(){
