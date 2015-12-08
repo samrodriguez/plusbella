@@ -804,10 +804,11 @@ class ConsultaController extends Controller
         //var_dump($entity->getPaciente()->getExpediente());
         $entity = $em->getRepository('DGPlusbelleBundle:Consulta')->findBy(array('paciente'=>$idPaciente));
         $paciente = $em->getRepository('DGPlusbelleBundle:Paciente')->find($idPaciente);
+        //var_dump($paciente);
         $edad="";
-        if(count($entity)!=0){
+        if(count($paciente)!=0){
             
-            $fecha = $entity[0]->getPaciente()->getFechaNacimiento()->format("Y-m-d");
+            $fecha = $paciente->getFechaNacimiento()->format("Y-m-d");
             //var_dump($fecha);
             //Calculo de la edad
             list($Y,$m,$d) = explode("-",$fecha);
