@@ -1,15 +1,62 @@
-{% extends '::base.html.twig' %}
+{% extends 'DGPlusbelleBundle:Layout:layout.html.twig' %}
 
-{% block body -%}
-    <h1>SesionTratamiento creation</h1>
+{% block contenido -%}
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <p>Registrar nueva sesión del paquete {{ ventaPaquete.paquete.nombre }}</p>
+        </div>
 
-    {{ form(form) }}
-
-        <ul class="record_actions">
-    <li>
-        <a href="{{ path('admin_sesiontratamiento') }}">
-            Back to the list
-        </a>
-    </li>
-</ul>
+        <div class="panel-body">
+            {{ form_start(form) }}
+            {{ form_errors(form) }}
+            <div class="row">
+                <div class="col-md-4 col-md-offset-2">
+                    <div id="lista_plantilla">
+                        {{ form_row(form.sucursal) }}
+                    </div>
+                </div> 
+                <div class="col-md-4">
+                    <div id="lista_plantilla">
+                        {{ form_row(form.tratamiento) }}
+                    </div>
+                </div> 
+            </div>
+            <div class="row">
+                <div class="col-md-4 col-md-offset-2">
+                    <div id="lista_plantilla">
+                        {{ form_row(form.empleado) }}
+                    </div>
+                </div> 
+                <div class="col-md-4">
+                    <div id="lista_plantilla">
+                        {{ form_row(form.paciente) }}
+                    </div>
+                </div> 
+            </div>
+            <div class="row">
+                <div class="col-md-3 col-md-offset-2">
+                    <div id="lista_plantilla">
+                        {{ form_row(form.fechaSesion) }}
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div id="lista_plantilla">
+                        {{ form_row(form.horaInicio) }}
+                    </div>
+                </div>    
+                <div class="col-md-3">
+                    <div id="lista_plantilla">
+                        {{ form_row(form.horaFin) }}
+                    </div>
+                </div>    
+            </div>
+            <div class="row">
+                <div class="form-grouphide col-sm-7 col-md-offset-2 pull-right" style="margin-top: 10px">
+                <a href="{{ path('admin_paciente') }}" class="btn btn-default btn-sm" id="cancelarNuevo">Cancelar</a>
+                {{ form_widget(form.submit) }}
+              </div>
+            </div>        
+        </div>
+    </div>  
+    {{ form_end(form) }}   
 {% endblock %}

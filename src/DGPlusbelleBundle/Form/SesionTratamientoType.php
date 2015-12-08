@@ -18,7 +18,7 @@ class SesionTratamientoType extends AbstractType
             ->add('fechaSesion')
             ->add('horaInicio')
             ->add('horaFin')
-            ->add('ventaPaquete')
+            //->add('ventaPaquete')
             ->add('sucursal')
             ->add('paciente')
             ->add('empleado')

@@ -76,7 +76,11 @@ class SesionTratamientoController extends Controller
             'method' => 'POST',
         ));
 
-        $form->add('submit', 'submit', array('label' => 'Create'));
+        $form->add('submit', 'submit', array('label' => 'Guardar',
+                                               'attr'=>
+                                                        array('class'=>'btn btn-success btn-sm')
+            
+            ));
 
         return $form;
     }
@@ -84,17 +88,24 @@ class SesionTratamientoController extends Controller
     /**
      * Displays a form to create a new SesionTratamiento entity.
      *
-     * @Route("/new", name="admin_sesiontratamiento_new")
+     * @Route("/new/{id}", name="admin_sesiontratamiento_new", options ={"expose" = true})
      * @Method("GET")
      * @Template()
      */
-    public function newAction()
+    public function newAction($id)
     {
         $entity = new SesionTratamiento();
         $form   = $this->createCreateForm($entity);
+        
+        $em = $this->getDoctrine()->getManager();
+        $ventaPaquete = $em->getRepository('DGPlusbelleBundle:VentaPaquete')->find($id);
+        
+        $seguimiento = $em->getRepository('DGPlusbelleBundle:SeguimientoPaquete')->findBy(array('idVentaPaquete' => $id));
 
         return array(
             'entity' => $entity,
+            'ventaPaquete' => $ventaPaquete,
+            'seguimiento' => $seguimiento,
             'form'   => $form->createView(),
         );
     }
