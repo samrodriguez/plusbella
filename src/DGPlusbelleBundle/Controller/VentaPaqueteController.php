@@ -79,6 +79,7 @@ class VentaPaqueteController extends Controller
 
         $entity->setFechaRegistro(new \DateTime('now'));
         $entity->setFechaVenta(new \DateTime('now'));
+        $entity->setEstado(1);
         $form = $this->createCreateForm($entity);
         $form->handleRequest($request);
 
@@ -87,12 +88,18 @@ class VentaPaqueteController extends Controller
             $em->persist($entity);
             $em->flush();
 
-            $seguimiento = new SeguimientoPaquete;
-            $seguimiento->setVentaPaquete($entity);
-            $seguimiento->setNumSesion(0);
-            $em->persist($seguimiento);
-            $em->flush();
-            
+            $paqueteTratamiento = $em->getRepository('DGPlusbelleBundle:PaqueteTratamiento')->findBy(array('paquete' => $entity->getPaquete()->getId()));
+            var_dump($paqueteTratamiento);
+            die();
+            foreach($paqueteTratamiento as $pt){
+                $seguimiento = new SeguimientoPaquete;
+                $seguimiento->setVentaPaquete($entity);
+                $seguimiento->setNumSesion(0);
+                $seguimiento->setTratamiento($pt->getTratamiento());
+                $em->persist($seguimiento);
+                $em->flush();
+            }
+                
             $usuario= $this->get('security.token_storage')->getToken()->getUser();
             $this->get('bitacora')->escribirbitacora("Se registro la venta de un paquete",$usuario->getId());
             

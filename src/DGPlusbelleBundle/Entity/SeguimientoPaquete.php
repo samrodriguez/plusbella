@@ -51,7 +51,17 @@ class SeguimientoPaquete {
      * })
      */
     private $idVentaPaquete;
-          
+     
+    /**
+     * @var \Tratamiento
+     *
+     * @ORM\ManyToOne(targetEntity="Tratamiento")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="tratamiento", referencedColumnName="id")
+     * })
+     */
+    private $tratamiento;
+    
     /**
      * Get id
      *
@@ -156,6 +166,30 @@ class SeguimientoPaquete {
     public function getVentaPaquete()
     {
         return $this->idVentaPaquete;
+    }
+    
+    /**
+     * Set tratamiento
+     *
+     * @param \DGPlusbelleBundle\Entity\Tratamiento $tratamiento
+     *
+     * @return SeguimientoPaquete
+     */
+    public function setTratamiento(\DGPlusbelleBundle\Entity\Tratamiento $tratamiento = null)
+    {
+        $this->tratamiento = $tratamiento;
+
+        return $this;
+    }
+
+    /**
+     * Get tratamiento
+     *
+     * @return \DGPlusbelleBundle\Entity\Tratamiento
+     */
+    public function getTratamiento()
+    {
+        return $this->tratamiento;
     }
     
 }
