@@ -42,8 +42,8 @@
                         </tbody>
                     </table>
                 </div>    
-            </div>>
-                        
+            </div>
+       
             <hr>
             <div class="row" style="margin-top: 25px">
                 <div class="col-md-3 col-md-offset-2">
@@ -65,24 +65,34 @@
                 
             </div>
             <div class="row">
-                <div class="col-md-3 col-md-offset-2">
-                    <div id="fecha-sesion">
+         {#   <div class="col-md-3 col-md-offset-2">
+                  <div id="fecha-sesion">
                         {{ form_row(form.fechaSesion) }}
-                    </div>
-                </div>
-                <div class="col-md-3">
+                    </div> 
+            </div> #}
+                <div class="col-md-2 col-md-offset-4">
                     <div id="hora-inicio">
                         {{ form_row(form.horaInicio) }}
                     </div>
                 </div>    
-                <div class="col-md-3">
+                <div class="col-md-2">
                     <div id="hora-fin">
                         {{ form_row(form.horaFin) }}
                     </div>
                 </div>    
             </div>
+            <div class="row">        
+              <div class="col-xs-12 col-sm-3 col-md-offset-3" style="margin-top:25px;">
+                <label class="control-label" for="dgplusbellebundle_empleado_sucursal">Foto antes</label>
+                  {{ form_widget(form.fileAntes) }}                
+              </div> 
+               <div class="col-xs-12 col-sm-4" style="margin-top:25px;">
+                <label class="control-label" for="dgplusbellebundle_empleado_sucursal">Foto despues</label>
+                  {{ form_widget(form.fileDespues) }}                
+              </div> 
+            </div>        
             <div class="row">
-                <div class="form-grouphide col-sm-7 col-md-offset-2 pull-right" style="margin-top: 10px">
+                <div class="form-grouphide col-sm-7 col-md-offset-2 pull-right" style="margin-top: 50px">
                 <a href="{{ path('admin_paciente') }}" class="btn btn-default btn-sm" id="cancelar-nuevo">Cancelar</a>
                 {{ form_widget(form.submit) }}
               </div>
@@ -90,4 +100,15 @@
         </div>
     </div>  
     {{ form_end(form) }}   
+{% endblock %}
+
+{% block javascripts_step %}
+        <script src="{{ asset('Resources/js/SesionTratamiento.js') }}"></script>
+       <script>
+            $(document).ready(function(){
+                
+              validarSesionTratamiento();
+           });//Fin document ready       
+       </script>         
+         
 {% endblock %}

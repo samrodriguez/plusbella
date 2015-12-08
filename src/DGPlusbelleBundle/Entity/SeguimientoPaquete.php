@@ -4,6 +4,7 @@ namespace DGPlusbelleBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
+
 /**
  * SeguimientoPaquete
  *
@@ -27,6 +28,20 @@ class SeguimientoPaquete {
      */
     private $numSesion;
     
+     /**
+     * @var string
+     *
+     * @ORM\Column(name="foto_antes", type="string", length=255, nullable=true)
+     */
+    private $fotoAntes;
+    
+     /**
+     * @var string
+     *
+     * @ORM\Column(name="foto_despues", type="string", length=255, nullable=true)
+     */
+    private $fotoDespues;
+    
     /**
      * @var \VentaPaquete
      *
@@ -36,7 +51,7 @@ class SeguimientoPaquete {
      * })
      */
     private $idVentaPaquete;
-    
+          
     /**
      * Get id
      *
@@ -69,6 +84,54 @@ class SeguimientoPaquete {
     public function getNumSesion()
     {
         return $this->numSesion;
+    }
+    
+     /**
+     * Set fotoAntes
+     *
+     * @param string $fotoAntes
+     *
+     * @return SeguimientoPaquete
+     */
+    public function setFotoAntes($fotoAntes)
+    {
+        $this->fotoAntes = $fotoAntes;
+
+        return $this;
+    }
+
+    /**
+     * Get fotoAntes
+     *
+     * @return string
+     */
+    public function getFotoAntes()
+    {
+        return $this->fotoAntes;
+    }
+    
+     /**
+     * Set fotoDespues
+     *
+     * @param string $fotoDespues
+     *
+     * @return SeguimientoPaquete
+     */
+    public function setFotoDespues($fotoDespues)
+    {
+        $this->fotoDespues = $fotoDespues;
+
+        return $this;
+    }
+
+    /**
+     * Get fotoDespues
+     *
+     * @return string
+     */
+    public function getFotoDespues()
+    {
+        return $this->fotoDespues;
     }
     
     /**
