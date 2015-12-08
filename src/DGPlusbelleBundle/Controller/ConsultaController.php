@@ -113,19 +113,19 @@ class ConsultaController extends Controller
         $expediente->setEstado(true);
         //$historial->setConsulta($entity);
         
-        
+        $entity->setFechaConsulta(new \DateTime('now'));
         
         //Tipo de consulta actica, emergencia
-        $dql = "SELECT tc FROM DGPlusbelleBundle:TipoConsulta tc WHERE tc.estado = :estado AND tc.id=:id";
+        /*$dql = "SELECT tc FROM DGPlusbelleBundle:TipoConsulta tc WHERE tc.estado = :estado AND tc.id=:id";
         $tipoConsulta = $em->createQuery($dql)
                        ->setParameters(array('estado'=>1,'id'=>1))
                        ->getResult();
                //var_dump($tipoConsulta[0]);
                //die();
-        $tipoConsulta = $tipoConsulta[0];
+        $tipoConsulta = $tipoConsulta[0];*/
         //var_dump($tipoConsulta);
                //die();
-        $entity->setTipoConsulta($tipoConsulta);
+        //$entity->setTipoConsulta($tipoConsulta);
         //var_dump($this->tipo);
         
         $form = $this->createCreateForm($entity,$id,$idEntidad);
@@ -142,11 +142,12 @@ class ConsultaController extends Controller
         //die();
         if ($form->isValid()) {
             $em = $this->getDoctrine()->getManager();
+            $tratamiento = null;
             switch ($accion){
                 case 'C':
                     $cita = $em->getRepository('DGPlusbelleBundle:Cita')->find($idEntidad);
                     $cita->setEstado("A");
-                    
+                    $tratamiento = $cita->getTratamiento();
                     $entity->setCita($cita);
                     $em->persist($cita);
                     $em->flush();
@@ -156,6 +157,8 @@ class ConsultaController extends Controller
                     break;
             }
         
+            
+            
             
             $paciente = $entity->getPaciente();
             $paciente->setEstado(true);
@@ -377,6 +380,7 @@ class ConsultaController extends Controller
         //$identidad= $request->get('identidad');
         //Busqueda del paciente
         $paciente = $em->getRepository('DGPlusbelleBundle:Paciente')->find($idEntidad);
+        
         //Seteo del paciente en la entidad
         $entity->setPaciente($paciente);
         //var_dump($paciente);
@@ -396,7 +400,7 @@ class ConsultaController extends Controller
      * @Method("GET")
      * @Template("DGPlusbelleBundle:Consulta:newconpaciente.html.twig")
      */
-    public function newConCitaAction()
+    public function newconcitaAction()
     {
         //Metodo para consulta nueva con el id de cita
         $entity = new Consulta();
@@ -412,7 +416,9 @@ class ConsultaController extends Controller
         $cita = $em->getRepository('DGPlusbelleBundle:Cita')->find($idEntidad);
         //var_dump($cadena);
         //var_dump($cita);
+        $tratamiento = $cita->getTratamiento();
         
+        $entity->setTratamiento($tratamiento);
         $idpaciente=$cita->getPaciente()->getId();
         
         //Busqueda del paciente

@@ -50,7 +50,7 @@ class UsuarioType extends AbstractType
                                                 //return $r->seleccionarEmpleadosPersonasActivos();
                                             } ,
                          'attr'=>array(
-                            'class'=>'form-control empleadoUsuario'
+                            'class'=>'form-control input-sm empleadoUsuario'
                          )
                        ))
             ->add('user_roles','entity',array('label' => 'Seleccione un rol','required'=>false,

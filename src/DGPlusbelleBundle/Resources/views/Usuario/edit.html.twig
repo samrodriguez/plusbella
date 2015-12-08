@@ -47,8 +47,9 @@
 
 {% endblock %}
 
+
 {% block javascripts_step %}
-      <script src="{{ asset('Resources/js/Usuario.js') }}"></script>  
+      <script src="{{ asset('Resources/js/EditUsuario.js') }}"></script>  
       
        <script>
             $(document).ready(function(){
@@ -62,8 +63,8 @@
                     }
                 });    
                 
-        validarUsuario();            
+        validarEditUsuario();            
                 
           });//Fin document ready
-            
- {% endblock %}      
+       </script>           
+ {% endblock %}  

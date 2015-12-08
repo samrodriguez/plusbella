@@ -50,6 +50,23 @@ class ReporteController extends Controller
         );
     }
     
+    
+    /**
+     * 
+     *
+     * @Route("/ingresodiario", name="admin_reporte_diario", options={"expose"=true})
+     * @Method("GET")
+     * @Template()
+     */
+    public function ingresosdiariosAction()
+    {
+        return array(
+            //'empleados'=>$empleados,
+            //'ingresos' => $ingresos[0],
+        );
+    }
+    
+    
     /**
      * 
      *
@@ -532,5 +549,127 @@ class ReporteController extends Controller
         $this->get('fpdf_printer')->generarPdfPorRango($titulo, $encabezadoTabla, $anchoCol, $consulta, $sangria, $fechaInicio, $fechaFin);
         
     }
+    
+    
+    
+    
+    
+    /**
+     * 
+     *
+     * @Route("/bar_graficoingresodiario", name="admin_reporte_ingresodiario_grafico", options={"expose"=true})
+     * @Method("GET")
+     * @Template()
+     */
+    public function bargraficoingresodiarioAction(Request $request){
+        $em = $this->getDoctrine()->getManager();
+        $mes= date('m');
+        $anioInicioUser = $request->get('anioInicioUser');
+        $anioFinUser = $request->get('anioFinUser');
+        $sucursal = $request->get('sucursal');
+        if(!isset($anioInicioUser)){
+            $year = date('Y');
+        }
+        else{
+            $year = $anioInicioUser;
+        }
+                
+        $ingresos = array();
+        //var_dump($mes);
+            //echo $i."\n";
+            $dql = "SELECT sum(c.costoConsulta) as total FROM DGPlusbelleBundle:Consulta c "
+                . "WHERE c.fechaConsulta BETWEEN :fechainicio AND :fechafin AND c.sucursal=:sucursal";
+                   
+            
+            
+            $ingresosConsulta = $em->createQuery($dql)
+                       ->setParameters(array('fechainicio'=>$anioInicioUser,'fechafin'=>$anioFinUser,'sucursal'=>$sucursal))
+                       //->setParameter('mes','_____0'.'1'.'___')
+                       ->getResult();
+            //echo "consultas";
+            //var_dump($ingresosConsulta);
+            array_push($ingresos, "Consultas");
+            if( count($ingresosConsulta)!=0){
+                //echo "sdacd";
+                //array_push($ingresosprev[0], $mesLabel[($mes-1)]);
+                if($ingresosConsulta[0]['total']==null){
+                    $ingresosConsulta[0]['total']=0;
+                }
+                array_push($ingresos, $ingresosConsulta[0]['total']);
+                
+                
+            }
+            else{
+                array_push($ingresos, 0);
+            }
+            
+            $dql = "SELECT sum(p.costo) as total FROM DGPlusbelleBundle:VentaPaquete vp "
+                    . "INNER JOIN vp.paquete p "
+                    . "WHERE vp.cuotas=1 AND vp.fechaVenta BETWEEN :fechainicio AND :fechafin AND vp.sucursal=:sucursal ";
+                   
+            
+            
+            $ingresosVentaPaquete= $em->createQuery($dql)
+                       ->setParameters(array('fechainicio'=>$anioInicioUser,'fechafin'=>$anioFinUser,'sucursal'=>$sucursal))
+                       //->setParameter('mes','_____0'.'1'.'___')
+                       ->getResult();
+            //echo "ventaspaquetes";
+            
+            array_push($ingresos, "Ventas paquetes");
+            if( count($ingresosVentaPaquete)!=0){
+                //echo "sdacd";
+                //array_push($ingresosprev[0], $mesLabel[($mes-1)]);
+                
+                if($ingresosVentaPaquete[0]['total']==null){
+                    $ingresosVentaPaquete[0]['total']=0;
+                }
+                array_push($ingresos, $ingresosVentaPaquete[0]['total']);
+                
+                
+                  
+            }  
+            else{
+                array_push($ingresos, 0);
+            }
+            
+            
+            $dql = "SELECT sum(a.monto) as total FROM DGPlusbelleBundle:Abono a "
+                    . "WHERE a.fechaAbono BETWEEN :fechainicio AND :fechafin AND c.sucursal=:sucursal";
+                   
+            
+            
+            $ingresosAbono= $em->createQuery($dql)
+                       ->setParameters(array('fechainicio'=>$anioInicioUser,'fechafin'=>$anioFinUser,'sucursal'=>$sucursal))
+                       //->setParameter('mes','_____0'.'1'.'___')
+                       ->getResult();
+          
+            //var_dump($ingresosAbono);
+            array_push($ingresos, "Abonos");
+            if( count($ingresosAbono)!=0){
+                //echo "sdacd";
+                //array_push($ingresosprev[0], $mesLabel[($mes-1)]);
+                //array_push($ingresos, $ingresosAbono);
+                if($ingresosAbono[0]['total']==null){
+                    $ingresosAbono[0]['total']=0;
+                }
+                array_push($ingresos, $ingresosAbono[0]['total']);
+                
+            }  
+            else{
+                array_push($ingresos, 0);
+            }
+            
+            var_dump($ingresos);
+            
+            return array(
+                    //'empleados'=>$empleados,
+                    'ingresos' => $ingresos,
+                );
+    }
+    
+    
+    
+    
+    
 }
 
