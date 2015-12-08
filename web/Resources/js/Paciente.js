@@ -13,7 +13,7 @@ $('.telefonoPersona').
   attr('data-bvalidator', 'minlength[9],required,required'); 
 
 $('.emailPersona').
-  attr('data-bvalidator', 'email,required,required'); 
+  attr('data-bvalidator', 'required,required'); 
 
 $('.duiPaciente').
   attr('data-bvalidator', 'minlength[10],required,required');  

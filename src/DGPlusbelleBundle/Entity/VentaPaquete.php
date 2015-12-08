@@ -34,6 +34,13 @@ class VentaPaquete
      * @ORM\Column(name="fecha_registro", type="datetime", nullable=true)
      */
     private $fechaRegistro;
+    
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="estado", type="integer", nullable=false)
+     */
+    private $estado;
 
     /**
      * @var \Paquete
@@ -160,6 +167,30 @@ class VentaPaquete
         return $this->fechaRegistro;
     }
 
+    /**
+     * Set estado
+     *
+     * @param boolean $estado
+     *
+     * @return VentaPaquete
+     */
+    public function setEstado($estado)
+    {
+        $this->estado = $estado;
+
+        return $this;
+    }
+
+    /**
+     * Get estado
+     *
+     * @return boolean
+     */
+    public function getEstado()
+    {
+        return $this->estado;
+    }
+    
     /**
      * Set paquete
      *

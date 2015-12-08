@@ -193,14 +193,14 @@
                                     <div class="row">
                                         <div class="col-md-1 col-md-offset-3">
                                             <div class="btn-group btn-group-sm pull-left">
-                                                <button id="seguimiento-paquete" data-toggle="tooltip" data-container="body" title="Registrar sesion de tratamiento" class="btn btn-default datatables1-actions opciones" role="button" onclick="seguimientoPaquete({{ entity.id }})">
-                                                    <i class="fa fa-pencil-square-o"></i><a href="{{ path('admin_ventapaquete_new') }}"> </a>
+                                                <button id="nueva-sesion" data-toggle="tooltip" data-container="body" title="Registrar sesion de tratamiento" class="btn btn-default datatables1-actions" role="button" onclick="nuevaSesionTratamiento({{ entity.id }});">
+                                                    <i class="fa fa-pencil-square-o"></i><a href=""> </a>
                                                 </button>
                                             </div>
                                         </div>
                                         <div class="col-md-1">
                                             <div class="btn-group btn-group-sm pull-left">
-                                                <button id="seguimiento-paquete" data-toggle="tooltip" data-container="body" title="Seguimiento paquete" class="btn btn-default datatables1-actions opciones" role="button" onclick="seguimientoPaquete({{ entity.id }})">
+                                                <button id="seguimiento-paquete" data-toggle="tooltip" data-container="body" title="Seguimiento paquete" class="btn btn-default datatables1-actions seguimiento" role="button" onclick="seguimientoPaquete({{ entity.id }});">
                                                     <i class="fa fa-history"></i><a href=""> </a>
                                                 </button>
                                             </div>
@@ -262,38 +262,9 @@
                     </table>
                 </div>
             </div>            
-            {#
-            {% for key, empleado in empleados %}
-                <div data-init-panel="true" class="panel bg-grd-dark text-light fade in panel-default panel-fill" data-fill-color="true">
-                    <div class="panel-body">
-                      <div class="pull-left mr-2x">
-                        <span class="kit-avatar kit-avatar-64 kit-avatar-square no-border">
-                          <img class="media-object" src="{{ asset('Photos/Empleado/') }}{{empleado.foto}}" alt="Foto perfil">
-                        </span>
-                      </div>
-                      <p class="lead mb-1x">{{empleado.nombres}} {{empleado.apellidos}}</p>
-                      <div class="progress progress-xs no-margin">
-                            <div class="progress-bar" style="width:{{empleado.porcentaje}}%"></div>
-                      </div>
-                      <p>
-                        <small class="pull-left">0 %</small>
-                        <small class="pull-right">100 %</small>
-                      </p>
-                    </div><!-- /.panel-body -->
-                </div>
-            {% endfor %}
-            #}  
             
           </div><!-- /.panel -->
     
-        
-        {#<div class="row">
-            <a id="nuevo" href="{{ path('admin_consulta_new') }}"  class="btn btn-primary btn-md" style="float: right">
-                Registrar consulta
-            </a>
-        </div>#}
-                
-       
             
     {% endblock %}
     
@@ -550,8 +521,72 @@
         }//Fin funcion
     </script>
      <script>  
+        function nuevaSesionTratamiento(id){
+            var url = Routing.generate('admin_sesiontratamiento_new', {'id': id});
+            window.open(url);
+        }
+    </script>
+     <script>  
         function seguimientoPaquete(id){
-            
+           $.post( "{{path('admin_busqueda_paquete_seguimiento')}}", { id: id }, function( data ) {
+                var fecha = data.query[0].venta.split('-');
+                var par = new Array();
+                par = data.query;
+
+                // Si el paquete vendido tiene sesiones de tratamiento
+                if(par.length !== 0){
+                    console.log( data.query );
+                    var mensaje = "";
+                    mensaje += "<div class='row'></div>";
+                    mensaje += "<div class='col-md-6 text-right'><b>Vendido por:: </b></div><div class='col-md-6'>" + data.query[0].empleado + "</div>";
+                    mensaje += "<div class='col-md-6 text-right'><b>Nombre del paciente: </b></div><div class='col-md-6'>" + data.query[0].paciente + "</div>";
+                    mensaje += "<div class='col-md-6 text-right'><b>Expediente No.: </b></div><div class='col-md-6'>" + data.query[0].numExp.toUpperCase() + "</div>";
+                    mensaje += "<div class='col-md-6 text-right'><b>Paquete: </b></div><div class='col-md-6'>" + data.query[0].nomPaquete + "</div>";
+                    mensaje += "<div class='col-md-6 text-right'><b>Fecha de venta: </b></div><div class='col-md-6'>" + fecha[2] + "/" +fecha[1] + "/" +fecha[0] + "</div>";
+                    mensaje += "<div class='col-md-6 text-right'><b>Costo del paquete: </b></div><div class='col-md-6'> $ " + data.query[0].costoPaquete + "</div>";
+                    mensaje += "<div class='col-md-6 text-right'><b>Descuento aplicado: </b></div><div class='col-md-6'> $ " + ((data.query[0].porcentaje * data.query[0].costoPaquete)/100).toFixed(2) + "</div>";
+                    mensaje += "</div>";
+                    
+                    mensaje += "<div class='row' ></div>";
+                    mensaje += "<table class='table table-bordered table-condensed' style='margin-top:25px'>";
+                    mensaje += "<thead>";
+                    mensaje += "<tr><th class='text-center'>Tratamiento</th><th class='text-center'>Sesiones</th></tr>";
+                    mensaje += "</thead>";
+                    mensaje += "<tbody>";
+                    
+                    $.each( data.query, function( key, value ) {
+                        console.log( value );
+                        mensaje +=  "<tr><td>" + value.ntrata + "</td><td>";
+                        //mensaje += "<div class='fa fa-check'></div>";
+                        for (var i = 0; i < value.sesiones; i++) {
+                            mensaje += "<div class='fa fa-certificate'></div>";
+                        }    
+                        
+                        mensaje += "</td></tr>";
+                    });    
+
+                    mensaje += "</tbody>";
+                    mensaje += "</table>";
+                    mensaje += "</div>";
+                    
+                    bootbox.dialog({
+                          message: mensaje,
+                          title: "Información del paquete ",
+                          buttons: {
+                            main: {
+                              label: "Aceptar",
+                              className: "btn-primary",
+                              callback: function() {
+
+                              }
+                            }
+                          }
+                    });
+                }
+                else{
+                    console.log( 'Este paquete no tiene sesiones que mostrar' );
+                }
+            }, "json");
         }//Fin funcion
     </script>
     {% endblock %}

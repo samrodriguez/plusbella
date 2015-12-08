@@ -8,6 +8,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use DGPlusbelleBundle\Entity\SesionTratamiento;
+use DGPlusbelleBundle\Entity\SeguimientoPaquete;
 use DGPlusbelleBundle\Form\SesionTratamientoType;
 
 /**
@@ -47,13 +48,53 @@ class SesionTratamientoController extends Controller
         $entity = new SesionTratamiento();
         $form = $this->createCreateForm($entity);
         $form->handleRequest($request);
+        $entity->setFechaSesion(new \DateTime('now'));
 
         if ($form->isValid()) {
             $em = $this->getDoctrine()->getManager();
             $em->persist($entity);
             $em->flush();
+            $seguimiento = new SeguimientoPaquete();
+            
+         if($entity->getFileAntes()!=null){
+                $path = $this->container->getParameter('photo.paciente');
 
-            return $this->redirect($this->generateUrl('admin_sesiontratamiento_show', array('id' => $entity->getId())));
+                $fecha = date('Y-m-d His');
+                $extension = $entity->getFileAntes()->getClientOriginalExtension();
+                $nombreArchivo = $entity->getId()."-"."Antes"."-".$fecha.".".$extension;
+                $em->persist($entity);
+                $em->flush();
+                //var_dump($path.$nombreArchivo);
+
+                
+                //$seguimiento = new SeguimientoPaquete;
+                $seguimiento->setFotoAntes($nombreArchivo);
+                $entity->getFileAntes()->move($path,$nombreArchivo);
+                $em->persist($seguimiento);
+                $em->flush();
+            }  
+            
+             if($entity->getFileDespues()!=null){
+                $path = $this->container->getParameter('photo.paciente');
+
+                $fecha = date('Y-m-d His');
+                $extension = $entity->getFileDespues()->getClientOriginalExtension();
+                $nombreArchivo = $entity->getId()."-"."Despues"."-".$fecha.".".$extension;
+                $em->persist($entity);
+                $em->flush();
+                //var_dump($path.$nombreArchivo);
+
+                
+                //$seguimiento = new SeguimientoPaquete;
+                $seguimiento->setFotoDespues($nombreArchivo);               
+                $entity->getFileDespues()->move($path,$nombreArchivo);
+                $em->persist($seguimiento);
+                $em->flush();
+            } 
+            
+              
+
+            return $this->redirect($this->generateUrl('admin_historialconsulta_new', array('id' => $entity->getId())));
         }
 
         return array(
@@ -76,7 +117,11 @@ class SesionTratamientoController extends Controller
             'method' => 'POST',
         ));
 
-        $form->add('submit', 'submit', array('label' => 'Create'));
+        $form->add('submit', 'submit', array('label' => 'Guardar',
+                                               'attr'=>
+                                                        array('class'=>'btn btn-success btn-sm')
+            
+            ));
 
         return $form;
     }
@@ -84,17 +129,24 @@ class SesionTratamientoController extends Controller
     /**
      * Displays a form to create a new SesionTratamiento entity.
      *
-     * @Route("/new", name="admin_sesiontratamiento_new")
+     * @Route("/new/{id}", name="admin_sesiontratamiento_new", options ={"expose" = true})
      * @Method("GET")
      * @Template()
      */
-    public function newAction()
+    public function newAction($id)
     {
         $entity = new SesionTratamiento();
         $form   = $this->createCreateForm($entity);
+        
+        $em = $this->getDoctrine()->getManager();
+        $ventaPaquete = $em->getRepository('DGPlusbelleBundle:VentaPaquete')->find($id);
+        
+        $seguimiento = $em->getRepository('DGPlusbelleBundle:SeguimientoPaquete')->findBy(array('idVentaPaquete' => $id));
 
         return array(
             'entity' => $entity,
+            'ventaPaquete' => $ventaPaquete,
+            'seguimiento' => $seguimiento,
             'form'   => $form->createView(),
         );
     }

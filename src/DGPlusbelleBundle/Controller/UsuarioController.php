@@ -212,7 +212,7 @@ class UsuarioController extends Controller
             }
             $em->flush();
 
-            return $this->redirect($this->generateUrl('admin_usuario_edit', array('id' => $id)));
+            return $this->redirect($this->generateUrl('admin_usuario'));
         }
 
         return array(

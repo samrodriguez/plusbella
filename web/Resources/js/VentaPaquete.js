@@ -9,6 +9,9 @@ attr('data-bvalidator', 'required,required');
 $('.cuotas').
 attr('data-bvalidator', 'required,required');
 
+$('.descuentoCita').
+attr('data-bvalidator', 'required,required');
+
 $('.calZebra').
 attr('data-bvalidator', 'required,required');
 

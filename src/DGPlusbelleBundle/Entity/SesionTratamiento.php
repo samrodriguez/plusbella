@@ -4,6 +4,8 @@ namespace DGPlusbelleBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * SesionTratamiento
@@ -91,6 +93,58 @@ class SesionTratamiento {
      * })
      */
     private $tratamiento;
+    
+     /**
+     * @Assert\File(maxSize="6000000")
+     */
+    private $fileAntes;
+
+    
+    /**
+     * Sets fileAntes.
+     *
+     * @param UploadedFile $fileAntes
+     */
+    public function setFileAntes(UploadedFile $fileAntes = null)
+    {
+        $this->fileAntes = $fileAntes;
+    }
+
+    /**
+     * Get fileAntes.
+     *
+     * @return UploadedFile
+     */
+    public function getFileAntes()
+    {
+        return $this->fileAntes;
+    }
+    
+     /**
+     * @Assert\File(maxSize="6000000")
+     */
+    private $fileDespues;
+
+    
+    /**
+     * Sets fileDespues.
+     *
+     * @param UploadedFile $fileDespues
+     */
+    public function setFileDespues(UploadedFile $fileDespues = null)
+    {
+        $this->fileDespues = $fileDespues;
+    }
+
+    /**
+     * Get fileDespues.
+     *
+     * @return UploadedFile
+     */
+    public function getFileDespues()
+    {
+        return $this->fileDespues;
+    }
     
     /**
      * Get id

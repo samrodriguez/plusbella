@@ -10,6 +10,9 @@ $('.empleadoVentaPaquete').
 $('.tratamientoPaciente').
         attr('data-bvalidator', 'required,required');
 
+$('.descuentoCita').
+        attr('data-bvalidator', 'required,required');
+
 $('.costoConsulta').
         attr('data-bvalidator', 'number,required,required');
 
