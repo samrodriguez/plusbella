@@ -852,6 +852,7 @@ class ConsultaController extends Controller
         //var_dump($totalPaquetes[0][1]);
         //var_dump($totalTratamientos[0][1]);
         
+        //var_dump($tratamientos);
         
         $empleados=$this->verificarComision(null,null);
         //var_dump($empleados);

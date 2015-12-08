@@ -138,10 +138,10 @@
                             <tr row="role">
                                 <th>N°</th>
                                 <th>Tratamiento</th>
-                                <th>Tipo consulta</th>
-                                <th>Fecha consulta</th>
-                                <th>Observacion</th>
-                                <th>Incapacidad</th>     
+                                <th>Número de sesiones</th>
+                                <th>Costo ($)</th>
+                                <th>Fecha de venta</th>
+                                
                             </tr>
                         </thead>
                         <tbody>
@@ -149,15 +149,11 @@
                                 <tr id="{{entity.tratamiento.id}}">
                                     <td>{{key+1}}</td>
                                     <td>{{ entity.tratamiento}}</td>
-                                    <td>{{ entity.tipoConsulta}}</td>
-                                    <td>{% if entity.fechaConsulta %}{{ entity.fechaConsulta|date('d/m/Y') }}{% endif %}</td>
-                                    <td>{{ entity.observacion }}</td>
-                                    <td>{% if entity.incapacidad == 1 %}
-                                            Si
-                                        {% else %}
-                                            No
-                                        {% endif %}
-                                    </td>
+                                    <td>{{ entity.numSesiones}}</td>
+                                    <td>{{ entity.costoConsulta}}</td>
+                                    <td>{% if entity.fechaVenta%}{{ entity.fechaVenta|date('d/m/Y') }}{% endif %}</td>
+                                    
+                                    
                                 </tr>
                             {% endfor %}
                         </tbody>
@@ -393,8 +389,8 @@
                                { "orderable": false, "targets": 0 },
                                { "orderable": false, "targets": 2 },
                                { "orderable": false, "targets": 3 },
-                               { "orderable": false, "targets": 4 },
-                               { "orderable": false, "targets": 5 }
+                               { "orderable": false, "targets": 4 }
+                               
                                //{ "orderData": [ 2, 3, 4 ], "targets": 2 }
                         ],
                         "language": {
