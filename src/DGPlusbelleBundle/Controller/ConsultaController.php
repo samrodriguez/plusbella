@@ -848,12 +848,12 @@ class ConsultaController extends Controller
         $dql = "SELECT count(c) FROM DGPlusbelleBundle:PersonaTratamiento c"
                . " WHERE c.paciente=:paciente";
         $totalTratamientos = $em->createQuery($dql)
-                ->setParameter('paciente', $idPaciente)
+                ->setParameter('paciente', $CompraPaciente->getPersona()->getId())
                 ->getArrayResult();
         //var_dump($totalPaquetes[0][1]);
         //var_dump($totalTratamientos[0][1]);
         
-        //var_dump($tratamientos);
+        //var_dump($totalTratamientos);
         
         $empleados=$this->verificarComision(null,null);
         //var_dump($empleados);
