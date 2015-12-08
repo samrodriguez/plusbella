@@ -81,6 +81,11 @@ class PersonaTratamientoType extends AbstractType
                          'class'=>'form-control input-sm descuentoCita'
                          )
                        ))
+             ->add('sucursal',null,array('label' => 'Sucursal','required'=>false,
+                'empty_value'   => 'Seleccione sucursal...',      
+                'attr'=>array(
+                'class'=>'form-control input-sm sucursalTratamiento'
+                    )))                      
         ;
     }
     
