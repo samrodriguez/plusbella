@@ -60,9 +60,13 @@ class ReporteController extends Controller
      */
     public function ingresosdiariosAction()
     {
+        $em = $this->getDoctrine()->getManager();
+        $entity = $em->getRepository('DGPlusbelleBundle:Sucursal')->findAll();
+        
         return array(
             //'empleados'=>$empleados,
             //'ingresos' => $ingresos[0],
+            'sucursales' => $entity,
         );
     }
     
@@ -565,14 +569,18 @@ class ReporteController extends Controller
         $em = $this->getDoctrine()->getManager();
         $mes= date('m');
         $anioInicioUser = $request->get('anioInicioUser');
+        
+        $originalDate = $anioInicioUser;
+        $anioInicioUser = date("Y-m-d", strtotime($originalDate));
+        
         $anioFinUser = $request->get('anioFinUser');
+        
+        $originalDate = $anioFinUser;
+        $anioFinUser = date("Y-m-d", strtotime($originalDate));
+        
+        
         $sucursal = $request->get('sucursal');
-        if(!isset($anioInicioUser)){
-            $year = date('Y');
-        }
-        else{
-            $year = $anioInicioUser;
-        }
+        
                 
         $ingresos = array();
         //var_dump($mes);
@@ -625,8 +633,6 @@ class ReporteController extends Controller
                 }
                 array_push($ingresos, $ingresosVentaPaquete[0]['total']);
                 
-                
-                  
             }  
             else{
                 array_push($ingresos, 0);
@@ -634,7 +640,7 @@ class ReporteController extends Controller
             
             
             $dql = "SELECT sum(a.monto) as total FROM DGPlusbelleBundle:Abono a "
-                    . "WHERE a.fechaAbono BETWEEN :fechainicio AND :fechafin AND c.sucursal=:sucursal";
+                    . "WHERE a.fechaAbono BETWEEN :fechainicio AND :fechafin AND a.sucursal=:sucursal";
                    
             
             
@@ -659,7 +665,33 @@ class ReporteController extends Controller
                 array_push($ingresos, 0);
             }
             
-            var_dump($ingresos);
+            $dql = "SELECT sum(a.costoConsulta) as total FROM DGPlusbelleBundle:PersonaTratamiento a "
+                    . "WHERE a.fechaVenta BETWEEN :fechainicio AND :fechafin AND a.sucursal=:sucursal";
+                   
+            
+            
+            $ingresosAbono= $em->createQuery($dql)
+                       ->setParameters(array('fechainicio'=>$anioInicioUser,'fechafin'=>$anioFinUser,'sucursal'=>$sucursal))
+                       //->setParameter('mes','_____0'.'1'.'___')
+                       ->getResult();
+          
+            //var_dump($ingresosAbono);
+            array_push($ingresos, "Tratamiento");
+            if( count($ingresosAbono)!=0){
+                //echo "sdacd";
+                //array_push($ingresosprev[0], $mesLabel[($mes-1)]);
+                //array_push($ingresos, $ingresosAbono);
+                if($ingresosAbono[0]['total']==null){
+                    $ingresosAbono[0]['total']=0;
+                }
+                array_push($ingresos, $ingresosAbono[0]['total']);
+                
+            }  
+            else{
+                array_push($ingresos, 0);
+            }
+            
+            //var_dump($ingresos);
             
             return array(
                     //'empleados'=>$empleados,

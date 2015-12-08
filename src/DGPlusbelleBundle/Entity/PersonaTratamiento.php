@@ -99,6 +99,17 @@ class PersonaTratamiento
      */
     private $descuento;
     
+    
+    /**
+     * @var \Sucursal
+     *
+     * @ORM\ManyToOne(targetEntity="Sucursal")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="sucursal", referencedColumnName="id")
+     * })
+     */
+    private $sucursal;
+    
 
     /**
      * Get id
@@ -330,5 +341,30 @@ class PersonaTratamiento
     public function getDescuento()
     {
         return $this->descuento;
+    }
+    
+    
+    /**
+     * Set sucursal
+     *
+     * @param \DGPlusbelleBundle\Entity\Sucursal $sucursal
+     *
+     * @return personatratamiento
+     */
+    public function setSucursal(\DGPlusbelleBundle\Entity\Sucursal $sucursal = null)
+    {
+        $this->sucursal = $sucursal;
+
+        return $this;
+    }
+
+    /**
+     * Get sucursal
+     *
+     * @return \DGPlusbelleBundle\Entity\Sucursal
+     */
+    public function getSucursal()
+    {
+        return $this->sucursal;
     }
 }

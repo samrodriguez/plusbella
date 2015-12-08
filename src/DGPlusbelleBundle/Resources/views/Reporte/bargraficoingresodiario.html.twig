@@ -1,5 +1,33 @@
 {% block contenido -%}
+    <div class="row pull-right col-md-4">
+        <table class="table table-hover">
+            <tr>
+                <th>
+                    <b>
+                        Actividad
+                    </b>
+                </th>
+                <th style="text-align: right">
+                    <b>
+                        Totales ($)
+                    </b>
+                </th>
                 
+            </tr>
+            {% for key, ingreso in ingresos  %}
+                <tr>
+                    {% if key is even %}
+                        <td>
+                            {{ingresos[key]}}
+                        </td>
+                        <td style="text-align: right">
+                            {{ingresos[key+1]|number_format(2, '.', ',')}}
+                        </td>
+                    {% endif %}
+                </tr>
+            {% endfor %}
+        </table>
+    </div>      
    {% endblock %}
 
   {% block javascripts_step %}
@@ -14,8 +42,8 @@
                 
                 var data = {
                 labels: [
-                        {% for key, ingreso in ingresos %}
-                            "{{ingresos[key]['paquete']}}",
+                        {% for key, ingreso in ingresos if key is even %}
+                            "{{ingresos[key]}}",
                         {% endfor %}
                 ],
                 datasets: [
@@ -28,14 +56,14 @@
                         pointHighlightFill: "#fff",
                         pointHighlightStroke: "rgba(151,187,205,1)",
                         data: [
-                                {% for key, ingreso in ingresos %}
-                                    {{ingresos[key]['total']|number_format(2, '.', ',')}},
+                                {% for key, ingreso in ingresos if key is odd  %}
+                                    "{{ingresos[key]|number_format(2, '.', ',')}}",
                                 {% endfor %}
                         ],
                     }
                 ]
             };
-            $('#contenedorGrafico').append('<canvas id="myChart" width="900%" height="400%"><canvas>');
+            $('#contenedorGrafico').append('<canvas id="myChart" width="600%" height="300%"><canvas>');
             var ctx = $("#myChart").get(0).getContext("2d");
             var myLineChart = new Chart(ctx).Line(data);
             
