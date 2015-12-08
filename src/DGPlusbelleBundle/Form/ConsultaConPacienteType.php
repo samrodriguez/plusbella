@@ -121,7 +121,20 @@ class ConsultaConPacienteType extends AbstractType
                 'by_reference' => false,
                 'allow_add' => true,
                 'allow_delete' => true,
-                ))                
+                ))    
+                    
+            ->add('sucursal','entity',array('label' => 'Seleccione sucursal...','required'=>false,
+                'class'=>'DGPlusbelleBundle:Sucursal',
+                'empty_value' => 'Seleccione una sucursal...',
+                'query_builder' => function(EntityRepository $repository) {
+                  return $repository->obtenerSucActivo();
+                },
+                'property'=>'nombre',
+                'multiple'=>false,
+                'expanded'=>false,
+                    'attr'=>array(
+                    'class'=>'sucursalPaquete'
+                    ))) 
         ;
     }
     

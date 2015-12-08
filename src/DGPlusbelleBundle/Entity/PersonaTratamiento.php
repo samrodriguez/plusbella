@@ -99,7 +99,8 @@ class PersonaTratamiento
      */
     private $descuento;
     
-     /**
+    
+    /**
      * @var \Sucursal
      *
      * @ORM\ManyToOne(targetEntity="Sucursal")

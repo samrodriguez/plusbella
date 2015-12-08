@@ -395,7 +395,7 @@ class ConsultaController extends Controller
     
     /**
      * Displays a form to create a new Consulta entity.
-     *
+     *v
      * @Route("/newconcita", name="admin_consulta_nueva_cita")
      * @Method("GET")
      * @Template("DGPlusbelleBundle:Consulta:newconpaciente.html.twig")
@@ -836,13 +836,15 @@ class ConsultaController extends Controller
         
         $paquetes = $em->getRepository('DGPlusbelleBundle:VentaPaquete')->findBy(array('paciente' => $CompraPaciente->getPersona()->getId()));
         
+        $tratamientos= $em->getRepository('DGPlusbelleBundle:PersonaTratamiento')->findBy(array('paciente' => $CompraPaciente->getPersona()->getId()));
+        
         $dql = "SELECT count(vp) FROM DGPlusbelleBundle:VentaPaquete vp"
                . " WHERE vp.paciente=:paciente";
         $totalPaquetes = $em->createQuery($dql)
                 ->setParameter('paciente', $CompraPaciente->getPersona())
                 ->getArrayResult();
         //var_dump($paquetes);
-        $dql = "SELECT count(c) FROM DGPlusbelleBundle:Consulta c"
+        $dql = "SELECT count(c) FROM DGPlusbelleBundle:PersonaTratamiento c"
                . " WHERE c.paciente=:paciente";
         $totalTratamientos = $em->createQuery($dql)
                 ->setParameter('paciente', $idPaciente)
@@ -872,6 +874,7 @@ class ConsultaController extends Controller
             'consultas' => $entity,
             'paquetes' => $paquetes,
             'empleados' => $empleados,
+            'tratamientos' => $tratamientos,
             'paciente' => $paciente,
             );
     }
@@ -921,7 +924,8 @@ class ConsultaController extends Controller
                        ->setParameters(array('mes'=>$fecha.'___','idEmpleado'=>$empleado['id']))
                        ->getResult();
                 
-                $dql = "SELECT sum(t.costo)"
+                
+                $dql = "SELECT sum(vp.costoConsulta)"
                     . " FROM"
                     . " DGPlusbelleBundle:PersonaTratamiento vp"
                     . " JOIN vp.tratamiento t"
@@ -1053,7 +1057,7 @@ class ConsultaController extends Controller
         //var_dump($fecha);
         $empleados=$this->verificarComision(null,$fecha);
         
-        //var_dump($empleados);
+        var_dump($empleados);
         
         return array(
             'empleados' => $empleados,

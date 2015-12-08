@@ -84,6 +84,16 @@ class Abono
     
     private $flagAbono;
 
+    
+    /**
+     * @var \Sucursal
+     *
+     * @ORM\ManyToOne(targetEntity="Sucursal")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="sucursal", referencedColumnName="id")
+     * })
+     */
+    private $sucursal;
 
 
     /**
@@ -276,5 +286,29 @@ class Abono
     public function getFlagAbono()
     {
         return $this->flagAbono;
+    }
+    
+    /**
+     * Set sucursal
+     *
+     * @param \DGPlusbelleBundle\Entity\Sucursal $sucursal
+     *
+     * @return abono
+     */
+    public function setSucursal(\DGPlusbelleBundle\Entity\Sucursal $sucursal = null)
+    {
+        $this->sucursal = $sucursal;
+
+        return $this;
+    }
+
+    /**
+     * Get sucursal
+     *
+     * @return \DGPlusbelleBundle\Entity\Sucursal
+     */
+    public function getSucursal()
+    {
+        return $this->sucursal;
     }
 }

@@ -45,6 +45,7 @@ $(document).ready(function() {
     //var horaInicial=null;
     $('#filtroSucursales').selectBoxIt();
     var sucursal = $('#filtroSucursales').val();
+    var fecha=null;
     //$('#filtroSucursales').change();
     //alert(hoy);
     calendario = $('#calendar-holder').fullCalendar({
@@ -92,6 +93,8 @@ $(document).ready(function() {
             var endtm = $.fullCalendar.formatDate(endDate,'HH:mm');
             var day = $.fullCalendar.formatDate(startDate,'dddd'); 
             var element = $(jsEvent.srcElement);
+            fecha=$.fullCalendar.formatDate(startDate,'dd-MM-yyyy');
+            alert(fecha);
             
         },
         eventDrop: function( startDate, event, dayDelta, minuteDelta, allDay, revertFunc, jsEvent, ui, view ) { 
@@ -333,6 +336,8 @@ $(document).ready(function() {
         
         dayClick: function(date, jsEvent, view) {
             //alert('Clicked on: '+date);
+            //fecha=new Date(fecha);
+            //alert('Clicked on: '+fecha);
             //alert('Coordinates: ' + jsEvent.pageX + ',' + jsEvent.pageY);
 
             calendario.fullCalendar( 'changeView', 'agendaDay' );

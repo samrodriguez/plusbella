@@ -48,6 +48,18 @@ class AbonoType extends AbstractType
                          'class'=>'form-control input-sm '
                          )
                        ))
+            ->add('sucursal','entity',array('label' => 'Seleccione sucursal...','required'=>false,
+                'class'=>'DGPlusbelleBundle:Sucursal',
+                'empty_value' => 'Seleccione una sucursal...',
+                'query_builder' => function(EntityRepository $repository) {
+                  return $repository->obtenerSucActivo();
+                },
+                'property'=>'nombre',
+                'multiple'=>false,
+                'expanded'=>false,
+                    'attr'=>array(
+                    'class'=>'sucursalPaquete'
+                    )))      
             ->add('ventaPaquete')
             ->add('personaTratamiento')
             ->add('flagAbono', 'choice', array('label'=>'Aplicar abono a',
