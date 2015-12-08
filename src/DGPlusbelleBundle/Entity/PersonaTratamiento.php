@@ -343,13 +343,12 @@ class PersonaTratamiento
         return $this->descuento;
     }
     
-    
-    /**
+     /**
      * Set sucursal
      *
      * @param \DGPlusbelleBundle\Entity\Sucursal $sucursal
      *
-     * @return personatratamiento
+     * @return Cita
      */
     public function setSucursal(\DGPlusbelleBundle\Entity\Sucursal $sucursal = null)
     {
