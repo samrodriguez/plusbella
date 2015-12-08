@@ -20,9 +20,21 @@ class SesionTratamientoType extends AbstractType
             ->add('horaFin')
             //->add('ventaPaquete')
             ->add('sucursal')
-            ->add('paciente')
+            //->add('paciente')
             ->add('empleado')
             ->add('tratamiento')
+           /* ->add('fotoAntes',null, array(
+                    'label'         =>  'Foto Antes',                               
+                    'required'  => false,
+                    'mapped' => false
+                )) */
+            ->add('fileAntes',null, array('label'=>'Foto antes','required'=>false,
+                    'attr'=>array('class'=>'fotoAntes'  
+                        
+                    )))  
+            ->add('fileDespues',null, array('label'=>'Foto despues','required'=>false,
+                    'attr'=>array('class'=>'fotoDespues' 
+                    )))      
         ;
     }
     
