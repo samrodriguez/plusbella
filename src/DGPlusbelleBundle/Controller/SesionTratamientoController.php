@@ -48,11 +48,13 @@ class SesionTratamientoController extends Controller
         $entity = new SesionTratamiento();
         $form = $this->createCreateForm($entity);
         $form->handleRequest($request);
+        $entity->setFechaSesion(new \DateTime('now'));
 
         if ($form->isValid()) {
             $em = $this->getDoctrine()->getManager();
             $em->persist($entity);
             $em->flush();
+            $seguimiento = new SeguimientoPaquete();
             
          if($entity->getFileAntes()!=null){
                 $path = $this->container->getParameter('photo.paciente');
@@ -65,9 +67,8 @@ class SesionTratamientoController extends Controller
                 //var_dump($path.$nombreArchivo);
 
                 
-                $seguimiento = new SeguimientoPaquete;
+                //$seguimiento = new SeguimientoPaquete;
                 $seguimiento->setFotoAntes($nombreArchivo);
-               // $seguimiento->setFotoAntes($nombreArchivo);
                 $entity->getFileAntes()->move($path,$nombreArchivo);
                 $em->persist($seguimiento);
                 $em->flush();
@@ -84,13 +85,14 @@ class SesionTratamientoController extends Controller
                 //var_dump($path.$nombreArchivo);
 
                 
-                $seguimiento = new SeguimientoPaquete;
-                $seguimiento->setFotoDespues($nombreArchivo);
-               // $seguimiento->setFotoAntes($nombreArchivo);
+                //$seguimiento = new SeguimientoPaquete;
+                $seguimiento->setFotoDespues($nombreArchivo);               
                 $entity->getFileDespues()->move($path,$nombreArchivo);
                 $em->persist($seguimiento);
                 $em->flush();
-            }    
+            } 
+            
+              
 
             return $this->redirect($this->generateUrl('admin_historialconsulta_new', array('id' => $entity->getId())));
         }
