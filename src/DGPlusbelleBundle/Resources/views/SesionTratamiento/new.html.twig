@@ -10,49 +10,80 @@
             {{ form_start(form) }}
             {{ form_errors(form) }}
             <div class="row">
-                <div class="col-md-4 col-md-offset-2">
-                    <div id="lista_plantilla">
+                <div class="col-md-10 col-md-offset-1">
+                    <table id="tabla" <div class="row">
+                <div class="col-md-10 col-md-offset-1">
+                    <table id="tabla" class="table table-bordered table-condensed">
+                        <tbody>
+                            <tr>
+                                <th>Paquete vendido</th>
+                                <td>{{ ventaPaquete.paquete.nombre }}</td>
+                            </tr>
+                            <tr>
+                                <th>Costo del paquete</th>
+                                <td>$ {{ ventaPaquete.paquete.costo }}</td>
+                            </tr>
+                            <tr>
+                                <th>Fecha de venta</th>
+                                <td>{% if ventaPaquete.fechaVenta %}{{ ventaPaquete.fechaVenta|date('d/m/Y') }}{% endif %}</td>
+                            </tr>
+                            <tr>
+                                <th>Vendido por</th>
+                                <td>{{ ventaPaquete.empleado }}</td>
+                            </tr>
+                            <tr>
+                                <th>Nombre del paciente</th>
+                                <td>{{ ventaPaquete.paciente }}</td>
+                            </tr>
+                            <tr>
+                                <th>Sesión No.</th>
+                                <td>{{ seguimiento[0].numSesion + 1 }}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>    
+            </div>>
+                        
+            <hr>
+            <div class="row" style="margin-top: 25px">
+                <div class="col-md-3 col-md-offset-2">
+                    <div id="sucursal">
                         {{ form_row(form.sucursal) }}
                     </div>
                 </div> 
-                <div class="col-md-4">
-                    <div id="lista_plantilla">
+                <div class="col-md-3">
+                    <div id="tratamiento">
                         {{ form_row(form.tratamiento) }}
                     </div>
                 </div> 
-            </div>
-            <div class="row">
-                <div class="col-md-4 col-md-offset-2">
-                    <div id="lista_plantilla">
+            
+                <div class="col-md-3">
+                    <div id="empleado">
                         {{ form_row(form.empleado) }}
                     </div>
                 </div> 
-                <div class="col-md-4">
-                    <div id="lista_plantilla">
-                        {{ form_row(form.paciente) }}
-                    </div>
-                </div> 
+                
             </div>
             <div class="row">
                 <div class="col-md-3 col-md-offset-2">
-                    <div id="lista_plantilla">
+                    <div id="fecha-sesion">
                         {{ form_row(form.fechaSesion) }}
                     </div>
                 </div>
                 <div class="col-md-3">
-                    <div id="lista_plantilla">
+                    <div id="hora-inicio">
                         {{ form_row(form.horaInicio) }}
                     </div>
                 </div>    
                 <div class="col-md-3">
-                    <div id="lista_plantilla">
+                    <div id="hora-fin">
                         {{ form_row(form.horaFin) }}
                     </div>
                 </div>    
             </div>
             <div class="row">
                 <div class="form-grouphide col-sm-7 col-md-offset-2 pull-right" style="margin-top: 10px">
-                <a href="{{ path('admin_paciente') }}" class="btn btn-default btn-sm" id="cancelarNuevo">Cancelar</a>
+                <a href="{{ path('admin_paciente') }}" class="btn btn-default btn-sm" id="cancelar-nuevo">Cancelar</a>
                 {{ form_widget(form.submit) }}
               </div>
             </div>        
