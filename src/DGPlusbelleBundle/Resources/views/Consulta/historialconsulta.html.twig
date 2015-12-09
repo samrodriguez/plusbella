@@ -128,7 +128,7 @@
             </div><!-- /.panel-body -->
             <div class="row" id="tabla1">
                 <div class="col-md-12">
-                    <h3 class="modal-title" id="myModalLabel">Tratamientos</h3>
+                    <h3 class="modal-title" id="myModalLabel">Venta de tratamientos</h3>
                     
                     <hr>
                 </div>
@@ -136,24 +136,40 @@
                     <table id = "datatables1" class="table table-noborder table-hover bordered-top dataTable" role="grid" aria-describedby="datatables1_info">
                         <thead>
                             <tr row="role">
-                                <th>N°</th>
-                                <th>Tratamiento</th>
-                                <th>Número de sesiones</th>
-                                <th>Costo ($)</th>
-                                <th>Fecha de venta</th>
-                                
+                                <th class="text-center">N°</th>
+                                <th class="text-center">Tratamiento</th>
+                                <th class="text-center">Número de sesiones</th>
+                                <th class="text-center">Costo ($)</th>
+                                <th class="text-center">Fecha de venta</th>
+                                <th class="text-center">Acciones</th>
                             </tr>
                         </thead>
                         <tbody>
                             {% for key, entity in tratamientos %}
                                 <tr id="{{entity.tratamiento.id}}">
-                                    <td>{{key+1}}</td>
+                                    <td class="text-center">{{key+1}}</td>
                                     <td>{{ entity.tratamiento}}</td>
-                                    <td>{{ entity.numSesiones}}</td>
-                                    <td>{{ entity.costoConsulta}}</td>
-                                    <td>{% if entity.fechaVenta%}{{ entity.fechaVenta|date('d/m/Y') }}{% endif %}</td>
-                                    
-                                    
+                                    <td class="text-center">{{ entity.numSesiones}}</td>
+                                    <td class="text-center">{{ entity.costoConsulta}}</td>
+                                    <td class="text-center">{% if entity.fechaVenta%}{{ entity.fechaVenta|date('d/m/Y') }}{% endif %}</td>
+                                    <td class="center-block">
+                                        <div class="row">
+                                            <div class="col-md-1 col-md-offset-3">
+                                                <div class="btn-group btn-group-sm pull-left">
+                                                    <button id="nueva-sesion" data-toggle="tooltip" data-container="body" title="Registrar sesion de tratamiento" class="btn btn-default datatables1-actions" role="button" onclick="sesionTratamiento({{ entity.id }});">
+                                                        <i class="fa fa-pencil-square-o"></i><a href=""> </a>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-1">
+                                                <div class="btn-group btn-group-sm pull-left">
+                                                    <button id="seguimiento-tratamiento" data-toggle="tooltip" data-container="body" title="Seguimiento del tratamiento" class="btn btn-default datatables1-actions seguimiento" role="button" onclick="seguimientoTratamiento({{ entity.id }});">
+                                                        <i class="fa fa-history"></i><a href=""> </a>
+                                                    </button>
+                                                </div>
+                                            </div>            
+                                        </div>
+                                    </td>
                                 </tr>
                             {% endfor %}
                         </tbody>
@@ -519,6 +535,12 @@
      <script>  
         function nuevaSesionTratamiento(id){
             var url = Routing.generate('admin_sesiontratamiento_new', {'id': id});
+            window.open(url);
+        }
+    </script>
+    <script>  
+        function sesionTratamiento(id){
+            var url = Routing.generate('admin_sesionventatratamiento_new', {'id': id});
             window.open(url);
         }
     </script>

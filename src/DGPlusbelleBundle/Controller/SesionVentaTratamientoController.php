@@ -84,17 +84,21 @@ class SesionVentaTratamientoController extends Controller
     /**
      * Displays a form to create a new SesionVentaTratamiento entity.
      *
-     * @Route("/new", name="admin_sesionventatratamiento_new")
+     * @Route("/new/{id}", name="admin_sesionventatratamiento_new", options ={"expose" = true})
      * @Method("GET")
      * @Template()
      */
-    public function newAction()
+    public function newAction($id)
     {
         $entity = new SesionVentaTratamiento();
         $form   = $this->createCreateForm($entity);
 
+        $em = $this->getDoctrine()->getManager();
+        $personaTratamiento = $em->getRepository('DGPlusbelleBundle:PersonaTratamiento')->find($id);
+        
         return array(
             'entity' => $entity,
+            'personaTratamiento' => $personaTratamiento,
             'form'   => $form->createView(),
         );
     }
