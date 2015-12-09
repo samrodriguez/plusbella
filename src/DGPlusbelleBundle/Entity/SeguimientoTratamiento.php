@@ -27,6 +27,20 @@ class SeguimientoTratamiento {
      */
     private $numSesion;
     
+     /**
+     * @var string
+     *
+     * @ORM\Column(name="foto_antes", type="string", length=255, nullable=true)
+     */
+    private $fotoAntes;
+    
+     /**
+     * @var string
+     *
+     * @ORM\Column(name="foto_despues", type="string", length=255, nullable=true)
+     */
+    private $fotoDespues;
+    
     /**
      * @var \PersonaTratamiento
      *
@@ -71,6 +85,54 @@ class SeguimientoTratamiento {
         return $this->numSesion;
     }
     
+     /**
+     * Set fotoAntes
+     *
+     * @param string $fotoAntes
+     *
+     * @return SeguimientoPaquete
+     */
+    public function setFotoAntes($fotoAntes)
+    {
+        $this->fotoAntes = $fotoAntes;
+
+        return $this;
+    }
+
+    /**
+     * Get fotoAntes
+     *
+     * @return string
+     */
+    public function getFotoAntes()
+    {
+        return $this->fotoAntes;
+    }
+    
+     /**
+     * Set fotoDespues
+     *
+     * @param string $fotoDespues
+     *
+     * @return SeguimientoPaquete
+     */
+    public function setFotoDespues($fotoDespues)
+    {
+        $this->fotoDespues = $fotoDespues;
+
+        return $this;
+    }
+
+    /**
+     * Get fotoDespues
+     *
+     * @return string
+     */
+    public function getFotoDespues()
+    {
+        return $this->fotoDespues;
+    }
+    
     /**
      * Set idPersonaTratamiento
      *
@@ -78,7 +140,7 @@ class SeguimientoTratamiento {
      *
      * @return SeguimientoTratamiento
      */
-    public function setVentaPaquete(\DGPlusbelleBundle\Entity\VentaPaquete $idPersonaTratamiento = null)
+    public function setPersonaTratamiento(\DGPlusbelleBundle\Entity\PersonaTratamiento $idPersonaTratamiento = null)
     {
         $this->idPersonaTratamiento = $idPersonaTratamiento;
 
@@ -90,7 +152,7 @@ class SeguimientoTratamiento {
      *
      * @return \DGPlusbelleBundle\Entity\PersonaTratamiento
      */
-    public function getVentaPaquete()
+    public function getPersonaTratamiento()
     {
         return $this->idPersonaTratamiento;
     }

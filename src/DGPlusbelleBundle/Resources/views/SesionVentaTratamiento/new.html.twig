@@ -3,63 +3,62 @@
 {% block contenido -%}
     <div class="panel panel-default">
         <div class="panel-heading">
-            <p>Modificar sesión del paquete {{ ventaPaquete.paquete.nombre }}</p>
+            <p>Registrar nueva sesión del tratamiento {{ personaTratamiento.tratamiento.nombre }}</p>
         </div>
 
         <div class="panel-body">
-            {{ form_start(edit_form) }}
-            {{ form_errors(edit_form) }}
-            <div class="row">
+            {{ form_start(form) }}
+            {{ form_errors(form) }}
+           <div class="row">
                 <div class="col-md-10 col-md-offset-1">
                     <table id="tabla" <div class="row">
                 <div class="col-md-10 col-md-offset-1">
                     <table id="tabla" class="table table-bordered table-condensed">
                         <tbody>
                             <tr>
-                                <th>Paquete vendido</th>
-                                <td>{{ ventaPaquete.paquete.nombre }}</td>
+                                <th>Tratamiento vendido</th>
+                                <td>{{ personaTratamiento.tratamiento.nombre }}</td>
                             </tr>
                             <tr>
-                                <th>Costo del paquete</th>
-                                <td>$ {{ ventaPaquete.paquete.costo }}</td>
+                                <th>Costo del tratamiento</th>
+                                <td>$ {{ personaTratamiento.tratamiento.costo }}</td>
                             </tr>
                             <tr>
                                 <th>Fecha de venta</th>
-                                <td>{% if ventaPaquete.fechaVenta %}{{ ventaPaquete.fechaVenta|date('d/m/Y') }}{% endif %}</td>
+                                <td>{% if personaTratamiento.fechaVenta %}{{ personaTratamiento.fechaVenta|date('d/m/Y') }}{% endif %}</td>
                             </tr>
                             <tr>
                                 <th>Vendido por</th>
-                                <td>{{ ventaPaquete.empleado }}</td>
+                                <td>{{ personaTratamiento.empleado }}</td>
                             </tr>
                             <tr>
                                 <th>Nombre del paciente</th>
-                                <td>{{ ventaPaquete.paciente }}</td>
+                                <td>{{ personaTratamiento.paciente }}</td>
                             </tr>
-                            <tr>
+                           {# <tr>
                                 <th>Sesión No.</th>
                                 <td>{{ seguimiento[0].numSesion + 1 }}</td>
-                            </tr>
+                            </tr> #}
                         </tbody>
                     </table>
                 </div>    
-            </div>
-       
-            <hr>
+            </div>  
+            
             <div class="row" style="margin-top: 25px">
-                <div class="col-md-3 col-md-offset-2">
+                 <div class="col-md-3 col-md-offset-2">
                     <div id="sucursal">
-                        {{ form_row(edit_form.sucursal) }}
+                        {{ form_row(form.personaTratamiento) }}
                     </div>
                 </div> 
                 <div class="col-md-3">
-                    <div id="tratamiento">
-                        {{ form_row(edit_form.tratamiento) }}
+                    <div id="sucursal">
+                        {{ form_row(form.sucursal) }}
                     </div>
                 </div> 
-            
+
                 <div class="col-md-3">
                     <div id="empleado">
-                        {{ form_row(edit_form.empleado) }}
+                        {{ form_row(form.empleado) }}
                     </div>
                 </div> 
                 
@@ -72,32 +71,47 @@
             </div> #}
                 <div class="col-md-2 col-md-offset-4">
                     <div id="hora-inicio">
-                        {{ form_row(edit_form.horaInicio) }}
+                        {{ form_row(form.horaInicio) }}
                     </div>
                 </div>    
                 <div class="col-md-2">
                     <div id="hora-fin">
-                        {{ form_row(edit_form.horaFin) }}
+                        {{ form_row(form.horaFin) }}
                     </div>
                 </div>    
-            </div>
-            <div class="row">        
+            </div> 
+                    
+             <div class="row">        
               <div class="col-xs-12 col-sm-3 col-md-offset-3" style="margin-top:25px;">
                 <label class="control-label" for="dgplusbellebundle_empleado_sucursal">Foto antes</label>
-                  {{ form_widget(edit_form.fileAntes) }}                
+                  {{ form_widget(form.fileAntes) }}                
               </div> 
-               <div class="col-xs-12 col-sm-4" style="margin-top:25px;">
+               <div class="col-xs-12 col-sm-2" style="margin-top:25px;">
                 <label class="control-label" for="dgplusbellebundle_empleado_sucursal">Foto despues</label>
-                  {{ form_widget(edit_form.fileDespues) }}                
+                  {{ form_widget(form.fileDespues) }}                
               </div> 
-            </div>        
-            <div class="row">
+            </div>             
+                    
+              <div class="row">
                 <div class="form-grouphide col-sm-7 col-md-offset-2 pull-right" style="margin-top: 50px">
                 <a href="{{ path('admin_paciente') }}" class="btn btn-default btn-sm" id="cancelar-nuevo">Cancelar</a>
-                {{ form_widget(edit_form.submit) }}
+                {{ form_widget(form.submit) }}
               </div>
-            </div>        
-        </div>
-    </div>  
-    {{ form_end(edit_form) }}   
+            </div>              
+
+ </div>
+      {{ form_widget(form._token) }}        
+</div> 
+      {{ form_end(form) }} 
+{% endblock %}
+
+{% block javascripts_step %}
+        <script src="{{ asset('Resources/js/SesionVentaTratamiento.js') }}"></script>
+       <script>
+            $(document).ready(function(){
+                
+              validarSesionVentaTratamiento();
+           });//Fin document ready       
+       </script>         
+         
 {% endblock %}
