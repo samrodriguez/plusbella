@@ -54,8 +54,8 @@
                 <th>Categoria</th>
                 <th>Nombre</th>
                 <th style="text-align: right; padding-right: 20px">Costo $</th>
-                <th><center>Fechacompra</center></th>
-                <th><center>Fechavencimiento</center></th>
+                <th><center>Fecha compra</center></th>
+                <th><center>Fecha vencimiento</center></th>
                 <th><center>Estado</center></th>
                {#   <th>Actions</th> #}
             </tr>
@@ -72,8 +72,8 @@
                 <td>{{ entity.categoria }}</td>
                 <td>{{ entity.nombre }}</td>
                 <td style="text-align: right; padding-right: 20px">$ {{ entity.costo |number_format(2, '.', ',')}}</td>
-                <td>{% if entity.fechaCompra %}{{ entity.fechaCompra|date('Y-m-d') }}{% endif %}</td>
-                <td>{% if entity.fechaVencimiento %}{{ entity.fechaVencimiento|date('Y-m-d') }}{% endif %}</td>
+                <td class="text-center">{% if entity.fechaCompra %}{{ entity.fechaCompra|date('d-m-Y') }}{% endif %}</td>
+                <td class="text-center">{% if entity.fechaVencimiento %}{{ entity.fechaVencimiento|date('d-m-Y') }}{% endif %}</td>
                 <td><center>
                     {% if entity.estado == 1 %}
                         Activo
@@ -202,6 +202,8 @@
                     if($("#addFormContainer").hasClass("hide")){
                         $("#addFormContainer").removeClass("hide");
                         $("#editFormContainer").addClass("hide");
+                        $('#dgplusbellebundle_producto_fechaCompra').Zebra_DatePicker();
+                        $('#dgplusbellebundle_producto_fechaVencimiento').Zebra_DatePicker();
                     }
                     else{
                         $("#addFormContainer").addClass("hide");
@@ -261,10 +263,13 @@
                 
                 
                 $("#edit-datatables1").click(function(){
+                    $('#dgplusbellebundle_producto_fechaCompra').Zebra_DatePicker();
+                    $('#dgplusbellebundle_producto_fechaVencimiento').Zebra_DatePicker();
                     if(!$("#edit-datatables1").hasClass("disabled")){
                         if($("#editFormContainer").hasClass("hide")){
                             $("#addFormContainer").addClass("hide");
                             $("#editFormContainer").removeClass("hide");
+                            
                         }
                         else{
                             //$("#addFormContainer").removeClass("hide");
@@ -295,7 +300,9 @@
                            { "orderable": false, "targets": 0 },
                            { "orderable": false, "targets": 2 },
                            { "orderable": false, "targets": 3 },
-                           { "orderable": false, "targets": 4 }
+                           { "orderable": false, "targets": 4 },
+                           { "orderable": false, "targets": 5 },
+                           { "orderable": false, "targets": 6 }
                           
                         
                           
@@ -306,7 +313,7 @@
                     "language": {
                     "info": "Mostrando página _PAGE_ de _PAGES_",
                     "infoEmpty": "",
-                    "emptyTable": "No se encontraron afiliados",
+                    "emptyTable": "No se encontraron registros",
                     "paginate": { 
                         "next": "Siguiente",
                         "previous": "Antetior"

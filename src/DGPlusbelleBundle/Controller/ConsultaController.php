@@ -893,7 +893,7 @@ class ConsultaController extends Controller
             $empleados= $em->createQuery($dql)
                        ->setParameter('idEmpleado',$id)
                        ->getResult();
-                       var_dump($empleados);
+                       //var_dump($empleados);
      
         }
         else{//Todos los empleados
@@ -1059,7 +1059,7 @@ class ConsultaController extends Controller
         //var_dump($fecha);
         $empleados=$this->verificarComision(null,$fecha);
         
-        var_dump($empleados);
+        //var_dump($empleados);
         
         return array(
             'empleados' => $empleados,

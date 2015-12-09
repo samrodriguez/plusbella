@@ -1,6 +1,34 @@
 {% block contenido -%}
-                
-   {% endblock %}
+    {% if ingresos %}
+        <div class="row pull-right col-md-4">
+            <table class="table table-hover">
+                <tr>
+                    <th>
+                        <b>
+                            Actividad
+                        </b>
+                    </th>
+                    <th style="text-align: right">
+                        <b>
+                            Cantidad
+                        </b>
+                    </th>
+
+                </tr>
+                {% for key, ingreso in ingresos  %}
+                    <tr>
+                        <td>
+                            {{ingresos[key]['paquete']}}
+                        </td>
+                        <td style="text-align: right">
+                            {{ingresos[key]['total']}}
+                        </td>
+                    </tr>
+                {% endfor %}
+            </table>
+        </div>      
+    {% endif %}
+{% endblock %}
 
   {% block javascripts_step %}
       
@@ -35,7 +63,7 @@
                     }
                 ]
             };
-            $('#contenedorGrafico').append('<canvas id="myChart" width="900px" height="400px"><canvas>');
+            $('#contenedorGrafico').append('<canvas id="myChart" width="600px" height="300px"><canvas>');
             var ctx = $("#myChart").get(0).getContext("2d");
             var myLineChart = new Chart(ctx).Line(data);
 

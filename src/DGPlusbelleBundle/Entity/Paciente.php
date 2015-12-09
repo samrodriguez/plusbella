@@ -111,6 +111,14 @@ class Paciente
      * @ORM\OneToMany(targetEntity="Expediente", mappedBy="paciente", cascade={"persist", "remove"})
      */
     private $expediente;
+    
+    
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="enterado_por", type="string", length=25, nullable=false)
+     */
+    private $enteradoPor;
 
 
     /**
@@ -429,4 +437,31 @@ class Paciente
     {
         return $this->expediente;
     }
+    
+    
+    /**
+     * Set referidoPor
+     *
+     * @param string $enteradoPor
+     *
+     * @return Paciente
+     */
+    public function setEnteradoPor($enteradoPor)
+    {
+        $this->enteradoPor = $enteradoPor;
+
+        return $this;
+    }
+
+    /**
+     * Get enteradoPor
+     *
+     * @return string
+     */
+    public function getEnteradoPor()
+    {
+        return $this->enteradoPor;
+    }
+    
+    
 }

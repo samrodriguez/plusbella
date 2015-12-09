@@ -38,6 +38,13 @@
                     <input id="fecha-fin" class="form-control input-sm" placeholder="Fecha fin...">
 
                 </div>
+                <div class="btn-group pull-left">
+                    <select id ="sucursalesIngresos" class="form-control input-sm" >
+                    {% for row in sucursales %}
+                        <option value="{{row.id}}">{{row.nombre}}</option>
+                    {% endfor %}
+                    </select>
+                </div>
                 
                 </div><!-- /btn-toolbar -->
                 <div class="row">
@@ -76,11 +83,12 @@
                
         var anioInicioUser = $('#fecha-inicio').val();
         var anioFinUser = $('#fecha-fin').val();
+        var sucursal = $('#sucursalesIngresos').val();
         
         var url = "{{ path('admin_reporte_paquete_grafico') }}";
             if(anioInicioUser!=""){
                 if(anioFinUser!=""){
-                    url+="?anioInicioUser="+anioInicioUser+"&anioFinUser="+anioFinUser;
+                    url+="?anioInicioUser="+anioInicioUser+"&anioFinUser="+anioFinUser+"&sucursal="+sucursal;
                     $('#contenedorGrafico').load(url);
                 }
             }       
@@ -96,7 +104,7 @@
                     anioFinUser = $('#fecha-fin').val();
                     if(anioFinUser!==""){
                         var url = "{{ path('admin_reporte_paquete_grafico') }}";
-                        url+="?anioInicioUser="+anioInicioUser+"&anioFinUser="+anioFinUser;
+                        url+="?anioInicioUser="+anioInicioUser+"&anioFinUser="+anioFinUser+"&sucursal="+sucursal;
                         $('#contenedorGrafico').load(url);
                     }
             }
@@ -108,11 +116,23 @@
                     if(anioInicioUser!==""){
                         anioFinUser = $('#fecha-fin').val();
                         var url = "{{ path('admin_reporte_paquete_grafico') }}";
-                        url+="?anioInicioUser="+anioInicioUser+"&anioFinUser="+anioFinUser;
+                        url+="?anioInicioUser="+anioInicioUser+"&anioFinUser="+anioFinUser+"&sucursal="+sucursal;
                         $('#contenedorGrafico').load(url);
                     }
                 }
         });  
+        
+        $( "#sucursalesIngresos" ).on( "change", function() {
+            sucursal = $('#sucursalesIngresos').val();
+            if(anioInicioUser!=="" && anioFinUser!==""){
+                anioInicioUser = $('#fecha-inicio').val();
+                anioFinUser = $('#fecha-fin').val();
+                var url = "{{ path('admin_reporte_paquete_grafico') }}";
+                url+="?anioInicioUser="+anioInicioUser+"&anioFinUser="+anioFinUser+"&sucursal="+sucursal;
+                $('#contenedorGrafico').load(url);
+            }
+        });
+        
     });//Fin document ready
         
     </script>    
@@ -121,15 +141,16 @@
             $('.opciones').click(function(){
                 var fechaInicio = $("#fecha-inicio").val();
                 var fechaFin = $("#fecha-fin").val();
+                var sucursal = $('#sucursalesIngresos').val();
                 if( fechaInicio != '' && fechaFin != '' ){
-                    var url = Routing.generate('admin_ingresopaquete_pdf', {'fechaInicio': fechaInicio, 'fechaFin': fechaFin});
+                    var url = Routing.generate('admin_ingresopaquete_pdf', {'fechaInicio': fechaInicio, 'fechaFin': fechaFin,'sucursal':sucursal});
                     window.open(url,'_blank');
                 }
                 else {
                     var fecha = new Date();
                     var ano = fecha.getFullYear();
                     
-                    var url = Routing.generate('admin_ingresopaquete_pdf', {'fechaInicio': ano + '-01-01', 'fechaFin': ano + '-12-31'});
+                    var url = Routing.generate('admin_ingresopaquete_pdf', {'fechaInicio': ano + '-01-01', 'fechaFin': ano + '-12-31','sucursal':sucursal});
                     window.open(url,'_blank');
                 }
                 

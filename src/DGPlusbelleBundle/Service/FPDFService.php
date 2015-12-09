@@ -170,4 +170,76 @@ class FPDFService {
             $pdf->SetFont('Arial','',10);
         $pdf->Cell(85, 27, $data);
     }
+    
+    
+    
+    public function generarTotalesPdfPorRango($titulo, $encabezado, $anchoCol, $consulta, $sangria, $fechaInicio, $fechaFin)
+    {
+        
+        $this->pdf->FPDF('P','mm','Letter');
+        $this->pdf->SetTopMargin(20);
+        $this->pdf->SetLeftMargin(20);
+        
+        $this->pdf->AddPage();
+        $this->pdf->SetFillColor(255);
+        
+        $this->pdf->SetFont('Times','B',16);
+        $this->pdf->Cell(180,32,$titulo, 0, 0, 'C');
+        
+        $this->pdf->SetFont('Times','B',13);
+        $this->pdf->Ln(8);
+        
+        if ( $fechaInicio != null && $fechaFin != null){
+            $fechaini = explode('-', $fechaInicio);
+            $fechf = explode('-', $fechaFin);
+
+            $this->pdf->Cell(180,32, 'Del periodo de '.$fechaini[2].'/'.$fechaini[1].'/'.$fechaini[0].' al '.$fechf[2].'/'.$fechf[1].'/'.$fechf[0], 0, 0, 'C');
+        } else {
+            $this->pdf->Cell(180,32, 'Del periodo de 01/01/2015 al 31/12/2015', 0, 0, 'C');
+        }
+        $this->pdf->Ln(30);
+        $this->pdf->SetFont('Times','B',11);
+        
+        $this->pdf->Cell($sangria);
+        $this->pdf->SetWidths($anchoCol);
+        
+        //$this->pdf->Row($encabezado);
+        $this->pdf->Cell(47,5,$encabezado['0'], 'LTRB', 0, 'L');
+            
+        $this->pdf->Cell(30,5,$encabezado['1'], 'LTRB', 0, 'R');
+        $this->pdf->Ln(5);
+        $this->pdf->SetFont('Times','',11);
+        $total=0;
+        foreach ($consulta as $fila) {
+            $data = array();
+            $cont = 0;
+            $this->pdf->Cell($sangria);
+            
+           foreach ($fila as $valor) {
+               $data[$cont] = $valor;
+               $cont++;
+            }
+            //var_dump($data['0']);
+            //var_dump($this->pdf->Row($data));
+            //$this->pdf->Row($data);
+            $this->pdf->Cell(47,5,$data['0'], 'LTRB', 0, 'L');
+            
+            $this->pdf->Cell(30,5,$data['1'], 'LTRB', 0, 'R');
+            $total = $total + $data['1'];
+            $this->pdf->Ln(5);
+        }
+        $this->pdf->SetFont('Times','B',11);
+        $this->pdf->Cell($sangria);
+        $this->pdf->Cell(47,5,"Total", 'LTRB', 0, 'L');
+            
+        $this->pdf->Cell(30,5,  number_format($total,2,'.',''), 'LTRB', 0, 'R');
+        
+        $this->pdf->Output();
+        return $this->pdf;
+    }
+    
+    
+    
 }
+
+

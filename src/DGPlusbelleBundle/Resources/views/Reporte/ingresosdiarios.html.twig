@@ -143,15 +143,16 @@
             $('.opciones').click(function(){
                 var fechaInicio = $("#fecha-inicio").val();
                 var fechaFin = $("#fecha-fin").val();
+                var sucursal = $('#sucursalesIngresos').val();
                 if( fechaInicio != '' && fechaFin != '' ){
-                    var url = Routing.generate('admin_ingresopaquete_pdf', {'fechaInicio': fechaInicio, 'fechaFin': fechaFin});
+                    var url = Routing.generate('admin_ingresodiario_pdf', {'fechaInicio': fechaInicio, 'fechaFin': fechaFin,'sucursal':sucursal});
                     window.open(url,'_blank');
                 }
                 else {
                     var fecha = new Date();
                     var ano = fecha.getFullYear();
                     
-                    var url = Routing.generate('admin_ingresopaquete_pdf', {'fechaInicio': ano + '-01-01', 'fechaFin': ano + '-12-31'});
+                    var url = Routing.generate('admin_ingresodiario_pdf', {'fechaInicio': ano + '-01-01', 'fechaFin': ano + '-12-31','sucursal':sucursal});
                     window.open(url,'_blank');
                 }
                 

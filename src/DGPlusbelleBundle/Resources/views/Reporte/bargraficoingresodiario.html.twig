@@ -4,16 +4,17 @@
             <tr>
                 <th>
                     <b>
-                        Actividad
+                        Servicios
                     </b>
                 </th>
                 <th style="text-align: right">
                     <b>
-                        Totales ($)
+                        Ingresos ($)
                     </b>
                 </th>
                 
             </tr>
+            
             {% for key, ingreso in ingresos  %}
                 <tr>
                     {% if key is even %}
@@ -22,10 +23,19 @@
                         </td>
                         <td style="text-align: right">
                             {{ingresos[key+1]|number_format(2, '.', ',')}}
+                            
                         </td>
                     {% endif %}
                 </tr>
             {% endfor %}
+                <tr>
+                    <td>
+                        <b>Total</b>
+                    </td>
+                    <td style="text-align: right">
+                        <b>{{granTotal|number_format(2, '.', ',')}}</b>
+                    </td>
+                </tr>
         </table>
     </div>      
    {% endblock %}

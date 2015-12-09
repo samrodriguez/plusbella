@@ -11,6 +11,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use DGPlusbelleBundle\Entity\Usuario;
 use DGPlusbelleBundle\Form\UsuarioType;
 use DGPlusbelleBundle\Form\EditUsuarioType;
+use DGPlusbelleBundle\Form\EditUsuario2Type;
 
 /**
  * Usuario controller.
@@ -156,6 +157,37 @@ class UsuarioController extends Controller
             'delete_form' => $deleteForm->createView(),
         );
     }
+    
+    
+    
+    /**
+     * Displays a form to edit an existing Usuario entity.
+     *
+     * @Route("/{id}/edit2", name="admin_usuario_edit2")
+     * @Method("GET")
+     * @Template()
+     */
+    public function edit2Action($id)
+    {
+        $em = $this->getDoctrine()->getManager();
+
+        $entity = $em->getRepository('DGPlusbelleBundle:Usuario')->find($id);
+
+        if (!$entity) {
+            throw $this->createNotFoundException('Unable to find Usuario entity.');
+        }
+
+        $editForm = $this->createEdit2Form($entity);
+        $deleteForm = $this->createDeleteForm($id);
+
+        return array(
+            'entity'      => $entity,
+            'edit_form'   => $editForm->createView(),
+            'delete_form' => $deleteForm->createView(),
+        );
+    }
+    
+    
 
     /**
     * Creates a form to edit a Usuario entity.
@@ -175,6 +207,27 @@ class UsuarioController extends Controller
 
         return $form;
     }
+    
+    
+    /**
+    * Creates a form to edit a Usuario entity.
+    *
+    * @param Usuario $entity The entity
+    *
+    * @return \Symfony\Component\Form\Form The form
+    */
+    private function createEdit2Form(Usuario $entity)
+    {
+        $form = $this->createForm(new EditUsuario2Type(), $entity, array(
+            'action' => $this->generateUrl('admin_usuario_update2', array('id' => $entity->getId())),
+            'method' => 'PUT',
+        ));
+
+        $form->add('submit', 'submit', array('label' => 'Modificar','attr'=>array('class'=>'btn btn-success btn-sm')));
+
+        return $form;
+    }
+    
     /**
      * Edits an existing Usuario entity.
      *
@@ -221,6 +274,77 @@ class UsuarioController extends Controller
             'delete_form' => $deleteForm->createView(),
         );
     }
+    
+    
+    /**
+     * Edits an existing Usuario entity.
+     *
+     * @Route("/{id}/update2", name="admin_usuario_update2")
+     * @Method("PUT")
+     * @Template("DGPlusbelleBundle:Usuario:edit2.html.twig")
+     */
+    public function update2Action(Request $request, $id)
+    {
+        $em = $this->getDoctrine()->getManager();
+
+        $entity = $em->getRepository('DGPlusbelleBundle:Usuario')->find($id);
+
+        if (!$entity) {
+            throw $this->createNotFoundException('Unable to find Usuario entity.');
+        }
+        
+        
+        
+        
+
+        $passOriginal = $entity->getPassword();
+        
+        //Informacion original
+        $persona = $entity->getPersona();
+        $salt = $entity->getSalt();
+        $estado = $entity->getEstado();
+        
+        $userroles = $entity->getUserRoles();
+        $enabled = $entity->isEnabled();
+        
+        //var_dump($entity->getPersona()->getId());
+        $deleteForm = $this->createDeleteForm($id);
+        $editForm = $this->createEdit2Form($entity);
+        //obtiene la contraseña actual 
+        $current_pass = $entity->getPassword();
+        
+        
+        $entity->setSalt($salt);
+        $entity->setEstado($estado);
+        $entity->setUserRoles($userroles);
+        $entity->setEstado($estado);
+        $entity->setPersona($persona);
+        //$entity->setEstado($estado);
+        
+        var_dump($salt);
+        $editForm->handleRequest($request);
+
+        if($entity->getPassword()==""){
+            $entity->setPassword($passOriginal);
+        }
+        
+        if ($editForm->isValid()) {
+            if ($current_pass != $entity->getPassword()) {
+                $this->setSecurePassword($entity);
+            }
+            $em->flush();
+
+            return $this->redirect($this->generateUrl('admin_usuario'));
+        }
+
+        return array(
+            'entity'      => $entity,
+            'edit_form'   => $editForm->createView(),
+            'delete_form' => $deleteForm->createView(),
+        );
+    }
+    
+    
     /**
      * Deletes a Usuario entity.
      *
