@@ -89,8 +89,8 @@ class VentaPaqueteController extends Controller
             $em->flush();
 
             $paqueteTratamiento = $em->getRepository('DGPlusbelleBundle:PaqueteTratamiento')->findBy(array('paquete' => $entity->getPaquete()->getId()));
-            var_dump($paqueteTratamiento);
-            die();
+            // var_dump($paqueteTratamiento);
+            // die();
             foreach($paqueteTratamiento as $pt){
                 $seguimiento = new SeguimientoPaquete;
                 $seguimiento->setVentaPaquete($entity);

@@ -78,7 +78,7 @@ class SeguimientoTratamiento {
      *
      * @return SeguimientoTratamiento
      */
-    public function setVentaPaquete(\DGPlusbelleBundle\Entity\VentaPaquete $idPersonaTratamiento = null)
+    public function setPersonaTratamiento(\DGPlusbelleBundle\Entity\PersonaTratamiento $idPersonaTratamiento = null)
     {
         $this->idPersonaTratamiento = $idPersonaTratamiento;
 
@@ -90,7 +90,7 @@ class SeguimientoTratamiento {
      *
      * @return \DGPlusbelleBundle\Entity\PersonaTratamiento
      */
-    public function getVentaPaquete()
+    public function getPersonaTratamiento()
     {
         return $this->idPersonaTratamiento;
     }
