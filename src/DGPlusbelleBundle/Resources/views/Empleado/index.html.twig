@@ -153,7 +153,7 @@
                     
                     
                      //Hay que cambiar el numero de la columna para las otras tablas
-                    estadoPrevio = $(this).children('td:nth-child(5)').html();
+                    estadoPrevio = $(this).children('td:nth-child(4)').html();
                     estadoPrevio = estadoPrevio.trim();
                     if(estadoPrevio==="Inactivo"){//se muestran los iconos de desactivado
                         $('#delete-datatables1').children().removeClass("fa fa-toggle-on");
@@ -193,7 +193,7 @@
                                     if(data.regs==0){
                                         //Se cambia a desactivado
                                         mensaje ="Empleado desactivado con exito";
-                                        $('#'+link + ' > td:nth-child(5)').html('Inactivo');
+                                        $('#'+link + ' > td:nth-child(4)').html('Inactivo');
                                         $('#delete-datatables1').children().removeClass("fa fa-toggle-on");
                                         $('#delete-datatables1').children().addClass("fa fa-toggle-off");
                                     //$('#datatables1>tbody>tr>td:nth-child(5)').html('Inactivo');
@@ -201,7 +201,7 @@
                                     if(data.regs==1){
                                         //Se cambia a activado
                                         mensaje ="Empleado activada con exito";
-                                        $('#'+link + ' > td:nth-child(5)').html('Activo');
+                                        $('#'+link + ' > td:nth-child(4)').html('Activo');
                                         $('#delete-datatables1').children().removeClass("fa fa-toggle-off");
                                         $('#delete-datatables1').children().addClass("fa fa-toggle-on");
                                     }
@@ -265,7 +265,8 @@
                     "order":[[0, "desc"],[1,"desc"]],
                     "columnDefs": [
                            { "orderable": false, "targets": 0 },
-                           { "orderable": false, "targets": 2 }
+                           { "orderable": false, "targets": 2 },
+                           { "orderable": false, "targets": 3 }
                           
                           
                         
