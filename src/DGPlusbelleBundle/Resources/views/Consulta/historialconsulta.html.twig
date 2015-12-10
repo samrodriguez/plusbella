@@ -167,7 +167,14 @@
                                                         <i class="fa fa-history"></i><a href=""> </a>
                                                     </button>
                                                 </div>
-                                            </div>            
+                                            </div>  
+                                             <div class="col-md-1">
+                                                <div class="btn-group btn-group-sm pull-left">
+                                                    <button id="seguimiento-fototratamiento" data-toggle="tooltip" data-container="body" title="Seguimiento del tratamiento" class="btn btn-default datatables1-actions seguimiento" role="button" onclick="sesionFotoTratamiento({{ entity.id }});">
+                                                        <i class="glyphicon glyphicon-picture"></i><a href=""> </a>
+                                                    </button>
+                                                </div>
+                                            </div>                
                                         </div>
                                     </td>
                                 </tr>
@@ -541,6 +548,12 @@
     <script>  
         function sesionTratamiento(id){
             var url = Routing.generate('admin_sesionventatratamiento_new', {'id': id});
+            window.open(url);
+        }
+    </script>
+     <script>  
+        function sesionFotoTratamiento(id){
+            var url = Routing.generate('admin_seguimientotratamiento_show', {'id': id});
             window.open(url);
         }
     </script>

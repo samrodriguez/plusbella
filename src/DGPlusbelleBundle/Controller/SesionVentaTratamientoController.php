@@ -152,7 +152,7 @@ class SesionVentaTratamientoController extends Controller
     /**
      * Finds and displays a SesionVentaTratamiento entity.
      *
-     * @Route("/{id}", name="admin_sesionventatratamiento_show")
+     * @Route("/{id}", name="admin_sesionventatratamiento_show", options ={"expose" = true})
      * @Method("GET")
      * @Template()
      */

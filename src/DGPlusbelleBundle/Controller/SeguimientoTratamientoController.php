@@ -38,7 +38,7 @@ class SeguimientoTratamientoController extends Controller
     /**
      * Finds and displays a SeguimientoTratamiento entity.
      *
-     * @Route("/{id}", name="admin_seguimientotratamiento_show")
+     * @Route("/{id}", name="admin_seguimientotratamiento_show", options ={"expose" = true})
      * @Method("GET")
      * @Template()
      */
