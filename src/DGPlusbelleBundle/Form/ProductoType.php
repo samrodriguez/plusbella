@@ -38,13 +38,15 @@ class ProductoType extends AbstractType
                   array('label'  => 'Fecha de compra','required'=>false,
                         'widget' => 'single_text',
                         'attr'   => array('class' => 'form-control input-sm calZebra'),
+                        'format' => 'dd-MM-yyyy',
                        ))
             ->add('fechaVencimiento', null,
                   array('label'  => 'Fecha de vencimiento','required'=>false,
                         'widget' => 'single_text',
                         'attr'   => array('class' => 'form-control input-sm calZebra'),
+                        'format' => 'dd-MM-yyyy',
                        ))
-            ->add('cantidad',null,array('label' => 'Cantidad','required'=>false,
+            ->add('cantidad','text',array('label' => 'Cantidad','required'=>false,
                     'attr'=>array(
                     'class'=>'form-control input-sm cantidadProducto'
                     )))             

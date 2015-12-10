@@ -1,6 +1,42 @@
 {% block contenido -%}
-                
-   {% endblock %}
+    {% if ingresos %}      
+        <div class="row pull-right col-md-4">
+            <table class="table table-hover">
+                <tr>
+                    <th>
+                        <b>
+                            Paquete
+                        </b>
+                    </th>
+                    <th style="text-align: right">
+                        <b>
+                            Ingresos ($)
+                        </b>
+                    </th>
+
+                </tr>
+                {% for key, ingreso in ingresos  %}
+                    <tr>
+                        <td>
+                            {{ingresos[key]['paquete']}}
+                        </td>
+                        <td style="text-align: right">
+                            {{ingresos[key]['total']|number_format(2, '.', ',')}}
+                        </td>
+                    </tr>
+                {% endfor %}
+                <tr>
+                    <td>
+                        <b>Total</b>
+                    </td>
+                    <td style="text-align: right">
+                        <b>{{granTotal|number_format(2, '.', ',')}}</b>
+                    </td>
+                </tr>
+            </table>
+        </div>  
+    {% endif %}
+{% endblock %}
 
   {% block javascripts_step %}
       
@@ -29,13 +65,13 @@
                         pointHighlightStroke: "rgba(151,187,205,1)",
                         data: [
                                 {% for key, ingreso in ingresos %}
-                                    {{ingresos[key]['total']|number_format(2, '.', ',')}},
+                                    {{ingresos[key]['total']}},
                                 {% endfor %}
                         ],
                     }
                 ]
             };
-            $('#contenedorGrafico').append('<canvas id="myChart" width="900%" height="400%"><canvas>');
+            $('#contenedorGrafico').append('<canvas id="myChart" width="600%" height="300%"><canvas>');
             var ctx = $("#myChart").get(0).getContext("2d");
             var myLineChart = new Chart(ctx).Line(data);
             

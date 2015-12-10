@@ -1,6 +1,34 @@
 {% block contenido -%}
+    {% if ingresos %}      
+    <div class="row pull-right col-md-4">
+        <table class="table table-hover">
+            <tr>
+                <th>
+                    <b>
+                        Tratamiento
+                    </b>
+                </th>
+                <th style="text-align: right">
+                    <b>
+                        Cantidad
+                    </b>
+                </th>
                 
-   {% endblock %}
+            </tr>
+            {% for key, ingreso in ingresos  %}
+                <tr>
+                    <td>
+                        {{ingresos[key]['tratamiento']}}
+                    </td>
+                    <td style="text-align: right">
+                        {{ingresos[key]['total']}}
+                    </td>
+                </tr>
+            {% endfor %}
+        </table>
+    </div>      
+    {% endif %}
+{% endblock %}
 
   {% block javascripts_step %}
       
@@ -13,29 +41,29 @@
                 $('canvas').remove();
                 
                 var data = {
-                labels: [
-                        {% for key, ingreso in ingresos %}
-                            "{{ingresos[key]['tratamiento']}}",
-                        {% endfor %}
-                ],
-                datasets: [
-                    {
-                        label: "My Second dataset",
-                        fillColor: "rgba(151,187,205,0.2)",
-                        strokeColor: "rgba(151,187,205,1)",
-                        pointColor: "rgba(151,187,205,1)",
-                        pointStrokeColor: "#fff",
-                        pointHighlightFill: "#fff",
-                        pointHighlightStroke: "rgba(151,187,205,1)",
-                        data: [
-                                {% for key, ingreso in ingresos %}
-                                    {{ingresos[key]['total']|number_format(2, '.', ',')}},
-                                {% endfor %}
-                        ],
-                    }
-                ]
-            };
-            $('#contenedorGrafico').append('<canvas id="myChart" width="900px" height="400px"><canvas>');
+                    labels: [
+                            {% for key, ingreso in ingresos %}
+                                "{{ingresos[key]['tratamiento']}}",
+                            {% endfor %}
+                    ],
+                    datasets: [
+                        {
+                            label: "My Second dataset",
+                            fillColor: "rgba(151,187,205,0.2)",
+                            strokeColor: "rgba(151,187,205,1)",
+                            pointColor: "rgba(151,187,205,1)",
+                            pointStrokeColor: "#fff",
+                            pointHighlightFill: "#fff",
+                            pointHighlightStroke: "rgba(151,187,205,1)",
+                            data: [
+                                    {% for key, ingreso in ingresos %}
+                                        {{ingresos[key]['total']|number_format(2, '.', ',')}},
+                                    {% endfor %}
+                            ],
+                        }
+                    ]
+                };
+            $('#contenedorGrafico').append('<canvas id="myChart" width="600px" height="300px"><canvas>');
             var ctx = $("#myChart").get(0).getContext("2d");
             var myLineChart = new Chart(ctx).Line(data);
 

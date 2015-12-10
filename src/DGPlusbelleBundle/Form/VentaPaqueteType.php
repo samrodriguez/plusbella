@@ -37,7 +37,11 @@ class VentaPaqueteType extends AbstractType
                          )
                        ))
 
-            //->add('sucursal')
+            ->add('sucursal',null,array('label' => 'Sucursal','required'=>false,
+                'empty_value'   => 'Seleccione sucursal...',      
+                'attr'=>array(
+                'class'=>'form-control input-sm sucursalTratamiento'
+                    )))
             ->add('paciente','entity', array( 'label' => 'Paciente',
                          'empty_value'   => 'Seleccione un paciente...',
                          'class'         => 'DGPlusbelleBundle:Persona',

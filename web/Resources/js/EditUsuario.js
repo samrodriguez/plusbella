@@ -12,11 +12,11 @@ $('.nombreUsuario').
 $('.firstPassword').
         attr('data-bvalidator');
 
-$('.secondPassword').
-        attr('data-bvalidator', 'equalto[firstPassword]');
-
-$('.secondPassword').
-        attr('data-bvalidator-msg', 'Las contraseñas deben coincidir, vuelva a digitarla');        
+$('#dgplusbellebundle_usuario_password_second').
+        attr('data-bvalidator', 'equalto[dgplusbellebundle_usuario_password_first],required,required');
+	
+$('#dgplusbellebundle_usuario_password_second').
+        attr('data-bvalidator-msg', 'Las contraseñas deben coincidir, vuelva a digitarla');     
 
     //Opciones del validador
     var optionsRed = { 

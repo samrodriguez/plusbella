@@ -45,8 +45,12 @@
             <div class="col-md-6">
             {{ form_row(edit_form.personaEmergencia) }}
             </div>
-            <div class="col-md-4">
+            <div class="col-md-3">
             {{ form_row(edit_form.telefonoEmergencia) }}
+            {# {{ form_row(form.estado) }}#}
+            </div>
+            <div class="col-md-2">
+            {{ form_row(edit_form.enteradoPor) }}
             {# {{ form_row(form.estado) }}#}
             </div>
         </div>
@@ -85,7 +89,7 @@
          $('.calZebra').Zebra_DatePicker({
             months:['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
             days: ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'],
-            format: 'Y-m-d',
+            format: 'd-m-Y',
             show_clear_date:false,
             show_select_today: "Hoy",
             
