@@ -564,11 +564,17 @@
            $.post( "{{path('admin_busqueda_paquete_seguimiento')}}", { id: id }, function( data ) {
                 var fecha = data.query[0].venta.split('-');
                 var par = new Array();
+               //var abonos = new Array();
                 par = data.query;
-
+                console.log( data.abonos );
+              /*  
+                Object.keys(data.abonos).forEach(function (key) {
+                    abonos = data.abonos[key];
+                });
+                console.log( abonos );*/
                 // Si el paquete vendido tiene sesiones de tratamiento
                 if(par.length !== 0){
-                    console.log( data.query );
+                   // console.log( data.query );
                     var mensaje = "";
                     mensaje += "<div class='row'></div>";
                     mensaje += "<div class='col-md-6 text-right'><b>Vendido por:: </b></div><div class='col-md-6'>" + data.query[0].empleado + "</div>";
@@ -578,6 +584,8 @@
                     mensaje += "<div class='col-md-6 text-right'><b>Fecha de venta: </b></div><div class='col-md-6'>" + fecha[2] + "/" +fecha[1] + "/" +fecha[0] + "</div>";
                     mensaje += "<div class='col-md-6 text-right'><b>Costo del paquete: </b></div><div class='col-md-6'> $ " + data.query[0].costoPaquete + "</div>";
                     mensaje += "<div class='col-md-6 text-right'><b>Descuento aplicado: </b></div><div class='col-md-6'><b style='color:red'> $ " + ((data.query[0].porcentaje * data.query[0].costoPaquete)/100).toFixed(2) + "</b></div>";
+                    mensaje += "<div class='col-md-6 text-right'><b>Monto total a cancelar: </b></div><div class='col-md-6'><b> $ " + ( data.query[0].costoPaquete - ((data.query[0].porcentaje * data.query[0].costoPaquete)/100)).toFixed(2) + "</b></div>";
+                    mensaje += "<div class='col-md-6 text-right'><b>Deuda pendiente: </b></div><div class='col-md-6'> $ " + ( (data.query[0].costoPaquete - ((data.query[0].porcentaje * data.query[0].costoPaquete)/100)) - data.abonos.abonos).toFixed(2) + "</div>";
                     mensaje += "</div>";
                     
                     mensaje += "<div class='row' ></div>";
