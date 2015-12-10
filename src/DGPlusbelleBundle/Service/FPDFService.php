@@ -127,7 +127,7 @@ class FPDFService {
         foreach ($consulta as $value) {
             $pdf->SetX(25);
             $pdf->SetFont('Arial','B',10);
-            $pdf->MultiCell(40, 5, $value->getDetallePlantilla()->getNombre().': ', 0, 'J', false);
+            $pdf->MultiCell(40, 5, $value->getDetallePlantilla()->getNombre().': ', 0, 'L', false);
             $pdf->SetX(66.6);
             $pdf->SetFont('Arial','',10);
             $pdf->MultiCell(135, 5, $value->getValorDetalle(), 0, 'J', false);
