@@ -17,6 +17,14 @@ class ImagenTratamientoType extends AbstractType
         $builder
             ->add('nombreImagen')
             ->add('historialConsulta')
+            
+             ->add('fileAntes',null, array('label'=>'Foto antes','required'=>false,
+                    'attr'=>array('class'=>'fotoAntes'  
+                        
+                    )))  
+            ->add('fileDespues',null, array('label'=>'Foto despues','required'=>false,
+                    'attr'=>array('class'=>'fotoDespues' 
+                    )))        
         ;
     }
     
