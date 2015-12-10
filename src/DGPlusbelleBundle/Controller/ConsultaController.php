@@ -128,7 +128,7 @@ class ConsultaController extends Controller
         //$entity->setTipoConsulta($tipoConsulta);
         //var_dump($this->tipo);
         
-        $form = $this->createCreateForm($entity,$id,$idEntidad);
+        $form = $this->createCreateForm($entity,2,$idEntidad);
         $form->handleRequest($request);
         
         //$campos = $form->get('campos')->getData();
@@ -290,7 +290,7 @@ class ConsultaController extends Controller
                     return $this->redirect($this->generateUrl('admin_cita'));
                     break;
                 case 'P';
-                    return $this->redirect($this->generateUrl('admin_consulta'));
+                    return $this->redirect($this->generateUrl('admin_paciente'));
                     break;
             }
             
