@@ -9,6 +9,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use DGPlusbelleBundle\Entity\SesionVentaTratamiento;
 use DGPlusbelleBundle\Entity\SeguimientoTratamiento;
+use DGPlusbelleBundle\Entity\ImagenTratamiento;
 use DGPlusbelleBundle\Form\SesionVentaTratamientoType;
 
 /**
@@ -94,7 +95,9 @@ class SesionVentaTratamientoController extends Controller
                 $em->flush();
             } 
 
-            return $this->redirect($this->generateUrl('admin_historialconsulta_new', array('id' => $entity->getId())));
+            $paciente = $em->getRepository('DGPlusbelleBundle:Paciente')->findOneBy(array('persona' => $entity->getPersonaTratamiento ()->getPaciente()->getId()));
+              
+            return $this->redirect($this->generateUrl('admin_historial_consulta', array('id' => 'P'.$paciente->getId())));
         }
 
         return array(
