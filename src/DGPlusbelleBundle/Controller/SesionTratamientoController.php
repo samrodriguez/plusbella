@@ -10,6 +10,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use DGPlusbelleBundle\Entity\SesionTratamiento;
 use DGPlusbelleBundle\Entity\SeguimientoPaquete;
 use DGPlusbelleBundle\Form\SesionTratamientoType;
+use Doctrine\ORM\EntityRepository;
 
 /**
  * SesionTratamiento controller.
@@ -39,39 +40,48 @@ class SesionTratamientoController extends Controller
     /**
      * Creates a new SesionTratamiento entity.
      *
-     * @Route("/", name="admin_sesiontratamiento_create")
+     * @Route("/create/{id}", name="admin_sesiontratamiento_create")
      * @Method("POST")
      * @Template("DGPlusbelleBundle:SesionTratamiento:new.html.twig")
      */
-    public function createAction(Request $request)
+    public function createAction(Request $request, $id)
     {
         $entity = new SesionTratamiento();
-        $form = $this->createCreateForm($entity);
+        $form = $this->createCreateForm($entity, $id);
         $form->handleRequest($request);
         $entity->setFechaSesion(new \DateTime('now'));
 
+        $em = $this->getDoctrine()->getManager();
+        $ventaPaquete = $em->getRepository('DGPlusbelleBundle:VentaPaquete')->find($id);
+        $entity->setVentaPaquete($ventaPaquete);
+        
         if ($form->isValid()) {
             $em = $this->getDoctrine()->getManager();
             $em->persist($entity);
             $em->flush();
-            $seguimiento = new SeguimientoPaquete();
             
-         if($entity->getFileAntes()!=null){
+            $ventaPaquete->setEstado(2);
+            $em->merge($ventaPaquete);
+            $em->flush();
+            
+            $seguimiento = $em->getRepository('DGPlusbelleBundle:SeguimientoPaquete')->findOneBy(array('idVentaPaquete' => $id, 
+                                                                                                    'tratamiento' => $entity->getTratamiento()->getId() 
+                                                                                                    ));
+            
+            $seguimiento->setNumSesion($seguimiento->getNumSesion() + 1);
+           
+            if($entity->getFileAntes()!=null){
                 $path = $this->container->getParameter('photo.paciente');
 
                 $fecha = date('Y-m-d His');
                 $extension = $entity->getFileAntes()->getClientOriginalExtension();
                 $nombreArchivo = $entity->getId()."-"."Antes"."-".$fecha.".".$extension;
-                $em->persist($entity);
-                $em->flush();
-                //var_dump($path.$nombreArchivo);
-
                 
-                //$seguimiento = new SeguimientoPaquete;
                 $seguimiento->setFotoAntes($nombreArchivo);
                 $entity->getFileAntes()->move($path,$nombreArchivo);
-                $em->persist($seguimiento);
+                $em->merge($seguimiento);
                 $em->flush();
+                
             }  
             
              if($entity->getFileDespues()!=null){
@@ -80,21 +90,15 @@ class SesionTratamientoController extends Controller
                 $fecha = date('Y-m-d His');
                 $extension = $entity->getFileDespues()->getClientOriginalExtension();
                 $nombreArchivo = $entity->getId()."-"."Despues"."-".$fecha.".".$extension;
-                $em->persist($entity);
-                $em->flush();
-                //var_dump($path.$nombreArchivo);
-
                 
-                //$seguimiento = new SeguimientoPaquete;
                 $seguimiento->setFotoDespues($nombreArchivo);               
                 $entity->getFileDespues()->move($path,$nombreArchivo);
-                $em->persist($seguimiento);
+                $em->merge($seguimiento);
                 $em->flush();
             } 
-            
+            $paciente = $em->getRepository('DGPlusbelleBundle:Paciente')->findOneBy(array('persona' => $entity->getVentaPaquete()->getPaciente()->getId()));
               
-
-            return $this->redirect($this->generateUrl('admin_historialconsulta_new', array('id' => $entity->getId())));
+            return $this->redirect($this->generateUrl('admin_historial_consulta', array('id' => 'P'.$paciente->getId())));
         }
 
         return array(
@@ -107,16 +111,45 @@ class SesionTratamientoController extends Controller
      * Creates a form to create a SesionTratamiento entity.
      *
      * @param SesionTratamiento $entity The entity
+     * @param mixed $id The entity id
      *
      * @return \Symfony\Component\Form\Form The form
      */
-    private function createCreateForm(SesionTratamiento $entity)
+    private function createCreateForm(SesionTratamiento $entity, $id)
     {
         $form = $this->createForm(new SesionTratamientoType(), $entity, array(
-            'action' => $this->generateUrl('admin_sesiontratamiento_create'),
+            'action' => $this->generateUrl('admin_sesiontratamiento_create', array('id' => $id)),
             'method' => 'POST',
         ));
 
+        $em = $this->getDoctrine()->getManager();
+        $venta = $em->getRepository('DGPlusbelleBundle:SeguimientoPaquete')->findBy(array('idVentaPaquete'=>$id));
+        
+        $tratamientos=array();         
+         foreach ($venta as $key => $value) {
+             $tratamientos[$key] = $value->getTratamiento();
+         }
+       // var_dump($tratamientos);
+        /*$form->add('tratamiento', 'entity', array( 'label' => 'Tratamiento','required'=>false,
+                         'empty_value'   => 'Seleccione tratamiento...',     
+                         'attr'=>array(
+                            'class'=>'form-control input-sm tratamientoPaquete'
+                            ),
+                         'class'         =>  'DGPlusbelleBundle:PaqueteTratamiento',
+                         'query_builder' =>  function(EntityRepository $repositorio) use ( $tratamientos ){
+                         return $repositorio
+                                ->createQueryBuilder('pt')
+                                ->select('tra.nombre')
+                                ->innerJoin('pt.paquete', 'paq')
+                                ->innerJoin('pt.tratamiento', 'tra')
+                                ->where('pt.tratamiento IN(:paquete)')
+                                ->setParameter(':paquete', array_values($tratamientos))
+                                 
+                            ;
+                         }
+                         
+            ));*/
+        
         $form->add('submit', 'submit', array('label' => 'Guardar',
                                                'attr'=>
                                                         array('class'=>'btn btn-success btn-sm')
@@ -136,7 +169,7 @@ class SesionTratamientoController extends Controller
     public function newAction($id)
     {
         $entity = new SesionTratamiento();
-        $form   = $this->createCreateForm($entity);
+        $form   = $this->createCreateForm($entity, $id);
         
         $em = $this->getDoctrine()->getManager();
         $ventaPaquete = $em->getRepository('DGPlusbelleBundle:VentaPaquete')->find($id);

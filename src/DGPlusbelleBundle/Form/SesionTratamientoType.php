@@ -30,11 +30,7 @@ class SesionTratamientoType extends AbstractType
                 'attr'=>array(
                 'class'=>'form-control input-sm sesionEmpleado'
                     )))      
-            ->add('tratamiento',null, array( 'label' => 'Tratamiento','required'=>false,
-                         'empty_value'   => 'Seleccione tratamiento...',     
-                         'attr'=>array(
-                         'class'=>'form-control input-sm tratamientoPaquete'
-                         )))
+            ->add('tratamiento')
            /* ->add('fotoAntes',null, array(
                     'label'         =>  'Foto Antes',                               
                     'required'  => false,

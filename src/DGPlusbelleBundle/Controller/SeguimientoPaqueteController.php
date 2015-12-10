@@ -81,7 +81,8 @@ class SeguimientoPaqueteController extends Controller
                     . "ven.fecha_venta as venta, "
                     . "tra.nombre as ntrata, "
                     . "des.porcentaje as porcentaje, "
-                    . "pt.num_sesiones as sesiones "
+                    . "pt.num_sesiones as sesiones, "
+                    . "seg.num_sesion as numSesion "
                     . "from venta_paquete ven "
                     . "inner join paquete paq on ven.paquete = paq.id "
                     . "inner join seguimiento_paquete seg on ven.id = seg.id_venta_paquete "
@@ -94,7 +95,7 @@ class SeguimientoPaqueteController extends Controller
                     . "inner join tratamiento tra on pt.tratamiento = tra.id "
                     . "left outer join abono abo on ven.id = abo.venta_paquete "
                     . "left outer join descuento des on ven.descuento = des.id "
-                    . "where ven.id = '$ventaPaqueteId'";
+                    . "where ven.id = '$ventaPaqueteId' and seg.tratamiento = pt.tratamiento";
             
             $rsm->addScalarResult('empleado','empleado');
             $rsm->addScalarResult('paciente','paciente');
@@ -105,6 +106,7 @@ class SeguimientoPaqueteController extends Controller
             $rsm->addScalarResult('porcentaje','porcentaje');
             $rsm->addScalarResult('venta','venta');
             $rsm->addScalarResult('sesiones','sesiones');
+            $rsm->addScalarResult('numSesion','numSesion');
             
             $mensaje = $em->createNativeQuery($sql, $rsm)
                     ->getResult();

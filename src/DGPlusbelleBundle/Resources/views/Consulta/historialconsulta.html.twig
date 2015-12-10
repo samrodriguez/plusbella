@@ -200,7 +200,9 @@
                                 <td>{{ entity.paquete }}</td>
                                 <td>{{ entity.empleado }}</td>
                                 <td class = "text-center">{% if entity.fechaVenta %}{{ entity.fechaVenta|date('d/m/Y') }}{% endif %}</td>
-                                <td class = "text-center">Proceso</td>
+                                <td class = "text-center">
+                                    {% if entity.estado == 1 %}Sin comenzar{% elseif entity.estado == 2 %}En proceso{% elseif entity.estado == 3 %}Finalizado{% endif %}
+                                </td>
                                 <td class="center-block">
                                     <div class="row">
                                         <div class="col-md-1 col-md-offset-3">
@@ -562,7 +564,7 @@
                     mensaje += "<div class='col-md-6 text-right'><b>Paquete: </b></div><div class='col-md-6'>" + data.query[0].nomPaquete + "</div>";
                     mensaje += "<div class='col-md-6 text-right'><b>Fecha de venta: </b></div><div class='col-md-6'>" + fecha[2] + "/" +fecha[1] + "/" +fecha[0] + "</div>";
                     mensaje += "<div class='col-md-6 text-right'><b>Costo del paquete: </b></div><div class='col-md-6'> $ " + data.query[0].costoPaquete + "</div>";
-                    mensaje += "<div class='col-md-6 text-right'><b>Descuento aplicado: </b></div><div class='col-md-6'> $ " + ((data.query[0].porcentaje * data.query[0].costoPaquete)/100).toFixed(2) + "</div>";
+                    mensaje += "<div class='col-md-6 text-right'><b>Descuento aplicado: </b></div><div class='col-md-6'><b style='color:red'> $ " + ((data.query[0].porcentaje * data.query[0].costoPaquete)/100).toFixed(2) + "</b></div>";
                     mensaje += "</div>";
                     
                     mensaje += "<div class='row' ></div>";
@@ -576,10 +578,21 @@
                         console.log( value );
                         mensaje +=  "<tr><td>" + value.ntrata + "</td><td>";
                         //mensaje += "<div class='fa fa-check'></div>";
-                        for (var i = 0; i < value.sesiones; i++) {
-                            mensaje += "<div class='fa fa-certificate'></div>";
-                        }    
                         
+                        if(value.numSesion == 0){
+                            for (var i = 0; i < value.sesiones; i++) {
+                                mensaje += "<div class='fa fa-certificate'></div>";
+                            }    
+                        } else {
+                            for (var i = 0; i < value.numSesion; i++) {
+                                mensaje += "<div class='fa fa-check'></div>";
+                            }
+                            for (var i = 0; i < value.sesiones - value.numSesion; i++) {
+                                mensaje += "<div class='fa fa-certificate'></div>";
+                            }
+                            
+                        }
+                            
                         mensaje += "</td></tr>";
                     });    
 
