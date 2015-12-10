@@ -93,8 +93,8 @@ $(document).ready(function() {
             var endtm = $.fullCalendar.formatDate(endDate,'HH:mm');
             var day = $.fullCalendar.formatDate(startDate,'dddd'); 
             var element = $(jsEvent.srcElement);
-            fecha=$.fullCalendar.formatDate(startDate,'dd-MM-yyyy');
-            alert(fecha);
+            //fecha=$.fullCalendar.formatDate(startDate,'dd-MM-yyyy');
+            //alert(fecha);
             
         },
         eventDrop: function( startDate, event, dayDelta, minuteDelta, allDay, revertFunc, jsEvent, ui, view ) { 
@@ -165,7 +165,6 @@ $(document).ready(function() {
                             allDay();
                             break;
                     }
-                    
                           
                 }); 
             //alert(dayDelta);
@@ -291,14 +290,14 @@ $(document).ready(function() {
                                         }
                                     },
                                 //}
-                                    success: {
+                                    /*success: {
                                         label: "Registrar consulta",
                                         className: "btn-success",
                                         callback: function() {
                                         window.location.href = "../consulta/newconcita?id=C"+data.regs[0].id;
 
                                         }
-                                    },
+                                    },*/
                                     main: {
                                         label: "Aceptar",
                                         className: "btn-primary",

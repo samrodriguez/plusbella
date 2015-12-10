@@ -32,7 +32,8 @@ class CitaController extends Controller
 
         $entities = $em->getRepository('DGPlusbelleBundle:Cita')->findAll();
         $sucursales= $em->getRepository('DGPlusbelleBundle:Sucursal')->findAll();
-        
+        $categorias = $em->getRepository('DGPlusbelleBundle:Categoria')->findAll();
+        //var_dump($categorias);
         /*$dql = "SELECT exp.paciente"
                 . "FROM DGPlusbelleBundle:Cita c, DGPlusbelleBundle:Paciente p, DGPlusbelleBundle:Expediente exp"
                 . "WHERE c.id.paciente = p.id AND p.expediente AND exp.paciente = exp.id";
@@ -45,6 +46,7 @@ class CitaController extends Controller
         return array(
             'entities' => $entities,
             'sucursales' => $sucursales,
+            'categorias' => $categorias,
         );
     }
     /**
@@ -565,6 +567,9 @@ class CitaController extends Controller
                 break;
             case "C":
                 $cita['regs'][0]["estado"] = "Cancelada";
+                break;
+            case "N":
+                $cita['regs'][0]["estado"] = "No asistio";
                 break;
         }
         

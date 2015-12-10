@@ -1,0 +1,68 @@
+{% extends 'DGPlusbelleBundle:Layout:layout.html.twig' %}
+
+{% block contenido -%}
+    
+    <div class="panel panel-default">
+  <!-- Default panel contents -->
+  <div class="panel-heading"><p>Editar usuario</p></div>
+  <div class="panel-body">
+  {{ form_start(edit_form) }}
+    {{ form_errors(edit_form) }}
+    <div class="row">
+    
+        <div class="col-md-2">
+            {{ form_row(edit_form.username) }}
+        </div>
+        <div class="col-md-2">
+            {{ form_row(edit_form.password.first) }}
+        </div>
+        <div class="col-md-2">
+            {{ form_row(edit_form.password.second) }}
+        </div>
+         {#<div class="col-md-2">
+        {{ form_row(form.estado) }}
+         </div>#}
+    </div>
+  
+        {#{{ form_row(form.estado) }}#}
+        
+   
+   
+             <div class="form-grouphide col-sm-9">
+                <a href="{{ path('admin_producto') }}" class="btn btn-default btn-sm" id="cancelarNuevo">Cancelar</a>
+                {{ form_widget(edit_form.submit) }}
+              </div>
+              {{ form_widget(edit_form._token) }}
+    
+  </div>
+
+
+</div>        
+
+{% endblock %}
+
+
+{% block javascripts_step %}
+      <script src="{{ asset('Resources/js/EditUsuario.js') }}"></script>  
+      
+       <script>
+            $(document).ready(function(){
+           var seleccionado="";
+                //Eliminar options del select de usuario
+                $('#dgplusbellebundle_usuario_persona option').each(function(index, val) {
+                    
+                    seleccionado = $(this).attr('selected');
+                    if (!seleccionado){
+                        $(this).remove();
+                    }
+                });    
+                
+               validarEditUsuario();            
+                /*$('#dgplusbellebundle_usuario_submit').on('click', functions(){
+                    if( $('#dgplusbellebundle_usuario_password_second').val()!= $('#dgplusbellebundle_usuario_password_second').val() ){
+                        bootbox.alert('Contraseñas deben ser iguales');
+                    }
+                });*/
+          });//Fin document ready
+       </script>           
+ {% endblock %}  

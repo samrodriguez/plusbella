@@ -45,6 +45,7 @@ class PacienteType extends AbstractType
                   array('label'  => 'Fecha nacimiento','required'=>false,
                         'widget' => 'single_text',
                         'attr'   => array('class' => 'form-control input-md calZebra'),
+                        'format' => 'dd-MM-yyyy',
                        ))
             ->add('referidoPor','text',array('label' => 'Referido por','required' => false,
                     'attr'=>array(
@@ -57,6 +58,10 @@ class PacienteType extends AbstractType
             ->add('telefonoEmergencia','text',array('label' => 'Al telefono','required' => false,
                     'attr'=>array(
                     'class'=>'form-control input-sm telefonoemerPaciente'
+                    )))
+             ->add('enteradoPor','text',array('label' => 'Enterado por','required' => false,
+                    'attr'=>array(
+                    'class'=>'form-control input-sm'
                     )))
             //->add('estado')
            // ->add('persona')
