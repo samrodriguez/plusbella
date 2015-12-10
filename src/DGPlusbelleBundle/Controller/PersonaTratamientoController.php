@@ -9,6 +9,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use DGPlusbelleBundle\Entity\PersonaTratamiento;
 use DGPlusbelleBundle\Form\PersonaTratamientoType;
+use DGPlusbelleBundle\Entity\SeguimientoTratamiento;
 
 /**
  * PersonaTratamiento controller.
@@ -57,6 +58,12 @@ class PersonaTratamientoController extends Controller
             $em->persist($entity);
             $em->flush();
 
+            $seguimiento = new SeguimientoTratamiento;
+            $seguimiento->setPersonaTratamiento($entity);
+            $seguimiento->setNumSesion(0);
+            $em->persist($seguimiento);
+            $em->flush();
+            
             return $this->redirect($this->generateUrl('admin_personatratamiento', array('id' => $entity->getId())));
         }
 

@@ -46,6 +46,7 @@ class SesionVentaTratamientoController extends Controller
     public function createAction(Request $request)
     {
         $entity = new SesionVentaTratamiento();
+        $seguimiento1 = new ImagenTratamiento();
         $form = $this->createCreateForm($entity);
         $form->handleRequest($request);
         $entity->setFechaSesion(new \DateTime('now'));
@@ -152,7 +153,7 @@ class SesionVentaTratamientoController extends Controller
     /**
      * Finds and displays a SesionVentaTratamiento entity.
      *
-     * @Route("/{id}", name="admin_sesionventatratamiento_show")
+     * @Route("/{id}", name="admin_sesionventatratamiento_show", options ={"expose" = true})
      * @Method("GET")
      * @Template()
      */
