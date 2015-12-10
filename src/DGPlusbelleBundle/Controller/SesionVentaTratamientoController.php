@@ -46,6 +46,7 @@ class SesionVentaTratamientoController extends Controller
     public function createAction(Request $request)
     {
         $entity = new SesionVentaTratamiento();
+        $seguimiento1 = new ImagenTratamiento();
         $form = $this->createCreateForm($entity);
         $form->handleRequest($request);
         $entity->setFechaSesion(new \DateTime('now'));

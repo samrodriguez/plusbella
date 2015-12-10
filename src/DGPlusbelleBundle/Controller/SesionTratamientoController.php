@@ -8,6 +8,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use DGPlusbelleBundle\Entity\SesionTratamiento;
+use DGPlusbelleBundle\Entity\ImagenTratamiento;
 use DGPlusbelleBundle\Entity\SeguimientoPaquete;
 use DGPlusbelleBundle\Form\SesionTratamientoType;
 use Doctrine\ORM\EntityRepository;
@@ -47,6 +48,7 @@ class SesionTratamientoController extends Controller
     public function createAction(Request $request, $id)
     {
         $entity = new SesionTratamiento();
+        $seguimiento1 = new ImagenTratamiento();
         $form = $this->createCreateForm($entity, $id);
         $form->handleRequest($request);
         $entity->setFechaSesion(new \DateTime('now'));
@@ -54,12 +56,18 @@ class SesionTratamientoController extends Controller
         $em = $this->getDoctrine()->getManager();
         $ventaPaquete = $em->getRepository('DGPlusbelleBundle:VentaPaquete')->find($id);
         $entity->setVentaPaquete($ventaPaquete);
-        
+       
         if ($form->isValid()) {
             $em = $this->getDoctrine()->getManager();
+            
+            
             $em->persist($entity);
             $em->flush();
             
+            $id2=$entity->getId();
+            //die();
+            $entity2 =  $em->getRepository('DGPlusbelleBundle:SesionTratamiento')->find($id2);
+            $seguimiento1->setSesionTratamiento($entity2);
             $ventaPaquete->setEstado(2);
             $em->merge($ventaPaquete);
             $em->flush();
@@ -67,9 +75,12 @@ class SesionTratamientoController extends Controller
             $seguimiento = $em->getRepository('DGPlusbelleBundle:SeguimientoPaquete')->findOneBy(array('idVentaPaquete' => $id, 
                                                                                                     'tratamiento' => $entity->getTratamiento()->getId() 
                                                                                                     ));
+
             
             $seguimiento->setNumSesion($seguimiento->getNumSesion() + 1);
-           
+            //var_dump($entity);
+           // $seguimiento1->setSesionTratamiento($entity);
+            
             if($entity->getFileAntes()!=null){
                 $path = $this->container->getParameter('photo.paciente');
 
@@ -78,8 +89,11 @@ class SesionTratamientoController extends Controller
                 $nombreArchivo = $entity->getId()."-"."Antes"."-".$fecha.".".$extension;
                 
                 $seguimiento->setFotoAntes($nombreArchivo);
+              
+                $seguimiento1->setFotoAntes($nombreArchivo);
                 $entity->getFileAntes()->move($path,$nombreArchivo);
                 $em->merge($seguimiento);
+                $em->persist($seguimiento1);
                 $em->flush();
                 
             }  
@@ -91,9 +105,12 @@ class SesionTratamientoController extends Controller
                 $extension = $entity->getFileDespues()->getClientOriginalExtension();
                 $nombreArchivo = $entity->getId()."-"."Despues"."-".$fecha.".".$extension;
                 
-                $seguimiento->setFotoDespues($nombreArchivo);               
+                $seguimiento->setFotoDespues($nombreArchivo); 
+              
+                $seguimiento1->setFotoDespues($nombreArchivo);     
                 $entity->getFileDespues()->move($path,$nombreArchivo);
                 $em->merge($seguimiento);
+                $em->persist($seguimiento1);
                 $em->flush();
             } 
             $paciente = $em->getRepository('DGPlusbelleBundle:Paciente')->findOneBy(array('persona' => $entity->getVentaPaquete()->getPaciente()->getId()));
