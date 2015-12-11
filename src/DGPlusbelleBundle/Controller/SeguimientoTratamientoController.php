@@ -129,4 +129,51 @@ class SeguimientoTratamientoController extends Controller
             return new Response('0');              
         }  
     }
+    
+    /**
+    * Ajax utilizado para evualar si quedan sesiones pedientes de la venta del tratamiento
+    *  
+    * @Route("/evaluarSesionesTratamiento", name="admin_evaluar_sesiones_tratamiento")
+    */
+    public function evaluarSesionesTratamientoAction()
+    {
+        $isAjax = $this->get('Request')->isXMLhttpRequest();
+        if($isAjax){
+            $ventaTratamientoId = $this->get('request')->request->get('id');
+            
+            $rsm = new ResultSetMapping();
+            $em = $this->getDoctrine()->getManager();            
+                
+            $sql = "select pt.num_sesiones as sesiones, "
+                    . "seg.num_sesion as numSesion, "
+                    . "tra.nombre as ntratamiento "
+                    . "from persona_tratamiento pt "
+                    . "inner join tratamiento tra on pt.tratamiento = tra.id "
+                    . "inner join seguimiento_tratamiento seg on pt.id = seg.id_persona_tratamiento "
+                    . "inner join persona emp on pt.empleado = emp.id "
+                    . "inner join persona pac on pt.paciente = pac.id "
+                    . "inner join paciente p on pac.id = p.persona "
+                    . "inner join expediente exp on p.id = exp.paciente "
+                    . "inner join sucursal suc on pt.sucursal = suc.id "
+                    . "inner join descuento des on pt.descuento = des.id "
+                    . "where pt.id = '$ventaTratamientoId'";
+            
+            $rsm->addScalarResult('sesiones','sesiones');
+            $rsm->addScalarResult('numSesion','numSesion');
+            $rsm->addScalarResult('ntratamiento','ntratamiento');
+            
+            $mensaje = $em->createNativeQuery($sql, $rsm)
+                    ->getResult();
+            
+            $response = new JsonResponse();
+            $response->setData(array(
+                                'query'  => $mensaje
+                            )); 
+
+            return $response; 
+               
+        } else {    
+            return new Response('0');              
+        }  
+    }
 }

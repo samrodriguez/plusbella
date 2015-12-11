@@ -132,4 +132,51 @@ class SeguimientoPaqueteController extends Controller
             return new Response('0');              
         }  
     }
+    
+    /**
+    * Ajax utilizado para buscar las sesiones de tratamiento de un paquete vendido
+    *  
+    * @Route("/evaluarSesionesPaquete", name="admin_evaluar_sesiones_paquete")
+    */
+    public function evaluarSesionesPaqueteAction()
+    {
+        $isAjax = $this->get('Request')->isXMLhttpRequest();
+        if($isAjax){
+            $ventaPaqueteId = $this->get('request')->request->get('id');
+            
+            $rsm = new ResultSetMapping();
+            $em = $this->getDoctrine()->getManager();            
+                
+            $sql = "select pt.num_sesiones as sesiones, "
+                    . "seg.num_sesion as numSesion "
+                    . "from venta_paquete ven "
+                    . "inner join paquete paq on ven.paquete = paq.id "
+                    . "inner join seguimiento_paquete seg on ven.id = seg.id_venta_paquete "
+                    . "inner join persona emp on ven.empleado = emp.id "
+                    . "inner join persona pac on ven.paciente = pac.id "
+                    . "inner join paciente p on pac.id = p.persona "
+                    . "inner join expediente exp on p.id = exp.paciente "
+                    . "inner join sucursal suc on ven.sucursal = suc.id "
+                    . "inner join paquete_tratamiento pt on paq.id = pt.paquete "
+                    . "inner join tratamiento tra on pt.tratamiento = tra.id "
+                    . "left outer join descuento des on ven.descuento = des.id "
+                    . "where ven.id = '$ventaPaqueteId' and seg.tratamiento = pt.tratamiento";
+            
+            $rsm->addScalarResult('sesiones','sesiones');
+            $rsm->addScalarResult('numSesion','numSesion');
+            //$rsm->addScalarResult('abono','abono');
+            
+            $mensaje = $em->createNativeQuery($sql, $rsm)
+                    ->getResult();
+            
+            $response = new JsonResponse();
+            $response->setData(array(
+                                'query'  => $mensaje,
+                            )); 
+            
+            return $response; 
+        } else {    
+            return new Response('0');              
+        }  
+    }
 }
