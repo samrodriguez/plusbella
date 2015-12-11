@@ -98,6 +98,14 @@ class SesionTratamiento {
      * @Assert\File(maxSize="6000000")
      */
     private $fileAntes;
+    
+    
+    /**
+     * @ORM\OneToMany(targetEntity="ImagenTratamiento", mappedBy="sesionVentaTratamiento", cascade={"persist", "remove"})
+     */
+    private $imagenTratamiento;
+    
+    
 
     
     /**

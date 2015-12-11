@@ -8,6 +8,9 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use DGPlusbelleBundle\Entity\ImagenTratamiento;
+use DGPlusbelleBundle\Entity\SesionTratamiento;
+use DGPlusbelleBundle\Entity\VentaPaquete;
+use DGPlusbelleBundle\Entity\SesionVentaTratamiento;
 use DGPlusbelleBundle\Form\ImagenTratamientoType;
 
 /**
@@ -244,4 +247,81 @@ class ImagenTratamientoController extends Controller
             ->getForm()
         ;
     }
+    
+    
+    
+    
+    
+    /**
+     * Finds and displays a ImagenTratamiento entity.
+     *
+     * @Route("/galeriatratamiento/{id}/fotos", name="admin_imagentratamiento_galeria", options={"expose"=true})
+     * @Method("GET")
+     * @Template("DGPlusbelleBundle:ImagenTratamiento:galeria.html.twig")
+     */
+    public function galeriatratamientoAction($id)
+    {
+        $em = $this->getDoctrine()->getManager();
+        
+        //$entity = $em->getRepository('DGPlusbelleBundle:VentaPaquete')->find($id);
+        //var_dump("sdc");
+        $dql = "SELECT i.fotoAntes, i.fotoDespues, st.fechaSesion FROM DGPlusbelleBundle:SesionVentaTratamiento st "
+                . "JOIN st.imagenTratamiento i "
+                . "WHERE st.personaTratamiento=:id";
+                
+        $imagenes = $em->createQuery($dql)
+                       ->setParameter('id',$id)
+                       ->getResult();
+                       //var_dump($empleados);
+        
+        //var_dump($imagenes);
+        
+
+        //$deleteForm = $this->createDeleteForm($id);
+
+        return array(
+            'entities' => $imagenes,
+            
+        );
+    }
+    
+    
+    
+    
+    /**
+     * 
+     *
+     * @Route("/galeriapaquete/{id}/fotos", name="admin_imagenpaquete_galeria", options={"expose"=true})
+     * @Method("GET")
+     * @Template("DGPlusbelleBundle:ImagenTratamiento:galeria.html.twig")
+     */
+    public function galeriapaqueteAction($id)
+    {
+        $em = $this->getDoctrine()->getManager();
+        
+        //$entity = $em->getRepository('DGPlusbelleBundle:VentaPaquete')->find($id);
+        //var_dump("sdc");
+        $dql = "SELECT i.fotoAntes, i.fotoDespues, st.fechaSesion FROM DGPlusbelleBundle:SesionTratamiento st "
+                . "JOIN st.imagenTratamiento i "
+                . "WHERE st.ventaPaquete=:id";
+                
+        $imagenes = $em->createQuery($dql)
+                       ->setParameter('id',$id)
+                       ->getResult();
+                       //var_dump($empleados);
+        
+        //var_dump($imagenes);
+        
+
+        //$deleteForm = $this->createDeleteForm($id);
+
+        return array(
+            'entities' => $imagenes,
+            
+        );
+    }
+    
+    
+    
+    
 }
