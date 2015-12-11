@@ -16,17 +16,20 @@
     MAIN CONTENT SECTION
     =============================================== -->
     
-    {#<div class="row">
+    <div class="row">
         <div class="col-md-6 text-center"><b><h3>Fotos antes</h3></b></div>
         <div class="col-md-6 text-center"><b><h3>Fotos despues</h3></b></div>
-    </div>#}
+    </div>
 
         <div class="content-body">
             <div id="gallery" class="gallery-content gallery-grid" itemscope itemtype="http://schema.org/ImageGallery">
                 
                     {% if entities %}
+                        
+                        <div class="row">
+                            <div class="col-md-6">
                         {% for entity in entities %}
-                            <div class="gallery-col mix" data-mysort="147">
+                            <div class="gallery-col mix col-md-6" data-mysort="147">
                               <div class="gallery-item" itemprop="associatedMedia" itemscope itemtype="{{ asset('Photos/Paciente/')}}{{entity.fotoAntes}}">
                                 <div class="thumbnail" data-lref="{{ asset('Photos/Paciente/')}}{{entity.fotoAntes}}" itemprop="contentUrl" data-size="1280x720">
                                   <div class="embed-responsive embed-responsive-16by9">
@@ -53,9 +56,12 @@
                               </div><!-- /.gallery-item -->
                             </div><!-- /.cols -->
                         {% endfor %}
-                    
+                            </div>
+                        
+                            <div class="col-md-6">
+                            
                         {% for entity in entities %}
-                            <div class="gallery-col mix" data-mysort="147">
+                            <div class="gallery-col mix col-md-6" data-mysort="147">
                                 <div class="gallery-item" itemprop="associatedMedia" itemscope itemtype="{{ asset('Photos/Paciente/')}}{{entity.fotoDespues}}">
                                 <div class="thumbnail" data-lref="{{ asset('Photos/Paciente/')}}{{entity.fotoDespues}}" itemprop="contentUrl" data-size="1280x720">
                                     <div class="embed-responsive embed-responsive-16by9">
@@ -81,8 +87,10 @@
                                 </div><!-- /.gallery-info -->
                               </div><!-- /.gallery-item -->
                             </div><!-- /.cols -->
-                        
+                            
                         {% endfor %}
+                            </div>
+                        </div>
                     {% else %}
                         <div class="row">
                             <div class="col-lg-12 text-center"><b>Este registro no tiene imágenes</b></div>
