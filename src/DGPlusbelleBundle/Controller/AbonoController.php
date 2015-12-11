@@ -127,11 +127,8 @@ class AbonoController extends Controller
                          'query_builder' => function(EntityRepository $r) use ( $paciente, $tratamiento ){
                                                 return $r->createQueryBuilder('s')
                                                          ->innerJoin('s.tratamiento', 'p')
-                                                        // ->innerJoin('s.paciente', 'pac')
                                                         ->where('s.cuotas > 0')
-                                                       // ->andWhere('pac.id = :idpac')
                                                         ->andWhere('s.id IN (:tratamientos)')
-                                                        //->setParameter(':idpac', $paciente)
                                                         ->setParameter('tratamientos', $tratamiento)
                                                     ;   
                                             } ,

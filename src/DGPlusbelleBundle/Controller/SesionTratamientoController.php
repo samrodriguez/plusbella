@@ -140,32 +140,32 @@ class SesionTratamientoController extends Controller
         ));
 
         $em = $this->getDoctrine()->getManager();
-        $venta = $em->getRepository('DGPlusbelleBundle:SeguimientoPaquete')->findBy(array('idVentaPaquete'=>$id));
+        $idtratamientos=array();    
         
-        $tratamientos=array();         
-         foreach ($venta as $key => $value) {
-             $tratamientos[$key] = $value->getTratamiento();
-         }
-       // var_dump($tratamientos);
-        /*$form->add('tratamiento', 'entity', array( 'label' => 'Tratamiento','required'=>false,
-                         'empty_value'   => 'Seleccione tratamiento...',     
+        $venta = $em->getRepository('DGPlusbelleBundle:VentaPaquete')->find($id);
+        $tratamientos = $em->getRepository('DGPlusbelleBundle:PaqueteTratamiento')->findBy(array('paquete' => $venta->getPaquete()->getId()));
+        
+        foreach ($tratamientos as $trat){
+            $idtrat=$trat->getId();
+            array_push($idtratamientos, $idtrat); 
+        }
+        
+        $form->add('tratamiento', 'entity', 
+                  array( 'label'         => 'Tratamiento','required'=>false,
+                         'empty_value'   => 'Seleccione un tratamiento...',
+                         'class'         => 'DGPlusbelleBundle:PaqueteTratamiento',
+                         'query_builder' => function(EntityRepository $r) use ( $idtratamientos ){
+                                                return $r->createQueryBuilder('s')
+                                                        ->select('s') 
+                                                        ->innerJoin('s.tratamiento', 'p')
+                                                        ->where('s.id IN (:tratamientos)')
+                                                        ->setParameter('tratamientos', $idtratamientos)
+                                                    ;   
+                                            } ,
                          'attr'=>array(
-                            'class'=>'form-control input-sm tratamientoPaquete'
-                            ),
-                         'class'         =>  'DGPlusbelleBundle:PaqueteTratamiento',
-                         'query_builder' =>  function(EntityRepository $repositorio) use ( $tratamientos ){
-                         return $repositorio
-                                ->createQueryBuilder('pt')
-                                ->select('tra.nombre')
-                                ->innerJoin('pt.paquete', 'paq')
-                                ->innerJoin('pt.tratamiento', 'tra')
-                                ->where('pt.tratamiento IN(:paquete)')
-                                ->setParameter(':paquete', array_values($tratamientos))
-                                 
-                            ;
-                         }
-                         
-            ));*/
+                         'class'=>'form-control input-sm'
+                         )
+                    ));  
         
         $form->add('submit', 'submit', array('label' => 'Guardar',
                                                'attr'=>
