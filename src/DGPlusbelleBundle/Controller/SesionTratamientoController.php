@@ -67,7 +67,7 @@ class SesionTratamientoController extends Controller
             $id2=$entity->getId();
             //die();
             $entity2 =  $em->getRepository('DGPlusbelleBundle:SesionTratamiento')->find($id2);
-            $seguimiento1->setSesionTratamiento($entity2);
+            $seguimiento1->setSesionTratamiento($entity);
             $ventaPaquete->setEstado(2);
             $em->merge($ventaPaquete);
             $em->flush();
@@ -92,11 +92,11 @@ class SesionTratamientoController extends Controller
                 $extension = $row->getFileAntes()->getClientOriginalExtension();
                 $nombreArchivo = $row->getId()."-"."Antes"."-".$fecha.".".$extension;
                 
-                $seguimiento->setFotoAntes($nombreArchivo);
+                //$seguimiento->setFotoAntes($nombreArchivo);
               
                 $seguimiento1->setFotoAntes($nombreArchivo);
-               $row->getFileAntes()->move($path,$nombreArchivo);
-                $em->merge($seguimiento);
+                $row->getFileAntes()->move($path,$nombreArchivo);
+                //$em->merge($seguimiento);
                 $em->persist($seguimiento1);
                 $em->flush();
                 
@@ -109,17 +109,17 @@ class SesionTratamientoController extends Controller
                 $extension = $row->getFileDespues()->getClientOriginalExtension();
                 $nombreArchivo = $row->getId()."-"."Despues"."-".$fecha.".".$extension;
                 
-                $seguimiento->setFotoDespues($nombreArchivo); 
+                //$seguimiento->setFotoDespues($nombreArchivo); 
               
                 $seguimiento1->setFotoDespues($nombreArchivo);     
                 $row->getFileDespues()->move($path,$nombreArchivo);
-                $em->merge($seguimiento);
+                //$em->merge($seguimiento);
                 $em->persist($seguimiento1);
                 $em->flush();
             }   
-                
-                
-                
+                //$em->persist($seguimiento1);
+                //$em->merge($seguimiento);
+                //$em->flush();
                 
             }
                 

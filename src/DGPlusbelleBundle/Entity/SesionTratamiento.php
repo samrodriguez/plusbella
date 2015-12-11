@@ -101,7 +101,7 @@ class SesionTratamiento {
     
     
     /**
-     * @ORM\OneToMany(targetEntity="ImagenTratamiento", mappedBy="sesionVentaTratamiento", cascade={"persist", "remove"})
+     * @ORM\OneToMany(targetEntity="ImagenTratamiento", mappedBy="sesionTratamiento", cascade={"persist", "remove"})
      */
     private $imagenTratamiento;
     
