@@ -101,7 +101,7 @@ class SesionTratamiento {
     
     
     /**
-     * @ORM\OneToMany(targetEntity="ImagenTratamiento", mappedBy="sesionVentaTratamiento", cascade={"persist", "remove"})
+     * @ORM\OneToMany(targetEntity="ImagenTratamiento", mappedBy="sesionTratamiento", cascade={"persist", "remove"})
      */
     private $imagenTratamiento;
     
@@ -356,30 +356,25 @@ class SesionTratamiento {
         return $this->tratamiento;
     }
     
-    
-    
-    
-    /**
-     * Set ventaPaquete
-     *
-     * @param \DGPlusbelleBundle\Entity\VentaPaquete $ventaPaquete
-     *
-     * @return SesionTratamiento
+     
+     /**
+     * @ORM\OneToMany(targetEntity="ImagenTratamiento", mappedBy="SesionTratamiento", cascade={"persist", "remove"})
      */
-    public function setImagenTratamiento(\DGPlusbelleBundle\Entity\ImagenTratamiento $imagenTratamiento = null)
+    protected $placas;
+    public function __construct()
     {
-        $this->imagenTratamiento = $imagenTratamiento;
-
-        return $this;
+        //$this->placas = array(new EstudioRadTamPlaca(), new EstudioRadTamPlaca());
+        $this->placas = new ArrayCollection();
+    }           
+    public function getPlacas()
+    {
+        return $this->placas;
     }
-
-    /**
-     * Get ventaPaquete
-     *
-     * @return \DGPlusbelleBundle\Entity\VentaPaquete
-     */
-    public function getImagenTratemiento()
+    public function setPlacas(\Doctrine\Common\Collections\Collection $placas)
     {
-        return $this->imagenTratamiento;
+        $this->placas = $placas;
+        foreach ($placas as $placa) {
+            $placa->setSesionTratamiento($this);
+        }
     }
 }

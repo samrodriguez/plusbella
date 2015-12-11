@@ -15,8 +15,8 @@ class ImagenTratamientoType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('nombreImagen')
-            ->add('historialConsulta')
+           // ->add('nombreImagen')
+           // ->add('historialConsulta')
             
              ->add('fileAntes',null, array('label'=>'Foto antes','required'=>false,
                     'attr'=>array('class'=>'fotoAntes'  

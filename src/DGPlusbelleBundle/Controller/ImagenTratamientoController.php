@@ -304,7 +304,7 @@ class ImagenTratamientoController extends Controller
         $dql = "SELECT i.fotoAntes, i.fotoDespues, st.fechaSesion FROM DGPlusbelleBundle:SesionTratamiento st "
                 . "JOIN st.imagenTratamiento i "
                 . "WHERE st.ventaPaquete=:id";
-                
+
         $imagenes = $em->createQuery($dql)
                        ->setParameter('id',$id)
                        ->getResult();

@@ -39,7 +39,7 @@ class ImagenTratamiento {
      /**
      * @var \sesionTratamiento
      *
-     * @ORM\ManyToOne(targetEntity="SesionTratamiento")
+     * @ORM\ManyToOne(targetEntity="SesionTratamiento", inversedBy="placas", cascade={"persist", "remove"})
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="sesion_tratamiento", referencedColumnName="id")
      * })
@@ -55,6 +55,58 @@ class ImagenTratamiento {
      * })
      */
     private $sesionVentaTratamiento;
+    
+     /**
+     * @Assert\File(maxSize="6000000")
+     */
+    private $fileAntes;
+
+    
+    /**
+     * Sets fileAntes.
+     *
+     * @param UploadedFile $fileAntes
+     */
+    public function setFileAntes(UploadedFile $fileAntes = null)
+    {
+        $this->fileAntes = $fileAntes;
+    }
+
+    /**
+     * Get fileAntes.
+     *
+     * @return UploadedFile
+     */
+    public function getFileAntes()
+    {
+        return $this->fileAntes;
+    }
+    
+     /**
+     * @Assert\File(maxSize="6000000")
+     */
+    private $fileDespues;
+
+    
+    /**
+     * Sets fileDespues.
+     *
+     * @param UploadedFile $fileDespues
+     */
+    public function setFileDespues(UploadedFile $fileDespues = null)
+    {
+        $this->fileDespues = $fileDespues;
+    }
+
+    /**
+     * Get fileDespues.
+     *
+     * @return UploadedFile
+     */
+    public function getFileDespues()
+    {
+        return $this->fileDespues;
+    }
     
      /**
      * Get id
