@@ -347,4 +347,26 @@ class SesionTratamiento {
     {
         return $this->tratamiento;
     }
+    
+     
+     /**
+     * @ORM\OneToMany(targetEntity="ImagenTratamiento", mappedBy="SesionTratamiento", cascade={"persist", "remove"})
+     */
+    protected $placas;
+    public function __construct()
+    {
+        //$this->placas = array(new EstudioRadTamPlaca(), new EstudioRadTamPlaca());
+        $this->placas = new ArrayCollection();
+    }           
+    public function getPlacas()
+    {
+        return $this->placas;
+    }
+    public function setPlacas(\Doctrine\Common\Collections\Collection $placas)
+    {
+        $this->placas = $placas;
+        foreach ($placas as $placa) {
+            $placa->setSesionTratamiento($this);
+        }
+    }
 }
