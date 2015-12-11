@@ -40,15 +40,15 @@ class SesionVentaTratamientoController extends Controller
     /**
      * Creates a new SesionVentaTratamiento entity.
      *
-     * @Route("/", name="admin_sesionventatratamiento_create")
+     * @Route("/create/{id}", name="admin_sesionventatratamiento_create")
      * @Method("POST")
      * @Template("DGPlusbelleBundle:SesionVentaTratamiento:new.html.twig")
      */
-    public function createAction(Request $request)
+    public function createAction(Request $request, $id)
     {
         $entity = new SesionVentaTratamiento();
         $seguimiento1 = new ImagenTratamiento();
-        $form = $this->createCreateForm($entity);
+        $form = $this->createCreateForm($entity, $id);
         $form->handleRequest($request);
         $entity->setFechaSesion(new \DateTime('now'));
 
@@ -62,7 +62,7 @@ class SesionVentaTratamientoController extends Controller
             $entity2 =  $em->getRepository('DGPlusbelleBundle:SesionVentaTratamiento')->find($id2);
             $seguimiento1->setSesionVentaTratamiento($entity2);
             
-            $seguimiento = new SeguimientoTratamiento();
+            
             
          if($entity->getFileAntes()!=null){
                 $path = $this->container->getParameter('photo.paciente');
@@ -74,12 +74,8 @@ class SesionVentaTratamientoController extends Controller
                 $em->flush();
                 //var_dump($path.$nombreArchivo);
 
-                
-                //$seguimiento = new SeguimientoPaquete;
-                $seguimiento->setFotoAntes($nombreArchivo);
                 $seguimiento1->setFotoAntes($nombreArchivo);
                 $entity->getFileAntes()->move($path,$nombreArchivo);
-                $em->persist($seguimiento);
                 $em->persist($seguimiento1);
                 $em->flush();
             }  
@@ -94,15 +90,17 @@ class SesionVentaTratamientoController extends Controller
                 $em->flush();
                 //var_dump($path.$nombreArchivo);
 
-                
-                //$seguimiento = new SeguimientoPaquete;
-                $seguimiento->setFotoDespues($nombreArchivo);  
                 $seguimiento1->setFotoDespues($nombreArchivo);  
                 $entity->getFileDespues()->move($path,$nombreArchivo);
-                $em->persist($seguimiento);
                 $em->persist($seguimiento1);
                 $em->flush();
             } 
+            
+            $seguimiento = $em->getRepository('DGPlusbelleBundle:SeguimientoTratamiento')->findOneBy(array('idPersonaTratamiento' => $id, 
+                                                                                         ));
+            $seguimiento->setNumSesion($seguimiento->getNumSesion() + 1);
+            $em->merge($seguimiento);
+            $em->flush();
 
             $paciente = $em->getRepository('DGPlusbelleBundle:Paciente')->findOneBy(array('persona' => $entity->getPersonaTratamiento ()->getPaciente()->getId()));
               
@@ -119,13 +117,14 @@ class SesionVentaTratamientoController extends Controller
      * Creates a form to create a SesionVentaTratamiento entity.
      *
      * @param SesionVentaTratamiento $entity The entity
+     * @param mixed $id The entity id
      *
      * @return \Symfony\Component\Form\Form The form
      */
-    private function createCreateForm(SesionVentaTratamiento $entity)
+    private function createCreateForm(SesionVentaTratamiento $entity, $id)
     {
         $form = $this->createForm(new SesionVentaTratamientoType(), $entity, array(
-            'action' => $this->generateUrl('admin_sesionventatratamiento_create'),
+            'action' => $this->generateUrl('admin_sesionventatratamiento_create', array('id' => $id)),
             'method' => 'POST',
         ));
 
@@ -147,7 +146,7 @@ class SesionVentaTratamientoController extends Controller
     public function newAction($id)
     {
         $entity = new SesionVentaTratamiento();
-        $form   = $this->createCreateForm($entity);
+        $form   = $this->createCreateForm($entity, $id);
 
         $em = $this->getDoctrine()->getManager();
         $personaTratamiento = $em->getRepository('DGPlusbelleBundle:PersonaTratamiento')->find($id);
