@@ -247,7 +247,7 @@ class ConsultaController extends Controller
                         if($key +1 != $lon){
                             //var_dump($lon);
                             $pnombre .= '_'.$nparam[$key + 1];
-                        }    
+                        }
                     }
                     $dataReporte->setValorDetalle($parameters[$pnombre]);
                 } else {
