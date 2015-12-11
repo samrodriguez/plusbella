@@ -78,7 +78,7 @@ class CitaController extends Controller
         //$horaCita = date_format($horaCita,'H:i');
         
         //$horaCita = strtotime($horaCita);
-        var_dump($horaCita);
+        //var_dump($horaCita);
         $em = $this->getDoctrine()->getManager();
         $cita = $em->getRepository('DGPlusbelleBundle:Cita')->findBy(array('empleado'=>$idEmpleado,'horaCita'=>$horaCita,'fechaCita'=>$fechaCita));
         
@@ -98,7 +98,7 @@ class CitaController extends Controller
             return array(
                 'entity' => $entity,
                 'form'   => $form->createView(),
-                'mensaje'=> 'Ya hay una cita programada en ese fecha y hora',
+                'mensaje'=> 'Ya hay una cita programada en ese fecha y hora, para el técnico que selecciono',
             );
         }
         
@@ -496,15 +496,15 @@ class CitaController extends Controller
                             }
                         }
                         else{
-                            if ($fechaReprogramada > $today_dt) {
+                            /*if ($fechaReprogramada > $today_dt) {
                                 $entity->setFechaCita(new \DateTime($newformat));
                                 $em->persist($entity);
                                 $em->flush();   
                                 $exito['regs']=0; //Cita reprogramada con exito
-                            }
-                            else{
+                            }*/
+                            //else{
                                 $exito['regs']=4;//Error, la hora es antes de la actual
-                            }
+                            //}
                             
                         }
                         
@@ -515,7 +515,7 @@ class CitaController extends Controller
                 }
         }
         else{
-            $exito['regs']=1;
+            $exito['regs']=3;
         }
         return new Response(json_encode($exito));
     }
