@@ -47,6 +47,7 @@ class SesionVentaTratamientoController extends Controller
     public function createAction(Request $request)
     {
         $entity = new SesionVentaTratamiento();
+        $seguimiento1 = new ImagenTratamiento();
         $form = $this->createCreateForm($entity);
         $form->handleRequest($request);
         $entity->setFechaSesion(new \DateTime('now'));
@@ -55,6 +56,11 @@ class SesionVentaTratamientoController extends Controller
             $em = $this->getDoctrine()->getManager();
             $em->persist($entity);
             $em->flush();
+            
+            $id2=$entity->getId();
+            //die();
+            $entity2 =  $em->getRepository('DGPlusbelleBundle:SesionVentaTratamiento')->find($id2);
+            $seguimiento1->setSesionVentaTratamiento($entity2);
             
             $seguimiento = new SeguimientoTratamiento();
             
@@ -71,8 +77,10 @@ class SesionVentaTratamientoController extends Controller
                 
                 //$seguimiento = new SeguimientoPaquete;
                 $seguimiento->setFotoAntes($nombreArchivo);
+                $seguimiento1->setFotoAntes($nombreArchivo);
                 $entity->getFileAntes()->move($path,$nombreArchivo);
                 $em->persist($seguimiento);
+                $em->persist($seguimiento1);
                 $em->flush();
             }  
             
@@ -88,9 +96,11 @@ class SesionVentaTratamientoController extends Controller
 
                 
                 //$seguimiento = new SeguimientoPaquete;
-                $seguimiento->setFotoDespues($nombreArchivo);               
+                $seguimiento->setFotoDespues($nombreArchivo);  
+                $seguimiento1->setFotoDespues($nombreArchivo);  
                 $entity->getFileDespues()->move($path,$nombreArchivo);
                 $em->persist($seguimiento);
+                $em->persist($seguimiento1);
                 $em->flush();
             } 
 
