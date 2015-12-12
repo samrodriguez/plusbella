@@ -85,13 +85,13 @@
                         <li><a href="#" aria-label="home"><i class="fa fa-home"></i></a></li>
                         <li class="active">Dashboard</li>
                     </ul>
-                    {% if is_granted('ROLE_PREVIOUS_ADMIN') %}
+                    {#{% if is_granted('ROLE_PREVIOUS_ADMIN') %}
                         <a href="{{ path('dashboard', {_change: '_exit'}) }}">End impersonating...</a>
                     {% elseif is_granted('ROLE_ADMIN')  %}
                         <form action="{{ path('dashboard_impersonating')}}" method="post" name="impersonating" id="impersonating">
                             <input type="text" name="impersonating" placeholder="Impersonating..."><input type="submit" value="OK">
                         </form> 
-                    {% endif %}
+                    {% endif %}#}
                     {% endblock %}   
                 </div><!-- /.content-bar -->
                 <div class="content-body">
