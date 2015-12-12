@@ -170,8 +170,8 @@
                                             </div>  
                                              <div class="col-md-1">
                                                 <div class="btn-group btn-group-sm pull-left">
-                                                    <button id="seguimiento-fototratamiento" data-toggle="tooltip" data-container="body" title="Ver imagenes" class="btn btn-default datatables1-actions seguimiento" role="button" onclick="sesionFotoTratamiento({{ entity.id }});">
-                                                        <i class="glyphicon glyphicon-picture"></i><a href=""> </a>
+                                                    <button id="seguimiento-fototratamiento" data-toggle="tooltip" data-container="body" title="Ver imagenes" class="btn btn-default datatables1-actions seguimiento" role="button" onclick="imagenTratamiento({{ entity.id }});">
+                                                        <i class="glyphicon glyphicon-picture"></i><a href="{{path('admin_imagentratamiento_galeria',{id:entity.id})}}"> </a>
                                                     </button>
                                                 </div>
                                             </div>                
@@ -221,11 +221,18 @@
                                         </div>
                                         <div class="col-md-1">
                                             <div class="btn-group btn-group-sm pull-left">
-                                                <button id="seguimiento-paquete" data-toggle="tooltip" data-container="body" title="Seguimiento paquete" class="btn btn-default datatables1-actions seguimiento" role="button" onclick="seguimientoPaquete({{ entity.id }});">
+                                                <button id="seguimiento-paquete" data-toggle="tooltip" data-container="body" title="Seguimiento paquete" class="btn btn-default datatables1-actions seguimiento" role="button" onclick="imagenPaquete({{ entity.id }});">
                                                     <i class="fa fa-history"></i><a href=""> </a>
                                                 </button>
                                             </div>
-                                        </div>            
+                                        </div>       
+                                        <div class="col-md-1">
+                                            <div class="btn-group btn-group-sm pull-left">
+                                                <button id="seguimiento-fototratamiento" data-toggle="tooltip" data-container="body" title="Ver imagenes" class="btn btn-default datatables1-actions seguimiento" role="button" onclick="imagenPaquete({{ entity.id }});">
+                                                    <i class="glyphicon glyphicon-picture"></i><a href="{{path('admin_imagentratamiento_galeria',{id:entity.id})}}"> </a>
+                                                </button>
+                                            </div>
+                                        </div>     
                                     </div>
                                 </td>
                             </tr>
@@ -560,6 +567,21 @@
         function sesionFotoTratamiento(id){
             var url = Routing.generate('admin_seguimientotratamiento_show', {'id': id});
             window.open(url);
+        }
+        
+    </script>
+    <script>  
+        function imagenTratamiento(id){
+            var url = Routing.generate('admin_imagentratamiento_galeria', {'id': id});
+            window.open(url);
+            
+        }
+    </script>
+    <script>  
+        function imagenPaquete(id){
+            var url = Routing.generate('admin_imagenpaquete_galeria', {'id': id});
+            window.open(url);
+            
         }
     </script>
      <script>  

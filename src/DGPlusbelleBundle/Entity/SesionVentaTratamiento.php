@@ -81,6 +81,11 @@ class SesionVentaTratamiento {
 
     
     /**
+     * @ORM\OneToMany(targetEntity="ImagenTratamiento", mappedBy="sesionTratamiento", cascade={"persist", "remove"})
+     */
+    private $imagenTratamiento;
+    
+    /**
      * Sets fileAntes.
      *
      * @param UploadedFile $fileAntes
@@ -278,5 +283,30 @@ class SesionVentaTratamiento {
     public function getPersonaTratamiento()
     {
         return $this->personaTratamiento;
+    }
+    
+    
+    /**
+     * Set ventaPaquete
+     *
+     * @param \DGPlusbelleBundle\Entity\VentaPaquete $ventatratamiento
+     *
+     * @return SesionTratamiento
+     */
+    public function setImagenTratamiento(\DGPlusbelleBundle\Entity\ImagenTratamiento $imagenTratamiento = null)
+    {
+        $this->imagenTratamiento = $imagenTratamiento;
+
+        return $this;
+    }
+
+    /**
+     * Get ventaPaquete
+     *
+     * @return \DGPlusbelleBundle\Entity\VentaPaquete
+     */
+    public function getImagenTratemiento()
+    {
+        return $this->imagenTratamiento;
     }
 }
