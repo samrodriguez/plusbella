@@ -280,9 +280,13 @@
                                                 <button id="exportar-pdf" data-toggle="tooltip" data-container="body" title="Detalle de consulta" class="btn btn-default datatables1-actions opciones" role="button" onclick="exportarPDF({{ entity.id }})">
                                                     <i class="fa fa-file-pdf-o"></i><a href=""> </a>
                                                 </button>
+                                                
                                             {% else %}
                                                 No aplica
                                             {% endif %}    
+                                            <button id="seguimiento-fototratamiento" data-toggle="tooltip" data-container="body" title="Ver imagenes" class="btn btn-default datatables1-actions seguimiento" role="button" onclick="imagenConsulta({{ entity.id }})">
+                                                    <i class="glyphicon glyphicon-picture"></i>
+                                            </button>
                                         </div>
                                     </td>
                                     
@@ -601,6 +605,13 @@
     <script>  
         function imagenPaquete(id){
             var url = Routing.generate('admin_imagenpaquete_galeria', {'id': id});
+            window.open(url);
+            
+        }
+    </script>
+    <script>  
+        function imagenConsulta(id){
+            var url = Routing.generate('admin_imagenconsulta_galeria', {'id': id});
             window.open(url);
             
         }

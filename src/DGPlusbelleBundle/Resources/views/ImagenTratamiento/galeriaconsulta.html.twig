@@ -23,16 +23,16 @@
                             {#<div class="col-md-6">#}
                         {% for entity in entities %}
                             <div class="gallery-col mix col-md-4" data-mysort="147">
-                              <div class="gallery-item" itemprop="associatedMedia" itemscope itemtype="{{ asset('Photos/Paciente/')}}{{entity.fotoAntes}}">
-                                <div class="thumbnail" data-lref="{{ asset('Photos/Paciente/')}}{{entity.fotoAntes}}" itemprop="contentUrl" data-size="1280x720">
+                              <div class="gallery-item" itemprop="associatedMedia" itemscope itemtype="{{ asset('Photos/Paciente/')}}{{entity.foto}}">
+                                <div class="thumbnail" data-lref="{{ asset('Photos/Paciente/')}}{{entity.foto}}" itemprop="contentUrl" data-size="1280x720">
                                   <div class="embed-responsive embed-responsive-16by9">
-                                    <img class="embed-responsive-item" itemprop="thumbnail" src="{{ asset('Photos/Paciente/')}}{{entity.fotoAntes}}" alt="dummy image">
+                                    <img class="embed-responsive-item" itemprop="thumbnail" src="{{ asset('Photos/Paciente/')}}{{entity.foto}}" alt="dummy image">
                                     <div class="embed-bar">
 
                                     </div>
                                     <div class="embed-bar hidden-gallery-list embed-bar-bottom">
 
-                                      <div><i class="icon-calendar"></i>  {{ entity.fechaSesion|date('d-m-Y')}}</div>
+                                      <div><i class="icon-calendar"></i> {# {{ entity.consulta.fechaConsulta|date('d-m-Y')}}#}</div>
                                     </div>
                                   </div><!-- /.embed -->
                                 </div><!-- /.thumbnail -->

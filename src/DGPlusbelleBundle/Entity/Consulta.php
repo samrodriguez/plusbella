@@ -434,10 +434,17 @@ class Consulta
      * @ORM\OneToMany(targetEntity="ConsultaProducto", mappedBy="consulta", cascade={"persist", "remove"})
      */
     protected $placas;
+    
+    /**
+     * @ORM\OneToMany(targetEntity="ImagenConsulta", mappedBy="consulta", cascade={"persist", "remove"})
+     */
+    protected $placas2;
+    
     public function __construct()
     {
         //$this->placas = array(new EstudioRadTamPlaca(), new EstudioRadTamPlaca());
         $this->placas = new ArrayCollection();
+        $this->placas2 = new ArrayCollection();
     }           
     public function getPlacas()
     {
@@ -448,6 +455,18 @@ class Consulta
         $this->placas = $placas;
         foreach ($placas as $placa) {
             $placa->setConsulta($this);
+        }
+    }
+    
+    public function getPlacas2()
+    {
+        return $this->placas2;
+    }
+    public function setPlacas2(\Doctrine\Common\Collections\Collection $placas2)
+    {
+        $this->placas2 = $placas2;
+        foreach ($placas2 as $placa2) {
+            $placa2->setConsulta($this);
         }
     }
     

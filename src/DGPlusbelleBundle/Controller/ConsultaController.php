@@ -14,9 +14,11 @@ use DGPlusbelleBundle\Entity\Expediente;
 use DGPlusbelleBundle\Entity\HistorialClinico;
 use DGPlusbelleBundle\Entity\HistorialConsulta;
 use DGPlusbelleBundle\Entity\ConsultaProducto;
+use DGPlusbelleBundle\Entity\ImagenConsulta;
 use DGPlusbelleBundle\Form\ConsultaType;
 use DGPlusbelleBundle\Form\ConsultaConPacienteType;
 use DGPlusbelleBundle\Form\ConsultaProductoType;
+use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * Consulta controller.
@@ -128,6 +130,9 @@ class ConsultaController extends Controller
         //$entity->setTipoConsulta($tipoConsulta);
         //var_dump($this->tipo);
         
+        
+        
+        
         $form = $this->createCreateForm($entity,2,$idEntidad);
         $form->handleRequest($request);
         
@@ -213,6 +218,42 @@ class ConsultaController extends Controller
 
             //$historial->setConsulta($consulta);
             //$historial->setExpediente($expediente);
+            
+            
+            $placas = new ArrayCollection();
+            $path = $this->container->getParameter('photo.paciente');
+            $i=0;
+            foreach($entity->getPlacas2() as $key => $row){
+                //var_dump($row);    
+                
+                
+                $imagenConsulta = new ImagenConsulta();
+                
+                if($row->getFile()!=null){
+                    
+                    //echo "vc";
+                    $fecha = date('Y-m-d His');
+                    $extension = $row->getFile()->getClientOriginalExtension();
+                    $nombreArchivo = "consulta - ".$i." - ".$fecha.".".$extension;
+
+                    //echo $nombreArchivo;
+                    //$seguimiento->setFotoAntes($nombreArchivo);
+
+                    $imagenConsulta->setFoto($nombreArchivo);
+                    $row->setFoto($nombreArchivo);
+                    //$imagenConsulta->setConsulta($entity);
+                    //array_push($placas, $imagenConsulta);
+                    $row->getFile()->move($path,$nombreArchivo);
+                    //$em->merge($seguimiento);
+                    $em->persist($row);
+                    //$em->flush();
+                    $i++;
+                
+                }
+                //var_dump($row->getFile());  
+            }
+            //die();
+            //$entity->setPlacas2($placas);
             
             $em->persist($entity);
             $em->flush();
