@@ -4,7 +4,7 @@ namespace DGPlusbelleBundle\Tests\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
-class SesionVentaTratamientoControllerTest extends WebTestCase
+class ImagenConsultaControllerTest extends WebTestCase
 {
     /*
     public function testCompleteScenario()
@@ -13,13 +13,13 @@ class SesionVentaTratamientoControllerTest extends WebTestCase
         $client = static::createClient();
 
         // Create a new entry in the database
-        $crawler = $client->request('GET', '/admin/sesionventatratamiento/');
-        $this->assertEquals(200, $client->getResponse()->getStatusCode(), "Unexpected HTTP status code for GET /admin/sesionventatratamiento/");
+        $crawler = $client->request('GET', '/admin/imagenconsulta/');
+        $this->assertEquals(200, $client->getResponse()->getStatusCode(), "Unexpected HTTP status code for GET /admin/imagenconsulta/");
         $crawler = $client->click($crawler->selectLink('Create a new entry')->link());
 
         // Fill in the form and submit it
         $form = $crawler->selectButton('Create')->form(array(
-            'dgplusbellebundle_sesionventatratamiento[field_name]'  => 'Test',
+            'dgplusbellebundle_imagenconsulta[field_name]'  => 'Test',
             // ... other fields to fill
         ));
 
@@ -33,7 +33,7 @@ class SesionVentaTratamientoControllerTest extends WebTestCase
         $crawler = $client->click($crawler->selectLink('Edit')->link());
 
         $form = $crawler->selectButton('Update')->form(array(
-            'dgplusbellebundle_sesionventatratamiento[field_name]'  => 'Foo',
+            'dgplusbellebundle_imagenconsulta[field_name]'  => 'Foo',
             // ... other fields to fill
         ));
 

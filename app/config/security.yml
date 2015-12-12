@@ -7,7 +7,9 @@ security:
             encode-as-base64: true
             iterations: 10       
     role_hierarchy:
-        ROLE_ADMIN:    [ ROLE_USUARIO ] 
+        ROLE_MEDICO:   ROLE_USER 
+        ROLE_ADMIN:    [ROLE_MEDICO, ROLE_ALLOWED_TO_SWITCH]
+        #ROLE_SUPER_ADMIN: [ROLE_ADMIN, ROLE_ALLOWED_TO_SWITCH]
         
     providers:      
         user_login:
@@ -36,4 +38,9 @@ security:
     access_control:
         - { path: ^/*, role:  ROLE_USER } 
         - { path: ^/secured/*, role: IS_AUTHENTICATED_ANONYMOUSLY }
-      
+        #Roles admin
+        - { path: ^/*, role:  ROLE_ADMIN } 
+        #Roles medicos
+        - { path: ^/*, role:  ROLE_MEDICOS } 
+        #Roles usuarios
+        - { path: ^/*, role:  ROLE_USER } 

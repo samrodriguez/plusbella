@@ -1,7 +1,7 @@
 {% extends '::base.html.twig' %}
 
 {% block body -%}
-    <h1>Abono</h1>
+    <h1>ImagenConsulta</h1>
 
     <table class="record_properties">
         <tbody>
@@ -10,28 +10,20 @@
                 <td>{{ entity.id }}</td>
             </tr>
             <tr>
-                <th>Monto</th>
-                <td>{{ entity.monto }}</td>
-            </tr>
-            <tr>
-                <th>Descripcion</th>
-                <td>{{ entity.descripcion }}</td>
-            </tr>
-            <tr>
-                <th>Fechaabono</th>
-                <td>{{ entity.fechaAbono|date('Y-m-d H:i:s') }}</td>
+                <th>Foto</th>
+                <td>{{ entity.foto }}</td>
             </tr>
         </tbody>
     </table>
 
         <ul class="record_actions">
     <li>
-        <a href="{{ path('admin_abono') }}">
+        <a href="{{ path('admin_imagenconsulta') }}">
             Back to the list
         </a>
     </li>
     <li>
-        <a href="{{ path('admin_abono_edit', { 'id': entity.id }) }}">
+        <a href="{{ path('admin_imagenconsulta_edit', { 'id': entity.id }) }}">
             Edit
         </a>
     </li>

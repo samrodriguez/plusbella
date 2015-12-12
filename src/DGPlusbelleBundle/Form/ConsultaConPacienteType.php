@@ -121,6 +121,15 @@ class ConsultaConPacienteType extends AbstractType
                 'by_reference' => false,
                 'allow_add' => true,
                 'allow_delete' => true,
+                ))   
+                    
+                    
+            ->add('placas2','collection',array(
+                'type' => new ImagenConsultaType(),
+                'label'=>' ',
+                'by_reference' => false,
+                'allow_add' => true,
+                'allow_delete' => true,
                 ))    
                     
             ->add('sucursal','entity',array('label' => 'Seleccione sucursal...','required'=>false,
