@@ -97,8 +97,8 @@ class SesionTratamientoController extends Controller
                 $seguimiento1->setFotoAntes($nombreArchivo);
                 $row->getFileAntes()->move($path,$nombreArchivo);
                 //$em->merge($seguimiento);
-                $em->persist($seguimiento1);
-                $em->flush();
+                //$em->persist($seguimiento1);
+                //$em->flush();
                 
             }  
             
@@ -114,12 +114,12 @@ class SesionTratamientoController extends Controller
                 $seguimiento1->setFotoDespues($nombreArchivo);     
                 $row->getFileDespues()->move($path,$nombreArchivo);
                 //$em->merge($seguimiento);
-                $em->persist($seguimiento1);
-                $em->flush();
+                //$em->persist($seguimiento1);
+                //$em->flush();
             }   
                 //$em->persist($seguimiento1);
-                //$em->merge($seguimiento);
-                //$em->flush();
+                $em->merge($seguimiento);
+                $em->flush();
                 
             }
                 

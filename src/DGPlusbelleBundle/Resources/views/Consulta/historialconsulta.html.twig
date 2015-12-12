@@ -559,13 +559,13 @@
         function nuevaSesionTratamiento(id){
             $.post( "{{path('admin_evaluar_sesiones_paquete')}}", { id: id }, function( data ) {
                 var aux = 0;
+                var total = data.query.length;
                 $.each( data.query, function( key, value ) {
-                    if(value.numSesion >= value.sesiones){
-                        aux = 1;
+                   if(value.numSesion >= value.sesiones){
+                        aux = aux + 1;
                     }
                 });   
-                
-                if(aux !== 1){
+                if(aux < total){
                     var url = Routing.generate('admin_sesiontratamiento_new', {'id': id});
                     window.open(url);
                 } else {
