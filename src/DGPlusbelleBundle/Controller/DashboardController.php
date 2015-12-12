@@ -36,6 +36,27 @@ class DashboardController extends Controller
     
     /**
      *
+     * @Route("/impersonating", name="dashboard_impersonating")
+     */
+    public function impersonatingAction(Request $request)
+    {
+        $login  = trim(chop($request->request->get('impersonating')));
+        $em = $this->getDoctrine()->getManager();
+          
+          
+        $entity = $em->getRepository('DGPlusbelleBundle:Usuario')->findOneBy(array('username'=>$login));
+        //var_dump($entity);
+        if (!$entity) {
+            throw $this->createNotFoundException('Unable to find Usuario entity.');
+        }        
+        
+        return $this->redirect($this->generateUrl('admin_cita',array('_change'=>$entity->getUsername())));
+        
+    }
+    
+    
+    /**
+     *
      * @Route("/menu", name="menu")
      */
     public function MenuAction()
