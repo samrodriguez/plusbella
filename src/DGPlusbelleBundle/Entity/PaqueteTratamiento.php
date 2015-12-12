@@ -131,4 +131,9 @@ class PaqueteTratamiento {
     {
         return $this->tratamiento;
     }
+    
+    public function __toString() 
+    {
+        return $this->getTratamiento()->getNombre() ? $this->getTratamiento()->getNombre() : '';
+    }
 }

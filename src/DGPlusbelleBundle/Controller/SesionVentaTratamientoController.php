@@ -9,6 +9,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use DGPlusbelleBundle\Entity\SesionVentaTratamiento;
 use DGPlusbelleBundle\Entity\SeguimientoTratamiento;
+use DGPlusbelleBundle\Entity\ImagenTratamiento;
 use DGPlusbelleBundle\Form\SesionVentaTratamientoType;
 
 /**
@@ -56,6 +57,11 @@ class SesionVentaTratamientoController extends Controller
             $em->persist($entity);
             $em->flush();
             
+            $id2=$entity->getId();
+            //die();
+            $entity2 =  $em->getRepository('DGPlusbelleBundle:SesionVentaTratamiento')->find($id2);
+            $seguimiento1->setSesionVentaTratamiento($entity2);
+            
             $seguimiento = new SeguimientoTratamiento();
             
          if($entity->getFileAntes()!=null){
@@ -71,8 +77,10 @@ class SesionVentaTratamientoController extends Controller
                 
                 //$seguimiento = new SeguimientoPaquete;
                 $seguimiento->setFotoAntes($nombreArchivo);
+                $seguimiento1->setFotoAntes($nombreArchivo);
                 $entity->getFileAntes()->move($path,$nombreArchivo);
                 $em->persist($seguimiento);
+                $em->persist($seguimiento1);
                 $em->flush();
             }  
             
@@ -88,13 +96,17 @@ class SesionVentaTratamientoController extends Controller
 
                 
                 //$seguimiento = new SeguimientoPaquete;
-                $seguimiento->setFotoDespues($nombreArchivo);               
+                $seguimiento->setFotoDespues($nombreArchivo);  
+                $seguimiento1->setFotoDespues($nombreArchivo);  
                 $entity->getFileDespues()->move($path,$nombreArchivo);
                 $em->persist($seguimiento);
+                $em->persist($seguimiento1);
                 $em->flush();
             } 
 
-            return $this->redirect($this->generateUrl('admin_historialconsulta_new', array('id' => $entity->getId())));
+            $paciente = $em->getRepository('DGPlusbelleBundle:Paciente')->findOneBy(array('persona' => $entity->getPersonaTratamiento ()->getPaciente()->getId()));
+              
+            return $this->redirect($this->generateUrl('admin_historial_consulta', array('id' => 'P'.$paciente->getId())));
         }
 
         return array(
