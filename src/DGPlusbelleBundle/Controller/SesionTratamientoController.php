@@ -67,25 +67,22 @@ class SesionTratamientoController extends Controller
             $id2=$entity->getId();
             //die();
             $entity2 =  $em->getRepository('DGPlusbelleBundle:SesionTratamiento')->find($id2);
-            $seguimiento1->setSesionTratamiento($entity);
+           // $seguimiento1->setSesionTratamiento($entity);
             $ventaPaquete->setEstado(2);
             $em->merge($ventaPaquete);
             $em->flush();
             
-            $seguimiento = $em->getRepository('DGPlusbelleBundle:SeguimientoPaquete')->findOneBy(array('idVentaPaquete' => $id, 
-                                                                                                    'tratamiento' => $entity->getTratamiento()->getId() 
-                                                                                                    ));
-
-            
-            $seguimiento->setNumSesion($seguimiento->getNumSesion() + 1);
+           
             //var_dump($entity);
            // $seguimiento1->setSesionTratamiento($entity);
             
             //var_dump($entity->getPlacas());
+           // die();
             foreach($entity->getPlacas() as $row){
                 //var_dump($row->getFileAntes());
-                
-               if($row->getFileAntes()!=null){
+              //var_dump($entity->getPlacas());
+             // die();  
+            if($row->getFileAntes()!=null){
                 $path = $this->container->getParameter('photo.paciente');
 
                 $fecha = date('Y-m-d His');
@@ -94,15 +91,16 @@ class SesionTratamientoController extends Controller
                 
                 //$seguimiento->setFotoAntes($nombreArchivo);
               
-                $seguimiento1->setFotoAntes($nombreArchivo);
+                $row->setFotoAntes($nombreArchivo);
                 $row->getFileAntes()->move($path,$nombreArchivo);
                 //$em->merge($seguimiento);
-                //$em->persist($seguimiento1);
-                //$em->flush();
+               // $em->merge($seguimiento1);
+                $em->persist($row);
+                $em->flush();
                 
             }  
-            
-             if($row->getFileDespues()!=null){
+           } 
+        /*     if($row->getFileDespues()!=null){
                 $path = $this->container->getParameter('photo.paciente');
 
                 $fecha = date('Y-m-d His');
@@ -120,8 +118,8 @@ class SesionTratamientoController extends Controller
                 //$em->persist($seguimiento1);
                 $em->merge($seguimiento);
                 $em->flush();
-                
-            }
+               */ 
+            //}
                 
            // die();
             
@@ -157,6 +155,16 @@ class SesionTratamientoController extends Controller
 //                $em->persist($seguimiento1);
 //                $em->flush();
 //            } 
+           
+            $seguimiento = $em->getRepository('DGPlusbelleBundle:SeguimientoPaquete')->findOneBy(array('idVentaPaquete' => $id, 
+                                                                                                    'tratamiento' => $entity->getTratamiento()->getId() 
+                                                                                                    ));
+
+            
+            $seguimiento->setNumSesion($seguimiento->getNumSesion() + 1);
+            $em->merge($seguimiento);
+            $em->flush();
+           
             $paciente = $em->getRepository('DGPlusbelleBundle:Paciente')->findOneBy(array('persona' => $entity->getVentaPaquete()->getPaciente()->getId()));
               
             return $this->redirect($this->generateUrl('admin_historial_consulta', array('id' => 'P'.$paciente->getId())));

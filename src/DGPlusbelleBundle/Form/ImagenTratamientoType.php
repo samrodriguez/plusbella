@@ -18,13 +18,13 @@ class ImagenTratamientoType extends AbstractType
            // ->add('nombreImagen')
            // ->add('historialConsulta')
             
-             ->add('fileAntes',null, array('label'=>'Foto antes','required'=>false,
+             ->add('fileAntes',null, array('label'=>'Foto','required'=>false,
                     'attr'=>array('class'=>'fotoAntes'  
                         
                     )))  
-            ->add('fileDespues',null, array('label'=>'Foto despues','required'=>false,
+          /*  ->add('fileDespues',null, array('label'=>'Foto despues','required'=>false,
                     'attr'=>array('class'=>'fotoDespues' 
-                    )))        
+                    )))    */    
         ;
     }
     
