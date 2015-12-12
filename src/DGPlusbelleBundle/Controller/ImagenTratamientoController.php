@@ -324,4 +324,41 @@ class ImagenTratamientoController extends Controller
     
     
     
+    
+    /**
+     * 
+     *
+     * @Route("/galeriaconsulta/{id}/fotos", name="admin_imagenconsulta_galeria", options={"expose"=true})
+     * @Method("GET")
+     * @Template("DGPlusbelleBundle:ImagenTratamiento:galeriaconsulta.html.twig")
+     */
+    public function galeriaconsultaAction($id)
+    {
+        $em = $this->getDoctrine()->getManager();
+        
+        //$entity = $em->getRepository('DGPlusbelleBundle:VentaPaquete')->find($id);
+        //var_dump("sdc");
+        $dql = "SELECT i.foto FROM DGPlusbelleBundle:Consulta c "
+                . "JOIN c.placas2 i "
+                . "WHERE c.id=:id";
+
+        $imagenes = $em->createQuery($dql)
+                       ->setParameter('id',$id)
+                       ->getResult();
+                       //var_dump($empleados);
+        
+        //var_dump($imagenes);
+        
+
+        //$deleteForm = $this->createDeleteForm($id);
+
+        return array(
+            'entities' => $imagenes,
+            
+        );
+    }
+    
+    
+    
+    
 }

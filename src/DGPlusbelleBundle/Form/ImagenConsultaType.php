@@ -6,7 +6,7 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
-class ImagenTratamientoType extends AbstractType
+class ImagenConsultaType extends AbstractType
 {
     /**
      * @param FormBuilderInterface $builder
@@ -15,16 +15,12 @@ class ImagenTratamientoType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-           // ->add('nombreImagen')
-           // ->add('historialConsulta')
-            
-             ->add('fileAntes',null, array('label'=>'Foto','required'=>false,
-                    'attr'=>array('class'=>'fotoAntes'  
+            //->add('foto')
+            //->add('consulta')
+            ->add('file',null, array('label'=>'Foto','required'=>false,
+                    'attr'=>array('class'=>'foto'  
                         
                     )))  
-          /*  ->add('fileDespues',null, array('label'=>'Foto despues','required'=>false,
-                    'attr'=>array('class'=>'fotoDespues' 
-                    )))    */    
         ;
     }
     
@@ -34,7 +30,7 @@ class ImagenTratamientoType extends AbstractType
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
         $resolver->setDefaults(array(
-            'data_class' => 'DGPlusbelleBundle\Entity\ImagenTratamiento'
+            'data_class' => 'DGPlusbelleBundle\Entity\ImagenConsulta'
         ));
     }
 
@@ -43,6 +39,6 @@ class ImagenTratamientoType extends AbstractType
      */
     public function getName()
     {
-        return 'dgplusbellebundle_imagentratamiento';
+        return 'dgplusbellebundle_imagenconsulta';
     }
 }
