@@ -25,6 +25,8 @@ $('.indicacionesConsulta').
 $('.classPlantilla').
   attr('data-bvalidator', 'required,required');       
    
+   $('.sucursalPaquete').
+attr('data-bvalidator', 'required,required');
     //Opciones del validador
     var optionsRed = { 
         classNamePrefix: 'bvalidator_bootstraprt_', 

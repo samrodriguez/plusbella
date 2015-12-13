@@ -2,6 +2,9 @@
 function validarCategoria(){
 $('.nombreCategoria').
         attr('data-bvalidator', 'required,required');
+
+$('.codigoCategoria').
+        attr('data-bvalidator', 'required,required');
 	
  
     //Opciones del validador

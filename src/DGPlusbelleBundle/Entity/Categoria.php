@@ -35,7 +35,12 @@ class Categoria
      */
     private $estado;
 
-
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="cod_categoria", type="string", length=75, nullable=false)
+     */
+    private $codigo;
 
     /**
      * Get id
@@ -97,5 +102,29 @@ class Categoria
     
     public function __toString() {
     return $this->nombre ? $this->nombre : '';
+    }
+    
+    /**
+     * Set codigo
+     *
+     * @param string $codigo
+     *
+     * @return Categoria
+     */
+    public function setCodigo($codigo)
+    {
+        $this->codigo = $codigo;
+
+        return $this;
+    }
+
+    /**
+     * Get nombre
+     *
+     * @return string
+     */
+    public function getCodigo()
+    {
+        return $this->codigo;
     }
 }

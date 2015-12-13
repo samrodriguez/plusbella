@@ -59,6 +59,7 @@
             <tr>
                 <th>N°</th> 
                 <th>Categoria</th>
+                <th>Código</th>
                 <th><center>Estado</center></th>
              {#   <th>Actions</th>  #}
             </tr>
@@ -73,6 +74,7 @@
                   </td>
              {#    <td><a href="{{ path('admin_categoria_show', { 'id': entity.id }) }}">{{ entity.id }}</a></td>  #}
                 <td>{{ entity.nombre }}</td>
+                <td>{{ entity.codigo}}</td>
                <td><center>
                     {% if entity.estado == 1 %}
                         Activo
@@ -140,7 +142,7 @@
                     
                     
                     //Hay que cambiar el numero de la columna para las otras tablas
-                    estadoPrevio = $(this).children('td:nth-child(3)').children().html();
+                    estadoPrevio = $(this).children('td:nth-child(4)').children().html();
                     estadoPrevio = estadoPrevio.trim();
                     if(estadoPrevio==="Inactivo"){//se muestran los iconos de desactivado
                         $('#delete-datatables1').children().removeClass("fa fa-toggle-on");
@@ -179,8 +181,8 @@
                           var mensaje="";
                                     if(data.regs==0){
                                         //Se cambia a desactivado
-                                        mensaje ="Categoria desactivado con exito";
-                                        $('#'+link + ' > td:nth-child(3)').html('<center>Inactivo</center>');
+                                        mensaje ="Categoria desactivada con exito";
+                                        $('#'+link + ' > td:nth-child(4)').html('<center>Inactivo</center>');
                                         $('#delete-datatables1').children().removeClass("fa fa-toggle-on");
                                         $('#delete-datatables1').children().addClass("fa fa-toggle-off");
                                     //$('#datatables1>tbody>tr>td:nth-child(5)').html('Inactivo');
@@ -188,7 +190,7 @@
                                     if(data.regs==1){
                                         //Se cambia a activado
                                         mensaje ="Categoria activada con exito";
-                                        $('#'+link + ' > td:nth-child(3)').html('<center>Activo</center>');
+                                        $('#'+link + ' > td:nth-child(4)').html('<center>Activo</center>');
                                         $('#delete-datatables1').children().removeClass("fa fa-toggle-off");
                                         $('#delete-datatables1').children().addClass("fa fa-toggle-on");
                                     }
@@ -252,7 +254,8 @@
                     "order":[[0, "desc"],[1,"desc"]],
                     "columnDefs": [
                            { "orderable": false, "targets": 0 },
-                           { "orderable": false, "targets": 2 }
+                           { "orderable": false, "targets": 2 },
+                           { "orderable": false, "targets": 3 }
                           
                         
                           

@@ -31,7 +31,7 @@ class CitaController extends Controller
         $em = $this->getDoctrine()->getManager();
 
         $entities = $em->getRepository('DGPlusbelleBundle:Cita')->findAll();
-        $sucursales= $em->getRepository('DGPlusbelleBundle:Sucursal')->findAll();
+        $sucursales= $em->getRepository('DGPlusbelleBundle:Sucursal')->findBy(array('estado'=>true));
         $categorias = $em->getRepository('DGPlusbelleBundle:Categoria')->findAll();
         //var_dump($categorias);
         /*$dql = "SELECT exp.paciente"
@@ -43,6 +43,7 @@ class CitaController extends Controller
         
         var_dump($entities);
         */
+        //var_dump($sucursales);
         return array(
             'entities' => $entities,
             'sucursales' => $sucursales,

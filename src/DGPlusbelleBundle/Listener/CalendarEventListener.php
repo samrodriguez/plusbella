@@ -144,6 +144,16 @@ class CalendarEventListener
                     $eventEntity->setFgColor('#FFF'); //set the foreground color of the event's label
                     //$title = '</div><div class="fa fa-close"> | '.$title/*' | '.$companyEvent->getEstado(). */;
                     break;
+                case 10:    //Categoria 9
+                    $eventEntity->setBgColor('#A0D468'); //set the background color of the event's label
+                    $eventEntity->setFgColor('#FFF'); //set the foreground color of the event's label
+                    //$title = '</div><div class="fa fa-close"> | '.$title/*' | '.$companyEvent->getEstado(). */;
+                    break;
+                default:    //Categoria 9
+                    $eventEntity->setBgColor('#AC92EC'); //set the background color of the event's label
+                    $eventEntity->setFgColor('#FFF'); //set the foreground color of the event's label
+                    //$title = '</div><div class="fa fa-close"> | '.$title/*' | '.$companyEvent->getEstado(). */;
+                    break;
             }
             
             

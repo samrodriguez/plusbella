@@ -19,6 +19,10 @@ class CategoriaType extends AbstractType
                     'attr'=>array(
                     'class'=>'form-control input-sm nombreCategoria'
                     )))
+            ->add('codigo','text',array('label' => 'Código','required'=>false,
+                    'attr'=>array(
+                    'class'=>'form-control input-sm codigoCategoria'
+                    )))
             //->add('estado')
         ;
     }

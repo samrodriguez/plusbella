@@ -28,11 +28,11 @@ class EditUsuarioType extends AbstractType
                     'required' => false,
                     'first_options'  => array('label' => 'Contraseña','required'=>false,
                     'attr'=>array(
-                    'class'=>'form-control input-sm firstPassword'
+                    'class'=>'form-control input-sm firstPassword up1'
                     )),
                     'second_options' => array('label' => 'Confirmar contraseña','required'=>false,
                     'attr'=>array(
-                    'class'=>'form-control input-sm secondPassword'
+                    'class'=>'form-control input-sm secondPassword up2'
                     )),
                 ))
             //->add('salt')

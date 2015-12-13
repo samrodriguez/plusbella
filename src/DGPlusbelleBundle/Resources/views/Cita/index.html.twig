@@ -66,7 +66,12 @@
                 {% if categoria.id == 9 %}
                     <li class="" style="opacity: 1; display: list-item; transform: translateY(0px);"><a data-original-title="{{categoria.nombre}}" href="#" style="background: #E07140" data-navbar="blue" rel="tooltip" title=""></a></li>
                 {% endif %}
-                
+                {% if categoria.id == 10 %}
+                    <li class="" style="opacity: 1; display: list-item; transform: translateY(0px);"><a data-original-title="{{categoria.nombre}}" href="#" style="background: #A0D468" data-navbar="blue" rel="tooltip" title=""></a></li>
+                {% endif %}
+                {% if categoria.id >= 11 %}
+                    <li class="" style="opacity: 1; display: list-item; transform: translateY(0px);"><a data-original-title="{{categoria.nombre}}" href="#" style="background: #AC92EC" data-navbar="blue" rel="tooltip" title=""></a></li>
+                {% endif %}
                 
                 
             {% endfor %}

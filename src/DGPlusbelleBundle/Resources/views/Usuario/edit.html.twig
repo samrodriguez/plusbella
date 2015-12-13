@@ -62,7 +62,12 @@
                         $(this).remove();
                     }
                 });    
-                
+               $(document).on('click','#dgplusbellebundle_usuario_submit',function(){
+                    if($('.up1').val()!=$('.up2').val()){
+                        bootbox.alert('Las contraseñas no coinciden');
+                        return false;
+                    }
+               });
         validarEditUsuario();            
                 
           });//Fin document ready

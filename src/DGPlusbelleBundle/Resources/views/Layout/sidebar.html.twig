@@ -35,7 +35,7 @@
 
     <li class="divider"></li>
     <li class="nav-header" role="presentation">ACCESO RAPIDO</li>
-    {% if is_granted('ROLE_ADMIN') %}
+    {% if is_granted('ROLE_ADMIN') or is_granted('ROLE_USER')%}
         <li class="nav-item" role="presentation">
             <a href="{{path('admin_paciente')}}">
                 <span class="nav-icon"><i class="fa fa-money"></i></span>
@@ -51,7 +51,7 @@
             </a>        
         </li>#}
     {% endif %}
-    {% if is_granted('ROLE_ADMIN') %}        
+    {% if is_granted('ROLE_ADMIN') or is_granted('ROLE_USER') or is_granted('ROLE_MEDICO') %}        
         <li class="nav-item" role="presentation">    
             <a href="{{path('admin_cita')}}">
               <span class="nav-icon"><i class="fa fa-calendar-check-o"></i></span>
@@ -68,7 +68,7 @@
             </a>
         </li>#}
     {% endif %} 
-    {% if is_granted('ROLE_ADMIN') %}
+    {% if is_granted('ROLE_ADMIN') or is_granted('ROLE_USER') %}
         <li class="nav-item" role="presentation">
             <a href="{{path('admin_paciente')}}">
               <span class="nav-icon"><i class="fa fa-hospital-o"></i></span>
@@ -78,7 +78,7 @@
     {% endif %}
     <li class="divider"></li>
     <li class="nav-header" role="presentation">MENU</li>
-    {% if is_granted('ROLE_ADMIN') %}
+    {% if is_granted('ROLE_ADMIN') or is_granted('ROLE_USER')%}
         <li class="nav-item" role="presentation">
           <a href="#" data-toggle="nav-child">
             <span class="nav-icon"><i class="fa fa-bed"></i></span>
@@ -114,7 +114,7 @@
           </ul>
         </li>
     {% endif %}
-    {% if is_granted('ROLE_ADMIN') %}
+    {% if is_granted('ROLE_ADMIN') or is_granted('ROLE_MEDICO') %}
         <li class="nav-item" role="presentation">
           <a href="#" data-toggle="nav-child">
             <span class="nav-icon"><i class="fa fa-briefcase"></i></span>
@@ -206,7 +206,7 @@
         </li>
     {% endif %}
     
-    {% if is_granted('ROLE_ADMIN') %}
+    {% if is_granted('ROLE_ADMIN') or is_granted('ROLE_MEDICO') %}
         <li class="nav-item" role="presentation">
           <a href="#" data-toggle="nav-child">
             <span class="nav-icon"><i class="fa fa-file-text-o"></i></span>

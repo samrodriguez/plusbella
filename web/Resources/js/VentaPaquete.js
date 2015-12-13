@@ -12,6 +12,9 @@ attr('data-bvalidator', 'required,required');
 $('.descuentoCita').
 attr('data-bvalidator', 'required,required');
 
+$('.sucursalTratamiento').
+attr('data-bvalidator', 'required,required');
+
 $('.calZebra').
 attr('data-bvalidator', 'required,required');
 

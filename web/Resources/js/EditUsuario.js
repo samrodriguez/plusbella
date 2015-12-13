@@ -11,13 +11,19 @@ $('.nombreUsuario').
 
 $('.firstPassword').
         attr('data-bvalidator');
-
+/*
 $('#dgplusbellebundle_usuario_password_second').
         attr('data-bvalidator', 'equalto[dgplusbellebundle_usuario_password_first],required,required');
 	
 $('#dgplusbellebundle_usuario_password_second').
         attr('data-bvalidator-msg', 'Las contraseñas deben coincidir, vuelva a digitarla');     
 
+$('.up2').
+        attr('data-bvalidator', 'equalto[dgplusbellebundle_usuario_password_first]');
+	
+$('.up2').
+        attr('data-bvalidator-msg', 'Las contraseñas deben coincidir, vuelva a digitarla');     
+*/
     //Opciones del validador
     var optionsRed = { 
         classNamePrefix: 'bvalidator_bootstraprt_', 

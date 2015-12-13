@@ -25,7 +25,8 @@ $('.cuotasTratamiento').
 $('#dgplusbellebundle_personatratamiento_fechaVenta').
         attr('data-bvalidator', 'required,required');
 	
- 
+ $('.sucursalTratamiento').
+attr('data-bvalidator', 'required,required');
     //Opciones del validador
     var optionsRed = { 
         classNamePrefix: 'bvalidator_bootstraprt_', 
