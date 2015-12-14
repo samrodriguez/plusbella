@@ -5,6 +5,7 @@ namespace DGPlusbelleBundle\Form;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+use Doctrine\ORM\EntityRepository;
 
 class SesionTratamientoType extends AbstractType
 {
@@ -19,11 +20,18 @@ class SesionTratamientoType extends AbstractType
             ->add('horaInicio')
             ->add('horaFin')
             //->add('ventaPaquete')
-            ->add('sucursal',null,array('label' => 'Sucursal','required'=>false,
+            ->add('sucursal','entity',array(
+                'label' => 'Sucursal',
                 'empty_value'   => 'Seleccione sucursal...',      
-                'attr'=>array(
-                'class'=>'form-control input-sm sucursalPaquete'
-                    )))      
+                'required'=>false,
+                'class'=>'DGPlusbelleBundle:Sucursal',
+                'query_builder' => function(EntityRepository $repository) {
+                  return $repository->obtenerSucActivo();
+                },
+                'property'=>'nombre',
+                    'attr'=>array(
+                    'class'=>'sucursalPaquete'
+                    )))       
             //->add('paciente')
             ->add('empleado',null,array('label' => 'Empleado','required'=>false,
                 'empty_value'   => 'Seleccione empleado...',      

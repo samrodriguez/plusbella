@@ -117,10 +117,6 @@ class SesionTratamientoController extends Controller
             $em->merge($seguimiento);
             $em->flush();
            
-            var_dump($total);
-            var_dump($aux);
-            die();
-            
             $paciente = $em->getRepository('DGPlusbelleBundle:Paciente')->findOneBy(array('persona' => $entity->getVentaPaquete()->getPaciente()->getId()));
               
             return $this->redirect($this->generateUrl('admin_historial_consulta', array('id' => 'P'.$paciente->getId())));
