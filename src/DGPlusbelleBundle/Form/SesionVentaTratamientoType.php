@@ -44,13 +44,21 @@ class SesionVentaTratamientoType extends AbstractType
                 'class'=>'form-control input-sm sesionEmpleado'
                     )))  
                 
-            ->add('fileAntes',null, array('label'=>'Foto antes','required'=>false,
+        /*    ->add('fileAntes',null, array('label'=>'Foto antes','required'=>false,
                     'attr'=>array('class'=>'fotoAntes'  
                         
                     )))  
             ->add('fileDespues',null, array('label'=>'Foto despues','required'=>false,
                     'attr'=>array('class'=>'fotoDespues' 
-                    )))        
+                    )))    
+             */           
+            ->add('placas','collection',array(
+                'type' => new ImagenTratamientoType(),
+                'label'=>' ',
+                'by_reference' => false,
+                'allow_add' => true,
+                'allow_delete' => true,
+                ))                  
         ;
     }
     
