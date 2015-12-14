@@ -49,7 +49,7 @@ class ImagenTratamiento {
      /**
      * @var \sesionVentaTratamiento
      *
-     * @ORM\ManyToOne(targetEntity="SesionVentaTratamiento")
+     * @ORM\ManyToOne(targetEntity="SesionVentaTratamiento", inversedBy="placas", cascade={"persist", "remove"})
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="sesion_venta_tratamiento", referencedColumnName="id")
      * })
