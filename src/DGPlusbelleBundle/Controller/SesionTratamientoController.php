@@ -198,8 +198,14 @@ class SesionTratamientoController extends Controller
         $tratamientos = $em->getRepository('DGPlusbelleBundle:PaqueteTratamiento')->findBy(array('paquete' => $venta->getPaquete()->getId()));
         
         foreach ($tratamientos as $trat){
-            $idtrat=$trat->getTratamiento()->getId();
-            array_push($idtratamientos, $idtrat); 
+            $idtrat = $trat->getTratamiento()->getId();
+            $seguimiento = $em->getRepository('DGPlusbelleBundle:SeguimientoPaquete')->findOneBy(array('tratamiento' => $idtrat,
+                                                                                                    'idVentaPaquete' => $id
+                                                                                                ));
+            if($seguimiento->getNumSesion() < $trat->getNumSesiones()){
+                array_push($idtratamientos, $idtrat); 
+            }
+            
         }
         
         $form->add('tratamiento', 'entity', 
