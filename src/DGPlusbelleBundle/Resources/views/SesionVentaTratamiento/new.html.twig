@@ -1,5 +1,53 @@
 {% extends 'DGPlusbelleBundle:Layout:layout.html.twig' %}
 
+{% block css %}
+    {{parent()}}
+    <style>
+        
+        //Posicion del boton agregar
+        .placas>div:last-child {
+            position:absolute;
+        }
+        div.placas > div:nth-child(2) > div:nth-child(2) > div > a{
+            display: none;
+        }
+        .addItem{
+            position: absolute;
+            height: 50px;
+            float: right;
+            margin-bottom: 50px;
+            padding-bottom: 100px;
+            top: -15px;
+            left: -2px;
+        }
+        
+            .addItem div {
+                position: absolute;
+            }
+        
+        .col-md-4{
+            padding-top: 40px;
+        }
+        
+        #dgplusbellebundle_consulta_horaInicio_hourSelectBoxItContainer, #dgplusbellebundle_consulta_horaInicio_minuteSelectBoxItContainer,
+        #dgplusbellebundle_consulta_horaFin_hourSelectBoxItContainer, #dgplusbellebundle_consulta_horaFin_minuteSelectBoxItContainer{
+            width:75px;
+        }
+        
+            #dgplusbellebundle_consulta_horaInicio_hourSelectBoxItContainer,#dgplusbellebundle_consulta_horaFin_hourSelectBoxItContainer {
+                float: left;
+            }
+            #dgplusbellebundle_consulta_horaInicio_minuteSelectBoxItContainer, #dgplusbellebundle_consulta_horaFin_minuteSelectBoxItContainer {
+                float: right;
+            }
+            #dgplusbellebundle_consulta_horaInicio, #dgplusbellebundle_consulta_horaFin{
+                width: 155px;
+            }
+          
+    </style>
+    
+    {% endblock %}
+
 {% block contenido -%}
     <div class="panel panel-default">
         <div class="panel-heading">
