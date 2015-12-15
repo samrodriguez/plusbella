@@ -639,4 +639,35 @@ class CitaController extends Controller
         return new Response(json_encode($cita));
     }
     
+    
+    /**
+     * @Route("/asistidacita/get/{id}", name="get_asistidaCita", options={"expose"=true})
+     * @Method("GET")
+     */
+    public function asistidaCitaAction(Request $request, $id) {
+        
+        $em = $this->getDoctrine()->getEntityManager();
+        
+        $entity = $em->getRepository('DGPlusbelleBundle:Cita')->find($id);
+        
+        //var_dump($entity);
+        if(count($entity)!=0){
+            
+            $entity->setEstado("A");
+            $em->persist($entity);
+            $em->flush();
+            $cita['regs'] = 0;  //Cita encontrada y modificada con éxito
+        }
+        else{
+            $cita['regs'] = 1;  //Cita no encontrada
+        }
+                 
+        //var_dump($cita);
+        
+        //var_dump($cita['regs'][0]["primerNombre"]);
+        //var_dump($cita);
+        
+        return new Response(json_encode($cita));
+    }
+    
 }
