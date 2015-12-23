@@ -78,6 +78,7 @@
 
 
 {% block jquery %}
+    <script src="{{ asset('Resources/js/EmpleadoEdit.js') }}"></script>
  <script>
             $(document).ready(function(){
                //Accion cancelar del boton modificar
@@ -89,7 +90,7 @@
         // Validando campo telefono
         $('.telefonoPersona').mask('0000-0000'); 
         
-         validarEmpleado();
+         validarEmpleadoEdit();
     });
 </script>
 {% endblock %}

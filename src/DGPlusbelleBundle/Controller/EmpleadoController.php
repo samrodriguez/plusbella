@@ -37,8 +37,8 @@ class EmpleadoController extends Controller
         $em = $this->getDoctrine()->getManager();
         
         $sql = "select per.nombres as pnombre, per.apellidos as papellido,  "
-                . "per.direccion as direccion, per.telefono as tel, per.email as email, emp.id as idemp, emp.cargo as cargo, emp.foto as foto, suc.nombre as sucursal , emp.estado as estado "
-                . "from empleado emp inner join persona per on emp.persona = per.id inner join sucursal suc on suc.id=emp.sucursal order by per.apellidos";
+                . "per.direccion as direccion, per.telefono as tel, per.email as email, emp.id as idemp, emp.cargo as cargo, emp.foto as foto,  emp.estado as estado "
+                . "from empleado emp inner join persona per on emp.persona = per.id  order by per.apellidos";
         
         $rsm->addScalarResult('idemp','idemp');
         $rsm->addScalarResult('pnombre','pnombre');
@@ -51,7 +51,7 @@ class EmpleadoController extends Controller
         $rsm->addScalarResult('email','email');
         $rsm->addScalarResult('cargo','cargo');
         $rsm->addScalarResult('foto','foto');
-        $rsm->addScalarResult('sucursal','sucursal');
+        //$rsm->addScalarResult('sucursal','sucursal');
         $rsm->addScalarResult('estado','estado');
 
        
@@ -89,8 +89,8 @@ class EmpleadoController extends Controller
         
         if ($form->isValid()) {
             $em = $this->getDoctrine()->getManager();
-            $em->persist($entity);
-            $em->flush();
+            //$em->persist($entity);
+            //$em->flush();
             
             //$entity = $em->getRepository('DGPlusbelleBundle:Empleado')->find($entity->getId());
             
@@ -107,9 +107,9 @@ class EmpleadoController extends Controller
                 $entity->setFoto($nombreArchivo);
                 $entity->getFile()->move($path,$nombreArchivo);
                 $em->persist($entity);
-                $em->flush();
             }
             
+            $em->flush();
             $usuario= $this->get('security.token_storage')->getToken()->getUser();
             $this->get('bitacora')->escribirbitacora("Se registro un nuevo empleado",$usuario->getId());
             

@@ -84,15 +84,7 @@ class Empleado
      */
     private $persona;
 
-    /**
-     * @var \Sucursal
-     *
-     * @ORM\ManyToOne(targetEntity="Sucursal")
-     * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="sucursal", referencedColumnName="id")
-     * })
-     */
-    private $sucursal;
+   
 
     /**
      * @var \Doctrine\Common\Collections\Collection
@@ -353,29 +345,7 @@ class Empleado
         return $this->persona;
     }
 
-    /**
-     * Set sucursal
-     *
-     * @param \DGPlusbelleBundle\Entity\Sucursal $sucursal
-     *
-     * @return Empleado
-     */
-    public function setSucursal(\DGPlusbelleBundle\Entity\Sucursal $sucursal = null)
-    {
-        $this->sucursal = $sucursal;
-
-        return $this;
-    }
-
-    /**
-     * Get sucursal
-     *
-     * @return \DGPlusbelleBundle\Entity\Sucursal
-     */
-    public function getSucursal()
-    {
-        return $this->sucursal;
-    }
+    
 
     /**
      * Add horario

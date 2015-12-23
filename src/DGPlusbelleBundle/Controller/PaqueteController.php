@@ -140,7 +140,7 @@ class PaqueteController extends Controller
     /**
      * Displays a form to edit an existing Paquete entity.
      *
-     * @Route("/{id}/edit", name="admin_paquete_edit")
+     * @Route("/{id}/edit", name="admin_paquete_edit", options={"expose"=true})
      * @Method("GET")
      * @Template()
      */

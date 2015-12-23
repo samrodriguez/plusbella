@@ -15,6 +15,7 @@ class CatalogoTratamientoRepository extends EntityRepository
                         ->select('ttrat')
                         ->from('DGPlusbelleBundle:Tratamiento', 'ttrat')
                         ->where('ttrat.estado = true')
+                        ->orderBy('ttrat.nombre','ASC')
                         ;
     }
 

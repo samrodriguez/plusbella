@@ -185,7 +185,7 @@
                     link=$(this).attr("id");
                     //alert(link);
                     //Carga del form modificar
-                    $("#editFormContainer").load(link+"/edit");
+                    //$("#editFormContainer").load(link+"/edit");
                     
                      //Hay que cambiar el numero de la columna para las otras tablas
                     estadoPrevio = $(this).children('td:nth-child(4)').children().html();
@@ -268,6 +268,10 @@
                 
                 
                 $("#edit-datatables1").click(function(){
+                    var url = Routing.generate('admin_paquete_edit', { id: link});
+                    window.location.href = url;
+                    //alert(url);
+                    /*return false;
                     if(!$("#edit-datatables1").hasClass("disabled")){
                         if($("#editFormContainer").hasClass("hide")){
                             $("#addFormContainer").addClass("hide");
@@ -277,7 +281,7 @@
                             //$("#addFormContainer").removeClass("hide");
                             $("#editFormContainer").addClass("hide");
                         }
-                    }
+                    }*/
 
                 });
                 /*

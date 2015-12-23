@@ -5,6 +5,7 @@ namespace DGPlusbelleBundle\Form;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+use Doctrine\ORM\EntityRepository;
 
 class PaqueteTratamientoType extends AbstractType
 {
@@ -15,10 +16,17 @@ class PaqueteTratamientoType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('tratamiento',null,array('label' => 'Tratamiento','required'=>false,'empty_value'=>'Seleccione tratamiento',
-                    'attr'=>array(
-                    'class'=>'form-control input-sm tratamientoPaquete'
-                    )))   
+            ->add('tratamiento','entity', array( 'label' => 'Tratamiento','required'=>false,
+                         'empty_value'   => 'Seleccione un tratamiento...',
+                         'class'         => 'DGPlusbelleBundle:Tratamiento',
+            'query_builder' => function(EntityRepository $repository) {
+                return $repository->obtenerTratActivo();
+            },
+                         
+                         'attr'=>array(
+                            'class'=>'form-control input-sm tratamientoPaquete'
+                         )
+                       ))
             ->add('numSesiones','text',array('label' => '# Sesiones','required'=>false,
                     'attr'=>array(
                     'class'=>'form-control input-sm sesionesPaquete'

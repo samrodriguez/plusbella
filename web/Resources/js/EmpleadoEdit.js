@@ -1,5 +1,5 @@
 
- function validarEmpleado(){
+ function validarEmpleadoEdit(){
 $('.nombresPersona').
   attr('data-bvalidator', 'required,required');
   
@@ -27,9 +27,11 @@ $('.bonoEmpleado').
 $('.cargoEmpleado').
   attr('data-bvalidator', 'required,required');  
   
-$('.fotoEmpleado').
+  $('.sucursalPaquete').
+  attr('data-bvalidator', 'required,required');  
+/*$('.fotoEmpleado').
   attr('data-bvalidator', 'extension[jpg:png],required');    
-  
+  */
 
 $('.sucursalEmpleado').
   attr('data-bvalidator', 'required,required'); 
@@ -46,7 +48,7 @@ $('.tratamientoEmpleado > div > label > input').
  
     //Validar el formulario
     $('form').bValidator(optionsRed);
-    $('.fotoEmpleado').bValidator().css('margin-top','30px');
+    //$('.fotoEmpleado').bValidator().css('margin-top','30px');
     //$('.fotoEmpleado').bValidator().css('position','absolute');
     //$('.fotoEmpleado').bValidator().css('width','50px');
     //$('.btn-file').css('width','200px');
