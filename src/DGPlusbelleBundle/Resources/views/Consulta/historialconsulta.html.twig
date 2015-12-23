@@ -6,7 +6,7 @@
     {{parent()}}
     <style>
         
-        //Posicion del boton agregar
+{#        //Posicion del boton agregar#}
         .placas>div:last-child {
             position:absolute;
         }
@@ -628,14 +628,23 @@
                     var mensaje = "";
                     mensaje += "<div class='row'></div>";
                     mensaje += "<div class='col-md-6 text-right'><b>Vendido por:: </b></div><div class='col-md-6'>" + data.query[0].empleado + "</div>";
+                    mensaje += "<div class='clearfix'></div>"
                     mensaje += "<div class='col-md-6 text-right'><b>Nombre del paciente: </b></div><div class='col-md-6'>" + data.query[0].paciente + "</div>";
+                    mensaje += "<div class='clearfix'></div>"
                     mensaje += "<div class='col-md-6 text-right'><b>Expediente No.: </b></div><div class='col-md-6'>" + data.query[0].numExp.toUpperCase() + "</div>";
+                    mensaje += "<div class='clearfix'></div>"
                     mensaje += "<div class='col-md-6 text-right'><b>Paquete: </b></div><div class='col-md-6'>" + data.query[0].nomPaquete + "</div>";
+                    mensaje += "<div class='clearfix'></div>"
                     mensaje += "<div class='col-md-6 text-right'><b>Fecha de venta: </b></div><div class='col-md-6'>" + fecha[2] + "/" +fecha[1] + "/" +fecha[0] + "</div>";
+                    mensaje += "<div class='clearfix'></div>"
                     mensaje += "<div class='col-md-6 text-right'><b>Costo del paquete: </b></div><div class='col-md-6'> $ " + data.query[0].costoPaquete + "</div>";
-                    mensaje += "<div class='col-md-6 text-right'><b>Descuento aplicado: </b></div><div class='col-md-6'><b style='color:red'> $ " + ((data.query[0].porcentaje * data.query[0].costoPaquete)/100).toFixed(2) + "</b></div>";
-                    mensaje += "<div class='col-md-6 text-right'><b>Monto total a cancelar: </b></div><div class='col-md-6'><b> $ " + ( data.query[0].costoPaquete - ((data.query[0].porcentaje * data.query[0].costoPaquete)/100)).toFixed(2) + "</b></div>";
-                    mensaje += "<div class='col-md-6 text-right'><b>Deuda pendiente: </b></div><div class='col-md-6'> $ " + ( (data.query[0].costoPaquete - ((data.query[0].porcentaje * data.query[0].costoPaquete)/100)) - data.abonos.abonos).toFixed(2) + "</div>";
+                    mensaje += "<div class='clearfix'></div>"
+                    mensaje += "<div class='col-md-6 text-right'><b>Descuento aplicado: </b></div><div class='col-md-6'><b style='color:red'> $ " + redondeoV4(((data.query[0].porcentaje * data.query[0].costoPaquete)/100),2) + "</b></div>";
+                    mensaje += "<div class='clearfix'></div>"
+                    mensaje += "<div class='col-md-6 text-right'><b>Monto total a cancelar: </b></div><div class='col-md-6'><b> $ " + redondeoV4(( data.query[0].costoPaquete - ((data.query[0].porcentaje * data.query[0].costoPaquete)/100)),2) + "</b></div>";
+                    mensaje += "<div class='clearfix'></div>"
+                    mensaje += "<div class='col-md-6 text-right'><b>Deuda pendiente: </b></div><div class='col-md-6'> $ " + redondeoV4(( (data.query[0].costoPaquete - ((data.query[0].porcentaje * data.query[0].costoPaquete)/100)) - data.abonos.abonos),2) + "</div>";
+                    mensaje += "<div class='clearfix'></div>"
                     mensaje += "</div>";
                     
                     mensaje += "<div class='row' ></div>";
@@ -702,14 +711,22 @@
                 if(par.length !== 0){
                     var mensaje = "";
                     mensaje += "<div class='row'></div>";
-                    mensaje += "<div class='col-md-6 text-right'><b>Vendido por:: </b></div><div class='col-md-6'>" + data.query[0].empleado + "</div>";
+                    mensaje += "<div class='col-md-6 text-right'><b>Vendido por: </b></div><div class='col-md-6'>" + data.query[0].empleado + "</div>";
+                    mensaje += "<div class='clearfix'></div>"
                     mensaje += "<div class='col-md-6 text-right'><b>Nombre del paciente: </b></div><div class='col-md-6'>" + data.query[0].paciente + "</div>";
+                    mensaje += "<div class='clearfix'></div>"
                     mensaje += "<div class='col-md-6 text-right'><b>Expediente No.: </b></div><div class='col-md-6'>" + data.query[0].numExp.toUpperCase() + "</div>";
+                    mensaje += "<div class='clearfix'></div>"
                     mensaje += "<div class='col-md-6 text-right'><b>Fecha de venta: </b></div><div class='col-md-6'>" + fecha[2] + "/" +fecha[1] + "/" +fecha[0] + "</div>";
+                    mensaje += "<div class='clearfix'></div>"
                     mensaje += "<div class='col-md-6 text-right'><b>Costo del tratamiento: </b></div><div class='col-md-6'> $ " + data.query[0].costoTratamiento + "</div>";
-                    mensaje += "<div class='col-md-6 text-right'><b>Descuento aplicado: </b></div><div class='col-md-6'><b style='color:red'> $ " + ((data.query[0].porcentaje * data.query[0].costoTratamiento)/100).toFixed(2) + "</b></div>";
-                    mensaje += "<div class='col-md-6 text-right'><b>Monto total a cancelar: </b></div><div class='col-md-6'><b> $ " + ( data.query[0].costoTratamiento - ((data.query[0].porcentaje * data.query[0].costoTratamiento)/100)).toFixed(2) + "</b></div>";
-                    mensaje += "<div class='col-md-6 text-right'><b>Deuda pendiente: </b></div><div class='col-md-6'> $ " + ( (data.query[0].costoTratamiento - ((data.query[0].porcentaje * data.query[0].costoTratamiento)/100)) - data.abonos.abonos).toFixed(2) + "</div>";
+                    mensaje += "<div class='clearfix'></div>"
+                    mensaje += "<div class='col-md-6 text-right'><b>Descuento aplicado: </b></div><div class='col-md-6'><b style='color:red'> $ " + redondeoV4(((data.query[0].porcentaje * data.query[0].costoTratamiento)/100),2) + "</b></div>";
+                    mensaje += "<div class='clearfix'></div>"
+                    mensaje += "<div class='col-md-6 text-right'><b>Monto total a cancelar: </b></div><div class='col-md-6'><b> $ " + redondeoV4(( data.query[0].costoTratamiento - ((data.query[0].porcentaje * data.query[0].costoTratamiento)/100)),2) + "</b></div>";
+                    mensaje += "<div class='clearfix'></div>"
+                    mensaje += "<div class='col-md-6 text-right'><b>Deuda pendiente: </b></div><div class='col-md-6'> $ " + redondeoV4(( (data.query[0].costoTratamiento - ((data.query[0].porcentaje * data.query[0].costoTratamiento)/100)) - data.abonos.abonos),2) + "</div>";
+                    mensaje += "<div class='clearfix'></div>"
                     mensaje += "</div>";
                     
                     mensaje += "<div class='row' ></div>";
@@ -758,5 +775,11 @@
                 }
              }, "json"); // Fin de post    
         } //Fin funcion seguimientoTratamiento
+        
+        function redondeoV4(numero, decimales)
+        {
+            var resultado = Math.round(numero*Math.pow(10,decimales))/Math.pow(10,decimales);
+            return resultado;
+        }
     </script>
     {% endblock %}
