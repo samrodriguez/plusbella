@@ -66,7 +66,7 @@
                       {#</a>#}
                   </td>
          {#       <td><a href="{{ path('admin_tipoconsulta_show', { 'id': entity.id }) }}">{{ entity.id }}</a></td>  #}
-                <td>{{ entity.nombre }}</td>
+                <td>{{ entity.nombre|upper }}</td>
                 <td><center>
                     {% if entity.estado == 1 %}
                         Activo

@@ -11,6 +11,9 @@
         div.placas > div:nth-child(2) > div:nth-child(2) > div > a{
             display: none;
         }
+        {#.placas > div:nth-child(1) > div > div > a {
+            display: none;
+        }#}
         .addItem{
             position: absolute;
             height: 50px;
@@ -26,7 +29,7 @@
             }
         
         .col-md-4{
-            padding-top: 40px;
+            margin-top: 40px;
         }
         
         .col-md-4 >div >div>div>label{
@@ -53,7 +56,16 @@
                 position: right;
             }
         
-          
+        .panel-body > div:nth-child(2) > div > a {
+            margin-top: 28px;
+            margin-left: -13px;
+            position:absolute;
+        }
+        
+        
+        
+        
+        
     </style>
     
 {% endblock %}
@@ -91,20 +103,16 @@
               <div id="listadoa">
                  <div class="listado col-md-12">
                     <div class="placas" data-prototype="{% filter escape %}  {% include 'DGPlusbelleBundle:Prototype:paquete.html.twig' with { 'form': edit_form.placas.vars.prototype} %}   {% endfilter  %}"> 
+                        {% for placa in edit_form.placas %}
+                            <div class="col-md-4">
+                                <div class="panel bg-grd-light" data-fill-color="true">
+                                    <div class="panel-body">
 
-                      {% for placa in edit_form.placas %}
-                                        
-                       <div class="col-md-4">
-                         <div class="panel bg-grd-light" data-fill-color="true">
-                            <div class="panel-body">
-                             
-                                
-                                  {{ form_row(placa) }} 
-                             
-                            
-                            </div>
-                         </div>
-                       </div>        
+                                        {{ form_row(placa) }} 
+
+                                    </div>
+                                </div>
+                            </div>        
                        {% endfor %}
                     </div>
                  </div>  
@@ -368,9 +376,9 @@ jQuery(document).ready(function() {
 
    //$('input[id$=dgplusbellebundle_plantilla_placas_]').selectBoxIt;
 
-    collectionHolder.find('li').each(function() {
+    collectionHolder.find('.cpanel-body').each(function() {
         addTagFormDeleteLink($(this));
-
+        
     });
 
     
@@ -427,14 +435,7 @@ function addTagForm(collectionHolder, $newLinkLi) {
     // add a delete link to the new form
     addTagFormDeleteLink($newFormLi);
     validarPaquete(); 
-    $('.btn_radio').click(function(event) {
-        /* Act on the event */
-        var id = $(this).attr('id');
-        // alert(id);
-        $('.btn_radio').prop('checked', false);
-        $('#'+id).prop('checked', true);
-        $('.btn_radio').removeClass('errorform');
-    });
+    
 }
 
 function addTagFormDeleteLink($tagFormLi) {

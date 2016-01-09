@@ -34,7 +34,7 @@ class PaqueteController extends Controller
         $form = $this->createCreateForm($entity);
         $em = $this->getDoctrine()->getManager();
 
-        $entities = $em->getRepository('DGPlusbelleBundle:Paquete')->findAll();
+        $entities = $em->getRepository('DGPlusbelleBundle:Paquete')->findBy(array('estado' => true));
 
         return array(
             'entities' => $entities,
@@ -200,12 +200,26 @@ class PaqueteController extends Controller
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find Paquete entity.');
         }
-
+        $originalCollection = $entity->getPlacas();
         $deleteForm = $this->createDeleteForm($id);
         $editForm = $this->createEditForm($entity);
         $editForm->handleRequest($request);
-
+        
         if ($editForm->isValid()) {
+            
+            foreach ($originalCollection as $row) {
+                
+                
+                if (false === $entity->getPlacas()->contains($row)) {
+                    
+                    // if you wanted to delete the Tag entirely, you can also do that
+                    $em->remove($row);
+                    $entity->removePlacas($row);
+                    $em->flush();
+                }
+            }
+            
+            
             $em->flush();
 
             $usuario= $this->get('security.token_storage')->getToken()->getUser();

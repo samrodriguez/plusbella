@@ -116,15 +116,15 @@
                     {{key+1}}
                 </td> 
                 <td>
-                    <p class="detallePaciente">{{ entity.pnombre }} {{ entity.papellido }}</p>
+                    <p class="detallePaciente">{{ entity.pnombre|upper }} {{ entity.papellido|upper }}</p>
                 </td>
                 <td>{{ entity.dui }}</td>
                 {#<td>{{ entity.direccion }}</td>#}
                 <td>{{ entity.tel}}</td>
-                <td>{{ entity.email }}</td>
+                <td>{{ entity.email|lower }}</td>
                
                 {#<td>{{ entity.ocupacion }}</td>#}
-                <td>{{ entity.lugarTrabajo }}</td>
+                <td>{{ entity.lugarTrabajo|upper }}</td>
                 <td>{% if entity.fechaNacimiento %}{{ entity.fechaNacimiento|date('d-m-Y') }}{% endif %}</td>
                 {#<td>{{ entity.referidoPor }}</td>#}
                 {#<td>{{ entity.personaEmergencia }}</td>
@@ -226,22 +226,34 @@
                         $.getJSON(Routing.generate('get_infopaciente', { id: idPaciente}), 
                         function(data) {
                             var mensaje = "";
-                            mensaje += "<div class='row'></div>";
+                            mensaje += "<div class='container-fluid'>";
                             //mensaje += "<div class='col-md-12'><hr></div></div>";
 
                             mensaje += "<div class='col-md-6 text-right'><b>Nombre del paciente: </b></div><div class='col-md-6'>"+data.regs[0].nombres+" "+data.regs[0].apellidos+"</div>";
+                            mensaje += "<div class='clearfix'></div>";
                             mensaje += "<div class='col-md-6 text-right'><b>DUI: </b></div><div class='col-md-6'>"+data.regs[0].dui+"</div>";
+                            mensaje += "<div class='clearfix'></div>";
                             mensaje += "<div class='col-md-6 text-right'><b>Teléfono de contacto: </b></div><div class='col-md-6'>"+data.regs[0].telefono+"</div>";
+                            mensaje += "<div class='clearfix'></div>";
                             mensaje += "<div class='col-md-6 text-right'><b>Correo: </b></div><div class='col-md-6'>"+data.regs[0].email+"</div>";
+                            mensaje += "<div class='clearfix'></div>";
                             mensaje += "<div class='col-md-6 text-right'><b>Estado civil: </b></div><div class='col-md-6'>"+data.regs[0].estadoCivil+"</div>";
+                            mensaje += "<div class='clearfix'></div>";
 
                             mensaje += "<div class='col-md-6 text-right'><b>Sexo: </b></div><div class='col-md-6'>"+data.regs[0].sexo+"</div>";
+                            mensaje += "<div class='clearfix'></div>";
                             mensaje += "<div class='col-md-6 text-right'><b>Ocupación: </b></div><div class='col-md-6'>"+data.regs[0].ocupacion+"</div>";
+                            mensaje += "<div class='clearfix'></div>";
                             mensaje += "<div class='col-md-6 text-right'><b>Lugar de trabajo: </b></div><div class='col-md-6'>"+data.regs[0].lugarTrabajo+"</div>";
+                            mensaje += "<div class='clearfix'></div>";
                             mensaje += "<div class='col-md-6 text-right'><b>Fecha de nacimiento: </b></div><div class='col-md-6'>"+data.regs[0].fechaNacimiento+"</div>";
+                            mensaje += "<div class='clearfix'></div>";
                             mensaje += "<div class='col-md-6 text-right'><b>Referido por: </b></div><div class='col-md-6'>"+data.regs[0].referidoPor+"</div>";
+                            mensaje += "<div class='clearfix'></div>";
                             mensaje += "<div class='col-md-6 text-right'><b>En caso de emergencia llamar a: </b></div><div class='col-md-6'>"+data.regs[0].personaEmergencia+"</div>";
+                            mensaje += "<div class='clearfix'></div>";
                             mensaje += "<div class='col-md-6 text-right'><b>Teléfono: </b></div><div class='col-md-6'>"+data.regs[0].telefonoEmergencia+"</div>";
+                            mensaje += "<div class='clearfix'></div>";
                             mensaje += "</div>";
                             bootbox.dialog({
                                   message: mensaje,

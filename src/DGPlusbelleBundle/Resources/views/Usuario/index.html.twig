@@ -64,8 +64,8 @@
                 <td>
                     {{key+1}}
                 </td> 
-                <td>{{ entity.persona }}</td>
-                <td>{{ entity.username }}</td>
+                <td>{{ entity.persona|upper }}</td>
+                <td>{{ entity.username|upper }}</td>
                 {#<td>{{ entity.password }}</td>
                 <td>{{ entity.salt }}</td>#}
                 <td>{%if entity.estado==1 %}

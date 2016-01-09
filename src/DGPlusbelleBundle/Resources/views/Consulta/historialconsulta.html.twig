@@ -123,6 +123,7 @@
                 <div class="btn-group btn-group-sm pull-left">
                     <input id="filterDatatables1" class="form-control input-sm" placeholder="Buscar...">
                     <input id="filterDatatables2" class="form-control input-sm" placeholder="Buscar...">
+                    <input id="filterDatatables3" class="form-control input-sm" placeholder="Buscar...">
                 </div>
               </div><!-- /btn-toolbar -->
             </div><!-- /.panel-body -->
@@ -360,7 +361,8 @@
                     $('#filterDatatables2').hide();
                     $('#filterDatatables3').hide();
                     
-                    $('#filterDatatables1').val('');
+                    $('#datatables2_filter').children().children().val('');
+                    $('#datatables3_filter').children().children().val('');
                     
                 });
                 
@@ -375,7 +377,8 @@
                     $('#filterDatatables2').show();
                     $('#filterDatatables3').hide();
                     
-                    $('#filterDatatables2').val('');
+                    $('#datatables1_filter').children().children().val('');
+                    $('#datatables3_filter').children().children().val('');
                     
                 });
                 
@@ -383,14 +386,15 @@
                     //alert("paquete");
                     //alert('oculto tabla1');
                     $("#tabla1").hide();
-                    $("#tabla3").show();
                     $("#tabla2").hide();
+                    $("#tabla3").show();
                     
                     $('#filterDatatables1').hide();
-                    $('#filterDatatables3').show();
                     $('#filterDatatables2').hide();
+                    $('#filterDatatables3').show();
                     
-                    $('#filterDatatables3').val('');
+                    $('#datatables1_filter').children().children().val('');
+                    $('#datatables2_filter').children().children().val('');
                     
                 });
                 /*
@@ -500,14 +504,15 @@
                     });
         
         //Oculta el filtro de las tablas
-        $('#datatables1_filter, #datatables2_filter').hide();
+        
+        
         //Oculta la tabla paquete
         //$('#tabla2').hide();
         //$('#tabla2').hide();
         $('#filterDatatables2').hide();
         $('#tabla2').hide();
         
-        $('#datatables1_filter, #datatables2_filter').hide();
+{#        $('#datatables1_filter, #datatables2_filter,#datatables3_filter').hide();#}
         
         //Oculta la tabla consulta
         $('#filterDatatables3').hide();

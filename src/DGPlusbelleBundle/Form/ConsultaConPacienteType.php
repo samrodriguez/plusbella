@@ -70,12 +70,29 @@ class ConsultaConPacienteType extends AbstractType
                    
                  
                 ))
+                    
+                    
+                    ->add('registraReceta', 'choice', array(
+                    'label'=> 'Registro clínico',
+                    'choices'  => array('1' => 'Sí', '0' => 'No'),
+                    'multiple' => false,
+                    'expanded'=>'true'
+                   
+                 
+                ))
             ->add('costoConsulta', 'text', array('required'=>false,
                     'attr'=>array(
                          'class'=>'form-control costoConsulta'
                          )
                        ))
             ->add('plantilla', 'entity', array('required'=>false,
+                    'label'         =>  'Historias clínicas',
+                    'empty_value'=>'Seleccione una opcion',
+                    'class'         =>  'DGPlusbelleBundle:Plantilla',
+                    'mapped' => false
+                ))   
+                    
+                    ->add('sesiontratamiento', 'entity', array('required'=>false,
                     'label'         =>  'Historias clínicas',
                     'empty_value'=>'Seleccione una opcion',
                     'class'         =>  'DGPlusbelleBundle:Plantilla',

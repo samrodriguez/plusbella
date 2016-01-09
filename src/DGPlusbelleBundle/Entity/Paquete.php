@@ -276,5 +276,10 @@ class Paquete
         }
     }
     
+    public function removePlacas(PaqueteTratamiento $placa)
+    {
+        $this->placas->removeElement($placa);
+    }
+    
    
 }

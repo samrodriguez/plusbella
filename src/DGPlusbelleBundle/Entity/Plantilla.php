@@ -155,4 +155,10 @@ class Plantilla
             //$placa->s
         }
     }
+    
+    public function removePlacas(DetallePlantilla $placa)
+    {
+        $this->placas->removeElement($placa);
+    }
+    
 }

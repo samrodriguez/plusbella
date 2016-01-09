@@ -32,7 +32,7 @@ class SucursalController extends Controller
         $form   = $this->createCreateForm($entity);
         $em = $this->getDoctrine()->getManager();
 
-        $entities = $em->getRepository('DGPlusbelleBundle:Sucursal')->findAll();
+        $entities = $em->getRepository('DGPlusbelleBundle:Sucursal')->findBy(array('estado' => true));
 
         return array(
             'entities' => $entities,

@@ -38,7 +38,7 @@ class EmpleadoController extends Controller
         
         $sql = "select per.nombres as pnombre, per.apellidos as papellido,  "
                 . "per.direccion as direccion, per.telefono as tel, per.email as email, emp.id as idemp, emp.cargo as cargo, emp.foto as foto,  emp.estado as estado "
-                . "from empleado emp inner join persona per on emp.persona = per.id  order by per.apellidos";
+                . "from empleado emp inner join persona per on emp.persona = per.id where emp.estado=true  order by per.apellidos";
         
         $rsm->addScalarResult('idemp','idemp');
         $rsm->addScalarResult('pnombre','pnombre');

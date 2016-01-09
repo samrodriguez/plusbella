@@ -72,7 +72,7 @@
                       {#</a>#}
                   </td>
               {#    <td><a href="{{ path('admin_descuento_show', { 'id': entity.id }) }}">{{ entity.id }}</a></td> #}
-                <td>{{ entity.nombre }}</td>
+                <td>{{ entity.nombre|upper}}</td>
                 <td><center>{{ entity.porcentaje }} %</center></td>
                <td>
                     {% if entity.estado == 1 %}

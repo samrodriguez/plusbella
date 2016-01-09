@@ -32,7 +32,7 @@ class TipoConsultaController extends Controller
         $form = $this->createCreateForm($entity);
         $em = $this->getDoctrine()->getManager();
 
-        $entities = $em->getRepository('DGPlusbelleBundle:TipoConsulta')->findAll();
+        $entities = $em->getRepository('DGPlusbelleBundle:TipoConsulta')->findBy(array('estado' => true));
 
         return array(
             'entities' => $entities,

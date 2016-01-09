@@ -32,7 +32,7 @@ class TratamientoController extends Controller
         $form = $this->createCreateForm($entity);
         $em = $this->getDoctrine()->getManager();
 
-        $entities = $em->getRepository('DGPlusbelleBundle:Tratamiento')->findAll();
+        $entities = $em->getRepository('DGPlusbelleBundle:Tratamiento')->findBy(array('estado' => true));
 
         return array(
             'entities' => $entities,

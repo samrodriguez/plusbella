@@ -68,8 +68,8 @@
                       {#</a>#}
                   </td>
            {#        <td><a href="{{ path('admin_tratamiento_show', { 'id': entity.id }) }}">{{ entity.id }}</a></td> #}
-                <td>{{ entity.categoria}}</td>
-                <td>{{ entity.nombre }}</td>
+                <td>{{ entity.categoria|upper}}</td>
+                <td>{{ entity.nombre|upper }}</td>
                 <td style="text-align: right; padding-right: 20px">$ {{ entity.costo |number_format(2, '.', ',')}}</td>
                  <td><center>
                     {% if entity.estado == 1 %}

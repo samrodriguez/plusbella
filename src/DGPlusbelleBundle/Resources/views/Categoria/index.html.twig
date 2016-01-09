@@ -73,8 +73,8 @@
                       {#</a>#}
                   </td>
              {#    <td><a href="{{ path('admin_categoria_show', { 'id': entity.id }) }}">{{ entity.id }}</a></td>  #}
-                <td>{{ entity.nombre }}</td>
-                <td>{{ entity.codigo}}</td>
+                <td>{{ entity.nombre|upper }}</td>
+                <td>{{ entity.codigo|upper }}</td>
                <td><center>
                     {% if entity.estado == 1 %}
                         Activo

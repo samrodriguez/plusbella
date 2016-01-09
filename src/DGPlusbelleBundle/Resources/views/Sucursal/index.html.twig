@@ -121,8 +121,8 @@
                           {{key+1}}
                       {#</a>#}
                   </td>
-                <td>{{ entity.nombre }}</td>
-                <td>{{ entity.direccion }}</td>
+                <td>{{ entity.nombre|upper }}</td>
+                <td>{{ entity.direccion|upper }}</td>
                 <td>{{ entity.telefono }}</td>
                 <td>
                     {% if entity.estado == 1 %}
@@ -132,7 +132,7 @@
                     {% endif %}
                     
                 </td>
-                <td>{{ entity.slug }}</td>
+                <td>{{ entity.slug|upper }}</td>
                 {#<td>#}
                     {#<a href="{{ path('admin_sucursal_show', { 'id': entity.id }) }}">show</a>#}
                     {#<a href="{{ path('admin_sucursal_edit', { 'id': entity.id }) }}">edit</a>#}

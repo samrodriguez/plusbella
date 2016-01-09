@@ -33,7 +33,7 @@ class UsuarioController extends Controller
         $em = $this->getDoctrine()->getManager();
         $entity = new Usuario();
         $form = $this->createCreateForm($entity);
-        $entities = $em->getRepository('DGPlusbelleBundle:Usuario')->findAll();
+        $entities = $em->getRepository('DGPlusbelleBundle:Usuario')->findBy(array('estado' => true));
 
         return array(
             'entities' => $entities,

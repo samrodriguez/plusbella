@@ -32,7 +32,7 @@ class DescuentoController extends Controller
         $form = $this->createCreateForm($entity);
         $em = $this->getDoctrine()->getManager();
 
-        $entities = $em->getRepository('DGPlusbelleBundle:Descuento')->findAll();
+        $entities = $em->getRepository('DGPlusbelleBundle:Descuento')->findBy(array('estado' => true));
 
         return array(
             'entities' => $entities,

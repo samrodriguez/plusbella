@@ -83,14 +83,14 @@
                 <td>
                     {{key+1}}
                 </td> 
-                <td>{{ entity.nombre }}</td>
-                <td>{{ entity.descripcion }}</td>
+                <td>{{ entity.nombre|upper }}</td>
+                <td>{{ entity.descripcion|upper }}</td>
                 <td>
                     
                     {% for key, parametro in parametros 
                        if entity.id == parametro.plantilla.id %}
                             {% set long =  parametro|length  %}   
-                            {{ parametro.nombre }}{% if key + 1 == long%}. {% else %}, {% endif %}
+                            {{ parametro.nombre|upper }}{% if key + 1 == long%}. {% else %}, {% endif %}
                     {% endfor %}    
                 </td>
             </tr>
@@ -127,6 +127,7 @@
                     $("#vender-paquete").removeClass("disabled");
                     $("#ver-expediente").removeClass("disabled");
         
+                    link=$(this).attr("id");
                     //var link=$('#datatables1>tbody>tr>td>a').attr("href");
                     //var link=$(this).children("td:first").children().attr("href");
                     //Obtener el id del registro
@@ -134,7 +135,7 @@
                     
                     //alert(link);
                     //Carga del form modificar
-                    $("#editFormContainer").load(idPaciente+"/edit");
+{#                    $("#editFormContainer").load(idPaciente+"/edit");#}
                     
                     
                     //var href=link.attr("href");
@@ -187,7 +188,7 @@
                 });
                 
                 
-                $("#edit-datatables1").click(function(){
+                {#$("#edit-datatables1").click(function(){
                     if(!$("#edit-datatables1").hasClass("disabled")){
                         if($("#editFormContainer").hasClass("hide")){
                             $("#addFormContainer").addClass("hide");
@@ -198,6 +199,25 @@
                             $("#editFormContainer").addClass("hide");
                         }
                     }
+
+                });#}
+                $("#edit-datatables1").click(function(){
+                    var url = Routing.generate('admin_plantilla_edit', { id: link});
+                    //alert(url);
+                    //return false;
+                    window.location.href = url;
+                    //alert(url);
+                    /*return false;
+                    if(!$("#edit-datatables1").hasClass("disabled")){
+                        if($("#editFormContainer").hasClass("hide")){
+                            $("#addFormContainer").addClass("hide");
+                            $("#editFormContainer").removeClass("hide");
+                        }
+                        else{
+                            //$("#addFormContainer").removeClass("hide");
+                            $("#editFormContainer").addClass("hide");
+                        }
+                    }*/
 
                 });
                 /*

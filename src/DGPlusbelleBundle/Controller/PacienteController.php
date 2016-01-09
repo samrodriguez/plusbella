@@ -319,8 +319,16 @@ class PacienteController extends Controller
         $apellido = $paciente->getPersona()->getApellidos();
         $nombre = $paciente->getPersona()->getNombres();
 
+        
+        $search  = array('Á', 'É', 'Í', 'Ó', 'Ú');
+        $replace = array('A', 'E', 'I', 'O', 'U');
+        
+        $apellido = str_replace($search,$replace , $apellido);
+        $nombre = str_replace($search,$replace , $nombre);
+        
         //Generacion del numero de expediente
-        $numeroExp = $nombre[0].$apellido[0].date("Y");
+//        $numeroExp = $nombre[0].$apellido[0].date("Y");
+        $numeroExp = substr($nombre, 0,1).substr($apellido, 0,1).date("Y");
 
         $dql = "SELECT COUNT(exp)+1 FROM DGPlusbelleBundle:Expediente exp WHERE exp.numero LIKE :numero";
 

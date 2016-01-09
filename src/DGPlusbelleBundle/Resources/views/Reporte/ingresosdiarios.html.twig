@@ -22,6 +22,15 @@
                     <button id="exportar-pdf" data-toggle="tooltip" data-container="body" title="Exportar a PDF" class="btn btn-default datatables1-actions opciones" role="button">
                         <i class="fa fa-file-pdf-o"></i>
                     </button>
+                    
+                </div>
+                    
+                <div class="btn-group btn-group-sm pull-left">
+                    
+                    <button id="tabla-listado" data-toggle="tooltip" data-container="body" title="Ver listado de transacciones" class="btn btn-default datatables1-actions " role="button">
+                        <i class="fa fa-list"></i>
+                    </button>
+                    
                 </div>
                 
                 <div class="btn-group pull-left">
@@ -94,7 +103,13 @@
                 }
             }       
         
+        $(document).on('click','#tabla-listado', function(){
         
+            $('#listadostransaccion').toggle();
+            $('canvas').toggle();
+            $('#grafico').toggle();
+            
+        });
         
         var datepickerInicio = $('#fecha-inicio').data('Zebra_DatePicker');
         var datepickerFin= $('#fecha-fin').data('Zebra_DatePicker');

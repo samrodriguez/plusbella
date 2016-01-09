@@ -63,6 +63,13 @@ class Consulta
      * @ORM\Column(name="reporte_plantilla", type="boolean", nullable=false)
      */
     private $reportePlantilla;
+    
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="receta_medica", type="boolean", nullable=false)
+     */
+    private $registraReceta;
 
    /**
      * @var float
@@ -439,6 +446,10 @@ class Consulta
      * @ORM\OneToMany(targetEntity="ImagenConsulta", mappedBy="consulta", cascade={"persist", "remove"})
      */
     protected $placas2;
+    /**
+     * @ORM\OneToMany(targetEntity="HistorialConsulta", mappedBy="consulta", cascade={"persist", "remove"})
+     */
+    protected $historialconsulta;
     
     public function __construct()
     {
@@ -493,6 +504,32 @@ class Consulta
     public function getSucursal()
     {
         return $this->sucursal;
+    }
+    
+    
+    
+    /**
+     * Set registraReceta
+     *
+     * @param boolean $registraReceta
+     *
+     * @return Consulta
+     */
+    public function setRegistraReceta($registraReceta)
+    {
+        $this->registraReceta = $registraReceta;
+
+        return $this;
+    }
+
+    /**
+     * Get reportePlantilla
+     *
+     * @return boolean
+     */
+    public function getRegistraReceta()
+    {
+        return $this->registraReceta;
     }
     
 

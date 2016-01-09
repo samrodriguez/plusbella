@@ -105,7 +105,7 @@ class ConsultaController extends Controller
         
         $user = $this->get('security.token_storage')->getToken()->getUser();
         //Entidades para insertar en el proceso de la consulta de emergencia
-        $historial = new HistorialClinico();
+//        $historial = new HistorialClinico();
         $expediente = new Expediente();
         
         
@@ -254,12 +254,14 @@ class ConsultaController extends Controller
             }
             //die();
             //$entity->setPlacas2($placas);
-            
+            $entity->setRegistraReceta(1);
             $em->persist($entity);
             $em->flush();
             
             $plantillaid = $parameters['dgplusbellebundle_consulta']['plantilla'];
-            
+            $recetaid = $parameters['dgplusbellebundle_consulta']['sesiontratamiento'];
+            var_dump($parameters);
+            //die();
             $dql = "SELECT det.id, det.nombre "
                     . "FROM DGPlusbelleBundle:DetallePlantilla det "
                     . "JOIN det.plantilla pla "
@@ -268,6 +270,17 @@ class ConsultaController extends Controller
             $parametros = $em->createQuery($dql)
                         ->setParameter('plantillaid', $plantillaid)
                         ->getResult();
+            
+            
+            $dql = "SELECT det.id, det.nombre "
+                    . "FROM DGPlusbelleBundle:DetallePlantilla det "
+                    . "JOIN det.plantilla pla "
+                    . "WHERE pla.id =  :plantillaid";
+            
+            $parametros2 = $em->createQuery($dql)
+                        ->setParameter('plantillaid', $recetaid)
+                        ->getResult();
+            
             //$valores = array(); 
             // var_dump($usuario); 
             
@@ -298,6 +311,36 @@ class ConsultaController extends Controller
                 
                 
                 $em->persist($dataReporte);
+                $em->flush();
+            }   
+            
+            foreach($parametros2 as $p){
+                $dataReporte2 = new HistorialConsulta;
+                $detalle = $em->getRepository('DGPlusbelleBundle:DetallePlantilla')->find($p['id']);
+                
+                $dataReporte2->setDetallePlantilla($detalle);       
+                $dataReporte2->setConsulta($entity);
+                
+                $nparam = explode(" ", $p['nombre']);
+                //var_dump(count($nparam)); 
+                $lon = count($nparam);
+                if($lon > 1){
+                    $pnombre = $nparam[0];
+                    foreach($nparam as $key => $par){
+                        //var_dump($key);
+                        if($key +1 != $lon){
+                            //var_dump($lon);
+                            $pnombre .= '_'.$nparam[$key + 1];
+                        }
+                    }
+                    $dataReporte2->setValorDetalle($parameters[$pnombre."2"]);
+                } else {
+                    $dataReporte2->setValorDetalle($parameters[$p['nombre']."2"]);
+                }
+               //var_dump($p['nombre']); 
+                
+                
+                $em->persist($dataReporte2);
                 $em->flush();
             }   
             

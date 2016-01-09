@@ -58,20 +58,20 @@ class VentaPaqueteController extends Controller
         //$usuario = $em->getRepository('DGPlusbelleBundle:Usuario')->findBy(array("id"=>1));
         $usuario= $this->get('security.token_storage')->getToken()->getUser();
 
-        $dql = "SELECT suc.id
-            FROM DGPlusbelleBundle:Usuario u
-                    JOIN u.persona per
-                    JOIN per.empleado emp
-                    JOIN emp.sucursal suc
-            WHERE u.id=:id";
-        
-        $entities = $em->createQuery($dql)
-                       ->setParameter('id',1)
-                       ->getResult();
+//        $dql = "SELECT suc.id
+//            FROM DGPlusbelleBundle:Usuario u
+//                    JOIN u.persona per
+//                    JOIN per.empleado emp
+//                    
+//            WHERE u.id=:id";
+//        
+//        $entities = $em->createQuery($dql)
+//                       ->setParameter('id',1)
+//                       ->getResult();
 
 
-        $sucursal = $em->getRepository('DGPlusbelleBundle:Sucursal')->findBy(array("id"=>$entities[0]["id"]));
-        $entity->setSucursal($sucursal[0]);
+//        $sucursal = $em->getRepository('DGPlusbelleBundle:Sucursal')->findBy(array("id"=>$entities[0]["id"]));
+//        $entity->setSucursal($sucursal[0]);
         $entity->setUsuario($usuario);
         //var_dump($usuario);
 

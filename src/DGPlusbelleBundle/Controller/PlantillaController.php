@@ -141,7 +141,7 @@ class PlantillaController extends Controller
     /**
      * Displays a form to edit an existing Plantilla entity.
      *
-     * @Route("/{id}/edit", name="admin_plantilla_edit")
+     * @Route("/{id}/edit", name="admin_plantilla_edit" , options={"expose"=true})
      * @Method("GET")
      * @Template()
      */
@@ -201,12 +201,29 @@ class PlantillaController extends Controller
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find Plantilla entity.');
         }
-
+        $originalCollection = $entity->getPlacas();
         $deleteForm = $this->createDeleteForm($id);
         $editForm = $this->createEditForm($entity);
         $editForm->handleRequest($request);
 
         if ($editForm->isValid()) {
+            
+            
+            
+            foreach ($originalCollection as $row) {
+                
+                
+                if (false === $entity->getPlacas()->contains($row)) {
+                    
+                    // if you wanted to delete the Tag entirely, you can also do that
+                    $em->remove($row);
+                    $entity->removePlacas($row);
+                    $em->flush();
+                }
+            }
+            
+            
+            
             $em->flush();
 
             $usuario= $this->get('security.token_storage')->getToken()->getUser();

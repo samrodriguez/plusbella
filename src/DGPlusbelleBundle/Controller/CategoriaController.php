@@ -32,7 +32,7 @@ class CategoriaController extends Controller
         $form = $this->createCreateForm($entity);
         $em = $this->getDoctrine()->getManager();
 
-        $entities = $em->getRepository('DGPlusbelleBundle:Categoria')->findAll();
+        $entities = $em->getRepository('DGPlusbelleBundle:Categoria')->findBy(array('estado' => true));
 
         return array(
             'entities' => $entities,

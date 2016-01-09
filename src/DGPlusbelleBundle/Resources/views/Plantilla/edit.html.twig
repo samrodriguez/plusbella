@@ -1,5 +1,7 @@
+{% extends 'DGPlusbelleBundle:Layout:layout.html.twig' %}
+
 {% block css %}
-    {#{{parent()}}#}
+    {{parent()}}
     <style>
         
         //Posicion del boton agregar
@@ -27,6 +29,23 @@
         div + label{
             display: none;
         }
+        
+        
+        .placas > div:nth-child(1) > div > div > div:nth-child(2) > div > a {
+            display:none;
+        }
+        
+        .placas > div > div > div > div:nth-child(2) > div > a {
+            margin-top:30px;
+            margin-left: -12px;
+        }
+        
+        .panel-default {
+            height: 164px;
+        }
+        
+        
+        
     </style>
     
 {% endblock %}
@@ -95,15 +114,15 @@
 
                       {% for placa in edit_form.placas %}
                                         
-                       <div class="col-md-4">
-                         <div class="panel bg-grd-light" data-fill-color="true">
-                            <div class="panel-body">
+                        <div class="col-md-4">
+                            <div class="panel bg-grd-light" data-fill-color="true">
+                                <div class="panel-body">
 
-                                  {{ form_row(placa) }} 
+                                    {{ form_row(placa) }} 
  
+                                </div>
                             </div>
-                         </div>
-                       </div>        
+                        </div>        
                        {% endfor %}
                     </div>
                  </div>  
@@ -123,7 +142,7 @@
 {% endblock %}
 
 {% block javascripts_step %}
-     <script src="{{ asset('Resources/js/VentaPaquete.js') }}"></script>
+     <script src="{{ asset('Resources/js/Plantilla.js') }}"></script>
       
 <script>
 
@@ -142,7 +161,7 @@ var $delLinkLi = $('#hnr_sircimbundle_estudioradiologicotype_placas.required').a
 
 jQuery(document).ready(function() {
     
-     $('div[id*="dgplusbellebundle_plantilla_placas_"]').siblings().remove();   // Oculta el id de la colección
+     $('div[id*="dgplusbellebundle_plantilla_placas_"]').siblings().remove();   // Oculta el id de la colecciÃ³n
 
     $("#dgplusbellebundle_consulta_pacienteSelectBoxItOptions li").remove();
 
@@ -156,7 +175,7 @@ jQuery(document).ready(function() {
 
     $('select[id$=dgplusbellebundle_consulta_placas_]').selectBoxIt();
 
-    collectionHolder.find('li').each(function() {
+    collectionHolder.find('.panel-body').each(function() {
         addTagFormDeleteLink($(this));
 
     });
@@ -173,7 +192,7 @@ jQuery(document).ready(function() {
     //Identificar que form esta activo
     var editar=$('div.placas').attr('id');
     if(editar!='editar_usuario'){
-        //addTagForm(collectionHolder, $newLinkLi);   //Muestra un formulario en la carga de la página nuevo
+        //addTagForm(collectionHolder, $newLinkLi);   //Muestra un formulario en la carga de la pÃ¡gina nuevo
     }
     
 
@@ -260,11 +279,6 @@ $('#editar_usuario')
             });
 
 
-    
-var editar=$('div.placas').attr('id');
-if(editar!='editar_usuario'){
-    // $('#hnr_sircimbundle_usuariotype_placas_0_usroPredeterminado').prop('checked', true);//Se carga el radiobutton seleccionado
-}
 
  </script>
 

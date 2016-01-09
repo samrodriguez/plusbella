@@ -32,7 +32,7 @@ class ProductoController extends Controller
         $form = $this->createCreateForm($entity);
         $em = $this->getDoctrine()->getManager();
 
-        $entities = $em->getRepository('DGPlusbelleBundle:Producto')->findAll();
+        $entities = $em->getRepository('DGPlusbelleBundle:Producto')->findBy(array('estado' => true));
 
         return array(
             'entities' => $entities,
