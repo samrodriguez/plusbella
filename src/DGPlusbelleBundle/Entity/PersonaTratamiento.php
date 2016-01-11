@@ -52,6 +52,12 @@ class PersonaTratamiento
      * })
      */
     private $tratamiento;
+    
+    
+    /**
+     * @ORM\OneToMany(targetEntity="SesionVentaTratamiento", mappedBy="personaTratamiento", cascade={"persist", "remove"})
+     */
+    private $sestratamiento;
 
 
     /**
@@ -240,6 +246,33 @@ class PersonaTratamiento
     {
         return $this->tratamiento;
     }
+    
+    
+    
+    /**
+     * Set tratamiento
+     *
+     * @param \DGPlusbelleBundle\Entity\Tratamiento $tratamiento
+     *
+     * @return PaqueteTratamiento
+     */
+    public function setSesTratamiento(\DGPlusbelleBundle\Entity\PersonaTratamiento $sestratamiento = null)
+    {
+        $this->sestratamiento = $sestratamiento;
+
+        return $this;
+    }
+
+    /**
+     * Get tratamiento
+     *
+     * @return \DGPlusbelleBundle\Entity\Tratamiento
+     */
+    public function getSesTratamiento()
+    {
+        return $this->sestratamiento;
+    }
+    
     
     
     /**

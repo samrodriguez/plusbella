@@ -9,6 +9,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use DGPlusbelleBundle\Entity\SesionTratamiento;
 use DGPlusbelleBundle\Entity\ImagenTratamiento;
+use DGPlusbelleBundle\Entity\HistorialConsulta;
 use DGPlusbelleBundle\Entity\SeguimientoPaquete;
 use DGPlusbelleBundle\Form\SesionTratamientoType;
 use Doctrine\ORM\EntityRepository;
@@ -108,6 +109,51 @@ class SesionTratamientoController extends Controller
             } else {
                 $ventaPaquete->setEstado(3);
             }
+            $parameters = $request->request->all();
+            $recetaid = $parameters['dgplusbellebundle_sesiontratamiento']['sesiontratamiento'];
+            var_dump($parameters);
+            //die();
+            
+            $dql = "SELECT det.id, det.nombre "
+                    . "FROM DGPlusbelleBundle:DetallePlantilla det "
+                    . "JOIN det.plantilla pla "
+                    . "WHERE pla.id =  :plantillaid";
+            
+            $parametros2 = $em->createQuery($dql)
+                        ->setParameter('plantillaid', $recetaid)
+                        ->getResult();
+            
+            foreach($parametros2 as $p){
+                $dataReporte2 = new HistorialConsulta;
+                $detalle = $em->getRepository('DGPlusbelleBundle:DetallePlantilla')->find($p['id']);
+                
+                $dataReporte2->setDetallePlantilla($detalle);       
+                $dataReporte2->setSesionTratamientoReceta($entity);
+                $dataReporte2->setConsulta(null);
+                
+                $nparam = explode(" ", $p['nombre']);
+                //var_dump(count($nparam)); 
+                $lon = count($nparam);
+                if($lon > 1){
+                    $pnombre = $nparam[0];
+                    foreach($nparam as $key => $par){
+                        //var_dump($key);
+                        if($key +1 != $lon){
+                            //var_dump($lon);
+                            $pnombre .= '_'.$nparam[$key + 1];
+                        }
+                    }
+                    $dataReporte2->setValorDetalle($parameters[$pnombre."2"]);
+                } else {
+                    $dataReporte2->setValorDetalle($parameters[$p['nombre']."2"]);
+                }
+               //var_dump($p['nombre']); 
+                
+                
+                $em->persist($dataReporte2);
+                $em->flush();
+            }   
+            
             
             $em->merge($ventaPaquete);
             $em->flush();

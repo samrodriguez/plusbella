@@ -37,6 +37,31 @@ class HistorialConsulta {
      */
     private $consulta;
     
+    
+    /**
+     * @var \Sesiontratamiento
+     *
+     * @ORM\ManyToOne(targetEntity="SesionTratamiento")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="sesion_tratamiento_receta", referencedColumnName="id")
+     * })
+     */
+    private $sesiontratamientoreceta;
+    
+    
+    
+    /**
+     * @var \Sesiontratamiento
+     *
+     * @ORM\ManyToOne(targetEntity="SesionVentaTratamiento")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="sesion_venta_tratamiento_receta", referencedColumnName="id")
+     * })
+     */
+    private $sesionventatratamientoreceta;
+    
+    
+    
     /**
      * @var \DetallePlantilla
      *
@@ -104,6 +129,66 @@ class HistorialConsulta {
     {
         return $this->consulta;
     }
+    
+    
+    
+    /**
+     * Set consulta
+     *
+     * @param \DGPlusbelleBundle\Entity\SesionTratamiento
+     *
+     * @return HistorialConsulta
+     */
+    public function setSesionTratamientoReceta(\DGPlusbelleBundle\Entity\SesionTratamiento $sesiontratamientoreceta = null)
+    {
+        $this->sesiontratamientoreceta = $sesiontratamientoreceta;
+
+        return $this;
+    }
+
+    /**
+     * Get consulta
+     *
+     * @return \DGPlusbelleBundle\Entity\Consulta
+     */
+    public function getSesionTratamientoReceta()
+    {
+        return $this->sesiontratamientoreceta;
+    }
+    
+    
+    
+    
+    
+    
+    
+    /**
+     * Set consulta
+     *
+     * @param \DGPlusbelleBundle\Entity\SesionVentasTratamiento
+     *
+     * @return HistorialConsulta
+     */
+    public function setSesionVentaTratamientoReceta(\DGPlusbelleBundle\Entity\SesionVentaTratamiento $sesionventatratamientoreceta = null)
+    {
+        $this->sesionventatratamientoreceta = $sesionventatratamientoreceta;
+
+        return $this;
+    }
+
+    /**
+     * Get consulta
+     *
+     * @return \DGPlusbelleBundle\Entity\Consulta
+     */
+    public function getSesionVentaTratamientoReceta()
+    {
+        return $this->sesionventatratamientoreceta;
+    }
+    
+    
+    
+    
 
     /**
      * Set detallePlantilla

@@ -58,7 +58,28 @@ class SesionVentaTratamientoType extends AbstractType
                 'by_reference' => false,
                 'allow_add' => true,
                 'allow_delete' => true,
-                ))                  
+                ))     
+                        
+            
+                        
+                        
+            ->add('sesiontratamiento', 'entity', array('required'=>false,
+                    'label'         =>  'Nombre médica',
+                    'empty_value'=>'Seleccione una opcion',
+                    'class'         =>  'DGPlusbelleBundle:Plantilla',
+                    'mapped' => false
+                ))  
+                        
+                        
+            ->add('registraReceta', 'choice', array(
+                    'label'=> 'Requiere receta',
+                    'choices'  => array('1' => 'Sí', '0' => 'No'),
+                    'multiple' => false,
+                    'expanded'=>'true'
+                   
+                 
+                ))
+                        
         ;
     }
     

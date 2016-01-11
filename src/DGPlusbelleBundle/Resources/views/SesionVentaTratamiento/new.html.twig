@@ -141,6 +141,34 @@
             </div>             
            #}
        
+            <div id="receta" class="receta col-md-12"  style="margin-bottom: 30px;">
+                <div class="row">
+                    <div class="col-md-12">
+                        <h3 class="text-left">Receta médica</h3>
+                        <hr>
+                        <br>
+                    </div>
+                    <div class="col-md-3 col-md-offset-1">
+                        {{ form_row(form.registraReceta) }}
+                    </div>
+                    <div class="col-md-3">
+                        <div id="lista_receta">
+                            {{ form_row(form.sesiontratamiento) }}
+                        </div>
+                    </div>  
+                    <div class="col-md-11 col-md-offset-1 ">
+{#                        {{ form_row(form.campos) }} #}
+                        <div id="camposReceta" class="camposReceta" style="margin-top: 30px">
+                            <div class="row">
+                                <div class="col-md-1"></div>
+                                <div id="cReceta" class="col-md-11 cReceta" ></div>
+                            </div>
+                        </div> 
+                    </div>    
+                </div>
+            </div>  
+                        
+       
                 <div class="row">  
                     <div id="listadoa">
                        <div class="listado col-md-12">          
@@ -167,10 +195,127 @@
 
 {% block javascripts_step %}
         <script src="{{ asset('Resources/js/SesionVentaTratamiento.js') }}"></script>
+        <script src="{{ asset('Resources/js/ConsultaPaciente.js') }}"></script>
        <script>
             $(document).ready(function(){
                 
               validarSesionVentaTratamiento();
+              
+              $( "#dgplusbellebundle_sesionventatratamiento_registraReceta_0" ).on( "click", function() {
+                    // Se muestra el combobox donde se selecciona la plantilla
+                    $("#lista_receta").show();
+                });
+              
+              
+              $( "#dgplusbellebundle_sesionventatratamiento_registraReceta_1" ).on( "click", function() {
+                // Se obtiene todos elementos que contengan la clase parametro
+                var elements = document.getElementsByClassName('parametro');
+                
+                // Se borran todos los elementohtmls que se encuentran en el div con id = cReceta
+                $('#cReceta div').html('');
+                
+                // Se oculta el combobox donde se selecciona la plantilla
+                $("#lista_receta").hide();
+                
+                // Se borran todos los elementos que contengan la clase = parametro
+                while(elements.length > 0){
+                    elements[0].parentNode.removeChild(elements[0]);
+                }
+                
+                $('#dgplusbellebundle_receta_campos option').each(function(index, option) {
+                    $(option).remove();
+                });
+            });
+            
+            
+            
+            
+            $( "#dgplusbellebundle_sesionventatratamiento_sesiontratamiento" ).on( "change", function() {
+                // Se obtiene el id de la plantilla
+                var id = $( this ).val();
+                
+                // Se obtiene todos elementos que contengan la clase parametro
+                var elements = document.getElementsByClassName('parametro2');
+                
+{#                $('#cReceta').remove();#}
+                // Se borran todos los elementos que se encuentran en el div con id = campos
+                $('#cReceta div').html('');
+                
+                // Se borran todos los elementos que contengan la clase = parametro
+                while(elements.length > 0){
+                    elements[0].parentNode.removeChild(elements[0]);
+                }
+                
+                $('#dgplusbellebundle_receta_campos option').each(function(index, option) {
+                    $(option).remove();
+                });
+                
+                // Se obtienen los campos necesarios para la plantilla seleccionada
+                $.post( "{{path('admin_busqueda_parametros')}}", { id: id }, function( data ) {
+                    var par = new Array();
+                    par = data.query;
+                    
+                    // Si la plantilla contiene campos
+                    if(par.length !== 0){
+                        mostrarCampos2(data.query);
+                    }
+                    else{
+                        console.log( 'Esta receta no tiene campos que mostrar' );
+                    }
+                }, "json");
+                
+            });
+            
+            
+            function mostrarCampos2(data) {
+            var div = document.getElementById('cReceta');
+            var form = $("form");
+           
+            //var form = document.createElement('form');
+            //form.setAttribute('action', '{# {{path('admin_set_campos')}} #}');
+            //form.setAttribute('method', 'POST');
+            /*-----------*/
+            
+            var input = new Array();
+            var label = new Array();
+            var campos = new Array();
+            var etiqueta = new Array();
+            
+            // Se recorre el array para mostrar los campos
+            $.each( data, function( key, value ) {
+                var t = document.createTextNode(value.nombre);
+                
+                // Se crea un div donde se muestran los parametros
+                campos[key] = document.createElement('div');
+                campos[key].setAttribute('class', 'parametro2 col-md-4');
+                
+                // Se crea el campo de texto del parametro de la plantilla
+                input[key] = document.createElement('input');
+                input[key].setAttribute('type', 'text');
+                input[key].setAttribute('placeholder', value.nombre);
+                input[key].setAttribute('class', 'form-control classReceta');
+                input[key].setAttribute('style', 'margin-bottom: 5px');
+                input[key].setAttribute('name', value.nombre+"2");
+                input[key].setAttribute('id', value.id);
+             //   input[key].setAttribute('onblur', 'setCamposPlantilla(' + value.id + ')');
+                
+                // Se crea el label del parametro de la plantilla
+                etiqueta[key] = document.createElement('p');
+                etiqueta[key].setAttribute('style', 'color: #646473; font-size: 13px; font-weight: 700;');
+                etiqueta[key].appendChild(t);
+                
+                label[key] = document.createElement('label');
+                
+                // Se introducen los elementos en el div con id = campos
+                label[key].appendChild(etiqueta[key]);
+                campos[key].appendChild(label[key]);
+                campos[key].appendChild(input[key]);
+                div.appendChild(campos[key]);
+            });
+            validarConsulta();
+        } // Fin de mostrarCampos
+              
+              
            });//Fin document ready       
        </script> 
        

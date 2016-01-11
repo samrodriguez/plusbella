@@ -80,7 +80,17 @@ class Tratamiento
      * )
      */
     private $sucursal;
+    
+    
 
+    
+    /**
+     * @ORM\OneToMany(targetEntity="PaqueteTratamiento", mappedBy="tratamiento", cascade={"persist", "remove"})
+     */
+    private $paquetetratamiento;
+    
+    
+    
     /**
      * Constructor
      */

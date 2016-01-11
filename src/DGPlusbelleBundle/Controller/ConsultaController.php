@@ -886,7 +886,7 @@ class ConsultaController extends Controller
         $idPaciente=  substr($idPaciente, 1);
         //var_dump($idPaciente);
         //var_dump($entity->getPaciente()->getExpediente());
-        $entity = $em->getRepository('DGPlusbelleBundle:Consulta')->findBy(array('paciente'=>$idPaciente));
+        $consultas = $em->getRepository('DGPlusbelleBundle:Consulta')->findBy(array('paciente'=>$idPaciente));
         $paciente = $em->getRepository('DGPlusbelleBundle:Paciente')->find($idPaciente);
         //var_dump($paciente);
         $edad="";
@@ -899,7 +899,7 @@ class ConsultaController extends Controller
             $edad = date("md") < $m.$d ? date("Y")-$Y-1 : date("Y")-$Y;        
         }
         else{
-            $entity=null;
+            $consultas=null;
         }
         //$idPaciente = $entity->getPaciente()->getId();
         
@@ -952,12 +952,12 @@ class ConsultaController extends Controller
 //echo calcular_edad(“01-10-1989″); // Resultado: 21
         return array(
             //'entities' => $entities,
-            'entity' => $entity,
+            //'entity' => $entity,
             'totalTratamientos'=> $totalTratamientos[0][1],//grafica de estadisticas
             'totalPaquetes'=> $totalPaquetes[0][1],//grafica de estadisticas
-            'totalConsultas'=> count($entity),//grafica de estadisticas
+            'totalConsultas'=> count($consultas),//grafica de estadisticas
             'edad' => $edad,
-            'consultas' => $entity,
+            'consultas' => $consultas,
             'paquetes' => $paquetes,
             'empleados' => $empleados,
             'tratamientos' => $tratamientos,

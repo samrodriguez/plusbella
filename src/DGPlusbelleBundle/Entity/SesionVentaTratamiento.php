@@ -331,4 +331,42 @@ class SesionVentaTratamiento {
             $placa->setSesionVentaTratamiento($this);
         }
     }
+    
+    
+    
+    
+    
+    
+    
+    
+    /**
+     * Set registraReceta
+     *
+     * @param boolean $registraReceta
+     *
+     * @return Consulta
+     */
+    public function setRegistraReceta($registraReceta)
+    {
+        $this->registraReceta = $registraReceta;
+
+        return $this;
+    }
+
+    /**
+     * Get reportePlantilla
+     *
+     * @return boolean
+     */
+    public function getRegistraReceta()
+    {
+        return $this->registraReceta;
+    }
+    
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="receta_medica", type="boolean", nullable=false)
+     */
+    private $registraReceta;
 }

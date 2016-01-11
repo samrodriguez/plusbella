@@ -492,6 +492,90 @@ class ReporteController extends Controller
        
         $this->get('fpdf_printer')->generarPlantilla($logo, $consulta, $medico);
     }
+    
+    
+    
+    
+    
+    
+    
+    /**
+     * Generar reporte pdf de Detalle Plantilla consulta
+     *
+     * @Route("/{id}/recetaConsulta", name="admin_recetaventatrat_pdf", options ={"expose" = true})
+     * @Method("GET")
+     * @Template()
+     */
+    public function DetallePlantillaRecetaPdfAction($id)
+    {
+        $em = $this->getDoctrine()->getManager();
+        //echo $id;
+        
+//        $tratamientos= $em->getRepository('DGPlusbelleBundle:PersonaTratamiento')->findBy(array('id' => $id));
+//        $idtra = $tratamientos[0]->getTratamiento()->getId();
+//        var_dump($idtra);
+//        //dump($tratamientos);
+//        $pt= $em->getRepository('DGPlusbelleBundle:SesionTratamiento')->findBy(array('id'=>52));
+//        //dump($pt[0]->getId());
+//        var_dump($pt);
+                
+        
+//        $dql = "SELECT hc, con, pac, exp, per1, per2, emp, det, pla "
+//                    . "FROM DGPlusbelleBundle:HistorialConsulta hc "
+//                    . "JOIN hc.sesionventatratamientoreceta con "
+//                    . "JOIN con.personaTratamiento pertrat "
+//                    . "JOIN pertrat.paciente pers2 "
+//                    . "JOIN pers2.paciente pac "
+//                    . "JOIN pac.paciente exp "
+//                    . "JOIN pac.persona per1 "
+//                    . "JOIN con.empleado emp "
+//                    . "JOIN emp.persona per2 "
+//                    . "JOIN hc.detallePlantilla det "
+//                    . "JOIN det.plantilla pla "
+//                    . "WHERE con.id =  :idconsulta";
+//        
+            
+        
+        
+        $dql = "SELECT hc, ses_ven, pac, exp,perstrat, per1, pac, exp, per2, emp, det, pla "
+                    . "FROM DGPlusbelleBundle:HistorialConsulta hc "//historialconsulta
+                    . "JOIN hc.sesionventatratamientoreceta ses_ven "//sesionventatratamiento
+                    . "JOIN ses_ven.personaTratamiento perstrat "//personatratamiento
+                    . "JOIN perstrat.paciente per1 "//persona
+                    . "JOIN per1.paciente pac "//paciente
+                    . "JOIN pac.expediente exp "//expediente
+                    
+                    . "JOIN ses_ven.empleado emp "
+                    . "JOIN emp.persona per2 "
+                    . "JOIN hc.detallePlantilla det "
+                    . "JOIN det.plantilla pla "
+                    . "WHERE perstrat.id =:id";
+        
+        
+        
+        
+        $consulta = $em->createQuery($dql)
+               
+                    ->setParameter('id', $id)
+                    ->getResult();
+        
+        
+        //var_dump($consulta);
+        
+        //$titulo = 'Reporte de Videoendoscopia';
+        
+        
+        $medico = array(
+                    "nombre" => "Dr. Juan Carlos Pacheco",
+                    "cargo" => "Cirujano Endoscopista",
+                    "codigo" => "JVPM 7370",
+                );
+        
+        $logo = '../web/Resources/img/dgplusbelle/images/';
+       
+        $this->get('fpdf_printer')->generarPlantilla2($logo, $consulta, $medico);
+    }
+    
   
     /**
      * Generar reporte pdf de Ingresos por Paquete
