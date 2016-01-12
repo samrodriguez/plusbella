@@ -108,6 +108,11 @@ class VentaPaquete
      * })
      */
     private $descuento;
+    
+    /**
+     * @ORM\OneToMany(targetEntity="SesionTratamiento", mappedBy="ventaPaquete", cascade={"persist", "remove"})
+     */
+    private $ventapaq;
 
     /**
      * Get id
@@ -363,6 +368,32 @@ class VentaPaquete
     public function getDescuento()
     {
         return $this->descuento;
+    }
+    
+    
+    
+    /**
+     * Set ventapaq
+     *
+     * @param \DGPlusbelleBundle\Entity\VentaPaquete $ventapaq
+     *
+     * @return PaqueteTratamiento
+     */
+    public function setVentaPaq(\DGPlusbelleBundle\Entity\VentaPaquete $ventapaq = null)
+    {
+        $this->ventapaq = $ventapaq;
+
+        return $this;
+    }
+
+    /**
+     * Get tratamiento
+     *
+     * @return \DGPlusbelleBundle\Entity\Tratamiento
+     */
+    public function getVentaPaq()
+    {
+        return $this->ventapaq;
     }
     
 }

@@ -49,7 +49,39 @@ class PaqueteTratamiento {
     private $tratamiento;
 
 
+    /**
+     * @ORM\OneToMany(targetEntity="SesionTratamiento", mappedBy="sesiontratamientoreceta", cascade={"persist", "remove"})
+     */
+    private $ventapaq;
 
+    
+    
+    
+    
+    /**
+     * Set ventapaq
+     *
+     * @param \DGPlusbelleBundle\Entity\SesionTratamiento $ventapaq
+     *
+     * @return PaqueteTratamiento
+     */
+    public function setVentaPaq(\DGPlusbelleBundle\Entity\SesionTratamiento $ventapaq = null)
+    {
+        $this->ventapaq = $ventapaq;
+
+        return $this;
+    }
+
+    /**
+     * Get tratamiento
+     *
+     * @return \DGPlusbelleBundle\Entity\SesionTratamiento
+     */
+    public function getVentaPaq()
+    {
+        return $this->ventapaq;
+    }
+    
     /**
      * Get id
      *

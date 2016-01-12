@@ -495,6 +495,100 @@ class ReporteController extends Controller
     
     
     
+    /**
+     * Generar reporte pdf de Detalle Plantilla consulta
+     *
+     * @Route("/{id}/ReporteConsultareceta", name="admin_reporteconsultarecetaplantilla_pdf", options ={"expose" = true})
+     * @Method("GET")
+     * @Template()
+     */
+    public function DetalleConsultaRecetaPlantillaPdfAction($id)
+    {
+        $em = $this->getDoctrine()->getManager();
+        
+        $dql = "SELECT hc, con, pac, exp, per1, per2, emp, det, pla "
+                    . "FROM DGPlusbelleBundle:HistorialConsulta hc "
+                    . "JOIN hc.consultareceta con "
+                    . "JOIN con.paciente pac "
+                    . "JOIN pac.expediente exp "
+                    . "JOIN pac.persona per1 "
+                    . "JOIN con.empleado emp "
+                    . "JOIN emp.persona per2 "
+                    . "JOIN hc.detallePlantilla det "
+                    . "JOIN det.plantilla pla "
+                    . "WHERE con.id =  :idconsulta";
+            
+        $consulta = $em->createQuery($dql)
+                    ->setParameter('idconsulta', $id)
+                    ->getResult();
+        
+        //$titulo = 'Reporte de Videoendoscopia';
+        
+        
+        $medico = array(
+                    "nombre" => "Dr. Juan Carlos Pacheco",
+                    "cargo" => "Cirujano Endoscopista",
+                    "codigo" => "JVPM 7370",
+                );
+        
+        $logo = '../web/Resources/img/dgplusbelle/images/';
+       
+        $this->get('fpdf_printer')->generarConsultaReceta($logo, $consulta, $medico);
+    }
+    
+    
+    
+    
+    
+    
+    /**
+     * Generar reporte pdf de Detalle Plantilla consulta
+     *
+     * @Route("/{id}/ReportePaqueterecetadx/{pac}", name="admin_reportepaqueterecetaplantilla_pdf", options ={"expose" = true})
+     * @Method("GET")
+     * @Template()
+     */
+    public function DetallePaqueteRecetaPlantillaPdfAction($id,$pac)
+    {
+        $em = $this->getDoctrine()->getManager();
+//        echo $pac;
+        $paciente = $em->getRepository('DGPlusbelleBundle:Paciente')->findBy(array('persona' =>$pac));
+        
+//        var_dump($paciente);
+        $dql = "SELECT hc, con, per2, emp, det, pla "
+                    . "FROM DGPlusbelleBundle:HistorialConsulta hc "
+                    . "JOIN hc.sesiontratamientoreceta con "
+                    
+                    
+                    . "JOIN con.empleado emp "
+                    . "JOIN emp.persona per2 "
+                    . "JOIN hc.detallePlantilla det "
+                    . "JOIN det.plantilla pla "
+                    . "WHERE con.id =  :id";
+        
+//        echo $dql;
+        
+        
+        $consulta = $em->createQuery($dql)
+                    ->setParameter('id', $id)
+                    ->getResult();
+        
+        //$titulo = 'Reporte de Videoendoscopia';
+        
+//        var_dump($consulta);
+        $medico = array(
+                    "nombre" => "Dr. Juan Carlos Pacheco",
+                    "cargo" => "Cirujano Endoscopista",
+                    "codigo" => "JVPM 7370",
+                );
+        
+        $logo = '../web/Resources/img/dgplusbelle/images/';
+       
+        $this->get('fpdf_printer')->generarPaqueteReceta($logo, $consulta, $medico,$paciente);
+    }
+    
+    
+    
     
     
     

@@ -246,42 +246,68 @@ class FPDFService {
     
     
     
-    
+    //Receta de los tratamientos hechos
     public function generarPlantilla2($urlLogo, $consulta, $medico){
         $pdf  = new \FPDF_FPDF();
         $pdi  = new \FPDF_FPDI();
         
         
-        $logo = $urlLogo.'sonodigest.jpg';
+        $logo = $urlLogo.'laplusbelle.jpg';
+        $logo2 = $urlLogo.'sonodigest.jpg';
         
         $pdf->FPDF('P','mm','Letter');
-	$pdf->SetTopMargin(0);
-	$pdf->SetLeftMargin(20);
+        $pdf->SetTopMargin(0);
+        $pdf->SetLeftMargin(20);
         $pdf->SetAutoPageBreak(true, 6);
         $pdf->AddPage();
         $pdf->SetFillColor(255);
         
         $pdf->SetFont('Arial','B',16);
-        $pdf->Cell(120,32,$consulta[0]->getDetallePlantilla()->getPlantilla()->getNombre());
+//        $pdf->Cell(120,32,$consulta[0]->getDetallePlantilla()->getPlantilla()->getNombre());
+        $pdf->Cell(70);
+        $pdf->Cell(120,32,utf8_decode($consulta[0]->getDetallePlantilla()->getPlantilla()->getNombre()));
         
-        $pdf->Image($logo, 150, 5, 50, 20);
+        $pdf->Image($logo, 20, 5, 50, 20);
+        $pdf->Image($logo2, 150, 5, 50, 20);
         $pdf->Line(20, 25.5, 200, 25.5);
         $pdf->Line(20, 26, 200, 26);
         
-        $pdf->SetFont('Arial','B',13);
-        $pdf->Ln(26);
         
-        $pdf->Cell(32,27,'Informacion general del paciente');
-        $pdf->Line(20, 43, 200, 43);
-        //var_dump($consulta[0]->getSesionVentaTratamientoReceta()->getFechaSesion());
+        $pdf->SetFont('Arial','',11);
+        $pdf->SetY(20);
+        $pdf->SetX(20);
+        $pdf->Cell(88, 27, $medico['nombre']);
+        
+        $pdf->Ln(5);
+        $pdf->SetX(20);
+        $pdf->Cell(85, 27, $medico['cargo']);
+        
+        $pdf->Ln(5);
+        $pdf->SetX(20);
+        $pdf->Cell(85, 27, $medico['codigo']);
+        
+        $pdf->SetFont('Arial','B',13);
         $pdf->Ln(15);
+        
+        $pdf->Cell(20,20,utf8_decode('Información general del paciente'));
+        
+        
+        
+        
+        $pdf->Line(20, 48, 200, 48);
+        
+        $pdf->Ln(5);        
+        
+        //var_dump($consulta[0]->getSesionVentaTratamientoReceta()->getFechaSesion());
+        
         //$this->mostrarCelda($pdf, 32, 'Fecha: ', $consulta[0]->getConsulta()->getFechaConsulta()->format("d/m/Y"));
         $this->mostrarCelda($pdf, 32, 'Fecha: ', $consulta[0]->getSesionVentaTratamientoReceta()->getFechaSesion()->format("d/m/Y"));
         
         $pdf->Ln(7);
-        $this->mostrarCelda($pdf, 32, 'Nombre: ', $consulta[0]->getSesionVentaTratamientoReceta()->getPersonaTratamiento()->getPaciente()->getNombres().' '.$consulta[0]->getSesionVentaTratamientoReceta()->getPersonaTratamiento()->getPaciente()->getApellidos());
+        $this->mostrarCelda($pdf, 32, 'Nombre: ', utf8_decode($consulta[0]->getSesionVentaTratamientoReceta()->getPersonaTratamiento()->getPaciente()->getNombres().' '.$consulta[0]->getSesionVentaTratamientoReceta()->getPersonaTratamiento()->getPaciente()->getApellidos()));
         
         $fecha = $consulta[0]->getSesionVentaTratamientoReceta()->getFechaSesion()->format("Y-m-d");        
+        
         list($Y,$m,$d) = explode("-",$fecha);
         $edad = date("md") < $m.$d ? date("Y")-$Y-1 : date("Y")-$Y;    
         
@@ -303,16 +329,17 @@ class FPDFService {
         
         $pdf->Ln(10);
         $pdf->SetFont('Arial','B',13);
-        $pdf->Cell(32,27,'Resultado de consulta');
-        $pdf->Line(20, 81, 200, 81);
+//        $pdf->Cell(32,27,'Resultado de consulta');
+        $pdf->Cell(40, 27, $consulta[0]->getDetallePlantilla()->getNombre().': ', 0, 'L', false);
+        $pdf->Line(20, 91, 200, 91);
         $pdf->Ln(18);
         foreach ($consulta as $value) {
             $pdf->SetX(25);
             $pdf->SetFont('Arial','B',10);
-            $pdf->MultiCell(40, 5, $value->getDetallePlantilla()->getNombre().': ', 0, 'L', false);
-            $pdf->SetX(66.6);
+//            $pdf->MultiCell(40, 5, $value->getDetallePlantilla()->getNombre().': ', 0, 'L', false);
+            $pdf->SetX(30);
             $pdf->SetFont('Arial','',10);
-            $pdf->MultiCell(135, 5, $value->getValorDetalle(), 0, 'J', false);
+            $pdf->MultiCell(170, 5, $value->getValorDetalle(), 0, 'J', false);
             $this->pdf->Ln(10);
             
         }
@@ -322,24 +349,17 @@ class FPDFService {
         //$pdf->Ln(55);
         $pdf->SetY(241);
         $pdf->SetX(20);
-         $pdf->SetFont('Arial','',9);
-        $pdf->Cell(85, 27, 'Colonia Escalon, Calle Cuscatlan, No. 448, San Salvador.');
+         
+        $pdf->Line(20, 244, 200, 244);
+        $pdf->Line(20, 245, 200, 245);
+        $pdf->SetY(241);
+        $pdf->SetX(20);
+        $pdf->SetFont('Arial','',12);
+        $pdf->Cell(85, 20, 'Tel.: 2519-2857 , 7861-0599');
+        $pdf->Ln(2);
+        $pdf->Cell(55, 27, utf8_decode('Colonia Escalón, Calle Cuscatlan, No. 448, San Salvador.'));
         $pdf->Ln(5);
         $pdf->SetX(20);
-        $pdf->Cell(85, 27, 'Entre la 83 Av. y 85 Av. Sur. Tel.: 25192857');
-        
-        $pdf->SetFont('Arial','',11);
-        $pdf->SetY(235);
-        $pdf->SetX(156);
-        $pdf->Cell(88, 27, $medico['nombre']);
-        
-        $pdf->Ln(5);
-        $pdf->SetX(160);
-        $pdf->Cell(85, 27, $medico['cargo']);
-        
-        $pdf->Ln(5);
-        $pdf->SetX(178);
-        $pdf->Cell(85, 27, $medico['codigo']);
         
         $pdf->Output();
         
@@ -352,6 +372,238 @@ class FPDFService {
     
     
     
+    
+    
+    public function generarConsultaReceta($urlLogo, $consulta, $medico){
+        $pdf  = new \FPDF_FPDF();
+        $pdi  = new \FPDF_FPDI();
+        
+        
+        $logo = $urlLogo.'laplusbelle.jpg';
+        $logo2 = $urlLogo.'sonodigest.jpg';
+        html_entity_decode("&aacute;");
+        $pdf->FPDF('P','mm','Letter');
+	$pdf->SetTopMargin(0);
+	$pdf->SetLeftMargin(20);
+        $pdf->SetAutoPageBreak(true, 6);
+        $pdf->AddPage();
+        $pdf->SetFillColor(255);
+        
+        $pdf->SetFont('Arial','B',16);
+//        $pdf->Cell(120,32,$consulta[0]->getDetallePlantilla()->getPlantilla()->getNombre());
+        $pdf->Cell(70);
+        $pdf->Cell(120,32,utf8_decode($consulta[0]->getDetallePlantilla()->getPlantilla()->getNombre()));
+        
+        $pdf->Image($logo, 20, 5, 50, 20);
+        $pdf->Image($logo2, 150, 5, 50, 20);
+        $pdf->Line(20, 25.5, 200, 25.5);
+        $pdf->Line(20, 26, 200, 26);
+        
+        
+        
+        $pdf->SetFont('Arial','',11);
+        $pdf->SetY(20);
+        $pdf->SetX(20);
+        $pdf->Cell(88, 27, $medico['nombre']);
+        
+        $pdf->Ln(5);
+        $pdf->SetX(20);
+        $pdf->Cell(85, 27, $medico['cargo']);
+        
+        $pdf->Ln(5);
+        $pdf->SetX(20);
+        $pdf->Cell(85, 27, $medico['codigo']);
+        
+        
+        
+        $pdf->SetFont('Arial','B',13);
+        $pdf->Ln(15);
+        
+        $pdf->Cell(20,20,utf8_decode('Información general del paciente'));
+        $pdf->Line(20, 48, 200, 48);
+        
+        $pdf->Ln(5);
+        $this->mostrarCelda($pdf, 32, 'Fecha: ', $consulta[0]->getConsultaReceta()->getFechaConsulta()->format("d/m/Y"));
+        $pdf->Ln(7);
+        $this->mostrarCelda($pdf, 32, 'Nombre: ', utf8_decode($consulta[0]->getConsultaReceta()->getPaciente()->getPersona()->getNombres().' '.$consulta[0]->getConsultaReceta()->getPaciente()->getPersona()->getApellidos()));
+        
+        $fecha = $consulta[0]->getConsultaReceta()->getPaciente()->getFechaNacimiento()->format("Y-m-d");        
+        list($Y,$m,$d) = explode("-",$fecha);
+        $edad = date("md") < $m.$d ? date("Y")-$Y-1 : date("Y")-$Y;    
+        
+        $this->mostrarCelda($pdf, 13, 'Edad: ', $edad /*.' '. htmlentities('Años', ENT_QUOTES,'UTF-8')*/);
+        
+        $pdf->Ln(7);
+        $this->mostrarCelda($pdf, 32, 'Expediente No.: ', $consulta[0]->getConsultaReceta()->getPaciente()->getExpediente()[0]->getNumero());
+        
+        $sexoPaciente = $consulta[0]->getConsultaReceta()->getPaciente()->getSexo();
+        $sexo = '';
+        if($sexoPaciente == 'm'){
+            $sexo = 'Masculino';
+        } else {
+            $sexo = 'Femenino';
+        }
+        
+        $this->mostrarCelda($pdf, 13, 'Sexo: ', $sexo);
+        
+        $pdf->Ln(10);
+        $pdf->SetFont('Arial','B',13);
+//        $pdf->Cell(32,27,'FX:');
+        $pdf->Cell(40, 27, $consulta[0]->getDetallePlantilla()->getNombre().': ', 0, 'L', false);
+        $pdf->Line(20, 91, 200, 91);
+        $pdf->Ln(18);
+        foreach ($consulta as $value) {
+            $pdf->SetX(25);
+            $pdf->SetFont('Arial','B',10);
+            
+            $pdf->SetX(30);
+            $pdf->SetFont('Arial','',10);
+            $pdf->MultiCell(170, 5, $value->getValorDetalle(), 0, 'J', false);
+            $this->pdf->Ln(10);
+            
+        }
+        //$tam = count($consulta);
+        
+        //$espacio = 
+        //$pdf->Ln(55);
+        $pdf->Line(20, 244, 200, 244);
+        $pdf->Line(20, 245, 200, 245);
+        $pdf->SetY(241);
+        $pdf->SetX(20);
+        $pdf->SetFont('Arial','',12);
+        $pdf->Cell(85, 20, 'Tel.: 2519-2857 , 7861-0599');
+        $pdf->Ln(2);
+        $pdf->Cell(55, 27, utf8_decode('Colonia Escalon, Calle Cuscatlan, No. 448, San Salvador.'));
+        $pdf->Ln(5);
+        $pdf->SetX(20);
+        
+        
+        
+        
+        $pdf->Output();
+        
+       // return $pdf;
+    }
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    public function generarPaqueteReceta($urlLogo, $consulta, $medico,$paciente){
+        $pdf  = new \FPDF_FPDF();
+        $pdi  = new \FPDF_FPDI();
+        
+        
+        $logo = $urlLogo.'laplusbelle.jpg';
+        $logo2 = $urlLogo.'sonodigest.jpg';
+        html_entity_decode("&aacute;");
+        $pdf->FPDF('P','mm','Letter');
+//        echo "sdcdsc";
+	$pdf->SetTopMargin(0);
+	$pdf->SetLeftMargin(20);
+        $pdf->SetAutoPageBreak(true, 6);
+        $pdf->AddPage();
+        $pdf->SetFillColor(255);
+        
+        $pdf->SetFont('Arial','B',16);
+//        $pdf->Cell(120,32,$consulta[0]->getDetallePlantilla()->getPlantilla()->getNombre());
+        $pdf->Cell(70);
+        $pdf->Cell(120,32,utf8_decode($consulta[0]->getDetallePlantilla()->getPlantilla()->getNombre()));
+        
+        $pdf->Image($logo, 20, 5, 50, 20);
+        $pdf->Image($logo2, 150, 5, 50, 20);
+        $pdf->Line(20, 25.5, 200, 25.5);
+        $pdf->Line(20, 26, 200, 26);
+        
+        
+        
+        $pdf->SetFont('Arial','',11);
+        $pdf->SetY(20);
+        $pdf->SetX(20);
+        $pdf->Cell(88, 27, $medico['nombre']);
+        
+        $pdf->Ln(5);
+        $pdf->SetX(20);
+        $pdf->Cell(85, 27, $medico['cargo']);
+        
+        $pdf->Ln(5);
+        $pdf->SetX(20);
+        $pdf->Cell(85, 27, $medico['codigo']);
+        
+        
+        
+        $pdf->SetFont('Arial','B',13);
+        $pdf->Ln(15);
+        
+        $pdf->Cell(20,20,utf8_decode('Información general del paciente'));
+        $pdf->Line(20, 48, 200, 48);
+        
+        $pdf->Ln(5);
+        $this->mostrarCelda($pdf, 32, 'Fecha: ', $consulta[0]->getSesiontratamientoReceta()->getFechaSesion()->format("d/m/Y"));
+        $pdf->Ln(7);
+        $this->mostrarCelda($pdf, 32, 'Nombre: ', utf8_decode($paciente[0]->getPersona()->getNombres().' '.$paciente[0]->getPersona()->getApellidos()));
+        
+        $fecha = $paciente[0]->getFechaNacimiento()->format("Y-m-d");        
+        list($Y,$m,$d) = explode("-",$fecha);
+        $edad = date("md") < $m.$d ? date("Y")-$Y-1 : date("Y")-$Y;    
+        
+        $this->mostrarCelda($pdf, 13, 'Edad: ', $edad /*.' '. htmlentities('Años', ENT_QUOTES,'UTF-8')*/);
+        
+        $pdf->Ln(7);
+        $this->mostrarCelda($pdf, 32, 'Expediente No.: ', $paciente[0]->getExpediente()[0]->getNumero());
+        
+        $sexoPaciente = $paciente[0]->getSexo();
+        $sexo = '';
+        if($sexoPaciente == 'm'){
+            $sexo = 'Masculino';
+        } else {
+            $sexo = 'Femenino';
+        }
+        
+        $this->mostrarCelda($pdf, 13, 'Sexo: ', $sexo);
+        
+        $pdf->Ln(10);
+        $pdf->SetFont('Arial','B',13);
+//        $pdf->Cell(32,27,'FX:');
+        $pdf->Cell(40, 27, $consulta[0]->getDetallePlantilla()->getNombre().': ', 0, 'L', false);
+        $pdf->Line(20, 91, 200, 91);
+        $pdf->Ln(18);
+        foreach ($consulta as $value) {
+            $pdf->SetX(25);
+            $pdf->SetFont('Arial','B',10);
+            
+            $pdf->SetX(30);
+            $pdf->SetFont('Arial','',10);
+            $pdf->MultiCell(170, 5, $value->getValorDetalle(), 0, 'J', false);
+            $this->pdf->Ln(10);
+            
+        }
+        //$tam = count($consulta);
+        
+        //$espacio = 
+        //$pdf->Ln(55);
+        $pdf->Line(20, 244, 200, 244);
+        $pdf->Line(20, 245, 200, 245);
+        $pdf->SetY(241);
+        $pdf->SetX(20);
+        $pdf->SetFont('Arial','',12);
+        $pdf->Cell(85, 20, 'Tel.: 2519-2857 , 7861-0599');
+        $pdf->Ln(2);
+        $pdf->Cell(55, 27, utf8_decode('Colonia Escalon, Calle Cuscatlan, No. 448, San Salvador.'));
+        $pdf->Ln(5);
+        $pdf->SetX(20);
+        
+        
+        
+        
+        $pdf->Output();
+        
+       // return $pdf;
+    }
     
     
     

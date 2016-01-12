@@ -86,7 +86,7 @@
                           </div>#}
                             {#<p class="lead mb-1x">   Datos del paciente </p>#}
                             <p class="text-muted"><i class="fa fa-fw"></i><div class="col-md-4">Nombre: </div><div class="col-md-8">{{ paciente.persona.nombres}} {{ paciente.persona.apellidos}} </div> </p>
-                            <p class="text-muted"><i class="fa fa-fw"></i><div class="col-md-4">Expediente:</div><div class="col-md-8"> {{ paciente.expediente[0].numero }} </div> </p>
+                            <p class="text-muted"><i class="fa fa-fw"></i><div class="col-md-4">Expediente:</div><div class="col-md-8"> {{ expediente }} </div> </p>
                             <p class="text-muted"><i class="fa fa-fw"></i><div class="col-md-4">Edad: </div><div class="col-md-8">{{ edad }} años </div> </p>
                           <div class="clearfix"></div>
                           
@@ -243,10 +243,10 @@
                                                 </button>
                                             </div>
                                         </div> 
-                                            {% for ent in entity.sestratamiento%}
+                                            {% for ent in entity.ventapaq%}
                                                 <div class="col-md-1">
                                                     <div class="btn-group btn-group-sm pull-left">
-                                                        <button id="ver-receta" data-toggle="tooltip" data-container="body" title="Consultar receta" class="btn btn-default datatables1-actions" role="button" onclick="exportarRecetaPaquetePDF({{ entity.id }});">
+                                                        <button id="ver-receta" data-toggle="tooltip" data-container="body" title="Consultar receta" class="btn btn-default datatables1-actions" role="button" onclick="exportarPaqueteRecetaPDF({{ ent.id }},{{entity.paciente.id}});">
                                                             <i class="fa fa-file-pdf-o"></i><a href=""> </a>
                                                         </button>
                                                     </div>
@@ -295,7 +295,7 @@
                                     <td>{{ entity.costoConsulta}}</td>
                                     <td>
                                        <div class="btn-group btn-group-sm pull-left">
-                                           {% if entity.reportePlantilla %}
+                                            {% if entity.reportePlantilla %}
                                                 <button id="exportar-pdf" data-toggle="tooltip" data-container="body" title="Detalle de consulta" class="btn btn-default datatables1-actions opciones" role="button" onclick="exportarPDF({{ entity.id }})">
                                                     <i class="fa fa-file-pdf-o"></i><a href=""> </a>
                                                 </button>
@@ -307,6 +307,17 @@
                                                     <i class="glyphicon glyphicon-picture"></i>
                                             </button>
                                         </div>
+                                              
+                                        {% for ent in entity.ventapaq%}
+                                            <div class="col-md-1">
+                                                <div class="btn-group btn-group-sm pull-left">
+                                                    <button id="ver-receta" data-toggle="tooltip" data-container="body" title="Consultar receta" class="btn btn-default datatables1-actions" role="button" onclick="exportarConsultaRecetaPDF({{ ent.consultareceta.id }});">
+                                                        <i class="fa fa-file-pdf-o"></i><a href=""> </a>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        {% endfor %}
+                                                    
                                     </td>
                                     
                             </tr>
@@ -617,6 +628,20 @@
             window.open(url,'_blank');
         }//Fin funcion
     </script>
+    <script>  
+        function exportarConsultaRecetaPDF(id){
+            var url = Routing.generate('admin_reporteconsultarecetaplantilla_pdf', {'id': id});
+            window.open(url,'_blank');
+        }//Fin funcion
+    </script>
+    
+    <script>  
+        function exportarPaqueteRecetaPDF(id,pac){
+            var url = Routing.generate('admin_reportepaqueterecetaplantilla_pdf', {'id': id,'pac': pac});
+            window.open(url,'_blank');
+        }//Fin funcion
+    </script>
+    
      <script>  
         function sesionFotoTratamiento(id){
             var url = Routing.generate('admin_seguimientotratamiento_show', {'id': id});
@@ -679,7 +704,7 @@
                     mensaje += "<div class='row' ></div>";
                     mensaje += "<table class='table table-bordered table-condensed' style='margin-top:25px'>";
                     mensaje += "<thead>";
-                    mensaje += "<tr><th class='text-center'>Tratamiento</th><th class='text-center'>Sesiones</th></tr>";
+                    mensaje += "<tr><th class='text-center'>Tratamiento</th><th class='text-center'>Sesiones</th><th></th></tr>";
                     mensaje += "</thead>";
                     mensaje += "<tbody>";
                     
@@ -699,8 +724,21 @@
                             }
                             
                         }
-                            
-                        mensaje += "</td></tr>";
+                            alert(data.query.id);
+                        mensaje+= "</td><td>";
+                            {% for key, entity in paquetes %}
+                                    {% for ent in entity.ventapaq %}
+                                        if(data.query.id=={{ent.id}})
+                                        {
+                                            mensaje+="<button id='ver-receta' data-toggle='tooltip' data-container='body' title='Consultar receta' class='btn btn-default datatables1-actions' role='button' onclick='exportarPaqueteRecetaPDF(5);'><i class='fa fa-file-pdf-o'></i><a href=''></a></button>"
+                                        }
+                                        else{
+                                            mensaje+="";
+                                        }
+                                        
+                                    {% endfor %}
+                            {% endfor %}
+                        mensaje+="</td></tr>";
                     });    
 
                     mensaje += "</tbody>";
@@ -739,6 +777,7 @@
                 // Si el paquete vendido tiene sesiones de tratamiento
                 if(par.length !== 0){
                     var mensaje = "";
+                    
                     mensaje += "<div class='row'></div>";
                     mensaje += "<div class='col-md-6 text-right'><b>Vendido por: </b></div><div class='col-md-6'>" + data.query[0].empleado + "</div>";
                     mensaje += "<div class='clearfix'></div>"

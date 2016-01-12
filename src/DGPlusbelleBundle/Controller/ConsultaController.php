@@ -254,7 +254,7 @@ class ConsultaController extends Controller
             }
             //die();
             //$entity->setPlacas2($placas);
-            $entity->setRegistraReceta(1);
+            //$entity->setRegistraReceta(1);
             $em->persist($entity);
             $em->flush();
             
@@ -290,6 +290,7 @@ class ConsultaController extends Controller
                 
                 $dataReporte->setDetallePlantilla($detalle);       
                 $dataReporte->setConsulta($entity);
+                $dataReporte->setConsultaReceta(null);
                 
                 $nparam = explode(" ", $p['nombre']);
                 //var_dump(count($nparam)); 
@@ -319,7 +320,8 @@ class ConsultaController extends Controller
                 $detalle = $em->getRepository('DGPlusbelleBundle:DetallePlantilla')->find($p['id']);
                 
                 $dataReporte2->setDetallePlantilla($detalle);       
-                $dataReporte2->setConsulta($entity);
+                $dataReporte2->setConsulta(null);
+                $dataReporte2->setConsultaReceta($entity);
                 
                 $nparam = explode(" ", $p['nombre']);
                 //var_dump(count($nparam)); 
@@ -342,7 +344,7 @@ class ConsultaController extends Controller
                 
                 $em->persist($dataReporte2);
                 $em->flush();
-            }   
+            }
             
             //var_dump($dataReporte);
            //var_dump($entity->getId());
@@ -888,7 +890,7 @@ class ConsultaController extends Controller
         //var_dump($entity->getPaciente()->getExpediente());
         $consultas = $em->getRepository('DGPlusbelleBundle:Consulta')->findBy(array('paciente'=>$idPaciente));
         $paciente = $em->getRepository('DGPlusbelleBundle:Paciente')->find($idPaciente);
-        //var_dump($paciente);
+        
         $edad="";
         if(count($paciente)!=0){
             
@@ -901,6 +903,16 @@ class ConsultaController extends Controller
         else{
             $consultas=null;
         }
+        $expnum="";
+        if(is_null($paciente->getExpediente()[0])){
+            $expnum = $this->generarExpediente($paciente);
+        }
+        else{
+            $expnum = $paciente->getExpediente()->getNumero();
+        }
+        
+//        var_dump($paciente->getExpediente());
+        //die();
         //$idPaciente = $entity->getPaciente()->getId();
         
         //var_dump($entity[0]->getPaciente());
@@ -917,8 +929,9 @@ class ConsultaController extends Controller
         $result = $stmt->fetchAll();
         */
         //echo $idPaciente;
+//        $paciente = $em->getRepository('DGPlusbelleBundle:Paciente')->find($idPaciente);
         $CompraPaciente = $em->getRepository('DGPlusbelleBundle:Paciente')->find($idPaciente);
-        
+        $paciente = $CompraPaciente;
         $paquetes = $em->getRepository('DGPlusbelleBundle:VentaPaquete')->findBy(array('paciente' => $CompraPaciente->getPersona()->getId()));
         
         $tratamientos= $em->getRepository('DGPlusbelleBundle:PersonaTratamiento')->findBy(array('paciente' => $CompraPaciente->getPersona()->getId()));
@@ -962,6 +975,7 @@ class ConsultaController extends Controller
             'empleados' => $empleados,
             'tratamientos' => $tratamientos,
             'paciente' => $paciente,
+            'expediente'=>$expnum,
             );
     }
     
@@ -1149,6 +1163,77 @@ class ConsultaController extends Controller
             'empleados' => $empleados,
             'fecha' => $fecha,
         );
+    }
+    
+    
+    
+    
+    
+    
+    /**
+     * Metodo que sirve para generar el expediente del paciente
+     *
+     * @param \DGPlusbelleBundle\Entity\Paciente $paciente
+     *
+     */
+    private function generarExpediente($paciente)
+    {
+        $em = $this->getDoctrine()->getManager();
+        
+        $expediente = new Expediente();
+        $user = $this->get('security.token_storage')->getToken()->getUser();
+        
+        // Obtencion del apellidos  y nombres del paciente
+        $apellido = $paciente->getPersona()->getApellidos();
+        $nombre = $paciente->getPersona()->getNombres();
+
+        
+        $search  = array('Á', 'É', 'Í', 'Ó', 'Ú');
+        $replace = array('A', 'E', 'I', 'O', 'U');
+        
+        $apellido = str_replace($search,$replace , $apellido);
+        $nombre = str_replace($search,$replace , $nombre);
+        
+        //Generacion del numero de expediente
+//        $numeroExp = $nombre[0].$apellido[0].date("Y");
+        $numeroExp = substr(strtoupper($nombre), 0,1).substr(strtoupper($apellido), 0,1).date("Y");
+//        $numeroExp = strtoupper ($numeroExp);
+//        echo $numeroExp;
+                
+        $dql = "SELECT COUNT(exp)+1 FROM DGPlusbelleBundle:Expediente exp WHERE exp.numero LIKE :numero";
+
+        $num = $em->createQuery($dql)
+                   ->setParameter('numero','%'.$numeroExp.'%')
+                   ->getResult();
+        //var_dump($user);
+        $numString = $num[0]["1"];
+        //var_dump($numString);
+
+        switch(strlen($numString)){
+            case 1:
+                    $numeroExp .= "00".$numString;
+                break;
+            case 2:
+                    $numeroExp .= "0".$numString;
+                break;
+            case 3:
+                    $numeroExp .= $numString;
+                break;
+        }
+//        var_dump($numeroExp);
+//        die();
+        //Seteo de valores del expediente
+        $expediente->setFechaCreacion(new \DateTime('now'));
+        $expediente->setHoraCreacion(new \DateTime('now'));
+        $expediente->setEstado(true);
+        $expediente->setNumero($numeroExp);
+        $expediente->setPaciente($paciente);
+        $expediente->setUsuario($user);
+
+//        $paciente->setExpediente($expediente);
+        $em->persist($expediente);
+        $em->flush();
+        return $numeroExp;
     }
     
     

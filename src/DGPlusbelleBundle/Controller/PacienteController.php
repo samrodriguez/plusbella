@@ -360,6 +360,7 @@ class PacienteController extends Controller
         $expediente->setUsuario($user);
 
         $em->persist($expediente);
+        $em->flush();
     }
     
     

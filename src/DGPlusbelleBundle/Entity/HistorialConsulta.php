@@ -38,10 +38,23 @@ class HistorialConsulta {
     private $consulta;
     
     
+    
+    /**
+     * @var \ConsultaReceta
+     *
+     * @ORM\ManyToOne(targetEntity="Consulta")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="consulta_receta", referencedColumnName="id")
+     * })
+     */
+    private $consultareceta;
+    
+    
+    
     /**
      * @var \Sesiontratamiento
      *
-     * @ORM\ManyToOne(targetEntity="SesionTratamiento")
+     * @ORM\ManyToOne(targetEntity="SesionTratamiento",inversedBy="sesionpaquetetratamiento")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="sesion_tratamiento_receta", referencedColumnName="id")
      * })
@@ -95,7 +108,7 @@ class HistorialConsulta {
 
         return $this;
     }
-
+    
     /**
      * Get valorDetalle
      *
@@ -128,6 +141,32 @@ class HistorialConsulta {
     public function getConsulta()
     {
         return $this->consulta;
+    }
+    
+    
+    
+    /**
+     * Set consulta
+     *
+     * @param \DGPlusbelleBundle\Entity\Consulta $consulta
+     *
+     * @return HistorialConsulta
+     */
+    public function setConsultaReceta(\DGPlusbelleBundle\Entity\Consulta $consultareceta = null)
+    {
+        $this->consultareceta = $consultareceta;
+
+        return $this;
+    }
+
+    /**
+     * Get consulta
+     *
+     * @return \DGPlusbelleBundle\Entity\Consulta
+     */
+    public function getConsultaReceta()
+    {
+        return $this->consultareceta;
     }
     
     

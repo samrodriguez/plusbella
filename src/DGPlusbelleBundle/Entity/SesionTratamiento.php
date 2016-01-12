@@ -67,7 +67,7 @@ class SesionTratamiento {
     /**
      * @var \Paciente
      *
-     * @ORM\ManyToOne(targetEntity="Paciente", inversedBy="sesion_tratamiento", cascade={"persist", "remove"})
+     * @ORM\ManyToOne(targetEntity="Paciente")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="paciente", referencedColumnName="id")
      * })
@@ -77,7 +77,7 @@ class SesionTratamiento {
     /**
      * @var \Empleado
      *
-     * @ORM\ManyToOne(targetEntity="Empleado", inversedBy="sesion_tratamiento", cascade={"persist", "remove"})
+     * @ORM\ManyToOne(targetEntity="Empleado")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="empleado", referencedColumnName="id")
      * })
@@ -87,7 +87,7 @@ class SesionTratamiento {
     /**
      * @var \Tratamiento
      *
-     * @ORM\ManyToOne(targetEntity="Tratamiento", inversedBy="sesion_tratamiento", cascade={"persist", "remove"})
+     * @ORM\ManyToOne(targetEntity="Tratamiento")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="tratamiento", referencedColumnName="id")
      * })
@@ -106,6 +106,10 @@ class SesionTratamiento {
     private $imagenTratamiento;
     
     
+    /**
+     * @ORM\OneToMany(targetEntity="HistorialConsulta", mappedBy="sesiontratamientoreceta", cascade={"persist", "remove"})
+     */
+    private $sesionpaquetetratamiento;
 
     
     /**

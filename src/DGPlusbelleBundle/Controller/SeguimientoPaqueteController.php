@@ -74,7 +74,7 @@ class SeguimientoPaqueteController extends Controller
             $rsm2 = new ResultSetMapping();
             $em = $this->getDoctrine()->getManager();            
                 
-            $sql = "select concat_ws(' ', emp.nombres, emp.apellidos) as empleado, "
+            $sql = "select ven.id as id,concat_ws(' ', emp.nombres, emp.apellidos) as empleado, "
                     . "concat_ws(' ', pac.nombres, pac.apellidos) as paciente, "
                     . "exp.numero as numExp, "
                     . "paq.nombre as nomPaquete, "
@@ -107,6 +107,7 @@ class SeguimientoPaqueteController extends Controller
             $rsm->addScalarResult('venta','venta');
             $rsm->addScalarResult('sesiones','sesiones');
             $rsm->addScalarResult('numSesion','numSesion');
+            $rsm->addScalarResult('id','id');
             //$rsm->addScalarResult('abono','abono');
             
             $mensaje = $em->createNativeQuery($sql, $rsm)

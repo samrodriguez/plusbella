@@ -440,6 +440,21 @@ class Paciente
     
     
     /**
+     * Set consulta
+     *
+     * @param \DGPlusbelleBundle\Entity\Expediente $expediente
+     *
+     * @return Consulta
+     */
+    public function setExpediente(\DGPlusbelleBundle\Entity\Expediente $expediente = null)
+    {
+        $this->expediente = $expediente;
+
+        return $this;
+    }
+    
+    
+    /**
      * Set referidoPor
      *
      * @param string $enteradoPor

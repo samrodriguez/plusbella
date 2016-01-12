@@ -137,6 +137,11 @@ class Consulta
      * })
      */
     private $sucursal;
+    
+    /**
+     * @ORM\OneToMany(targetEntity="HistorialConsulta", mappedBy="consultareceta", cascade={"persist", "remove"})
+     */
+    private $ventapaq;
 
     /**
      * Get id
@@ -530,6 +535,32 @@ class Consulta
     public function getRegistraReceta()
     {
         return $this->registraReceta;
+    }
+    
+    
+    
+    /**
+     * Set ventapaq
+     *
+     * @param \DGPlusbelleBundle\Entity\VentaPaquete $ventapaq
+     *
+     * @return PaqueteTratamiento
+     */
+    public function setVentaPaq(\DGPlusbelleBundle\Entity\HistorialConsulta $ventapaq = null)
+    {
+        $this->ventapaq = $ventapaq;
+
+        return $this;
+    }
+
+    /**
+     * Get tratamiento
+     *
+     * @return \DGPlusbelleBundle\Entity\Tratamiento
+     */
+    public function getVentaPaq()
+    {
+        return $this->ventapaq;
     }
     
 
