@@ -73,28 +73,7 @@ class CalendarEventListener
             
             $eventEntity->setAllDay(false); // default is false, set to true if this is an all day event
             $unicode="&#10003;";
-            switch($companyEvent->getEstado()){
-                case "A":    //Asistida
-                    //$eventEntity->setBgColor('#48CFAD'); //set the background color of the event's label
-                    //$eventEntity->setFgColor('#000'); //set the foreground color of the event's label
-                    $title = '<div class="fa fa-check"></div> | '.$title/*' | '.$companyEvent->getEstado().*/;
-                    break;
-                case "P":   //Pendiente
-                    //$eventEntity->setBgColor('#4FC1E9'); //set the background color of the event's label
-                    //$eventEntity->setFgColor('#000'); //set the foreground color of the event's label
-                    $title = '<div class="fa fa-calendar-minus-o"></div> | '.$title/*' | '.$companyEvent->getEstado(). */;
-                    break;
-                case "C":    //Cancelada
-                    //$eventEntity->setBgColor('#ED5565'); //set the background color of the event's label
-                    //$eventEntity->setFgColor('#000'); //set the foreground color of the event's label
-                    $title = '<div class="fa fa-calendar-times-o"></div> | '.$title/*' | '.$companyEvent->getEstado(). */;
-                    break;
-                case "N":    //Cancelada
-                    //$eventEntity->setBgColor('#ED5565'); //set the background color of the event's label
-                    //$eventEntity->setFgColor('#000'); //set the foreground color of the event's label
-                    $title = '<div class="fa fa-calendar-o"></div> | '.$title/*' | '.$companyEvent->getEstado(). */;
-                    break;
-            }
+            
                     
                     
                     
@@ -144,12 +123,32 @@ class CalendarEventListener
                     $eventEntity->setFgColor('#FFF'); //set the foreground color of the event's label
                     //$title = '</div><div class="fa fa-close"> | '.$title/*' | '.$companyEvent->getEstado(). */;
                     break;
-                case 10:    //Categoria 9
-                    $eventEntity->setBgColor('#A0D468'); //set the background color of the event's label
+                case 10:    //Categoria 10
+                    $eventEntity->setBgColor('#0F6D38'); //set the background color of the event's label
                     $eventEntity->setFgColor('#FFF'); //set the foreground color of the event's label
                     //$title = '</div><div class="fa fa-close"> | '.$title/*' | '.$companyEvent->getEstado(). */;
                     break;
-                default:    //Categoria 9
+                
+                
+                case 11:    //Categoria 11
+                    $eventEntity->setBgColor('#1C3343'); //set the background color of the event's label
+                    $eventEntity->setFgColor('#FFF'); //set the foreground color of the event's label
+                    //$title = '</div><div class="fa fa-close"> | '.$title/*' | '.$companyEvent->getEstado(). */;
+                    break;
+                
+                case 12:    //Categoria 12
+                    $eventEntity->setBgColor('#67A59B'); //set the background color of the event's label
+                    $eventEntity->setFgColor('#FFF'); //set the foreground color of the event's label
+                    //$title = '</div><div class="fa fa-close"> | '.$title/*' | '.$companyEvent->getEstado(). */;
+                    break;
+                
+                case 13:    //Categoria 13
+                    $eventEntity->setBgColor('#A053A0'); //set the background color of the event's label
+                    $eventEntity->setFgColor('#FFF'); //set the foreground color of the event's label
+                    //$title = '</div><div class="fa fa-close"> | '.$title/*' | '.$companyEvent->getEstado(). */;
+                    break;
+                
+                default:    //Categoria 14+
                     $eventEntity->setBgColor('#AC92EC'); //set the background color of the event's label
                     $eventEntity->setFgColor('#FFF'); //set the foreground color of the event's label
                     //$title = '</div><div class="fa fa-close"> | '.$title/*' | '.$companyEvent->getEstado(). */;
@@ -157,12 +156,35 @@ class CalendarEventListener
             }
             
             
+            switch($companyEvent->getEstado()){
+                case "A":    //Asistida
+                    //$eventEntity->setBgColor('#48CFAD'); //set the background color of the event's label
+                    //$eventEntity->setFgColor('#000'); //set the foreground color of the event's label
+                    
+                    $title = '<div class="fa fa-calendar-check-o" style="width: 17px; height: 100%; float: left; background: #69BD45;  position: absolute; margin-left: -3px; padding-left:2px "></div> <div style="width: 91%; height: 100%; float: right; position: relative; "> | '.$title.'</div>'/*' | '.$companyEvent->getEstado().*/;
+                    break;
+                case "P":   //Pendiente
+                    //$eventEntity->setBgColor('#4FC1E9'); //set the background color of the event's label
+                    //$eventEntity->setFgColor('#000'); //set the foreground color of the event's label
+                    $title = '<div class="fa fa-calendar-minus-o" style="width: 17px; height: 100%; float: left; background: #3852A4;  position: absolute; margin-left: -3px; padding-left:2px "></div> <div style="width: 91%; height: 100%; float: right; position: relative; "> | '.$title.'</div>'/*' | '.$companyEvent->getEstado(). */;
+                    break;
+                case "C":    //Cancelada
+                    //$eventEntity->setBgColor('#ED5565'); //set the background color of the event's label
+                    //$eventEntity->setFgColor('#000'); //set the foreground color of the event's label
+                    $title = '<div class="fa fa-calendar-times-o" style="width: 17px; height: 100%; float: left; background: #F00;  position: absolute; margin-left: -3px; padding-left:2px "></div> <div style="width: 91%; height: 100%; float: right; position: relative; "> | '.$title.'</div>'/*' | '.$companyEvent->getEstado(). */;
+                    break;
+                case "N":    //No asistida
+                    //$eventEntity->setBgColor('#ED5565'); //set the background color of the event's label
+                    //$eventEntity->setFgColor('#000'); //set the foreground color of the event's label
+                    $title = '<div class="fa fa-calendar-o" style="width: 17px; height: 100%; float: left; background: #421E5B;  position: absolute; margin-left: -3px; padding-left:2px "></div> <div style="width: 91%; height: 100%; float: right; position: relative; "> | '.$title.'</div>'/*' | '.$companyEvent->getEstado(). */;
+                    break;
+            }
 
             
             $eventEntity->setTitle($title);
             //$eventEntity->setUrl($unicode);
             //$eventEntity->setUrl('http://www.google.com'); // url to send user to when event label is clicked
-            $eventEntity->setCssClass('my-custom-class'); // a custom class you may want to apply to event labels
+            //$eventEntity->setCssClass('my-custom-class'); // a custom class you may want to apply to event labels
             //var_dump($eventEntity);
             //finally, add the event to the CalendarEvent for displaying on the calendar
             $calendarEvent->addEvent($eventEntity);

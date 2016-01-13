@@ -69,10 +69,26 @@
                 {% if categoria.id == 10 %}
                     <li class="" style="opacity: 1; display: list-item; transform: translateY(0px);"><a data-original-title="{{categoria.nombre}}" href="#" style="background: #A0D468" data-navbar="blue" rel="tooltip" title=""></a></li>
                 {% endif %}
-                {% if categoria.id >= 11 %}
-                    <li class="" style="opacity: 1; display: list-item; transform: translateY(0px);"><a data-original-title="{{categoria.nombre}}" href="#" style="background: #AC92EC" data-navbar="blue" rel="tooltip" title=""></a></li>
+                
+                
+                {% if categoria.id == 11 %}
+                    <li class="" style="opacity: 1; display: list-item; transform: translateY(0px);"><a data-original-title="{{categoria.nombre}}" href="#" style="background: #1C3343" data-navbar="blue" rel="tooltip" title=""></a></li>
                 {% endif %}
                 
+                
+                {% if categoria.id == 12 %}
+                    <li class="" style="opacity: 1; display: list-item; transform: translateY(0px);"><a data-original-title="{{categoria.nombre}}" href="#" style="background: #67A59B" data-navbar="blue" rel="tooltip" title=""></a></li>
+                {% endif %}
+                
+                
+                {% if categoria.id == 13 %}
+                    <li class="" style="opacity: 1; display: list-item; transform: translateY(0px);"><a data-original-title="{{categoria.nombre}}" href="#" style="background: #A053A0" data-navbar="blue" rel="tooltip" title=""></a></li>
+                {% endif %}
+                
+                
+                {% if categoria.id >= 14 %}
+                    <li class="" style="opacity: 1; display: list-item; transform: translateY(0px);"><a data-original-title="{{categoria.nombre}}" href="#" style="background: #AC92EC" data-navbar="blue" rel="tooltip" title=""></a></li>
+                {% endif %}
                 
             {% endfor %}
         </ul>
@@ -93,19 +109,19 @@
     </div>
     <div class="col-md-3 pull-right" style="height:20px;">
         
-        <button data-toggle="tooltip" data-container="body" title="Cita completada" class="btn btn-default datatables1-actions " role="button">
+        <button data-toggle="tooltip" data-container="body" title="Cita completada" class="btn btn-default datatables1-actions" style="color:#FFF;background:#69BD45;" role="button">
             <i class="fa fa-calendar-check-o"></i>
         </button>
-        <button data-toggle="tooltip" data-container="body" title="Cita pediente" class="btn btn-default datatables1-actions  " role="button">
+        <button data-toggle="tooltip" data-container="body" title="Cita pediente" class="btn btn-default datatables1-actions" style="color:#FFF;background:#3852A4;" role="button">
             <i class="fa fa-calendar-minus-o"></i>
         </button>
-        <button data-toggle="tooltip" data-container="body" title="Cita perdida" class="btn btn-default datatables1-actions  " role="button">
+        <button data-toggle="tooltip" data-container="body" title="Cita perdida" class="btn btn-default datatables1-actions" style="color:#FFF;background:#421E5B;" role="button">
             <i class="fa fa-calendar-o"></i>
         </button>
         {#<button data-toggle="tooltip" data-container="body" title="Cita " class="btn btn-default datatables1-actions  " role="button">
             <i class="fa fa-calendar-plus-o"></i>
         </button>#}
-        <button data-toggle="tooltip" data-container="body" title="Cita cancelada" class="btn btn-default datatables1-actions  " role="button">
+        <button data-toggle="tooltip" data-container="body" title="Cita cancelada" class="btn btn-default datatables1-actions  " style="color:#FFF;background:#F00;" role="button">
             <i class="fa fa-calendar-times-o"></i>
         </button>
     </div>
