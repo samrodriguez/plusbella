@@ -47,29 +47,40 @@ class CalendarEventListener
             $st    = new \DateTime($fi.' '.$ih);
             $nh    = new \DateTime($fi.' '.$h);
             //$//end   = new \DateTime($fi.' '.$fh);
-            $idPaciente = $companyEvent->getPaciente()->getId();
+            $eventEntity = new EventEntity('', $st,$nh );
+            if($companyEvent->getPaciente()!=null){
+                $idPaciente = $companyEvent->getPaciente()->getId();
+                $dql = "SELECT exp"
+                . " FROM DGPlusbelleBundle:Expediente exp"
+                . " WHERE exp.paciente =:paciente";
+                $expediente= $this->em->createQuery($dql)
+                        ->setParameter('paciente',$idPaciente)
+                         ->getResult();
+
+                //var_dump($expediente);
+                $expNumero= $expediente[0]->getNumero();
+                //optional calendar event settings
+
+                //var_dump($index);
+                $eventEntity->setId($companyEvent->getID());
+                $title = strtoupper($expNumero).' - '.$companyEvent->getPaciente()->getPersona()->getNombres().' '.$companyEvent->getPaciente()->getPersona()->getApellidos();
+                //var_dump($expNumero);
+            }
+            else{
+                $eventEntity->setId($companyEvent->getID());
+                $idPaciente = "Reserva de cita";
+                $expNumero ="";
+                $title = $idPaciente.$expNumero;
+            }
             //var_dump($idPaciente);
             //$expediente = $this->em->getRepository('DGPlusbelleBundle:Expediente')->findBy(array('paciente'=>$idPaciente));
             
-            $dql = "SELECT exp"
-                . " FROM DGPlusbelleBundle:Expediente exp"
-                . " WHERE exp.paciente =:paciente";
-            $expediente= $this->em->createQuery($dql)
-                    ->setParameter('paciente',$idPaciente)
-                     ->getResult();
             
-            //var_dump($expediente);
-            $expNumero= $expediente[0]->getNumero();
-            //var_dump($expNumero);
-            $eventEntity = new EventEntity('', $st,$nh );
+            
             
         
             
-            //optional calendar event settings
-
-            //var_dump($index);
-            $eventEntity->setId($companyEvent->getID());
-            $title = strtoupper($expNumero).' - '.$companyEvent->getPaciente()->getPersona()->getNombres().' '.$companyEvent->getPaciente()->getPersona()->getApellidos();
+            
             
             $eventEntity->setAllDay(false); // default is false, set to true if this is an all day event
             $unicode="&#10003;";

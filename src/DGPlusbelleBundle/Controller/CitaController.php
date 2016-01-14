@@ -9,6 +9,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use DGPlusbelleBundle\Entity\Cita;
+use DGPlusbelleBundle\Entity\Expediente;
 use DGPlusbelleBundle\Form\CitaType;
 
 /**
@@ -86,6 +87,24 @@ class CitaController extends Controller
         //var_dump($cita);
         if(count($cita)==0){
             if ($form->isValid()) {
+                $paciente = $entity->getPaciente();
+//                var_dump($paciente);
+                if($paciente!=null){
+                    
+                
+                    $expediente = $paciente->getExpediente();
+                    if(count($expediente)==0){
+                        //var_dump($expediente);
+    //                    echo "no tiene expediente";
+                        $expNumero = $this->generarExpediente($paciente);
+                    }
+                    else{
+                        $expNumero= $expediente[0]->getNumero();
+    //                    echo "tiene expediente";
+                    }
+                }
+//                echo $expNumero;
+//                die();
                 $usuario= $this->get('security.token_storage')->getToken()->getUser();
                 $em = $this->getDoctrine()->getManager();
                 $em->persist($entity);
@@ -550,9 +569,37 @@ class CitaController extends Controller
                 ->getArrayResult();
         
         //var_dump($cita);
-        $cita['regs'][0]["numero"] = strtoupper($cita['regs'][0]["numero"]);
-        $cita['regs'][0]["nombres"] = ucwords($cita['regs'][0]["nombres"]);
-        $cita['regs'][0]["apellidos"] = ucwords($cita['regs'][0]["apellidos"]);
+        if(count($cita['regs'])!=0){
+            $cita['regs'][0]["numero"] = strtoupper($cita['regs'][0]["numero"]);
+            $cita['regs'][0]["nombres"] = ucwords($cita['regs'][0]["nombres"]);
+            $cita['regs'][0]["apellidos"] = ucwords($cita['regs'][0]["apellidos"]);
+        }
+        else{
+            $dql = "SELECT c.id, t.nombre as nombreTratamiento,
+                per.nombres as primerNombreEmp, per.apellidos as primerApellidoEmp, 
+                c.fechaCita, c.horaCita, c.estado
+                    FROM DGPlusbelleBundle:Cita c
+                    JOIN c.empleado emp
+                    JOIN c.tratamiento t
+                    JOIN emp.persona per
+                WHERE c.id =:id";
+            $cita['regs'] = $em->createQuery($dql)
+                    ->setParameter('id', $id)
+                    ->getArrayResult();
+            
+            $cita['regs'][0]["numero"] = "-";
+            $cita['regs'][0]["nombres"] = "Paciente no registrado";
+            $cita['regs'][0]["apellidos"] = "";
+            
+//            $cita['regs'][0]["nombreTratamiento"] = ucwords($cita['regs'][0]["nombreTratamiento"]);
+//            $cita['regs'][0]["primerNombreEmp"] = ucwords($cita['regs'][0]["primerNombreEmp"]);
+//            $cita['regs'][0]["primerApellidoEmp"] = ucwords($cita['regs'][0]["primerApellidoEmp"]);
+//            $cita['regs'][0]["fechaCita"] = $cita['regs'][0]["fechaCita"]->format("d-m-Y");
+//            $cita['regs'][0]["horaCita"] = $cita['regs'][0]["horaCita"]->format("H:i");
+            //$cita['regs'] = 0;
+        }
+        
+        
         $cita['regs'][0]["nombreTratamiento"] = ucwords($cita['regs'][0]["nombreTratamiento"]);
         $cita['regs'][0]["primerNombreEmp"] = ucwords($cita['regs'][0]["primerNombreEmp"]);
         $cita['regs'][0]["primerApellidoEmp"] = ucwords($cita['regs'][0]["primerApellidoEmp"]);
@@ -573,8 +620,6 @@ class CitaController extends Controller
                 $cita['regs'][0]["estado"] = "No asistio";
                 break;
         }
-        
-        
         
         //var_dump($cita['regs'][0]["primerNombre"]);
         //var_dump($cita);
@@ -668,6 +713,100 @@ class CitaController extends Controller
         //var_dump($cita);
         
         return new Response(json_encode($cita));
+    }
+    
+    
+    
+    /**
+     * Metodo que sirve para generar el expediente del paciente
+     *
+     * @param \DGPlusbelleBundle\Entity\Paciente $paciente
+     *
+     */
+    private function generarExpediente($paciente)
+    {
+        $em = $this->getDoctrine()->getManager();
+        
+        $expediente = new Expediente();
+        $user = $this->get('security.token_storage')->getToken()->getUser();
+        
+        // Obtencion del apellidos  y nombres del paciente
+        $apellido = $paciente->getPersona()->getApellidos();
+        $nombre = $paciente->getPersona()->getNombres();
+
+        
+        $search  = array('Á', 'É', 'Í', 'Ó', 'Ú');
+        $replace = array('A', 'E', 'I', 'O', 'U');
+        
+        $apellido = str_replace($search,$replace , $apellido);
+        $nombre = str_replace($search,$replace , $nombre);
+        
+        //Generacion del numero de expediente
+//        $numeroExp = $nombre[0].$apellido[0].date("Y");
+        $flag=true;
+        $i=0;
+//        echo $nombre;
+        while ($flag){
+            if($nombre[$i]==' '){
+                $i++;
+//                echo '"'.$nombre.'"';
+            }
+            else{
+                $flag=false;
+                $nombre=$nombre[$i];
+            }
+        }
+//        echo $nombre;
+        $flag=true;
+        $i=0;
+        while ($flag){
+            if($apellido[$i]==' '){
+                $i++;
+            }
+            else{
+                $flag=false;
+                $apellido=$apellido[$i];
+            }
+        }
+        
+        $numeroExp = substr(strtoupper(trim($nombre)), 0,1).substr(strtoupper(trim($apellido)), 0,1).date("Y");
+//        $numeroExp = strtoupper ($numeroExp);
+//        echo $numeroExp;
+                
+        $dql = "SELECT COUNT(exp)+1 FROM DGPlusbelleBundle:Expediente exp WHERE exp.numero LIKE :numero";
+
+        $num = $em->createQuery($dql)
+                   ->setParameter('numero','%'.$numeroExp.'%')
+                   ->getResult();
+        //var_dump($user);
+        $numString = $num[0]["1"];
+        //var_dump($numString);
+
+        switch(strlen($numString)){
+            case 1:
+                    $numeroExp .= "00".$numString;
+                break;
+            case 2:
+                    $numeroExp .= "0".$numString;
+                break;
+            case 3:
+                    $numeroExp .= $numString;
+                break;
+        }
+//        var_dump($numeroExp);
+//        die();
+        //Seteo de valores del expediente
+        $expediente->setFechaCreacion(new \DateTime('now'));
+        $expediente->setHoraCreacion(new \DateTime('now'));
+        $expediente->setEstado(true);
+        $expediente->setNumero($numeroExp);
+        $expediente->setPaciente($paciente);
+        $expediente->setUsuario($user);
+
+//        $paciente->setExpediente($expediente);
+        $em->persist($expediente);
+        $em->flush();
+        return $numeroExp;
     }
     
 }

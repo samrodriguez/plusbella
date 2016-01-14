@@ -59,7 +59,7 @@
                         <td style="width:10%;">
                             {{key+1}}
                         </td>
-                        <td>{{ entity.nombres|upper }} {{ entity.apellidos|upper }}</td>
+                        <td>{{ entity.nombres|upper|trim(' ') }} {{ entity.apellidos|upper|trim(' ') }}</td>
                         <td>{{ entity.fechatransaccion|date('d-m-Y') }}</td>
                         <td>{{ entity.tipocosto}}</td>
                         <td style="text-align: right; margin-right: 20px;">{{ entity.costo|number_format(2, '.', ',') }}</td>
@@ -84,7 +84,7 @@
 
         $('#datatables1').DataTable({ 
                     searching:true,
-                    "order":[0,"ASC"],
+                    "order":[0,"desc"],
                     "columnDefs": [
                            { "orderable": false, "targets": 0 },
                            { "orderable": false, "targets": 2 },
@@ -131,7 +131,7 @@
                         pointHighlightStroke: "rgba(151,187,205,1)",
                         data: [
                                 {% for key, ingreso in ingresos if key is odd  %}
-                                    "{{ingresos[key]|number_format(2, '.', ',')}}",
+                                    "{{ingresos[key]  }}",
                                 {% endfor %}
                         ],
                     }

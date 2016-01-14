@@ -699,9 +699,10 @@ class ReporteController extends Controller
         $rsm->addScalarResult('paquete','paquete');
         $rsm->addScalarResult('total','total');
         
-        $sql = "SELECT p.nombre as paquete, cast(sum(p.costo) as decimal(36,2)) as total "
-                . "from venta_paquete vp INNER JOIN paquete p on vp.paquete = p.id "
+        $sql = "SELECT p.nombre as paquete, cast(sum(p.costo* (1-(d.porcentaje/100) )   ) as decimal(36,2)) as total "
+                . "from venta_paquete vp INNER JOIN paquete p on vp.paquete = p.id INNER JOIN descuento d on vp.descuento = d.id "
                 . "WHERE  vp.fecha_venta BETWEEN '$fechaInicio' and  '$fechaFin' AND vp.sucursal=$sucursal group by p.nombre order by sum(p.costo) desc";
+        
         
         $query = $em->createNativeQuery($sql, $rsm);
         $consulta = $query->getResult();
@@ -752,7 +753,7 @@ class ReporteController extends Controller
         $sucursal=$em->getRepository('DGPlusbelleBundle:Sucursal')->find($sucursal);
         
         $titulo = "Consolidado de paquetes vendidos, sucursal '".$sucursal->getNombre()."'";
-        $encabezadoTabla = array('Nombre del Paquete', 'Ingresos ($)');
+        $encabezadoTabla = array('Nombre del Paquete', 'Cantidad');
         $anchoCol = array(47, 30);
         $sangria = 50;
         
@@ -863,7 +864,7 @@ class ReporteController extends Controller
         }*/
         
         $titulo = "Reporte de ingresos por consulta de emergencia, sucursal '".$sucursal->getNombre()."'";
-        $encabezadoTabla = array('Tratamiento', 'Ingresos ($)');
+        $encabezadoTabla = array('Tratamiento', 'Cantidad');
         $anchoCol = array(47, 30);
         $sangria = 50;
         
@@ -1059,7 +1060,7 @@ class ReporteController extends Controller
                 }
                 
                 $granTotal = $granTotal+$ingresosConsulta[0]['total'];
-                array_push($ingresos, $ingresosConsulta[0]['total']);
+                array_push($ingresos, number_format($ingresosConsulta[0]['total'],2,'.',''));
                 
                 
             }
@@ -1080,6 +1081,8 @@ class ReporteController extends Controller
                        ->getResult();
             //echo "ventaspaquetes";
             
+            
+            
             array_push($ingresos, "Ventas paquetes");
             if( count($ingresosVentaPaquete)!=0){
                 //echo "sdacd";
@@ -1090,7 +1093,7 @@ class ReporteController extends Controller
                 }
                 
                 $granTotal = $granTotal+$ingresosVentaPaquete[0]['total'];
-                array_push($ingresos, $ingresosVentaPaquete[0]['total']);
+                array_push($ingresos, number_format($ingresosVentaPaquete[0]['total'],2,'.',''));
                 
             }  
             else{
@@ -1119,7 +1122,7 @@ class ReporteController extends Controller
                 }
                 
                 $granTotal = $granTotal+$ingresosAbono[0]['total'];
-                array_push($ingresos, $ingresosAbono[0]['total']);
+                array_push($ingresos, number_format($ingresosAbono[0]['total'],2,'.',''));
                 
             }  
             else{
@@ -1148,7 +1151,7 @@ class ReporteController extends Controller
                 }
                 
                 $granTotal = $granTotal+$ingresosAbono[0]['total'];
-                array_push($ingresos, $ingresosAbono[0]['total']);
+                array_push($ingresos, number_format($ingresosAbono[0]['total'],2,'.',''));
                 
             }  
             else{
@@ -1226,8 +1229,8 @@ class ReporteController extends Controller
                 array_push($ingresos, 0);
             }
             
-            $dql = "SELECT sum(p.costo) as total FROM DGPlusbelleBundle:VentaPaquete vp "
-                    . "INNER JOIN vp.paquete p "
+            $dql = "SELECT sum(p.costo*(1-(d.porcentaje/100)) ) as total FROM DGPlusbelleBundle:VentaPaquete vp "
+                    . "INNER JOIN vp.paquete p INNER JOIN vp.descuento d "
                     . "WHERE vp.cuotas=1 AND vp.fechaVenta BETWEEN :fechainicio AND :fechafin AND vp.sucursal=:sucursal ";
                    
             
@@ -1284,8 +1287,8 @@ class ReporteController extends Controller
                 array_push($ingresos, 0);
             }
             
-            $dql = "SELECT sum(a.costoConsulta) as total FROM DGPlusbelleBundle:PersonaTratamiento a "
-                    . "WHERE a.fechaVenta BETWEEN :fechainicio AND :fechafin AND a.sucursal=:sucursal";
+            $dql = "SELECT sum(a.costoConsulta* (1-(d.porcentaje/100)) ) as total FROM DGPlusbelleBundle:PersonaTratamiento a "
+                    . "INNER JOIN a.descuento d WHERE a.fechaVenta BETWEEN :fechainicio AND :fechafin AND a.sucursal=:sucursal";
                    
             
             
@@ -1304,6 +1307,7 @@ class ReporteController extends Controller
                     $ingresosAbono[0]['total']=0;
                 }
                 $tratamiento=["Tratamiento",  number_format($ingresosAbono[0]['total'],2,'.','')];
+                
                 $granTotal = $granTotal+$ingresosAbono[0]['total'];
                 array_push($ingresos, $ingresosAbono[0]['total']);
                 
@@ -1314,7 +1318,7 @@ class ReporteController extends Controller
         
         
         
-        
+            
         
         
         
@@ -1329,7 +1333,7 @@ class ReporteController extends Controller
         array_push($consulta2, $tratamiento);
         
         
-        
+        var_dump($consulta2);
         
         
         

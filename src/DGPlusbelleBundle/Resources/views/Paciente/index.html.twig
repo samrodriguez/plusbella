@@ -39,7 +39,7 @@
                     </button> 
                 </div>
                 <div class="btn-group btn-group-sm pull-left">
-                    <button id="nueva-cita" data-toggle="tooltip" data-container="body" title="Nueva cita" class="btn btn-default datatables1-actions disabled opciones" role="button">
+                    <button id="nueva-cita" data-toggle="tooltip" data-container="body" title="Nueva cita" class="btn btn-default datatables1-actions {#disabled#} opciones" role="button">
                         <i class="fa fa-calendar-plus-o"></i><a href="{{ path('admin_cita_new') }}"> </a>
                     </button>
                     <button id="nueva-consulta" data-toggle="tooltip" data-container="body" title="Nueva consulta" class="btn btn-default datatables1-actions disabled opciones" role="button">
@@ -395,7 +395,7 @@
                 
                 $('#datatables1').DataTable({ 
                     searching:true,
-                    "order":[[0, "desc"],[1,"desc"]],
+                    "order":[[1,"asc"]],
                     "columnDefs": [
                            { "orderable": false, "targets": 0 },
                            { "orderable": false, "targets": 2 },

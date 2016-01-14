@@ -893,12 +893,18 @@ class ConsultaController extends Controller
         
         $edad="";
         if(count($paciente)!=0){
-            
-            $fecha = $paciente->getFechaNacimiento()->format("Y-m-d");
-            //var_dump($fecha);
-            //Calculo de la edad
-            list($Y,$m,$d) = explode("-",$fecha);
-            $edad = date("md") < $m.$d ? date("Y")-$Y-1 : date("Y")-$Y;        
+            $fecha = $paciente->getFechaNacimiento();
+            if($fecha!=null){
+                $fecha = $paciente->getFechaNacimiento()->format("Y-m-d");
+                //var_dump($fecha);
+                //Calculo de la edad
+                list($Y,$m,$d) = explode("-",$fecha);
+                $edad = date("md") < $m.$d ? date("Y")-$Y-1 : date("Y")-$Y;       
+                $edad = $edad. " años";
+            }
+            else{
+                $edad = "No se ha ingresado fecha de nacimiento";
+            }
         }
         else{
             $consultas=null;
@@ -908,7 +914,7 @@ class ConsultaController extends Controller
             $expnum = $this->generarExpediente($paciente);
         }
         else{
-            $expnum = $paciente->getExpediente()->getNumero();
+            $expnum = $paciente->getExpediente()[0]->getNumero();
         }
         
 //        var_dump($paciente->getExpediente());

@@ -65,7 +65,8 @@
                         pointHighlightStroke: "rgba(151,187,205,1)",
                         data: [
                                 {% for key, ingreso in ingresos %}
-                                    {{ingresos[key]['total']}},
+                                    {{ingresos[key]['total']|number_format(2, '.', ',')}},
+                                                
                                 {% endfor %}
                         ],
                     }

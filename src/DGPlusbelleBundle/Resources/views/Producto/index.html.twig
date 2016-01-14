@@ -205,8 +205,14 @@
                     if($("#addFormContainer").hasClass("hide")){
                         $("#addFormContainer").removeClass("hide");
                         $("#editFormContainer").addClass("hide");
-                        $('#dgplusbellebundle_producto_fechaCompra').Zebra_DatePicker();
-                        $('#dgplusbellebundle_producto_fechaVencimiento').Zebra_DatePicker();
+                        $('#dgplusbellebundle_producto_fechaCompra,#dgplusbellebundle_producto_fechaVencimiento').Zebra_DatePicker({
+                            months:['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
+                            days: ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'],
+                            format: 'd-m-Y',
+                            show_clear_date:false,
+                            show_select_today: "Hoy"
+                        });
+{#                        $('#dgplusbellebundle_producto_fechaVencimiento').Zebra_DatePicker();#}
                     }
                     else{
                         $("#addFormContainer").addClass("hide");
@@ -226,7 +232,7 @@
                                     if(data.regs==0){
                                         //Se cambia a desactivado
                                         mensaje ="Producto desactivado con exito";
-                                        $('#'+link + ' > td:nth-child(7)').html('<center>Inactivo</center>');
+                                        $('#'+link + ' > td:nth-child(8)').html('<center>Inactivo</center>');
                                         $('#delete-datatables1').children().removeClass("fa fa-toggle-on");
                                         $('#delete-datatables1').children().addClass("fa fa-toggle-off");
                                     //$('#datatables1>tbody>tr>td:nth-child(5)').html('Inactivo');
@@ -234,7 +240,7 @@
                                     if(data.regs==1){
                                         //Se cambia a activado
                                         mensaje ="Producto activada con exito";
-                                        $('#'+link + ' > td:nth-child(7)').html('<center>Activo</center>');
+                                        $('#'+link + ' > td:nth-child(8)').html('<center>Activo</center>');
                                         $('#delete-datatables1').children().removeClass("fa fa-toggle-off");
                                         $('#delete-datatables1').children().addClass("fa fa-toggle-on");
                                     }

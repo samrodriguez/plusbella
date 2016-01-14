@@ -36,10 +36,10 @@ class PacienteController extends Controller
         $rsm = new ResultSetMapping();
         $em = $this->getDoctrine()->getManager();
         
-        $sql = "select per.nombres as pnombre, per.apellidos as papellido,  "
+        $sql = "select TRIM(per.nombres) as pnombre, TRIM(per.apellidos) as papellido,  "
                 . "per.direccion as direccion, per.telefono as tel, per.email as email, pac.id as idpac, pac.dui as dui, pac.estado_civil as ecivil, pac.sexo as sexo, pac.ocupacion as ocupacion, "
                 . "pac.lugar_trabajo as lugarTrabajo, pac.fecha_nacimiento as fechaNacimiento, pac.referido_por as referidoPor "
-                . "from paciente pac inner join persona per on pac.persona = per.id order by per.apellidos";
+                . "from paciente pac inner join persona per on pac.persona = per.id order by per.nombres ASC, per.apellidos ASC";
         
         $rsm->addScalarResult('idpac','idpac');
         $rsm->addScalarResult('pnombre','pnombre');
@@ -385,7 +385,10 @@ class PacienteController extends Controller
         
         //$paciente['regs'] = $em->getRepository('DGPlusbelleBundle:Paciente')->find($id);
         $fecha = $paciente['regs'][0]['fechaNacimiento'];
-        $paciente['regs'][0]['fechaNacimiento'] = $fecha->format("d-m-Y");
+        if($fecha!=null){
+            $paciente['regs'][0]['fechaNacimiento'] = $fecha->format("d-m-Y");
+        }
+        
         //var_dump($fecha->format("d-m-Y"));
         //var_dump($paciente);
         

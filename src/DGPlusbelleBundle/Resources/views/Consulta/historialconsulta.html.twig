@@ -87,7 +87,7 @@
                             {#<p class="lead mb-1x">   Datos del paciente </p>#}
                             <p class="text-muted"><i class="fa fa-fw"></i><div class="col-md-4">Nombre: </div><div class="col-md-8">{{ paciente.persona.nombres}} {{ paciente.persona.apellidos}} </div> </p>
                             <p class="text-muted"><i class="fa fa-fw"></i><div class="col-md-4">Expediente:</div><div class="col-md-8"> {{ expediente }} </div> </p>
-                            <p class="text-muted"><i class="fa fa-fw"></i><div class="col-md-4">Edad: </div><div class="col-md-8">{{ edad }} años </div> </p>
+                            <p class="text-muted"><i class="fa fa-fw"></i><div class="col-md-4">Edad: </div><div class="col-md-8">{{ edad }} </div> </p>
                           <div class="clearfix"></div>
                           
                           
@@ -541,7 +541,7 @@
         $('#filterDatatables2').hide();
         $('#tabla2').hide();
         
-{#        $('#datatables1_filter, #datatables2_filter,#datatables3_filter').hide();#}
+        $('#datatables1_filter, #datatables2_filter,#datatables3_filter').hide();
         
         //Oculta la tabla consulta
         $('#filterDatatables3').hide();
@@ -724,7 +724,7 @@
                             }
                             
                         }
-                            alert(data.query.id);
+{#                            alert(data.query.id);#}
                         mensaje+= "</td><td>";
                             {% for key, entity in paquetes %}
                                     {% for ent in entity.ventapaq %}
