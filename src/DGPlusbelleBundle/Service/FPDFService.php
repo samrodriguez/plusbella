@@ -374,7 +374,7 @@ class FPDFService {
     
     
     
-    public function generarConsultaReceta($urlLogo, $consulta, $medico){
+    public function generarConsultaReceta($urlLogo, $consulta, $medico, $otros){
         $pdf  = new \FPDF_FPDF();
         $pdi  = new \FPDF_FPDI();
         
@@ -392,7 +392,8 @@ class FPDFService {
         $pdf->SetFont('Arial','B',16);
 //        $pdf->Cell(120,32,$consulta[0]->getDetallePlantilla()->getPlantilla()->getNombre());
         $pdf->Cell(70);
-        $pdf->Cell(120,32,utf8_decode($consulta[0]->getDetallePlantilla()->getPlantilla()->getNombre()));
+        //$pdf->Cell(120,32,utf8_decode($consulta[0]->getDetallePlantilla()->getPlantilla()->getNombre()));
+        $pdf->Cell(120,32,utf8_decode('Recete médica'));
         
         $pdf->Image($logo, 20, 5, 50, 20);
         $pdf->Image($logo2, 150, 5, 50, 20);
@@ -414,16 +415,30 @@ class FPDFService {
         $pdf->SetX(20);
         $pdf->Cell(85, 27, $medico['codigo']);
         
+        //var_dump($otros);
+        $i=20;
+        foreach($otros as $key => $otro){
+            $pdf->SetY($i);
+            $pdf->SetX(140);
+            $pdf->Cell(20, 25, utf8_decode($otros[$key]));
+            $i=$i+4;
+        }
+        
+        
+        
+        
+        
         
         
         $pdf->SetFont('Arial','B',13);
         $pdf->Ln(15);
         
         $pdf->Cell(20,20,utf8_decode('Información general del paciente'));
-        $pdf->Line(20, 48, 200, 48);
+        //$pdf->Line(20, 47, 200, 47);
         
         $pdf->Ln(5);
         $this->mostrarCelda($pdf, 32, 'Fecha: ', $consulta[0]->getConsultaReceta()->getFechaConsulta()->format("d/m/Y"));
+        $this->mostrarCelda($pdf, 32, 'Proxima cita: ','_______________');
         $pdf->Ln(7);
         $this->mostrarCelda($pdf, 32, 'Nombre: ', utf8_decode($consulta[0]->getConsultaReceta()->getPaciente()->getPersona()->getNombres().' '.$consulta[0]->getConsultaReceta()->getPaciente()->getPersona()->getApellidos()));
         
@@ -450,7 +465,7 @@ class FPDFService {
         $pdf->SetFont('Arial','B',13);
 //        $pdf->Cell(32,27,'FX:');
         $pdf->Cell(40, 27, $consulta[0]->getDetallePlantilla()->getNombre().': ', 0, 'L', false);
-        $pdf->Line(20, 91, 200, 91);
+        $pdf->Line(20, 97, 200, 97);
         $pdf->Ln(18);
         foreach ($consulta as $value) {
             $pdf->SetX(25);
@@ -463,6 +478,7 @@ class FPDFService {
             
         }
         //$tam = count($consulta);
+        
         
         //$espacio = 
         //$pdf->Ln(55);

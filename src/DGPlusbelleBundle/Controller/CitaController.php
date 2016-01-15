@@ -450,7 +450,7 @@ class CitaController extends Controller
     public function nuevaHoraAction(Request $request, $id, $delta, $fecha) {
         
         $request = $this->getRequest();
-        
+        date_default_timezone_set('America/El_Salvador');
         $em = $this->getDoctrine()->getEntityManager();
         $entity = $em->getRepository('DGPlusbelleBundle:Cita')->find($id);
         $empleado=$entity->getEmpleado();

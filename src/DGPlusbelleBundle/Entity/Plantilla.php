@@ -43,6 +43,14 @@ class Plantilla
      * @ORM\Column(name="estado", type="boolean", nullable=false)
      */
     private $estado;
+    
+    
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="clinica", type="string", length=75, nullable=false)
+     */
+    private $clinica;
 
     /**
      * Get id
@@ -54,6 +62,31 @@ class Plantilla
         return $this->id;
     }
 
+    /**
+     * Set nombre
+     *
+     * @param string $nombre
+     * 
+     * @return Plantilla
+     */
+    public function setClinica($clinica)
+    {
+        $this->clinica = $clinica;
+
+        return $this;
+    }
+
+    /**
+     * Get nombre
+     *
+     * @return string 
+     */
+    public function getClinica()
+    {
+        return $this->clinica;
+    }
+    
+    
     /**
      * Set nombre
      *
@@ -77,6 +110,7 @@ class Plantilla
     {
         return $this->nombre;
     }
+    
 
     /**
      * Set descripcion

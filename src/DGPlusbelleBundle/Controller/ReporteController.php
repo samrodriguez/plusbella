@@ -121,7 +121,7 @@ class ReporteController extends Controller
             $dql = "SELECT p.nombre as paquete, sum(p.costo*(1-(d.porcentaje/100))) as total FROM DGPlusbelleBundle:VentaPaquete vp "
                 . "JOIN vp.paquete p "
                 . "JOIN vp.descuento d "
-                . "WHERE vp.fechaVenta BETWEEN :fechainicio AND :fechafin AND vp.sucursal=:sucursal group by 'paquete'";
+                . "WHERE vp.fechaVenta BETWEEN :fechainicio AND :fechafin AND vp.sucursal=:sucursal group by 'paquete' order by total DESC";
                    
             $ingresosprev=array();
             
@@ -205,7 +205,7 @@ class ReporteController extends Controller
             //echo $i."\n";
             $dql = "SELECT MONTH(c.fechaConsulta) as mes, sum(c.costoConsulta) as total FROM DGPlusbelleBundle:Consulta c "
                 . "JOIN c.tipoConsulta tc "
-                . "WHERE c.fechaConsulta BETWEEN :fechainicio AND :fechafin AND tc.nombre = 'Emergencia' AND c.sucursal=:sucursal "
+                . "WHERE c.fechaConsulta BETWEEN :fechainicio AND :fechafin AND tc.id = '".$tipoconsulta."' AND c.sucursal=:sucursal "
                 . " AND c.tipoConsulta=:tipoconsulta group by 'mes'";
             $ingresosprev=array();
             
@@ -315,7 +315,7 @@ class ReporteController extends Controller
             //echo $i."\n";
             $dql = "SELECT p.nombre as paquete, count(vp.id) as total FROM DGPlusbelleBundle:VentaPaquete vp "
                 . "JOIN vp.paquete p "
-                . "WHERE vp.fechaVenta BETWEEN :fechainicio AND :fechafin AND vp.sucursal=:sucursal group by 'paquete'";
+                . "WHERE vp.fechaVenta BETWEEN :fechainicio AND :fechafin AND vp.sucursal=:sucursal group by 'paquete' order by total DESC";
             $ingresosprev=array();
             
             $ingresosprev = $em->createQuery($dql)
@@ -363,11 +363,12 @@ class ReporteController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
         $entity = $em->getRepository('DGPlusbelleBundle:Sucursal')->findAll();
-        
+        $entity2 = $em->getRepository('DGPlusbelleBundle:TipoConsulta')->findAll();
         return array(
             //'empleados'=>$empleados,
             //'ingresos' => $ingresos[0],
             'sucursales' => $entity,
+            'tipoconsulta' => $entity2,
         );
     }
     
@@ -396,7 +397,8 @@ class ReporteController extends Controller
         
         
         $sucursal = $request->get('sucursal');
-        
+        $tipoconsulta= $request->get('tipoconsulta');
+        //var_dump($tipoconsulta);
         
         //var_dump($anioUser);
         if(!isset($anioUser)){
@@ -412,10 +414,14 @@ class ReporteController extends Controller
         $ingresos = array();
         //var_dump($mes);
             //echo $i."\n";
-            $dql = "SELECT t.nombre as tratamiento, count(c.tratamiento) as total FROM DGPlusbelleBundle:Consulta c "
-                . "JOIN c.tratamiento t "
-                . "JOIN c.tipoConsulta tc "
-                . "WHERE c.fechaConsulta BETWEEN :fechainicio AND :fechafin AND tc.nombre = 'Emergencia' AND c.sucursal=:sucursal group by 'tratamiento'";
+//            $dql = "SELECT t.nombre as tratamiento, count(c.tratamiento) as total FROM DGPlusbelleBundle:Consulta c "
+//                . "JOIN c.tratamiento t "
+//                . "JOIN c.tipoConsulta tc "
+//                . "WHERE c.fechaConsulta BETWEEN :fechainicio AND :fechafin AND tc.id =:tipoconsulta AND c.sucursal=:sucursal group by 'tratamiento'";
+            $dql = "SELECT t.nombre as tratamiento, count(pt.tratamiento) as total FROM DGPlusbelleBundle:PersonaTratamiento pt "
+                . "JOIN pt.tratamiento t "
+                . "JOIN pt.sucursal s "
+                . "WHERE pt.fechaVenta BETWEEN :fechainicio AND :fechafin AND s.id=:sucursal group by 'tratamiento' ORDER BY total DESC";
             $ingresosprev=array();
             
             $ingresosprev = $em->createQuery($dql)
@@ -522,18 +528,52 @@ class ReporteController extends Controller
                     ->setParameter('idconsulta', $id)
                     ->getResult();
         
+        if($consulta[0]->getDetallePlantilla()->getPlantilla()->getClinica()==0){
+//            $medico = array(
+//                    "nombre" => "Dr. Juan Carlos Pacheco",
+//                    "cargo" => "Cirujano Endoscopista",
+//                    "codigo" => "JVPM 7370",
+//                );
+            $medico = array(
+                    "nombre" => "Dr. Juan Carlos Pacheco",
+                    "cargo" => "",
+                    "codigo" => "JVPM 7370",
+                );
+            $otros = array(
+                    "0" => "CIRUGÍA GENERAL",
+                    "1" => "FLEBOLOGÍA",
+                    "2" => "CIRUGÍA LAPAROSCÓPICA",
+                    "3" => "ENDOSCOPÍA DIGESTIVA",
+                    "4" => "ECODOPPLER COLOR"
+                );
+        }
+        else{
+//            $medico = array(
+//                    "nombre" => "Dra. Mildred Lara de Pacheco",
+//                    "cargo" => "Cirujano Endoscopista",
+//                    "codigo" => "JVPM 9306",
+//                );
+            $medico = array(
+                    "nombre" => "Dra. Mildred Lara de Pacheco",
+                    "cargo" => "",
+                    "codigo" => "JVPM 9306",
+                );
+            $otros = array(
+                    "0" => "MEDICINA ESTÉTICA",
+                    "1" => "MEDICINA ANTI-ENVEGECIMIENTO",
+                    "2" => "MEDICINA BIOLÓGICA",
+                    "3" => "MEDICINA FAMILIAR",
+                    "4" => "TERAPIA NEUTRAL"
+                );
+        }
         //$titulo = 'Reporte de Videoendoscopia';
         
         
-        $medico = array(
-                    "nombre" => "Dr. Juan Carlos Pacheco",
-                    "cargo" => "Cirujano Endoscopista",
-                    "codigo" => "JVPM 7370",
-                );
+        
         
         $logo = '../web/Resources/img/dgplusbelle/images/';
        
-        $this->get('fpdf_printer')->generarConsultaReceta($logo, $consulta, $medico);
+        $this->get('fpdf_printer')->generarConsultaReceta($logo, $consulta, $medico,$otros);
     }
     
     
@@ -764,11 +804,11 @@ class ReporteController extends Controller
     /**
      * Generar reporte pdf de Ingreso por consulta de emergencia
      *
-     * @Route("/{fechaInicio}/{fechaFin}/{sucursal}/IngresoEmergencia", name="admin_ingresoemergencia_pdf", options ={"expose" = true})
+     * @Route("/{fechaInicio}/{fechaFin}/{sucursal}/{consulta}/IngresoConsulta", name="admin_ingresoemergencia_pdf", options ={"expose" = true})
      * @Method("GET")
      * @Template()
      */
-    public function ingresoConsultaEmergenciaPdfAction($fechaInicio, $fechaFin, $sucursal)
+    public function ingresoConsultaEmergenciaPdfAction($fechaInicio, $fechaFin, $sucursal,$consulta)
     {
         $em = $this->getDoctrine()->getManager();
         $mesLabel = array("Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre");
@@ -790,11 +830,12 @@ class ReporteController extends Controller
         $sql = "SELECT month(c.fecha_consulta) as mes, cast(sum(c.costo_consulta) as decimal(36,2)) as total "
                 . "from consulta c INNER JOIN tipo_consulta tc on c.tipo_consulta = tc.id "
                 . "WHERE  c.fecha_consulta BETWEEN '$fechaInicio' and  '$fechaFin' AND c.sucursal=$sucursal "
-                . "AND tc.nombre = 'Emergencia' "
+                . "AND tc.id='".$consulta."'"
                 . "group by month(c.fecha_consulta) "
                 . "order by month(c.fecha_consulta)";
         
         $sucursal=$em->getRepository('DGPlusbelleBundle:Sucursal')->find($sucursal);
+        $nomconsulta =$em->getRepository('DGPlusbelleBundle:TipoConsulta')->find($consulta);
         
         $query = $em->createNativeQuery($sql, $rsm);
         $ingresosemer = $query->getResult();
@@ -806,7 +847,7 @@ class ReporteController extends Controller
             $consulta[$key]['total'] = $ingresosemer[$key]['total'];
         }
         
-        $titulo = "Reporte de ingresos por consulta de emergencia, sucursal '".$sucursal->getNombre()."'";
+        $titulo = "Reporte de ingresos por consulta de '".$nomconsulta->getNombre()."', sucursal '".$sucursal->getNombre()."'";
         $encabezadoTabla = array('Mes', 'Ingresos ($)');
         $anchoCol = array(47, 30);
         $sangria = 50;
