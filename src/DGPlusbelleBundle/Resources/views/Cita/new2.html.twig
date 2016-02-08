@@ -1,0 +1,211 @@
+{% extends 'DGPlusbelleBundle:Layout:layout.html.twig' %} 
+
+
+
+{% block contenido -%}
+ 
+<div class="panel panel-default">
+  <!-- Default panel contents -->
+    <div class="panel-heading"><p>Nueva cita</p></div>
+    <div class="panel-body">
+    {{ form_start(form) }}
+    {{ form_errors(form) }}
+    
+    <div class="row">
+        <div class="col-md-3">
+         {{ form_row(form.paciente ) }}   
+        </div>
+    </div>
+    
+    <div class="row">
+        <div class="col-md-3">
+         
+         <label class="control-label" for="dgplusbellebundle_cita_paciente">Médico/Esteticista</label>
+         {{ form_widget(form.empleado) }}
+        </div>
+        
+        <div class="col-md-3">
+         {{ form_row(form.fechaCita) }} 
+        </div>
+        
+        {#<div class="col-md-3">
+         {{ form_row(form.horario ) }}   
+        </div>
+        #}
+        <div class="col-md-3">
+         {{ form_row(form.horaCita) }} 
+        </div>
+        <div class="col-md-3">
+         {{ form_row(form.horaFin) }}
+        </div>
+         {#{{ form_row(form.estado) }} #}
+        {#
+            <div class="col-md-3">
+                {{ form_row(form.estado) }} 
+            </div>   
+        #}
+    </div>
+    <div class="row">
+        
+        
+         {#{{ form_row(form.estado) }} #}
+                
+        {#
+        <div class="col-md-3">
+         {{ form_row(form.descuento) }} 
+        </div>
+        #}
+        <div class="col-md-3">
+         {{ form_row(form.tratamiento ) }}   
+        </div>
+        <div class="col-md-3">
+         {{ form_row(form.sucursal ) }}   
+        </div>
+        
+    </div>
+    <div class="row">
+        
+    </div>
+         
+             <div class="form-grouphide"> 
+                <a href="{{ path('admin_paciente') }}" class="btn btn-default btn-sm" id="cancelarNuevo">Cancelar</a>
+                    {{ form_widget(form.submit) }} 
+                <label style="color:#F00; ">
+                    {{ mensaje }}
+                </label>
+             </div>
+        
+   
+ 
+    </div>
+{{ form_widget(form._token) }}
+</div>  
+{{ form_end(form) }}                
+{% endblock %}
+
+
+{% block javascripts_step %}
+    
+   <script src="{{ asset('Resources/js/Cita.js') }}"></script>  
+   
+    <style>
+        #dgplusbellebundle_cita_horaInicio{
+            width: 160px;
+        }
+            
+            #dgplusbellebundle_cita_horaInicio_hourSelectBoxItContainer {
+                width: 75px;
+                float: left;
+            }
+            #dgplusbellebundle_cita_horaInicio_minuteSelectBoxItContainer {
+                width: 75px;
+                float:right;
+            }
+    </style>
+    <script type="text/javascript" src="{{ asset('Resources/zebra/inicializacioncalendarios.js')}}" ></script>
+        <script>
+            $(document).ready(function(){
+                //Llamada ajax para validar la fecha y hora de una cita
+                //$('body').data('error',1);
+                //Llamada ajax para validar la fecha y hora de una cita
+                $("#dgplusbellebundle_cita_submit" ).on( "click", function(e) {
+                    var idEmpleado = $('#dgplusbellebundle_cita_empleado').val();
+                    var fechaCita= $('#dgplusbellebundle_cita_fechaCita').val();
+                    var horaCita = $('#dgplusbellebundle_cita_horaCita_hour').val()+":"+$('#dgplusbellebundle_cita_horaCita_minute').val();
+                    //alert(idEmpleado);
+                    
+                    $.getJSON(Routing.generate('get_existeCita', { idempleado: idEmpleado,fecha:fechaCita,hora:horaCita}), 
+                        function(data) {
+                            //alert(data.regs.length);
+                            //return false;
+                            if(data.regs.length!=0){
+                                var mensaje = "";
+                                mensaje += "<div class='row'><div class='col-md-12'><b><p class='text-left'>Error...</p></b></div></div>";
+                                mensaje += "<div class='row'><hr></div>";
+                                mensaje += "<div class='row'><div class='col-md-12'>Ya existe una cita programada para ese doctor en ese dia y esa hora</div></div>"
+                                bootbox.alert(mensaje, function() {   
+                                    $('body').data('error',0);
+                                });  
+                                //alert(error);
+                                //e.preventDefault();
+                            }
+                            else{
+                                $('body').data('error',1);
+                            }
+                        });        
+                    var error = $('body').data('error');
+                    //alert(error);
+                    if(error == 0){
+                        return false;
+                    }                    
+                });
+
+                //Generación de calendario zebra
+                //$('#dgplusbellebundle_cita_fechaCita').Zebra_DatePicker(//{
+                    /*onSelect:
+                        $.getJSON(Routing.generate('get_horas', { idEmp: idEmp}), 
+                        function(data) {
+                            var numRegistros = data.regs.length;
+                            var x='1,2,3,4,5,6,0,';
+                            $.each(data.regs, function(indice, reg) {
+                                //alert(indice);
+                                switch(reg.diaHorario){
+                                    case 'Lunes'    : index = x.indexOf('1'); break;
+                                    case 'Martes'   : index = x.indexOf('2'); break;
+                                    case 'Miercoles': index = x.indexOf('3'); break;
+                                    case 'Jueves'   : index = x.indexOf('4'); break;
+                                    case 'Viernes'  : index = x.indexOf('5'); break; 
+                                    case 'Sabado'   : index = x.indexOf('6'); break; 
+                                    case 'Domingo'  : index = x.indexOf('0'); break;
+                                }
+                                x = x.substring(0, index) + x.substring(index+2, x.length);   
+
+
+                                //alert(deshabilitar);
+                                datepicker.update({
+                                    direction: true,
+                                    disabled_dates: ['* * * '+x] 
+                                });
+                            });        
+                        }); */
+               /* }*///);
+               
+                
+                {#$('#dgplusbellebundle_cita_fechaCita').daterangepicker({
+                    singleDatePicker: true,
+                    showDropdowns: true,
+                    locale: {
+                        format: 'YYYY-MM-DD'
+                    },
+                });#}
+                var seleccionado="";
+                //Eliminar options del select de pacientes
+               //Eliminar options del select de pacientes
+               $('#dgplusbellebundle_cita_paciente').select2();
+               {# $('#dgplusbellebundle_cita_paciente option').each(function(index, val) {
+                    
+                    seleccionado = $(this).attr('selected');
+                    if (!seleccionado){
+                        $(this).remove();
+                    }
+                });#}
+                    
+                   
+                //Eliminar las opciones de la lista creada por el selectBoxIt
+                $("#dgplusbellebundle_cita_pacienteSelectBoxItOptions li").remove();
+                
+		$('#dgplusbellebundle_cita_empleado').select2();
+                $('#dgplusbellebundle_cita_tratamiento').select2();
+                //$('#dgplusbellebundle_cita_horaInicio').ptTimeSelect();
+
+
+                
+                //Cargar los horarios al inicio
+                //$('#dgplusbellebundle_cita_empleado').change();
+                //Modificar horarios al cmabiar dropdown
+              
+        
+              validarCita(); 
+        });
+        </script>
+{% endblock %}

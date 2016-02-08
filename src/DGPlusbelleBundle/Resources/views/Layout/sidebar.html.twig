@@ -3,12 +3,12 @@
 <div class="sidebar-block">
   <div class="media">
     <div class="media-left">
-      <a href="page-profile.html">
-        <span class="status dotted dotted-primary" data-toggle="tooltip" data-container="body" title="available"></span>
+      {#<a href="page-profile.html">#}
+        <span class="status dotted dotted-primary" data-toggle="tooltip" data-container="body" title="Conectado"></span>
         {% block imagenPerfil %}
             <img class="media-object img-circle" src="{{ asset('Photos/Empleado/')}}{{app.user.persona.empleado[0].foto}}" alt="photo profile">
         {% endblock %}
-      </a>
+{#      </a>#}
     </div>
     {% block perfil %}
         <div class="media-body">
@@ -216,8 +216,9 @@
             <li role="presentation"><a role="menuitem" tabindex="-1" href="{{ path('admin_reporte_paquete') }}"><span class="nav-text">Ingresos por paquete</span></a></li>
             <li role="presentation"><a role="menuitem" tabindex="-1" href="{{ path('admin_reporte_emergencia') }}"><span class="nav-text">Ingresos por consulta</span></a></li>
             <li role="presentation"><a role="menuitem" tabindex="-1" href="{{ path('admin_reporte_consolidado_paquete') }}"><span class="nav-text">Consolidado de paquetes</span></a></li>
-            <li role="presentation"><a role="menuitem" tabindex="-1" href="{{ path('admin_reporte_tratamiento_frecuente') }}"><span class="nav-text">Tratamiento mas frecuente por consulta</span></a></li>
+            <li role="presentation"><a role="menuitem" tabindex="-1" href="{{ path('admin_reporte_tratamiento_frecuente') }}"><span class="nav-text">Tratamiento más vendido</span></a></li>
             <li role="presentation"><a role="menuitem" tabindex="-1" href="{{ path('admin_reporte_diario') }}"><span class="nav-text">Ingresos diarios</span></a></li>
+            <li role="presentation"><a role="menuitem" tabindex="-1" href="{{ path('admin_reporte_referidos') }}"><span class="nav-text">Pacientes referidos por</span></a></li>
           </ul>
         </li>
     {% endif %}

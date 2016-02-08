@@ -173,6 +173,7 @@ class PersonaTratamientoController extends Controller
             'entity'      => $entity,
             'edit_form'   => $editForm->createView(),
             'delete_form' => $deleteForm->createView(),
+                        'id'=>"P".$entity->getPaciente()->getPaciente()[0]->getId(),
         );
     }
 

@@ -50,6 +50,7 @@
                     <th>Nombres</th>
                     <th><center>Fecha transacción</center></th>
                     <th><center>Transacción</center></th>
+                    <th><center>Sucursal</center></th>
                     <th><center>Valor ($)</center></th>
                 </tr>
             </thead>
@@ -62,6 +63,7 @@
                         <td>{{ entity.nombres|upper|trim(' ') }} {{ entity.apellidos|upper|trim(' ') }}</td>
                         <td>{{ entity.fechatransaccion|date('d-m-Y') }}</td>
                         <td>{{ entity.tipocosto}}</td>
+                        <td>{{ entity.sucursal}}</td>
                         <td style="text-align: right; margin-right: 20px;">{{ entity.costo|number_format(2, '.', ',') }}</td>
                     </tr>
                 {% endfor %}

@@ -122,6 +122,15 @@ class Paciente
 
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="fecha_registro", type="datetime", length=200, nullable=true)
+     */
+    private $fechaRegistro;
+    
+    
+    
+    /**
      * Get id
      *
      * @return integer
@@ -478,5 +487,29 @@ class Paciente
         return $this->enteradoPor;
     }
     
+    
+    /**
+     * Set referidoPor
+     *
+     * @param string $fechaRegistro
+     *
+     * @return Paciente
+     */
+    public function setFechaRegistro($fechaRegistro)
+    {
+        $this->fechaRegistro = $fechaRegistro;
+
+        return $this;
+    }
+
+    /**
+     * Get enteradoPor
+     *
+     * @return string
+     */
+    public function getFechaRegistro()
+    {
+        return $this->fechaRegistro;
+    }
     
 }

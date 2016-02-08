@@ -100,7 +100,12 @@ class Cita
      */
     private $tratamiento;
 
-
+     /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="hora_fin_cita", type="time", nullable=false)
+     */
+    private $horaFin;
 
     /**
      * Get id
@@ -167,22 +172,22 @@ class Cita
      *
      * @return Cita
      */
-    /* public function setHoraFin($horaFin)
+    public function setHoraFin($horaFin)
     {
         $this->horaFin = $horaFin;
 
         return $this;
-    }*/
+    }
 
     /**
      * Get horaFin
      *
      * @return \DateTime
      */
-    /*   public function getHoraFin()
+    public function getHoraFin()
     {
         return $this->horaFin;
-    }  */
+    }
 
     /**
      * Set fechaRegistro

@@ -276,6 +276,28 @@ class ReporteController extends Controller
     /**
      * 
      *
+     * @Route("/referidospor", name="admin_reporte_referidos", options={"expose"=true})
+     * @Method("GET")
+     * @Template()
+     */
+    public function referidosporAction()
+    {
+        $em = $this->getDoctrine()->getManager();
+        
+        $entity = $em->getRepository('DGPlusbelleBundle:Paciente')->findAll();
+        
+        
+        return array(
+            //'empleados'=>$empleados,
+            //'ingresos' => $ingresos[0],
+            //'pacientes' => $entity,
+        );
+    }
+    
+    
+    /**
+     * 
+     *
      * @Route("/bar_graficoconsolidadopaquete", name="admin_reporte_consolidado_grafico", options={"expose"=true})
      * @Method("GET")
      * @Template()
@@ -494,7 +516,7 @@ class ReporteController extends Controller
                     "codigo" => "JVPM 7370",
                 );
         
-        $logo = '../web/Resources/img/dgplusbelle/images/';
+        $logo = 'Resources/img/dgplusbelle/images/';
        
         $this->get('fpdf_printer')->generarPlantilla($logo, $consulta, $medico);
     }
@@ -536,7 +558,7 @@ class ReporteController extends Controller
 //                );
             $medico = array(
                     "nombre" => "Dr. Juan Carlos Pacheco",
-                    "cargo" => "",
+                    "cargo" => "Cirujano Endoscopista",
                     "codigo" => "JVPM 7370",
                 );
             $otros = array(
@@ -571,7 +593,7 @@ class ReporteController extends Controller
         
         
         
-        $logo = '../web/Resources/img/dgplusbelle/images/';
+        $logo = 'Resources/img/dgplusbelle/images/';
        
         $this->get('fpdf_printer')->generarConsultaReceta($logo, $consulta, $medico,$otros);
     }
@@ -615,16 +637,51 @@ class ReporteController extends Controller
         
         //$titulo = 'Reporte de Videoendoscopia';
         
-//        var_dump($consulta);
-        $medico = array(
+        if($consulta[0]->getDetallePlantilla()->getPlantilla()->getClinica()==0){
+//            $medico = array(
+//                    "nombre" => "Dr. Juan Carlos Pacheco",
+//                    "cargo" => "Cirujano Endoscopista",
+//                    "codigo" => "JVPM 7370",
+//                );
+            $medico = array(
                     "nombre" => "Dr. Juan Carlos Pacheco",
                     "cargo" => "Cirujano Endoscopista",
                     "codigo" => "JVPM 7370",
                 );
+            $otros = array(
+                    "0" => "CIRUGÍA GENERAL",
+                    "1" => "FLEBOLOGÍA",
+                    "2" => "CIRUGÍA LAPAROSCÓPICA",
+                    "3" => "ENDOSCOPÍA DIGESTIVA",
+                    "4" => "ECODOPPLER COLOR"
+                );
+        }
+        else{
+//            $medico = array(
+//                    "nombre" => "Dra. Mildred Lara de Pacheco",
+//                    "cargo" => "Cirujano Endoscopista",
+//                    "codigo" => "JVPM 9306",
+//                );
+            $medico = array(
+                    "nombre" => "Dra. Mildred Lara de Pacheco",
+                    "cargo" => "",
+                    "codigo" => "JVPM 9306",
+                );
+            $otros = array(
+                    "0" => "MEDICINA ESTÉTICA",
+                    "1" => "MEDICINA ANTI-ENVEGECIMIENTO",
+                    "2" => "MEDICINA BIOLÓGICA",
+                    "3" => "MEDICINA FAMILIAR",
+                    "4" => "TERAPIA NEUTRAL"
+                );
+        }
+
         
-        $logo = '../web/Resources/img/dgplusbelle/images/';
+
+        
+        $logo = 'Resources/img/dgplusbelle/images/';
        
-        $this->get('fpdf_printer')->generarPaqueteReceta($logo, $consulta, $medico,$paciente);
+        $this->get('fpdf_printer')->generarPaqueteReceta($logo, $consulta, $medico,$paciente,$otros);
     }
     
     
@@ -699,15 +756,48 @@ class ReporteController extends Controller
         //$titulo = 'Reporte de Videoendoscopia';
         
         
-        $medico = array(
+        if($consulta[0]->getDetallePlantilla()->getPlantilla()->getClinica()==0){
+//            $medico = array(
+//                    "nombre" => "Dr. Juan Carlos Pacheco",
+//                    "cargo" => "Cirujano Endoscopista",
+//                    "codigo" => "JVPM 7370",
+//                );
+            $medico = array(
                     "nombre" => "Dr. Juan Carlos Pacheco",
                     "cargo" => "Cirujano Endoscopista",
                     "codigo" => "JVPM 7370",
                 );
+            $otros = array(
+                    "0" => "CIRUGÍA GENERAL",
+                    "1" => "FLEBOLOGÍA",
+                    "2" => "CIRUGÍA LAPAROSCÓPICA",
+                    "3" => "ENDOSCOPÍA DIGESTIVA",
+                    "4" => "ECODOPPLER COLOR"
+                );
+        }
+        else{
+//            $medico = array(
+//                    "nombre" => "Dra. Mildred Lara de Pacheco",
+//                    "cargo" => "Cirujano Endoscopista",
+//                    "codigo" => "JVPM 9306",
+//                );
+            $medico = array(
+                    "nombre" => "Dra. Mildred Lara de Pacheco",
+                    "cargo" => "",
+                    "codigo" => "JVPM 9306",
+                );
+            $otros = array(
+                    "0" => "MEDICINA ESTÉTICA",
+                    "1" => "MEDICINA ANTI-ENVEGECIMIENTO",
+                    "2" => "MEDICINA BIOLÓGICA",
+                    "3" => "MEDICINA FAMILIAR",
+                    "4" => "TERAPIA NEUTRAL"
+                );
+        }
         
-        $logo = '../web/Resources/img/dgplusbelle/images/';
+        $logo = 'Resources/img/dgplusbelle/images/';
        
-        $this->get('fpdf_printer')->generarPlantilla2($logo, $consulta, $medico);
+        $this->get('fpdf_printer')->generarPlantilla2($logo, $consulta, $medico,$otros);
     }
     
   
@@ -741,7 +831,7 @@ class ReporteController extends Controller
         
         $sql = "SELECT p.nombre as paquete, cast(sum(p.costo* (1-(d.porcentaje/100) )   ) as decimal(36,2)) as total "
                 . "from venta_paquete vp INNER JOIN paquete p on vp.paquete = p.id INNER JOIN descuento d on vp.descuento = d.id "
-                . "WHERE  vp.fecha_venta BETWEEN '$fechaInicio' and  '$fechaFin' AND vp.sucursal=$sucursal group by p.nombre order by sum(p.costo) desc";
+                . "WHERE  vp.fecha_venta BETWEEN '$fechaInicio' and  '$fechaFin' AND vp.sucursal=$sucursal group by p.nombre order by 2 desc";
         
         
         $query = $em->createNativeQuery($sql, $rsm);
@@ -785,7 +875,7 @@ class ReporteController extends Controller
         
         $sql = "SELECT p.nombre as paquete, count(vp.id) as total "
                 . "from venta_paquete vp INNER JOIN paquete p on vp.paquete = p.id "
-                . "WHERE  vp.fecha_venta BETWEEN '$fechaInicio' and  '$fechaFin' AND vp.sucursal=$sucursal group by 1 order by count(vp.id) ";
+                . "WHERE  vp.fecha_venta BETWEEN '$fechaInicio' and  '$fechaFin' AND vp.sucursal=$sucursal group by 1 order by count(vp.id) desc";
         
         $query = $em->createNativeQuery($sql, $rsm);
         $consulta = $query->getResult();
@@ -881,18 +971,14 @@ class ReporteController extends Controller
         $rsm->addScalarResult('tratamiento','tratamiento');
         $rsm->addScalarResult('total','total');
         
-        $sql = "SELECT t.nombre as tratamiento, count(c.tratamiento_id) as total "
-                . "from consulta c INNER JOIN tipo_consulta tc on c.tipo_consulta = tc.id "
-                . "inner join tratamiento t on c.tratamiento_id = t.id "
-                . "WHERE  c.fecha_consulta BETWEEN '$fechaInicio' and  '$fechaFin' "
-                . "AND tc.nombre = 'Emergencia' AND c.sucursal = $sucursal "
+        $sql = "SELECT t.nombre as tratamiento, count(c.tratamiento) as total "
+                . "from persona_tratamiento c "
+                . "inner join tratamiento t on c.tratamiento = t.id "
+                . "WHERE  c.fecha_venta BETWEEN '$fechaInicio' and  '$fechaFin' "
+                . "AND c.sucursal = $sucursal "
                 . "group by t.nombre "
-                . "order by t.nombre";
+                . "order by 2 desc";
         
-        $dql = "SELECT t.nombre as tratamiento, count(c.tratamiento) as total FROM DGPlusbelleBundle:Consulta c "
-                . "JOIN c.tratamiento t "
-                . "JOIN c.tipoConsulta tc "
-                . "WHERE c.fechaConsulta BETWEEN :fechainicio AND :fechafin AND tc.nombre = 'Emergencia' group by 'tratamiento'";
         
         $query = $em->createNativeQuery($sql, $rsm);
         $consulta = $query->getResult();
@@ -904,7 +990,7 @@ class ReporteController extends Controller
             $consulta[$key]['total'] = $ingresosemer[$key]['total'];
         }*/
         
-        $titulo = "Reporte de ingresos por consulta de emergencia, sucursal '".$sucursal->getNombre()."'";
+        $titulo = "Reporte de tratamientos mas vendidos, sucursal '".$sucursal->getNombre()."'";
         $encabezadoTabla = array('Tratamiento', 'Cantidad');
         $anchoCol = array(47, 30);
         $sangria = 50;
@@ -945,9 +1031,10 @@ class ReporteController extends Controller
         
         $listadoP = array();
         
-        $dqlpac="SELECT p.id, per.nombres, per.apellidos, c.costoConsulta, c.fechaConsulta FROM DGPlusbelleBundle:Consulta c "
+        $dqlpac="SELECT p.id, per.nombres, per.apellidos, c.costoConsulta, c.fechaConsulta, s.nombre FROM DGPlusbelleBundle:Consulta c "
                 . "JOIN c.paciente p "
                 . "JOIN p.persona per "
+                . "JOIN c.sucursal s "
                 . "WHERE c.fechaConsulta BETWEEN :fechainicio AND :fechafin ORDER BY per.nombres ASC";
         
         $listadopaciente = $em->createQuery($dqlpac)
@@ -963,6 +1050,7 @@ class ReporteController extends Controller
                     "nombres"=>$row['nombres'],
                     "apellidos"=>$row['apellidos'],
                     "tipocosto"=>"Consulta",
+                    "sucursal"=>$row['nombre'],
                     "costo"=>$row['costoConsulta'],
                     "fechatransaccion"=>$row['fechaConsulta']
                 );
@@ -979,9 +1067,10 @@ class ReporteController extends Controller
         
         
         
-        $dqlpac="SELECT p.id, per.nombres, per.apellidos, a.monto, a.fechaAbono FROM DGPlusbelleBundle:Abono a "
+        $dqlpac="SELECT p.id, per.nombres, per.apellidos, a.monto, a.fechaAbono, s.nombre FROM DGPlusbelleBundle:Abono a "
                 . "JOIN a.paciente p "
                 . "JOIN p.persona per "
+                . "JOIN a.sucursal s "
                 . "WHERE a.fechaAbono BETWEEN :fechainicio AND :fechafin ORDER BY per.nombres ASC";
         $listadoabono = $em->createQuery($dqlpac)
                        ->setParameters(array('fechainicio'=>$anioInicioUser,'fechafin'=>$anioFinUser))
@@ -994,6 +1083,7 @@ class ReporteController extends Controller
                     "nombres"=>$row['nombres'],
                     "apellidos"=>$row['apellidos'],
                     "tipocosto"=>"Abono",
+                    "sucursal"=>$row['nombre'],
                     "costo"=>$row['monto'],
                     "fechatransaccion"=>$row['fechaAbono']
                 );
@@ -1008,10 +1098,12 @@ class ReporteController extends Controller
         
         
         
-        $dqlpac="SELECT pac.id, per.nombres, per.apellidos, paq.costo,vp.fechaVenta FROM DGPlusbelleBundle:VentaPaquete vp "
+        $dqlpac="SELECT pac.id, per.nombres, per.apellidos, paq.costo*(1-(d.porcentaje/100)) as costo,vp.fechaVenta,s.nombre FROM DGPlusbelleBundle:VentaPaquete vp "
                 . "JOIN vp.paciente per "
                 . "JOIN per.paciente pac "
                 . "JOIN vp.paquete paq "
+                . "JOIN vp.sucursal s "
+                . "JOIN vp.descuento d "
                 . "WHERE vp.fechaVenta BETWEEN :fechainicio AND :fechafin ORDER BY per.nombres ASC";
         $listadoventas = $em->createQuery($dqlpac)
                        ->setParameters(array('fechainicio'=>$anioInicioUser,'fechafin'=>$anioFinUser))
@@ -1024,6 +1116,7 @@ class ReporteController extends Controller
                     "nombres"=>$row['nombres'],
                     "apellidos"=>$row['apellidos'],
                     "tipocosto"=>"Venta paquete",
+                    "sucursal"=>$row['nombre'],
                     "costo"=>$row['costo'],
                     "fechatransaccion"=>$row['fechaVenta']
                 );
@@ -1038,22 +1131,25 @@ class ReporteController extends Controller
         
         
         
-        $dqlpac="SELECT pac.id, per.nombres, per.apellidos, t.costo, pt.fechaVenta FROM DGPlusbelleBundle:PersonaTratamiento pt "
+        $dqlpac="SELECT pac.id, per.nombres, per.apellidos, t.costo*(1-(d.porcentaje/100)) as costo, pt.fechaVenta, s.nombre FROM DGPlusbelleBundle:PersonaTratamiento pt "
                 . "JOIN pt.paciente per "
                 . "JOIN per.paciente pac "
                 . "JOIN pt.tratamiento t "
+                . "JOIN pt.sucursal s "
+                . "JOIN pt.descuento d "
                 . "WHERE pt.fechaVenta BETWEEN :fechainicio AND :fechafin ORDER BY per.nombres ASC, per.apellidos";
         $listadotratamientos = $em->createQuery($dqlpac)
                        ->setParameters(array('fechainicio'=>$anioInicioUser,'fechafin'=>$anioFinUser))
                        //->setParameter('mes','_____0'.'1'.'___')
                        ->getResult();
-        
+        //var_dump($listadotratamientos);
         foreach ($listadotratamientos as $row) {
             $ar = array(
 //                    "id"=>$row['id'],
                     "nombres"=>$row['nombres'],
                     "apellidos"=>$row['apellidos'],
                     "tipocosto"=>"Venta tratamiento",
+                    "sucursal"=>$row['nombre'],
                     "costo"=>$row['costo'],
                     "fechatransaccion"=>$row['fechaVenta']
                 );
@@ -1075,7 +1171,7 @@ class ReporteController extends Controller
 //            sort($listadoP);     
 //        }
         
-//        var_dump($listadoP);
+        //var_dump($listadoP);
         
                 
         $ingresos = array();
@@ -1170,8 +1266,9 @@ class ReporteController extends Controller
                 array_push($ingresos, 0);
             }
             
-            $dql = "SELECT sum(a.costoConsulta*(1-(d.porcentaje/100))) as total FROM DGPlusbelleBundle:PersonaTratamiento a "
+            $dql = "SELECT sum(t.costo*(1-(d.porcentaje/100))) as total FROM DGPlusbelleBundle:PersonaTratamiento a "
                     . "JOIN a.descuento d "
+                    . "JOIN a.tratamiento t "
                     . "WHERE a.fechaVenta BETWEEN :fechainicio AND :fechafin AND a.sucursal=:sucursal";
                    
             
@@ -1328,8 +1425,8 @@ class ReporteController extends Controller
                 array_push($ingresos, 0);
             }
             
-            $dql = "SELECT sum(a.costoConsulta* (1-(d.porcentaje/100)) ) as total FROM DGPlusbelleBundle:PersonaTratamiento a "
-                    . "INNER JOIN a.descuento d WHERE a.fechaVenta BETWEEN :fechainicio AND :fechafin AND a.sucursal=:sucursal";
+            $dql = "SELECT sum(t.costo* (1-(d.porcentaje/100)) ) as total FROM DGPlusbelleBundle:PersonaTratamiento a "
+                    . "INNER JOIN a.tratamiento t INNER JOIN a.descuento d WHERE a.fechaVenta BETWEEN :fechainicio AND :fechafin AND a.sucursal=:sucursal";
                    
             
             
@@ -1374,7 +1471,7 @@ class ReporteController extends Controller
         array_push($consulta2, $tratamiento);
         
         
-        var_dump($consulta2);
+        //var_dump($consulta2);
         
         
         
@@ -1397,6 +1494,360 @@ class ReporteController extends Controller
         $sangria = 50;
         
         $this->get('fpdf_printer')->generarTotalesPdfPorRango($titulo, $encabezadoTabla, $anchoCol, $consulta2, $sangria, $fechaInicio, $fechaFin);
+        
+    }
+    
+    
+    
+    
+    /**
+     * 
+     *
+     * @Route("/bar_referidospor", name="admin_reporte_referidos_por", options={"expose"=true})
+     * @Method("GET")
+     * @Template()
+     */
+    public function barreferidosporAction(Request $request){
+        $em = $this->getDoctrine()->getManager();
+        $mes= date('m');
+        
+        
+        $anioInicioUser = $request->get('anioInicioUser');
+        
+        
+        $originalDate = $anioInicioUser;
+        $anioInicioUser = date("Y-m-d", strtotime($originalDate));
+        
+        $anioFinUser = $request->get('anioFinUser');
+        
+        $originalDate = $anioFinUser;
+        $anioFinUser = date("Y-m-d", strtotime($originalDate));
+        
+        
+                
+        //var_dump($anioUser);
+        if(!isset($anioUser)){
+            $year = date('Y');
+        }
+        else{
+            $year = $anioUser;
+        }
+        
+        //var_dump($anioInicioUser);
+        //var_dump($anioFinUser);
+        $mesint = intval($mes);
+                      
+        $ingresos = array();
+        //var_dump($mes);
+            //echo $i."\n";
+        $dql = "SELECT exp.numero, per.nombres, per.apellidos, p.referidoPor, p.fechaRegistro FROM DGPlusbelleBundle:Paciente p "
+                . "JOIN p.persona per "
+                . "LEFT JOIN p.expediente exp "
+                . "WHERE p.fechaRegistro BETWEEN :fechainicio AND :fechafin order by per.nombres ASC";
+        $referidos =array();
+
+        $referidos = $em->createQuery($dql)
+                   ->setParameters(array('fechainicio'=>$anioInicioUser,'fechafin'=>$anioFinUser))
+                   //->setParameter('mes','_____0'.'1'.'___')
+                   ->getResult();
+            /*
+            foreach ($ingresosprev as $key=>$ingreso){
+                //var_dump($ingreso);
+                $indexMes=$ingresosprev[$key]['mes'];
+                    $ingresosprev[$key]['mesnombre']=$mesLabel[$indexMes-1];
+                
+            }*/
+            //var_dump($ingresosprev);
+            //var_dump($ingresosprev);
+//            if( count($ingresosprev)!=0){
+//                //echo "sdacd";
+//                //array_push($ingresosprev[0], $mesLabel[($mes-1)]);
+//                array_push($ingresos, $referidos);
+//                
+//                return array(
+//                    //'empleados'=>$empleados,
+//                    'ingresos' => $ingresos[0],
+//                );
+//                  
+//            }  
+//            else{
+//                return array(
+//                    //'empleados'=>$empleados,
+//                    'ingresos' => $ingresos,
+//                );
+//            }
+        return array(
+            'pacientes' => $referidos,
+        );
+            
+          
+    }
+    
+    
+    
+    
+    
+    
+    /**
+     * Generar reporte pdf de Ingreso por consulta de emergencia
+     *
+     * @Route("/{fechaInicio}/{fechaFin}/referido/por/pdf", name="admin_referido_por_pdf", options ={"expose" = true})
+     * @Method("GET")
+     * @Template()
+     */
+    public function referidoporPdfAction($fechaInicio, $fechaFin)
+    {
+        $em = $this->getDoctrine()->getManager();
+        //$mesLabel = array("Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre");
+       
+        
+        $originalDate = $fechaInicio;
+        $fechaInicio = date("Y-m-d", strtotime($originalDate));
+        
+        $originalDate = $fechaFin;
+        $fechaFin = date("Y-m-d", strtotime($originalDate));
+        
+        //var_dump($fechaInicio);
+        //var_dump($fechaFin);
+        
+        $rsm = new ResultSetMapping();
+        $rsm->addScalarResult('expediente','expediente');
+        $rsm->addScalarResult('nombres','nombres');
+        $rsm->addScalarResult('apellidos','apellidos');
+        $rsm->addScalarResult('referido','referido');
+        
+        $sql = "SELECT exp.numero as expediente, per.nombres as nombres, per.apellidos as apellidos, p.referido_por as referido "
+                . "from paciente p "
+                . "inner join persona per on p.persona = per.id "
+                . "left outer join expediente exp on p.id = exp.paciente "
+                . "WHERE p.fecha_registro BETWEEN '$fechaInicio' and  '$fechaFin' "
+                . "order by per.nombres asc";
+        
+        
+        $query = $em->createNativeQuery($sql, $rsm);
+        $consulta = $query->getResult();
+        //var_dump($consulta);
+        //$consulta = array();
+        //$sucursal=$em->getRepository('DGPlusbelleBundle:Sucursal')->find($sucursal);
+        /*foreach ($ingresosemer as $key=>$ingreso){
+            $indexMes=$ingresosemer[$key]['mes'];
+            $consulta[$key]['mesnombre'] = $mesLabel[$indexMes-1]; 
+            $consulta[$key]['total'] = $ingresosemer[$key]['total'];
+        }*/
+        
+        $titulo = "Reporte de pacientes referidos";
+        $encabezadoTabla = array('Expediente', 'Nombre', 'Apellido','Referido por');
+        $anchoCol = array(22, 55,55,48);
+        //$sangria = 1;
+        
+        $this->get('fpdf_printer')->generarPdfReferidoPorRango($titulo, $encabezadoTabla, $anchoCol, $consulta,  $fechaInicio, $fechaFin);
+        
+    }
+    
+    
+    
+    
+    /**
+     * Generar reporte pdf de Ingreso por consulta de emergencia
+     *
+     * @Route("/prevpdf/plantilla/pdf", name="admin_prevpdfplantilla_por_pdf", options ={"expose" = true})
+     */
+    public function prevplantillaPdfAction(Request $request)
+    {
+        $em = $this->getDoctrine()->getManager();
+        
+        $nombre = $request->get('nombre');
+        $id = $request->get('id');
+        $valores = $request->get('valores');
+        //var_dump($nombre);
+        //var_dump($valores);
+        
+        $paciente = $em->getRepository('DGPlusbelleBundle:Paciente')->find($nombre);
+        //var_dump($paciente->getPersona());
+        //var_dump($id);
+        $plantilla = $em->getRepository('DGPlusbelleBundle:DetallePlantilla')->findBy(array('plantilla'=>$id));
+        //var_dump($plantilla);
+        $fecha= date('d-m-Y');
+//        var_dump($fecha);
+        
+        $logo = 'Resources/img/dgplusbelle/images/';
+        $titulo = $plantilla[0]->getPlantilla()->getNombre();
+        $consulta="prueba";
+        $this->get('fpdf_printer')->generarplantillaTempPdf($titulo, $paciente, $plantilla, $consulta, $fecha, $logo, $valores);
+        die();
+        
+
+//        foreach($parametros as $p){
+//            $dataReporte = new HistorialConsulta;
+//            $detalle = $em->getRepository('DGPlusbelleBundle:DetallePlantilla')->find($p['id']);
+//
+//            
+//
+//            $nparam = explode(" ", $p['nombre']);
+//            //var_dump(count($nparam)); 
+//            $lon = count($nparam);
+//            if($lon > 1){
+//                $pnombre = $nparam[0];
+//                foreach($nparam as $key => $par){
+//                    //var_dump($key);
+//                    if($key +1 != $lon){
+//                        //var_dump($lon);
+//                        $pnombre .= '_'.$nparam[$key + 1];
+//                    }
+//                }
+//                $dataReporte->setValorDetalle($parameters[$pnombre]);
+//            } else {
+//                $dataReporte->setValorDetalle($parameters[$p['nombre']]);
+//            }
+//           //var_dump($p['nombre']); 
+//
+//
+//            $em->persist($dataReporte);
+//            $em->flush();
+//        }   
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+//        $query = $em->createNativeQuery($sql, $rsm);
+//        $consulta = $query->getResult();
+        //var_dump($consulta);
+        //$consulta = array();
+        //$sucursal=$em->getRepository('DGPlusbelleBundle:Sucursal')->find($sucursal);
+        /*foreach ($ingresosemer as $key=>$ingreso){
+            $indexMes=$ingresosemer[$key]['mes'];
+            $consulta[$key]['mesnombre'] = $mesLabel[$indexMes-1]; 
+            $consulta[$key]['total'] = $ingresosemer[$key]['total'];
+        }*/
+        
+//        $titulo = "Reporte de pacientes referidos";
+//        $encabezadoTabla = array('Expediente', 'Nombre', 'Apellido','Referido por');
+//        $anchoCol = array(22, 55,55,48);
+//        //$sangria = 1;
+//        
+//        $this->get('fpdf_printer')->generarPdfReferidoPorRango($titulo, $encabezadoTabla, $anchoCol, $consulta,  $fechaInicio, $fechaFin);
+        
+    }
+
+    
+    
+    
+    
+    
+    
+    
+    /**
+     * Generar reporte pdf de Ingreso por consulta de emergencia
+     *
+     * @Route("/prevpdf/receta/pdf", name="admin_prevpdfreceta_por_pdf", options ={"expose" = true})
+     */
+    public function prevrecetaPdfAction(Request $request)
+    {
+        $em = $this->getDoctrine()->getManager();
+        
+        $nombre = $request->get('nombre');
+        $id = $request->get('id');
+        $valores = $request->get('valores');
+        //var_dump($nombre);
+        //var_dump($valores);
+        
+        $paciente = $em->getRepository('DGPlusbelleBundle:Paciente')->find($nombre);
+        //var_dump($paciente->getPersona());
+        //var_dump($id);
+        $plantilla = $em->getRepository('DGPlusbelleBundle:DetallePlantilla')->findBy(array('plantilla'=>$id));
+        //var_dump($plantilla);
+        $fecha= date('d-m-Y');
+//        var_dump($fecha);
+        
+        $logo = 'Resources/img/dgplusbelle/images/';
+        $titulo = 'prueba';
+        $consulta="prueba";
+        
+        
+        
+        if($plantilla[0]->getPlantilla()->getClinica()==0){
+//            $medico = array(
+//                    "nombre" => "Dr. Juan Carlos Pacheco",
+//                    "cargo" => "Cirujano Endoscopista",
+//                    "codigo" => "JVPM 7370",
+//                );
+            $medico = array(
+                    "nombre" => "Dr. Juan Carlos Pacheco",
+                    "cargo" => "Cirujano Endoscopista",
+                    "codigo" => "JVPM 7370",
+                );
+            $otros = array(
+                    "0" => "CIRUGÍA GENERAL",
+                    "1" => "FLEBOLOGÍA",
+                    "2" => "CIRUGÍA LAPAROSCÓPICA",
+                    "3" => "ENDOSCOPÍA DIGESTIVA",
+                    "4" => "ECODOPPLER COLOR"
+                );
+        }
+        else{
+//            $medico = array(
+//                    "nombre" => "Dra. Mildred Lara de Pacheco",
+//                    "cargo" => "Cirujano Endoscopista",
+//                    "codigo" => "JVPM 9306",
+//                );
+            $medico = array(
+                    "nombre" => "Dra. Mildred Lara de Pacheco",
+                    "cargo" => "",
+                    "codigo" => "JVPM 9306",
+                );
+            $otros = array(
+                    "0" => "MEDICINA ESTÉTICA",
+                    "1" => "MEDICINA ANTI-ENVEGECIMIENTO",
+                    "2" => "MEDICINA BIOLÓGICA",
+                    "3" => "MEDICINA FAMILIAR",
+                    "4" => "TERAPIA NEUTRAL"
+                );
+        }
+        
+        
+        $this->get('fpdf_printer')->generarrecetaTempPdf($titulo, $paciente, $plantilla, $consulta, $fecha, $logo, $valores, $medico, $otros);
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+//        $query = $em->createNativeQuery($sql, $rsm);
+//        $consulta = $query->getResult();
+//        //var_dump($consulta);
+//        //$consulta = array();
+//        //$sucursal=$em->getRepository('DGPlusbelleBundle:Sucursal')->find($sucursal);
+//        /*foreach ($ingresosemer as $key=>$ingreso){
+//            $indexMes=$ingresosemer[$key]['mes'];
+//            $consulta[$key]['mesnombre'] = $mesLabel[$indexMes-1]; 
+//            $consulta[$key]['total'] = $ingresosemer[$key]['total'];
+//        }*/
+//        
+//        $titulo = "Reporte de pacientes referidos";
+//        $encabezadoTabla = array('Expediente', 'Nombre', 'Apellido','Referido por');
+//        $anchoCol = array(22, 55,55,48);
+//        //$sangria = 1;
+//        
+//        $this->get('fpdf_printer')->generarPdfReferidoPorRango($titulo, $encabezadoTabla, $anchoCol, $consulta,  $fechaInicio, $fechaFin);
         
     }
     

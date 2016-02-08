@@ -1,0 +1,89 @@
+{% block contenido -%}
+    
+    
+    {% if pacientes %}               
+        <div id="listadostransaccion" style="margin-top: 20px;">
+            <table id = "datatables1" class="table table-bordered table-hover display dt-responsive" style="margin-top: 30px">
+                <thead>
+                    <tr>
+                        <th style="width:10%;">Expediente</th>
+                        <th>Nombres</th>
+                        <th><center>Fecha registro</center></th>
+                        <th><center>Referido por</center></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for key, entity in pacientes %}
+                        <tr>
+                            <td style="width:10%;">
+{#                                {{key+1}}#}
+                                {{entity.numero|upper}}
+                            </td>
+                            <td>{{ entity.nombres|upper|trim(' ') }} {{ entity.apellidos|upper|trim(' ') }}</td>
+                            <td>{{ entity.fechaRegistro|date('d-m-Y') }}</td>
+                            <td>{{ entity.referidoPor}}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+               
+    {% else %}
+        
+        <div class="container-fluid">
+            <div class="col-md-12 text-center">
+                No se encontraron registros
+            </div>
+        </div>
+        
+        
+                
+    {% endif %}
+                    
+   {% endblock %}
+
+  {% block javascripts_step %}
+      
+        
+          
+       <script>
+    $(document).ready(function(){
+
+
+        
+
+
+        $('#datatables1').DataTable({ 
+                    searching:true,
+                    "order":[1,"asc"],
+                    "columnDefs": [
+                           { "orderable": false, "targets": 0 },
+                           { "orderable": false, "targets": 2 },
+                           { "orderable": false, "targets": 3 }
+                                 
+                       
+                           
+                           
+                           //{ "orderData": [ 2, 3, 4 ], "targets": 2 }
+                    ],
+                    "language": {
+                    "info": "Mostrando página _PAGE_ de _PAGES_",
+                    "infoEmpty": "",
+                    "emptyTable": "No se encontraron registros",
+                    "paginate": {
+                        "next": "Siguiente",
+                        "previous": "Anterior"
+                    },
+                    "processing": "Procesando petición...",
+                    "search": "Buscar registros:",
+                    "lengthMenu": "Mostrar _MENU_ registros"
+                }, 
+                    
+        });
+                
+                
+        
+    });//Fin document ready
+        </script>
+
+    {% endblock %} 

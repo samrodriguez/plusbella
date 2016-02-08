@@ -73,7 +73,7 @@ class ConsultaConPacienteType extends AbstractType
                     
                     
                     ->add('registraReceta', 'choice', array(
-                    'label'=> 'Registro clínico',
+                    'label'=> 'Receta',
                     'choices'  => array('1' => 'Sí', '0' => 'No'),
                     'multiple' => false,
                     'expanded'=>'true'
@@ -89,13 +89,19 @@ class ConsultaConPacienteType extends AbstractType
                     'label'         =>  'Historias clínicas',
                     'empty_value'=>'Seleccione una opcion',
                     'class'         =>  'DGPlusbelleBundle:Plantilla',
+                    'query_builder' => function(EntityRepository $repository) {
+                    return $repository->otrosDocActivo();
+                },
                     'mapped' => false
                 ))   
                     
                     ->add('sesiontratamiento', 'entity', array('required'=>false,
-                    'label'         =>  'Historias clínicas',
+                    'label'         =>  'Nombre',
                     'empty_value'=>'Seleccione una opcion',
                     'class'         =>  'DGPlusbelleBundle:Plantilla',
+                    'query_builder' => function(EntityRepository $repository) {
+                return $repository->obtenerRecetasActivo();
+            },
                     'mapped' => false
                 ))   
           /*  ->add('campos', 'choice', array(

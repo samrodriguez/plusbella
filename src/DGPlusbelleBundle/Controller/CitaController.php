@@ -32,7 +32,7 @@ class CitaController extends Controller
         $em = $this->getDoctrine()->getManager();
 
         $entities = $em->getRepository('DGPlusbelleBundle:Cita')->findAll();
-        $sucursales= $em->getRepository('DGPlusbelleBundle:Sucursal')->findBy(array('estado'=>true));
+        $sucursales= $em->getRepository('DGPlusbelleBundle:Sucursal')->findBy(array('estado'=>true), array('id' => 'DESC'));
         $categorias = $em->getRepository('DGPlusbelleBundle:Categoria')->findAll();
         //var_dump($categorias);
         /*$dql = "SELECT exp.paciente"
@@ -45,10 +45,37 @@ class CitaController extends Controller
         var_dump($entities);
         */
         //var_dump($sucursales);
+        $empleados = $em->getRepository('DGPlusbelleBundle:Empleado')->findBy(array('estado'=>true));
+        date_default_timezone_set('America/El_Salvador');
+        
+        $hoy = date('Y-m-d');
+        $horaActual = date('H:i:s', time()-7200);
+        
+        /*$dql = "SELECT c from DGPlusbelleBundle:Cita c "
+                . "WHERE c.fechaCita <:hoy AND c.horaCita <:horaActual AND c.estado='P'";*/
+                                $dql = "SELECT c from DGPlusbelleBundle:Cita c "
+                . "WHERE c.fechaCita <:hoy  OR (c.fechaCita =:hoy AND c.horaCita <:horaActual) AND c.estado='P'";
+        $citaspasadas = $em->createQuery($dql)
+                    ->setParameters(array('hoy'=>$hoy,'horaActual'=>$horaActual))
+                     ->getResult();
+        //var_dump($hoy);
+        //var_dump($horaActual);
+        //echo count($citaspasadas);
+        //$citaspasadas = $em->getRepository('DGPlusbelleBundle:Cita')->findBy(array('estado'=>'P'));
+        //var_dump($citaspasadas);
+        
+        foreach($citaspasadas as $row){
+            $row->setEstado('N');
+            $em->persist($row);
+            $em->flush();
+        }
+        
+       
         return array(
             'entities' => $entities,
             'sucursales' => $sucursales,
             'categorias' => $categorias,
+            'empleados'=>$empleados,
         );
     }
     /**
@@ -82,7 +109,8 @@ class CitaController extends Controller
         //$horaCita = strtotime($horaCita);
         //var_dump($horaCita);
         $em = $this->getDoctrine()->getManager();
-        $cita = $em->getRepository('DGPlusbelleBundle:Cita')->findBy(array('empleado'=>$idEmpleado,'horaCita'=>$horaCita,'fechaCita'=>$fechaCita));
+//        $cita = $em->getRepository('DGPlusbelleBundle:Cita')->findBy(array('empleado'=>$idEmpleado,'horaCita'=>$horaCita,'fechaCita'=>$fechaCita));
+	$cita = $em->getRepository('DGPlusbelleBundle:Cita')->findBy(array('empleado'=>$idEmpleado,'horaCita'=>$horaCita,'fechaCita'=>$fechaCita,'estado'=>'P'));
         
         //var_dump($cita);
         if(count($cita)==0){
@@ -469,10 +497,10 @@ class CitaController extends Controller
                 
             
                 //var_dump($entity);
-                $hora = $entity->getHoraCita()->format("H:i");
+                $hora = $entity->getHoraCita()->format("H:i:s");
 
                 $horaTime = strtotime($hora);
-                $horaNueva = date("H:i", strtotime($delta.' minutes', $horaTime));
+                $horaNueva = date("H:i:s", strtotime($delta.' minutes', $horaTime));
                 //var_dump($horaNueva);
                 $entity->setHoraCita(new \DateTime($horaNueva));
                 //echo "hora nueva: ";
@@ -481,7 +509,7 @@ class CitaController extends Controller
                     FROM DGPlusbelleBundle:Cita c
                     WHERE c.empleado =:idEmp AND c.horaCita =:hora AND c.fechaCita=:fecha AND c.id <>:id";
                 $entityDuplicada = $em->createQuery($dql)
-                                    ->setParameters(array('idEmp'=>$empleado->getId(),'hora'=>$entity->getHoraCita()->format('H:i'),'fecha'=>$newformat,'id'=>$entity->getId()))
+                                    ->setParameters(array('idEmp'=>$empleado->getId(),'hora'=>$entity->getHoraCita()->format('H:i:s'),'fecha'=>$newformat,'id'=>$entity->getId()))
                                     ->getArrayResult();
                 if(count($entityDuplicada)==0){
                     //$hoy = new \DateTime('now');
@@ -500,8 +528,35 @@ class CitaController extends Controller
                         $exito['regs']=3;//Error, intenta reprogramar la cita a un dia anterior a "hoy"
                     }
                     else{
-                        $var = date('H:i');
-                        //var_dump($var);
+                        $var = date('H:i:s');
+	                if ($fechaReprogramada == $today_dt) {
+	              	    if($horaNueva>$var ){
+                        
+	                            if($entity->getEstado()=="P"){
+	                                $entity->setFechaCita(new \DateTime($newformat));
+	                                $em->persist($entity);
+	                                $em->flush();   
+	                                $exito['regs']=0; //Cita reprogramada con exito
+	                            }
+	                            else{
+	                                $exito['regs']=1;//Error, La cita tiene estado asistida o cancelada
+	                            }
+                        	}
+	                }
+	                else{
+	                	if($entity->getEstado()=="P"){
+                                $entity->setFechaCita(new \DateTime($newformat));
+                                $em->persist($entity);
+                                $em->flush();   
+                                $exito['regs']=0; //Cita reprogramada con exito
+                            }
+                            else{
+                                $exito['regs']=1;//Error, La cita tiene estado asistida o cancelada
+                            }
+	                }
+	                 /*   
+                        $var = date('H:i:s');
+                        //var_dump($horaNueva);
                         
                         if($horaNueva>=$var ){
                         
@@ -516,17 +571,35 @@ class CitaController extends Controller
                             }
                         }
                         else{
-                            /*if ($fechaReprogramada > $today_dt) {
+                            if($horaNueva>=$var ){
                                 $entity->setFechaCita(new \DateTime($newformat));
                                 $em->persist($entity);
                                 $em->flush();   
                                 $exito['regs']=0; //Cita reprogramada con exito
-                            }*/
-                            //else{
-                                $exito['regs']=4;//Error, la hora es antes de la actual
-                            //}
+                            }
+                            else{
+                                if ($fechaReprogramada > $today_dt) {
+                                
+	                                if($entity->getEstado()=="P"){
+	                                $entity->setFechaCita(new \DateTime($newformat));
+	                                $em->persist($entity);
+	                                $em->flush();   
+	                                $exito['regs']=0; //Cita reprogramada con exito
+	                            }
+	                            else{
+	                                $exito['regs']=1;//Error, La cita tiene estado asistida o cancelada
+	                            }
+                                     $entity->setFechaCita(new \DateTime($newformat));
+                                     $em->persist($entity);
+                                     $em->flush();   
+                                     $exito['regs']=0; //Cita reprogramada con exito
+                                }
+                                else{
+                                    $exito['regs']=4;//Error, la hora es antes de la actual
+                                }
+                            }
                             
-                        }
+                        }*/
                         
                     }
                 }
@@ -537,6 +610,7 @@ class CitaController extends Controller
         else{
             $exito['regs']=3;
         }
+//var_dump($exito['regs']);
         return new Response(json_encode($exito));
     }
     
@@ -808,5 +882,63 @@ class CitaController extends Controller
         $em->flush();
         return $numeroExp;
     }
+    
+    
+    
+    
+    
+    
+    
+    
+    /**
+     * Displays a form to create a new Cita entity.
+     *
+     * @Route("/new/cita", name="admin_cita_new2", options={"expose"=true})
+     * @Method("GET")
+     * @Template()
+     */
+    public function new2Action(Request $request)
+    {
+        $entity = new Cita();
+        
+        $em = $this->getDoctrine()->getManager();
+        
+        //Recuperación del paciente
+        $request = $this->getRequest();
+        
+        $fecha = $request->get('fecha');
+        $hora = $request->get('hora');
+        //var_dump($fecha);
+        //var_dump($hora);
+        
+        //$id = substr($cadena, 1);
+        
+        
+        
+        //Busqueda del paciente
+        $pacientes = $em->getRepository('DGPlusbelleBundle:Paciente')->findAll();
+        //Seteo del paciente en la entidad
+        //$entity->setPaciente($paciente);
+        $fecha = new \DateTime($fecha);
+        $hora = new \DateTime($hora);
+        //var_dump($fecha);
+        $entity->setFechaCita($fecha);
+        $entity->setHoraCita($hora);
+        
+        //Enlace del form con la entidad
+        $form   = $this->createCreateForm($entity);
+        //var_dump($form->getConfig()->getData());
+        
+        return array(
+            'entity' => $entity,
+            'form'   => $form->createView(),
+            'mensaje'=> ' ',
+        );
+    }
+    
+    
+    
+    
+    
     
 }

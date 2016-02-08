@@ -107,17 +107,17 @@
               <div class="btn-toolbar clearfix" role="toolbar">
                 <div class="btn-group btn-group-sm pull-left">
                     <button data-toggle="tooltip" data-container="body" title="Consultas realizadas" id="consultas-datatables3" class="btn btn-default" role="button">
-                        <i class="fa fa-medkit"></i>
+                        <i class="fa fa-medkit" style="margin-right:5px;"></i>({{totalConsultas}})
                     </button>
                 </div>  
                 <div class="btn-group btn-group-sm pull-left">
                     <button data-toggle="tooltip" data-container="body" title="Tratamientos realizados" id="tratamientos-datatables1" class="btn btn-default" role="button">
-                        <i class="fa fa-clipboard"></i>
+                        <i class="fa fa-clipboard" style="margin-right:5px;"></i>({{totalTratamientos}})
                     </button>
                 </div>
                 <div class="btn-group btn-group-sm pull-left">
                     <button data-toggle="tooltip" data-container="body" title="Paquetes vendidos" id="ventapaquetes-datatables2" class="btn btn-default" role="button">
-                        <i class="fa fa-briefcase"></i>
+                        <i class="fa fa-briefcase" style="margin-right:5px;"></i>({{totalPaquetes}})
                     </button>
                 </div>
                 <div class="btn-group btn-group-sm pull-left">
@@ -169,11 +169,25 @@
                                                     </button>
                                                 </div>
                                             </div>  
-                                            <div class="col-md-1">
+                                            <div class="col-md-5">
                                                 <div class="btn-group btn-group-sm pull-left">
                                                     <button id="seguimiento-fototratamiento" data-toggle="tooltip" data-container="body" title="Ver imagenes" class="btn btn-default datatables1-actions seguimiento" role="button" onclick="imagenTratamiento({{ entity.id }});">
                                                         <i class="glyphicon glyphicon-picture"></i><a href="{{path('admin_imagentratamiento_galeria',{id:entity.id})}}"> </a>
                                                     </button>
+                                                    {% set cont = 0 %}
+                                                    {% if is_granted('ROLE_ADMIN') %}
+                                                        {% for paq in tratamientosnoedit%}
+                                                            {% if entity.id == paq.idpersonatrat%}
+                                                                {% set cont=cont+1 %}
+
+                                                            {% endif %}
+                                                        {% endfor %}
+                                                        {% if cont==0 %}
+                                                            <a style="padding-top:8px; height: 30px;" href="{{path('admin_personatratamiento_edit',{id:entity.id})}}" data-toggle="tooltip" data-container="body" title="Editar venta tratamiento" class="btn btn-default datatables1-actions seguimiento" role="button" onclick="borrarConsulta({{ entity.id }})">
+                                                                <i class="fa fa-edit"></i>
+                                                            </a>
+                                                        {% endif %}
+                                                    {% endif %}
                                                 </div>
                                             </div>
                                                 {% for ent in entity.sestratamiento%}
@@ -236,14 +250,29 @@
                                                 </button>
                                             </div>
                                         </div>       
-                                        <div class="col-md-1">
+                                        <div class="col-md-5">
                                             <div class="btn-group btn-group-sm pull-left">
                                                 <button id="seguimiento-fototratamiento" data-toggle="tooltip" data-container="body" title="Ver imagenes" class="btn btn-default datatables1-actions seguimiento" role="button" onclick="imagenPaquete({{ entity.id }});">
                                                     <i class="glyphicon glyphicon-picture"></i><a href="{{path('admin_imagentratamiento_galeria',{id:entity.id})}}"> </a>
                                                 </button>
+                                                {% set cont = 0 %}
+                                                {% if is_granted('ROLE_ADMIN') %}
+                                                    {% for paq in paquetesnoedit%}
+                                                        {% if entity.id == paq.idpaquete%}
+                                                            {% set cont=cont+1 %}
+                                                        
+                                                        {% endif %}
+                                                    {% endfor %}
+                                                    {% if cont==0 %}
+                                                        <a style="padding-top:8px; height: 30px;" href="{{path('admin_ventapaquete_edit',{id:entity.id})}}" data-toggle="tooltip" data-container="body" title="Editar venta paquete" class="btn btn-default datatables1-actions seguimiento" role="button" onclick="borrarConsulta({{ entity.id }})">
+                                                            <i class="fa fa-edit"></i>
+                                                        </a>
+                                                    {% endif %}
+                                                {% endif %}
                                             </div>
                                         </div> 
-                                            {% for ent in entity.ventapaq%}
+                                            {% for ent in entity.ventapaq %}
+                                               {% if ent.registraReceta == 1 %}
                                                 <div class="col-md-1">
                                                     <div class="btn-group btn-group-sm pull-left">
                                                         <button id="ver-receta" data-toggle="tooltip" data-container="body" title="Consultar receta" class="btn btn-default datatables1-actions" role="button" onclick="exportarPaqueteRecetaPDF({{ ent.id }},{{entity.paciente.id}});">
@@ -251,6 +280,7 @@
                                                         </button>
                                                     </div>
                                                 </div>
+                                                {% endif %}
                                             {% endfor %}
                                     </div>
                                 </td>
@@ -306,6 +336,11 @@
                                             <button id="seguimiento-fototratamiento" data-toggle="tooltip" data-container="body" title="Ver imagenes" class="btn btn-default datatables1-actions seguimiento" role="button" onclick="imagenConsulta({{ entity.id }})">
                                                     <i class="glyphicon glyphicon-picture"></i>
                                             </button>
+                                            {% if is_granted('ROLE_ADMIN') %}
+                                                <a href="{{path('admin_consulta_delete',{id:entity.id,idpaciente:"P"+paciente.id})}}" data-toggle="tooltip" data-container="body" title="Borrar consulta" class="btn btn-default datatables1-actions seguimiento" role="button" onclick="borrarConsulta({{ entity.id }})">
+                                                    <i class="fa fa-times"></i>
+                                                </a>
+                                            {% endif %}
                                         </div>
                                               
                                         {% for ent in entity.ventapaq%}

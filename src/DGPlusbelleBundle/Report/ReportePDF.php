@@ -10,7 +10,7 @@ class ReportePDF  extends \FPDF_FPDF {
         $this->Cell(80);
         //$urlLogo = $this->getParameter('plusbelle.logo');
         //$logo = $urlLogo.'sonodigest.jpg';
-         $this->Image('../web/Resources/img/dgplusbelle/images/laplusbelle.jpg', 150, 5, 50, 20);
+         $this->Image('Resources/img/dgplusbelle/images/laplusbelle.jpg', 150, 5, 50, 20);
          $this->Line(20, 25.5, 200, 25.5);
          $this->Line(20, 26, 200, 26);
         // Title
@@ -31,11 +31,11 @@ class ReportePDF  extends \FPDF_FPDF {
         $this->Line(20, 260.5, 200, 260.5);
         $this->Line(20, 261, 200, 261);
         
-        $this->Cell(0, 10, 'San Salvador, Colonia Escalon, Calle Cuscatlan, No. 448. entre la 83 Av. y 85 Av. Sur. Tel. 2519-2857.',0,0);
-        
-        $tot = count($this->pages);
-        $this->SetX(-35);
-        $this->Cell(0,10,'Pagina '.$this->PageNo().' de '. $tot, 0, 0, 'C'); 
+//        $this->Cell(0, 10, 'San Salvador, Colonia Escalon, Calle Cuscatlan, No. 448. entre la 83 Av. y 85 Av. Sur. Tel. 2519-2857.',0,0);
+//        
+//        $tot = count($this->pages);
+//        $this->SetX(-35);
+//        $this->Cell(0,10,'Pagina '.$this->PageNo().' de '. $tot, 0, 0, 'C'); 
     }
 
     function SetWidths($w)

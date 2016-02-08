@@ -2,7 +2,7 @@
 
 {% block contenido -%}
     <div class="panel panel-default">
-        <div class="panel-heading"><p>Registrar nueva venta de tratamiento</p></div>
+        <div class="panel-heading"><p>Editar venta de tratamiento</p></div>
         <div class="panel-body">
             {# {{ form(form) }} #}
             {{ form_start(edit_form) }}
@@ -35,6 +35,9 @@
                 <div class="col-md-3" >
                   {{ form_row(edit_form.descuento)}} 
                 </div> 
+                <div class="col-md-3" >
+                  {{ form_row(edit_form.sucursal)}} 
+                </div> 
                 
                 
                 {#<div class="col-md-3" >
@@ -45,7 +48,8 @@
                 </div>  #}
             </div>
             <div class="form-grouphide md-12"> 
-                <a href="{{path('admin_paciente')}}" class="btn btn-default btn-sm" id="cancelarNuevo">Cancelar</a>
+{#                <a href="{{path('admin_paciente')}}" class="btn btn-default btn-sm" id="cancelarNuevo">Cancelar</a>#}
+	            <a href="{{ path('admin_historial_consulta',{'id':id})}}" class="btn btn-default btn-sm" id="cancelarModificar">Cancelar</a>
                 {{ form_widget(edit_form.submit) }}
             </div>
         </div>

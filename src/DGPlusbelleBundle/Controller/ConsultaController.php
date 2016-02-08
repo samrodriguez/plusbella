@@ -807,15 +807,31 @@ class ConsultaController extends Controller
     /**
      * Deletes a Consulta entity.
      *
-     * @Route("/{id}", name="admin_consulta_delete")
-     * @Method("DELETE")
+     * @Route("/{id}/borrar/{idpaciente}", name="admin_consulta_delete")
+     * @Method("GET")
      */
-    public function deleteAction(Request $request, $id)
+    public function deleteAction(Request $request, $id,$idpaciente)
     {
-        $form = $this->createDeleteForm($id);
-        $form->handleRequest($request);
-
-        if ($form->isValid()) {
+        //$form = $this->createDeleteForm($id);
+//        $form->handleRequest($request);
+//
+//        if ($form->isValid()) {
+//            $em = $this->getDoctrine()->getManager();
+//            $entity = $em->getRepository('DGPlusbelleBundle:Consulta')->find($id);
+//
+//            if (!$entity) {
+//                throw $this->createNotFoundException('Unable to find Consulta entity.');
+//            }
+//
+//            $em->remove($entity);
+//            $em->flush();
+//        }
+        $idpaciente="P".$idpaciente;
+        //var_dump($idpaciente);
+//        $form = $this->createDeleteForm($id);
+//        $form->handleRequest($request);
+//
+//        if ($form->isValid()) {
             $em = $this->getDoctrine()->getManager();
             $entity = $em->getRepository('DGPlusbelleBundle:Consulta')->find($id);
 
@@ -825,9 +841,10 @@ class ConsultaController extends Controller
 
             $em->remove($entity);
             $em->flush();
-        }
+//        }
 
-        return $this->redirect($this->generateUrl('admin_consulta'));
+//        return $this->redirect($this->generateUrl('admin_consulta'));
+        return $this->redirect($this->generateUrl('admin_historial_consulta',array('id'=>$idpaciente)));
     }
 
     /**
@@ -961,6 +978,53 @@ class ConsultaController extends Controller
         $empleados=$this->verificarComision(null,null);
         //var_dump($empleados);
         
+        
+        
+        //$seguimientopaquete = $em->getRepository('DGPlusbelleBundle:SeguimientoPaquete')->findBy(array('idVentaPaquete' => 30));
+        //var_dump($seguimientopaquete);
+        $regnoeditpaquete = array();
+        foreach($paquetes as $row){
+            $c=0;
+            $seguimientopaquete = $em->getRepository('DGPlusbelleBundle:SeguimientoPaquete')->findBy(array('idVentaPaquete' => $row->getId()));
+            foreach($seguimientopaquete as $reg){
+                if($reg->getnumSesion()!=0){
+                    $c++;
+                }
+                
+                //array_push($regnoedit, array('idpaquete'=>$row->getId()));
+                
+            }
+            //var_dump($c);
+            if($c!=0){
+                    array_push($regnoeditpaquete, array('idpaquete'=>$row->getId()));
+            }
+            
+            
+        }
+        
+        
+        
+        //$seguimientotratamiento= $em->getRepository('DGPlusbelleBundle:PersonaTratamiento')->findBy(array('idVentaPaquete' => 30));
+        //var_dump($seguimientopaquete);
+        $regnoedittratamiento = array();
+        foreach($tratamientos as $row){
+            $c=0;
+            $seguimientopaquete = $em->getRepository('DGPlusbelleBundle:SeguimientoTratamiento')->findBy(array('idPersonaTratamiento' => $row->getId()));
+            foreach($seguimientopaquete as $reg){
+                if($reg->getnumSesion()!=0){
+                    $c++;
+                }
+                
+                //array_push($regnoedit, array('idpaquete'=>$row->getId()));
+                
+            }
+            //var_dump($c);
+            if($c!=0){
+                    array_push($regnoedittratamiento, array('idpersonatrat'=>$row->getId()));
+            }
+            
+            
+        }
         //var_dump();
         //sendEmail($to, $cc, $bcc,$replay, $body){
         
@@ -982,6 +1046,8 @@ class ConsultaController extends Controller
             'tratamientos' => $tratamientos,
             'paciente' => $paciente,
             'expediente'=>$expnum,
+            'paquetesnoedit'=>$regnoeditpaquete,
+            'tratamientosnoedit'=>$regnoedittratamiento,
             );
     }
     

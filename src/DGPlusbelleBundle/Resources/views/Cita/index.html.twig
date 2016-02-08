@@ -14,6 +14,14 @@
         button:hover{
             cursor: default;
         }
+        a>img {
+          cursor: pointer;
+          
+        }
+        a>img:hover {
+          opacity: 0.5;
+          
+        }
     </style>
 {% endblock %}
 
@@ -27,12 +35,27 @@
             
         
         
-            <select  id="filtroSucursales">
+            <select  id="filtroSucursales" class="col-md-12 input-sm form-control">
 
                 {% for sucursal in sucursales %}
                     <option value="{{sucursal.id}}"> {{sucursal.nombre}}</option>
                 {% endfor %}
             </select>
+            <div class='col-md-12' style='margin-top:20px;'>
+        <a id="0" style='background:transparent; border:0px; border-radius:80px; text-decoration: none; margin-right: 20px;'>
+            <img class="userFilter" data-original-title="Todos" rel="tooltip" src='{{ asset('Photos/Empleado/')}}na.jpg' alt='Foto perfil' style='border-radius:80px;width: 35px; height: 35px;'>
+        </a>
+        {% for empleado in empleados %}
+            
+                <a  id="{{empleado.id}}" style='background:transparent; border:0px; border-radius:80px; text-decoration: none;'>
+                    {% if empleado.foto!=""%}
+                        <img class="userFilter" data-original-title="{{empleado.persona.nombres|upper}} {{empleado.persona.apellidos|upper}}" rel="tooltip" src='{{ asset('Photos/Empleado/')}}{{empleado.foto}}' alt='Foto perfil' style='border-radius:80px;width: 35px; height: 35px;'>
+                    {% else %}
+                        <img class="userFilter" data-original-title="{{empleado.persona.nombres|upper}} {{empleado.persona.apellidos|upper}}" rel="tooltip" src='{{ asset('Photos/Empleado/')}}na.jpg' alt='Foto perfil' style='border-radius:80px;width: 35px; height: 35px;'>
+                    {% endif %}
+                </a>
+        {% endfor %}
+        </div>
         
     </div>
     

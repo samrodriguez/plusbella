@@ -24,11 +24,20 @@ class CalendarEventListener
         $startDate = $calendarEvent->getStartDatetime();
         $endDate   = $calendarEvent->getEndDatetime();
         $sucursal = $request->get('sucursal');
+        $user = $request->get('user');
         //var_dump($sucursal);
+        //var_dump($user);
+        //die();
         //$em = $this->getDoctrine()->getManager();
         //var_dump($sucursal);
         if(isset($sucursal)){
-            $citas = $this->em->getRepository('DGPlusbelleBundle:Cita')->findBy(array('sucursal'=>$sucursal));
+            if($user==0){
+                $citas = $this->em->getRepository('DGPlusbelleBundle:Cita')->findBy(array('sucursal'=>$sucursal));
+            }
+            else{
+                $citas = $this->em->getRepository('DGPlusbelleBundle:Cita')->findBy(array('sucursal'=>$sucursal,'empleado'=>$user));
+            }
+            
         }
         else{
             $citas = $this->em->getRepository('DGPlusbelleBundle:Cita')->findAll();
@@ -44,10 +53,17 @@ class CalendarEventListener
             $h = date("H:i", strtotime('+30 minutes', strtotime($ih)));
             
             //var_dump($h);
+            
+            
             $st    = new \DateTime($fi.' '.$ih);
             $nh    = new \DateTime($fi.' '.$h);
             //$//end   = new \DateTime($fi.' '.$fh);
             $eventEntity = new EventEntity('', $st,$nh );
+            
+            $horaFin = $companyEvent->getHoraCita()->format("H:i");
+            $horaFinTime = strtotime($horaFin);
+            $horaFin = date("g:i a", strtotime('30 minutes', $horaFinTime));
+            
             if($companyEvent->getPaciente()!=null){
                 $idPaciente = $companyEvent->getPaciente()->getId();
                 $dql = "SELECT exp"
@@ -58,19 +74,27 @@ class CalendarEventListener
                          ->getResult();
 
                 //var_dump($expediente);
-                $expNumero= $expediente[0]->getNumero();
+                if(count($expNumero = $expediente)!=0){
+                    $expNumero= $expediente[0]->getNumero();
+                }
+                else{
+                    $expNumero="";
+                }
                 //optional calendar event settings
 
+		$doctor = $companyEvent->getEmpleado()->getPersona()->getNombres().' '.$companyEvent->getEmpleado()->getPersona()->getApellidos();
                 //var_dump($index);
                 $eventEntity->setId($companyEvent->getID());
-                $title = strtoupper($expNumero).' - '.$companyEvent->getPaciente()->getPersona()->getNombres().' '.$companyEvent->getPaciente()->getPersona()->getApellidos();
+//                $title = strtoupper($expNumero).' - '.$companyEvent->getPaciente()->getPersona()->getNombres().' '.$companyEvent->getPaciente()->getPersona()->getApellidos();
+		$title = strtoupper($expNumero).' - '.$companyEvent->getPaciente()->getPersona()->getNombres().' '.$companyEvent->getPaciente()->getPersona()->getApellidos().' | '.$doctor.' | '.$horaFin;
                 //var_dump($expNumero);
             }
             else{
                 $eventEntity->setId($companyEvent->getID());
                 $idPaciente = "Reserva de cita";
                 $expNumero ="";
-                $title = $idPaciente.$expNumero;
+//                $title = $idPaciente.$expNumero;
+                $title = $idPaciente.$expNumero.' | '.$doctor.' | '.$horaFin;
             }
             //var_dump($idPaciente);
             //$expediente = $this->em->getRepository('DGPlusbelleBundle:Expediente')->findBy(array('paciente'=>$idPaciente));
@@ -198,6 +222,7 @@ class CalendarEventListener
             //$eventEntity->setCssClass('my-custom-class'); // a custom class you may want to apply to event labels
             //var_dump($eventEntity);
             //finally, add the event to the CalendarEvent for displaying on the calendar
+            
             $calendarEvent->addEvent($eventEntity);
         }
     }

@@ -14,7 +14,10 @@
 {% block jquery -%}
 <script type="text/javascript">     
 var calendario = null;
-sucursal = $('#filtroSucursales').val();
+var sucursal = $('#filtroSucursales').val();
+var user=0;
+var i=0;
+var sources=new Array();
 var source = 
     {
         url: Routing.generate('fullcalendar_loader')+'?sucursal='+sucursal,
@@ -40,11 +43,71 @@ var source =
         
     };
   */  
+  
+  function setsource(){
+  //	calendario.fullCalendar('removeEventSource',source);
+//  	calendario.fullCalendar('removeEventSource',source2);
+  	calendario.fullCalendar('removeEventSource');
+//	$('#calendar-holder').fullCalendar( 'removeEvents').fullCalendar('removeEventSources');
+	sucursal = $('#filtroSucursales').val();
+        //alert(Routing.generate('fullcalendar_loader')+'?sucursal='+sucursal);
+        calendario.fullCalendar('removeEvents');
+        
+        for(j=0;j<sources.length;j++){
+            console.log(j);
+            calendario.fullCalendar('removeEventSource',sources[j]);
+            //sources.remove(j);
+        }
+        console.log(sources[0]);
+        var source2 = 
+            {
+                url: Routing.generate('fullcalendar_loader')+'?sucursal='+sucursal+'&user='+user,
+                type: 'POST',
+                data: {
+                    filtro: 1
+                },
+                error: function() {
+                    bootbox.alert('Se produjo un error al recuperar los datos del calendario, recargue la página!');
+                }
+
+            };
+            sources.push(source2);
+        calendario.fullCalendar('addEventSource', source2);
+        
+  	calendario.fullCalendar('removeEvents');    
+
+	
+	//calendario.fullCalendar('addEventSource', source2);
+  }
+  
+  $(document).on('change','#filtroSucursales',function(){
+        
+            setsource();
+        //calendario.fullCalendar('removeEvents');    
+	//calendario.fullCalendar('removeEventSource',source);
+//	calendario.fullCalendar('addEventSource', source);
+        
+        //alert('dcdsc');
+
+        
+
+    });
+    $(document).on('click','.userFilter',function(){
+        user=$(this).parent().attr('id');
+        console.log(user);
+        
+        setsource();
+        //return false;
+    });
 $(document).ready(function() {        
     // page is now ready, initialize the calendar...
+    Date.prototype.timeNow = function () {
+         return ((this.getHours() < 10)?"0":"") + this.getHours() +":"+ ((this.getMinutes() < 10)?"0":"") + this.getMinutes()/* +":"+ ((this.getSeconds() < 10)?"0":"") + this.getSeconds()*/;
+    }
+    
     //var horaInicial=null;
-    $('#filtroSucursales').selectBoxIt();
-    var sucursal = $('#filtroSucursales').val();
+
+    sucursal = $('#filtroSucursales').val();
     var fecha=null;
     //$('#filtroSucursales').change();
     //alert(hoy);
@@ -75,11 +138,11 @@ $(document).ready(function() {
         weekNumbers: true,
         firstDay: 0,
         slotMinutes: 30,
-        axisFormat: 'hh:mm tt',
+        axisFormat: 'H:mm',
         firstHour: 6,
         //displayEventTime: false,
         timeFormat: '',
-        
+        //height:'auto',
         minTime: '06:00:00',
         maxTime: '23:00:00',
         allDaySlot: false,
@@ -95,6 +158,70 @@ $(document).ready(function() {
             var element = $(jsEvent.srcElement);
             //fecha=$.fullCalendar.formatDate(startDate,'dd-MM-yyyy');
             //alert(fecha);
+            
+            
+            if(view.name == 'agendaDay' ){
+                //alert(view.name);
+                //alert("Fecha: "+stdate+", Hora: "+starttm);
+                var hoy = new Date();
+                                    
+                var dd = hoy.getDate();
+                var mm = hoy.getMonth()+1; //hoy es 0!
+                var yyyy = hoy.getFullYear();
+                //alert(view.name);
+                if(dd<10) {
+                    dd='0'+dd
+                } 
+
+                if(mm<10) {
+                    mm='0'+mm
+                } 
+
+                //hoy = yyyy+'-'+mm+'-'+dd;
+                hoy = dd+'-'+mm+'-'+yyyy;
+                
+                var date = new Date();
+                //date.setTime(result_from_Date_getTime);
+
+                var seconds = date.getSeconds();
+                var minutes = date.getMinutes();
+                var hour = date.getHours();
+                
+                //alert(date.timeNow());
+                
+                if(stdate<hoy){
+                    //alert('menor');// no programar cita
+                    var mensaje = "";
+                    mensaje += "<div class='row'><div class='col-md-12'><b><p class='text-left'>Error...</p></b></div></div>";
+                    mensaje += "<div class='row'><hr></div>";
+                    mensaje += "<div class='row'><div class='col-md-12'>No se puede programar cita en un día pasado</div></div>"
+                    bootbox.alert(mensaje, function() {});
+                }
+                else{
+                    if(stdate>hoy){
+                        //alert('permitir programar cita');// programar cita
+                        var url = Routing.generate('admin_cita_new2', { fecha: stdate, hora:starttm});
+                        window.location = url;
+                    }
+                    else{
+                        if(starttm<=(date.timeNow())){
+                            //alert('no permitir');// no programar cita
+                            var mensaje = "";
+                            mensaje += "<div class='row'><div class='col-md-12'><b><p class='text-left'>Error...</p></b></div></div>";
+                            mensaje += "<div class='row'><hr></div>";
+                            mensaje += "<div class='row'><div class='col-md-12'>No se puede programar una cita a una hora pasada el día de hoy</div></div>"
+                            bootbox.alert(mensaje, function() {});
+                        }
+                        else{
+                            //alert('permitir programar cita');// 
+                            var url = Routing.generate('admin_cita_new2', { fecha: stdate, hora:starttm});
+                            window.location = url;
+                        }
+                    }
+                }
+            
+            }
+            
             
         },
         eventDrop: function( startDate, event, dayDelta, minuteDelta, allDay, revertFunc, jsEvent, ui, view ) { 
@@ -186,6 +313,7 @@ $(document).ready(function() {
         },*/
         eventClick: function ( startDate, endDate, event, jsEvent, view )  {
             var hoy = new Date();
+            var hoyDate = new Date();
             var dd = hoy.getDate();
             var mm = hoy.getMonth()+1; //hoy es 0!
             var yyyy = hoy.getFullYear();
@@ -203,7 +331,7 @@ $(document).ready(function() {
             //alert('"'+hoy+'"');
             //alert(startDate.id);
             //alert("Información de la citra");
-            
+            //alert(hoyDate);
             $.getJSON(Routing.generate('get_infoCita', { id: startDate.id}), 
                 function(data) {
                             //alert(data.regs[0].fechaCita["date"].toString());1
@@ -253,8 +381,69 @@ $(document).ready(function() {
                                 title: "Información de la cita",
                                 buttons: {
                                     
+                                 danger: {
+                                            label: "Cancelar cita",
+                                            className: "btn-danger",
+                                            callback: function() {
+                                                var evento = calendario.fullCalendar('clientEvents',startDate.id);
+                                                var tituloEvento = "";
+                                                var eventoId = 0;
+                                                Object.keys(evento).forEach(function (key) {
+                                                    tituloEvento = evento[key].title;
+
+                                                    var subTituloEvento = tituloEvento.split("|");
+//                                                    var iconoX = '<div class="fa fa-calendar-times-o"></div> | ';
+                                                    var iconoX = '<div class="fa fa-calendar-times-o" style="width: 17px; height: 100%; float: left; background: #F00;  position: absolute; margin-left: -3px; padding-left:2px "></div> <div style="width: 91%; height: 100%; float: right; position: relative; ">'
+                                                    //console.log(subTituloEvento);
+                                                    var nuevoTitulo = iconoX+' | '+subTituloEvento[1]+' | '+subTituloEvento[2];
+                                                    evento[key].title = nuevoTitulo;
+                                                    $.getJSON(Routing.generate('get_cancelarCita', { id: evento[key].id}), 
+                                                    function(data) {
+                                                        var mensaje = "";
+                                                        if(data.regs==0){
+                                                            mensaje += "<div class='row'><div class='col-md-12'><b><p class='text-left'>Actualización exitosa...</p></b></div></div>";
+                                                            mensaje += "<hr>";
+                                                            mensaje += "<div class='row'><div class='col-md-12'>¡Cita cancelada satisfactoriamente!</div></div>"
+                                                            calendario.fullCalendar('updateEvent', evento);
+                                                            bootbox.alert(mensaje, function() {
+
+                                                            });
+                                                        }
+                                                        else{
+                                                            mensaje += "<div class='row'><div class='col-md-12'><b><p class='text-left'>Error...</p></b></div></div>";
+                                                            mensaje += "<hr>";
+                                                            mensaje += "<div class='row'><div class='col-md-12'>¡La cita no pudo cancelarse, intente de nuevo!</div></div>"
+                                                            bootbox.alert(mensaje, function() {
+
+                                                            });
+                                                        }
+                                                    });
+                                                });
+
+
+                                                //console.log('texto de prueba');
+                                                //console.log(evento.backgroundColor);
+                                                //console.log( JSON.stringify(evento['backgroundColor']) );
+                                                //alert(evento.id);
+                                                /*alert(evento.title);
+                                                alert(evento.allDay);
+                                                alert(evento.start);
+
+                                                alert(evento.end);
+                                                alert(evento.url);
+                                                alert(evento.className);
+
+                                                alert(evento.color);
+                                                alert(evento.backgroundColor);
+                                                alert(evento.borderColor);
+                                                alert(evento.textColor);*/
+
+                                                //calendario.fullCalendar('eventColor','#000');
+                                                /*bootbox.alert("uh oh, look out!");*/
+                                            }
+                                        },   
                                 //if(data.regs[0].estado=="Pendiente"){
-                                danger: {
+                                success: {
                                         label: "Asistida",
                                         className: "btn-success",
                                         callback: function() {
@@ -266,9 +455,9 @@ $(document).ready(function() {
                                                 tituloEvento = evento[key].title;
 
                                                 var subTituloEvento = tituloEvento.split(" | ");
-                                                var iconoX = '<div class="fa fa-calendar-check-o"></div> | ';
+                                                var iconoX = '<div class="fa fa-calendar-check-o" style="width: 17px; height: 100%; float: left; background: #69BD45;  position: absolute; margin-left: -3px; padding-left:2px "></div> <div style="width: 91%; height: 100%; float: right; position: relative; ">  | ';
                                                 //console.log(subTituloEvento);
-                                                var nuevoTitulo = iconoX+subTituloEvento[1];
+                                                var nuevoTitulo = iconoX+' | '+subTituloEvento[1]+' | '+subTituloEvento[2];
                                                 evento[key].title = nuevoTitulo;
                                                 $.getJSON(Routing.generate('get_asistidaCita', { id: evento[key].id}), 
                                                 function(data) {
@@ -359,7 +548,14 @@ $(document).ready(function() {
                             });
                           }
                           else{
-                                if(data.regs[0].estado=="Pendiente" && data.regs[0].fechaCita>hoy){
+                          //alert(data.regs[0].fechaCita);
+                          /*if(new Date(data.regs[0].fechaCita)>new Date(hoy)){
+                          	alert(data.regs[0].fechaCita+' > '+hoy);
+                          }*/
+                          
+                          var dateCita= data.regs[0].fechaCita.split("-"); 
+                          
+                                if(data.regs[0].estado=="Pendiente" && ((dateCita[2]>yyyy) || (dateCita[2]==yyyy && dateCita[1]>mm) || (dateCita[2]==yyyy && dateCita[1]==mm && dateCita[0]>dd)  )){
                                 bootbox.dialog({
                                     message: mensaje,
                                     title: "Información de la cita",
@@ -377,9 +573,9 @@ $(document).ready(function() {
                                                     tituloEvento = evento[key].title;
 
                                                     var subTituloEvento = tituloEvento.split(" | ");
-                                                    var iconoX = '<div class="fa fa-calendar-times-o"></div> | ';
+                                                    var iconoX = '<div class="fa fa-calendar-times-o" style="width: 17px; height: 100%; float: left; background: #F00;  position: absolute; margin-left: -3px; padding-left:2px "></div> <div style="width: 91%; height: 100%; float: right; position: relative; ">'
                                                     //console.log(subTituloEvento);
-                                                    var nuevoTitulo = iconoX+subTituloEvento[1];
+                                                    var nuevoTitulo = iconoX+' | '+subTituloEvento[1]+' | '+subTituloEvento[2];
                                                     evento[key].title = nuevoTitulo;
                                                     $.getJSON(Routing.generate('get_cancelarCita', { id: evento[key].id}), 
                                                     function(data) {
@@ -482,6 +678,8 @@ $(document).ready(function() {
            
         },
         
+        
+        
         dayClick: function(date, jsEvent, view) {
             //alert('Clicked on: '+date);
             //fecha=new Date(fecha);
@@ -494,6 +692,8 @@ $(document).ready(function() {
         },
         
         
+        
+        
         //eventSources: [ source ],
         eventRender: function(event, element) {
             element.find('.fc-event-title').html(element.find('.fc-event-title').text());
@@ -504,35 +704,17 @@ $(document).ready(function() {
               alert('double click!');
             });
             
-        }
+        },
         
-        
+       
 
         
     });//FIN DE LA CONFIGURACION DEL CALENDARIO
-    calendario.fullCalendar('addEventSource', source); 
-    $(document).on('change','#filtroSucursales', function(){
-        sucursal = $('#filtroSucursales').val();
-        //alert(Routing.generate('fullcalendar_loader')+'?sucursal='+sucursal);
-        calendario.fullCalendar('removeEvents');
-        var source = 
-            {
-                url: Routing.generate('fullcalendar_loader')+'?sucursal='+sucursal,
-                type: 'POST',
-                data: {
-                    filtro: 1
-                },
-                error: function() {
-                    bootbox.alert('Se produjo un error al recuperar los datos del calendario, recargue la página!');
-                }
-
-            };
-        calendario.fullCalendar('addEventSource', source); 
-        //alert('dcdsc');
-
-        
-
-    });
+    calendario.fullCalendar('removeEventSource',source);
+                setsource();
+    
+    
+    
     
 });//FIN
 </script> 

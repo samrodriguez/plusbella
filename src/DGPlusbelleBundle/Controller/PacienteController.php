@@ -93,6 +93,7 @@ class PacienteController extends Controller
             $em = $this->getDoctrine()->getManager();
             $entity->getPersona()->setNombres(ucfirst($nombres));
             $entity->getPersona()->setApellidos(ucfirst($apellidos));
+            $entity->setFechaRegistro(new \DateTime('now'));
             
             $em->persist($entity);
             $this->generarExpediente($entity);

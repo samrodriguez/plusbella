@@ -1,8 +1,9 @@
-{% block js -%}
+{#{% block js -%}
     
     <script src="{{ asset('Resources/wrapkit/scripts/daterangepicker.js') }}"></script>
 {% endblock %}
-
+#}
+{% extends 'DGPlusbelleBundle:Layout:layout.html.twig' %}
 
 {% block contenido -%}
     <div class="panel panel-default">
@@ -31,9 +32,13 @@
                 <div class="form-group col-md-1" >
                   {{ form_row(edit_form.descuento)}} 
                 </div>  
+                <div class="form-group col-md-3" >
+                  {{ form_row(edit_form.sucursal)}} 
+                </div>  
             </div>
         <div class="form-grouphide"> 
-            <a href="{{ path('admin_ventapaquete') }}" class="btn btn-default btn-sm" id="cancelarModificar">Cancelar</a>
+{#            <a href="{{ path('admin_ventapaquete') }}" class="btn btn-default btn-sm" id="cancelarModificar">Cancelar</a>#}
+            <a href="{{ path('admin_historial_consulta',{'id':id})}}" class="btn btn-default btn-sm" id="cancelarModificar">Cancelar</a>
             {{ form_widget(edit_form._token) }}
             {{ form_widget(edit_form.submit) }}
         </div>
@@ -49,7 +54,7 @@
 <script>
         //Accion cancelar del boton modificar
         $("#cancelarModificar").click(function(){
-            $("#edit-datatables1").click();
+            $("#editFormContainer").hide();
             return false;
         });
         $('#dgplusbellebundle_ventapaquete_fechaVenta').daterangepicker({

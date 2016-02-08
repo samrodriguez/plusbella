@@ -32,10 +32,15 @@ class CitaType extends AbstractType
                 ->add('horaCita', 'time', array(
                     'input'  => 'datetime',
                     'widget' => 'choice',
-                    'hours'=> array('6','7','8','9','10','11','12','13','14','15','16','17','18','19'),
+                    'hours'=> array('6','7','8','9','10','11','12','13','14','15','16','17','18','19','20'),
                     'minutes'=> array('0','30')
                 ))
-            //->add('horaFin')
+->add('horaFin', 'time', array(
+                    'input'  => 'datetime',
+                    'widget' => 'choice',
+                    'hours'=> array('6','7','8','9','10','11','12','13','14','15','16','17','18','19','20'),
+                    'minutes'=> array('0','30')
+                ))
            // ->add('fechaRegistro')
             //->add('estado')
             

@@ -203,7 +203,7 @@ class VentaPaqueteController extends Controller
         if (!$entity) {
             throw $this->createNotFoundException('Unable to find VentaPaquete entity.');
         }
-
+//var_dump($entity);
         $editForm = $this->createEditForm($entity);
         $deleteForm = $this->createDeleteForm($id);
 
@@ -211,6 +211,7 @@ class VentaPaqueteController extends Controller
             'entity'      => $entity,
             'edit_form'   => $editForm->createView(),
             'delete_form' => $deleteForm->createView(),
+            'id'=>"P".$entity->getPaciente()->getPaciente()[0]->getId(),
         );
     }
 
@@ -251,20 +252,19 @@ class VentaPaqueteController extends Controller
         //Obtener el usuario segun el id
         $usuario = $em->getRepository('DGPlusbelleBundle:Usuario')->findBy(array("id"=>1));
 
-        $dql = "SELECT suc.id
+        /*$dql = "SELECT suc.id
             FROM DGPlusbelleBundle:Usuario u
                     JOIN u.persona per
                     JOIN per.empleado emp
-                    JOIN emp.sucursal suc
             WHERE u.id=:id";
         
         $entities = $em->createQuery($dql)
                        ->setParameter('id',1)
                        ->getResult();
+*/
 
-
-        $sucursal = $em->getRepository('DGPlusbelleBundle:Sucursal')->findBy(array("id"=>$entities[0]["id"]));
-        $entity->setSucursal($sucursal[0]);
+        //$sucursal = $em->getRepository('DGPlusbelleBundle:Sucursal')->findBy(array("id"=>$entities[0]["id"]));
+        //$entity->setSucursal($sucursal[0]);
         $entity->setUsuario($usuario[0]);
 
 
