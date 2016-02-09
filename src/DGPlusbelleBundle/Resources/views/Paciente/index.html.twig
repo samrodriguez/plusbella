@@ -4,7 +4,7 @@
     <style>
         .detallePaciente{
             cursor: pointer;
-            color: #4FC1E9;
+            color: #48CFAD;
         }
     </style>
 {% endblock %}
@@ -116,8 +116,8 @@
                     {{key+1}}
                 </td> 
                 <td>
-                    <p class="detallePaciente">{{ entity.pnombre|upper }} {{ entity.papellido|upper }}</p>
-                </td>
+                    {#<p class="detallePaciente">#}{{ entity.pnombre|upper }} {{ entity.papellido|upper }}{#</p>#}
+                    <i class="detallePaciente fa fa-info-circle pull-right"></i>
                 <td>{{ entity.dui }}</td>
                 {#<td>{{ entity.direccion }}</td>#}
                 <td>{{ entity.tel}}</td>
@@ -220,7 +220,7 @@
                 $('#datatables1>tbody>tr,.detallePaciente').on('click', function(event) {
                     idPaciente=$(this).attr("id");
                     //alert($(this).prop("tagName"));
-                    if($(this).prop("tagName")=="P"){
+                    if($(this).prop("tagName")=="I"){
                         idPaciente=$(this).parent().parent().attr("id");
                         //alert(idPaciente);
                         $.getJSON(Routing.generate('get_infopaciente', { id: idPaciente}), 

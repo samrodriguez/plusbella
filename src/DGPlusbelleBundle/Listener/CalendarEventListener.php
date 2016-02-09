@@ -60,9 +60,21 @@ class CalendarEventListener
             //$//end   = new \DateTime($fi.' '.$fh);
             $eventEntity = new EventEntity('', $st,$nh );
             
-            $horaFin = $companyEvent->getHoraCita()->format("H:i");
-            $horaFinTime = strtotime($horaFin);
-            $horaFin = date("g:i a", strtotime('30 minutes', $horaFinTime));
+            
+            //var_dump($companyEvent);
+            //echo $companyEvent->getHoraFin()=='00:00';
+            if($companyEvent->getHoraFin()->format("H:i")=='00:00'){
+                //var_dump($companyEvent);
+                $horaFin = $companyEvent->getHoraCita()->format("H:i");
+                $horaFinTime = strtotime($horaFin);
+                $horaFin = date("g:i a", strtotime('30 minutes', $horaFinTime));
+            }
+            else{
+                $horaFin = $companyEvent->getHoraFin()->format("H:i");
+                $horaFinTime = strtotime($horaFin);
+                //$horaFin = date("g:i a", strtotime($horaFinTime));
+            }
+            //echo $horaFin;
             
             if($companyEvent->getPaciente()!=null){
                 $idPaciente = $companyEvent->getPaciente()->getId();
