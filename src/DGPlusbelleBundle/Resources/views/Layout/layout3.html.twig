@@ -39,7 +39,6 @@
                 font-weight: bold;
             }
             .panel-heading{
-                
                 font-size: 18px;
                 font-weight: bold;
             }
@@ -48,6 +47,13 @@
                     margin-top:10px;
                 }
             
+                #goBack{
+                    margin-top:1px;
+                }
+                    #goBack:hover{
+                        cursor:pointer;
+                        opacity:0.8;
+                    }
             
         </style>
         {%- endblock %}
@@ -77,6 +83,9 @@
             <section class="content-wrapper" role="main">
                 <div class="content">
                 <div class="content-bar">
+                    <div data-original-title="Atrás" data-toggle="tooltip" id="goBack" class="pull-left" role="group" style="margin-right:10px;">
+                        <i class="fa fa-arrow-circle-left fa-2x" id="goBack"></i>
+                    </div>
                     <div class="pull-right" role="group">
                       {#<a data-toggle="modal" href="#" data-scripts="{{ asset('Resources/wrapkit/_includes/setups.js') }}" data-target="#templateSetup" title="Template Setups" aria-label="template setups" class="btn btn-nofill btn-sm btn-default" href="#"><span class="icon-settings fa-lg text-muted"></span></a>#}
                     </div>
@@ -171,7 +180,7 @@
         <!-- VALIDATOR: js -->
         
         
-    
+        
     {% endblock %}  
     {% block javascripts -%}
     <!-- Aspectos generales de la plantilla -->
@@ -185,6 +194,14 @@
                     //$(this).select2();
                 }
             });
+            
+            
+            $('#goBack').on('click', function(){
+                //alert('prueba');
+                window.history.back();
+            });
+                
+            
             
         });
     </script>
