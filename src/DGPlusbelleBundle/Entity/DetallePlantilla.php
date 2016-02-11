@@ -33,6 +33,15 @@ class DetallePlantilla {
      * @ORM\Column(name="descripcion", type="string", length=200, nullable=true)
      */
     private $descripcion;
+    
+    
+    
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="tipo_parametro", type="string", length=50, nullable=true)
+     */
+    private $tipoParametro;
 
     
 
@@ -104,6 +113,33 @@ class DetallePlantilla {
         return $this->descripcion;
     }
         
+    
+    /**
+     * Set tipoParametro
+     *
+     * @param string $tipoParametro
+     * 
+     * @return DetallePlantilla
+     */
+    public function setTipoParametro($tipoParametro)
+    {
+        $this->tipoParametro = $tipoParametro;
+
+        return $this;
+    }
+
+    /**
+     * Get tipoParametro
+     *
+     * @return string 
+     */
+    public function getTipoParametro()
+    {
+        return $this->tipoParametro;
+    }
+    
+    
+    
     /**
      * Set plantilla
      *

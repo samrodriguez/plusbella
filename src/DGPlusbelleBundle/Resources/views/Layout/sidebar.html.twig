@@ -37,9 +37,17 @@
     <li class="nav-header" role="presentation">ACCESO RAPIDO</li>
     {% if is_granted('ROLE_ADMIN') or is_granted('ROLE_USER')%}
         <li class="nav-item" role="presentation">
-            <a href="{{path('admin_paciente')}}">
-                <span class="nav-icon"><i class="fa fa-money"></i></span>
+            <a href="{{path('admin_ventapaquete_new')}}">
+                <span class="nav-icon"><i class="fa fa-briefcase"></i></span>
                 <span class="nav-text">Venta de paquetes</span>
+            </a>
+        </li>
+    {% endif %}
+    {% if is_granted('ROLE_ADMIN') or is_granted('ROLE_USER')%}
+        <li class="nav-item" role="presentation">
+            <a href="{{path('admin_cita_new2')}}">
+                <span class="nav-icon"><i class="fa fa-calendar-plus-o"></i></span>
+                <span class="nav-text">Nueva cita</span>
             </a>
         </li>
     {% endif %}
@@ -73,6 +81,14 @@
             <a href="{{path('admin_paciente')}}">
               <span class="nav-icon"><i class="fa fa-hospital-o"></i></span>
               <span  class="nav-text">Gestión de pacientes</span>
+            </a>
+        </li>
+    {% endif %}
+    {% if is_granted('ROLE_ADMIN') or is_granted('ROLE_USER')%}
+        <li class="nav-item" role="presentation">
+            <a href="{{path('admin_consulta_expediente')}}">
+                <span class="nav-icon"><i class="fa fa-book"></i></span>
+                <span class="nav-text">Consultar expediente</span>
             </a>
         </li>
     {% endif %}

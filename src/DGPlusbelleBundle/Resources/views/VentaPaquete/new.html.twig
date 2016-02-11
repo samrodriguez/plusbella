@@ -59,13 +59,13 @@
                 
                 var seleccionado="";
                 //Eliminar options del select de pacientes
-                $('#dgplusbellebundle_ventapaquete_paciente option').each(function(index, val) {
+                {#$('#dgplusbellebundle_ventapaquete_paciente option').each(function(index, val) {
                     
                     seleccionado = $(this).attr('selected');
                     if (!seleccionado){
                         $(this).remove();
                     }
-                });
+                });#}
                 $('#dgplusbellebundle_ventapaquete_paquete').select2();
                 //Eliminar las opciones de la lista creada por el selectBoxIt
                 $("#dgplusbellebundle_ventapaquete_pacienteSelectBoxItOptions li").remove();

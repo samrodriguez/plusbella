@@ -51,6 +51,37 @@ class ConsultaController extends Controller
         );
     }
     
+    
+    /**
+     * Lista todos los expediente de los paciente.
+     *
+     * @Route("/expediente", name="admin_consulta_expediente")
+     * @Method("GET")
+     * @Template("DGPlusbelleBundle:Consulta:expediente.html.twig")
+     */
+    public function expedienteAction()
+    {
+        $em = $this->getDoctrine()->getManager();
+        
+        
+        
+        $entities = $em->getRepository('DGPlusbelleBundle:Paciente')->findAll();
+        $dql = $dql = "SELECT p.id, exp.numero, per.nombres, per.apellidos  FROM DGPlusbelleBundle:Paciente p"
+                . " INNER JOIN p.persona per"
+                . " JOIN p.expediente exp";
+        $entities = $em->createQuery($dql)
+                       //->setParameter('tipo',1)
+                       ->getResult();
+        //var_dump($entities);
+        //var_dump($entities[0]->getExpediente()[0]->getNumero());
+        //die();
+        return array(
+            'pacientes' => $entities,
+            'tipo'  => 1,
+        );
+    }
+    
+    
     /**
      * Lists all Consulta diaria entities.
      *
@@ -1162,13 +1193,49 @@ class ConsultaController extends Controller
             $plantillaid = $this->get('request')->request->get('id');
              
             $em = $this->getDoctrine()->getManager();            
-            $dql = "SELECT det.id, det.nombre "
+            $dql = "SELECT det.id, det.nombre,det.tipoParametro "
                     . "FROM DGPlusbelleBundle:DetallePlantilla det "
                     . "JOIN det.plantilla pla "
                     . "WHERE pla.id =  :plantillaid";
             
             $parametros = $em->createQuery($dql)
                         ->setParameter('plantillaid', $plantillaid)
+                        ->getResult();
+            
+            $response = new JsonResponse();
+            $response->setData(array(
+                                'query' => $parametros
+                            )); 
+            
+            return $response; 
+        } else {    
+            return new Response('0');              
+        }  
+    }
+    
+    
+    
+    
+    
+    /**
+    * Ajax utilizado para buscar los parametros del reporte de una plantilla
+    *  
+    * @Route("/buscaropcionesParametrosPlantilla", name="admin_busqueda_opciones_parametros")
+    */
+    public function buscarpcionesParametrosPlantillaAction()
+    {
+        $isAjax = $this->get('Request')->isXMLhttpRequest();
+        if($isAjax){
+            $id = $this->get('request')->request->get('id');
+             
+            $em = $this->getDoctrine()->getManager();            
+            $dql = "SELECT opcdet.nombre,det.id "
+                    . "FROM DGPlusbelleBundle:DetalleOpcionesPlantilla opcdet "
+                    . "JOIN opcdet.detallePlantilla det "
+                    . "WHERE opcdet.detallePlantilla =  :id";
+            
+            $parametros = $em->createQuery($dql)
+                        ->setParameter('id', $id)
                         ->getResult();
             
             $response = new JsonResponse();

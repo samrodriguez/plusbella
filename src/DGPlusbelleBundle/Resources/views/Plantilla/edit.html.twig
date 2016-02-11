@@ -40,9 +40,9 @@
             margin-left: -12px;
         }
         
-        .panel-default {
+        {#.panel-default {
             height: 164px;
-        }
+        }#}
         
         
         
@@ -62,82 +62,80 @@
 
     {# {{ form(edit_form) }} #}
 
+        <div class="row">        
+            <div class="col-md-12">
+                <h3 class="text-left">Historia clínica</h3>
+                <hr>
+            </div>
+        </div>
         <div class="row">
-                    
-                    
-                    <div class="col-md-12">
-                        <h3 class="text-left">Historia clínica</h3>
-                        <hr>
-                    </div>
-                </div>
-         <div class="row">
-                <br>
-                <div class="col-xs-12 col-sm-4">
-                    {{ form_row(edit_form.nombre) }}
-                </div>
-                <div class="col-xs-12 col-sm-6">
-                    {{ form_row(edit_form.descripcion) }}
-                </div>
-                <div class="col-xs-12 col-sm-2">
-                    {{ form_row(edit_form.clinica) }}
-                </div>
-                {#
-                <div class="col-md-2">
-                    {{ form_row(edit_form.horaInicio) }}
-                </div>
-                
-                <div class="col-md-2">
-                    {{ form_row(edit_form.horaFin) }}
-                </div>
-                
-                <div class="col-md-1">
-                    {{ form_row(edit_form.incapacidad) }}
-                </div>
-                #}
+            <br>
+            <div class="col-xs-12 col-sm-4">
+                {{ form_row(edit_form.nombre) }}
             </div>
-            <div class="row">
-                    
-                    
-                    <div class="col-md-12">
-                        <h3 class="text-left">Parámetros para historial clínico</h3>
-                        <hr>
-                        <br>
-                    </div>
-            </div>  
-             <div class="row">
+            <div class="col-xs-12 col-sm-6">
+                {{ form_row(edit_form.descripcion) }}
+            </div>
+            <div class="col-xs-12 col-sm-2">
+                {{ form_row(edit_form.clinica) }}
+            </div>
+            {#
+            <div class="col-md-2">
+                {{ form_row(edit_form.horaInicio) }}
+            </div>
+
+            <div class="col-md-2">
+                {{ form_row(edit_form.horaFin) }}
+            </div>
+
+            <div class="col-md-1">
+                {{ form_row(edit_form.incapacidad) }}
+            </div>
+            #}
+        </div>
+        <div class="row">
+
+
                 <div class="col-md-12">
-                    <br><br>
+                    <h3 class="text-left">Parámetros para historial clínico</h3>
+                    <hr>
+                    <br>
                 </div>
+        </div>  
+         <div class="row">
+            <div class="col-md-12">
+                <br><br>
             </div>
-            <div class="row">  
-             
-                 <div class="listado col-md-12">
-                    <div class="placas" data-prototype="{% filter escape %}  {% include 'DGPlusbelleBundle:Prototype:plantilla.html.twig' with { 'form': edit_form.placas.vars.prototype} %}   {% endfilter  %}"> 
+        </div>
+        <div class="row">  
 
-                      {% for placa in edit_form.placas %}
-                                        
-                        <div class="col-md-4">
-                            <div class="panel bg-grd-light" data-fill-color="true">
-                                <div class="panel-body">
+             <div class="listado col-md-12">
+                <div class="placas" data-prototype="{% filter escape %}  {% include 'DGPlusbelleBundle:Prototype:plantilla.html.twig' with { 'form': edit_form.placas.vars.prototype} %}   {% endfilter  %}"> 
 
-                                    {{ form_row(placa) }} 
- 
-                                </div>
+                  {% for placa in edit_form.placas %}
+
+                    <div class="col-md-4">
+                        <div class="panel bg-grd-light" data-fill-color="true">
+                            <div class="panel-body">
+
+                                {{ form_row(placa) }} 
+
                             </div>
-                        </div>        
-                       {% endfor %}
-                    </div>
-                 </div>  
-              
-            </div>
-              <br>      
-            <div class="form-grouphide"> 
-                 <a href="{{path('admin_plantilla')}}" class="btn btn-default btn-sm" id="cancelarNuevo">Cancelar</a>
-                 {{ form_widget(edit_form._token) }}
+                        </div>
+                    </div>        
+                   {% endfor %}
+                </div>
+             </div>  
+
+        </div>
+        <br>      
+        <div class="form-grouphide"> 
+            <a href="{{path('admin_plantilla')}}" class="btn btn-default btn-sm" id="cancelarNuevo">Cancelar</a>
+            {{ form_widget(edit_form._token) }}
                  
-                {{ form_widget(edit_form.submit) }}
-             </div>    
-            </div>
+            {{ form_widget(edit_form.submit) }}
+        </div>    
+    </div>
         {{ form_widget(edit_form._token) }}
     </div>  
     {{ form_end(edit_form) }}       
