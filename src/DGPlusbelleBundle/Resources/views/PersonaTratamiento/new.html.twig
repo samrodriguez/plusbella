@@ -73,7 +73,13 @@
                         $(this).remove();
                     }
                 });  
+                
             $('#dgplusbellebundle_personatratamiento_tratamiento').select2();
+            $('#dgplusbellebundle_personatratamiento_paciente').select2();
+            $('#dgplusbellebundle_personatratamiento_empleado').select2();          
+            $('#dgplusbellebundle_personatratamiento_descuento').select2();
+            $('#dgplusbellebundle_personatratamiento_sucursal').select2();
+            
             //El numero de sesiones sea mayor o igual a cero. No despliegue valores negativos  en lista 
             $(document).on("change","#dgplusbellebundle_personatratamiento_numSesiones",function(){
                     //alert("prueba");
@@ -98,6 +104,8 @@
             if($('#dgplusbellebundle_personatratamiento_cuotas').val()==""){
                 $('#dgplusbellebundle_personatratamiento_cuotas').val("1");
             }
+            
+              
                 
         validarTratamientoPaciente();            
                 

@@ -8,7 +8,6 @@
   <div class="panel-body">
   {{ form_start(form) }}
     {{ form_errors(form) }}
-    
         <div class="col-xs-12 col-sm-2">
         {{ form_row(form.categoria) }}
         </div>
@@ -39,3 +38,16 @@
 </div>        
 
 {% endblock %}
+
+{% block javascripts_step %}
+    
+   <script> 
+       
+     $(document).ready(function(){
+          $('#dgplusbellebundle_tratamiento_categoria').select2();
+
+     });//Fin document ready 
+  
+  </script>  
+  
+{% endblock %}    

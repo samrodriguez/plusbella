@@ -20,6 +20,34 @@
               </div><!-- /.panel -->        
                           
            </div>  
-          </div>                
+          </div>      
+                          
+                          
+ {% block javascripts_step %}
+    
+   <script> 
+       
+     $(document).ready(function(){
+         
+        
+         $('.tratamientoPaquete').select2();
+         {# $('#dgplusbellebundle_paquete_placas_0_tratamiento').select2();
+          $('#dgplusbellebundle_paquete_placas_1_tratamiento').select2();
+          $('#dgplusbellebundle_paquete_placas_2_tratamiento').select2();
+          $('#dgplusbellebundle_paquete_placas_3_tratamiento').select2();
+          $('#dgplusbellebundle_paquete_placas_4_tratamiento').select2();
+          $('#dgplusbellebundle_paquete_placas_5_tratamiento').select2();
+          $('#dgplusbellebundle_paquete_placas_6_tratamiento').select2();
+          $('#dgplusbellebundle_paquete_placas_7_tratamiento').select2();
+          $('#dgplusbellebundle_paquete_placas_8_tratamiento').select2();
+          $('#dgplusbellebundle_paquete_placas_9_tratamiento').select2();
+          $('#dgplusbellebundle_paquete_placas_10_tratamiento').select2();
+          $('#dgplusbellebundle_paquete_placas_11_tratamiento').select2();#}
+     
+     });//Fin document ready 
+  
+  </script>  
+  
+{% endblock %}                           
              
 {% endspaceless   %}

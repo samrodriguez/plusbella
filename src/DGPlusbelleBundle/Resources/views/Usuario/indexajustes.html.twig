@@ -1,10 +1,7 @@
-{% extends 'DGPlusbelleBundle:Layout:layout.html.twig' %}
-
+{% extends 'DGPlusbelleBundle:Layout:layout3.html.twig' %}
 
 {% block contenido -%}
     
-  
-
         <div class="content-body">
           <div class="panel" data-fill-color="true">
             <div class="panel-heading">
@@ -13,19 +10,19 @@
                 <a href="#" class="btn btn-icon" data-toggle="panel-expand" rel="tooltip" data-placement="bottom" title="expand"><i class="arrow_expand"></i></a>
                 <a href="#" class="btn btn-icon" data-toggle="panel-collapse" rel="tooltip" data-placement="bottom" title="collapse"><i class="icon_minus_alt2"></i></a>
               </div>
-              <h3 class="panel-title">Tratamientos</h3>
+              <h3 class="panel-title">Usuarios</h3>
             </div><!-- /.panel-heading -->
 
             <div class="panel-body">
               <div class="btn-toolbar clearfix" role="toolbar">
                
                 <div class="btn-group btn-group-sm pull-left">
-                   <button data-toggle="tooltip" data-container="body" title="Nuevo tratamiento" id="add-datatables1" class="btn btn-default" role="button">
+                   <button data-toggle="tooltip" data-container="body" title="Nuevo empleado" id="add-datatables1" class="btn btn-default" role="button">
                     <i class="fa fa-plus"></i>
                       </button> 
                 </div>
                 <div class="btn-group btn-group-sm pull-left">
-                  <button id="edit-datatables1" data-toggle="tooltip" data-container="body" title="Modificar tratamiento" class="btn btn-default datatables1-actions disabled" role="button">
+                  <button id="edit-datatables1" data-toggle="tooltip" data-container="body" title="Modificar empleado" class="btn btn-default datatables1-actions disabled" role="button">
                     <i class="fa fa-edit"></i>
                   </button>
                   <button id="delete-datatables1" data-toggle="tooltip" data-container="body" title="Cambiar estado" class="btn btn-default datatables1-actions disabled" role="button">
@@ -39,109 +36,116 @@
             </div><!-- /.panel-body -->
 
             <div class="panel-body hide" id="addFormContainer">
-              {% include 'DGPlusbelleBundle:Tratamiento:new.html.twig' %}
+              {% include 'DGPlusbelleBundle:Usuario:new.html.twig' %}
             </div><!-- /.panel-body -->
 
             <div class="panel-body hide" id="editFormContainer">
-            
+     
             </div><!-- /.panel-body -->
     
-
- <!--     <a href="{{ path('admin_tratamiento_new') }}" class="btn btn-success"> Crear nuevo descuento</a> -->
+    
+   <!--     <a href="{{ path('admin_empleado_new') }}" class="btn btn-success"> Crear nuevo empleado</a>  -->
 
     <table id = "datatables1" class="table table-bordered table-hover display dt-responsive" style="margin-top: 30px">
         <thead>
             <tr>
-                <th>N°</th> 
-                <th>Categoria</th>
-                <th>Tratamiento</th>
-                <th style="text-align: right; padding-right: 20px">Costo</th>
-                <th><center>Estado</center></th>
-                {# <th>Actions</th> #}
+                <th>No.</th>
+                <th>Nombre de empleado</th>
+                <th>Usuario</th>
+                {#<th>Password</th>
+                <th>Salt</th>#}
+                <th>Estado</th>
+                {#<th>Actions</th>#}
             </tr>
         </thead>
         <tbody>
-       {% for key, entity in entities %}
+        {% for key, entity in entities %}
             <tr id="{{entity.id}}">
-                  <td>
-                      {#<a class="correlativo" href="{{ path('admin_sucursal_show', { 'id': entity.id }) }}">#}
-                          {{key+1}}
-                      {#</a>#}
-                  </td>
-           {#        <td><a href="{{ path('admin_tratamiento_show', { 'id': entity.id }) }}">{{ entity.id }}</a></td> #}
-                <td>{{ entity.categoria|upper}}</td>
-                <td>{{ entity.nombre|upper }}</td>
-                <td style="text-align: right; padding-right: 20px">$ {{ entity.costo |number_format(2, '.', ',')}}</td>
-                 <td><center>
-                    {% if entity.estado == 1 %}
+                <td>
+                    {{key+1}}
+                </td> 
+                <td>{{ entity.persona|upper }}</td>
+                <td>{{ entity.username|upper }}</td>
+                {#<td>{{ entity.password }}</td>
+                <td>{{ entity.salt }}</td>#}
+                <td>{%if entity.estado==1 %}
                         Activo
                     {% else %}
                         Inactivo
                     {% endif %}
-                    
-               </center> </td>
-             <!--      <td>
+                </td>
+                {#<td>
                 <ul>
                     <li>
-                        <a href="{{ path('admin_tratamiento_show', { 'id': entity.id }) }}">show</a>
+                        <a href="{{ path('admin_usuario_show', { 'id': entity.id }) }}">show</a>
                     </li>
                     <li>
-                        <a href="{{ path('admin_tratamiento_edit', { 'id': entity.id }) }}">edit</a>
+                        <a href="{{ path('admin_usuario_edit', { 'id': entity.id }) }}">edit</a>
                     </li>
                 </ul>
-                </td> -->
+                </td>#}
             </tr>
         {% endfor %}
         </tbody>
     </table>
-  </div><!-- /.panel -->
-          
-     <!--     <a href="{{ path('admin_sucursal_new') }}" class="btn btn-success " > Crear nueva sucursal</a> -->
-          
-    <!-- Template Setups -->
+        </div><!-- /.panel -->
+
+<!-- Template Setups -->
     {#    <div class="modal fade" id="templateSetup">
           <div class="modal-dialog">
             <!-- modal-content -->
             <div class="modal-content"></div>
           </div><!-- /.modal-dialog -->
-        </div><!-- /.templateSetup -->   #}
+        </div><!-- /.templateSetup -->  #}
 
       </div><!-- /.content -->
    
- {% endblock %}
 
- 
-  {% block javascripts_step %}
-      
-       <script src="{{ asset('Resources/js/Tratamiento.js') }}"></script>
+{% endblock %}
+
+{% block javascripts_step %}
+      <script src="{{ asset('Resources/js/Usuario.js') }}"></script>  
       
        <script>
             $(document).ready(function(){
-                var link=0;
-                var estadoPrevio = "";
+                 var link=0;
+                 var estadoPrevio = "";
+                               
+                
                 //Seleccionar un registro
                 $('#datatables1>tbody>tr').on('click', function(event) {
                     //Se limpia los otros que esten activos
-                    $('#datatables1>tbody>tr').each(function(index, val) {
-                        $(this).removeClass("active");
-                    });
-                    //Se activa el registro en el que se hizo click
-                    $(this).addClass("active");
+                    link=$(this).attr("id");
+                    if(link!=1){
+                        $('#datatables1>tbody>tr').each(function(index, val) {
+                            $(this).removeClass("active");
+                        });
+                        //Se activa el registro en el que se hizo click
+                        $(this).addClass("active");
                     //Se habilitan los botones de editar y borrar
-                    $("#edit-datatables1").removeClass("disabled");
-                    $("#delete-datatables1").removeClass("disabled");
+                    
+                    
+                        $("#edit-datatables1").removeClass("disabled");
+                        $("#delete-datatables1").removeClass("disabled");
                     
                     //var link=$('#datatables1>tbody>tr>td>a').attr("href");
                     //var link=$(this).children("td:first").children().attr("href");
                     //Obtener el id del registro
-                    link=$(this).attr("id");
+                    
                     //alert(link);
                     //Carga del form modificar
-                    $("#editFormContainer").load(link+"/edit");
+                    
+                        $("#editFormContainer").load(link+"/edit");
+                    }
+                    else{
+                        bootbox.alert("Administrador no se puede editar", function() {
+                                        //Example.show("Hello world callback");
+                                    });
+                    }
                     
                     
-                    //Hay que cambiar el numero de la columna para las otras tablas
-                    estadoPrevio = $(this).children('td:nth-child(5)').children().html();
+                     //Hay que cambiar el numero de la columna para las otras tablas
+                    estadoPrevio = $(this).children('td:nth-child(4)').html();
                     estadoPrevio = estadoPrevio.trim();
                     if(estadoPrevio==="Inactivo"){//se muestran los iconos de desactivado
                         $('#delete-datatables1').children().removeClass("fa fa-toggle-on");
@@ -157,8 +161,6 @@
                     
                 });
                 
-               {# $('#dgplusbellebundle_tratamiento_categoria').select2();#}
-                
                 
                 $("#add-datatables1").click(function(){
                     if($("#addFormContainer").hasClass("hide")){
@@ -173,28 +175,31 @@
 
                 });
                 
-                
-                     $("#delete-datatables1").click(function(){
-                        if(!$(this).hasClass('disabled')){   
-                        bootbox.confirm("¿Desea cambiar el estado de este registro?", function(result) {
+                 $("#delete-datatables1").click(function(){
+                     if(!$(this).hasClass('disabled')){                     
+                     bootbox.confirm("¿Desea cambiar el estado de este registro?", function(result) {
                         if(result){
-                        $.getJSON(Routing.generate('admin_tratamiento_desactivar', { id: link}), 
+                        $.getJSON(Routing.generate('admin_usuario_desactivar', { id: link}), 
                           function(data) {
-                               var mensaje="";
+                          var mensaje="";
                                     if(data.regs==0){
                                         //Se cambia a desactivado
-                                        mensaje ="Tratamiento desactivado con exito";
-                                        $('#'+link + ' > td:nth-child(5)').html('<center>Inactivo</center>');
+                                        mensaje ="Usuario desactivado con éxito";
+                                        $('#'+link + ' > td:nth-child(4)').html('Inactivo');
                                         $('#delete-datatables1').children().removeClass("fa fa-toggle-on");
                                         $('#delete-datatables1').children().addClass("fa fa-toggle-off");
                                     //$('#datatables1>tbody>tr>td:nth-child(5)').html('Inactivo');
                                     }
                                     if(data.regs==1){
                                         //Se cambia a activado
-                                        mensaje ="Tratamiento activada con exito";
-                                        $('#'+link + ' > td:nth-child(5)').html('<center>Activo</center>');
+                                        mensaje ="Usuario activada con éxito";
+                                        $('#'+link + ' > td:nth-child(4)').html('Activo');
                                         $('#delete-datatables1').children().removeClass("fa fa-toggle-off");
                                         $('#delete-datatables1').children().addClass("fa fa-toggle-on");
+                                    }
+                                    if(data.regs==2){
+                                        //Se cambia a activado
+                                        mensaje ="Usuario administrador no puede ser desactivado";
                                     }
                                     bootbox.alert(mensaje, function() {
                                         //Example.show("Hello world callback");
@@ -205,11 +210,10 @@
                         }
                                     
                     });     
-                        }
+                        } 
 
                 }); 
-                              
-
+                
                 //Accion cancelar del boton nuevo
                 $("#cancelarNuevo").click(function(){
                     $("#add-datatables1").click();
@@ -225,17 +229,25 @@
                 
                 
                 $("#edit-datatables1").click(function(){
-                    if(!$("#edit-datatables1").hasClass("disabled")){
-                        if($("#editFormContainer").hasClass("hide")){
-                            $("#addFormContainer").addClass("hide");
-                            $("#editFormContainer").removeClass("hide");
+                    if(!$(this).hasClass('disabled')){
+                        if(link != 1){
+                            if(!$("#edit-datatables1").hasClass("disabled")){
+                                if($("#editFormContainer").hasClass("hide")){
+                                    $("#addFormContainer").addClass("hide");
+                                    $("#editFormContainer").removeClass("hide");
+                                }
+                                else{
+                                    //$("#addFormContainer").removeClass("hide");
+                                    $("#editFormContainer").addClass("hide");
+                                }
+                            }
                         }
                         else{
-                            //$("#addFormContainer").removeClass("hide");
-                            $("#editFormContainer").addClass("hide");
+                            bootbox.alert("Administrador no se puede editar", function() {
+                                            //Example.show("Hello world callback");
+                                        });
                         }
                     }
-
                 });
                 /*
                 $("#dgplusbellebundle_sucursal_submit").click(function(){
@@ -257,14 +269,11 @@
                     "order":[[0, "desc"],[1,"desc"]],
                     "columnDefs": [
                            { "orderable": false, "targets": 0 },
-                           { "orderable": false, "targets": 2 },
-                           { "orderable": false, "targets": 3 },
-                           { "orderable": false, "targets": 4 }
+                           { "orderable": false, "targets": 2 }
                           
                         
-                          
-                        
-                      
+
+                           
                            //{ "orderData": [ 2, 3, 4 ], "targets": 2 }
                     ],
                     "language": {
@@ -273,24 +282,23 @@
                     "emptyTable": "No se encontraron registros",
                     "paginate": { 
                         "next": "Siguiente",
-                        "previous": "Antetior"
+                        "previous": "Anterior"
                     },
                     "processing": "Procesando petición...",
                     "search": "Buscar registros:",
                     "lengthMenu": "Mostrar _MENU_ registros"
-                },          
+                }, 
                     
         });
         
-        $('#datatables1>tr>td').on('click', function(event) {
-            alert('dsv');
-        });
+       
         //Oculta el filtro de la tabla
         $('#datatables1_filter').hide();
         $('#filterDatatables1').val('');
         
         
-        validarTratamiento(); 
+     validarUsuario();    
+        //validarEmpleado(); 
         
     });//Fin document ready
         
@@ -314,8 +322,4 @@
     };
         </script>
 
-
     {% endblock %} 
-  
-
-  

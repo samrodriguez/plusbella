@@ -40,6 +40,28 @@ class UsuarioController extends Controller
             'form'   => $form->createView(),
         );
     }
+    
+     /**
+     * Lists all Usuario entities.
+     *
+     * @Route("/indexajustes", name="admin_usuario_indexajustes")
+     * @Method("GET")
+     * @Template("DGPlusbelleBundle:Usuario:indexajustes.html.twig")
+     */
+    public function indexajustesAction()
+    {
+        $em = $this->getDoctrine()->getManager();
+        $entity = new Usuario();
+        $form = $this->createCreateForm($entity);
+        $entities = $em->getRepository('DGPlusbelleBundle:Usuario')->findBy(array('estado' => true));
+
+        return 
+        array(
+            'entities' => $entities,
+            'form'   => $form->createView(),
+        );
+    }
+    
     /**
      * Creates a new Usuario entity.
      *

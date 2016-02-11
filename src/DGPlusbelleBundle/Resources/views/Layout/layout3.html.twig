@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html class="no-js" lang="en">
+    <head>
+    {%block head -%} 
+        {% block title -%}<title>:{% block titlename -%}::: La Plus Belle :::{% endblock %}</title>{% endblock %}
+        {% block meta -%}
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <meta name="viewport" content="initial-scale=1,minimum-scale=1,maximum-scale=1,width=device-width,height=device-height,target-densitydpi=device-dpi,user-scalable=yes">
+        <meta name="theme-color" content="#ffffff">
+        {% endblock %}
+        
+        {% block css -%}
+        <!-- Bootstrap -->
+        <link rel="stylesheet" href="{{ asset('Resources/wrapkit/styles/bootstrap.css') }}">
+        <!-- Bootstrap -->
+        <!-- Dependencies -->
+        <link rel="stylesheet" href="{{ asset('Resources/wrapkit/styles/dependencies.css') }}">
+        <!-- endDependencies -->
+        <!-- Wrapkit -->
+        <link rel="stylesheet" href="{{ asset('Resources/wrapkit/styles/wrapkit.css') }}">
+        <!-- endWrapkit -->
+
+        <link rel="stylesheet" href="{{ asset('Resources/wrapkit/styles/components.css') }}">
+
+        <link rel="stylesheet" href="{{ asset('Resources/ptTimeSelect/css/jquery.ptTimeSelect.css') }}">
+        <link rel="stylesheet" href="{{ asset('Resources/zebra/css/bootstrap.css') }}">
+
+        <link rel="stylesheet" href="{{ asset('Resources/wrapkit/styles/pages.css') }}">
+        <!-- fullcalendar -->
+        <link rel="stylesheet" href="{{ asset('bundles/adesignscalendar/css/fullcalendar/fullcalendar.css') }}" />
+        <link rel="stylesheet" href="{{ asset('Resources/fullcalendar/css/fullcalendar.print.css') }}" media="print"/>
+        <link rel="stylesheet" href="{{ asset('Resources/bValidator-0.73/themes/bvalidator.theme.bootstrap.rt.css') }}" />
+        <!-- fullcalendar -->
+        <style>
+            {# Hace los encabezados mas grandes#}
+            .panel-title{
+                font-size: 22px;
+                font-weight: bold;
+            }
+            .panel-heading{
+                
+                font-size: 18px;
+                font-weight: bold;
+            }
+            
+                .panel-heading p{
+                    margin-top:10px;
+                }
+            
+            
+        </style>
+        {%- endblock %}
+        
+        
+        
+    {% endblock %}
+    </head>
+    <body {% block htmlbody %}{% endblock %}>
+    {% block body -%}
+        <main class="wrapkit-wrapper" id="wrapper">
+        {% block bodycontenido -%}
+            <!-- ============================================
+            HEADER SECTION
+            =============================================== -->
+            {% block navigation -%}
+            {% include 'DGPlusbelleBundle:Layout:navigation.html.twig'%} 
+            {% endblock %}
+            
+            <!-- ============================================
+            SIDEBAR SECTION
+            =============================================== -->
+            {% block sidebar %}
+            {% include 'DGPlusbelleBundle:Layout:sidebarajustes.html.twig'%}
+            {% endblock %}
+                    
+            <section class="content-wrapper" role="main">
+                <div class="content">
+                <div class="content-bar">
+                    <div class="pull-right" role="group">
+                      {#<a data-toggle="modal" href="#" data-scripts="{{ asset('Resources/wrapkit/_includes/setups.js') }}" data-target="#templateSetup" title="Template Setups" aria-label="template setups" class="btn btn-nofill btn-sm btn-default" href="#"><span class="icon-settings fa-lg text-muted"></span></a>#}
+                    </div>
+                    {% block bar %}  
+                    <ul class="breadcrumb breadcrumb-angle">
+                        <li><a href="#" aria-label="home"><i class="fa fa-home"></i></a></li>
+                        <li class="active">Dashboard</li>
+                    </ul>
+                    {#{% if is_granted('ROLE_PREVIOUS_ADMIN') %}
+                        <a href="{{ path('dashboard', {_change: '_exit'}) }}">End impersonating...</a>
+                    {% elseif is_granted('ROLE_ADMIN')  %}
+                        <form action="{{ path('dashboard_impersonating')}}" method="post" name="impersonating" id="impersonating">
+                            <input type="text" name="impersonating" placeholder="Impersonating..."><input type="submit" value="OK">
+                        </form> 
+                    {% endif %}#}
+                    {% endblock %}   
+                </div><!-- /.content-bar -->
+                <div class="content-body">
+                    {% block contenido %}{% endblock %} 
+                </div><!-- /.content-body -->
+                <!-- Template Setups -->
+                <div class="modal fade" id="templateSetup">
+                  <div class="modal-dialog">
+                    <!-- modal-content -->
+                    <div class="modal-content"></div>
+                  </div><!-- /.modal-dialog -->
+                </div><!-- /.templateSetup -->
+                </div><!-- /.content -->
+            </section><!-- /MAIN -->
+        {% endblock %}
+        {% block footer -%} 
+        {% include 'DGPlusbelleBundle:Layout:footer.html.twig'%} 
+        {% endblock %}
+        </main>    
+    {%- endblock %}  
+                        
+
+    {% block js -%}
+        <!-- VENDORS : jQuery & Bootstrap -->
+        <script src="{{ asset('Resources/wrapkit/scripts/vendor.js') }}"></script>
+        <!-- END VENDORS -->
+        <!-- DEPENDENCIES : Required plugins -->
+        <script src="{{ asset('Resources/wrapkit/scripts/dependencies.js') }}"></script>
+        <!-- END DEPENDENCIES -->
+    
+        <!-- WRAPKIT -->
+        <script src="{{ asset('Resources/wrapkit/scripts/wrapkit.js') }}"></script>
+        <!-- END WRAPKIT -->
+        <!-- WRAPKIT SETUPS -->
+        <script src="{{ asset('Resources/wrapkit/scripts/wrapkit-setup.js') }}"></script>
+        
+        <!-- end WRAPKIT SETUPS -->
+        
+        <script src="{{ asset('Resources/wrapkit/scripts/morris.bundle.js') }}"></script>
+        <script src="{{ asset('Resources/wrapkit/scripts/jquery.sparkline.js') }}"></script>
+        <script src="{{ asset('Resources/wrapkit/scripts/jquery.tagsinput.js') }}"></script>
+        <script src="{{ asset('Resources/wrapkit/scripts/jquery.mask.js') }}"></script>
+        <script src="{{ asset('Resources/wrapkit/scripts/select2.js') }}"></script>
+        <script src="{{ asset('Resources/wrapkit/scripts/jquery.selectBoxit.js') }}"></script>
+        <script src="{{ asset('Resources/wrapkit/scripts/moment.js') }}"></script>
+        <script src="{{ asset('Resources/wrapkit/scripts/daterangepicker.js') }}"></script>
+        <script src="{{ asset('Resources/wrapkit/scripts/jquery-minicolors.js') }}"></script>
+        {#<script src="{{ asset('Resources/wrapkit/scripts/fullcalendar.js') }}"></script>#}
+
+        <script src="{{ asset('Resources/wrapkit/scripts/clndr.js') }}"></script>
+        <script src="{{ asset('Resources/wrapkit/scripts/dataTables.bootstrap.js') }}"></script>
+        <script src="{{ asset('Resources/wrapkit/scripts/dataTables.tableTools.js') }}"></script>
+        <script src="{{ asset('Resources/wrapkit/scripts/jquery.validate.js') }}"></script>
+        <script src="{{ asset('Resources/wrapkit/scripts/bootbox.js') }}"></script>
+        <script src="{{ asset('Resources/wrapkit/scripts/toastr.js') }}"></script>
+        <script src="{{ asset('Resources/wrapkit/scripts/bootstrap-editable.js') }}"></script>
+        <script src="{{ asset('Resources/wrapkit/scripts/chartjs.js') }}"></script>
+        
+
+         <!-- fullcalendar -->
+        <script src="{{ asset('bundles/fosjsrouting/js/router.js') }}"></script>
+        <script src="{{ path('fos_js_routing_js', {'callback': 'fos.Router.setData'}) }}"></script>
+        <script src="{{ asset('bundles/adesignscalendar/js/fullcalendar/jquery.fullcalendar.min.js') }}"></script>
+        <script src="{{ asset('Resources/jquery-ui/ui/jquery-ui.js') }}"></script>
+        <!-- fullcalendar -->
+        
+        <!-- COMPONENTS -->
+        <script src="{{ asset('Resources/ptTimeSelect/js/jquery.ptTimeSelect.js') }}"></script>  
+        <!-- END COMPONENTS -->
+        
+        <script src="{{ asset('Resources/bootstrap-3/js/bootstrap.min.js') }}"></script> 
+        
+        <script type="text/javascript" src="{{ asset('Resources/bValidator-0.73/jquery.bvalidator.js')}}"></script>
+        <script type="text/javascript" src="{{ asset('Resources/bValidator-0.73/bvalidator.lang.es.js')}}" ></script>
+        <script type="text/javascript" src="{{ asset('Resources/zebra/js/zebra_datepicker.js')}}" ></script>
+        <script src="{{ asset('Resources/wrapkit/scripts/fileinput.js') }}"></script>
+        <!-- VALIDATOR: js -->
+        
+        
+    
+    {% endblock %}  
+    {% block javascripts -%}
+    <!-- Aspectos generales de la plantilla -->
+    <script>
+        $(document).ready(function(){
+            $('select').each(function(index, val) {
+                if (!$(this).hasClass("busqueda") ){
+                   //$(this).selectBoxIt();
+                }
+                else{
+                    //$(this).select2();
+                }
+            });
+            
+        });
+    </script>
+    <script type="text/javascript">
+        $(function () {
+          $('[data-toggle="tooltip"]').tooltip();
+          $('.dropdown-toggle').dropdown();
+        })
+    </script>
+    {% endblock %}  
+    {% block jquery -%}
+    {% endblock %} 
+    </body>
+</html>
+  
+
+{% block javascripts_step %}
+   
+{% endblock %}

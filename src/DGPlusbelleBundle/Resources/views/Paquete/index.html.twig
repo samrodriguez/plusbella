@@ -203,7 +203,8 @@
                     
                     
                 });
-                
+                              
+                $('.tratamientoPaquete').select2();
                 
                 $("#add-datatables1").click(function(){
                     if($("#addFormContainer").hasClass("hide")){
@@ -458,7 +459,7 @@ function addTagForm(collectionHolder, $newLinkLi) {
 }
 
 function addTagFormDeleteLink($tagFormLi) {
-    var $removeFormA = $('<div class="row"><div class="col-md-1"><a class="link btn btn-danger" href="#">Eliminar</a></div></div>');
+    var $removeFormA = $('<div class="col-md-1"><a class="link btn btn-danger" href="#">Eliminar</a></div>');
     $tagFormLi.append($removeFormA);
 
     $removeFormA.on('click', function(e) {
