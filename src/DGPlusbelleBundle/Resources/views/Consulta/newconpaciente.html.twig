@@ -437,7 +437,7 @@
         function mostrarCampos(data) {
             var div = document.getElementById('campos');
             var form = $("form");
-           
+            //console.log(data[0]);
             //var form = document.createElement('form');
             //form.setAttribute('action', '{# {{path('admin_set_campos')}} #}');
             //form.setAttribute('method', 'POST');
@@ -461,27 +461,109 @@
                 campos[key].setAttribute('class', 'parametro col-md-11');
                 
                 // Se crea el campo de texto del parametro de la plantilla
-                input[key] = document.createElement('textarea');
-                input[key].setAttribute('type', 'text');
-                input[key].setAttribute('placeholder', value.nombre);
-                input[key].setAttribute('class', 'form-control classPlantilla');
-                input[key].setAttribute('style', 'margin-bottom: 5px;resize:vertical;height:150px;');
-                input[key].setAttribute('name', value.nombre);
-                input[key].setAttribute('id', value.id);
+                if(value.tipoParametro=='Textarea' || value.tipoParametro==''){
+                    input[key] = document.createElement('textarea');
+                    input[key].setAttribute('type', 'text');
+                    input[key].setAttribute('placeholder', value.nombre);
+                    input[key].setAttribute('class', 'form-control classPlantilla');
+                    input[key].setAttribute('style', 'margin-bottom: 5px;resize:vertical;height:150px;');
+                    input[key].setAttribute('name', value.nombre);
+                    input[key].setAttribute('id', value.id);
+                    
+                    etiqueta[key] = document.createElement('p');
+                    etiqueta[key].setAttribute('style', 'color: #646473; font-size: 13px; font-weight: 700;');
+                    etiqueta[key].appendChild(t);
+
+                    label[key] = document.createElement('label');
+
+                    // Se introducen los elementos en el div con id = campos
+                    label[key].appendChild(etiqueta[key]);
+                    campos[key].appendChild(label[key]);
+                    console.log(input[key]);
+                    campos[key].appendChild(input[key]);
+                    div.appendChild(campos[key]);
+                }
+                if(value.tipoParametro=='Radiobutton'){
+                    $.post( "{{path('admin_busqueda_opciones_parametros')}}", { id: value.id }, function( opc ) {
+                        var par = new Array();
+                        par = opc.query;
+                        //console.log(par[0]);
+                        // Si la plantilla contiene campos
+                        $.each( par, function( key2, value2 ) {
+                            input[key] = document.createElement('input');
+                            input[key].setAttribute('type', 'radio');
+                            //input[key].setAttribute('placeholder', value.nombre);
+                            input[key].setAttribute('class', 'form-control classPlantilla');
+                            //input[key].setAttribute('style', 'margin-bottom: 5px;resize:vertical;height:150px;');
+                            input[key].setAttribute('name', value.nombre);
+                            input[key].setAttribute('id', value.id);
+                            //console.log(input[key2]);  
+                            etiqueta[key] = document.createElement('p');
+                            //etiqueta[key].setAttribute('style', 'color: #646473; font-size: 13px; font-weight: 700;');
+                            etiqueta[key].appendChild(t);
+
+                            label[key] = document.createElement('label');
+
+                            // Se introducen los elementos en el div con id = campos
+                            label[key].appendChild(etiqueta[key]);
+                            campos[key].appendChild(label[key]);
+                            //console.log(input[key]);
+                            campos[key].appendChild(input[key]);
+                            $('#'+value.id).append(value2.nombre);
+                            div.appendChild(campos[key]);
+                        });
+                        //console.log(input[key]);
+
+                    }, "json");
+                    
+                    
+                }
+                if(value.tipoParametro=='Checkbox'){
+                    
+                    $.post( "{{path('admin_busqueda_opciones_parametros')}}", { id: value.id }, function( opc2 ) {
+                        var par2 = new Array();
+                        par2 = opc2.query;
+                        //console.log(par2[0]);
+                        // Si la plantilla contiene campos
+                        $.each( par2, function( key3, value3 ) {
+                            input[key] = document.createElement('input');
+                            input[key].setAttribute('type', 'checkbox');
+                            //input[key].setAttribute('placeholder', value.nombre);
+                            input[key].setAttribute('class', 'form-control classPlantilla');
+                            //input[key].setAttribute('style', 'margin-bottom: 5px;resize:vertical;height:150px;');
+                            input[key].setAttribute('name', value.nombre);
+                            input[key].setAttribute('id', value.id);
+                            //console.log(input[key]);  
+                            
+                            
+                            etiqueta[key] = document.createElement('p');
+                            //etiqueta[key].setAttribute('style', 'color: #646473; font-size: 13px; font-weight: 700;');
+                            etiqueta[key].appendChild(t);
+
+                            label[key] = document.createElement('label');
+
+                            // Se introducen los elementos en el div con id = campos
+                            label[key].appendChild(etiqueta[key]);
+                            campos[key].appendChild(label[key]);
+                            console.log(campos[key]);
+                            campos[key].appendChild(input[key]);
+                            //console.log(key3);
+                            //console.log(value3.nombre);
+                            $('#'+value.id).append(value3.nombre);
+                            div.appendChild(campos[key]);
+                
+                        });
+                        
+
+                    }, "json");
+                }
+                
+                
+                
              //   input[key].setAttribute('onblur', 'setCamposPlantilla(' + value.id + ')');
                 
                 // Se crea el label del parametro de la plantilla
-                etiqueta[key] = document.createElement('p');
-                etiqueta[key].setAttribute('style', 'color: #646473; font-size: 13px; font-weight: 700;');
-                etiqueta[key].appendChild(t);
                 
-                label[key] = document.createElement('label');
-                
-                // Se introducen los elementos en el div con id = campos
-                label[key].appendChild(etiqueta[key]);
-                campos[key].appendChild(label[key]);
-                campos[key].appendChild(input[key]);
-                div.appendChild(campos[key]);
                 
                 if(((key+1)%3)==0){
                     //console.log(key%3);

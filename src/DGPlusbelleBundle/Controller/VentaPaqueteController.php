@@ -147,13 +147,13 @@ class VentaPaqueteController extends Controller
         
         //Recuperación del paciente
         $request = $this->getRequest();
-        $id= $request->get('id');
-        $id = substr($id, 1);
+        //$id= $request->get('id');
+        //$id = substr($id, 1);
         //Busqueda del paciente
-        $paciente = $em->getRepository('DGPlusbelleBundle:Paciente')->find($id);
+        //$paciente = $em->getRepository('DGPlusbelleBundle:Paciente')->find($id);
         //Seteo del paciente en la entidad
-        $persona=$paciente->getPersona();
-        $entity->setPaciente($persona);
+        //$persona=$paciente->getPersona();
+        //$entity->setPaciente($persona);
         $form   = $this->createCreateForm($entity);
 
         return array(

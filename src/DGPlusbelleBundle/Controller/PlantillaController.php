@@ -8,6 +8,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use DGPlusbelleBundle\Entity\Plantilla;
+use DGPlusbelleBundle\Entity\DetalleOpcionesPlantilla;
 use DGPlusbelleBundle\Form\PlantillaType;
 
 /**
@@ -54,17 +55,58 @@ class PlantillaController extends Controller
         $entity->setEstado(true);
         $form = $this->createCreateForm($entity);
         $form->handleRequest($request);
-
+        $parameters = $request->request->all();
+        //var_dump($parameters);
+        
         if ($form->isValid()) {
             $em = $this->getDoctrine()->getManager();
             $em->persist($entity);
             $em->flush();
-
+            $coleccion = $entity->getPlacas();
             $usuario= $this->get('security.token_storage')->getToken()->getUser();
+            //var_dump($entity);
+            //var_dump($coleccion);
+            foreach ( $coleccion as $key => $row) {//itera la coleccion inicial de todos los parametros
+                //var_dump($key);
+            
+                foreach ( $parameters as $clave => $row2) {//itera la coleccion de los atributos de cada parametro
+                    $nombreOpcion = explode('-',$clave);
+                    //echo "Clave de parameters ".$clave;
+                    
+                    
+                    if (strpos($clave, 'opcionTag') !== false) {//verifica que cada clave tenga el prefijo opcionTag
+                        //echo 'true';
+                        
+                        if ( $key==$nombreOpcion[1] ) {//Obtiene el valor de cada iteración para almacenarse en la tabla
+                            $detalleOpcionesPlantilla = new DetalleOpcionesPlantilla();
+                            
+                            $detalleOpcionesPlantilla->setNombre($row2);
+                            $detalleOpcionesPlantilla->setDetallePlantilla($entity->getPlacas()[$key]);
+                            $em->persist($detalleOpcionesPlantilla);
+                            $em->flush($detalleOpcionesPlantilla);
+                            //var_dump($entity->getPlacas());
+                            //var_dump($clave);
+                            //echo $nombreOpcion[1];
+                            
+                            //var_dump($row2);//valor del atributo a guardar en campo nombre de detalle_opciones_plantilla
+                            //var_dump($detalleOpcionesPlantilla);
+                        }
+                    }
+                }
+                
+//                if($key=='opcionTag'){
+//                    
+//                }
+//                var_dump($key);
+            }
+            //die();
+            
             $this->get('bitacora')->escribirbitacora("Se creo una nueva plantilla de reporte",$usuario->getId());
             
             return $this->redirect($this->generateUrl('admin_plantilla', array('id' => $entity->getId())));
         }
+        
+        
 
         return array(
             'entity' => $entity,

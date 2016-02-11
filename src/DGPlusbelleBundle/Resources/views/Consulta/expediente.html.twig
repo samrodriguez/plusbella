@@ -1,0 +1,460 @@
+{% extends 'DGPlusbelleBundle:Layout:layout.html.twig' %}
+{% block css %}
+    {{parent()}}
+    <style>
+        .detallePaciente{
+            cursor: pointer;
+            color: #48CFAD;
+        }
+    </style>
+{% endblock %}
+{% block contenido -%}
+
+
+        <div class="content-body">
+          <div class="panel" data-fill-color="true">
+            <div class="panel-heading">
+              <div class="panel-control pull-right">
+                <a href="#" class="btn btn-icon" data-toggle="panel-refresh" rel="tooltip" data-placement="bottom" title="refresh"><i class="icon-refresh"></i></a>
+                <a href="#" class="btn btn-icon" data-toggle="panel-expand" rel="tooltip" data-placement="bottom" title="expand"><i class="arrow_expand"></i></a>
+                <a href="#" class="btn btn-icon" data-toggle="panel-collapse" rel="tooltip" data-placement="bottom" title="collapse"><i class="icon_minus_alt2"></i></a>
+              </div>
+              <h3 class="panel-title">Expedientes</h3>
+            </div><!-- /.panel-heading -->
+
+            <div class="panel-body">
+              <div class="btn-toolbar clearfix" role="toolbar">
+               
+                {#<div class="btn-group btn-group-sm pull-left">
+                    <button data-toggle="tooltip" data-container="body" title="Nuevo paciente" id="add-datatables1" class="btn btn-default" role="button">
+                        <i class="icon-user-follow"></i>
+                    </button> #}
+                    {#<button data-toggle="tooltip" data-container="body" title="Detalles paciente" id="detalle-datatables1" class="btn btn-default disabled" role="button">
+                        <i class="fa fa-bars"></i>
+                    </button> #}
+                {#</div>
+                <div class="btn-group btn-group-sm pull-left">
+                    <button id="ver-expediente" data-toggle="tooltip" data-container="body" title="Ver expediente" class="btn btn-default datatables1-actions disabled opciones" role="button">
+                        <i class="fa fa-book"></i><a href="{{ path('admin_historial_consulta') }}"> </a>
+                    </button> 
+                </div>#}
+                {#<div class="btn-group btn-group-sm pull-left">
+                    <button id="nueva-cita" data-toggle="tooltip" data-container="body" title="Nueva cita" class="btn btn-default datatables1-actions {#disabled#} {#opciones" role="button">#}
+                      {#  <i class="fa fa-calendar-plus-o"></i><a href="{{ path('admin_cita_new') }}"> </a>
+                    </button>
+                    <button id="nueva-consulta" data-toggle="tooltip" data-container="body" title="Nueva consulta" class="btn btn-default datatables1-actions disabled opciones" role="button">
+                        <i class="fa fa-folder-open"></i><a href="{{ path('admin_consulta_nueva_paciente') }}"> </a>
+                    </button>#}
+                    {#<button id="nueva-consulta" data-toggle="tooltip" data-container="body" title="Nueva consulta emergencia" class="btn btn-default datatables1-actions disabled opciones" role="button">
+                        <i class="fa fa-folder-open"></i><a href="{{ path('admin_consulta_nueva_paciente') }}"> </a>
+                    </button>#}
+                    {#<button id="nueva-devolucion" data-toggle="tooltip" data-container="body" title="Nueva devolucion" class="btn btn-default datatables1-actions disabled opciones" role="button">
+                        <i class="fa fa-money"></i><a href="{{ path('admin_devolucion_new') }}"> </a>
+                    </button> 
+                    <button id="vender-paquete" data-toggle="tooltip" data-container="body" title="Vender paquete" class="btn btn-default datatables1-actions disabled opciones" role="button">
+                        <i class="fa fa-briefcase"></i><a href="{{ path('admin_ventapaquete_new') }}"> </a>
+                    </button> 
+                    <button id="vender-tratamiento" data-toggle="tooltip" data-container="body" title="Vender tratamiento" class="btn btn-default datatables1-actions disabled opciones" role="button">
+                        <i class="fa fa-leanpub"></i><a href="{{ path('admin_personatratamiento_new') }}"> </a>
+                    </button> 
+                     <button id="nuevo-abono" data-toggle="tooltip" data-container="body" title="Nuevo abono" class="btn btn-default datatables1-actions disabled opciones" role="button">
+                        <i class="fa fa-dollar"></i><a href="{{ path('admin_abono_new') }}"> </a>
+                    </button> 
+                    
+                </div>#}
+                {#<div class="btn-group btn-group-sm pull-left">
+                  <button id="edit-datatables1" data-toggle="tooltip" data-container="body" title="Modificar paciente" class="btn btn-default datatables1-actions disabled" role="button">
+                    <i class="fa fa-edit"></i>
+                  </button>#}
+                  {#<button id="delete-datatables1" data-toggle="tooltip" data-container="body" title="Eliminar registro" class="btn btn-default datatables1-actions disabled" role="button">
+                    <i class="fa fa-trash-o"></i>
+                  </button>#}
+{#                </div>#}
+                <div class="btn-group pull-left">
+                  <input id="filterDatatables1" class="form-control input-sm" placeholder="Buscar...">
+                </div>
+              </div><!-- /btn-toolbar -->
+            </div><!-- /.panel-body -->
+
+            
+            
+            <div class="panel-body hide" id="editFormContainer">
+            
+            </div>
+            
+            <div class="panel-body hide" id="opcionesFormContainer">
+            
+            </div>
+
+       
+ <!--    <a href="{{ path('admin_paciente_new') }}" class="btn btn-success"> Crear nuevo paciente</a>  -->
+
+    <table id = "datatables1" class="table table-bordered table-hover display dt-responsive" style="margin-top: 30px">
+        <thead>
+            <tr>
+                <th>N°</th>  
+                <th>Expediente</th>
+                <th>Paciente</th>
+                {#<th>DUI</th>#}
+               {# <th>Dirección</th> #}
+{#                <th>Teléfono</th>#}
+{#                <th>Email</th>#}
+                {#<th>Ocupación</th>#}
+                {#<th>Lugar de trabajo</th> 
+                <th>F. Nacimiento</th>#}
+                {#<th>Referido por</th>#}
+                
+                {#<th>Acciones</th>#}
+            </tr>
+        </thead>
+        <tbody>
+         {% for key, entity in pacientes %}
+                <tr id="P{{entity.id}}">
+             {# <td>{{ entity.idpac }}</td>  #}
+                <td>
+                    {{key+1}}
+                </td> 
+                <td>
+                    {{ entity.numero }}
+
+                </td>
+                <td>
+                    {#<p class="detallePaciente">#}{{ entity.nombres|upper }} {{ entity.apellidos|upper }}{#</p>#}
+                    <i class="detallePaciente fa fa-info-circle pull-right"></i>
+                </td>
+                
+                {#<td>{{ entity.direccion }}</td>#}
+{#                <td>{{ entity.tel}}</td>#}
+{#                <td>{{ entity.email|lower }}</td>#}
+               
+                {#<td>{{ entity.ocupacion }}</td>#}
+                {#<td>{{ entity.lugarTrabajo|upper }}</td>
+                <td>{% if entity.fechaNacimiento %}{{ entity.fechaNacimiento|date('d-m-Y') }}{% endif %}</td>#}
+                {#<td>{{ entity.referidoPor }}</td>#}
+                {#<td>{{ entity.personaEmergencia }}</td>
+                <td>{{ entity.telefonoEmergencia }}</td>#}
+                
+                 {#<td>
+                <ul>
+                    <li>
+                        <a href="{{ path('admin_paciente_show', { 'id': entity.idpac }) }}">Consulta de emergencia</a>
+                    </li>
+                    <li>
+                        <a href="{{ path('admin_cita_new', { 'id': entity.idpac }) }}">Nueva cita</a>
+                    </li>
+                </ul>
+                </td>#}    
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+    </div><!-- /.panel -->    
+       
+<!-- Template Setups -->
+     {#   <div class="modal fade" id="templateSetup">
+          <div class="modal-dialog">
+            <!-- modal-content -->
+            <div class="modal-content"></div>
+          </div><!-- /.modal-dialog -->
+        </div><!-- /.templateSetup -->
+            #}
+      </div><!-- /.content -->
+   
+
+     
+  
+   {% endblock %}
+   
+    
+       
+  {% block javascripts_step %}
+       <script src="{{ asset('Resources/js/Paciente.js') }}"></script>
+        
+        <script>
+           
+            $(document).ready(function(){
+                var idPaciente = 0;
+                
+                
+                
+              // validando campos  
+              $('#dgplusbellebundle_paciente_dui').mask('00000000-0');  
+              $('#dgplusbellebundle_paciente_persona_telefono').mask('0000-0000'); 
+              $('#dgplusbellebundle_paciente_telefonoEmergencia').mask('0000-0000'); 
+              
+        {#$(".detallePaciente").click(function(){
+                    $.getJSON(Routing.generate('get_infopaciente', { id: idPaciente}), 
+                    function(data) {
+                        var mensaje = "";
+                          mensaje += "<div class='row'></div>";
+                          //mensaje += "<div class='col-md-12'><hr></div></div>";
+                          
+                          mensaje += "<div class='col-md-6 text-right'><b>Nombre del paciente: </b></div><div class='col-md-6'>"+data.regs[0].nombres+" "+data.regs[0].apellidos+"</div>";
+                          mensaje += "<div class='col-md-6 text-right'><b>DUI: </b></div><div class='col-md-6'>"+data.regs[0].dui+"</div>";
+                          mensaje += "<div class='col-md-6 text-right'><b>Teléfono: </b></div><div class='col-md-6'>"+data.regs[0].telefono+"</div>";
+                          mensaje += "<div class='col-md-6 text-right'><b>Correo: </b></div><div class='col-md-6'>"+data.regs[0].email+"</div>";
+                          mensaje += "<div class='col-md-6 text-right'><b>Estado civil: </b></div><div class='col-md-6'>"+data.regs[0].estadoCivil+"</div>";
+                          
+                          mensaje += "<div class='col-md-6 text-right'><b>Sexo: </b></div><div class='col-md-6'>"+data.regs[0].sexo+"</div>";
+                          mensaje += "<div class='col-md-6 text-right'><b>Ocupación: </b></div><div class='col-md-6'>"+data.regs[0].ocupacion+"</div>";
+                          mensaje += "<div class='col-md-6 text-right'><b>Lugar de trabajo: </b></div><div class='col-md-6'>"+data.regs[0].lugarTrabajo+"</div>";
+                          mensaje += "<div class='col-md-6 text-right'><b>Fecha de nacimiento: </b></div><div class='col-md-6'>"+data.regs[0].fechaNacimiento+"</div>";
+                          mensaje += "<div class='col-md-6 text-right'><b>Referido por: </b></div><div class='col-md-6'>"+data.regs[0].referidoPor+"</div>";
+                          mensaje += "<div class='col-md-6 text-right'><b>En caso de emergencia llamar a: </b></div><div class='col-md-6'>"+data.regs[0].personaEmergencia+"</div>";
+                          mensaje += "<div class='col-md-6 text-right'><b>Teléfono: </b></div><div class='col-md-6'>"+data.regs[0].telefonoEmergencia+"</div>";
+                          mensaje += "</div>";
+                          bootbox.dialog({
+                                message: mensaje,
+                                title: "Información del paciente",
+                                buttons: {
+                                  main: {
+                                    label: "Aceptar",
+                                    className: "btn-primary",
+                                    callback: function() {
+
+                                    }
+                                  }
+                                }
+                            });
+                    });
+                
+                });
+              #}
+                //Seleccionar un registro
+                $('#datatables1>tbody>tr,.detallePaciente').on('click', function(event) {
+                    idPaciente=$(this).attr("id");
+                    //alert($(this).prop("tagName"));
+                    if($(this).prop("tagName")=="I"){
+                        idPaciente=$(this).parent().parent().attr("id");
+                        //alert(idPaciente);
+                        $.getJSON(Routing.generate('get_infopaciente', { id: idPaciente}), 
+                        function(data) {
+                            var mensaje = "";
+                            mensaje += "<div class='container-fluid'>";
+                            //mensaje += "<div class='col-md-12'><hr></div></div>";
+
+                            mensaje += "<div class='col-md-6 text-right'><b>Nombre del paciente: </b></div><div class='col-md-6'>"+data.regs[0].nombres+" "+data.regs[0].apellidos+"</div>";
+                            mensaje += "<div class='clearfix'></div>";
+                            mensaje += "<div class='col-md-6 text-right'><b>DUI: </b></div><div class='col-md-6'>"+data.regs[0].dui+"</div>";
+                            mensaje += "<div class='clearfix'></div>";
+                            mensaje += "<div class='col-md-6 text-right'><b>Teléfono de contacto: </b></div><div class='col-md-6'>"+data.regs[0].telefono+"</div>";
+                            mensaje += "<div class='clearfix'></div>";
+                            mensaje += "<div class='col-md-6 text-right'><b>Correo: </b></div><div class='col-md-6'>"+data.regs[0].email+"</div>";
+                            mensaje += "<div class='clearfix'></div>";
+                            mensaje += "<div class='col-md-6 text-right'><b>Estado civil: </b></div><div class='col-md-6'>"+data.regs[0].estadoCivil+"</div>";
+                            mensaje += "<div class='clearfix'></div>";
+
+                            mensaje += "<div class='col-md-6 text-right'><b>Sexo: </b></div><div class='col-md-6'>"+data.regs[0].sexo+"</div>";
+                            mensaje += "<div class='clearfix'></div>";
+                            mensaje += "<div class='col-md-6 text-right'><b>Ocupación: </b></div><div class='col-md-6'>"+data.regs[0].ocupacion+"</div>";
+                            mensaje += "<div class='clearfix'></div>";
+                            mensaje += "<div class='col-md-6 text-right'><b>Lugar de trabajo: </b></div><div class='col-md-6'>"+data.regs[0].lugarTrabajo+"</div>";
+                            mensaje += "<div class='clearfix'></div>";
+                            mensaje += "<div class='col-md-6 text-right'><b>Fecha de nacimiento: </b></div><div class='col-md-6'>"+data.regs[0].fechaNacimiento+"</div>";
+                            mensaje += "<div class='clearfix'></div>";
+                            mensaje += "<div class='col-md-6 text-right'><b>Referido por: </b></div><div class='col-md-6'>"+data.regs[0].referidoPor+"</div>";
+                            mensaje += "<div class='clearfix'></div>";
+                            mensaje += "<div class='col-md-6 text-right'><b>En caso de emergencia llamar a: </b></div><div class='col-md-6'>"+data.regs[0].personaEmergencia+"</div>";
+                            mensaje += "<div class='clearfix'></div>";
+                            mensaje += "<div class='col-md-6 text-right'><b>Teléfono: </b></div><div class='col-md-6'>"+data.regs[0].telefonoEmergencia+"</div>";
+                            mensaje += "<div class='clearfix'></div>";
+                            mensaje += "</div>";
+                            bootbox.dialog({
+                                  message: mensaje,
+                                  title: "Información del paciente",
+                                  buttons: {
+                                    main: {
+                                      label: "Aceptar",
+                                      className: "btn-primary",
+                                      callback: function() {
+
+                                      }
+                                    }
+                                  }
+                            });
+                        });
+                    }
+                    else{
+                    
+                        //Se limpia los otros que esten activos
+                        $('#datatables1>tbody>tr').each(function(index, val) {
+                            $(this).removeClass("active");
+                        });
+                        //Se activa el registro en el que se hizo click
+                        $(this).addClass("active");
+                        //Se habilitan los botones de editar y borrar
+                        $("#edit-datatables1").removeClass("disabled");
+                        $("#delete-datatables1").removeClass("disabled");
+                        $("#nueva-cita").removeClass("disabled");
+                        $("#nueva-consulta").removeClass("disabled");
+                        $("#nueva-devolucion").removeClass("disabled");
+                        $("#vender-paquete").removeClass("disabled");
+                        $("#vender-tratamiento").removeClass("disabled");
+                        $("#ver-expediente").removeClass("disabled");
+                        $("#nuevo-abono").removeClass("disabled");
+                        $("#detalle-datatables1").removeClass("disabled");
+
+                        //var link=$('#datatables1>tbody>tr>td>a').attr("href");
+                        //var link=$(this).children("td:first").children().attr("href");
+                        //Obtener el id del registro
+
+
+                        //alert(link);
+                        //Carga del form modificar
+                        $("#editFormContainer").load(idPaciente+"/edit");
+
+
+                        //var href=link.attr("href");
+                        //alert(object);
+                    }
+                });
+                
+                
+                
+                
+                
+                $("#add-datatables1").click(function(){
+                    if($("#addFormContainer").hasClass("hide")){
+                        $("#addFormContainer").removeClass("hide");
+                        $("#editFormContainer").addClass("hide");
+                        $('.calZebra').Zebra_DatePicker({
+                            months:['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
+                            days: ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'],
+                            format: 'd-m-Y',
+                            show_clear_date:false,
+                            show_select_today: "Hoy",
+                        });
+                    }
+                    else{
+                        $("#addFormContainer").addClass("hide");
+                        limpiarCampos();
+                        //$("#editFormContainer").removeClass("hide");
+                    }
+
+                });
+                
+                //Accion cancelar del boton nuevo
+                $("#cancelarNuevo").click(function(){
+                    $("#add-datatables1").click();
+                    limpiarCampos();
+                    return false;
+                });
+                
+                //Accion cancelar del boton modificar
+                $("#cancelarModificar").click(function(){
+                    $("#edit-datatables1").click();
+                    return false;
+                });
+                
+                //Accion nueva cita
+                $(".opciones").click(function(){
+                    //$("#edit-datatables1").click();
+                    var href = $(this).children("a").attr("href")+"?id="+idPaciente;
+                    
+                    if( !$(this).hasClass("disabled") ){
+                        //$("#opcionesFormContainer").load(href);
+                        window.location=href;
+                        //$("#addFormContainer").addClass("hide");
+                        //$("#editFormContainer").addClass("hide");
+                        //$("#opcionesFormContainer").removeClass("hide");
+                    }
+                    return false;
+                });
+                
+                
+                $("#edit-datatables1").click(function(){
+                    if(!$("#edit-datatables1").hasClass("disabled")){
+                        if($("#editFormContainer").hasClass("hide")){
+                            $("#addFormContainer").addClass("hide");
+                            $("#editFormContainer").removeClass("hide");
+                            $('.calZebra').Zebra_DatePicker({
+                                months:['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
+                                days: ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'],
+                                format: 'd-m-Y',
+                                show_clear_date:false,
+                                show_select_today: "Hoy",
+                            });
+                        }
+                        else{
+                            //$("#addFormContainer").removeClass("hide");
+                            $("#editFormContainer").addClass("hide");
+                        }
+                    }
+
+                });
+                /*
+                $("#dgplusbellebundle_sucursal_submit").click(function(){
+                    $(".icon-refresh").click();
+                    return false;
+                });
+                */
+                $('#filterDatatables1').on('keyup', function(event) {
+                    var filtro = $(this).val(); 
+                    //alert(filtro);
+                    $('#datatables1_filter>label>input').val($(this).val());
+                    $('#datatables1_filter>label>input').keyup();
+
+                });
+                
+                
+                $('#datatables1').DataTable({ 
+                    searching:true,
+                    "order":[[1,"asc"]],
+                    "columnDefs": [
+                           { "orderable": false, "targets": 0 },
+                           { "orderable": false, "targets": 2 }
+                           
+                           {#{ "orderable": false, "targets": 4 },
+                           { "orderable": false, "targets": 5 },
+                           { "orderable": false, "targets": 6 }#}
+                           
+                           
+                           //{ "orderData": [ 2, 3, 4 ], "targets": 2 }
+                    ],
+                    "language": {
+                    "info": "Mostrando página _PAGE_ de _PAGES_",
+                    "infoEmpty": "",
+                    "emptyTable": "No se encontraron registros",
+                    "paginate": { 
+                        "next": "Siguiente",
+                        "previous": "Anterior"
+                    },
+                    "processing": "Procesando petición...",
+                    "search": "Buscar registros:",
+                    "lengthMenu": "Mostrar _MENU_ registros"
+                }, 
+                    
+        });
+        
+        
+        //Oculta el filtro de la tabla
+        $('#datatables1_filter').hide();
+        $('#filterDatatables1').val('');
+        
+        
+           validarPaciente();  
+        
+    });//Fin document ready
+        
+    //Definición de funciones
+    function limpiarCampos(){
+        //Limpiar los campos de tipo text
+        $("#add-datatables1 input[type=text]").each(function(index, val) {
+            $(this).val("");
+        });
+        //Seleccionar el primer elemento de los dropdown
+        $('add-datatables1 select option').each( function(index, val) {
+            if(index == 0){
+                $(this).attr("selected","selected");
+            }
+            else{
+                $(this).removeAttr("selected");
+            }
+            
+         
+	});             
+    };
+    
+        </script>
+
+    {% endblock %} 

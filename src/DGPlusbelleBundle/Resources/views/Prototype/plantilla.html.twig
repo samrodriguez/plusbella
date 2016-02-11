@@ -16,8 +16,11 @@
                         {#  <div class="col-md-12"> #}
                           {#     <p class="text"><i class=""> Sesiones </i> </p> #}
                             {{ form_row(form.descripcion) }}
-                       {#   </div>  #}
-                       
+
+                            {{ form_row(form.tipoParametro) }}
+                            {#   </div>  #}
+                            <div class="campos"><button style="margin-top:10px;margin-bottom:10px;" id="masOpcion">Agregar otro</button></div>
+                            <div id="opciones"></div>
                 {#  </div>  #}
                           
                  <p class="text-center">

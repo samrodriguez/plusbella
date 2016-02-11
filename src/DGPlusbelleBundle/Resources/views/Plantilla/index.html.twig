@@ -234,6 +234,63 @@
 
                 });
                 
+                var thenum = 0;
+                
+                $(document).on('change','select[id*=_tipoParametro]',function(){
+                    //alert('asx');
+                    $(this).parent().siblings('#opciones').html('');
+                    var tipo = $(this).val();
+                    var idSelect = $(this).attr('id');
+                    thenum = idSelect.replace( /^\D+/g, '');
+                    thenum = thenum.replace( /^\D+/g, '');
+                    var string = thenum.split('_');
+                    thenum = thenum[0];
+                    //alert(string[0]);
+                    if(tipo!="Textarea"){
+                        $(this).parent().siblings('.campos').children().show();
+                    }
+                    else{
+                        $(this).parent().siblings('.campos').children().hide();
+                    }
+                });
+                
+                
+                                
+                
+                
+                $(document).on('click','#borrarOpcion',function(){
+                    //alert('asx');
+                    $(this).parent().remove();
+                    return false;
+                });
+                
+                var cor = 0;
+                
+                
+                $(document).on('click','#masOpcion',function(){
+                    //alert('asx');
+                    var idSelect = $(this).parent().prev().children('select').attr('id');
+                    //alert(idSelect);
+                    thenum = idSelect.replace( /^\D+/g, '');
+                    thenum = thenum.replace( /^\D+/g, '');
+                    var string = thenum.split('_');
+                    thenum = thenum[0];
+                    
+                    $(this).parent().siblings('#opciones').append('\
+                        <div class="col-md-6">\n\
+                            <input class="" style="margin-bottom:5px;" type="text" name="opcionTag'+cor+'-'+thenum+'" placeholder="Opción"></input><a style="text-decoration:none; margin-left:10px;" id="borrarOpcion" href="">X</a>\n\
+                        </div>');
+        
+                    cor++;
+                    {#$('#opciones').append('\
+                        <div class="col-md-6">\n\
+                            <input style="margin-bottom:5px;" type="text" name="opcionTag" placeholder="Opcion"></input><a style="text-decoration:none; margin-left:10px;" id="borrarOpcion" href="">X</a>\n\
+                        </div>');#}
+                    return false;
+                });
+                
+                
+                
                 
                 $('#datatables1').DataTable({ 
                     searching:true,

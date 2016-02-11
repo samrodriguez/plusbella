@@ -23,6 +23,7 @@ class DetallePlantillaType extends AbstractType
                     'attr'=>array(
                     'class'=>'form-control input-sm descripcionDetalle'
                     )))
+            ->add('tipoParametro','choice',array('choices'=>array('Radiobutton'=>'Radio button','Checkbox'=>'Checkbox','Textarea'=>'Textarea')))
             //->add('plantilla')
         ;
     }
