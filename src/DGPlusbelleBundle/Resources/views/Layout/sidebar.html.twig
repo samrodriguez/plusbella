@@ -186,8 +186,15 @@
           </ul>
         </li>
     {% endif %}#}
-    {% if is_granted('ROLE_ADMIN') %}    
+    {% if is_granted('ROLE_ADMIN') %} 
         <li class="nav-item" role="presentation">
+          <a href="{{ path('admin_plantilla') }}">
+            <span class="nav-icon"><i class="fa fa-list-ul"></i></span>
+            <span class="nav-text">Gestionar Historial clínico</span>
+          </a>
+        </li>
+    
+       {# <li class="nav-item" role="presentation">
           <a href="#" data-toggle="nav-child">
             <span class="nav-icon"><i class="fa fa-list-ul"></i></span>
             <span class="nav-text">Historial clínico</span>
@@ -195,7 +202,7 @@
           <ul class="nav nav-child level-1 nav-stacked nav-pills" role="menu">
             <li role="presentation"><a role="menuitem" tabindex="-1" href="{{ path('admin_plantilla') }}"><span class="nav-text">Gestionar historias clínicas</span></a></li>
           </ul>
-        </li>
+        </li>#}
     {% endif %}
     
    {# {% if is_granted('ROLE_ADMIN') %}    

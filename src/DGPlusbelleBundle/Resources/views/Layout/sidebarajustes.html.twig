@@ -44,7 +44,14 @@
     <li class="divider"></li>
     <li class="nav-header" role="presentation">AJUSTES</li>   
     {% if is_granted('ROLE_ADMIN') %}
-        <li class="nav-item" role="presentation">
+     <li class="nav-item" role="presentation">
+          <a href="{{ path('admin_tipoconsulta') }}">
+            <span class="nav-icon"><i class="fa fa-check-square"></i></span>
+            <span class="nav-text">Nuevo tipo de consulta</span>
+          </a>
+     </li>
+   
+       {# <li class="nav-item" role="presentation">
           <a href="#" data-toggle="nav-child">
             <span class="nav-icon"><i class="fa fa-check-square"></i></span>
             <span class="nav-text">Consultas</span>
@@ -52,7 +59,7 @@
           <ul class="nav nav-child level-1 nav-stacked nav-pills" role="menu" >
             <li role="presentation"><a role="menuitem" tabindex="-1" href="{{ path('admin_tipoconsulta') }}"><span class="nav-text ">Nuevo tipo de consulta</span></a></li>
           </ul>
-        </li>
+        </li>#}
     {% endif %}
     {% if is_granted('ROLE_ADMIN') %}
         <li class="nav-item" role="presentation">
@@ -62,14 +69,21 @@
           </a>
           <ul class="nav nav-child level-1 nav-stacked nav-pills" role="menu">
             <li role="presentation"><a role="menuitem" tabindex="-1" href="{{ path('admin_tratamiento') }}"><span class="nav-text">Gestionar tratamiento</span></a></li>
-          </ul>
-          <ul class="nav nav-child level-1 nav-stacked nav-pills" role="menu">
+         {# </ul>
+          <ul class="nav nav-child level-1 nav-stacked nav-pills" role="menu">#}
             <li role="presentation"><a role="menuitem" tabindex="-1" href="{{ path('admin_categoria') }}"><span class="nav-text">Gestionar categoria</span></a></li>
           </ul>
         </li>
     {% endif %}
     {% if is_granted('ROLE_ADMIN') or is_granted('ROLE_MEDICO') %}
         <li class="nav-item" role="presentation">
+          <a href="{{ path('admin_paquete') }}">
+            <span class="nav-icon"><i class="fa fa-briefcase"></i></span>
+            <span class="nav-text">Gestionar paquete</span>
+          </a>
+        </li>
+        
+       {# <li class="nav-item" role="presentation">
           <a href="#" data-toggle="nav-child">
             <span class="nav-icon"><i class="fa fa-briefcase"></i></span>
             <span class="nav-text">Paquetes</span>
@@ -77,10 +91,17 @@
           <ul class="nav nav-child level-1 nav-stacked nav-pills" role="menu">
             <li role="presentation"><a role="menuitem" tabindex="-1" href="{{ path('admin_paquete') }}"><span class="nav-text">Gestionar paquete</span></a></li>
           </ul>
-        </li>
+        </li>#}
     {% endif %}
     {% if is_granted('ROLE_ADMIN') %}
         <li class="nav-item" role="presentation">
+          <a href="{{ path('admin_producto') }}">
+            <span class="nav-icon"><i class="fa fa-database"></i></span>
+            <span class="nav-text">Gestionar productos</span>
+          </a>
+        </li>
+        
+       {# <li class="nav-item" role="presentation">
           <a href="#" data-toggle="nav-child">
             <span class="nav-icon"><i class="fa fa-database"></i></span>
             <span class="nav-text">Inventario</span>
@@ -88,7 +109,7 @@
           <ul class="nav nav-child level-1 nav-stacked nav-pills" role="menu">
             <li role="presentation"><a role="menuitem" tabindex="-1" href="{{ path('admin_producto') }}"><span class="nav-text">Gestionar productos</span></a></li>
           </ul>
-        </li>
+        </li>#}
     {% endif %}
     {% if is_granted('ROLE_ADMIN') %}
         <li class="nav-item" role="presentation">
@@ -103,7 +124,14 @@
         </li>
     {% endif %}
     {% if is_granted('ROLE_ADMIN') %}
-        <li class="nav-item" role="presentation">
+         <li class="nav-item" role="presentation">
+          <a href="{{ path('admin_sucursal') }}">
+            <span class="nav-icon"><i class="fa fa-university"></i></span>
+            <span class="nav-text">Gestionar sucursal</span>
+          </a>
+        </li>
+        
+       {# <li class="nav-item" role="presentation">
           <a href="#" data-toggle="nav-child">
             <span class="nav-icon"><i class="fa fa-university"></i></span>
             <span class="nav-text">Sucursal</span>
@@ -111,10 +139,17 @@
           <ul class="nav nav-child level-1 nav-stacked nav-pills" role="menu">
             <li role="presentation"><a role="menuitem" tabindex="-1" href="{{ path('admin_sucursal') }}"><span class="nav-text">Gestionar sucursal</span></a></li>
           </ul>
-        </li>
+        </li>#}
     {% endif %}
-    {% if is_granted('ROLE_ADMIN') %}    
-        <li class="nav-item" role="presentation">
+    {% if is_granted('ROLE_ADMIN') %}  
+         <li class="nav-item" role="presentation">
+          <a href="{{ path('admin_descuento') }}">
+            <span class="nav-icon"><i class="fa fa-magic"></i></span>
+            <span class="nav-text">Gestionar descuento</span>
+          </a>
+         </li>
+        
+       {# <li class="nav-item" role="presentation">
           <a href="#" data-toggle="nav-child">
             <span class="nav-icon"><i class="fa fa-magic"></i></span>
             <span class="nav-text">Descuento</span>
@@ -122,7 +157,7 @@
           <ul class="nav nav-child level-1 nav-stacked nav-pills" role="menu">
             <li role="presentation"><a role="menuitem" tabindex="-1" href="{{ path('admin_descuento') }}"><span class="nav-text">Gestionar descuento</span></a></li>
           </ul>
-        </li>
+        </li>#}
     {% endif %}
     {#{% if is_granted('ROLE_ADMIN') %}    
         <li class="nav-item" role="presentation">
@@ -136,8 +171,15 @@
         </li>
     {% endif %}#}
     
-    {% if is_granted('ROLE_ADMIN') %}    
-        <li class="nav-item" role="presentation">
+    {% if is_granted('ROLE_ADMIN') %} 
+         <li class="nav-item" role="presentation">
+          <a href="{{ path('admin_usuario') }}">
+            <span class="nav-icon"><i class="fa fa-users"></i></span>
+            <span class="nav-text">Gestionar usuarios</span>
+          </a>
+         </li>
+        
+       {# <li class="nav-item" role="presentation">
           <a href="#" data-toggle="nav-child">
             <span class="nav-icon"><i class="fa fa-users"></i></span>
             <span class="nav-text">Usuarios</span>
@@ -145,11 +187,18 @@
           <ul class="nav nav-child level-1 nav-stacked nav-pills" role="menu">
             <li role="presentation"><a role="menuitem" tabindex="-1" href="{{ path('admin_usuario') }}"><span class="nav-text">Gestionar usuarios</span></a></li>
           </ul>
-        </li>
+        </li>#}
     {% endif %}
     
-    {% if is_granted('ROLE_ADMIN') %}    
+    {% if is_granted('ROLE_ADMIN') %}  
         <li class="nav-item" role="presentation">
+          <a href="{{ path('admin_rol') }}">
+            <span class="nav-icon"><i class="fa fa-exchange"></i></span>
+            <span class="nav-text">Gestionar roles</span>
+          </a>
+        </li> 
+        
+       {# <li class="nav-item" role="presentation">
           <a href="#" data-toggle="nav-child">
             <span class="nav-icon"><i class="fa fa-exchange"></i></span>
             <span class="nav-text">Roles</span>
@@ -157,7 +206,7 @@
           <ul class="nav nav-child level-1 nav-stacked nav-pills" role="menu">
             <li role="presentation"><a role="menuitem" tabindex="-1" href="{{ path('admin_rol') }}"><span class="nav-text">Gestionar roles</span></a></li>
           </ul>
-        </li>
+        </li>#}
     {% endif %}
     
    {# {% if is_granted('ROLE_ADMIN') or is_granted('ROLE_MEDICO') %}
