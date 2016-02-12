@@ -43,7 +43,10 @@
             #dgplusbellebundle_consulta_horaInicio, #dgplusbellebundle_consulta_horaFin{
                 width: 155px;
             }
-          
+           {# .link{
+                display: none; 
+            }    #}
+ 
     </style>
     
 {% endblock %}
@@ -210,9 +213,12 @@
                     if($("#addFormContainer").hasClass("hide")){
                         $("#addFormContainer").removeClass("hide");
                         $("#editFormContainer").addClass("hide");
+                          $(".activobtn").click();
+                       
                     }
                     else{
                         $("#addFormContainer").addClass("hide");
+                        $(".link").click();
                         limpiarCampos();
                         //$("#editFormContainer").removeClass("hide");
                     }
@@ -366,7 +372,7 @@
 var collectionHolder = $('div.placas');
 var col=$('#hnr_sircimbundle_estudioradiologicotype_placas');
 // setup an "add a tag" link
-var $addTagLink = $('<div class="row"><div class="col-md-2"><a href="#" class="btn btn-primary ">Agregar tratamiento</a></div></div>');
+var $addTagLink = $('<div class="row"><div class="col-md-2"><a href="#" class="btn btn-primary activobtn">Agregar tratamiento</a></div></div>');
 var $removeTagLink = $('<a href="#" class="remove_placa_link btn btn-danger">Eliminar</a>');
 var $newLinkLi = $('<div class="col-md-12 addItem"></div>').append($addTagLink);
 var $delLinkLi = $('#hnr_sircimbundle_estudioradiologicotype_placas.required').append($removeTagLink);
@@ -406,10 +412,9 @@ jQuery(document).ready(function() {
     //Identificar que form esta activo
     var editar=$('div.placas').attr('id');
    // if(editar!='editar_usuario'){
-        addTagForm(collectionHolder, $newLinkLi);   //Muestra un formulario en la carga de la página nuevo
+        //addTagForm(collectionHolder, $newLinkLi);   //Muestra un formulario en la carga de la página nuevo
    // }
-    
-
+   
 
     $addTagLink.on('click', function(e) {
         // prevent the link from creating a "#" on the URL
