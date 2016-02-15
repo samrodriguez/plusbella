@@ -82,7 +82,7 @@
         {% if is_granted('ROLE_PREVIOUS_ADMIN') %}
         <li class="divider"></li>    
         <li role="presentation">
-            <a role="menuitem" tabindex="-1" ref="{{ path('dashboard', {_change: '_exit'}) }}">
+            <a role="menuitem" tabindex="-1" href="{{ path('dashboard', {_change: '_exit'}) }}">
                 <span class="pull-right"><i class="fa fa-sign-out text-muted"></i></span> 
                 End impersonating...</a>
         </li>
