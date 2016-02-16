@@ -2,7 +2,7 @@
 {% block css %}
     {{parent()}}
     <style>
-        .detallePaciente{
+        .detallePaciente, .expedientePaciente{
             cursor: pointer;
             color: #48CFAD;
         }
@@ -120,7 +120,9 @@
                 </td>
                 <td>
                     {#<p class="detallePaciente">#}{{ entity.nombres|upper }} {{ entity.apellidos|upper }}{#</p>#}
-                    <i class="detallePaciente fa fa-info-circle pull-right"></i>
+                    <i class="expedientePaciente fa fa-th-list pull-right" data-toggle="tooltip" data-original-title="Ver expediente"></i>
+                    
+                    <i class="detallePaciente fa fa-info-circle pull-right" data-toggle="tooltip" data-original-title="Ver información general" style="margin-right:30px;"></i>
                 </td>
                 
                 {#<td>{{ entity.direccion }}</td>#}
@@ -301,7 +303,7 @@
 
                         //alert(link);
                         //Carga del form modificar
-                        $("#editFormContainer").load(idPaciente+"/edit");
+                        //$("#editFormContainer").load(idPaciente+"/edit");
 
 
                         //var href=link.attr("href");
@@ -310,7 +312,12 @@
                 });
                 
                 
-                
+                $('.expedientePaciente').on('click', function(event) {
+                    var id = $(this).parent().parent().attr('id');
+                    var href = {{path('admin_historial_consulta')}};
+                    
+                    alert(href);
+                });
                 
                 
                 $("#add-datatables1").click(function(){

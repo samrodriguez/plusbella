@@ -345,6 +345,10 @@ $(document).ready(function() {
   {#                        if(data.regs!=0){#}
                             //alert(data.regs[0].numero);
                             
+                            var hinicio=(data.regs[0].horaCita);
+                            var hfin=(data.regs[0].horaFinCita);
+                            var telef=(data.regs[0].telefono);
+                            
                             mensaje += "<div class='container-fluid'>";
                             //mensaje += "<div class='col-md-12'><hr></div></div>";
                             mensaje += "<div class='col-md-6 text-right'><b>Estado: </b></div><div class='col-md-6'>"+data.regs[0].estado+"</div>";
@@ -369,7 +373,39 @@ $(document).ready(function() {
                             mensaje += "<div class='clearfix'></div>";
                             mensaje += "<div class='col-md-6 text-right'><b>Fecha: </b></div><div class='col-md-6'>"+data.regs[0].fechaCita+"</div>";
                             mensaje += "<div class='clearfix'></div>";
-                            mensaje += "<div class='col-md-6 text-right'><b>Hora: </b></div><div class='col-md-6'>"+data.regs[0].horaCita+"</div>";
+                            
+                            if(!hinicio){
+
+                              mensaje += "<div class='col-md-6 text-right'><b>Hora inicio: </b></div><div class='col-md-6'>-</div>";  
+                              
+                            } else{
+                                
+                              mensaje += "<div class='col-md-6 text-right'><b>Hora inicio: </b></div><div class='col-md-6'>"+data.regs[0].horaCita+"</div>";  
+                            
+                            } 
+                                                 
+                            mensaje += "<div class='clearfix'></div>";
+                            
+                            if(!hfin){
+
+                              mensaje += "<div class='col-md-6 text-right'><b>Hora final: </b></div><div class='col-md-6'>-</div>";  
+                              
+                            } else{
+                                
+                              mensaje += "<div class='col-md-6 text-right'><b>Hora final: </b></div><div class='col-md-6'>"+data.regs[0].horaFinCita+"</div>";  
+                            
+                            } 
+                            mensaje += "<div class='clearfix'></div>";
+ 
+    
+                           if(!telef){
+ 
+                              mensaje += "<div class='col-md-6 text-right'><b>Telefono: </b></div><div class='col-md-6'>-</div>";   
+                            } else{
+                                
+                            mensaje += "<div class='col-md-6 text-right'><b>Telefono: </b></div><div class='col-md-6'>"+data.regs[0].telefono+"</div>"; 
+
+                            } 
                             mensaje += "<div class='clearfix'></div>";
                             mensaje += "</div>";
                         
