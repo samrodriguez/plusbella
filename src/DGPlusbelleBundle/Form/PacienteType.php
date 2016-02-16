@@ -59,10 +59,10 @@ class PacienteType extends AbstractType
                     'attr'=>array(
                     'class'=>'form-control input-sm telefonoemerPaciente'
                     )))
-             ->add('enteradoPor','text',array('label' => 'Enterado por','required' => false,
-                    'attr'=>array(
-                    'class'=>'form-control input-sm'
-                    )))
+//             ->add('enteradoPor','text',array('label' => 'Enterado por','required' => false,
+//                    'attr'=>array(
+//                    'class'=>'form-control input-sm'
+//                    )))
             //->add('estado')
            // ->add('persona')
         ;

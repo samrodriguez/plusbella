@@ -39,10 +39,14 @@ class PersonaType extends AbstractType
                     'attr'=>array(
                     'class'=>'form-control input-sm direccionPersona'
                     )))
-            ->add('telefono','text',array('label' => 'Telefono','required'=>false,
+            ->add('telefono','text',array('label' => 'Telefono 1','required'=>false,
                     'attr'=>array(
                         'class'=>'form-control input-sm telefonoPersona'
                     )))
+             ->add('telefono2','text',array('label' => 'Telefono 2','required'=>false,
+                    'attr'=>array(
+                        'class'=>'form-control input-sm telefono2Persona'
+                    )))    
             ->add('email','text',array('label' => 'Correo','required'=>false,
                     'attr'=>array(
                     'class'=>'form-control input-sm emailPersona'

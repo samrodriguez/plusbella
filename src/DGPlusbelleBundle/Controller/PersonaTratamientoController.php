@@ -3,6 +3,7 @@
 namespace DGPlusbelleBundle\Controller;
 
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -116,6 +117,7 @@ class PersonaTratamientoController extends Controller
         //var_dump($persona);
         $entity->setPaciente($persona);
         //var_dump($entity);
+        
         $form   = $this->createCreateForm($entity);
 
         return array(
@@ -272,4 +274,32 @@ class PersonaTratamientoController extends Controller
             ->getForm()
         ;
     }
+    
+    
+    /**
+    * Deletes a Cuenta entity.
+    *
+    * @Route("/costo_tratamiento/{id}", name="admin_costo_tratamiento", options={"expose"=true})
+    * @Method("GET")
+    */
+   public function costotratamAction(Request $request, $id)
+   {
+
+       $em = $this->getDoctrine()->getManager();
+       $entity = $em->getRepository('DGPlusbelleBundle:Tratamiento')->find($id);
+
+       $exito=array();
+
+       if($entity!=null){
+          
+           $exito['regs']=$entity->getCosto();
+       }
+       else{
+           $exito['regs']=-1;
+       }
+
+       return new Response(json_encode($exito));
+       
+   }  
+    
 }
