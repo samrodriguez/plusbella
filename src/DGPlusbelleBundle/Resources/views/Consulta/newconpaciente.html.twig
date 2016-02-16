@@ -445,6 +445,7 @@
             
             var input = new Array();
             var label = new Array();
+            var label2 = new Array();
             var campos = new Array();
             var saltos = new Array();
             var etiqueta = new Array();
@@ -532,6 +533,7 @@
                             input[key].setAttribute('class', 'form-control classPlantilla');
                             //input[key].setAttribute('style', 'margin-bottom: 5px;resize:vertical;height:150px;');
                             input[key].setAttribute('name', value.nombre);
+                            //input[key].setAttribute('val', value.nombre);
                             input[key].setAttribute('id', value.id);
                             //console.log(input[key]);  
                             
@@ -541,12 +543,16 @@
                             etiqueta[key].appendChild(t);
 
                             label[key] = document.createElement('label');
-
+                            label2[key] = document.createElement('label');
+                            label2[key].htmlFor = "id";
+                            label2[key].appendChild(document.createTextNode(value3.nombre));
+                            
                             // Se introducen los elementos en el div con id = campos
                             label[key].appendChild(etiqueta[key]);
                             campos[key].appendChild(label[key]);
                             console.log(campos[key]);
                             campos[key].appendChild(input[key]);
+                            campos[key].appendChild(label2[key]);
                             //console.log(key3);
                             //console.log(value3.nombre);
                             $('#'+value.id).append(value3.nombre);
@@ -735,13 +741,13 @@
     
                 var seleccionado="";
                 //Eliminar options del select de pacientes
-                $('#dgplusbellebundle_consulta_paciente option').each(function(index, val) {
+               {# $('#dgplusbellebundle_consulta_paciente option').each(function(index, val) {
                     
                     seleccionado = $(this).attr('selected');
                     if (!seleccionado){
                         $(this).remove();
                     }
-                });
+                });#}
 
     
 
