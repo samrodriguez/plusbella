@@ -19,6 +19,7 @@ use DGPlusbelleBundle\Form\ConsultaType;
 use DGPlusbelleBundle\Form\ConsultaConPacienteType;
 use DGPlusbelleBundle\Form\ConsultaProductoType;
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\ORM\EntityRepository;
 
 /**
  * Consulta controller.
@@ -439,6 +440,17 @@ class ConsultaController extends Controller
                 'action' => $this->generateUrl('admin_consulta_create', array('id' => 2,'identidad'=>$identidad)),
                 'method' => 'POST',
             ));
+            $paciente = $entity->getPaciente();
+            $form->add('paciente', 'entity', array(
+                        'label'         =>  'Paciente',
+                        //'empty_value'=>'Seleccione una actividad',
+                        'class'         =>  'DGPlusbelleBundle:Paciente',
+                        'query_builder' =>  function(EntityRepository $repositorio) use (  $paciente ){
+                    return $repositorio
+                            ->createQueryBuilder('pa')
+                            ->where('pa.id = :pac')
+                            ->setParameter(':pac', $paciente->getId());
+                    }));
         }
         
         
