@@ -118,7 +118,7 @@ class Paciente
      *
      * @ORM\Column(name="enterado_por", type="string", length=25, nullable=false)
      */
-    private $enteradoPor;
+//    private $enteradoPor;
 
 
     /**
@@ -470,22 +470,22 @@ class Paciente
      *
      * @return Paciente
      */
-    public function setEnteradoPor($enteradoPor)
-    {
-        $this->enteradoPor = $enteradoPor;
-
-        return $this;
-    }
+//    public function setEnteradoPor($enteradoPor)
+//    {
+//        $this->enteradoPor = $enteradoPor;
+//
+//        return $this;
+//    }
 
     /**
      * Get enteradoPor
      *
      * @return string
      */
-    public function getEnteradoPor()
-    {
-        return $this->enteradoPor;
-    }
+//    public function getEnteradoPor()
+//    {
+//        return $this->enteradoPor;
+//    }
     
     
     /**
