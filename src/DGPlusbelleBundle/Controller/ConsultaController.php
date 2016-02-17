@@ -113,11 +113,11 @@ class ConsultaController extends Controller
     /**
      * Creates a new Consulta entity.
      *
-     * @Route("/", name="admin_consulta_create")
+     * @Route("/create/{idpac}", name="admin_consulta_create")
      * @Method("POST")
      * @Template("DGPlusbelleBundle:Consulta:newconpaciente.html.twig")
      */
-    public function createAction(Request $request)
+    public function createAction(Request $request, $idpac)
     {
         $entity = new Consulta();
         $em = $this->getDoctrine()->getManager();
@@ -131,6 +131,7 @@ class ConsultaController extends Controller
         //Obtener el id del parametro
         $idEntidad = substr($cadena, 1);
         
+        $pac = $em->getRepository('DGPlusbelleBundle:Paciente')->find($idpac);
         
         //var_dump($cadena);
         
@@ -165,7 +166,7 @@ class ConsultaController extends Controller
         
         
         
-        $form = $this->createCreateForm($entity,2,$idEntidad);
+        $form = $this->createCreateForm($entity,2,$idEntidad,$pac);
         $form->handleRequest($request);
         
         //$campos = $form->get('campos')->getData();
@@ -427,20 +428,21 @@ class ConsultaController extends Controller
      *
      * @return \Symfony\Component\Form\Form The form
      */
-    private function createCreateForm(Consulta $entity,$tipo,$identidad)
+    private function createCreateForm(Consulta $entity,$tipo,$identidad, \DGPlusbelleBundle\Entity\Paciente $paciente)
     {
         if($tipo==1){
             $form = $this->createForm(new ConsultaType(), $entity, array(
-                'action' => $this->generateUrl('admin_consulta_create', array('id' => 1,'identidad'=>$identidad)),
+                'action' => $this->generateUrl('admin_consulta_create', array('id' => 1,'identidad'=>$identidad, 'idpac'=>$paciente->getId())),
                 'method' => 'POST',
             ));
         }
         else{
             $form = $this->createForm(new ConsultaConPacienteType(), $entity, array(
-                'action' => $this->generateUrl('admin_consulta_create', array('id' => 2,'identidad'=>$identidad)),
+                'action' => $this->generateUrl('admin_consulta_create', array('id' => 2,'identidad'=>$identidad, $paciente, 'idpac'=>$paciente->getId())),
                 'method' => 'POST',
             ));
-            $paciente = $entity->getPaciente();
+            //$paciente = $entity->getPaciente();
+            //var_dump($entity);
             $form->add('paciente', 'entity', array(
                         'label'         =>  'Paciente',
                         //'empty_value'=>'Seleccione una actividad',
@@ -513,7 +515,7 @@ class ConsultaController extends Controller
         //Seteo del paciente en la entidad
         $entity->setPaciente($paciente);
         //var_dump($paciente);
-        $form   = $this->createCreateForm($entity,2,$cadena);
+        $form   = $this->createCreateForm($entity,2,$cadena, $paciente);
         $entity->setPaciente($paciente);
         return array(
             'entity' => $entity,
