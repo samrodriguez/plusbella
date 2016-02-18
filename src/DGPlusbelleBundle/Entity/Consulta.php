@@ -55,7 +55,7 @@ class Consulta
      *
      * @ORM\Column(name="incapacidad", type="boolean", nullable=false)
      */
-    private $incapacidad;
+//    private $incapacidad;
     
     /**
      * @var boolean
@@ -280,22 +280,22 @@ class Consulta
      *
      * @return Consulta
      */
-    public function setIncapacidad($incapacidad)
-    {
-        $this->incapacidad = $incapacidad;
-
-        return $this;
-    }
+//    public function setIncapacidad($incapacidad)
+//    {
+//        $this->incapacidad = $incapacidad;
+//
+//        return $this;
+//    }
 
     /**
      * Get incapacidad
      *
      * @return boolean
      */
-    public function getIncapacidad()
-    {
-        return $this->incapacidad;
-    }
+//    public function getIncapacidad()
+//    {
+//        return $this->incapacidad;
+//    }
     
     /**
      * Set reportePlantilla

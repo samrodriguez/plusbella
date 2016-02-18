@@ -35,13 +35,13 @@ class ConsultaConPacienteType extends AbstractType
                     'attr'=>array(
                     'class'=>'form-control input-sm observacionConsulta'
                     )))
-            ->add('incapacidad', 'choice', array(
-                    'choices'  => array('1' => 'Sí', '0' => 'No'),
-                    'multiple' => false,
-                    'expanded'=>'true',
-                    'preferred_choices' => array(0),  
-                    'data'=>0
-                ))
+//            ->add('incapacidad', 'choice', array(
+//                    'choices'  => array('1' => 'Sí', '0' => 'No'),
+//                    'multiple' => false,
+//                    'expanded'=>'true',
+//                    'preferred_choices' => array(0),  
+//                    'data'=>0
+//                ))
             //->add('cita')
             ->add('paciente','entity', array( 'label' => 'Paciente','required'=>false,
                          'empty_value'   => 'Seleccione un paciente...',

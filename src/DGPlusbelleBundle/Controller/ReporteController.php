@@ -1131,7 +1131,7 @@ class ReporteController extends Controller
         
         
         
-        $dqlpac="SELECT pac.id, per.nombres, per.apellidos, t.costo*(1-(d.porcentaje/100)) as costo, pt.fechaVenta, s.nombre FROM DGPlusbelleBundle:PersonaTratamiento pt "
+        $dqlpac="SELECT pac.id, per.nombres, per.apellidos, pt.costoConsulta*(1-(d.porcentaje/100)) as costo, pt.fechaVenta, s.nombre FROM DGPlusbelleBundle:PersonaTratamiento pt "
                 . "JOIN pt.paciente per "
                 . "JOIN per.paciente pac "
                 . "JOIN pt.tratamiento t "
@@ -1142,7 +1142,7 @@ class ReporteController extends Controller
                        ->setParameters(array('fechainicio'=>$anioInicioUser,'fechafin'=>$anioFinUser))
                        //->setParameter('mes','_____0'.'1'.'___')
                        ->getResult();
-        //var_dump($listadotratamientos);
+      // var_dump($listadotratamientos);
         foreach ($listadotratamientos as $row) {
             $ar = array(
 //                    "id"=>$row['id'],
@@ -1162,7 +1162,7 @@ class ReporteController extends Controller
 //            array_push($listadoP, $row['costo']);
         }
         
-        
+       // var_dump($listadoP);  
         
 //        foreach($listadoP as $row){
 //            array_multisort(
@@ -1266,7 +1266,7 @@ class ReporteController extends Controller
                 array_push($ingresos, 0);
             }
             
-            $dql = "SELECT sum(t.costo*(1-(d.porcentaje/100))) as total FROM DGPlusbelleBundle:PersonaTratamiento a "
+            $dql = "SELECT sum(a.costoConsulta*(1-(d.porcentaje/100))) as total FROM DGPlusbelleBundle:PersonaTratamiento a "
                     . "JOIN a.descuento d "
                     . "JOIN a.tratamiento t "
                     . "WHERE a.fechaVenta BETWEEN :fechainicio AND :fechafin AND a.sucursal=:sucursal";
