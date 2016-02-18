@@ -138,8 +138,17 @@ class CitaController extends Controller
                 ->setParameters(array('empleado'=>$idEmpleado,'horaCita'=>$horaCita,'fechaCita'=>$fechaCita,'estado'=>'P'))
                 ->getArrayResult();
         
-//        var_dump($cita);
-//        die();
+        
+        $dql = "SELECT ca from DGPlusbelleBundle:CierreAdministrativo ca "
+                . "WHERE ca.empleado=:empleado "
+                . "AND ca.horaInicio<=:horaCita "
+                . "AND ca.horaFin>:horaCita "
+                . "AND ca.fecha=:fechaCita ";
+        $cierres = $em->createQuery($dql)
+                ->setParameters(array('empleado'=>$idEmpleado,'horaCita'=>$horaCita,'fechaCita'=>$fechaCita))
+                ->getArrayResult();
+        //var_dump($cierres);
+        //die();
         
         if($horaFin<$horaCita){
             return array(
@@ -152,37 +161,47 @@ class CitaController extends Controller
         
         
         if(count($cita)==0){
-            if ($form->isValid()) {
-                $paciente = $entity->getPaciente();
-//                var_dump($paciente);
-                if($paciente!=null){
-                    
-                
-                    $expediente = $paciente->getExpediente();
-                    if(count($expediente)==0){
-                        //var_dump($expediente);
-    //                    echo "no tiene expediente";
-                        $expNumero = $this->generarExpediente($paciente);
+            if(count($cierres)==0){
+                if ($form->isValid()) {
+                    $paciente = $entity->getPaciente();
+    //                var_dump($paciente);
+                    if($paciente!=null){
+
+
+                        $expediente = $paciente->getExpediente();
+                        if(count($expediente)==0){
+                            //var_dump($expediente);
+        //                    echo "no tiene expediente";
+                            $expNumero = $this->generarExpediente($paciente);
+                        }
+                        else{
+                            $expNumero= $expediente[0]->getNumero();
+        //                    echo "tiene expediente";
+                        }
                     }
-                    else{
-                        $expNumero= $expediente[0]->getNumero();
-    //                    echo "tiene expediente";
-                    }
+    //                echo $expNumero;
+    //                die();
+                    $usuario= $this->get('security.token_storage')->getToken()->getUser();
+                    $em = $this->getDoctrine()->getManager();
+                    $em->persist($entity);
+                    $em->flush();
+                    $this->get('bitacora')->escribirbitacora("Se creo una nueva cita",$usuario->getId());
+                    return $this->redirect($this->generateUrl('admin_cita'));
                 }
-//                echo $expNumero;
-//                die();
-                $usuario= $this->get('security.token_storage')->getToken()->getUser();
-                $em = $this->getDoctrine()->getManager();
-                $em->persist($entity);
-                $em->flush();
-                $this->get('bitacora')->escribirbitacora("Se creo una nueva cita",$usuario->getId());
-                return $this->redirect($this->generateUrl('admin_cita'));
+            }
+            else{
+                return array(
+                    
+                    'entity' => $entity,
+                    'form'   => $form->createView(),
+                    'mensaje'=> 'El empleado seleccionado tiene reserva de tiempo el día y hora seleccionada',
+                );
             }
         }
         else{
             
             return array(
-                'sucursal'=>$sucursal,
+               // 'sucursal'=>$sucursal,
                 'entity' => $entity,
                 'form'   => $form->createView(),
                 'mensaje'=> 'Ya hay una cita programada en esa fecha y hora, para el técnico que selecciono',

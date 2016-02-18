@@ -22,16 +22,16 @@ class CierreAdministrativo
     private $id;
 
     /**
-     * @var string
+     * @var \DateTime
      *
-     * @ORM\Column(name="horaInicio", type="date", nullable=false)
+     * @ORM\Column(name="horaInicio", type="time", nullable=false)
      */
     private $horaInicio;
 
     /**
-     * @var string
+     * @var \DateTime
      *
-     * @ORM\Column(name="horaFin", type="date", nullable=false)
+     * @ORM\Column(name="horaFin", type="time", nullable=false)
      */
     private $horaFin;
 
@@ -50,6 +50,18 @@ class CierreAdministrativo
      */
     private $fecha;
 
+    
+    /**
+     * @var \Empleado
+     *
+     * @ORM\ManyToOne(targetEntity="Empleado")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="id_empleado", referencedColumnName="id")
+     * })
+     */
+    private $empleado;
+    
+    
     /**
      * Get id
      *
@@ -156,6 +168,33 @@ class CierreAdministrativo
     public function getFecha(){
         return $this->fecha;
     }
+    
+    
+    
+    /**
+     * Set empleado
+     *
+     * @param \DGPlusbelleBundle\Entity\Empleado $empleado
+     *
+     * @return Cita
+     */
+    public function setEmpleado(\DGPlusbelleBundle\Entity\Empleado $empleado = null)
+    {
+        $this->empleado = $empleado;
+
+        return $this;
+    }
+
+    /**
+     * Get empleado
+     *
+     * @return \DGPlusbelleBundle\Entity\Empleado
+     */
+    public function getEmpleado()
+    {
+        return $this->empleado;
+    }
+    
     
     
     public function __toString() {

@@ -2,6 +2,7 @@
 
 
 
+
 {% block contenido -%}
     
         <div class="content-body">
@@ -52,10 +53,12 @@
         <thead>
             <tr>
 {#                <th>Id</th>#}
+                <th>Empleado</th>
+                <th>Fecha</th>
                 <th>Horainicio</th>
                 <th>Horafin</th>
                 <th>Motivo</th>
-                <th>Fecha</th>
+                
 {#                <th>Actions</th>#}
             </tr>
         </thead>
@@ -63,10 +66,12 @@
         {% for entity in entities %}
             <tr>
 {#                <td><a href="{{ path('admin_cierreadministrativo_show', { 'id': entity.id }) }}">{{ entity.id }}</a></td>#}
-                <td>{% if entity.horaInicio %}{{ entity.horaInicio|date('Y-m-d H:i:s') }}{% endif %}</td>
-                <td>{% if entity.horaFin %}{{ entity.horaFin|date('Y-m-d H:i:s') }}{% endif %}</td>
+                <td>{{ entity.empleado.persona.nombres|upper}} {{ entity.empleado.persona.apellidos|upper}}</td>
+                <td>{% if entity.fecha %}{{ entity.fecha|date('d-m-Y') }}{% endif %}</td>
+                <td>{% if entity.horaInicio %}{{ entity.horaInicio|date('H:i') }}{% endif %}</td>
+                <td>{% if entity.horaFin %}{{ entity.horaFin|date('H:i') }}{% endif %}</td>
                 <td>{{ entity.motivo }}</td>
-                <td>{% if entity.fecha %}{{ entity.fecha|date('Y-m-d H:i:s') }}{% endif %}</td>
+                
                 {#<td>
                 <ul>
                     <li>
@@ -99,8 +104,8 @@
     
 
 {% block javascripts_step %}
-       <script src="{{ asset('Resources/js/Empleado.js') }}"></script>
-      
+       <script src="{{ asset('Resources/js/CAdministrativo.js') }}"></script>
+       <script type="text/javascript" src="{{ asset('Resources/zebra/inicializacioncalendarios.js')}}" ></script>
        <script>
             $(document).ready(function(){
                  var link=0;
@@ -113,6 +118,8 @@
                     }
                 }); 
                 
+                
+        
                 // Validando campo telefono
                  $('#dgplusbellebundle_empleado_persona_telefono').mask('0000-0000'); 
                 
@@ -159,6 +166,14 @@
                     if($("#addFormContainer").hasClass("hide")){
                         $("#addFormContainer").removeClass("hide");
                         $("#editFormContainer").addClass("hide");
+                        $('.fechaCierre').Zebra_DatePicker({
+                            months:['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
+                            days: ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'],
+                            format: 'd-m-Y',
+                            direction:true,
+                            show_clear_date:false,
+                            show_select_today: "Hoy",
+                        });
                     }
                     else{
                         $("#addFormContainer").addClass("hide");
@@ -168,41 +183,7 @@
 
                 });
                 
-                 $("#delete-datatables1").click(function(){
-                     if(!$(this).hasClass('disabled')){                     
-                     bootbox.confirm("¿Desea cambiar el estado de este registro?", function(result) {
-                        if(result){
-                        $.getJSON(Routing.generate('admin_empleado_desactivar', { id: link}), 
-                          function(data) {
-                          var mensaje="";
-                                    if(data.regs==0){
-                                        //Se cambia a desactivado
-                                        mensaje ="Empleado desactivado con exito";
-                                        $('#'+link + ' > td:nth-child(4)').html('Inactivo');
-                                        $('#delete-datatables1').children().removeClass("fa fa-toggle-on");
-                                        $('#delete-datatables1').children().addClass("fa fa-toggle-off");
-                                    //$('#datatables1>tbody>tr>td:nth-child(5)').html('Inactivo');
-                                    }
-                                    if(data.regs==1){
-                                        //Se cambia a activado
-                                        mensaje ="Empleado activada con exito";
-                                        $('#'+link + ' > td:nth-child(4)').html('Activo');
-                                        $('#delete-datatables1').children().removeClass("fa fa-toggle-off");
-                                        $('#delete-datatables1').children().addClass("fa fa-toggle-on");
-                                    }
-                                    bootbox.alert(mensaje, function() {
-                                        //Example.show("Hello world callback");
-                                    });
-                                    
-                                // alert(link);
-                            }); 
-                        }
-                                    
-                    });     
-                        } 
-
-                }); 
-                
+                                 
                 //Accion cancelar del boton nuevo
                 $("#cancelarNuevo").click(function(){
                     $("#add-datatables1").click();
@@ -250,18 +231,27 @@
                     var horaInicio=$('#dgplusbellebundle_cierreadministrativo_horaInicio_hour').val();
                     var minutoInicio=$('#dgplusbellebundle_cierreadministrativo_horaInicio_minute').val();
                     
+                    if(parseInt(horaInicio)<10){
+                        horaInicio='0'+horaInicio;
+                    }
+                    
+                    
                     var horaFin=$('#dgplusbellebundle_cierreadministrativo_horaFin_hour').val();
                     var minutoFin=$('#dgplusbellebundle_cierreadministrativo_horaFin_minute').val();
                     
-                    var inicio= horaInicio+":"+minutoInicio;
-                    var fin= horaFin+":"+minutoFin;
+                    if(parseInt(horaFin)<10){
+                        horaFin='0'+horaFin;
+                    }
+                    
+                    var inicio= horaInicio+minutoInicio;
+                    var fin= horaFin+minutoFin;
                     
                     if(inicio>=fin){
-                        alert('Inicio: '+inicio + ', fin: '+fin);
-                        return false;
-                    }else{
+                        bootbox.alert("La hora de inicio no puede ser menor a la de fin");
                         return false;
                     }
+                        //alert("Hora correctas");
+
                     
                     
                 });
@@ -272,9 +262,10 @@
                     searching:true,
                     "order":[[0, "desc"],[1,"desc"]],
                     "columnDefs": [
-                           { "orderable": false, "targets": 0 },
+                           
                            { "orderable": false, "targets": 2 },
-                           { "orderable": false, "targets": 3 }
+                           { "orderable": false, "targets": 3 },
+                           { "orderable": false, "targets": 4 }
                           
                           
                         
@@ -305,7 +296,8 @@
         $('#filterDatatables1').val('');
         
         
-        validarEmpleado(); 
+        $('#dgplusbellebundle_cierreadministrativo_empleado').select2();
+        validarCierre(); 
         
     });//Fin document ready
         
