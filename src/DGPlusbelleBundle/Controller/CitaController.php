@@ -27,7 +27,7 @@ class CitaController extends Controller
      * @Method("GET")
      * @Template()
      */
-    public function indexAction()
+    public function indexAction(Request $request)
     {
         $em = $this->getDoctrine()->getManager();
 
@@ -45,6 +45,11 @@ class CitaController extends Controller
         var_dump($entities);
         */
         //var_dump($sucursales);
+        
+        $sucursal = $request->get('id');
+        
+        
+        //var_dump($sucursal);
         $empleados = $em->getRepository('DGPlusbelleBundle:Empleado')->findBy(array('estado'=>true));
         date_default_timezone_set('America/El_Salvador');
         
@@ -76,6 +81,7 @@ class CitaController extends Controller
             'sucursales' => $sucursales,
             'categorias' => $categorias,
             'empleados'=>$empleados,
+            'sucursal'=>$sucursal,
         );
     }
     /**
@@ -95,8 +101,14 @@ class CitaController extends Controller
         
         
         $idEmpleado = $entity->getEmpleado()->getId();
-        $horaCita = $entity->getHoraCita();
-        $fechaCita = $entity->getFechaCita();
+        $horaCita = $entity->getHoraCita()->format('H:i:s');
+        $horaFin = $entity->getHoraFin()->format('H:i:s');
+        $fechaCita = $entity->getFechaCita()->format('Y-m-d');
+        
+//        $idEmpleado = $entity->getEmpleado();
+//        $horaCita = $entity->getHoraCita();
+//        $horaFin = $entity->getHoraFin();
+//        $fechaCita = $entity->getFechaCita();
         
         //var_dump($entity->getEmpleado()->getId());
         //var_dump($entity->getHoraCita());
@@ -110,9 +122,35 @@ class CitaController extends Controller
         //var_dump($horaCita);
         $em = $this->getDoctrine()->getManager();
 //        $cita = $em->getRepository('DGPlusbelleBundle:Cita')->findBy(array('empleado'=>$idEmpleado,'horaCita'=>$horaCita,'fechaCita'=>$fechaCita));
-	$cita = $em->getRepository('DGPlusbelleBundle:Cita')->findBy(array('empleado'=>$idEmpleado,'horaCita'=>$horaCita,'fechaCita'=>$fechaCita,'estado'=>'P'));
+        //$cita = $em->getRepository('DGPlusbelleBundle:Cita')->findBy(array('empleado'=>$idEmpleado,'horaCita'=>$horaCita,'fechaCita'=>$fechaCita,'estado'=>'P'));
+//        var_dump($idEmpleado);
+//        var_dump($horaCita);
+//        var_dump($horaFin);
+//        var_dump($fechaCita);
         
-        //var_dump($cita);
+        $dql = "SELECT c from DGPlusbelleBundle:Cita c "
+                . "WHERE c.empleado=:empleado "
+                . "AND c.horaCita<=:horaCita "
+                . "AND c.horaFin>:horaCita "
+                . "AND c.fechaCita=:fechaCita "
+                . "AND c.estado=:estado";
+        $cita = $em->createQuery($dql)
+                ->setParameters(array('empleado'=>$idEmpleado,'horaCita'=>$horaCita,'fechaCita'=>$fechaCita,'estado'=>'P'))
+                ->getArrayResult();
+        
+//        var_dump($cita);
+//        die();
+        
+        if($horaFin<$horaCita){
+            return array(
+                'entity' => $entity,
+                'form'   => $form->createView(),
+                'mensaje'=> 'La hora de fin no puede ser menor a la de inicio de cita',
+            );
+        }
+        
+        
+        
         if(count($cita)==0){
             if ($form->isValid()) {
                 $paciente = $entity->getPaciente();
@@ -144,9 +182,10 @@ class CitaController extends Controller
         else{
             
             return array(
+                'sucursal'=>$sucursal,
                 'entity' => $entity,
                 'form'   => $form->createView(),
-                'mensaje'=> 'Ya hay una cita programada en ese fecha y hora, para el técnico que selecciono',
+                'mensaje'=> 'Ya hay una cita programada en esa fecha y hora, para el técnico que selecciono',
             );
         }
         
@@ -219,7 +258,7 @@ class CitaController extends Controller
     /**
      * Finds and displays a Cita entity.
      *
-     * @Route("/{id}", name="admin_cita_show")
+     * @Route("/{id}/show", name="admin_cita_show")
      * @Method("GET")
      * @Template()
      */
@@ -230,7 +269,7 @@ class CitaController extends Controller
         $entity = $em->getRepository('DGPlusbelleBundle:Cita')->find($id);
 
         if (!$entity) {
-            throw $this->createNotFoundException('Unable to find Cita entity.');
+            //throw $this->createNotFoundException('Unable to find Cita entity.');
         }
 
         $deleteForm = $this->createDeleteForm($id);
@@ -289,7 +328,7 @@ class CitaController extends Controller
     /**
      * Edits an existing Cita entity.
      *
-     * @Route("/{id}", name="admin_cita_update")
+     * @Route("/{id}/update", name="admin_cita_update")
      * @Method("PUT")
      * @Template("DGPlusbelleBundle:Cita:edit.html.twig")
      */
@@ -323,7 +362,7 @@ class CitaController extends Controller
     /**
      * Deletes a Cita entity.
      *
-     * @Route("/{id}", name="admin_cita_delete")
+     * @Route("/{id}/delete", name="admin_cita_delete")
      * @Method("DELETE")
      */
     public function deleteAction(Request $request, $id)

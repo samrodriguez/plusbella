@@ -38,29 +38,27 @@
     {#<div class="col-md-1 text-right">
         Sucursales
     </div>#}
-    
+    <input id="sucursal" value="{{sucursal}}" type="hidden">
     <div class="col-md-5">
+
         
-            
-        
-        
-            <select  id="filtroSucursales" class="col-md-12 input-sm form-control">
+            {#<select  id="filtroSucursales" class="col-md-12 input-sm form-control">
 
                 {% for sucursal in sucursales %}
                     <option value="{{sucursal.id}}"> {{sucursal.nombre}}</option>
                 {% endfor %}
-            </select>
-            <div class='col-md-12' style='margin-top:20px;'>
-        <a id="0" style='background:transparent; border:0px; border-radius:80px; text-decoration: none; margin-right: 20px;'>
-            <img class="userFilter" data-original-title="Todos" rel="tooltip" src='{{ asset('Photos/Empleado/')}}na.jpg' alt='Foto perfil' style='border-radius:80px;width: 35px; height: 35px;'>
-        </a>
+            </select>#}
+        <div class='col-md-12'>
+            <a id="0" style='background:transparent; border:0px; border-radius:80px; text-decoration: none; margin-right: 20px;'>
+                <img class="userFilter" data-toggle="tooltip" data-original-title="Todos" rel="tooltip" src='{{ asset('Photos/Empleado/')}}na.jpg' alt='Foto perfil' style='border-radius:80px;width: 35px; height: 35px;'>
+            </a>
         {% for empleado in empleados %}
             
                 <a  id="{{empleado.id}}" style='background:transparent; border:0px; border-radius:80px; text-decoration: none;'>
                     {% if empleado.foto!=""%}
-                        <img class="userFilter" data-original-title="{{empleado.persona.nombres|upper}} {{empleado.persona.apellidos|upper}}" rel="tooltip" src='{{ asset('Photos/Empleado/')}}{{empleado.foto}}' alt='Foto perfil' style='border-radius:80px;width: 35px; height: 35px;'>
+                        <img class="userFilter" data-toggle="tooltip" data-original-title="{{empleado.persona.nombres|upper}} {{empleado.persona.apellidos|upper}}" rel="tooltip" src='{{ asset('Photos/Empleado/')}}{{empleado.foto}}' alt='Foto perfil' style='border-radius:80px;width: 35px; height: 35px;'>
                     {% else %}
-                        <img class="userFilter" data-original-title="{{empleado.persona.nombres|upper}} {{empleado.persona.apellidos|upper}}" rel="tooltip" src='{{ asset('Photos/Empleado/')}}na.jpg' alt='Foto perfil' style='border-radius:80px;width: 35px; height: 35px;'>
+                        <img class="userFilter" data-toggle="tooltip" data-original-title="{{empleado.persona.nombres|upper}} {{empleado.persona.apellidos|upper}}" rel="tooltip" src='{{ asset('Photos/Empleado/')}}na.jpg' alt='Foto perfil' style='border-radius:80px;width: 35px; height: 35px;'>
                     {% endif %}
                 </a>
         {% endfor %}
@@ -72,54 +70,54 @@
         <ul id="navbarDemoContext" class=" dropdown-inline color-lists dropdown-menu-right" role="menu" style="opacity: 1; display: block; transform: translateY(0px) scaleX(1) scaleY(1); transform-origin: 50% 50% 0px;">
             {% for categoria in categorias%}
                 {% if categoria.id == 1 %}    
-                    <li class="" style="opacity: 1; display: list-item; transform: translateY(0px);"><a data-original-title="{{categoria.nombre}}" href="#" style="background: #8C1821" data-navbar="violet" rel="tooltip" title=""></a></li>
+                    <li class="" style="opacity: 1; display: list-item; transform: translateY(0px);"><a data-toggle="tooltip" data-original-title="{{categoria.nombre}}" href="#" style="background: #8C1821" data-navbar="violet" rel="tooltip" title=""></a></li>
                 {% endif %}
                 {% if categoria.id == 2 %}    
-                    <li class="" style="opacity: 1; display: list-item; transform: translateY(0px);"><a data-original-title="{{categoria.nombre}}" href="#" style="background: #4C4B31" data-navbar="red" rel="tooltip" title=""></a></li>
+                    <li class="" style="opacity: 1; display: list-item; transform: translateY(0px);"><a data-toggle="tooltip" data-original-title="{{categoria.nombre}}" href="#" style="background: #4C4B31" data-navbar="red" rel="tooltip" title=""></a></li>
                 {% endif %}
                 {% if categoria.id == 3 %}    
-                    <li class="" style="opacity: 1; display: list-item; transform: translateY(0px);"><a data-original-title="{{categoria.nombre}}" href="#" style="background: #C7931C" data-navbar="orange" rel="tooltip" title=""></a></li>
+                    <li class="" style="opacity: 1; display: list-item; transform: translateY(0px);"><a data-toggle="tooltip" data-original-title="{{categoria.nombre}}" href="#" style="background: #C7931C" data-navbar="orange" rel="tooltip" title=""></a></li>
                 {% endif %}
                 {% if categoria.id == 4 %}    
-                    <li class="" style="opacity: 1; display: list-item; transform: translateY(0px);"><a data-original-title="{{categoria.nombre}}" href="#" style="background: #B2B064" data-navbar="yellow" rel="tooltip" title=""></a></li>
+                    <li class="" style="opacity: 1; display: list-item; transform: translateY(0px);"><a data-toggle="tooltip" data-original-title="{{categoria.nombre}}" href="#" style="background: #B2B064" data-navbar="yellow" rel="tooltip" title=""></a></li>
                 {% endif %}
                 {% if categoria.id == 5 %}    
-                    <li class="" style="opacity: 1; display: list-item; transform: translateY(0px);"><a data-original-title="{{categoria.nombre}}" href="#" style="background: #7E9499" data-navbar="green" rel="tooltip" title=""></a></li>
+                    <li class="" style="opacity: 1; display: list-item; transform: translateY(0px);"><a data-toggle="tooltip" data-original-title="{{categoria.nombre}}" href="#" style="background: #7E9499" data-navbar="green" rel="tooltip" title=""></a></li>
                 {% endif %}
                 {% if categoria.id == 6 %}    
-                    <li class="" style="opacity: 1; display: list-item; transform: translateY(0px);"><a data-original-title="{{categoria.nombre}}" href="#" style="background: #7C591A" data-navbar="teal" rel="tooltip" title=""></a></li>
+                    <li class="" style="opacity: 1; display: list-item; transform: translateY(0px);"><a data-toggle="tooltip" data-original-title="{{categoria.nombre}}" href="#" style="background: #7C591A" data-navbar="teal" rel="tooltip" title=""></a></li>
                 {% endif %}
                 {% if categoria.id == 7 %}    
-                    <li class="" style="opacity: 1; display: list-item; transform: translateY(0px);"><a data-original-title="{{categoria.nombre}}" href="#" style="background: #D77C87" data-navbar="cyan" rel="tooltip" title=""></a></li>
+                    <li class="" style="opacity: 1; display: list-item; transform: translateY(0px);"><a data-toggle="tooltip" data-original-title="{{categoria.nombre}}" href="#" style="background: #D77C87" data-navbar="cyan" rel="tooltip" title=""></a></li>
                 {% endif %}
                 {% if categoria.id == 8 %}    
-                    <li class="" style="opacity: 1; display: list-item; transform: translateY(0px);"><a data-original-title="{{categoria.nombre}}" href="#" style="background: #5D5D5D" data-navbar="blue" rel="tooltip" title=""></a></li>
+                    <li class="" style="opacity: 1; display: list-item; transform: translateY(0px);"><a data-toggle="tooltip" data-original-title="{{categoria.nombre}}" href="#" style="background: #5D5D5D" data-navbar="blue" rel="tooltip" title=""></a></li>
                 {% endif %}
                 {% if categoria.id == 9 %}
-                    <li class="" style="opacity: 1; display: list-item; transform: translateY(0px);"><a data-original-title="{{categoria.nombre}}" href="#" style="background: #E07140" data-navbar="blue" rel="tooltip" title=""></a></li>
+                    <li class="" style="opacity: 1; display: list-item; transform: translateY(0px);"><a data-toggle="tooltip" data-original-title="{{categoria.nombre}}" href="#" style="background: #E07140" data-navbar="blue" rel="tooltip" title=""></a></li>
                 {% endif %}
                 {% if categoria.id == 10 %}
-                    <li class="" style="opacity: 1; display: list-item; transform: translateY(0px);"><a data-original-title="{{categoria.nombre}}" href="#" style="background: #A0D468" data-navbar="blue" rel="tooltip" title=""></a></li>
+                    <li class="" style="opacity: 1; display: list-item; transform: translateY(0px);"><a data-toggle="tooltip" data-original-title="{{categoria.nombre}}" href="#" style="background: #A0D468" data-navbar="blue" rel="tooltip" title=""></a></li>
                 {% endif %}
                 
                 
                 {% if categoria.id == 11 %}
-                    <li class="" style="opacity: 1; display: list-item; transform: translateY(0px);"><a data-original-title="{{categoria.nombre}}" href="#" style="background: #1C3343" data-navbar="blue" rel="tooltip" title=""></a></li>
+                    <li class="" style="opacity: 1; display: list-item; transform: translateY(0px);"><a data-toggle="tooltip" data-original-title="{{categoria.nombre}}" href="#" style="background: #1C3343" data-navbar="blue" rel="tooltip" title=""></a></li>
                 {% endif %}
                 
                 
                 {% if categoria.id == 12 %}
-                    <li class="" style="opacity: 1; display: list-item; transform: translateY(0px);"><a data-original-title="{{categoria.nombre}}" href="#" style="background: #67A59B" data-navbar="blue" rel="tooltip" title=""></a></li>
+                    <li class="" style="opacity: 1; display: list-item; transform: translateY(0px);"><a data-toggle="tooltip" data-original-title="{{categoria.nombre}}" href="#" style="background: #67A59B" data-navbar="blue" rel="tooltip" title=""></a></li>
                 {% endif %}
                 
                 
                 {% if categoria.id == 13 %}
-                    <li class="" style="opacity: 1; display: list-item; transform: translateY(0px);"><a data-original-title="{{categoria.nombre}}" href="#" style="background: #A053A0" data-navbar="blue" rel="tooltip" title=""></a></li>
+                    <li class="" style="opacity: 1; display: list-item; transform: translateY(0px);"><a data-toggle="tooltip" data-original-title="{{categoria.nombre}}" href="#" style="background: #A053A0" data-navbar="blue" rel="tooltip" title=""></a></li>
                 {% endif %}
                 
                 
                 {% if categoria.id >= 14 %}
-                    <li class="" style="opacity: 1; display: list-item; transform: translateY(0px);"><a data-original-title="{{categoria.nombre}}" href="#" style="background: #AC92EC" data-navbar="blue" rel="tooltip" title=""></a></li>
+                    <li class="" style="opacity: 1; display: list-item; transform: translateY(0px);"><a data-toggle="tooltip" data-original-title="{{categoria.nombre}}" href="#" style="background: #AC92EC" data-navbar="blue" rel="tooltip" title=""></a></li>
                 {% endif %}
                 
             {% endfor %}
@@ -164,17 +162,15 @@
         
 {% endblock %}
 
-
-{% block javascripts_step %}
-    <script src="{{ asset('Resources/wrapkit/scripts/plugin-setups.js') }}"></script>
+{% block javascripts_step -%}
+    <!-- Aspectos generales de la plantilla -->
+    {{parent()}}
     
-    <script>
-        $(document).ready(function(){
-
-            
-
+    <script type="text/javascript">
+        $(function () {
+          $('[data-toggle="tooltip"]').tooltip();
+          
         });
-    
     </script>
-    
-{% endblock %}
+    {% endblock %}
+

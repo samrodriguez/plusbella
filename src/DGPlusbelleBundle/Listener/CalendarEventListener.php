@@ -24,23 +24,37 @@ class CalendarEventListener
         $startDate = $calendarEvent->getStartDatetime();
         $endDate   = $calendarEvent->getEndDatetime();
         $sucursal = $request->get('sucursal');
+        $hoyFiltro = $request->get('hoyFiltro');
+        $date = new \DateTime($hoyFiltro);
+        //var_dump($hoyFiltro);
         $user = $request->get('user');
         //var_dump($sucursal);
         //var_dump($user);
         //die();
         //$em = $this->getDoctrine()->getManager();
-        //var_dump($sucursal);
-        if(isset($sucursal)){
+        
+//        var_dump($sucursal);
+//        die();
+        
+        if($sucursal!=''){
             if($user==0){
                 $citas = $this->em->getRepository('DGPlusbelleBundle:Cita')->findBy(array('sucursal'=>$sucursal));
             }
             else{
+                //$citas = $this->em->getRepository('DGPlusbelleBundle:Cita')->findBy(array('sucursal'=>$sucursal));
                 $citas = $this->em->getRepository('DGPlusbelleBundle:Cita')->findBy(array('sucursal'=>$sucursal,'empleado'=>$user));
             }
             
         }
         else{
-            $citas = $this->em->getRepository('DGPlusbelleBundle:Cita')->findAll();
+            //$citas = $this->em->getRepository('DGPlusbelleBundle:Cita')->findBy(array('fechaCita'=>$date));
+            if($user==0){
+                $citas = $this->em->getRepository('DGPlusbelleBundle:Cita')->findAll();
+            }
+            else{
+                //$citas = $this->em->getRepository('DGPlusbelleBundle:Cita')->findBy(array('sucursal'=>$sucursal));
+                $citas = $this->em->getRepository('DGPlusbelleBundle:Cita')->findBy(array('empleado'=>$user));
+            }
         }
         
         foreach($citas as $key => $companyEvent) {
