@@ -139,9 +139,9 @@
                     }
                 ]
             };
-            $('#contenedorGrafico').append('<canvas id="myChart" width="600%" height="300%"><canvas>');
-            var ctx = $("#myChart").get(0).getContext("2d");
-            var myLineChart = new Chart(ctx).Line(data);
+            $('#contenedorGrafico').append('<canvas id="myBarChart" width="600%" height="300%"><canvas>');
+            var ctx = $("#myBarChart").get(0).getContext("2d");
+            var myLineChart = new Chart(ctx).Bar(data);
             
         {% else %}
             bootbox.alert("No hay datos para ese intervalo", function() {});
