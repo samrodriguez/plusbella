@@ -216,7 +216,8 @@ class AbonoController extends Controller
         //$form   = $this->createCreateForm($entity, $paciente->getPersona()->getId(), $idtratamientos);
         
         return array(
-            'entity' => $entity,
+            'entity'   => $entity,
+            'paciente' => $paciente,
             'form'   => $form->createView(),
         );
     }

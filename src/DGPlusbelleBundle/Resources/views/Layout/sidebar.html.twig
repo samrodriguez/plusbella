@@ -59,11 +59,27 @@
             </a>        
         </li>#}
     {% endif %}
-    {% if is_granted('ROLE_ADMIN') or is_granted('ROLE_USER') or is_granted('ROLE_MEDICO') %}        
+    {#{% if is_granted('ROLE_ADMIN') or is_granted('ROLE_USER') or is_granted('ROLE_MEDICO') %}        
         <li class="nav-item" role="presentation">    
             <a href="{{path('admin_cita')}}">
               <span class="nav-icon"><i class="fa fa-calendar-check-o"></i></span>
               <span class="nav-text">Calendario de citas</span>
+            </a>
+        </li>
+    {% endif %}#}
+    {% if is_granted('ROLE_ADMIN') or is_granted('ROLE_USER')%}
+        <li class="nav-item" role="presentation">
+            <a href="{{path('admin_cita',{id:8})}}">
+                <span class="nav-icon"><i class="fa fa-calendar-check-o"></i></span>
+                <span class="nav-text">Citas Escalon</span>
+            </a>
+        </li>
+    {% endif %}
+    {% if is_granted('ROLE_ADMIN') or is_granted('ROLE_USER')%}
+        <li class="nav-item" role="presentation">
+            <a href="{{path('admin_cita',{id:3})}}">
+                <span class="nav-icon"><i class="fa fa-calendar-check-o"></i></span>
+                <span class="nav-text">Citas Santa Elena</span>
             </a>
         </li>
     {% endif %}

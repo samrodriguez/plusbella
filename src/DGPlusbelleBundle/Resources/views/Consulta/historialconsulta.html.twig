@@ -222,7 +222,7 @@
                                 <th class = "text-center">Paquete</th>
                                 <th class = "text-center">Vendido por</th>
                                 <th class = "text-center">Fecha de venta</th>
-                                <th class = "text-center">Estado</th>
+                                {#<th class = "text-center">Estado</th>#}
                                 <th class = "text-center">Acciones</th>
                             </tr>
                         </thead>
@@ -233,9 +233,9 @@
                                 <td>{{ entity.paquete }}</td>
                                 <td>{{ entity.empleado }}</td>
                                 <td class = "text-center">{% if entity.fechaVenta %}{{ entity.fechaVenta|date('d/m/Y') }}{% endif %}</td>
-                                <td class = "text-center">
+                                {#<td class = "text-center">
                                     {% if entity.estado == 1 %}Sin comenzar{% elseif entity.estado == 2 %}En proceso{% elseif entity.estado == 3 %}Finalizado{% endif %}
-                                </td>
+                                </td>#}
                                 <td class="center-block">
                                     <div class="row">
                                         <div class="col-md-1 col-md-offset-3">
@@ -273,7 +273,7 @@
                                                 {% endif %}
                                             </div>
                                         </div> 
-                                            {% for ent in entity.ventapaq %}
+                                            {#{% for ent in entity.ventapaq %}
                                                {% if ent.registraReceta == 1 %}
                                                 <div class="col-md-1">
                                                     <div class="btn-group btn-group-sm pull-left">
@@ -283,7 +283,7 @@
                                                     </div>
                                                 </div>
                                                 {% endif %}
-                                            {% endfor %}
+                                            {% endfor %}#}
                                     </div>
                                 </td>
                             </tr>
@@ -651,27 +651,57 @@
     </script>
      <script>  
         function nuevaSesionTratamiento(id){
-            bootbox.confirm( 'El paciente tiene deuda pendiente en éste paquete ¿Desea continuar?', function( result ) {
-                toastr.info( 'Confirm result: ' + result);
-            
-                {#$.post( "{{path('admin_evaluar_sesiones_paquete')}}", { id: id }, function( data ) {
-                    var aux = 0;
-                    var total = data.query.length;
-                    $.each( data.query, function( key, value ) {
-                       if(value.numSesion >= value.sesiones){
-                            aux = aux + 1;
-                        }
-                    });   
-                    if(aux < total){
+            $.post( "{{path('admin_evaluar_sesiones_paquete')}}", { id: id }, function( data ) {
+                var aux = 0;
+                var total = data.query.length;
+                
+                // Calculando la deuda pendiente que tiene el paciente en el paquete seleccionado
+                var deuda = ( (data.query[0].costoPaquete - ((data.query[0].porcentaje * data.query[0].costoPaquete)/100)) - data.abonos.abonos).toFixed(2);
+                
+                $.each( data.query, function( key, value ) {
+                   if(value.numSesion >= value.sesiones){
+                        aux = aux + 1;
+                    }
+                });   
+                
+                // Si exiten sesiones pendientes
+                if(aux < total){
+                    // Si el paciente no tiene deuda pendiente en el paquete seleccionado
+                    if(deuda <= 0){
                         var url = Routing.generate('admin_sesiontratamiento_new', {'id': id});
                         window.open(url, "_self");
+                        
+                    // Si el paciente tiene deuda pendiente en el paquete seleccionado    
                     } else {
-                        bootbox.alert('Se han completado las sesiones, no se puede registrar una nueva sesion en el paquete');
+                        bootbox.confirm({ title: 'Confirmación de registro de nueva sesión',
+                            message: 'El paciente tiene  una deuda de $' + deuda + ', en éste paquete ¿Desea continuar?',
+                            buttons: {
+                                'cancel': {
+                                    label: 'Cancelar',
+                                    className: 'btn-default pull-left'
+                                },
+                                'confirm': {
+                                    label: 'Aceptar',
+                                    className: 'btn-primary pull-right'
+                                }
+                            },
+                            callback: function(result) {
+                                // Si acepta continuar con el registro de una nueva sesion de tratamiento
+                                if(result == true){ 
+                                    var url = Routing.generate('admin_sesiontratamiento_new', {'id': id});
+                                    window.open(url, "_self");
+                                }
+                            }
+                        });      
                     }
-
-
-                }, "json"); // Fin de post #}   
-            });            
+                    
+                // Si se han completado todas las sesiones de todos tratamientos que cuenta el paquete    
+                } else {
+                    bootbox.alert('Se han completado las sesiones, no se puede registrar una nueva sesion en el paquete');
+                }
+                
+            }, "json"); // Fin de post    
+                      
         }
     </script>
     <script>  
@@ -749,7 +779,7 @@
                 if(par.length !== 0){
                     var mensaje = "";
                     mensaje += "<div class='panel-body'>";
-                    mensaje += "<div class='col-md-12'><small>Aqui se muestra la informacion</small></div>";
+                    //mensaje += "<div class='col-md-12'><small>Aqui se muestra la informacion</small></div>";
                     mensaje += "<div class='clearfix'></div>"
                     //mensaje += "<div class='col-md-3 text-right'><b>Expediente No.: </b></div><div class='col-md-3'>" + data.query[0].numExp.toUpperCase() + "</div>";
                     //mensaje += "<div class='col-md-3 text-right'><b>Nombre del paciente: </b></div><div class='col-md-3'>" + data.query[0].paciente + "</div>";

@@ -1,11 +1,11 @@
 
 
 {% block contenido -%}
-    
-    <div class="panel panel-default">
+
+<div class="panel panel-default">
   <!-- Default panel contents -->
-  <div class="panel-heading"><p>Nuevo tratamiento</p></div>
-  <div class="panel-body">
+<div class="panel-heading"><p>Nuevo tratamiento</p></div>
+<div class="panel-body">
   {{ form_start(form) }}
     {{ form_errors(form) }}
         <div class="col-xs-12 col-sm-2">
@@ -22,18 +22,12 @@
         </div>
         {#{{ form_row(form.estado) }}#}
   
- 
-    
-         <div class="form-grouphide col-sm-9">
-            
-                <a href="{{ path('admin_tratamiento') }}" class="btn btn-default  btn-sm" id="cancelarNuevo">Cancelar</a>
-                {{ form_widget(form.submit) }}
-
+        <div class="form-grouphide col-sm-9">    
+            <a href="{{ path('admin_tratamiento') }}" class="btn btn-default  btn-sm" id="cancelarNuevo">Cancelar</a>
+            {{ form_widget(form.submit) }}
         </div>
-   
     {{ form_end(form) }}
-  </div>
-
+</div>
 
 </div>        
 
