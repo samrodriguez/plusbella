@@ -69,6 +69,13 @@ class Persona
      * @ORM\Column(name="telefono", type="string", length=12, nullable=false)
      */
     private $telefono;
+    
+     /**
+     * @var string
+     *
+     * @ORM\Column(name="telefono2", type="string", length=12, nullable=false)
+     */
+    private $telefono2;
 
     /**
      * @var string
@@ -312,6 +319,30 @@ class Persona
     public function getTelefono()
     {
         return $this->telefono;
+    }
+    
+     /**
+     * Set telefono2
+     *
+     * @param string $telefono2
+     *
+     * @return Persona
+     */
+    public function setTelefono2($telefono2)
+    {
+        $this->telefono2 = $telefono2;
+
+        return $this;
+    }
+
+    /**
+     * Get telefono2
+     *
+     * @return string
+     */
+    public function getTelefono2()
+    {
+        return $this->telefono2;
     }
 
     /**

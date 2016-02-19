@@ -74,6 +74,22 @@
                     }
                 });  
                 
+                
+              $(document).on("change","#dgplusbellebundle_personatratamiento_tratamiento",function(){
+                
+                 Costot = $('#dgplusbellebundle_personatratamiento_tratamiento').val();
+                 //alert($('#dgplusbellebundle_personatratamiento_tratamiento').val());
+ 
+                 $.getJSON(Routing.generate('admin_costo_tratamiento', { id: Costot}), 
+                   function(data) {
+ 
+                     $('#dgplusbellebundle_personatratamiento_costoConsulta').val(data.regs);
+                     
+                  }); 
+             
+                 });     
+           
+                
             $('#dgplusbellebundle_personatratamiento_tratamiento').select2();
             $('#dgplusbellebundle_personatratamiento_paciente').select2();
             $('#dgplusbellebundle_personatratamiento_empleado').select2();          
@@ -104,8 +120,7 @@
             if($('#dgplusbellebundle_personatratamiento_cuotas').val()==""){
                 $('#dgplusbellebundle_personatratamiento_cuotas').val("1");
             }
-            
-              
+  
                 
         validarTratamientoPaciente();            
                 

@@ -49,10 +49,10 @@
             {{ form_row(edit_form.telefonoEmergencia) }}
             {# {{ form_row(form.estado) }}#}
             </div>
-            <div class="col-md-2">
+           {# <div class="col-md-2">
             {{ form_row(edit_form.enteradoPor) }}
-            {# {{ form_row(form.estado) }}#}
-            </div>
+            
+            </div>#}
         </div>
         <div class="form-grouphide col-sm-9"> 
             <a href="{{ path('admin_paciente') }}" class="btn btn-default btn-sm" id="cancelarModificar">Cancelar</a>
@@ -82,6 +82,7 @@
          // validando campos  
               $('.duiPaciente').mask('00000000-0');  
               $('.telefonoPersona').mask('0000-0000'); 
+              $('.telefono2Persona').mask('0000-0000'); 
               $('.telefonoemerPaciente').mask('0000-0000'); 
         
         
