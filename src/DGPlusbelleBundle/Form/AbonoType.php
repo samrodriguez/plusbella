@@ -23,7 +23,7 @@ class AbonoType extends AbstractType
         $builder
             ->add('monto',null,array('label' => 'Monto $','required'=>false,
                     'attr'=>array(
-                    'class'=>'form-control input-sm montoAbono'
+                    'class'=>'form-control input-sm montoAbono',
                     )))
             ->add('descripcion','textarea',array('label' => 'Descripción','required'=>false,
                     'attr'=>array(
@@ -37,17 +37,18 @@ class AbonoType extends AbstractType
                                                 return $repository->obtenerEmpActivo();
                                              },  
                          'attr'=>array(
-                         'class'=>'form-control input-sm empleadoAbono'
+                         'class'=>'form-control input-sm empleadoAbono',
+                         'style'=>'width: 350px;'    
                          )
                        ))
-            ->add('paciente', null, 
-                  array( 'label'         => 'Paciente',
-                         'empty_value'   => 'Seleccione un paciente...',
-                         'class'         => 'DGPlusbelleBundle:Paciente',
-                         'attr'=>array(
-                         'class'=>'form-control input-sm '
-                         )
-                       ))
+//            ->add('paciente', null, 
+//                  array( 'label'         => 'Paciente',
+//                         'empty_value'   => 'Seleccione un paciente...',
+//                         'class'         => 'DGPlusbelleBundle:Paciente',
+//                         'attr'=>array(
+//                         'class'=>'form-control input-sm '
+//                         )
+//                       ))
             ->add('sucursal','entity',array('label' => 'Seleccione sucursal...','required'=>false,
                 'class'=>'DGPlusbelleBundle:Sucursal',
                 'empty_value' => 'Seleccione una sucursal...',
@@ -58,7 +59,8 @@ class AbonoType extends AbstractType
                 'multiple'=>false,
                 'expanded'=>false,
                     'attr'=>array(
-                    'class'=>'sucursalPaquete'
+                    'class'=>'sucursalPaquete',
+                    'style'=>'width: 300px;'        
                     )))      
             ->add('ventaPaquete')
             ->add('personaTratamiento')
