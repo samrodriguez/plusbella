@@ -17,13 +17,32 @@
 {% block jquery -%}
 <script type="text/javascript">     
 var calendario = null;
-var sucursal = $('#filtroSucursales').val();
+var sucursal = $('#sucursal').val();
+
+var hoyFiltro = new Date();
+                                    
+                var ddFiltro = hoyFiltro.getDate();
+                var mmFiltro = hoyFiltro.getMonth()+1; //hoy es 0!
+                var yyyyFiltro = hoyFiltro.getFullYear();
+                //alert(view.name);
+                if(ddFiltro<10) {
+                    ddFiltro='0'+ddFiltro;
+                } 
+
+                if(mmFiltro<10) {
+                    mmFiltro='0'+mmFiltro;
+                } 
+
+                hoyFiltro = yyyyFiltro+'-'+mmFiltro+'-'+ddFiltro;
+                //hoyFiltro = ddFiltro+'-'+mmFiltro+'-'+yyyyFiltro;
+
+//alert(hoyFiltro);
 var user=0;
 var i=0;
 var sources=new Array();
 var source = 
     {
-        url: Routing.generate('fullcalendar_loader')+'?sucursal='+sucursal,
+        url: Routing.generate('fullcalendar_loader')+'?sucursal='+sucursal+'&hoyFiltro='+hoyFiltro,
         type: 'POST',
         data: {
             filtro: 1
@@ -52,7 +71,7 @@ var source =
 //  	calendario.fullCalendar('removeEventSource',source2);
   	calendario.fullCalendar('removeEventSource');
 //	$('#calendar-holder').fullCalendar( 'removeEvents').fullCalendar('removeEventSources');
-	sucursal = $('#filtroSucursales').val();
+	sucursal = $('#sucursal').val();
         //alert(Routing.generate('fullcalendar_loader')+'?sucursal='+sucursal);
         calendario.fullCalendar('removeEvents');
         
@@ -64,7 +83,7 @@ var source =
         console.log(sources[0]);
         var source2 = 
             {
-                url: Routing.generate('fullcalendar_loader')+'?sucursal='+sucursal+'&user='+user,
+                url: Routing.generate('fullcalendar_loader')+'?sucursal='+sucursal+'&user='+user+'&hoyFiltro='+hoyFiltro,
                 type: 'POST',
                 data: {
                     filtro: 1
@@ -110,7 +129,8 @@ $(document).ready(function() {
     
     //var horaInicial=null;
 
-    sucursal = $('#filtroSucursales').val();
+{#    sucursal = $('#filtroSucursales').val();#}
+    sucursal = $('#sucursal').val();
     var fecha=null;
     //$('#filtroSucursales').change();
     //alert(hoy);
@@ -154,13 +174,14 @@ $(document).ready(function() {
         slotEventOverlap:false,
         select: function( startDate, endDate, allDay, jsEvent, view ){
             var stdate = $.fullCalendar.formatDate(startDate,'dd-MM-yyyy');
+            var stdate2 = $.fullCalendar.formatDate(startDate,'yyyy-MM-dd');
             var endate = $.fullCalendar.formatDate(endDate,'dd-MM-yyyy');
             var starttm = $.fullCalendar.formatDate(startDate,'HH:mm');
             var endtm = $.fullCalendar.formatDate(endDate,'HH:mm');
             var day = $.fullCalendar.formatDate(startDate,'dddd'); 
             var element = $(jsEvent.srcElement);
             //fecha=$.fullCalendar.formatDate(startDate,'dd-MM-yyyy');
-            //alert(fecha);
+            //alert(endDate);
             
             
             if(view.name == 'agendaDay' ){
@@ -173,15 +194,15 @@ $(document).ready(function() {
                 var yyyy = hoy.getFullYear();
                 //alert(view.name);
                 if(dd<10) {
-                    dd='0'+dd
+                    dd='0'+dd;
                 } 
 
                 if(mm<10) {
-                    mm='0'+mm
+                    mm='0'+mm;
                 } 
 
-                //hoy = yyyy+'-'+mm+'-'+dd;
-                hoy = dd+'-'+mm+'-'+yyyy;
+                hoy = yyyy+'-'+mm+'-'+dd;
+                //hoy = dd+'-'+mm+'-'+yyyy;
                 
                 var date = new Date();
                 //date.setTime(result_from_Date_getTime);
@@ -190,9 +211,17 @@ $(document).ready(function() {
                 var minutes = date.getMinutes();
                 var hour = date.getHours();
                 
+                {#var ho = new Date(stdate);
+                var ho2 = new Date(hoy);#}
                 //alert(date.timeNow());
+                {#alert(ho);
+                alert(ho2);#}
                 
-                if(stdate<hoy){
+
+               
+
+
+                if(stdate2<hoy){
                     //alert('menor');// no programar cita
                     var mensaje = "";
                     mensaje += "<div class='row'><div class='col-md-12'><b><p class='text-left'>Error...</p></b></div></div>";
@@ -201,7 +230,7 @@ $(document).ready(function() {
                     bootbox.alert(mensaje, function() {});
                 }
                 else{
-                    if(stdate>hoy){
+                    if(stdate2>hoy){
                         //alert('permitir programar cita');// programar cita
                         var url = Routing.generate('admin_cita_new2', { fecha: stdate, hora:starttm});
                         window.location = url;
@@ -222,7 +251,6 @@ $(document).ready(function() {
                         }
                     }
                 }
-            
             }
             
             

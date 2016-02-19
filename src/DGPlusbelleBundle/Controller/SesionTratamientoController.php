@@ -61,7 +61,7 @@ class SesionTratamientoController extends Controller
         if ($form->isValid()) {
             $em = $this->getDoctrine()->getManager();
             
-            
+            $entity->setRegistraReceta("0");
             $em->persist($entity);
             $em->flush();
             
@@ -101,7 +101,7 @@ class SesionTratamientoController extends Controller
             foreach ($tratamientos as $trat){
                  if($seguimiento->getNumSesion() + 1 >= $trat->getNumSesiones()){
                      $aux++;
-                } 
+                }
             }
             
             if($aux < $total){
@@ -110,11 +110,11 @@ class SesionTratamientoController extends Controller
                 $ventaPaquete->setEstado(3);
             }
             $parameters = $request->request->all();
-            $recetaid = $parameters['dgplusbellebundle_sesiontratamiento']['sesiontratamiento'];
-            var_dump($parameters);
+            //$recetaid = $parameters['dgplusbellebundle_sesiontratamiento']['sesiontratamiento'];
+            //var_dump($parameters);
             //die();
             
-            $dql = "SELECT det.id, det.nombre "
+            /*$dql = "SELECT det.id, det.nombre "
                     . "FROM DGPlusbelleBundle:DetallePlantilla det "
                     . "JOIN det.plantilla pla "
                     . "WHERE pla.id =  :plantillaid";
@@ -152,7 +152,7 @@ class SesionTratamientoController extends Controller
                 
                 $em->persist($dataReporte2);
                 $em->flush();
-            }   
+            }   */
             
             
             $em->merge($ventaPaquete);

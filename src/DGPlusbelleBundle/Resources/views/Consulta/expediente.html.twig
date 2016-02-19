@@ -314,9 +314,9 @@
                 
                 $('.expedientePaciente').on('click', function(event) {
                     var id = $(this).parent().parent().attr('id');
-                    var href = {{path('admin_historial_consulta')}};
-                    
-                    alert(href);
+                    var href = "{{path('admin_historial_consulta')}}?id="+id;
+                    window.location = href;
+                    //alert(href);
                 });
                 
                 
@@ -411,12 +411,6 @@
                            { "orderable": false, "targets": 0 },
                            { "orderable": false, "targets": 2 }
                            
-                           {#{ "orderable": false, "targets": 4 },
-                           { "orderable": false, "targets": 5 },
-                           { "orderable": false, "targets": 6 }#}
-                           
-                           
-                           //{ "orderData": [ 2, 3, 4 ], "targets": 2 }
                     ],
                     "language": {
                     "info": "Mostrando página _PAGE_ de _PAGES_",
@@ -431,7 +425,7 @@
                     "lengthMenu": "Mostrar _MENU_ registros"
                 }, 
                     
-        });
+                });
         
         
         //Oculta el filtro de la tabla
