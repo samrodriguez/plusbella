@@ -36,7 +36,7 @@
                              
                              <div class="col-md-2" style="margin-top: 25px;"><b>Fecha de venta: </b></div><div id="fecha-venta" class="col-md-4" style="margin-top: 25px;"></div>
                              <div class="clearfix"></div>
-                             <div class="col-md-2" style="margin-top: 15px;"><b>Costo del paquete: </b></div><div id="costo" class="col-md-2" style="margin-top: 15px;"></div>
+                             <div class="col-md-2" style="margin-top: 15px;"><b>Costo: </b></div><div id="costo" class="col-md-2" style="margin-top: 15px;"></div>
                              <div class="col-md-2" style="margin-top: 15px;"><b>Descuento aplicado: </b></div><div id="descuento" class="col-md-2" style="margin-top: 15px;"></div>
                              <div class="col-md-2" style="margin-top: 15px;"><b>Monto total a cancelar: </b></div><b><div id="monto-total" class="col-md-2" style="margin-top: 15px;"></div></b>
                              <div class="clearfix"></div>
@@ -106,13 +106,22 @@
             });
 
             $(document).on("click","#dgplusbellebundle_abono_flagAbono_0", function(){
+                var capa = document.getElementById('contenido-abono');
+                
+                capa.style.display = 'none';
                 $("#paquete").show();
                 $("#tratamiento").hide();
+                $('#dgplusbellebundle_abono_ventaPaquete').val('');
+                
             });
 
             $(document).on("click","#dgplusbellebundle_abono_flagAbono_1", function(){
+                var capa = document.getElementById('contenido-abono');
+            
+                capa.style.display = 'none';
                 $("#tratamiento").show();
                 $("#paquete").hide(); 
+                $('#dgplusbellebundle_abono_personaTratamiento').val('');
             });
             
             if($('#dgplusbellebundle_abono_flagAbono_0').is(':checked')){
@@ -153,9 +162,17 @@
                     capa.style.display = 'block';
                 }, "json"); // Fin de post    
             } else {
-                $.post( "{{path('admin_evaluar_sesiones_paquete')}}", { id: id }, function( data ) {
-
-    //            capa.style.display = 'block';
+                $.post( "{{path('admin_busqueda_tratamiento_seguimiento')}}", { id: id }, function( data ) {
+                    var fecha = data.query[0].venta.split('-');
+                    deuda = (( (data.query[0].costoTratamiento - ((data.query[0].porcentaje * data.query[0].costoTratamiento)/100)) - data.abonos.abonos),2).toFixed(2);
+                    
+                    document.getElementById('fecha-venta').innerHTML = fecha[2] + "/" +fecha[1] + "/" +fecha[0];   
+                    document.getElementById('vendido-por').innerHTML = data.query[0].empleado;   
+                    document.getElementById('costo').innerHTML = "$" + ( data.query[0].costoTratamiento - 0 ).toFixed(2);   
+                    document.getElementById('descuento').innerHTML = "$" + ((data.query[0].porcentaje * data.query[0].costoTratamiento)/100).toFixed(2);   
+                    document.getElementById('monto-total').innerHTML = "$" + ( data.query[0].costoTratamiento - ((data.query[0].porcentaje * data.query[0].costoTratamiento)/100)).toFixed(2);   
+                    document.getElementById('deuda-pte').innerHTML = "$" + ( (data.query[0].costoTratamiento - ((data.query[0].porcentaje * data.query[0].costoTratamiento)/100)) - data.abonos.abonos).toFixed(2);   
+                    capa.style.display = 'block';
                 }, "json"); // Fin de post 
             }    
         } 
