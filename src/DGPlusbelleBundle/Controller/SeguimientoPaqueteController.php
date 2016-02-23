@@ -80,6 +80,7 @@ class SeguimientoPaqueteController extends Controller
                     . "paq.nombre as nomPaquete, "
                     . "paq.costo as costoPaquete, "
                     . "ven.fecha_venta as venta, "
+                    . "ven.cuotas as cuotas, "
                     . "tra.nombre as ntrata, "
                     . "des.porcentaje as porcentaje, "
                     . "pt.num_sesiones as sesiones, "
@@ -105,6 +106,7 @@ class SeguimientoPaqueteController extends Controller
             $rsm->addScalarResult('ntrata','ntrata');
             $rsm->addScalarResult('porcentaje','porcentaje');
             $rsm->addScalarResult('venta','venta');
+            $rsm->addScalarResult('cuotas','cuotas');
             $rsm->addScalarResult('sesiones','sesiones');
             $rsm->addScalarResult('numSesion','numSesion');
             $rsm->addScalarResult('id','id');
@@ -113,11 +115,12 @@ class SeguimientoPaqueteController extends Controller
             $mensaje = $em->createNativeQuery($sql, $rsm)
                     ->getResult();
             
-            $sql2 = "select cast(sum(abo.monto) as decimal(36,2)) abonos "
+            $sql2 = "select cast(sum(abo.monto) as decimal(36,2)) abonos, count(abo.monto) cuotas "
                     . "from abono abo inner join venta_paquete vp on abo.venta_paquete = vp.id "
                     . "where vp.id = '$ventaPaqueteId'";
             
             $rsm2->addScalarResult('abonos','abonos');
+            $rsm2->addScalarResult('cuotas','cuotas');
             
             $abonos = $em->createNativeQuery($sql2, $rsm2)
                     ->getResult();

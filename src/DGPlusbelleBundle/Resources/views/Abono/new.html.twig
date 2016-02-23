@@ -34,7 +34,9 @@
                              <div class="col-md-2"><b>Nombre del paciente: </b></div><div class="col-md-4">{{ paciente.persona.nombres}} {{ paciente.persona.apellidos}} </div>
                              <div class="col-md-2"><b>Vendido por: </b></div><div id="vendido-por" class="col-md-4"></div>
                              
-                             <div class="col-md-2" style="margin-top: 25px;"><b>Fecha de venta: </b></div><div id="fecha-venta" class="col-md-4" style="margin-top: 25px;"></div>
+                             <div class="col-md-2" style="margin-top: 45px;"><b>Fecha de venta: </b></div><div id="fecha-venta" class="col-md-2" style="margin-top: 45px;"></div>
+                             <div class="col-md-2" style="margin-top: 45px;"><b>Cuota No.: </b></div><div id="cuota" class="col-md-2" style="margin-top: 45px;"></div>
+                             <div class="col-md-2" style="margin-top: 45px;"><b>Total de cuotas: </b></div><div id="cuotas" class="col-md-2" style="margin-top: 45px;"></div>
                              <div class="clearfix"></div>
                              <div class="col-md-2" style="margin-top: 15px;"><b>Costo: </b></div><div id="costo" class="col-md-2" style="margin-top: 15px;"></div>
                              <div class="col-md-2" style="margin-top: 15px;"><b>Descuento aplicado: </b></div><div id="descuento" class="col-md-2" style="margin-top: 15px;"></div>
@@ -95,6 +97,11 @@
     <script src="{{ asset('Resources/js/Abono.js') }}"></script>  
     <script>   
         jQuery(document).ready(function() {
+            $('#dgplusbellebundle_abono_sucursal').val('');
+            $('#dgplusbellebundle_abono_empleado').val('');
+            $('#dgplusbellebundle_abono_monto').val('');
+            $('#dgplusbellebundle_abono_descripcion').val('');
+           
             var seleccionado="";
             //Eliminar options del select de pacientes
             $('#dgplusbellebundle_abono_paciente option').each(function(index, val) {
@@ -148,6 +155,18 @@
             var capa = document.getElementById('contenido-abono');
             capa.style.display = 'none';
             
+            $( "#dgplusbellebundle_abono_submit" ).prop( "disabled", false );
+            
+            var abono = document.getElementById('capaError');
+            abono.style.display = 'none';
+            
+            quitarReadOnly('dgplusbellebundle_abono_monto');
+            
+            $('#dgplusbellebundle_abono_sucursal').val('');
+            $('#dgplusbellebundle_abono_empleado').val('');
+            $('#dgplusbellebundle_abono_monto').val('');
+            $('#dgplusbellebundle_abono_descripcion').val('');  
+            
              if($("#dgplusbellebundle_abono_flagAbono_0").is(':checked')) {  
                 $.post( "{{path('admin_busqueda_paquete_seguimiento')}}", { id: id }, function( data ) {
                     var fecha = data.query[0].venta.split('-');
@@ -155,24 +174,50 @@
                     
                     document.getElementById('fecha-venta').innerHTML = fecha[2] + "/" +fecha[1] + "/" +fecha[0];   
                     document.getElementById('vendido-por').innerHTML = data.query[0].empleado;   
+                    document.getElementById('cuota').innerHTML = parseInt(data.abonos.cuotas) + 1;   
+                    document.getElementById('cuotas').innerHTML = data.query[0].cuotas;   
                     document.getElementById('costo').innerHTML = "$" + ( data.query[0].costoPaquete - 0 ).toFixed(2);   
                     document.getElementById('descuento').innerHTML = "$" + ((data.query[0].porcentaje * data.query[0].costoPaquete)/100).toFixed(2);   
                     document.getElementById('monto-total').innerHTML = "$" + ( data.query[0].costoPaquete - ((data.query[0].porcentaje * data.query[0].costoPaquete)/100)).toFixed(2);   
                     document.getElementById('deuda-pte').innerHTML = "$" + ( (data.query[0].costoPaquete - ((data.query[0].porcentaje * data.query[0].costoPaquete)/100)) - data.abonos.abonos).toFixed(2);   
                     capa.style.display = 'block';
+                    
+                    $('#dgplusbellebundle_abono_submit').val(id+'-'+0);  
+                    if(deuda == 0){
+                        $( "#dgplusbellebundle_abono_submit" ).prop( "disabled", true );
+                    }
+                    if( (parseInt(data.abonos.cuotas) + 1) == data.query[0].cuotas) {
+                        $('#dgplusbellebundle_abono_monto').val(deuda);
+                        ponerReadOnly('dgplusbellebundle_abono_monto');
+                    }
+                    
                 }, "json"); // Fin de post    
             } else {
                 $.post( "{{path('admin_busqueda_tratamiento_seguimiento')}}", { id: id }, function( data ) {
                     var fecha = data.query[0].venta.split('-');
-                    deuda = (( (data.query[0].costoTratamiento - ((data.query[0].porcentaje * data.query[0].costoTratamiento)/100)) - data.abonos.abonos),2).toFixed(2);
-                    
+                    deuda = ( (data.query[0].costoTratamiento - ((data.query[0].porcentaje * data.query[0].costoTratamiento)/100)) - data.abonos.abonos).toFixed(2);
+                    console.log(deuda);
                     document.getElementById('fecha-venta').innerHTML = fecha[2] + "/" +fecha[1] + "/" +fecha[0];   
-                    document.getElementById('vendido-por').innerHTML = data.query[0].empleado;   
+                    document.getElementById('vendido-por').innerHTML = data.query[0].empleado;  
+                    document.getElementById('cuota').innerHTML = parseInt(data.abonos.cuotas) + 1;   
+                    document.getElementById('cuotas').innerHTML = data.query[0].cuotas; 
                     document.getElementById('costo').innerHTML = "$" + ( data.query[0].costoTratamiento - 0 ).toFixed(2);   
                     document.getElementById('descuento').innerHTML = "$" + ((data.query[0].porcentaje * data.query[0].costoTratamiento)/100).toFixed(2);   
                     document.getElementById('monto-total').innerHTML = "$" + ( data.query[0].costoTratamiento - ((data.query[0].porcentaje * data.query[0].costoTratamiento)/100)).toFixed(2);   
-                    document.getElementById('deuda-pte').innerHTML = "$" + ( (data.query[0].costoTratamiento - ((data.query[0].porcentaje * data.query[0].costoTratamiento)/100)) - data.abonos.abonos).toFixed(2);   
+                    document.getElementById('deuda-pte').innerHTML = "$" + ( (data.query[0].costoTratamiento - ((data.query[0].porcentaje * data.query[0].costoTratamiento)/100)) - data.abonos.abonos).toFixed(2);                       
                     capa.style.display = 'block';
+                    
+                    $('#dgplusbellebundle_abono_submit').val(id+'-'+1);  
+                    
+                    if(deuda == 0){
+                        $( "#dgplusbellebundle_abono_submit" ).prop( "disabled", true );
+                    }
+                    
+                    if( (parseInt(data.abonos.cuotas) + 1) == data.query[0].cuotas) {
+                        $('#dgplusbellebundle_abono_monto').val(deuda);
+                        ponerReadOnly('dgplusbellebundle_abono_monto');
+                        
+                    }
                 }, "json"); // Fin de post 
             }    
         } 
@@ -181,6 +226,8 @@
             $(document).on("input","#dgplusbellebundle_abono_monto", function(){
                 var capa = document.getElementById('capaError');
                 var abono = parseFloat($(this).val());
+                
+               // alert(abono +'-'+deuda);
                 
                 if(abono > deuda){
                     //alert(deuda + ' - ' + abono);
@@ -191,6 +238,25 @@
                     capa.style.display = 'none';
                 }
             });
-        });//Fin document ready    
+        });//Fin document ready   
+        
+        function ponerReadOnly(id) {
+            // Ponemos el atributo de solo lectura
+            $("#"+id).attr("readonly","readonly");
+
+            // Ponemos una clase para cambiar el color del texto y mostrar que
+            // esta deshabilitado
+            $("#"+id).addClass("readOnly");
+
+        }
+
+        function quitarReadOnly(id) {
+            // Eliminamos el atributo de solo lectura
+            $("#"+id).removeAttr("readonly");
+
+            // Eliminamos la clase que hace que cambie el color
+            $("#"+id).removeClass("readOnly");
+
+        }
     </script>
 {% endblock %}    

@@ -20,7 +20,7 @@ use DGPlusbelleBundle\Form\ConsultaConPacienteType;
 use DGPlusbelleBundle\Form\ConsultaProductoType;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\EntityRepository;
-
+use Doctrine\ORM\Query\ResultSetMapping;
 /**
  * Consulta controller.
  *
@@ -946,10 +946,8 @@ class ConsultaController extends Controller
         
         //Recuperación del id
         $request = $this->getRequest();
-        $idPaciente= $request->get('id');  
-        $idPaciente=  substr($idPaciente, 1);
-        //var_dump($idPaciente);
-        //var_dump($entity->getPaciente()->getExpediente());
+        $idPacient= $request->get('id');  
+        $idPaciente=  substr($idPacient, 1);
         $consultas = $em->getRepository('DGPlusbelleBundle:Consulta')->findBy(array('paciente'=>$idPaciente));
         $paciente = $em->getRepository('DGPlusbelleBundle:Paciente')->find($idPaciente);
         
@@ -958,7 +956,7 @@ class ConsultaController extends Controller
             $fecha = $paciente->getFechaNacimiento();
             if($fecha!=null){
                 $fecha = $paciente->getFechaNacimiento()->format("Y-m-d");
-                //var_dump($fecha);
+                
                 //Calculo de la edad
                 list($Y,$m,$d) = explode("-",$fecha);
                 $edad = date("md") < $m.$d ? date("Y")-$Y-1 : date("Y")-$Y;       
@@ -979,17 +977,12 @@ class ConsultaController extends Controller
             $expnum = $paciente->getExpediente()[0]->getNumero();
         }
         
-//        var_dump($paciente->getExpediente());
-        //die();
         //$idPaciente = $entity->getPaciente()->getId();
-        
-        //var_dump($entity[0]->getPaciente());
-        //var_dump($entity);
         
         //$dias = $em->createQuery($dql)
                 //->setParameter('idEmp', $idEmp)
                 //->getArrayResult();
-        //var_dump($consultas);
+       
         /*$stmt = $this->getDoctrine()->getEntityManager()
             ->getConnection()
              ->prepare('select paquete.id, paquete.nombre, paquete_tratamiento.num_sesiones from paciente natural join persona natural join venta_paquete natural join paquete natural join paquete_tratamiento where paciente.id = 1');
@@ -1001,7 +994,7 @@ class ConsultaController extends Controller
         $CompraPaciente = $em->getRepository('DGPlusbelleBundle:Paciente')->find($idPaciente);
         $paciente = $CompraPaciente;
         $paquetes = $em->getRepository('DGPlusbelleBundle:VentaPaquete')->findBy(array('paciente' => $CompraPaciente->getPersona()->getId()));
-        
+        //var_dump($paquetes);
         $tratamientos= $em->getRepository('DGPlusbelleBundle:PersonaTratamiento')->findBy(array('paciente' => $CompraPaciente->getPersona()->getId()));
         
         $dql = "SELECT count(vp) FROM DGPlusbelleBundle:VentaPaquete vp"
@@ -1009,24 +1002,16 @@ class ConsultaController extends Controller
         $totalPaquetes = $em->createQuery($dql)
                 ->setParameter('paciente', $CompraPaciente->getPersona())
                 ->getArrayResult();
-        //var_dump($paquetes);
+        
         $dql = "SELECT count(c) FROM DGPlusbelleBundle:PersonaTratamiento c"
                . " WHERE c.paciente=:paciente";
         $totalTratamientos = $em->createQuery($dql)
                 ->setParameter('paciente', $CompraPaciente->getPersona()->getId())
                 ->getArrayResult();
-        //var_dump($totalPaquetes[0][1]);
-        //var_dump($totalTratamientos[0][1]);
-        
-        //var_dump($totalTratamientos);
         
         $empleados=$this->verificarComision(null,null);
-        //var_dump($empleados);
-        
-        
         
         //$seguimientopaquete = $em->getRepository('DGPlusbelleBundle:SeguimientoPaquete')->findBy(array('idVentaPaquete' => 30));
-        //var_dump($seguimientopaquete);
         $regnoeditpaquete = array();
         foreach($paquetes as $row){
             $c=0;
@@ -1036,19 +1021,42 @@ class ConsultaController extends Controller
                     $c++;
                 }
                 
-                //array_push($regnoedit, array('idpaquete'=>$row->getId()));
-                
+                //array_push($regnoedit, array('idpaquete'=>$row->getId()));                
             }
-            //var_dump($c);
+            
             if($c!=0){
                     array_push($regnoeditpaquete, array('idpaquete'=>$row->getId()));
             }
             
-            
         }
+        $rsm2 = new ResultSetMapping();
         
+        $sql2 = "SELECT vp.id paquete, cast(sum(abo.monto) as decimal(36,2)) abonos "
+                . "FROM abono abo RIGHT OUTER JOIN venta_paquete vp on abo.venta_paquete = vp.id "
+                . "WHERE vp.paciente=:paciente "
+                . "GROUP BY vp.id";
         
+        $rsm2->addScalarResult('paquete','paquete');
+        //$rsm2->addScalarResult('abono','abono');
+        $rsm2->addScalarResult('abonos','abonos');
+
+        $abonosPaq = $em->createNativeQuery($sql2, $rsm2)
+                ->setParameter('paciente', $CompraPaciente->getPersona()->getId())
+                ->getResult();
+        //var_dump($abonosPaq);
+        $rsm3 = new ResultSetMapping();
         
+        $sql3 = "select p.id tratamiento, cast(sum(abo.monto) as decimal(36,2)) abonos "
+                . "FROM abono abo RIGHT OUTER JOIN persona_tratamiento p on abo.persona_tratamiento = p.id "
+                . "WHERE p.paciente=:paciente "
+                . "GROUP BY p.id";
+
+        $rsm3->addScalarResult('tratamiento','tratamiento');
+        $rsm3->addScalarResult('abonos','abonos');
+
+        $abonosTrata = $em->createNativeQuery($sql3, $rsm3)
+                ->setParameter('paciente', $CompraPaciente->getPersona()->getId())
+                ->getResult();
         //$seguimientotratamiento= $em->getRepository('DGPlusbelleBundle:PersonaTratamiento')->findBy(array('idVentaPaquete' => 30));
         //var_dump($seguimientopaquete);
         $regnoedittratamiento = array();
@@ -1087,12 +1095,15 @@ class ConsultaController extends Controller
             'edad' => $edad,
             'consultas' => $consultas,
             'paquetes' => $paquetes,
+            'abonosPaq' => $abonosPaq,
             'empleados' => $empleados,
             'tratamientos' => $tratamientos,
+            'abonosTrata' => $abonosTrata,
             'paciente' => $paciente,
             'expediente'=>$expnum,
             'paquetesnoedit'=>$regnoeditpaquete,
             'tratamientosnoedit'=>$regnoedittratamiento,
+            'idPaciente'=>$idPacient
             );
     }
     

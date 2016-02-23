@@ -140,21 +140,36 @@
                         <thead>
                             <tr row="role">
                                 <th class="text-center">N°</th>
+                                <th class="text-center">Fecha de venta</th>
                                 <th class="text-center">Tratamiento</th>
                                 <th class="text-center">Número de sesiones</th>
                                 <th class="text-center">Costo ($)</th>
-                                <th class="text-center">Fecha de venta</th>
+                                
+                                <th class = "text-center">Deuda pendiente</th>
                                 <th class="text-center">Acciones</th>
                             </tr>
                         </thead>
                         <tbody>
                             {% for key, entity in tratamientos %}
+                                {% set deuda = 0 %}
                                 <tr id="{{entity.tratamiento.id}}">
                                     <td class="text-center">{{key+1}}</td>
+                                    <td class="text-center">{% if entity.fechaVenta%}{{ entity.fechaVenta|date('d/m/Y') }}{% endif %}</td>
                                     <td>{{ entity.tratamiento}}</td>
                                     <td class="text-center">{{ entity.numSesiones}}</td>
-                                    <td class="text-center">{{ entity.costoConsulta}}</td>
-                                    <td class="text-center">{% if entity.fechaVenta%}{{ entity.fechaVenta|date('d/m/Y') }}{% endif %}</td>
+                                    <td class="text-center">$ {{ entity.costoConsulta|number_format(2, '.', ',') }}</td>
+                                    
+                                    <td class = "text-center">
+                                        $
+                                        {% set acum = 0 %}
+                                        {% for abono in abonosTrata %}
+                                            {% if abono['tratamiento'] == entity.id %}
+                                                {% set acum = acum + abono['abonos'] %}
+                                            {% endif %}
+                                        {% endfor %} 
+                                        {% set deuda = ( entity.costoConsulta - (( entity.descuento.porcentaje * entity.costoConsulta ) / 100 ) - acum ) %}
+                                        {{ deuda|number_format(2, '.', ',') }}
+                                    </td>
                                     <td class="center-block">
                                         <div class="row">
                                             <div class="col-md-1 col-md-offset-3">
@@ -170,7 +185,16 @@
                                                         <i class="fa fa-history"></i><a href=""> </a>
                                                     </button>
                                                 </div>
-                                            </div>  
+                                            </div> 
+                                            {% if deuda != 0%}            
+                                            <div class="col-md-1">
+                                                <div class="btn-group btn-group-sm pull-left">
+                                                    <button id="abono-tratamiento" data-toggle="tooltip" data-container="body" title="Nuevo abono" class="btn btn-default datatables1-actions abono" role="button" onclick="nuevoAbono('{{ idPaciente }}', 1);">
+                                                        <i class="fa fa-dollar"></i><a href=""> </a>
+                                                    </button>
+                                                </div>
+                                            </div> 
+                                            {% endif %}        
                                             <div class="col-md-5">
                                                 <div class="btn-group btn-group-sm pull-left">
                                                     <button id="seguimiento-fototratamiento" data-toggle="tooltip" data-container="body" title="Ver imagenes" class="btn btn-default datatables1-actions seguimiento" role="button" onclick="imagenTratamiento({{ entity.id }});">
@@ -201,6 +225,7 @@
                                                         </div>
                                                     </div>
                                                 {% endfor %}
+                                                
                                         </div>
                                     </td>
                                 </tr>
@@ -219,20 +244,36 @@
                         <thead>
                             <tr row="role">
                                 <th class = "text-center">N°</th>
+                                <th class = "text-center">Fecha de venta</th>
                                 <th class = "text-center">Paquete</th>
                                 <th class = "text-center">Vendido por</th>
-                                <th class = "text-center">Fecha de venta</th>
+                                <th class = "text-center">Deuda pendiente</th>
                                 {#<th class = "text-center">Estado</th>#}
                                 <th class = "text-center">Acciones</th>
                             </tr>
                         </thead>
                         <tbody>
                         {% for key, entity in paquetes %}
+                            {% set deuda = 0 %}
                             <tr>
                                 <td class = "text-center">{{key+1}}</td>
+                                <td class = "text-center">{% if entity.fechaVenta %}{{ entity.fechaVenta|date('d/m/Y') }}{% endif %}</td>
                                 <td>{{ entity.paquete }}</td>
                                 <td>{{ entity.empleado }}</td>
-                                <td class = "text-center">{% if entity.fechaVenta %}{{ entity.fechaVenta|date('d/m/Y') }}{% endif %}</td>
+                                <td class = "text-center">
+                                    $
+                                    {% set acum = 0 %}
+                                    {% for abono in abonosPaq %}
+                                        {% if abono['paquete'] == entity.id %}
+                                            {% set acum = acum + abono['abonos'] %}
+                                        {% endif %}
+                                    {% endfor %} 
+                                    
+                                    {% set deuda = ( entity.paquete.costo - (( entity.descuento.porcentaje * entity.paquete.costo ) / 100 ) - acum ) %}
+                                    {{ deuda|number_format(2, '.', ',') }}
+                                    
+                                    {#{{ ( ( entity.paquete.costo - (( entity.descuento.porcentaje * entity.paquete.costo ) / 100 ) - acum ))|number_format(2, '.', ',') }}#}
+                                </td>
                                 {#<td class = "text-center">
                                     {% if entity.estado == 1 %}Sin comenzar{% elseif entity.estado == 2 %}En proceso{% elseif entity.estado == 3 %}Finalizado{% endif %}
                                 </td>#}
@@ -251,7 +292,16 @@
                                                     <i class="fa fa-history"></i><a href=""> </a>
                                                 </button>
                                             </div>
-                                        </div>       
+                                        </div>   
+                                        {% if deuda != 0%}            
+                                            <div class="col-md-1">
+                                                <div class="btn-group btn-group-sm pull-left">
+                                                    <button id="abono-paquete" data-toggle="tooltip" data-container="body" title="Nuevo abono" class="btn btn-default datatables1-actions abono" role="button" onclick="nuevoAbono('{{ idPaciente }}', 0);">
+                                                        <i class="fa fa-dollar"></i><a href=""> </a>
+                                                    </button>
+                                                </div>
+                                            </div> 
+                                            {% endif %}            
                                         <div class="col-md-5">
                                             <div class="btn-group btn-group-sm pull-left">
                                                 <button id="seguimiento-fototratamiento" data-toggle="tooltip" data-container="body" title="Ver imagenes" class="btn btn-default datatables1-actions seguimiento" role="button" onclick="imagenPaquete({{ entity.id }});">
@@ -718,6 +768,12 @@
         }
     </script>
     <script>  
+        function nuevoAbono(id){
+            var url = Routing.generate('admin_abono_new', {'id': id});
+            window.open(url,'_self');
+        }//Fin funcion
+    </script>
+    <script>  
         function exportarRecetaVentaTratamientoPDF(id){
             var url = Routing.generate('admin_recetaventatrat_pdf', {'id': id});
             window.open(url,'_blank');
@@ -805,7 +861,7 @@
                     mensaje += "<div class='panel-body' style='margin-left: 14px; margin-right: 14px;'>";
                     mensaje += "<table class='table table-bordered table-condensed' style='margin-top:25px'>";
                     mensaje += "<thead>";
-                    mensaje += "<tr><th class='text-center'>Tratamiento</th><th class='text-center'>Número de sesiones</th><th class='text-center'>Sesiones</th></tr>";
+                    mensaje += "<tr><th class='text-center'>Tratamiento</th><th class='text-center'>Número de sesiones</th><th class='text-center'>Progreso del paquete</th></tr>";
                     mensaje += "</thead>";
                     mensaje += "<tbody>";
                     

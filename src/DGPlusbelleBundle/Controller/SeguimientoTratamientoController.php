@@ -80,6 +80,7 @@ class SeguimientoTratamientoController extends Controller
                     . "pt.costotratamiento as costoTratamiento, "
                     . "des.porcentaje as porcentaje, "
                     . "pt.fecha_venta as venta, "
+                    . "pt.cuotas as cuotas, "
                     . "pt.num_sesiones as sesiones, "
                     . "seg.num_sesion as numSesion, "
                     . "tra.nombre as ntratamiento "
@@ -100,6 +101,7 @@ class SeguimientoTratamientoController extends Controller
             $rsm->addScalarResult('costoTratamiento','costoTratamiento');
             $rsm->addScalarResult('porcentaje','porcentaje');
             $rsm->addScalarResult('venta','venta');
+            $rsm->addScalarResult('cuotas','cuotas');
             $rsm->addScalarResult('sesiones','sesiones');
             $rsm->addScalarResult('numSesion','numSesion');
            $rsm->addScalarResult('ntratamiento','ntratamiento');
@@ -107,11 +109,12 @@ class SeguimientoTratamientoController extends Controller
             $mensaje = $em->createNativeQuery($sql, $rsm)
                     ->getResult();
             
-            $sql2 = "select cast(sum(abo.monto) as decimal(36,2)) abonos "
+            $sql2 = "select cast(sum(abo.monto) as decimal(36,2)) abonos, count(abo.monto) cuotas "
                     . "from abono abo inner join persona_tratamiento p on abo.persona_tratamiento = p.id "
                     . "where p.id = '$ventaTratamientoId'";
             
             $rsm2->addScalarResult('abonos','abonos');
+            $rsm2->addScalarResult('cuotas','cuotas');
             
             $abonos = $em->createNativeQuery($sql2, $rsm2)
                     ->getResult();
