@@ -1031,9 +1031,11 @@ class ReporteController extends Controller
         
         $listadoP = array();
         
-        $dqlpac="SELECT p.id, per.nombres, per.apellidos, c.costoConsulta, c.fechaConsulta, s.nombre FROM DGPlusbelleBundle:Consulta c "
+        $dqlpac="SELECT p.id, per.nombres, per.apellidos, emp.nombres nemp, emp.apellidos napel, c.costoConsulta, c.fechaConsulta, s.nombre FROM DGPlusbelleBundle:Consulta c "
                 . "JOIN c.paciente p "
                 . "JOIN p.persona per "
+                . "JOIN c.empleado e "
+                . "JOIN e.persona emp "
                 . "JOIN c.sucursal s "
                 . "WHERE c.fechaConsulta BETWEEN :fechainicio AND :fechafin ORDER BY per.nombres ASC";
         
@@ -1050,6 +1052,8 @@ class ReporteController extends Controller
                     "nombres"=>$row['nombres'],
                     "apellidos"=>$row['apellidos'],
                     "tipocosto"=>"Consulta",
+                    "nempleado"=>$row['nemp'],
+                    "aempleado"=>$row['napel'],
                     "sucursal"=>$row['nombre'],
                     "costo"=>$row['costoConsulta'],
                     "fechatransaccion"=>$row['fechaConsulta']
@@ -1067,11 +1071,13 @@ class ReporteController extends Controller
         
         
         
-        $dqlpac="SELECT p.id, per.nombres, per.apellidos, a.monto, a.fechaAbono, s.nombre FROM DGPlusbelleBundle:Abono a "
+        $dqlpac="SELECT p.id, per1.nombres, per1.apellidos, per2.nombres nemp, per2.apellidos napel, a.monto, a.fechaAbono, s.nombre FROM DGPlusbelleBundle:Abono a "
                 . "JOIN a.paciente p "
-                . "JOIN p.persona per "
+                . "JOIN p.persona per1 "
+                . "JOIN a.empleado e "
+                . "JOIN e.persona per2 "
                 . "JOIN a.sucursal s "
-                . "WHERE a.fechaAbono BETWEEN :fechainicio AND :fechafin ORDER BY per.nombres ASC";
+                . "WHERE a.fechaAbono BETWEEN :fechainicio AND :fechafin ORDER BY per1.nombres ASC";
         $listadoabono = $em->createQuery($dqlpac)
                        ->setParameters(array('fechainicio'=>$anioInicioUser,'fechafin'=>$anioFinUser))
                        //->setParameter('mes','_____0'.'1'.'___')
@@ -1083,6 +1089,8 @@ class ReporteController extends Controller
                     "nombres"=>$row['nombres'],
                     "apellidos"=>$row['apellidos'],
                     "tipocosto"=>"Abono",
+                    "nempleado"=>$row['nemp'],
+                    "aempleado"=>$row['napel'],
                     "sucursal"=>$row['nombre'],
                     "costo"=>$row['monto'],
                     "fechatransaccion"=>$row['fechaAbono']
@@ -1098,8 +1106,9 @@ class ReporteController extends Controller
         
         
         
-        $dqlpac="SELECT pac.id, per.nombres, per.apellidos, paq.costo*(1-(d.porcentaje/100)) as costo,vp.fechaVenta,s.nombre FROM DGPlusbelleBundle:VentaPaquete vp "
+        $dqlpac="SELECT pac.id, per.nombres, per.apellidos, emp.nombres nemp, emp.apellidos napel, paq.costo*(1-(d.porcentaje/100)) as costo,vp.fechaVenta,s.nombre FROM DGPlusbelleBundle:VentaPaquete vp "
                 . "JOIN vp.paciente per "
+                . "JOIN vp.empleado emp "
                 . "JOIN per.paciente pac "
                 . "JOIN vp.paquete paq "
                 . "JOIN vp.sucursal s "
@@ -1109,13 +1118,15 @@ class ReporteController extends Controller
                        ->setParameters(array('fechainicio'=>$anioInicioUser,'fechafin'=>$anioFinUser))
                        //->setParameter('mes','_____0'.'1'.'___')
                        ->getResult();
-        
+//   var_dump($listadoventas);
         foreach ($listadoventas as $row) {
             $ar = array(
 //                    "id"=>$row['id'],
                     "nombres"=>$row['nombres'],
                     "apellidos"=>$row['apellidos'],
                     "tipocosto"=>"Venta paquete",
+                    "nempleado"=>$row['nemp'],
+                    "aempleado"=>$row['napel'],
                     "sucursal"=>$row['nombre'],
                     "costo"=>$row['costo'],
                     "fechatransaccion"=>$row['fechaVenta']
@@ -1131,9 +1142,10 @@ class ReporteController extends Controller
         
         
         
-        $dqlpac="SELECT pac.id, per.nombres, per.apellidos, pt.costoConsulta*(1-(d.porcentaje/100)) as costo, pt.fechaVenta, s.nombre FROM DGPlusbelleBundle:PersonaTratamiento pt "
+        $dqlpac="SELECT pac.id, per.nombres, per.apellidos, emp.nombres nemp, emp.apellidos napel, pt.costoConsulta*(1-(d.porcentaje/100)) as costo, pt.fechaVenta, s.nombre FROM DGPlusbelleBundle:PersonaTratamiento pt "
                 . "JOIN pt.paciente per "
                 . "JOIN per.paciente pac "
+                . "JOIN pt.empleado emp "
                 . "JOIN pt.tratamiento t "
                 . "JOIN pt.sucursal s "
                 . "JOIN pt.descuento d "
@@ -1149,6 +1161,8 @@ class ReporteController extends Controller
                     "nombres"=>$row['nombres'],
                     "apellidos"=>$row['apellidos'],
                     "tipocosto"=>"Venta tratamiento",
+                    "nempleado"=>$row['nemp'],
+                    "aempleado"=>$row['napel'],
                     "sucursal"=>$row['nombre'],
                     "costo"=>$row['costo'],
                     "fechatransaccion"=>$row['fechaVenta']
@@ -1239,37 +1253,100 @@ class ReporteController extends Controller
             
             
             $dql = "SELECT sum(a.monto) as total FROM DGPlusbelleBundle:Abono a "
-                    . "WHERE a.fechaAbono BETWEEN :fechainicio AND :fechafin AND a.sucursal=:sucursal";
-                    
+                    . "INNER JOIN a.ventaPaquete vp "
+                    . "WHERE a.fechaAbono BETWEEN :fechainicio AND :fechafin AND a.sucursal=:sucursal ";
             
             
-            $ingresosAbono= $em->createQuery($dql)
+             $ingresosAbonoPaquete= $em->createQuery($dql)
                        ->setParameters(array('fechainicio'=>$anioInicioUser,'fechafin'=>$anioFinUser,'sucursal'=>$sucursal))
                        //->setParameter('mes','_____0'.'1'.'___')
                        ->getResult();
           
             //var_dump($ingresosAbono);
-            array_push($ingresos, "Abonos");
-            if( count($ingresosAbono)!=0){
+            array_push($ingresos, "Abonos Paquetes");
+            if( count($ingresosAbonoPaquete)!=0){
                 //echo "sdacd";
                 //array_push($ingresosprev[0], $mesLabel[($mes-1)]);
                 //array_push($ingresos, $ingresosAbono);
-                if($ingresosAbono[0]['total']==null){
-                    $ingresosAbono[0]['total']=0;
+                if($ingresosAbonoPaquete[0]['total']==null){
+                    $ingresosAbonoPaquete[0]['total']=0;
                 }
                 
-                $granTotal = $granTotal+$ingresosAbono[0]['total'];
-                array_push($ingresos, number_format($ingresosAbono[0]['total'],2,'.',''));
+                $granTotal = $granTotal+$ingresosAbonoPaquete[0]['total'];
+                array_push($ingresos, number_format($ingresosAbonoPaquete[0]['total'],2,'.',''));
                 
             }  
             else{
                 array_push($ingresos, 0);
             }
             
+            
+            
+             $dql = "SELECT sum(a.monto) as total FROM DGPlusbelleBundle:Abono a "
+                    . "INNER JOIN a.personaTratamiento pt "
+                    . "WHERE a.fechaAbono BETWEEN :fechainicio AND :fechafin AND a.sucursal=:sucursal ";        
+            
+            
+            
+             
+              $ingresosAbonoTratamiento= $em->createQuery($dql)
+                       ->setParameters(array('fechainicio'=>$anioInicioUser,'fechafin'=>$anioFinUser,'sucursal'=>$sucursal))
+                       //->setParameter('mes','_____0'.'1'.'___')
+                       ->getResult();
+          
+            //var_dump($ingresosAbono);
+            array_push($ingresos, "Abonos tratamientos");
+            if( count($ingresosAbonoTratamiento)!=0){
+                //echo "sdacd";
+                //array_push($ingresosprev[0], $mesLabel[($mes-1)]);
+                //array_push($ingresos, $ingresosAbono);
+                if($ingresosAbonoTratamiento[0]['total']==null){
+                    $ingresosAbonoTratamiento[0]['total']=0;
+                }
+                
+                $granTotal = $granTotal+$ingresosAbonoTratamiento[0]['total'];
+                array_push($ingresos, number_format($ingresosAbonoTratamiento[0]['total'],2,'.',''));
+                
+            }  
+            else{
+                array_push($ingresos, 0);
+            }
+             
+             
+             
+            
+//           $dql = "SELECT sum(a.monto) as total FROM DGPlusbelleBundle:Abono a "
+//                   . "WHERE a.fechaAbono BETWEEN :fechainicio AND :fechafin AND a.sucursal=:sucursal";
+//                    
+//            
+//            
+//            $ingresosAbono= $em->createQuery($dql)
+//                       ->setParameters(array('fechainicio'=>$anioInicioUser,'fechafin'=>$anioFinUser,'sucursal'=>$sucursal))
+//                       //->setParameter('mes','_____0'.'1'.'___')
+//                       ->getResult();
+//          
+//            //var_dump($ingresosAbono);
+//            array_push($ingresos, "Abonos");
+//            if( count($ingresosAbono)!=0){
+//                //echo "sdacd";
+//                //array_push($ingresosprev[0], $mesLabel[($mes-1)]);
+//                //array_push($ingresos, $ingresosAbono);
+//                if($ingresosAbono[0]['total']==null){
+//                    $ingresosAbono[0]['total']=0;
+//                }
+//                
+//                $granTotal = $granTotal+$ingresosAbono[0]['total'];
+//                array_push($ingresos, number_format($ingresosAbono[0]['total'],2,'.',''));
+//                
+//            }  
+//            else{
+//                array_push($ingresos, 0);
+//            }
+            
             $dql = "SELECT sum(a.costoConsulta*(1-(d.porcentaje/100))) as total FROM DGPlusbelleBundle:PersonaTratamiento a "
                     . "JOIN a.descuento d "
                     . "JOIN a.tratamiento t "
-                    . "WHERE a.fechaVenta BETWEEN :fechainicio AND :fechafin AND a.sucursal=:sucursal";
+                    . "WHERE a.cuotas=1 AND a.fechaVenta BETWEEN :fechainicio AND :fechafin AND a.sucursal=:sucursal";
                    
             
             
@@ -1279,7 +1356,7 @@ class ReporteController extends Controller
                        ->getResult();
           
             //var_dump($ingresosAbono);
-            array_push($ingresos, "Tratamiento");
+            array_push($ingresos, "Venta tratamientos");
             if( count($ingresosAbono)!=0){
                 //echo "sdacd";
                 //array_push($ingresosprev[0], $mesLabel[($mes-1)]);
@@ -1397,36 +1474,102 @@ class ReporteController extends Controller
             }
             
             
+//            $dql = "SELECT sum(a.monto) as total FROM DGPlusbelleBundle:Abono a "
+//                    . "WHERE a.fechaAbono BETWEEN :fechainicio AND :fechafin AND a.sucursal=:sucursal";
+//                   
+//            
+//            
+//            $ingresosAbono= $em->createQuery($dql)
+//                       ->setParameters(array('fechainicio'=>$fechaInicio,'fechafin'=>$fechaFin,'sucursal'=>$sucursal))
+//                       //->setParameter('mes','_____0'.'1'.'___')
+//                       ->getResult();
+//          
+//            //var_dump($ingresosAbono);
+//            array_push($ingresos, "Abonos");
+//            if( count($ingresosAbono)!=0){
+//                //echo "sdacd";
+//                //array_push($ingresosprev[0], $mesLabel[($mes-1)]);
+//                //array_push($ingresos, $ingresosAbono);
+//                if($ingresosAbono[0]['total']==null){
+//                    $ingresosAbono[0]['total']=0;
+//                }
+//                $abonos=["Abonos",  number_format($ingresosAbono[0]['total'],2,'.','')];
+//                $granTotal = $granTotal+$ingresosAbono[0]['total'];
+//                array_push($ingresos, $ingresosAbono[0]['total']);
+//                
+//            }  
+//            else{
+//                array_push($ingresos, 0);
+//            }
+            
+            
+            
             $dql = "SELECT sum(a.monto) as total FROM DGPlusbelleBundle:Abono a "
-                    . "WHERE a.fechaAbono BETWEEN :fechainicio AND :fechafin AND a.sucursal=:sucursal";
-                   
+                    . "INNER JOIN a.ventaPaquete vp "
+                    . "WHERE a.fechaAbono BETWEEN :fechainicio AND :fechafin AND a.sucursal=:sucursal ";
             
             
-            $ingresosAbono= $em->createQuery($dql)
-                       ->setParameters(array('fechainicio'=>$fechaInicio,'fechafin'=>$fechaFin,'sucursal'=>$sucursal))
+             $ingresosAbonoPaquetes= $em->createQuery($dql)
+                         ->setParameters(array('fechainicio'=>$fechaInicio,'fechafin'=>$fechaFin,'sucursal'=>$sucursal))
                        //->setParameter('mes','_____0'.'1'.'___')
                        ->getResult();
           
             //var_dump($ingresosAbono);
-            array_push($ingresos, "Abonos");
-            if( count($ingresosAbono)!=0){
+            array_push($ingresos, "Abonos Paquetes");
+            if( count($ingresosAbonoPaquetes)!=0){
                 //echo "sdacd";
                 //array_push($ingresosprev[0], $mesLabel[($mes-1)]);
                 //array_push($ingresos, $ingresosAbono);
-                if($ingresosAbono[0]['total']==null){
-                    $ingresosAbono[0]['total']=0;
+                if($ingresosAbonoPaquetes[0]['total']==null){
+                    $ingresosAbonoPaquetes[0]['total']=0;
                 }
-                $abonos=["Abonos",  number_format($ingresosAbono[0]['total'],2,'.','')];
-                $granTotal = $granTotal+$ingresosAbono[0]['total'];
-                array_push($ingresos, $ingresosAbono[0]['total']);
+                $abonosPaquetes=["Abonos paquetes",  number_format($ingresosAbonoPaquetes[0]['total'],2,'.','')];
+                $granTotal = $granTotal+$ingresosAbonoPaquetes[0]['total'];
+                array_push($ingresos, number_format($ingresosAbonoPaquetes[0]['total'],2,'.',''));
                 
             }  
             else{
                 array_push($ingresos, 0);
             }
             
-            $dql = "SELECT sum(t.costo* (1-(d.porcentaje/100)) ) as total FROM DGPlusbelleBundle:PersonaTratamiento a "
-                    . "INNER JOIN a.tratamiento t INNER JOIN a.descuento d WHERE a.fechaVenta BETWEEN :fechainicio AND :fechafin AND a.sucursal=:sucursal";
+            
+            
+             $dql = "SELECT sum(a.monto) as total FROM DGPlusbelleBundle:Abono a "
+                    . "INNER JOIN a.personaTratamiento pt "
+                    . "WHERE a.fechaAbono BETWEEN :fechainicio AND :fechafin AND a.sucursal=:sucursal ";        
+            
+            
+            
+             
+              $ingresosAbonoTratamientos= $em->createQuery($dql)
+                        ->setParameters(array('fechainicio'=>$fechaInicio,'fechafin'=>$fechaFin,'sucursal'=>$sucursal))
+                       //->setParameter('mes','_____0'.'1'.'___')
+                       ->getResult();
+          
+            //var_dump($ingresosAbono);
+            array_push($ingresos, "Abonos tratamientos");
+            if( count($ingresosAbonoTratamientos)!=0){
+                //echo "sdacd";
+                //array_push($ingresosprev[0], $mesLabel[($mes-1)]);
+                //array_push($ingresos, $ingresosAbono);
+                if($ingresosAbonoTratamientos[0]['total']==null){
+                    $ingresosAbonoTratamientos[0]['total']=0;
+                }
+                $abonosTratamientos=["Abonos tratamientos",  number_format($ingresosAbonoTratamientos[0]['total'],2,'.','')];
+                $granTotal = $granTotal+$ingresosAbonoTratamientos[0]['total'];
+                array_push($ingresos, number_format($ingresosAbonoTratamientos[0]['total'],2,'.',''));
+                
+            }  
+            else{
+                array_push($ingresos, 0);
+            }
+            
+            
+            
+            
+            
+            $dql = "SELECT sum(a.costoConsulta* (1-(d.porcentaje/100)) ) as total FROM DGPlusbelleBundle:PersonaTratamiento a "
+                    . "INNER JOIN a.tratamiento t INNER JOIN a.descuento d WHERE a.cuotas=1 AND a.fechaVenta BETWEEN :fechainicio AND :fechafin AND a.sucursal=:sucursal";
                    
             
             
@@ -1444,7 +1587,7 @@ class ReporteController extends Controller
                 if($ingresosAbono[0]['total']==null){
                     $ingresosAbono[0]['total']=0;
                 }
-                $tratamiento=["Tratamiento",  number_format($ingresosAbono[0]['total'],2,'.','')];
+                $tratamiento=["Ventas tratamientos",  number_format($ingresosAbono[0]['total'],2,'.','')];
                 
                 $granTotal = $granTotal+$ingresosAbono[0]['total'];
                 array_push($ingresos, $ingresosAbono[0]['total']);
@@ -1467,7 +1610,9 @@ class ReporteController extends Controller
         
         array_push($consulta2, $consultas);
         array_push($consulta2, $ventasPaquetes);
-        array_push($consulta2, $abonos);
+//        array_push($consulta2, $abonos);
+       array_push($consulta2, $abonosPaquetes);
+       array_push($consulta2, $abonosTratamientos);
         array_push($consulta2, $tratamiento);
         
         

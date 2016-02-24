@@ -108,6 +108,14 @@
             </a>
         </li>
     {% endif %}
+     {% if is_granted('ROLE_ADMIN') or is_granted('ROLE_USER')%}
+        <li class="nav-item" role="presentation">
+            <a href="{{path('admin_cierreadministrativo')}}">
+                <span class="nav-icon"><i class="fa fa-clock-o"></i></span>
+                <span class="nav-text">Reservar tiempo</span>
+            </a>
+        </li>
+    {% endif %}
     <li class="divider"></li>
     <li class="nav-header" role="presentation">MENU</li>
    {# {% if is_granted('ROLE_ADMIN') or is_granted('ROLE_USER')%}
@@ -258,6 +266,7 @@
             <li role="presentation"><a role="menuitem" tabindex="-1" href="{{ path('admin_reporte_tratamiento_frecuente') }}"><span class="nav-text">Tratamiento más vendido</span></a></li>
             <li role="presentation"><a role="menuitem" tabindex="-1" href="{{ path('admin_reporte_diario') }}"><span class="nav-text">Ingresos diarios</span></a></li>
             <li role="presentation"><a role="menuitem" tabindex="-1" href="{{ path('admin_reporte_referidos') }}"><span class="nav-text">Pacientes referidos por</span></a></li>
+            <li role="presentation"><a role="menuitem" tabindex="-1" href="{{ path('admin_empleado_progreso_venta') }}"><span class="nav-text">Progreso de empleado</span></a></li>
           </ul>
         </li>
     {% endif %}

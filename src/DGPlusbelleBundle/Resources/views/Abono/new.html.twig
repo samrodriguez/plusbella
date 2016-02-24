@@ -1,67 +1,90 @@
 {% extends 'DGPlusbelleBundle:Layout:layout.html.twig' %}
 
 {% block contenido -%}
+            
     
-    
-   <div class="panel panel-default">
-    <div class="panel-heading">
-        <p>Nuevo abono</p>
-    </div>
-    
-    <div class="panel-body">
-    {{ form_start(form) }}
-        {{ form_errors(form) }}
-        
-        
-     <div class="col-xs-12 col-sm-2" >
-     {{ form_row(form.paciente) }} 
-     </div>  
-     
-     <div class="col-xs-12 col-sm-2" >
-     {{ form_row(form.empleado) }} 
-     </div> 
-     
-  {#    <div class="col-xs-12 col-sm-2" >
-     {{ form_row(form.ventaPaquete) }} 
-     </div> 
-      <div class="col-xs-12 col-sm-2" >
-     {{ form_row(form.personaTratamiento) }} 
-     </div> #}
-     
-      <div class="col-xs-12 col-sm-1" >
-     {{ form_row(form.monto) }} 
-     </div> 
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <p>Nuevo abono</p>
+        </div>
+        <div class="row" style="margin-top: 20px;">
+            
+                <div class="col-md-3 col-md-offset-2">
+                    {{ form_row(form.flagAbono) }}
+                </div>
+                <div id="paquete" style="display:none;">
+                    <div class="col-md-2">
+                        {{ form_row(form.ventaPaquete, {'attr': { 'onchange':'MuestraCapa($(this).val())' } }) }}
+                    </div>
+                </div>
+                <div id="tratamiento" style="display:none;">
+                    <div class="col-md-2">
+                        {{ form_row(form.personaTratamiento, {'attr': { 'onchange':'MuestraCapa($(this).val())' } }) }}
+                    </div>
+                </div>
+            
+        </div>
+        <hr>
+        <div id="contenido-abono" style="display: none">
+            <div class="row" style="margin-top: 5px;">
+             <div class="col-md-8 col-md-offset-2">
+                 <div class="row">
+                     <div data-init-panel="true" {#class="panel bg-grd-light fade in panel-default "#} data-fill-color="true" style="height:150px;">
+                         <div class="panel-body">
+                             <div class="col-md-2"><b>Nombre del paciente: </b></div><div class="col-md-4">{{ paciente.persona.nombres}} {{ paciente.persona.apellidos}} </div>
+                             <div class="col-md-2"><b>Vendido por: </b></div><div id="vendido-por" class="col-md-4"></div>
+                             
+                             <div class="col-md-2" style="margin-top: 45px;"><b>Fecha de venta: </b></div><div id="fecha-venta" class="col-md-2" style="margin-top: 45px;"></div>
+                             <div class="col-md-2" style="margin-top: 45px;"><b>Cuota No.: </b></div><div id="cuota" class="col-md-2" style="margin-top: 45px;"></div>
+                             <div class="col-md-2" style="margin-top: 45px;"><b>Total de cuotas: </b></div><div id="cuotas" class="col-md-2" style="margin-top: 45px;"></div>
+                             <div class="clearfix"></div>
+                             <div class="col-md-2" style="margin-top: 15px;"><b>Costo: </b></div><div id="costo" class="col-md-2" style="margin-top: 15px;"></div>
+                             <div class="col-md-2" style="margin-top: 15px;"><b>Descuento aplicado: </b></div><div id="descuento" class="col-md-2" style="margin-top: 15px;"></div>
+                             <div class="col-md-2" style="margin-top: 15px;"><b>Monto total a cancelar: </b></div><b><div id="monto-total" class="col-md-2" style="margin-top: 15px;"></div></b>
+                             <div class="clearfix"></div>
+                             <div class="col-md-12">
+                                 <div class="row">
+                                    <div class="col-md-2 col-md-offset-4" style="margin-top: 35px; font-size: 20px;"><b>Deuda pendiente: </b></div>
+                                    <div id="deuda-pte" class="col-md-2" style="margin-top: 35px; font-size: 20px;"></div>
+                                 </div>   
+                             </div>
+                         <div class="clearfix"></div>
 
-      <div class="row">
-            <div class="col-md-2">
-            {{ form_row(form.flagAbono) }}
-            </div>
-            <div id="paquete" style="display:none;">
-                <div class="col-md-2">
-                {{ form_row(form.ventaPaquete) }}
-                </div>
-            </div>
-            <div id="tratamiento" style="display:none;">
-                <div class="col-md-2">
-                {{ form_row(form.personaTratamiento) }}
-                </div>
-            </div>
-       </div>
-    
-     <div class="col-xs-12 col-sm-4" >
-     {{ form_row(form.sucursal) }} 
-     </div> 
-     <div class="col-xs-12 col-sm-4" >
-     {{ form_row(form.descripcion) }} 
-     </div> 
-     
-     
-      <div class="form-grouphide col-sm-9"> 
-                 <a href="{{ path('admin_abono') }}" class="btn btn-default btn-sm" id="cancelarNuevo">Cancelar</a>
+
+                         </div><!-- /.panel-body -->
+                     </div>
+                 </div>
+             </div> 
+         </div>  
+         <hr>
+         <div class="clearfix"></div>
+         <div class="row">
+            <div class="panel-body">
+            {{ form_start(form) }}
+            {{ form_errors(form) }}
+            <div class="col-xs-12 col-sm-3 col-sm-offset-2" >
+                <p><b>Sucursal</b></p>
+                {{ form_widget(form.sucursal) }} 
+            </div> 
+            <div class="col-xs-12 col-sm-3" >
+                <p><b>Empleado</b></p>
+                {{ form_widget(form.empleado) }} 
+            </div> 
+            <div class="col-xs-12 col-sm-2 " >
+                {{ form_row(form.monto) }}
+                <div id="capaError" style="color:red; display: none"><p>El monto ingresado de ser menor o igual a la deuda pendiente</p></div>
+            </div>   
+            <div class="clearfix"></div>
+            <div class="col-xs-12 col-sm-4 col-sm-offset-2" style="margin-top: 35px;" >
+                {{ form_row(form.descripcion) }} 
+            </div> 
+            <div class="form-grouphide col-sm-4 col-sm-offset-5 col-xs-12" style="margin-top: 20px; margin-bottom: 15px;"> 
+                <a href="{{ path('admin_abono') }}" class="btn btn-default btn-sm" id="cancelarNuevo">Cancelar</a>
                 {{ form_widget(form.submit) }}
-      </div>
-          
-   </div>
+            </div>
+
+           </div>
+        </div>   
    {{ form_widget(form._token) }}
 </div>  
    {{ form_end(form) }}    
@@ -71,29 +94,41 @@
 
 {% block javascripts_step %}
     
-     <script src="{{ asset('Resources/js/Abono.js') }}"></script>  
-    
- <script>   
-    jQuery(document).ready(function() {
-    
-                var seleccionado="";
-                //Eliminar options del select de pacientes
-                $('#dgplusbellebundle_abono_paciente option').each(function(index, val) {
-                    
-                    seleccionado = $(this).attr('selected');
-                    if (!seleccionado){
-                        $(this).remove();
-                    }
-                });
+    <script src="{{ asset('Resources/js/Abono.js') }}"></script>  
+    <script>   
+        jQuery(document).ready(function() {
+            $('#dgplusbellebundle_abono_sucursal').val('');
+            $('#dgplusbellebundle_abono_empleado').val('');
+            $('#dgplusbellebundle_abono_monto').val('');
+            $('#dgplusbellebundle_abono_descripcion').val('');
+           
+            var seleccionado="";
+            //Eliminar options del select de pacientes
+            $('#dgplusbellebundle_abono_paciente option').each(function(index, val) {
+
+                seleccionado = $(this).attr('selected');
+                if (!seleccionado){
+                    $(this).remove();
+                }
+            });
+
+            $(document).on("click","#dgplusbellebundle_abono_flagAbono_0", function(){
+                var capa = document.getElementById('contenido-abono');
                 
-                $(document).on("click","#dgplusbellebundle_abono_flagAbono_0", function(){
+                capa.style.display = 'none';
                 $("#paquete").show();
                 $("#tratamiento").hide();
+                $('#dgplusbellebundle_abono_ventaPaquete').val('');
+                
             });
+
+            $(document).on("click","#dgplusbellebundle_abono_flagAbono_1", function(){
+                var capa = document.getElementById('contenido-abono');
             
-                $(document).on("click","#dgplusbellebundle_abono_flagAbono_1", function(){
+                capa.style.display = 'none';
                 $("#tratamiento").show();
                 $("#paquete").hide(); 
+                $('#dgplusbellebundle_abono_personaTratamiento').val('');
             });
             
             if($('#dgplusbellebundle_abono_flagAbono_0').is(':checked')){
@@ -111,9 +146,117 @@
             {# $('#dgplusbellebundle_abono_ventaPaquete').select2();
              $('#dgplusbellebundle_abono_personaTratamiento').select2();#}
 
-  validarAbono();    
-    });//Fin document ready
- </script> 
- 
+            validarAbono();    
+        });//Fin document ready
+    </script> 
+    <script>  
+        var deuda = 0;
+        function MuestraCapa(id) {
+            var capa = document.getElementById('contenido-abono');
+            capa.style.display = 'none';
+            
+            $( "#dgplusbellebundle_abono_submit" ).prop( "disabled", false );
+            
+            var abono = document.getElementById('capaError');
+            abono.style.display = 'none';
+            
+            quitarReadOnly('dgplusbellebundle_abono_monto');
+            
+            $('#dgplusbellebundle_abono_sucursal').val('');
+            $('#dgplusbellebundle_abono_empleado').val('');
+            $('#dgplusbellebundle_abono_monto').val('');
+            $('#dgplusbellebundle_abono_descripcion').val('');  
+            
+             if($("#dgplusbellebundle_abono_flagAbono_0").is(':checked')) {  
+                $.post( "{{path('admin_busqueda_paquete_seguimiento')}}", { id: id }, function( data ) {
+                    var fecha = data.query[0].venta.split('-');
+                    deuda = ( (data.query[0].costoPaquete - ((data.query[0].porcentaje * data.query[0].costoPaquete)/100)) - data.abonos.abonos).toFixed(2);
+                    
+                    document.getElementById('fecha-venta').innerHTML = fecha[2] + "/" +fecha[1] + "/" +fecha[0];   
+                    document.getElementById('vendido-por').innerHTML = data.query[0].empleado;   
+                    document.getElementById('cuota').innerHTML = parseInt(data.abonos.cuotas) + 1;   
+                    document.getElementById('cuotas').innerHTML = data.query[0].cuotas;   
+                    document.getElementById('costo').innerHTML = "$" + ( data.query[0].costoPaquete - 0 ).toFixed(2);   
+                    document.getElementById('descuento').innerHTML = "$" + ((data.query[0].porcentaje * data.query[0].costoPaquete)/100).toFixed(2);   
+                    document.getElementById('monto-total').innerHTML = "$" + ( data.query[0].costoPaquete - ((data.query[0].porcentaje * data.query[0].costoPaquete)/100)).toFixed(2);   
+                    document.getElementById('deuda-pte').innerHTML = "$" + ( (data.query[0].costoPaquete - ((data.query[0].porcentaje * data.query[0].costoPaquete)/100)) - data.abonos.abonos).toFixed(2);   
+                    capa.style.display = 'block';
+                    
+                    $('#dgplusbellebundle_abono_submit').val(id+'-'+0);  
+                    if(deuda == 0){
+                        $( "#dgplusbellebundle_abono_submit" ).prop( "disabled", true );
+                    }
+                    if( (parseInt(data.abonos.cuotas) + 1) == data.query[0].cuotas) {
+                        $('#dgplusbellebundle_abono_monto').val(deuda);
+                        ponerReadOnly('dgplusbellebundle_abono_monto');
+                    }
+                    
+                }, "json"); // Fin de post    
+            } else {
+                $.post( "{{path('admin_busqueda_tratamiento_seguimiento')}}", { id: id }, function( data ) {
+                    var fecha = data.query[0].venta.split('-');
+                    deuda = ( (data.query[0].costoTratamiento - ((data.query[0].porcentaje * data.query[0].costoTratamiento)/100)) - data.abonos.abonos).toFixed(2);
+                    console.log(deuda);
+                    document.getElementById('fecha-venta').innerHTML = fecha[2] + "/" +fecha[1] + "/" +fecha[0];   
+                    document.getElementById('vendido-por').innerHTML = data.query[0].empleado;  
+                    document.getElementById('cuota').innerHTML = parseInt(data.abonos.cuotas) + 1;   
+                    document.getElementById('cuotas').innerHTML = data.query[0].cuotas; 
+                    document.getElementById('costo').innerHTML = "$" + ( data.query[0].costoTratamiento - 0 ).toFixed(2);   
+                    document.getElementById('descuento').innerHTML = "$" + ((data.query[0].porcentaje * data.query[0].costoTratamiento)/100).toFixed(2);   
+                    document.getElementById('monto-total').innerHTML = "$" + ( data.query[0].costoTratamiento - ((data.query[0].porcentaje * data.query[0].costoTratamiento)/100)).toFixed(2);   
+                    document.getElementById('deuda-pte').innerHTML = "$" + ( (data.query[0].costoTratamiento - ((data.query[0].porcentaje * data.query[0].costoTratamiento)/100)) - data.abonos.abonos).toFixed(2);                       
+                    capa.style.display = 'block';
+                    
+                    $('#dgplusbellebundle_abono_submit').val(id+'-'+1);  
+                    
+                    if(deuda == 0){
+                        $( "#dgplusbellebundle_abono_submit" ).prop( "disabled", true );
+                    }
+                    
+                    if( (parseInt(data.abonos.cuotas) + 1) == data.query[0].cuotas) {
+                        $('#dgplusbellebundle_abono_monto').val(deuda);
+                        ponerReadOnly('dgplusbellebundle_abono_monto');
+                        
+                    }
+                }, "json"); // Fin de post 
+            }    
+        } 
+        
+        jQuery(document).ready(function() {
+            $(document).on("input","#dgplusbellebundle_abono_monto", function(){
+                var capa = document.getElementById('capaError');
+                var abono = parseFloat($(this).val());
+                
+               // alert(abono +'-'+deuda);
+                
+                if(abono > deuda){
+                    //alert(deuda + ' - ' + abono);
+                    $( "#dgplusbellebundle_abono_submit" ).prop( "disabled", true );
+                    capa.style.display = 'block';
+                } else {
+                    $( "#dgplusbellebundle_abono_submit" ).prop( "disabled", false );
+                    capa.style.display = 'none';
+                }
+            });
+        });//Fin document ready   
+        
+        function ponerReadOnly(id) {
+            // Ponemos el atributo de solo lectura
+            $("#"+id).attr("readonly","readonly");
 
+            // Ponemos una clase para cambiar el color del texto y mostrar que
+            // esta deshabilitado
+            $("#"+id).addClass("readOnly");
+
+        }
+
+        function quitarReadOnly(id) {
+            // Eliminamos el atributo de solo lectura
+            $("#"+id).removeAttr("readonly");
+
+            // Eliminamos la clase que hace que cambie el color
+            $("#"+id).removeClass("readOnly");
+
+        }
+    </script>
 {% endblock %}    

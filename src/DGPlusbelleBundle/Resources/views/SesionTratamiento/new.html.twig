@@ -67,7 +67,7 @@
                             </tr>
                             <tr>
                                 <th>Costo del paquete</th>
-                                <td>$ {{ ventaPaquete.paquete.costo }}</td>
+                                <td>$ {{ (ventaPaquete.paquete.costo - ((ventaPaquete.paquete.costo * ventaPaquete.descuento.porcentaje) / 100)) | number_format(2,'.',',') }}</td>
                             </tr>
                             <tr>
                                 <th>Fecha de venta</th>
@@ -91,7 +91,7 @@
             </div>
        
             <hr>
-            <div class="row" style="margin-top: 25px">
+            <div class="row" style="margin-top: 35px; margin-bottom: 50px;">
                 <div class="col-md-3 col-md-offset-2">
                     <div id="sucursal">
                         {{ form_row(form.sucursal) }}
@@ -110,12 +110,13 @@
                 </div> 
                     
             </div>
-            <div class="row">
-         {#   <div class="col-md-3 col-md-offset-2">
+            <hr>        
+            {#<div class="row">
+            <div class="col-md-3 col-md-offset-2">
                   <div id="fecha-sesion">
                         {{ form_row(form.fechaSesion) }}
                     </div> 
-            </div> #}
+            </div> 
                 <div class="col-md-2 col-md-offset-4">
                     <div id="hora-inicio">
                         {{ form_row(form.horaInicio) }}
@@ -126,7 +127,7 @@
                         {{ form_row(form.horaFin) }}
                     </div>
                 </div>    
-            </div>
+            </div>#}
                     
                     
             {#<div id="receta" class="receta col-md-12"  style="margin-bottom: 30px;">
@@ -172,7 +173,7 @@
               </div>
             </div>   
              #} 
-               <div class="row" style="margin-bottom: 50px;">  
+               <div class="row" style="margin-top: 50px; margin-bottom: 50px;">  
                     <div id="listadoa">
                        <div class="listado col-md-12">          
                            <div class="placas" data-prototype="{% filter escape %}  {% include 'DGPlusbelleBundle:Prototype:foto.html.twig' with { 'form': form.placas.vars.prototype} %}   {% endfilter  %}"> 
@@ -181,7 +182,11 @@
                        </div>
                     </div>
 
-                </div>    
+                </div>   
+                <div class="form-grouphide col-sm-4 col-sm-offset-6 col-xs-12" style="margin-top: 20px; margin-bottom: 15px;"> 
+                {#<a href="{{ path('admin_historial_consulta', { 'id': 'P' ~ ventaPaquete.paciente.id }) }}" class="btn btn-default btn-sm" id="cancelarNuevo">Cancelar</a>#}
+                {{ form_widget(form.submit) }}
+            </div>           
               
         </div>
     </div>  
@@ -193,12 +198,16 @@
         <script src="{{ asset('Resources/js/ConsultaPaciente.js') }}"></script>
        <script>
             $(document).ready(function(){
+                $('#dgplusbellebundle_sesiontratamiento_sucursal').select2();
+                $('#dgplusbellebundle_sesiontratamiento_tratamiento').select2();
+                $('#dgplusbellebundle_sesiontratamiento_empleado').select2();
                 
                 $( "#dgplusbellebundle_sesiontratamiento_registraReceta_0" ).on( "click", function() {
                     // Se muestra el combobox donde se selecciona la plantilla
                     $("#lista_receta").show();
                 });
-              validarSesionTratamiento();
+                
+                validarSesionTratamiento();
               
               $( "#dgplusbellebundle_sesiontratamiento_registraReceta_1" ).on( "click", function() {
                 // Se obtiene todos elementos que contengan la clase parametro

@@ -17,8 +17,8 @@ class SesionVentaTratamientoType extends AbstractType
     {
         $builder
             //->add('fechaSesion')
-            ->add('horaInicio')
-            ->add('horaFin')
+            //->add('horaInicio')
+            //->add('horaFin')
             ->add('personaTratamiento',null,array('label' => 'Tratamiento','required'=>false,
                 'empty_value'   => 'Seleccione tratamiento...',      
                 'attr'=>array(

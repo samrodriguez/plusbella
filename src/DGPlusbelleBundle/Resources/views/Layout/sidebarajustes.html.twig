@@ -112,17 +112,28 @@
         </li>#}
     {% endif %}
     {% if is_granted('ROLE_ADMIN') %}
-        <li class="nav-item" role="presentation">
+       {# <li class="nav-item" role="presentation">
           <a href="#" data-toggle="nav-child">
             <span class="nav-icon"><i class="fa fa-user-md"></i></span>
             <span class="nav-text">Empleados</span>
           </a>
-          <ul class="nav nav-child level-1 nav-stacked nav-pills" role="menu">
-            <li role="presentation"><a role="menuitem" tabindex="-1" href="{{ path('admin_cierreadministrativo') }}"><span class="nav-text">Reservar tiempo</span></a></li>
-            <li role="presentation"><a role="menuitem" tabindex="-1" href="{{ path('admin_empleado') }}"><span class="nav-text">Gestionar empleado</span></a></li>
-            <li role="presentation"><a role="menuitem" tabindex="-1" href="{{ path('admin_empleado_progreso_venta') }}"><span class="nav-text">Progreso de empleado</span></a></li>
-          </ul>
+          <ul class="nav nav-child level-1 nav-stacked nav-pills" role="menu">#}
+           {# <li role="presentation"><a role="menuitem" tabindex="-1" href="{{ path('admin_cierreadministrativo') }}"><span class="nav-text">Reservar tiempo</span></a></li>#}
+           {# <li role="presentation"><a role="menuitem" tabindex="-1" href="{{ path('admin_empleado') }}"><span class="nav-text">Gestionar empleado</span></a></li>#}
+           {# <li role="presentation"><a role="menuitem" tabindex="-1" href="{{ path('admin_empleado_progreso_venta') }}"><span class="nav-text">Progreso de empleado</span></a></li>#}
+         {# </ul>
+        </li>#}
+        
+        
+        
+        <li class="nav-item" role="presentation">
+          <a href="{{ path('admin_empleado') }}">
+            <span class="nav-icon"><i class="fa fa-user-md"></i></span>
+            <span class="nav-text">Gestionar empleado</span>
+          </a>
         </li>
+        
+        
     {% endif %}
     {% if is_granted('ROLE_ADMIN') %}
          <li class="nav-item" role="presentation">

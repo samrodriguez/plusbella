@@ -140,27 +140,42 @@
                         <thead>
                             <tr row="role">
                                 <th class="text-center">N°</th>
+                                <th class="text-center">Fecha de venta</th>
                                 <th class="text-center">Tratamiento</th>
                                 <th class="text-center">Número de sesiones</th>
-                                <th class="text-center">Costo ($)</th>
-                                <th class="text-center">Fecha de venta</th>
+                                <th class="text-center">Costo</th>
+                                
+                                <th class = "text-center">Deuda pendiente</th>
                                 <th class="text-center">Acciones</th>
                             </tr>
                         </thead>
                         <tbody>
                             {% for key, entity in tratamientos %}
+                                {% set deuda = 0 %}
                                 <tr id="{{entity.tratamiento.id}}">
                                     <td class="text-center">{{key+1}}</td>
+                                    <td class="text-center">{% if entity.fechaVenta%}{{ entity.fechaVenta|date('d/m/Y') }}{% endif %}</td>
                                     <td>{{ entity.tratamiento}}</td>
                                     <td class="text-center">{{ entity.numSesiones}}</td>
-                                    <td class="text-center">{{ entity.costoConsulta}}</td>
-                                    <td class="text-center">{% if entity.fechaVenta%}{{ entity.fechaVenta|date('d/m/Y') }}{% endif %}</td>
+                                    <td class="text-center">$ {{ (entity.costoConsulta - ((entity.costoConsulta * entity.descuento.porcentaje) / 100))|number_format(2, '.', ',') }}</td>
+                                    
+                                    <td class = "text-center">
+                                        $
+                                        {% set acum = 0 %}
+                                        {% for abono in abonosTrata %}
+                                            {% if abono['tratamiento'] == entity.id %}
+                                                {% set acum = acum + abono['abonos'] %}
+                                            {% endif %}
+                                        {% endfor %} 
+                                        {% set deuda = ( entity.costoConsulta - (( entity.descuento.porcentaje * entity.costoConsulta ) / 100 ) - acum ) %}
+                                        {{ deuda|number_format(2, '.', ',') }}
+                                    </td>
                                     <td class="center-block">
                                         <div class="row">
                                             <div class="col-md-1 col-md-offset-3">
                                                 <div class="btn-group btn-group-sm pull-left">
                                                     <button id="nueva-sesion" data-toggle="tooltip" data-container="body" title="Registrar sesion de tratamiento" class="btn btn-default datatables1-actions" role="button" onclick="sesionTratamiento({{ entity.id }});">
-                                                        <i class="fa fa-pencil-square-o"></i><a href=""> </a>
+                                                        <i class="fa fa-plus-square"></i><a href=""> </a>
                                                     </button>
                                                 </div>
                                             </div>
@@ -170,7 +185,16 @@
                                                         <i class="fa fa-history"></i><a href=""> </a>
                                                     </button>
                                                 </div>
-                                            </div>  
+                                            </div> 
+                                            {% if deuda != 0%}            
+                                            <div class="col-md-1">
+                                                <div class="btn-group btn-group-sm pull-left">
+                                                    <button id="abono-tratamiento" data-toggle="tooltip" data-container="body" title="Nuevo abono" class="btn btn-default datatables1-actions abono" role="button" onclick="nuevoAbono('{{ idPaciente }}', 1);">
+                                                        <i class="fa fa-dollar"></i><a href=""> </a>
+                                                    </button>
+                                                </div>
+                                            </div> 
+                                            {% endif %}        
                                             <div class="col-md-5">
                                                 <div class="btn-group btn-group-sm pull-left">
                                                     <button id="seguimiento-fototratamiento" data-toggle="tooltip" data-container="body" title="Ver imagenes" class="btn btn-default datatables1-actions seguimiento" role="button" onclick="imagenTratamiento({{ entity.id }});">
@@ -201,6 +225,7 @@
                                                         </div>
                                                     </div>
                                                 {% endfor %}
+                                                
                                         </div>
                                     </td>
                                 </tr>
@@ -219,29 +244,45 @@
                         <thead>
                             <tr row="role">
                                 <th class = "text-center">N°</th>
+                                <th class = "text-center">Fecha de venta</th>
                                 <th class = "text-center">Paquete</th>
                                 <th class = "text-center">Vendido por</th>
-                                <th class = "text-center">Fecha de venta</th>
-                                <th class = "text-center">Estado</th>
+                                <th class = "text-center">Deuda pendiente</th>
+                                {#<th class = "text-center">Estado</th>#}
                                 <th class = "text-center">Acciones</th>
                             </tr>
                         </thead>
                         <tbody>
                         {% for key, entity in paquetes %}
+                            {% set deuda = 0 %}
                             <tr>
                                 <td class = "text-center">{{key+1}}</td>
+                                <td class = "text-center">{% if entity.fechaVenta %}{{ entity.fechaVenta|date('d/m/Y') }}{% endif %}</td>
                                 <td>{{ entity.paquete }}</td>
                                 <td>{{ entity.empleado }}</td>
-                                <td class = "text-center">{% if entity.fechaVenta %}{{ entity.fechaVenta|date('d/m/Y') }}{% endif %}</td>
                                 <td class = "text-center">
-                                    {% if entity.estado == 1 %}Sin comenzar{% elseif entity.estado == 2 %}En proceso{% elseif entity.estado == 3 %}Finalizado{% endif %}
+                                    $
+                                    {% set acum = 0 %}
+                                    {% for abono in abonosPaq %}
+                                        {% if abono['paquete'] == entity.id %}
+                                            {% set acum = acum + abono['abonos'] %}
+                                        {% endif %}
+                                    {% endfor %} 
+                                    
+                                    {% set deuda = ( entity.paquete.costo - (( entity.descuento.porcentaje * entity.paquete.costo ) / 100 ) - acum ) %}
+                                    {{ deuda|number_format(2, '.', ',') }}
+                                    
+                                    {#{{ ( ( entity.paquete.costo - (( entity.descuento.porcentaje * entity.paquete.costo ) / 100 ) - acum ))|number_format(2, '.', ',') }}#}
                                 </td>
+                                {#<td class = "text-center">
+                                    {% if entity.estado == 1 %}Sin comenzar{% elseif entity.estado == 2 %}En proceso{% elseif entity.estado == 3 %}Finalizado{% endif %}
+                                </td>#}
                                 <td class="center-block">
                                     <div class="row">
                                         <div class="col-md-1 col-md-offset-3">
                                             <div class="btn-group btn-group-sm pull-left">
                                                 <button id="nueva-sesion" data-toggle="tooltip" data-container="body" title="Registrar sesion de tratamiento" class="btn btn-default datatables1-actions" role="button" onclick="nuevaSesionTratamiento({{ entity.id }});">
-                                                    <i class="fa fa-pencil-square-o"></i><a href=""> </a>
+                                                    <i class="fa fa-plus-square"></i><a href=""> </a>
                                                 </button>
                                             </div>
                                         </div>
@@ -251,7 +292,16 @@
                                                     <i class="fa fa-history"></i><a href=""> </a>
                                                 </button>
                                             </div>
-                                        </div>       
+                                        </div>   
+                                        {% if deuda != 0%}            
+                                            <div class="col-md-1">
+                                                <div class="btn-group btn-group-sm pull-left">
+                                                    <button id="abono-paquete" data-toggle="tooltip" data-container="body" title="Nuevo abono" class="btn btn-default datatables1-actions abono" role="button" onclick="nuevoAbono('{{ idPaciente }}', 0);">
+                                                        <i class="fa fa-dollar"></i><a href=""> </a>
+                                                    </button>
+                                                </div>
+                                            </div> 
+                                            {% endif %}            
                                         <div class="col-md-5">
                                             <div class="btn-group btn-group-sm pull-left">
                                                 <button id="seguimiento-fototratamiento" data-toggle="tooltip" data-container="body" title="Ver imagenes" class="btn btn-default datatables1-actions seguimiento" role="button" onclick="imagenPaquete({{ entity.id }});">
@@ -651,27 +701,57 @@
     </script>
      <script>  
         function nuevaSesionTratamiento(id){
-            bootbox.confirm( 'El paciente tiene deuda pendiente en éste paquete ¿Desea continuar?', function( result ) {
-                toastr.info( 'Confirm result: ' + result);
-            
-                {#$.post( "{{path('admin_evaluar_sesiones_paquete')}}", { id: id }, function( data ) {
-                    var aux = 0;
-                    var total = data.query.length;
-                    $.each( data.query, function( key, value ) {
-                       if(value.numSesion >= value.sesiones){
-                            aux = aux + 1;
-                        }
-                    });   
-                    if(aux < total){
+            $.post( "{{path('admin_evaluar_sesiones_paquete')}}", { id: id }, function( data ) {
+                var aux = 0;
+                var total = data.query.length;
+                
+                // Calculando la deuda pendiente que tiene el paciente en el paquete seleccionado
+                var deuda = ( (data.query[0].costoPaquete - ((data.query[0].porcentaje * data.query[0].costoPaquete)/100)) - data.abonos.abonos).toFixed(2);
+                
+                $.each( data.query, function( key, value ) {
+                   if(value.numSesion >= value.sesiones){
+                        aux = aux + 1;
+                    }
+                });   
+                
+                // Si exiten sesiones pendientes
+                if(aux < total){
+                    // Si el paciente no tiene deuda pendiente en el paquete seleccionado
+                    if(deuda <= 0){
                         var url = Routing.generate('admin_sesiontratamiento_new', {'id': id});
                         window.open(url, "_self");
+                        
+                    // Si el paciente tiene deuda pendiente en el paquete seleccionado    
                     } else {
-                        bootbox.alert('Se han completado las sesiones, no se puede registrar una nueva sesion en el paquete');
+                        bootbox.confirm({ title: 'Confirmación de registro de nueva sesión',
+                            message: 'El paciente tiene  una deuda de $' + deuda + ', en éste paquete ¿Desea continuar?',
+                            buttons: {
+                                'cancel': {
+                                    label: 'Cancelar',
+                                    className: 'btn-default pull-left'
+                                },
+                                'confirm': {
+                                    label: 'Aceptar',
+                                    className: 'btn-primary pull-right'
+                                }
+                            },
+                            callback: function(result) {
+                                // Si acepta continuar con el registro de una nueva sesion de tratamiento
+                                if(result == true){ 
+                                    var url = Routing.generate('admin_sesiontratamiento_new', {'id': id});
+                                    window.open(url, "_self");
+                                }
+                            }
+                        });      
                     }
-
-
-                }, "json"); // Fin de post #}   
-            });            
+                    
+                // Si se han completado todas las sesiones de todos tratamientos que cuenta el paquete    
+                } else {
+                    bootbox.alert('Se han completado las sesiones, no se puede registrar una nueva sesion en el paquete');
+                }
+                
+            }, "json"); // Fin de post    
+                      
         }
     </script>
     <script>  
@@ -686,6 +766,12 @@
                 }
             }, "json"); // Fin de post        
         }
+    </script>
+    <script>  
+        function nuevoAbono(id){
+            var url = Routing.generate('admin_abono_new', {'id': id});
+            window.open(url,'_self');
+        }//Fin funcion
     </script>
     <script>  
         function exportarRecetaVentaTratamientoPDF(id){
@@ -749,7 +835,7 @@
                 if(par.length !== 0){
                     var mensaje = "";
                     mensaje += "<div class='panel-body'>";
-                    mensaje += "<div class='col-md-12'><small>Aqui se muestra la informacion</small></div>";
+                    //mensaje += "<div class='col-md-12'><small>Aqui se muestra la informacion</small></div>";
                     mensaje += "<div class='clearfix'></div>"
                     //mensaje += "<div class='col-md-3 text-right'><b>Expediente No.: </b></div><div class='col-md-3'>" + data.query[0].numExp.toUpperCase() + "</div>";
                     //mensaje += "<div class='col-md-3 text-right'><b>Nombre del paciente: </b></div><div class='col-md-3'>" + data.query[0].paciente + "</div>";
@@ -775,7 +861,7 @@
                     mensaje += "<div class='panel-body' style='margin-left: 14px; margin-right: 14px;'>";
                     mensaje += "<table class='table table-bordered table-condensed' style='margin-top:25px'>";
                     mensaje += "<thead>";
-                    mensaje += "<tr><th class='text-center'>Tratamiento</th><th class='text-center'>Número de sesiones</th><th class='text-center'>Sesiones</th></tr>";
+                    mensaje += "<tr><th class='text-center'>Tratamiento</th><th class='text-center'>Número de sesiones</th><th class='text-center'>Progreso del paquete</th></tr>";
                     mensaje += "</thead>";
                     mensaje += "<tbody>";
                     
@@ -843,6 +929,9 @@
     </script>
     <script>  
         function seguimientoTratamiento(id){
+            $("#tabla1").hide();
+            $("#tabla2").hide();
+            $("#tabla3").hide();
             $.post( "{{path('admin_busqueda_tratamiento_seguimiento')}}", { id: id }, function( data ) {
                 console.log(data.query);
                 
@@ -854,7 +943,78 @@
                 if(par.length !== 0){
                     var mensaje = "";
                     
-                    mensaje += "<div class='row'></div>";
+                    mensaje += "<div class='panel-body'>";
+                    //mensaje += "<div class='col-md-12'><small>Aqui se muestra la informacion</small></div>";
+                    mensaje += "<div class='clearfix'></div>"
+                    //mensaje += "<div class='col-md-3 text-right'><b>Expediente No.: </b></div><div class='col-md-3'>" + data.query[0].numExp.toUpperCase() + "</div>";
+                    //mensaje += "<div class='col-md-3 text-right'><b>Nombre del paciente: </b></div><div class='col-md-3'>" + data.query[0].paciente + "</div>";
+                    //mensaje += "<div class='clearfix'></div>"
+                    mensaje += "<div class='col-md-1 col-md-offset-1 text-right' style='margin-top: 25px;'><b>Fecha de venta: </b></div><div class='col-md-2' style='margin-top: 25px;'>" + fecha[2] + "/" +fecha[1] + "/" +fecha[0] + "</div>";
+                    //mensaje += "<div class='clearfix'></div>"
+                    mensaje += "<div class='col-md-1 text-right' style='margin-top: 25px;'><b>Tratamiento: </b></div><div class='col-md-3' style='margin-top: 25px;'>" + data.query[0].ntratamiento + "</div>";
+                    //mensaje += "<div class='clearfix'></div>"
+                    mensaje += "<div class='col-md-1 text-right' style='margin-top: 25px;'><b>Vendido por: </b></div><div class='col-md-3' style='margin-top: 25px;'>" + data.query[0].empleado + "</div>";
+                    mensaje += "<div class='clearfix'></div>"
+                    
+                    mensaje += "<div class='col-md-2 text-right' style='margin-top: 15px;'><b>Costo del tratamiento: </b></div><div class='col-md-1' style='margin-top: 15px;'> $ " + ( data.query[0].costoTratamiento - 0 ).toFixed(2) + "</div>";
+                    //mensaje += "<div class='clearfix'></div>"
+                    //mensaje += "<div class='col-md-2 text-right' style='margin-top: 15px;'><b>Descuento aplicado: </b></div><div class='col-md-2' style='margin-top: 15px;'><b style='color:red'> $ " + redondeoV4(((data.query[0].porcentaje * data.query[0].costoPaquete)/100),2) + "</b></div>";
+                    mensaje += "<div class='col-md-2 text-right' style='margin-top: 15px;'><b>Descuento aplicado: </b></div><div class='col-md-2' style='margin-top: 15px;'>{#<b style='color:red'>#} $ " + ((data.query[0].porcentaje * data.query[0].costoTratamiento)/100).toFixed(2) + "{#</b>#}</div>";
+                    //mensaje += "<div class='clearfix'></div>"
+                    mensaje += "<div class='col-md-2 text-right' style='margin-top: 15px;'><b>Monto total a cancelar: </b></div><div class='col-md-2' style='margin-top: 15px;'>{#<b>#} $ " + ( data.query[0].costoTratamiento - ((data.query[0].porcentaje * data.query[0].costoTratamiento)/100)).toFixed(2) + "{#</b>#}</div>";
+                    mensaje += "<div class='clearfix'></div>"
+                    mensaje += "<div class='col-md-6 text-right' style='margin-top: 30px; margin-bottom: 30px;'><b style='font-size: 20px;'>Deuda pendiente: </b></div><div class='col-md-6' style='margin-top: 30px;'><b style='font-size: 20px;'> $ " + ( (data.query[0].costoTratamiento - ((data.query[0].porcentaje * data.query[0].costoTratamiento)/100)) - data.abonos.abonos).toFixed(2) + "</b></div>";
+                    mensaje += "<div class='clearfix'></div>"
+                    mensaje += "</div>";
+                    
+                    mensaje += "<div class='panel-body' style='margin-left: 14px; margin-right: 14px;'>";
+                    mensaje += "<table class='table table-bordered table-condensed' style='margin-top:25px'>";
+                    mensaje += "<thead>";
+                    mensaje += "<tr><th class='text-center'>Nombre del tratamiento</th><th class='text-center'>Número de sesiones</th><th class='text-center'>Progreso del tratamiento</th></tr>";
+                    mensaje += "</thead>";
+                    mensaje += "<tbody>";
+                    
+                    $.each( data.query, function( key, value ) {
+                        mensaje +=  "<tr><td>" + data.query[0].ntratamiento + "</td>";
+                        mensaje +=  "<td class='text-center'>" + value.sesiones + "</td><td><div class'row'>";
+                        if(value.numSesion == 0){
+                            for (var i = 0; i < value.sesiones; i++) {
+                                //mensaje += "<div class='fa fa-certificate'></div>";
+                                 mensaje +=  "{#<div>#}<img class='' style='height: 50px;'  src='{{ asset('Photos/Estados/pendiente.png')}}' title='Sesion pendiente'>{#</div>#}";
+                            }    
+                        } else {
+                            for (var i = 0; i < value.numSesion; i++) {
+                                //mensaje += "<td><div class='fa fa-check'></div></td>";
+                                mensaje +=  "{#<div>#}<img class='' style='height: 50px;'  src='{{ asset('Photos/Estados/realizado.png')}}' title='Sesion realizada'>{#</div>#}";
+                            }
+                            for (var i = 0; i < value.sesiones - value.numSesion; i++) {
+                                //mensaje += "<div class='fa fa-certificate'></div>";
+                                mensaje +=  "{#<div>#}<img class='' style='height: 50px;'  src='{{ asset('Photos/Estados/pendiente.png')}}' title='Sesion pendiente'>{#</div>#}";
+                            }
+                            
+                        }
+{#                            alert(data.query.id);#}
+                        mensaje+= "</div></td>{#<td>#}";
+                            {#{% for key, entity in paquetes %}
+                                    {% for ent in entity.ventapaq %}
+                                        if(data.query.id=={{ent.id}})
+                                        {
+                                            mensaje+="<button id='ver-receta' data-toggle='tooltip' data-container='body' title='Consultar receta' class='btn btn-default datatables1-actions' role='button' onclick='exportarPaqueteRecetaPDF(5);'><i class='fa fa-file-pdf-o'></i><a href=''></a></button>"
+                                        }
+                                        else{
+                                            mensaje+="";
+                                        }
+                                        
+                                    {% endfor %}
+                            {% endfor %}#}
+                        mensaje+="</td></tr>";
+                    });    
+
+                    mensaje += "</tbody>";
+                    mensaje += "</table>";
+                    mensaje += "</div>";
+                    
+                    {#mensaje += "<div class='row'></div>";
                     mensaje += "<div class='col-md-6 text-right'><b>Vendido por: </b></div><div class='col-md-6'>" + data.query[0].empleado + "</div>";
                     mensaje += "<div class='clearfix'></div>"
                     mensaje += "<div class='col-md-6 text-right'><b>Nombre del paciente: </b></div><div class='col-md-6'>" + data.query[0].paciente + "</div>";
@@ -898,9 +1058,11 @@
                     mensaje += "</td></tr>";
                     mensaje += "</tbody>";
                     mensaje += "</table>";
-                    mensaje += "</div>";
+                    mensaje += "</div>";#}
                     
-                    bootbox.dialog({
+                    document.getElementById('tabla4').innerHTML = mensaje;   
+                    $("#tabla4").show();
+                    {#bootbox.dialog({
                           message: mensaje,
                           title: "Información del tratamiento ",
                           buttons: {
@@ -912,7 +1074,7 @@
                               }
                             }
                           }
-                    });
+                    });#}
                 }
                 else{
                     console.log( 'Este paquete no tiene sesiones que mostrar' );

@@ -17,8 +17,8 @@ class SesionTratamientoType extends AbstractType
     {
         $builder
             //->add('fechaSesion')
-            ->add('horaInicio')
-            ->add('horaFin')
+            //->add('horaInicio')
+            //->add('horaFin')
             //->add('ventaPaquete')
             ->add('sucursal','entity',array(
                 'label' => 'Sucursal',

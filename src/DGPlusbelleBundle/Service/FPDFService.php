@@ -223,7 +223,7 @@ class FPDFService {
         $this->pdf->SetWidths($anchoCol);
         
         //$this->pdf->Row($encabezado);
-        $this->pdf->Cell(47,5,$encabezado['0'], 'LTRB', 0, 'L');
+        $this->pdf->Cell(50,5,$encabezado['0'], 'LTRB', 0, 'L');
             
         $this->pdf->Cell(30,5,$encabezado['1'], 'LTRB', 0, 'R');
         $this->pdf->Ln(5);
@@ -241,7 +241,7 @@ class FPDFService {
             //var_dump($data['0']);
             //var_dump($this->pdf->Row($data));
             //$this->pdf->Row($data);
-            $this->pdf->Cell(47,5,$data['0'], 'LTRB', 0, 'L');
+            $this->pdf->Cell(50,5,$data['0'], 'LTRB', 0, 'L');
             
             $this->pdf->Cell(30,5,$data['1'], 'LTRB', 0, 'R');
             $total = $total + $data['1'];
@@ -249,7 +249,7 @@ class FPDFService {
         }
         $this->pdf->SetFont('Times','B',11);
         $this->pdf->Cell($sangria);
-        $this->pdf->Cell(47,5,"Total", 'LTRB', 0, 'L');
+        $this->pdf->Cell(50,5,"Total", 'LTRB', 0, 'L');
             
         $this->pdf->Cell(30,5,  number_format($total,2,'.',''), 'LTRB', 0, 'R');
         

@@ -69,7 +69,7 @@
                             </tr>
                             <tr>
                                 <th>Costo del tratamiento</th>
-                                <td>$ {{ personaTratamiento.tratamiento.costo }}</td>
+                                <td>$ {{ (personaTratamiento.costoConsulta - ((personaTratamiento.costoConsulta * personaTratamiento.descuento.porcentaje) / 100))|number_format(2,'.',',') }}</td>
                             </tr>
                             <tr>
                                 <th>Fecha de venta</th>
@@ -111,12 +111,12 @@
                 </div> 
                 
             </div>
-            <div class="row">
-         {#   <div class="col-md-3 col-md-offset-2">
-                  <div id="fecha-sesion">
-                        {{ form_row(form.fechaSesion) }}
-                    </div> 
-            </div> #}
+            {#<div class="row">
+                <div class="col-md-3 col-md-offset-2">
+                      <div id="fecha-sesion">
+                            {{ form_row(form.fechaSesion) }}
+                        </div> 
+                </div> 
                 <div class="col-md-2 col-md-offset-4">
                     <div id="hora-inicio">
                         {{ form_row(form.horaInicio) }}
@@ -127,7 +127,7 @@
                         {{ form_row(form.horaFin) }}
                     </div>
                 </div>    
-            </div> 
+            </div> #}
        {#             
              <div class="row">        
               <div class="col-xs-12 col-sm-3 col-md-offset-3" style="margin-top:25px;">

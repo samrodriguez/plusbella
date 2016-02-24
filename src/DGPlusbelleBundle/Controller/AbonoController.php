@@ -47,25 +47,44 @@ class AbonoController extends Controller
     public function createAction(Request $request)
     {
         $entity = new Abono();
-        
+        $em = $this->getDoctrine()->getManager();
         $request = $this->getRequest();
         $idpaquetes = $request->get('paquete');
         $idtratamientos = $request->get('tratamiento');
         $paciente = $request->get('paciente');
+        
+        $pac = $em->getRepository('DGPlusbelleBundle:Paciente')->findOneBy(array('persona'=>$paciente));
+        //var_dump($pac);
         $form   = $this->createCreateForm($entity, $paciente, $idpaquetes, $idtratamientos);
        // $form   = $this->createCreateForm($entity, $paciente, $idtratamientos);
         //$form = $this->createCreateForm($entity);
         $form->handleRequest($request);
+        $parameters = $request->request->all();
+        //var_dump($parameters);
         $entity->setFechaAbono(new \DateTime('now'));
+        //var_dump($idpaquetes);
+        $vPaquete=array();
+        $vTratamiento=array();
         
-        if($entity->getFlagAbono()==0){
+        $aux = explode("-", $parameters['dgplusbellebundle_abono']['submit']);
+        
+        if($aux[1]==0){
+            //var_dump($aux[0]);
             $entity->setPersonaTratamiento(null);
-            
+            $vPaquete = $em->getRepository('DGPlusbelleBundle:VentaPaquete')->find($aux[0]);
+            $entity->setVentaPaquete($vPaquete);
         }
         else{
+            //var_dump($aux[0]);
             $entity->setVentaPaquete(null); 
+            $vTratamiento = $em->getRepository('DGPlusbelleBundle:PersonaTratamiento')->find($aux[0]);
+            $entity->setPersonaTratamiento($vTratamiento);
+            //var_dump($vTratamiento);
         }
+        $entity->setPaciente($pac);
 
+        
+        //die();
         if ($form->isValid()) {
             $em = $this->getDoctrine()->getManager();
             $em->persist($entity);
@@ -74,7 +93,8 @@ class AbonoController extends Controller
             $usuario= $this->get('security.token_storage')->getToken()->getUser();
             $this->get('bitacora')->escribirbitacora("Se registro un abono correctamente",$usuario->getId());
             
-            return $this->redirect($this->generateUrl('admin_abono', array('id' => $entity->getId())));
+            //return $this->redirect($this->generateUrl('admin_abono', array('id' => $entity->getId())));
+            return $this->redirect($this->generateUrl('admin_paciente', array('id' => $pac->getId())));
         }
 
         return array(
@@ -147,7 +167,7 @@ class AbonoController extends Controller
     /**
      * Displays a form to create a new Abono entity.
      *
-     * @Route("/new", name="admin_abono_new")
+     * @Route("/new", name="admin_abono_new", options={"expose"=true})
      * @Method("GET")
      * @Template()
      */
@@ -159,7 +179,9 @@ class AbonoController extends Controller
         //Recuperación del paciente
         $request = $this->getRequest();
         $id= $request->get('id');
+        //var_dump($id);
         $id = substr($id, 1);
+        
         //Busqueda del paciente
         $paciente = $em->getRepository('DGPlusbelleBundle:Paciente')->find($id);
         //Seteo del paciente en la entidad
@@ -208,7 +230,7 @@ class AbonoController extends Controller
             }
         }
         
-        
+        //var_dump($idpaquetes);  
         //var_dump($idpaquetes);
         $entity->setPaciente($paciente);
         
@@ -216,7 +238,8 @@ class AbonoController extends Controller
         //$form   = $this->createCreateForm($entity, $paciente->getPersona()->getId(), $idtratamientos);
         
         return array(
-            'entity' => $entity,
+            'entity'   => $entity,
+            'paciente' => $paciente,
             'form'   => $form->createView(),
         );
     }
