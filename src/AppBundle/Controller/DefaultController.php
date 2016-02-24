@@ -14,7 +14,9 @@ class DefaultController extends Controller
     public function indexAction(Request $request)
     {
         // replace this example code with whatever you need
-        return $this->redirect($this->generateUrl('plusbelle_login'));
+        //return $this->redirect($this->generateUrl('plusbelle_login'));
+        return $this->redirect($this->generateUrl('admin_cita'));
+        
 //        return $this->render('default/index.html.twig', array(
 //            'base_dir' => realpath($this->container->getParameter('kernel.root_dir').'/..'),
 //        ));

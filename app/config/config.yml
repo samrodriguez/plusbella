@@ -86,6 +86,8 @@ doctrine:
                     DGPlusbelleBundle: ~
                 dql:
                     datetime_functions:
+                        DATE_FORMAT: DoctrineExtensions\Query\Mysql\DateFormat
+                        DAY: DoctrineExtensions\Query\Mysql\Day
                         MONTH: DoctrineExtensions\Query\Mysql\Month
                         YEAR: DoctrineExtensions\Query\Mysql\Year
         auto_generate_proxy_classes: "%kernel.debug%"

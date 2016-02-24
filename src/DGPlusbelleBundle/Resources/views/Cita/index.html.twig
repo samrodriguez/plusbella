@@ -38,7 +38,9 @@
     {#<div class="col-md-1 text-right">
         Sucursales
     </div>#}
-    <input id="sucursal" value="{{sucursal}}" type="hidden">
+    {#<input id="sucursal" value="{{sucursal}}" type="hidden">
+    <input id="fechaInicio" value="" type="text">
+    <input id="fechaFin" value="" type="text">#}
     <div class="col-md-5">
 
         
@@ -79,7 +81,8 @@
                     <li class="" style="opacity: 1; display: list-item; transform: translateY(0px);"><a data-toggle="tooltip" data-original-title="{{categoria.nombre}}" href="#" style="background: #C7931C" data-navbar="orange" rel="tooltip" title=""></a></li>
                 {% endif %}
                 {% if categoria.id == 4 %}    
-                    <li class="" style="opacity: 1; display: list-item; transform: translateY(0px);"><a data-toggle="tooltip" data-original-title="{{categoria.nombre}}" href="#" style="background: #B2B064" data-navbar="yellow" rel="tooltip" title=""></a></li>
+                    {#<li class="" style="opacity: 1; display: list-item; transform: translateY(0px);"><a data-toggle="tooltip" data-original-title="{{categoria.nombre}}" href="#" style="background: #B2B064" data-navbar="yellow" rel="tooltip" title=""></a></li>#}
+                    <li class="" style="opacity: 1; display: list-item; transform: translateY(0px);"><a data-toggle="tooltip" data-original-title="{{categoria.nombre}}" href="#" style="background: #EA92C3" data-navbar="yellow" rel="tooltip" title=""></a></li>
                 {% endif %}
                 {% if categoria.id == 5 %}    
                     <li class="" style="opacity: 1; display: list-item; transform: translateY(0px);"><a data-toggle="tooltip" data-original-title="{{categoria.nombre}}" href="#" style="background: #7E9499" data-navbar="green" rel="tooltip" title=""></a></li>

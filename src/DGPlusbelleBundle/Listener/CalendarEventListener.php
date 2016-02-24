@@ -21,13 +21,47 @@ class CalendarEventListener
         
         $request = $calendarEvent->getRequest();
         $filter = $request->get('filter');
-        $startDate = $calendarEvent->getStartDatetime();
-        $endDate   = $calendarEvent->getEndDatetime();
+        //$startDate = $calendarEvent->getStartDatetime();
+        //$endDate   = $calendarEvent->getEndDatetime();
         $sucursal = $request->get('sucursal');
         $hoyFiltro = $request->get('hoyFiltro');
-        $date = new \DateTime($hoyFiltro);
-        //var_dump($hoyFiltro);
+//        $fechaInicio = $request->get('fechaInicio');
+//        $fechaFin = $request->get('fechaFin');
+        
+        $request   = $calendarEvent->getRequest();
+        $filter        = $request->get('filter');
+        
         $user = $request->get('user');
+        
+        $fechaInicio = $request->get('start');
+        $fechaFin = $request->get('end');
+        $startDate = date('Y-m-d',$fechaInicio);
+        $endDate = date('Y-m-d',$fechaFin);
+        
+        //var_dump($startDate);
+        //var_dump($endDate);
+        
+        if($sucursal==''){
+            $sucursal =3;
+        }
+        //var_dump($sucursal);
+        //die();
+//        var_dump($fechaInicio);
+//        var_dump($fechaFin);
+//        die();
+        //$fechaInicioDate = new \DateTime($fechaInicio);
+        //$fechaFinDate = new \DateTime($fechaFin);
+        
+        
+        //die();
+        //$fechaInicio = $fechaInicioDate->format('Y-m-d');
+        //$fechaFin = $fechaFinDate->format('Y-m-d');
+        //var_dump($fechaInicio);
+        //var_dump($fechaFin);
+        //die();
+        //$date = new \DateTime($hoyFiltro);
+        //var_dump($hoyFiltro);
+        
         //var_dump($sucursal);
         //var_dump($user);
         //die();
@@ -38,11 +72,24 @@ class CalendarEventListener
         
         if($sucursal!=''){
             if($user==0){
-                $citas = $this->em->getRepository('DGPlusbelleBundle:Cita')->findBy(array('sucursal'=>$sucursal));
+                $dql = "SELECT c FROM DGPlusbelleBundle:Cita c "
+                        . "WHERE c.sucursal=:sucursal AND c.fechaCita BETWEEN :fechaInicio AND :fechaFin";
+                
+                $citas = $this->em->createQuery($dql)
+                        ->setParameters(array('sucursal'=>$sucursal,'fechaInicio'=>$startDate,'fechaFin'=>$endDate))
+                         ->getResult();
+                
+//                $citas = $this->em->getRepository('DGPlusbelleBundle:Cita')->findBy(array('sucursal'=>$sucursal));
             }
             else{
                 //$citas = $this->em->getRepository('DGPlusbelleBundle:Cita')->findBy(array('sucursal'=>$sucursal));
-                $citas = $this->em->getRepository('DGPlusbelleBundle:Cita')->findBy(array('sucursal'=>$sucursal,'empleado'=>$user));
+                $dql = "SELECT c FROM DGPlusbelleBundle:Cita c "
+                        . "WHERE c.sucursal=:sucursal AND c.empleado=:user AND c.fechaCita BETWEEN :fechaInicio AND :fechaFin";
+                
+                $citas = $this->em->createQuery($dql)
+                        ->setParameters(array('sucursal'=>$sucursal,'user'=>$user,'fechaInicio'=>$startDate,'fechaFin'=>$endDate))
+                         ->getResult();
+                //$citas = $this->em->getRepository('DGPlusbelleBundle:Cita')->findBy(array('sucursal'=>$sucursal,'empleado'=>$user));
             }
             
         }
@@ -56,6 +103,32 @@ class CalendarEventListener
                 $citas = $this->em->getRepository('DGPlusbelleBundle:Cita')->findBy(array('empleado'=>$user));
             }
         }
+        
+        
+        /*$cierres = $this->em->getRepository('DGPlusbelleBundle:CierreAdministrativo')->findAll();
+        
+        
+        foreach($cierres as $key => $cierreEvent) {
+            $fi = $cierreEvent->getFecha()->format('Y-m-d');
+            $ih = $cierreEvent->getHoraInicio()->format('H:i');
+            $fh = $cierreEvent->getHoraFin()->format('H:i');
+            
+            $st    = new \DateTime($fi.' '.$ih);
+            $nh    = new \DateTime($fi.' '.$fh);
+            
+            $eventEntity = new EventEntity('', $st,$nh );
+            
+            $empleado = $cierreEvent->getEmpleado()->getPersona()->getNombres().' '.$cierreEvent->getEmpleado()->getPersona()->getApellidos();;
+            $motivo=$cierreEvent->getMotivo();
+            
+            $title = "Cierre administrativo | ".$empleado.' | '.$motivo;
+            $title = '<div class="fa fa-lock fa-2" style="width: 17px; height: 100%; float: left; background: #69BD45;  position: absolute; margin-left: -3px; padding-left:2px "></div> <div style="width: 91%; height: 100%; float: right; position: relative; "> | '.$title.'</div>'/*' | '.$companyEvent->getEstado().*/;
+          /*  $eventEntity->setTitle($title);
+            
+            $calendarEvent->addEvent($eventEntity);
+        }
+        */
+        
         
         foreach($citas as $key => $companyEvent) {
             // create an event with a start/end time, or an all day event
@@ -155,7 +228,8 @@ class CalendarEventListener
                     //$title = '</div><div class="fa fa-close"> | '.$title/*' | '.$companyEvent->getEstado(). */;
                     break;
                 case 4:    //Categoria 4
-                    $eventEntity->setBgColor('#B2B064'); //set the background color of the event's label
+                    //$eventEntity->setBgColor('#B2B064'); //set the background color of the event's label
+                    $eventEntity->setBgColor('#EA92C3'); //set the background color of the event's label
                     $eventEntity->setFgColor('#FFF'); //set the foreground color of the event's label
                     //$title = '</div><div class="fa fa-close"> | '.$title/*' | '.$companyEvent->getEstado(). */;
                     break;
