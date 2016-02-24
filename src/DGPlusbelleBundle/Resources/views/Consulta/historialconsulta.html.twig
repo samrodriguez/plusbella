@@ -293,7 +293,7 @@
                                                 </button>
                                             </div>
                                         </div>   
-                                        {% if deuda != 0%}            
+                                        {% if deuda|number_format(2, '.', ',') != 0%}
                                             <div class="col-md-1">
                                                 <div class="btn-group btn-group-sm pull-left">
                                                     <button id="abono-paquete" data-toggle="tooltip" data-container="body" title="Nuevo abono" class="btn btn-default datatables1-actions abono" role="button" onclick="nuevoAbono('{{ idPaciente }}', 0);">
@@ -301,7 +301,7 @@
                                                     </button>
                                                 </div>
                                             </div> 
-                                            {% endif %}            
+                                        {% endif %}            
                                         <div class="col-md-5">
                                             <div class="btn-group btn-group-sm pull-left">
                                                 <button id="seguimiento-fototratamiento" data-toggle="tooltip" data-container="body" title="Ver imagenes" class="btn btn-default datatables1-actions seguimiento" role="button" onclick="imagenPaquete({{ entity.id }});">
