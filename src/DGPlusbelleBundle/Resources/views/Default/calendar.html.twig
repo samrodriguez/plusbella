@@ -18,8 +18,11 @@
 <script type="text/javascript">     
 var calendario = null;
 var sucursal = $('#sucursal').val();
-
+//var fechaInicio = new Date();
+//var fechaFin = new Date();
 var hoyFiltro = new Date();
+///var fechaInicio= $('#fechaInicio').val();
+//var fechaFin= $('#fechaFin').val();
                                     
                 var ddFiltro = hoyFiltro.getDate();
                 var mmFiltro = hoyFiltro.getMonth()+1; //hoy es 0!
@@ -42,7 +45,7 @@ var i=0;
 var sources=new Array();
 var source = 
     {
-        url: Routing.generate('fullcalendar_loader')+'?sucursal='+sucursal+'&hoyFiltro='+hoyFiltro,
+        url: Routing.generate('fullcalendar_loader')+'?sucursal='+sucursal,
         type: 'POST',
         data: {
             filtro: 1
@@ -66,41 +69,7 @@ var source =
     };
   */  
   
-  function setsource(){
-  //	calendario.fullCalendar('removeEventSource',source);
-//  	calendario.fullCalendar('removeEventSource',source2);
-  	calendario.fullCalendar('removeEventSource');
-//	$('#calendar-holder').fullCalendar( 'removeEvents').fullCalendar('removeEventSources');
-	sucursal = $('#sucursal').val();
-        //alert(Routing.generate('fullcalendar_loader')+'?sucursal='+sucursal);
-        calendario.fullCalendar('removeEvents');
-        
-        for(j=0;j<sources.length;j++){
-            console.log(j);
-            calendario.fullCalendar('removeEventSource',sources[j]);
-            //sources.remove(j);
-        }
-        console.log(sources[0]);
-        var source2 = 
-            {
-                url: Routing.generate('fullcalendar_loader')+'?sucursal='+sucursal+'&user='+user+'&hoyFiltro='+hoyFiltro,
-                type: 'POST',
-                data: {
-                    filtro: 1
-                },
-                error: function() {
-                    bootbox.alert('Se produjo un error al recuperar los datos del calendario, recargue la página!');
-                }
-
-            };
-            sources.push(source2);
-        calendario.fullCalendar('addEventSource', source2);
-        
-  	calendario.fullCalendar('removeEvents');    
-
-	
-	//calendario.fullCalendar('addEventSource', source2);
-  }
+  
   
   $(document).on('change','#filtroSucursales',function(){
         
@@ -131,6 +100,8 @@ $(document).ready(function() {
 
 {#    sucursal = $('#filtroSucursales').val();#}
     sucursal = $('#sucursal').val();
+    //fechaInicio= $('#fechaInicio').val();
+    //fechaFin= $('#fechaFin').val();
     var fecha=null;
     //$('#filtroSucursales').change();
     //alert(hoy);
@@ -172,6 +143,58 @@ $(document).ready(function() {
         selectable: true,
         selectHelper: true,
         slotEventOverlap:false,
+        viewDisplay: function (element) {
+            
+            {#console.log(element.start);
+            console.log(element.end);
+            console.log(element.name);#}
+            fechaInicio= element.start;
+            fechaFin= element.end;
+            {#console.log(fechaInicio);
+            console.log(fechaFin);#}
+            $('#fechaInicio').val(fechaInicio);
+            $('#fechaFin').val(fechaFin);
+            //$(this).fullCalendar('refetchEvents');
+            //setsource();
+            {#$(this).fullCalendar('removeEventSource',source);
+    $(this).fullCalendar('removeEventSource',source2);
+    $(this).fullCalendar('removeEventSource',source);
+//  	calendario.fullCalendar('removeEventSource',source2);
+//  	calendario.fullCalendar('removeEventSource',source2);
+    $(this).fullCalendar('removeEventSource');
+//	$('#calendar-holder').fullCalendar( 'removeEvents').fullCalendar('removeEventSources');
+	sucursal = $('#sucursal').val();
+        //alert(Routing.generate('fullcalendar_loader')+'?sucursal='+sucursal);
+        $(this).fullCalendar('removeEvents');
+        fechaInicio= $('#fechaInicio').val();
+        fechaFin= $('#fechaFin').val();
+        console.log(fechaInicio);
+        console.log(fechaFin);
+        for(j=0;j<sources.length;j++){
+            console.log(j);
+            $(this).fullCalendar('removeEventSource',sources[j]);
+            //sources.remove(j);
+        }
+        console.log(sources[0]);
+        var source2 = 
+            {
+                url: Routing.generate('fullcalendar_loader')+'?sucursal='+sucursal+'&hoyFiltro='+hoyFiltro+'&fechaInicio='+fechaInicio+'&fechaFin='+fechaFin+'&user='+user,
+                type: 'POST',
+                data: {
+                    filtro: 1
+                },
+                error: function() {
+                    bootbox.alert('Se produjo un error al recuperar los datos del calendario, recargue la página!');
+                }
+
+            };
+            sources.push(source2);
+        $('#calendar-holder').fullCalendar('addEventSource', source2);
+        $(this).fullCalendar('removeEventSource',source2);
+        $(this).fullCalendar('addEventSource', source2);
+        
+            $(this).fullCalendar('removeEvents');#}
+        },
         select: function( startDate, endDate, allDay, jsEvent, view ){
             var stdate = $.fullCalendar.formatDate(startDate,'dd-MM-yyyy');
             var stdate2 = $.fullCalendar.formatDate(startDate,'yyyy-MM-dd');
@@ -255,6 +278,18 @@ $(document).ready(function() {
             
             
         },
+            {#eventSources: [
+            {
+                url: Routing.generate('fullcalendar_loader')+'?sucursal='+sucursal+'&hoyFiltro='+hoyFiltro+'&fechaInicio='+$('#fechaInicio').val()+'&fechaFin='+$('#fechaFin').val()+'&user='+user,
+                type: 'POST',
+                data: {
+                    filtro: 1
+                },
+                error: function() {
+                    bootbox.alert('Se produjo un error al recuperar los datos del calendario, recargue la página!');
+                }
+            }
+        ],#}
         eventDrop: function( startDate, event, dayDelta, minuteDelta, allDay, revertFunc, jsEvent, ui, view ) { 
             var stdate = $.fullCalendar.formatDate(event.start,'dd-MM-yyyy');
             var endate = $.fullCalendar.formatDate(event.end,'dd-MM-yyyy');
@@ -266,6 +301,11 @@ $(document).ready(function() {
             //alert(date);
             //return false;
             var id=startDate.id;
+            if (typeof id === 'undefined') {
+                bootbox.alert("Este evento no puede ser reprogramado", function() {});
+                allDay();
+                return false;
+            }
             $.getJSON(Routing.generate('get_nuevaHora', { id: id, delta:dayDelta, fecha:date}), 
                 function(data) {
                     //alert(data.regs);
@@ -342,6 +382,9 @@ $(document).ready(function() {
             var starttm = $.fullCalendar.formatDate(event.start,'HH:mm');
             var endtm = $.fullCalendar.formatDate(event.end,'HH:mm');    
         },*/
+{#viewRender:function(view, element){
+            alert('prueba');
+        },#}
         eventClick: function ( startDate, endDate, event, jsEvent, view )  {
             var hoy = new Date();
             var hoyDate = new Date();
@@ -363,6 +406,9 @@ $(document).ready(function() {
             //alert(startDate.id);
             //alert("Información de la citra");
             //alert(hoyDate);
+            if (typeof startDate.id === 'undefined') {
+                return false;
+            }
             $.getJSON(Routing.generate('get_infoCita', { id: startDate.id}), 
                 function(data) {
                             //alert(data.regs[0].fechaCita["date"].toString());1
@@ -735,8 +781,8 @@ $(document).ready(function() {
                             mensaje += "</div>";
                             bootbox.alert(mensaje, function() {
                                 {#Example.show("Hello world callback");#}
-                                                    {#});
-                                  } #}
+                                                    {#}{#);
+                                                         #}
                             
                           //bootbox.alert(mensaje, function() {
                                 //Example.show("Hello world callback");
@@ -770,7 +816,7 @@ $(document).ready(function() {
             calendario.bind('dblclick', function() {
               alert('double click!');
             });
-            
+            //setsource();
         },
         
        
@@ -778,11 +824,52 @@ $(document).ready(function() {
         
     });//FIN DE LA CONFIGURACION DEL CALENDARIO
     calendario.fullCalendar('removeEventSource',source);
+    calendario.fullCalendar('removeEvents');
+    //$('#0').click();
                 setsource();
     
     
     
     
 });//FIN
+
+function setsource(){
+  //	calendario.fullCalendar('removeEventSource',source);
+//  	calendario.fullCalendar('removeEventSource',source2);
+  	calendario.fullCalendar('removeEventSource');
+//	$('#calendar-holder').fullCalendar( 'removeEvents').fullCalendar('removeEventSources');
+	sucursal = $('#sucursal').val();
+        //alert(Routing.generate('fullcalendar_loader')+'?sucursal='+sucursal);
+        calendario.fullCalendar('removeEvents');
+        fechaInicio= $('#fechaInicio').val();
+        fechaFin= $('#fechaFin').val();
+        console.log(fechaInicio);
+        console.log(fechaFin);
+        for(j=0;j<sources.length;j++){
+            console.log(j);
+            calendario.fullCalendar('removeEventSource',sources[j]);
+            //sources.remove(j);
+        }
+        console.log(sources[0]);
+        var source2 = 
+            {
+                url: Routing.generate('fullcalendar_loader')+'?sucursal='+sucursal+'&user='+user,
+                type: 'POST',
+                data: {
+                    filtro: 1
+                },
+                error: function() {
+                    bootbox.alert('Se produjo un error al recuperar los datos del calendario, recargue la página!');
+                }
+
+            };
+            sources.push(source2);
+        calendario.fullCalendar('addEventSource', source2);
+        
+  	calendario.fullCalendar('removeEvents');    
+
+	
+	//calendario.fullCalendar('addEventSource', source2);
+  }
 </script> 
 {% endblock %}

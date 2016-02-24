@@ -7,6 +7,7 @@
             color: #48CFAD;
         }
     </style>
+    <style ></style>
 {% endblock %}
 {% block contenido -%}
 
@@ -94,37 +95,39 @@
     <table id = "datatables1" class="table table-bordered table-hover display dt-responsive" style="margin-top: 30px">
         <thead>
             <tr>
-                <th>N°</th>  
-                <th>Paciente</th>
+{#                <th>N°</th>  #}
+                <th>ID</th>
+                <th>Nombres</th>
+                <th>Apellidos</th>
                 <th>DUI</th>
-               {# <th>Dirección</th> #}
                 <th>Teléfono</th>
                 <th>Email</th>
                 {#<th>Ocupación</th>#}
                 <th>Lugar de trabajo</th> 
-                <th>F. Nacimiento</th>
+                <th>Fecha de nacimiento</th>
+                <th>Detalle</th>
                 {#<th>Referido por</th>#}
                 
                 {#<th>Acciones</th>#}
             </tr>
         </thead>
-        <tbody>
+        {#<tbody>
          {% for key, entity in pacientes %}
                 <tr id="P{{entity.idpac}}">
              {# <td>{{ entity.idpac }}</td>  #}
-                <td>
+                {#<td>
                     {{key+1}}
                 </td> 
-                <td>
-                    {#<p class="detallePaciente">#}{{ entity.pnombre|upper }} {{ entity.papellido|upper }}{#</p>#}
-                    <i class="detallePaciente fa fa-info-circle pull-right"></i>
-                <td>{{ entity.dui }}</td>
+                <td>#}
+                    {#<p class="detallePaciente">{{ entity.pnombre|upper }} {{ entity.papellido|upper }}{#</p>#}
+                    {#<i class="detallePaciente fa fa-info-circle pull-right"></i>
+                <td>{{ entity.dui }}</td>#}
                 {#<td>{{ entity.direccion }}</td>#}
-                <td>{{ entity.tel}}</td>
+                {#<td>{{ entity.tel}}</td>
                 <td>{{ entity.email|lower }}</td>
                
                 {#<td>{{ entity.ocupacion }}</td>#}
-                <td>{{ entity.lugarTrabajo|upper }}</td>
+                {#<td>{{ entity.lugarTrabajo|upper }}</td>
                 <td>{% if entity.fechaNacimiento %}{{ entity.fechaNacimiento|date('d-m-Y') }}{% endif %}</td>
                 {#<td>{{ entity.referidoPor }}</td>#}
                 {#<td>{{ entity.personaEmergencia }}</td>
@@ -140,9 +143,9 @@
                     </li>
                 </ul>
                 </td>#}    
-            </tr>
+           {# </tr>
         {% endfor %}
-        </tbody>
+        </tbody>#}
     </table>
     </div><!-- /.panel -->    
        
@@ -165,7 +168,10 @@
        
   {% block javascripts_step %}
        <script src="{{ asset('Resources/js/Paciente.js') }}"></script>
-        
+       
+    
+    
+
         <script>
            
             $(document).ready(function(){
@@ -218,13 +224,14 @@
                 });
               #}
                 //Seleccionar un registro
-                $('#datatables1>tbody>tr,.detallePaciente').on('click', function(event) {
-                    idPaciente=$(this).attr("id");
+                $(document).on('click','#datatables1>tbody>tr,.infoPaciente', function(event) {
+                    idPaciente=$(this).children().html();
+                    
                     //alert($(this).prop("tagName"));
                     if($(this).prop("tagName")=="I"){
-                        idPaciente=$(this).parent().parent().attr("id");
+                        idPaciente=$(this).parent().parent().parent().children().html();
                         //alert(idPaciente);
-                        $.getJSON(Routing.generate('get_infopaciente', { id: idPaciente}), 
+                        $.getJSON(Routing.generate('get_infopaciente', { id: "P"+ idPaciente}), 
                         function(data) {
                             var mensaje = "";
                             mensaje += "<div class='container-fluid'>";
@@ -298,7 +305,7 @@
 
                         //alert(link);
                         //Carga del form modificar
-                        $("#editFormContainer").load(idPaciente+"/edit");
+                        $("#editFormContainer").load("P"+idPaciente+"/edit");
 
 
                         //var href=link.attr("href");
@@ -346,7 +353,7 @@
                 //Accion nueva cita
                 $(".opciones").click(function(){
                     //$("#edit-datatables1").click();
-                    var href = $(this).children("a").attr("href")+"?id="+idPaciente;
+                    var href = $(this).children("a").attr("href")+"?id=P"+idPaciente;
                     
                     if( !$(this).hasClass("disabled") ){
                         //$("#opcionesFormContainer").load(href);
@@ -393,10 +400,27 @@
 
                 });
                 
-                
+                //var long = $('datatables1_length').children().children().val();
                 $('#datatables1').DataTable({ 
-                    searching:true,
-                    "order":[[1,"asc"]],
+                    {#searching:true,
+                    order:[[1,"asc"]],#}
+                    "processing": true,
+                    "serverSide": true,
+                    "ajax": {
+                        "url": '{{path('admin_paciente_data')}}',
+                        "type": 'GET'
+                    },
+                    "columns": [
+                        { "data": "id" },   
+                        { "data": "nombres" },
+                        { "data": "apellidos" },
+                        { "data": "dui" },
+                        { "data": "telefono" },
+                        { "data": "email" },
+                        { "data": "lugarTrabajo" },
+                        { "data": "fechaNacimiento" },
+                        { "data": "link" }
+                    ],
                     "columnDefs": [
                            { "orderable": false, "targets": 0 },
                            { "orderable": false, "targets": 2 },

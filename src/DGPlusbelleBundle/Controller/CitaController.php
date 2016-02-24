@@ -58,7 +58,7 @@ class CitaController extends Controller
         
         /*$dql = "SELECT c from DGPlusbelleBundle:Cita c "
                 . "WHERE c.fechaCita <:hoy AND c.horaCita <:horaActual AND c.estado='P'";*/
-                                $dql = "SELECT c from DGPlusbelleBundle:Cita c "
+        $dql = "SELECT c from DGPlusbelleBundle:Cita c "
                 . "WHERE c.fechaCita <:hoy  OR (c.fechaCita =:hoy AND c.horaCita <:horaActual) AND c.estado='P'";
         $citaspasadas = $em->createQuery($dql)
                     ->setParameters(array('hoy'=>$hoy,'horaActual'=>$horaActual))
@@ -72,8 +72,9 @@ class CitaController extends Controller
         foreach($citaspasadas as $row){
             $row->setEstado('N');
             $em->persist($row);
-            $em->flush();
+            //$em->flush();
         }
+        $em->flush();
         
        
         return array(
@@ -543,7 +544,7 @@ class CitaController extends Controller
         //var_dump($empleado->getId());
         //$entityDuplicada = $em->getRepository('DGPlusbelleBundle:Cita')->findBy(array('empleado'=>$empleado->getId(),'horaInicio'=>$entity->getHoraInicio()));
         $horaInicial = $entity->getHoraCita();
-        //var_dump($dql);
+        
         $time = strtotime($fecha);
         //var_dump($entity->getFechaCita());
         $newformat = date('Y-m-d',$time);
@@ -580,6 +581,9 @@ class CitaController extends Controller
                     //var_dump(date('Y-m-d',$newformat));
                     $today_dt = $today_dt->format("Y-m-d");
                     $expire_dt = $newformat;
+                    //var_dump($fechaReprogramada);
+                    //var_dump($today_dt);
+                    
                     if ($fechaReprogramada < $today_dt) {
                         //var_dump($newformat);
                         //var_dump($expire_dt);
@@ -587,77 +591,39 @@ class CitaController extends Controller
                     }
                     else{
                         $var = date('H:i:s');
-	                if ($fechaReprogramada == $today_dt) {
-	              	    if($horaNueva>$var ){
-                        
-	                            if($entity->getEstado()=="P"){
-	                                $entity->setFechaCita(new \DateTime($newformat));
-	                                $em->persist($entity);
-	                                $em->flush();   
-	                                $exito['regs']=0; //Cita reprogramada con exito
-	                            }
-	                            else{
-	                                $exito['regs']=1;//Error, La cita tiene estado asistida o cancelada
-	                            }
-                        	}
-	                }
-	                else{
-	                	if($entity->getEstado()=="P"){
-                                $entity->setFechaCita(new \DateTime($newformat));
-                                $em->persist($entity);
-                                $em->flush();   
-                                $exito['regs']=0; //Cita reprogramada con exito
+                        if ($fechaReprogramada == $today_dt) {
+                            //echo "propbando3";
+                            //var_dump($var);
+                            //var_dump($horaNueva);
+                            if($horaNueva>$var ){
+                            //echo "probando";
+                                if($entity->getEstado()=="P"){
+                                    $entity->setFechaCita(new \DateTime($newformat));
+                                    $em->persist($entity);
+                                    $em->flush();   
+                                    $exito['regs']=0; //Cita reprogramada con exito
+                                }
+                                else{
+                                    $exito['regs']=1;//Error, La cita tiene estado asistida o cancelada
+                                }
                             }
                             else{
-                                $exito['regs']=1;//Error, La cita tiene estado asistida o cancelada
-                            }
-	                }
-	                 /*   
-                        $var = date('H:i:s');
-                        //var_dump($horaNueva);
-                        
-                        if($horaNueva>=$var ){
-                        
-                            if($entity->getEstado()=="P"){
-                                $entity->setFechaCita(new \DateTime($newformat));
-                                $em->persist($entity);
-                                $em->flush();   
-                                $exito['regs']=0; //Cita reprogramada con exito
-                            }
-                            else{
-                                $exito['regs']=1;//Error, La cita tiene estado asistida o cancelada
+                                $exito['regs']=3;
                             }
                         }
                         else{
-                            if($horaNueva>=$var ){
-                                $entity->setFechaCita(new \DateTime($newformat));
-                                $em->persist($entity);
-                                $em->flush();   
-                                $exito['regs']=0; //Cita reprogramada con exito
-                            }
-                            else{
-                                if ($fechaReprogramada > $today_dt) {
-                                
-	                                if($entity->getEstado()=="P"){
-	                                $entity->setFechaCita(new \DateTime($newformat));
-	                                $em->persist($entity);
-	                                $em->flush();   
-	                                $exito['regs']=0; //Cita reprogramada con exito
-	                            }
-	                            else{
-	                                $exito['regs']=1;//Error, La cita tiene estado asistida o cancelada
-	                            }
-                                     $entity->setFechaCita(new \DateTime($newformat));
-                                     $em->persist($entity);
-                                     $em->flush();   
-                                     $exito['regs']=0; //Cita reprogramada con exito
+                            //echo "propbando2";
+                            if($entity->getEstado()=="P"){
+                                    $entity->setFechaCita(new \DateTime($newformat));
+                                    $em->persist($entity);
+                                    $em->flush();   
+                                    $exito['regs']=0; //Cita reprogramada con exito
                                 }
                                 else{
-                                    $exito['regs']=4;//Error, la hora es antes de la actual
+                                    $exito['regs']=1;//Error, La cita tiene estado asistida o cancelada
                                 }
-                            }
-                            
-                        }*/
+                        }
+	                 
                         
                     }
                 }
