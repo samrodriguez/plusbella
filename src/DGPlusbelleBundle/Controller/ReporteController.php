@@ -1031,9 +1031,11 @@ class ReporteController extends Controller
         
         $listadoP = array();
         
-        $dqlpac="SELECT p.id, per.nombres, per.apellidos, c.costoConsulta, c.fechaConsulta, s.nombre FROM DGPlusbelleBundle:Consulta c "
+        $dqlpac="SELECT p.id, per.nombres, per.apellidos, emp.nombres nemp, emp.apellidos napel, c.costoConsulta, c.fechaConsulta, s.nombre FROM DGPlusbelleBundle:Consulta c "
                 . "JOIN c.paciente p "
                 . "JOIN p.persona per "
+                . "JOIN c.empleado e "
+                . "JOIN e.persona emp "
                 . "JOIN c.sucursal s "
                 . "WHERE c.fechaConsulta BETWEEN :fechainicio AND :fechafin ORDER BY per.nombres ASC";
         
@@ -1050,6 +1052,8 @@ class ReporteController extends Controller
                     "nombres"=>$row['nombres'],
                     "apellidos"=>$row['apellidos'],
                     "tipocosto"=>"Consulta",
+                    "nempleado"=>$row['nemp'],
+                    "aempleado"=>$row['napel'],
                     "sucursal"=>$row['nombre'],
                     "costo"=>$row['costoConsulta'],
                     "fechatransaccion"=>$row['fechaConsulta']
@@ -1067,11 +1071,13 @@ class ReporteController extends Controller
         
         
         
-        $dqlpac="SELECT p.id, per.nombres, per.apellidos, a.monto, a.fechaAbono, s.nombre FROM DGPlusbelleBundle:Abono a "
+        $dqlpac="SELECT p.id, per1.nombres, per1.apellidos, per2.nombres nemp, per2.apellidos napel, a.monto, a.fechaAbono, s.nombre FROM DGPlusbelleBundle:Abono a "
                 . "JOIN a.paciente p "
-                . "JOIN p.persona per "
+                . "JOIN p.persona per1 "
+                . "JOIN a.empleado e "
+                . "JOIN e.persona per2 "
                 . "JOIN a.sucursal s "
-                . "WHERE a.fechaAbono BETWEEN :fechainicio AND :fechafin ORDER BY per.nombres ASC";
+                . "WHERE a.fechaAbono BETWEEN :fechainicio AND :fechafin ORDER BY per1.nombres ASC";
         $listadoabono = $em->createQuery($dqlpac)
                        ->setParameters(array('fechainicio'=>$anioInicioUser,'fechafin'=>$anioFinUser))
                        //->setParameter('mes','_____0'.'1'.'___')
@@ -1083,6 +1089,8 @@ class ReporteController extends Controller
                     "nombres"=>$row['nombres'],
                     "apellidos"=>$row['apellidos'],
                     "tipocosto"=>"Abono",
+                    "nempleado"=>$row['nemp'],
+                    "aempleado"=>$row['napel'],
                     "sucursal"=>$row['nombre'],
                     "costo"=>$row['monto'],
                     "fechatransaccion"=>$row['fechaAbono']
@@ -1098,8 +1106,9 @@ class ReporteController extends Controller
         
         
         
-        $dqlpac="SELECT pac.id, per.nombres, per.apellidos, paq.costo*(1-(d.porcentaje/100)) as costo,vp.fechaVenta,s.nombre FROM DGPlusbelleBundle:VentaPaquete vp "
+        $dqlpac="SELECT pac.id, per.nombres, per.apellidos, emp.nombres nemp, emp.apellidos napel, paq.costo*(1-(d.porcentaje/100)) as costo,vp.fechaVenta,s.nombre FROM DGPlusbelleBundle:VentaPaquete vp "
                 . "JOIN vp.paciente per "
+                . "JOIN vp.empleado emp "
                 . "JOIN per.paciente pac "
                 . "JOIN vp.paquete paq "
                 . "JOIN vp.sucursal s "
@@ -1116,6 +1125,8 @@ class ReporteController extends Controller
                     "nombres"=>$row['nombres'],
                     "apellidos"=>$row['apellidos'],
                     "tipocosto"=>"Venta paquete",
+                    "nempleado"=>$row['nemp'],
+                    "aempleado"=>$row['napel'],
                     "sucursal"=>$row['nombre'],
                     "costo"=>$row['costo'],
                     "fechatransaccion"=>$row['fechaVenta']
@@ -1131,9 +1142,10 @@ class ReporteController extends Controller
         
         
         
-        $dqlpac="SELECT pac.id, per.nombres, per.apellidos, pt.costoConsulta*(1-(d.porcentaje/100)) as costo, pt.fechaVenta, s.nombre FROM DGPlusbelleBundle:PersonaTratamiento pt "
+        $dqlpac="SELECT pac.id, per.nombres, per.apellidos, emp.nombres nemp, emp.apellidos napel, pt.costoConsulta*(1-(d.porcentaje/100)) as costo, pt.fechaVenta, s.nombre FROM DGPlusbelleBundle:PersonaTratamiento pt "
                 . "JOIN pt.paciente per "
                 . "JOIN per.paciente pac "
+                . "JOIN pt.empleado emp "
                 . "JOIN pt.tratamiento t "
                 . "JOIN pt.sucursal s "
                 . "JOIN pt.descuento d "
@@ -1149,6 +1161,8 @@ class ReporteController extends Controller
                     "nombres"=>$row['nombres'],
                     "apellidos"=>$row['apellidos'],
                     "tipocosto"=>"Venta tratamiento",
+                    "nempleado"=>$row['nemp'],
+                    "aempleado"=>$row['napel'],
                     "sucursal"=>$row['nombre'],
                     "costo"=>$row['costo'],
                     "fechatransaccion"=>$row['fechaVenta']
