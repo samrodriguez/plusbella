@@ -947,6 +947,7 @@ class ConsultaController extends Controller
         //Recuperación del id
         $request = $this->getRequest();
         $idPacient= $request->get('id');  
+        //var_dump($idPacient);
         $idPaciente=  substr($idPacient, 1);
         $consultas = $em->getRepository('DGPlusbelleBundle:Consulta')->findBy(array('paciente'=>$idPaciente));
         $paciente = $em->getRepository('DGPlusbelleBundle:Paciente')->find($idPaciente);
