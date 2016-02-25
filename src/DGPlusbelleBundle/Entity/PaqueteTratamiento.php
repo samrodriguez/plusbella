@@ -31,7 +31,7 @@ class PaqueteTratamiento {
     /**
      * @var \Paquete
      *
-     * @ORM\ManyToOne(targetEntity="Paquete")
+     * @ORM\ManyToOne(targetEntity="Paquete",inversedBy="placas", cascade={"persist", "remove"})
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="paquete", referencedColumnName="id")
      * })
@@ -41,7 +41,7 @@ class PaqueteTratamiento {
     /**
      * @var \Tratamiento
      *
-     * @ORM\ManyToOne(targetEntity="Tratamiento", inversedBy="placas", cascade={"persist", "remove"})
+     * @ORM\ManyToOne(targetEntity="Tratamiento", inversedBy="paquetetratamiento", cascade={"persist", "remove"})
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="tratamiento", referencedColumnName="id")
      * })

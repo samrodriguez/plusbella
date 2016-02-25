@@ -1,6 +1,92 @@
 <div class="row" style="margin-top:20px">
+    
+    
+    
+    
+    
 {% for key, empleado in empleados %}
-    <div class="col-md-6">
+    
+    <div class="col-md-4 col-sm-6 mb-4x">
+        <div class="help-block text-center">
+            {% if empleado.porcentaje==100%}
+            <div style="width: 180px; height: 180px; line-height: 180px;" class="easyPieChart" data-percent="{{empleado.porcentaje|number_format(2, '.', ',')}}" data-size="180" data-rotate="90" data-line-width="16" data-scale-color="false" data-track-color="transparent" data-bar-color="#48CFAD">
+                <span class="badge right">
+                    <span class="fa-stack fa-3x">
+                        <span class="fa-stack-2x text-teal"></span>
+                        <i class="fa-stack-1x" style="color: #EA92C3">
+                            <img style="position: absolute;margin-top:5px;margin-right:30px ;border-radius: 100px;width:20px;" class="fa-stack-1x" src="{{ asset('Photos/Empleado/') }}{{empleado.foto}}">
+                        </i>
+                    </span>
+                </span>
+                <span class="percentage fa-2x">
+                    <span class="data-percent">{#{{empleado.porcentaje}}#}</span>%
+                </span>
+                <canvas width="180" height="180"></canvas>
+            </div>
+                
+            {% else %}
+            <div style="width: 180px; height: 180px; line-height: 180px;" class="easyPieChart" data-percent="{{empleado.porcentaje|number_format(2, '.', ',')}}" data-size="180" data-rotate="90" data-line-width="16" data-scale-color="false" data-track-color="transparent" data-bar-color="#ED5565">
+                <span class="badge right">
+                  <span class="fa-stack fa-3x">
+                    <span class="fa-stack-2x text-violet"></span>
+                        <i class="fa-stack-1x" style="color: #EA92C3">
+                            <img style="position: absolute;margin-top:5px;margin-right:30px ;border-radius: 100px;width:50px;" class="fa-stack-1x" src="{{ asset('Photos/Empleado/') }}{{empleado.foto}}">
+                        </i>
+                    </span>
+                </span>
+                <span class="percentage fa-2x">
+                    <span class="data-percent">{#{{empleado.porcentaje}}#}</span>%
+                </span>
+                <canvas width="180" height="180"></canvas>
+            </div>
+            {% endif %}
+        </div>
+        <div class="help-block pr-2x pl-2x">
+            <div class="col-md-1"></div>
+                    <div class="col-md-5">
+                        <p>Total vendido: </p>
+                        <p>Comision:</p>
+                        <p>Meta:</p>
+                        <p>Bono de meta:</p>
+                        <p>Porcentaje:</p>
+                    </div>
+                    <div class="col-md-4" style="margin-left:10px; text-align: right;">
+                        {#{% if empleado.suma  != null%}#}
+                        
+                            <p>$ {{empleado.suma|number_format(2, '.', ',')}} </p>
+                            <p>$ {{empleado.comision|number_format(2, '.', ',')}} </p>
+                            <p>$ {{empleado.meta|number_format(2, '.', ',')}} </p>
+                            <p>{{empleado.bono}}</p>
+                            <p>{{empleado.por|number_format(2, '.', ',')}} %</p>
+                        {#{% else %}#}
+                            {#<p> No hay ventas en el mes</p>
+                            <p>$ {{empleado.comision|number_format(2, '.', ',')}} </p>
+                            <p>{{empleado.bono}}</p>
+                            <p>{{empleado.por|number_format(2, '.', ',')}} %</p>#}
+                        {#{% endif %}#}
+                    </div>
+                    <div class="col-md-1"></div>
+        </div>
+    </div>
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+    {#<div class="col-md-6">
         <div data-init-panel="true" class="panel bg-grd-dark text-light fade in panel-default panel-fill" data-fill-color="true">
             <div class="panel-body">
               <div class="pull-left mr-2x">
@@ -27,25 +113,49 @@
                     </div>
                     <div class="col-md-4" style="margin-left:10px; text-align: right;">
                         {#{% if empleado.suma  != null%}#}
-                            <p>$ {{empleado.suma|number_format(2, '.', ',')}} </p>
+                            {#<p>$ {{empleado.suma|number_format(2, '.', ',')}} </p>
                             <p>$ {{empleado.comision|number_format(2, '.', ',')}} </p>
                             <p>$ {{empleado.meta|number_format(2, '.', ',')}} </p>
                             <p>{{empleado.bono}}</p>
-                            <p>{{empleado.por|number_format(2, '.', ',')}} %</p>
+                            <p>{{empleado.por|number_format(2, '.', ',')}} %</p>#}
                         {#{% else %}#}
                             {#<p> No hay ventas en el mes</p>
                             <p>$ {{empleado.comision|number_format(2, '.', ',')}} </p>
                             <p>{{empleado.bono}}</p>
                             <p>{{empleado.por|number_format(2, '.', ',')}} %</p>#}
                         {#{% endif %}#}
-                    </div>
+                    {#</div>
                     <div class="col-md-1"></div>
                 </div>
             </div><!-- /.panel-body -->
 
         </div>
-    </div>
+    </div>#}
   
 
 {% endfor %}
  </div>
+ 
+ 
+ {% block javascripts_step %}
+        
+    <script type="text/javascript" src="{{ asset('Resources/zebra/inicializacioncalendarios.js')}}" ></script>
+    <script type="text/javascript" src="{{ asset('Resources/wrapkit/scripts/jquery.easypiechart.js')}}"></script>
+    <script type="text/javascript" src="{{ asset('Resources/wrapkit/scripts/demo/chart-inline-demo.js')}}"></script>
+    <script>
+        $(document).ready(function(){
+            var fecha = $('#fecha').val();
+            var datepickerInicio = $('#fecha').data('Zebra_DatePicker');
+            datepickerInicio.update({
+                format: 'm-Y',
+                onSelect: function(){
+                    $('#contenedorEmpleados').html('');
+                    fecha = $('#fecha').val();
+                    var url = "{{ path('admin_empleado_progreso_venta_ajax') }}";
+                    url+="?fecha="+fecha;
+                    $('#contenedorEmpleados').load(url);        
+                }
+            });  
+        });//Fin document ready
+    </script>
+    {% endblock %}

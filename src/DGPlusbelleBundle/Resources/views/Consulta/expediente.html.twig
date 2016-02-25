@@ -92,7 +92,7 @@
     <table id = "datatables1" class="table table-bordered table-hover display dt-responsive" style="margin-top: 30px">
         <thead>
             <tr>
-                <th>N°</th>  
+{#                <th>N°</th>  #}
                 <th>Expediente</th>
                 <th>Paciente</th>
                 {#<th>DUI</th>#}
@@ -111,9 +111,9 @@
          {% for key, entity in pacientes %}
                 <tr id="P{{entity.id}}">
              {# <td>{{ entity.idpac }}</td>  #}
-                <td>
+                {#<td>
                     {{key+1}}
-                </td> 
+                </td> #}
                 <td>
                     {{ entity.numero }}
 
@@ -408,8 +408,8 @@
                     searching:true,
                     "order":[[1,"asc"]],
                     "columnDefs": [
-                           { "orderable": false, "targets": 0 },
-                           { "orderable": false, "targets": 2 }
+{#                           { "orderable": false, "targets": 0 },#}
+                           { "orderable": false, "targets": 1 }
                            
                     ],
                     "language": {

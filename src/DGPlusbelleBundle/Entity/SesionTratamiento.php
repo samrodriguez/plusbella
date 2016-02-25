@@ -47,7 +47,7 @@ class SesionTratamiento {
     /**
      * @var \VentaPaquete
      *
-     * @ORM\ManyToOne(targetEntity="VentaPaquete", inversedBy="sesion_tratamiento", cascade={"persist", "remove"})
+     * @ORM\ManyToOne(targetEntity="VentaPaquete", inversedBy="ventapaq", cascade={"persist", "remove"})
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="venta_paquete", referencedColumnName="id")
      * })
