@@ -1,6 +1,10 @@
 
  function validarCierre(){
-$('.fechaCierre').
+     
+$('.busquedaEmp').
+  attr('data-bvalidator', 'required,required');
+  
+$('.fecha1').
   attr('data-bvalidator', 'required,required');
   
 $('.motivoCierre').

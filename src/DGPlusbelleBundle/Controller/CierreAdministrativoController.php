@@ -169,7 +169,7 @@ class CierreAdministrativoController extends Controller
             'method' => 'PUT',
         ));
 
-        $form->add('submit', 'submit', array('label' => 'Update'));
+        $form->add('submit', 'submit', array('label' => 'Editar','attr'=>array('class'=> 'btn btn-success btn-sm btn')));
 
         return $form;
     }

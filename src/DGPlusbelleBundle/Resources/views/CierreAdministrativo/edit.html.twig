@@ -1,16 +1,88 @@
-{% extends '::base.html.twig' %}
 
-{% block body -%}
-    <h1>CierreAdministrativo edit</h1>
 
-    {{ form(edit_form) }}
 
-        <ul class="record_actions">
-    <li>
-        <a href="{{ path('admin_cierreadministrativo') }}">
-            Back to the list
-        </a>
-    </li>
-    <li>{{ form(delete_form) }}</li>
-</ul>
+
+
+{% block contenido -%}
+<div class="panel panel-default">
+  <!-- Default panel contents -->
+<div class="panel-heading"><p>Editar cierre administrativo</p></div>
+<div class="panel-body">
+
+    {{ form_start(edit_form) }}
+    {{ form_errors(edit_form) }}
+        
+        <div class="col-md-3" style="margin-bottom:20px;">
+            {{ form_widget(edit_form.empleado) }}   
+        </div>
+        
+        <div class="clearfix"></div>
+        <div class="col-md-2">
+            {{ form_row(edit_form.fecha) }}
+        </div>
+        <div class="col-md-2">
+            {{ form_row(edit_form.horaInicio) }}
+        </div>
+        <div class="col-md-2">
+            {{ form_row(edit_form.horaFin) }}
+        </div>
+        <div class="col-md-6">
+            {{ form_row(edit_form.motivo) }}
+        </div>
+         
+        {#{{ form_row(form.estado) }}#}
+  
+ 
+    
+        <div class="form-grouphide col-sm-9">
+            <a href="{{ path('admin_cierreadministrativo') }}" class="btn btn-default  btn-sm" id="cancelarNuevo">Cancelar</a>
+            {{ form_widget(edit_form.submit) }}
+        </div>
+   
+    {{ form_end(edit_form) }}
+    </div>
+</div>    
+    
 {% endblock %}
+
+
+
+
+{% block jquery %}
+    <script src="{{ asset('Resources/js/CAdministrativo.js') }}"></script>
+ <script>    
+         
+    $(document).ready(function(){
+       //Accion cancelar del boton modificar
+        $("#cancelarModificar").click(function(){
+            $("#edit-datatables1").click();
+            return false;
+        });
+        
+        $('.fecha1').Zebra_DatePicker({
+            months:['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
+            days: ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'],
+            format: 'd-m-Y',
+            direction:true,
+            show_clear_date:false,
+            show_select_today: "Hoy",
+        });
+        
+         // validando campos  
+
+        
+         
+         
+    });
+</script>
+{% endblock %}
+            
+    
+    
+    
+
+
+
+
+
+

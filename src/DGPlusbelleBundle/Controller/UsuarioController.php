@@ -316,6 +316,7 @@ class UsuarioController extends Controller
         }
         
         
+        $usuarioOriginal = $entity->getUsername();
         
         
 
@@ -343,12 +344,14 @@ class UsuarioController extends Controller
         $entity->setPersona($persona);
         //$entity->setEstado($estado);
         
-        var_dump($salt);
+        //var_dump($salt);
         $editForm->handleRequest($request);
 
         if($entity->getPassword()==""){
             $entity->setPassword($passOriginal);
         }
+        
+        $entity->setUsername($usuarioOriginal);
         
         if ($editForm->isValid()) {
             if ($current_pass != $entity->getPassword()) {
@@ -356,7 +359,7 @@ class UsuarioController extends Controller
             }
             $em->flush();
 
-            return $this->redirect($this->generateUrl('admin_usuario'));
+            return $this->redirect($this->generateUrl('admin_cita'));
         }
 
         return array(

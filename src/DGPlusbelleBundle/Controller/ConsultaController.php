@@ -293,7 +293,7 @@ class ConsultaController extends Controller
             
             $plantillaid = $parameters['dgplusbellebundle_consulta']['plantilla'];
             $recetaid = $parameters['dgplusbellebundle_consulta']['sesiontratamiento'];
-            var_dump($parameters);
+            //var_dump($parameters);
             //die();
             $dql = "SELECT det.id, det.nombre "
                     . "FROM DGPlusbelleBundle:DetallePlantilla det "

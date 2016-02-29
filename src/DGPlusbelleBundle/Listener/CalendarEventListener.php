@@ -185,15 +185,15 @@ class CalendarEventListener
                 //var_dump($index);
                 $eventEntity->setId($companyEvent->getID());
 //                $title = strtoupper($expNumero).' - '.$companyEvent->getPaciente()->getPersona()->getNombres().' '.$companyEvent->getPaciente()->getPersona()->getApellidos();
-		$title = strtoupper($expNumero).' - '.$companyEvent->getPaciente()->getPersona()->getNombres().' '.$companyEvent->getPaciente()->getPersona()->getApellidos().' | '.$doctor.' | '.$horaFin;
+		$title = strtoupper($expNumero).' - '.strtoupper($companyEvent->getPaciente()->getPersona()->getNombres().' '.$companyEvent->getPaciente()->getPersona()->getApellidos()).' | '.$doctor.' | '.$horaFin;
                 //var_dump($expNumero);
             }
             else{
                 $eventEntity->setId($companyEvent->getID());
-                $idPaciente = "Reserva de cita";
+                $idPaciente = strtoupper("Reserva de cita");
                 $expNumero ="";
 //                $title = $idPaciente.$expNumero;
-                $title = $idPaciente.$expNumero.' | '.$doctor.' | '.$horaFin;
+                $title = $idPaciente.$expNumero.' | '.strtoupper($doctor).' | '.$horaFin;
             }
             //var_dump($idPaciente);
             //$expediente = $this->em->getRepository('DGPlusbelleBundle:Expediente')->findBy(array('paciente'=>$idPaciente));

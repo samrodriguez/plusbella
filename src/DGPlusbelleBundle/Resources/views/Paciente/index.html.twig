@@ -8,7 +8,7 @@
         }
     </style>
     
-{#        <link rel="stylesheet" href="https://cdn.datatables.net/1.10.11/css/jquery.dataTables.min.css" />#}
+        <link rel="stylesheet" href="{{asset('Resources/datatables/serversideprocessing.css')}}" />
     
 {% endblock %}
 {% block contenido -%}
@@ -99,13 +99,15 @@
             <tr>
 {#                <th>N°</th>  #}
                 <th>ID</th>
+                <th>Expediente</th>
+                
                 <th>Nombres</th>
                 <th>Apellidos</th>
-                <th>DUI</th>
+                {#<th>DUI</th>
                 <th>Teléfono</th>
-                <th>Email</th>
+                <th>Email</th>#}
                 {#<th>Ocupación</th>#}
-                <th>Lugar de trabajo</th> 
+                {#<th>Lugar de trabajo</th> #}
                 <th>Fecha de nacimiento</th>
                 <th>Detalle</th>
                 {#<th>Referido por</th>#}
@@ -414,12 +416,14 @@
                     },
                     "columns": [
                         { "data": "id" },   
+                        { "data": "expediente" },                       
+
                         { "data": "nombres" },
                         { "data": "apellidos" },
-                        { "data": "dui" },
-                        { "data": "telefono" },
-                        { "data": "email" },
-                        { "data": "lugarTrabajo" },
+                        {#{ "data": "dui" },#}
+{#                        { "data": "telefono" },#}
+                        {#{ "data": "email" },
+                        { "data": "lugarTrabajo" },#}
                         { "data": "fechaNacimiento" },
                         { "data": "link" }
                     ],
@@ -427,9 +431,9 @@
                            { "orderable": false, "targets": 0 },
                            { "orderable": false, "targets": 2 },
                            { "orderable": false, "targets": 3 },
-                           { "orderable": false, "targets": 4 },
-                           { "orderable": false, "targets": 5 },
-                           { "orderable": false, "targets": 6 }
+                           { "orderable": false, "targets": 4 }
+                           {#{ "orderable": false, "targets": 5 },
+                           { "orderable": false, "targets": 6 }#}
                            
                            
                            //{ "orderData": [ 2, 3, 4 ], "targets": 2 }
