@@ -42,6 +42,7 @@ var hoyFiltro = new Date();
 //alert(hoyFiltro);
 var user=0;
 var i=0;
+var paciente="";
 var sources=new Array();
 var source = 
     {
@@ -69,7 +70,15 @@ var source =
     };
   */  
   
-  
+  function tog(v){return v?'addClass':'removeClass';} 
+    $(document).on('input', '.clearable', function(){
+        $(this)[tog(this.value)]('x');
+    }).on('mousemove', '.x', function( e ){
+        $(this)[tog(this.offsetWidth-18 < e.clientX-this.getBoundingClientRect().left)]('onX');
+    }).on('touchstart click', '.onX', function( ev ){
+        ev.preventDefault();
+        $(this).removeClass('x onX').val('').change();
+    });
   
   $(document).on('change','#filtroSucursales',function(){
         
@@ -95,9 +104,29 @@ $(document).ready(function() {
     Date.prototype.timeNow = function () {
          return ((this.getHours() < 10)?"0":"") + this.getHours() +":"+ ((this.getMinutes() < 10)?"0":"") + this.getMinutes()/* +":"+ ((this.getSeconds() < 10)?"0":"") + this.getSeconds()*/;
     }
-    
-    //var horaInicial=null;
+    $("#nombrePaciente").tooltip({
+ 
+        // place tooltip on the right edge
+        position: "center right",
 
+        // a little tweaking of the position
+        offset: [-2, 10],
+
+        // use the built-in fadeIn/fadeOut effect
+        effect: "fade",
+
+        // custom opacity setting
+        opacity: 0.7
+ 
+    });
+    //var horaInicial=null;
+    $(document).on('click','#botonBuscar', function(event){
+        {#if($(this).val()==''){
+            //paciente = $(this).val();
+            setsource();
+        }#}
+        setsource();
+    });
 {#    sucursal = $('#filtroSucursales').val();#}
     sucursal = $('#sucursal').val();
     //fechaInicio= $('#fechaInicio').val();
@@ -839,10 +868,13 @@ function setsource(){
   	calendario.fullCalendar('removeEventSource');
 //	$('#calendar-holder').fullCalendar( 'removeEvents').fullCalendar('removeEventSources');
 	sucursal = $('#sucursal').val();
+        
+        //paciente = $('#nombrePaciente').val();
         //alert(Routing.generate('fullcalendar_loader')+'?sucursal='+sucursal);
         calendario.fullCalendar('removeEvents');
         fechaInicio= $('#fechaInicio').val();
         fechaFin= $('#fechaFin').val();
+        paciente=$('#nombrePaciente').val();
         console.log(fechaInicio);
         console.log(fechaFin);
         for(j=0;j<sources.length;j++){
@@ -853,7 +885,7 @@ function setsource(){
         console.log(sources[0]);
         var source2 = 
             {
-                url: Routing.generate('fullcalendar_loader')+'?sucursal='+sucursal+'&user='+user,
+                url: Routing.generate('fullcalendar_loader')+'?sucursal='+sucursal+'&user='+user+'&paciente='+paciente,
                 type: 'POST',
                 data: {
                     filtro: 1
@@ -863,7 +895,7 @@ function setsource(){
                 }
 
             };
-            sources.push(source2);
+        sources.push(source2);
         calendario.fullCalendar('addEventSource', source2);
         
   	calendario.fullCalendar('removeEvents');    
