@@ -1,0 +1,59 @@
+{% extends '::base.html.twig' %}
+
+{% block body -%}
+    <h1>ComposicionCorporal list</h1>
+
+    <table class="records_list">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Peso</th>
+                <th>Grasacorporal</th>
+                <th>Aguacorporal</th>
+                <th>Fecha</th>
+                <th>Masamusculo</th>
+                <th>Valoracionfisica</th>
+                <th>Edadmetabolica</th>
+                <th>Dcibmr</th>
+                <th>Masaosea</th>
+                <th>Grasavisceral</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for entity in entities %}
+            <tr>
+                <td><a href="{{ path('admin_composicioncorporal_show', { 'id': entity.id }) }}">{{ entity.id }}</a></td>
+                <td>{{ entity.peso }}</td>
+                <td>{{ entity.grasaCorporal }}</td>
+                <td>{{ entity.aguaCorporal }}</td>
+                <td>{% if entity.fecha %}{{ entity.fecha|date('Y-m-d H:i:s') }}{% endif %}</td>
+                <td>{{ entity.masaMusculo }}</td>
+                <td>{{ entity.valoracionFisica }}</td>
+                <td>{{ entity.edadMetabolica }}</td>
+                <td>{{ entity.dciBmr }}</td>
+                <td>{{ entity.masaOsea }}</td>
+                <td>{{ entity.grasaVisceral }}</td>
+                <td>
+                <ul>
+                    <li>
+                        <a href="{{ path('admin_composicioncorporal_show', { 'id': entity.id }) }}">show</a>
+                    </li>
+                    <li>
+                        <a href="{{ path('admin_composicioncorporal_edit', { 'id': entity.id }) }}">edit</a>
+                    </li>
+                </ul>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+        <ul>
+        <li>
+            <a href="{{ path('admin_composicioncorporal_new') }}">
+                Create a new entry
+            </a>
+        </li>
+    </ul>
+    {% endblock %}

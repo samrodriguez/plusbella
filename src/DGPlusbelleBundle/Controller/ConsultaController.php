@@ -123,7 +123,7 @@ class ConsultaController extends Controller
         $em = $this->getDoctrine()->getManager();
         //Obtiene el usuario
         $id= $request->get('id');
-        
+        $flag = 0;
         $cadena= $request->get('identidad');
         
         //Obtener del parametro el valor que se debe usar para programar la consulta
@@ -164,9 +164,14 @@ class ConsultaController extends Controller
         //var_dump($this->tipo);
         
         
-        
-        
-        $form = $this->createCreateForm($entity,2,$idEntidad,$pac);
+        if($idpac == -1){
+            $flag = 1;
+            $pacient = new \DGPlusbelleBundle\Entity\Paciente();
+            $form = $this->createCreateForm($entity,3,$idEntidad,$pacient);
+        } else {
+            $form = $this->createCreateForm($entity,2,$idEntidad,$pac);
+        }
+            
         $form->handleRequest($request);
         
         //$campos = $form->get('campos')->getData();
@@ -258,12 +263,9 @@ class ConsultaController extends Controller
             $i=0;
             foreach($entity->getPlacas2() as $key => $row){
                 //var_dump($row);    
-                
-                
                 $imagenConsulta = new ImagenConsulta();
                 
                 if($row->getFile()!=null){
-                    
                     //echo "vc";
                     $fecha = date('Y-m-d His');
                     $extension = $row->getFile()->getClientOriginalExtension();
@@ -281,7 +283,6 @@ class ConsultaController extends Controller
                     $em->persist($row);
                     //$em->flush();
                     $i++;
-                
                 }
                 //var_dump($row->getFile());  
             }
@@ -291,94 +292,186 @@ class ConsultaController extends Controller
             $em->persist($entity);
             $em->flush();
             
-            $plantillaid = $parameters['dgplusbellebundle_consulta']['plantilla'];
-            $recetaid = $parameters['dgplusbellebundle_consulta']['sesiontratamiento'];
-            var_dump($parameters);
-            //die();
-            $dql = "SELECT det.id, det.nombre "
-                    . "FROM DGPlusbelleBundle:DetallePlantilla det "
-                    . "JOIN det.plantilla pla "
-                    . "WHERE pla.id =  :plantillaid";
-            
-            $parametros = $em->createQuery($dql)
-                        ->setParameter('plantillaid', $plantillaid)
-                        ->getResult();
-            
-            
-            $dql = "SELECT det.id, det.nombre "
-                    . "FROM DGPlusbelleBundle:DetallePlantilla det "
-                    . "JOIN det.plantilla pla "
-                    . "WHERE pla.id =  :plantillaid";
-            
-            $parametros2 = $em->createQuery($dql)
-                        ->setParameter('plantillaid', $recetaid)
-                        ->getResult();
-            
-            //$valores = array(); 
-            // var_dump($usuario); 
-            
-            foreach($parametros as $p){
-                $dataReporte = new HistorialConsulta;
-                $detalle = $em->getRepository('DGPlusbelleBundle:DetallePlantilla')->find($p['id']);
-                
-                $dataReporte->setDetallePlantilla($detalle);       
-                $dataReporte->setConsulta($entity);
-                $dataReporte->setConsultaReceta(null);
-                
-                $nparam = explode(" ", $p['nombre']);
-                //var_dump(count($nparam)); 
-                $lon = count($nparam);
-                if($lon > 1){
-                    $pnombre = $nparam[0];
-                    foreach($nparam as $key => $par){
-                        //var_dump($key);
-                        if($key +1 != $lon){
-                            //var_dump($lon);
-                            $pnombre .= '_'.$nparam[$key + 1];
+            if(isset($parameters['dgplusbellebundle_consulta']['plantilla'])){
+                $plantillaid = $parameters['dgplusbellebundle_consulta']['plantilla'];
+
+                //var_dump($parameters);
+                //die();
+                $dql = "SELECT det.id, det.nombre "
+                        . "FROM DGPlusbelleBundle:DetallePlantilla det "
+                        . "JOIN det.plantilla pla "
+                        . "WHERE pla.id =  :plantillaid";
+
+                $parametros = $em->createQuery($dql)
+                            ->setParameter('plantillaid', $plantillaid)
+                            ->getResult();
+
+
+                //$valores = array(); 
+                // var_dump($usuario); 
+
+                foreach($parametros as $p){
+                    $dataReporte = new HistorialConsulta;
+                    $detalle = $em->getRepository('DGPlusbelleBundle:DetallePlantilla')->find($p['id']);
+
+                    $dataReporte->setDetallePlantilla($detalle);       
+                    $dataReporte->setConsulta($entity);
+                    $dataReporte->setConsultaReceta(null);
+
+                    $nparam = explode(" ", $p['nombre']);
+                    //var_dump(count($nparam)); 
+                    $lon = count($nparam);
+                    if($lon > 1){
+                        $pnombre = $nparam[0];
+                        foreach($nparam as $key => $par){
+                            //var_dump($key);
+                            if($key +1 != $lon){
+                                //var_dump($lon);
+                                $pnombre .= '_'.$nparam[$key + 1];
+                            }
                         }
+                        $dataReporte->setValorDetalle($parameters[$pnombre]);
+                    } else {
+                        $dataReporte->setValorDetalle($parameters[$p['nombre']]);
                     }
-                    $dataReporte->setValorDetalle($parameters[$pnombre]);
-                } else {
-                    $dataReporte->setValorDetalle($parameters[$p['nombre']]);
-                }
-               //var_dump($p['nombre']); 
-                
-                
-                $em->persist($dataReporte);
-                $em->flush();
-            }   
-            
-            foreach($parametros2 as $p){
-                $dataReporte2 = new HistorialConsulta;
-                $detalle = $em->getRepository('DGPlusbelleBundle:DetallePlantilla')->find($p['id']);
-                
-                $dataReporte2->setDetallePlantilla($detalle);       
-                $dataReporte2->setConsulta(null);
-                $dataReporte2->setConsultaReceta($entity);
-                
-                $nparam = explode(" ", $p['nombre']);
-                //var_dump(count($nparam)); 
-                $lon = count($nparam);
-                if($lon > 1){
-                    $pnombre = $nparam[0];
-                    foreach($nparam as $key => $par){
-                        //var_dump($key);
-                        if($key +1 != $lon){
-                            //var_dump($lon);
-                            $pnombre .= '_'.$nparam[$key + 1];
-                        }
-                    }
-                    $dataReporte2->setValorDetalle($parameters[$pnombre."2"]);
-                } else {
-                    $dataReporte2->setValorDetalle($parameters[$p['nombre']."2"]);
-                }
-               //var_dump($p['nombre']); 
-                
-                
-                $em->persist($dataReporte2);
-                $em->flush();
+                   //var_dump($p['nombre']); 
+
+
+                    $em->persist($dataReporte);
+                    $em->flush();
+                }   
             }
+            else {
+                
+                $esteticaid = $parameters['dgplusbellebundle_consulta']['estetica'];
+
+
+                $dql = "SELECT det.id, det.nombre, opc.id opcid, opc.nombre opcnom "
+                        . "FROM DGPlusbelleBundle:OpcionesDetalleEstetica opc "
+                        . "JOIN opc.detalleEstetica det "
+                        . "JOIN det.estetica est "
+                        . "WHERE est.id =  :esteticaid";
+
+                $parametros = $em->createQuery($dql)
+                            ->setParameter('esteticaid', $esteticaid)
+                            ->getResult();
+
+
+                //$valores = array(); 
+                //var_dump($parameters); 
+                //die();
+                foreach($parametros as $p){
+                    $dataReporte = new \DGPlusbelleBundle\Entity\HistorialEstetica;
+                    
+                    $detalle = $em->getRepository('DGPlusbelleBundle:OpcionesDetalleEstetica')->find($p['opcid']);
+                    
+                    
+                    
+                    $dataReporte->setdetalleEstetica($detalle);       
+                    $dataReporte->setConsulta($entity);
+                    //$dataReporte->setConsultaReceta(null);
+                    //var_dump($p['opcnom']);
+                    $nparam = explode(" ", $p['opcnom']);
+                    //var_dump(count($nparam)); 
+                    $lon = count($nparam);
+                    if($lon > 1){
+                        $pnombre = $nparam[0];
+                        foreach($nparam as $key => $par){
+                            //var_dump($key);
+                            if($key +1 != $lon){
+                                //var_dump($lon);
+                                $pnombre .= '_'.$nparam[$key + 1];
+                            }
+                        }
+                        
+                        if(isset($parameters[$pnombre])){
+                            $dataReporte->setValor($pnombre);
+                            
+                            $em->persist($dataReporte);
+                            $em->flush();
+                        }    
+                    } else {
+                        if(isset($parameters[$p['opcnom']])){
+                            $dataReporte->setValor($p['opcnom']);
+                             //var_dump($parameters[$p['opcnom']]); 
+                             
+                            $em->persist($dataReporte);
+                            $em->flush();
+                        }
+                    }
+                
+//                    $em->persist($dataReporte);
+//                    $em->flush();
+                }
+                
+                if(isset($parameters['corporal'])){
+                    $compCorporal = new \DGPlusbelleBundle\Entity\ComposicionCorporal;
+                    $estetica = $em->getRepository('DGPlusbelleBundle:Estetica')->find($parameters['dgplusbellebundle_consulta']['estetica']);
+                    
+                    $compCorporal->setPeso($parameters['corporal']['peso']);
+                    $compCorporal->setGrasaCorporal($parameters['corporal']['grasa_corporal']);
+                    $compCorporal->setAguaCorporal($parameters['corporal']['agua_corporal']);
+                    $compCorporal->setMasaMusculo($parameters['corporal']['masa_musculo']);
+                    $compCorporal->setValoracionFisica($parameters['corporal']['valoracion_fisica']);
+                    $compCorporal->setEdadMetabolica($parameters['corporal']['edad_metabolica']);
+                    $compCorporal->setDciBmr($parameters['corporal']['dci_bmr']);
+                    $compCorporal->setMasaOsea($parameters['corporal']['masa_osea']);
+                    $compCorporal->setGrasaVisceral($parameters['corporal']['grasa_visceral']);
+                    $compCorporal->setFecha(new \DateTime('now'));
+                    $compCorporal->setConsulta($entity);
+                    $compCorporal->setEstetica($estetica);
+                    var_dump($parameters['corporal']['masa_osea']); 
+                    $em->persist($compCorporal);
+                    $em->flush();
+                    
+                    
+//                  die();
+                }    
+            }
+                
+            if(isset($parameters['dgplusbellebundle_consulta']['sesiontratamiento'])){
+                $recetaid = $parameters['dgplusbellebundle_consulta']['sesiontratamiento'];
             
+                $dql = "SELECT det.id, det.nombre "
+                        . "FROM DGPlusbelleBundle:DetallePlantilla det "
+                        . "JOIN det.plantilla pla "
+                        . "WHERE pla.id =  :plantillaid";
+
+                $parametros2 = $em->createQuery($dql)
+                            ->setParameter('plantillaid', $recetaid)
+                            ->getResult();
+            
+                foreach($parametros2 as $p){
+                    $dataReporte2 = new HistorialConsulta;
+                    $detalle = $em->getRepository('DGPlusbelleBundle:DetallePlantilla')->find($p['id']);
+
+                    $dataReporte2->setDetallePlantilla($detalle);       
+                    $dataReporte2->setConsulta(null);
+                    $dataReporte2->setConsultaReceta($entity);
+
+                    $nparam = explode(" ", $p['nombre']);
+                    //var_dump(count($nparam)); 
+                    $lon = count($nparam);
+                    if($lon > 1){
+                        $pnombre = $nparam[0];
+                        foreach($nparam as $key => $par){
+                            //var_dump($key);
+                            if($key +1 != $lon){
+                                //var_dump($lon);
+                                $pnombre .= '_'.$nparam[$key + 1];
+                            }
+                        }
+                        $dataReporte2->setValorDetalle($parameters[$pnombre."2"]);
+                    } else {
+                        $dataReporte2->setValorDetalle($parameters[$p['nombre']."2"]);
+                    }
+                   //var_dump($p['nombre']); 
+
+
+                    $em->persist($dataReporte2);
+                    $em->flush();
+                }
+            }
             //var_dump($dataReporte);
            //var_dump($entity->getId());
             //var_dump($parametros);
@@ -418,6 +511,7 @@ class ConsultaController extends Controller
         return array(
             'entity' => $entity,
             'form'   => $form->createView(),
+            'flag'   => $flag,
         );
     }
 
@@ -430,13 +524,13 @@ class ConsultaController extends Controller
      */
     private function createCreateForm(Consulta $entity,$tipo,$identidad, \DGPlusbelleBundle\Entity\Paciente $paciente)
     {
-        if($tipo==1){
+        if($tipo == 1){
             $form = $this->createForm(new ConsultaType(), $entity, array(
                 'action' => $this->generateUrl('admin_consulta_create', array('id' => 1,'identidad'=>$identidad, 'idpac'=>$paciente->getId())),
                 'method' => 'POST',
             ));
         }
-        else{
+        elseif($tipo == 2) {
             $form = $this->createForm(new ConsultaConPacienteType(), $entity, array(
                 'action' => $this->generateUrl('admin_consulta_create', array('id' => 2,'identidad'=>$identidad, $paciente, 'idpac'=>$paciente->getId())),
                 'method' => 'POST',
@@ -453,13 +547,76 @@ class ConsultaController extends Controller
                             ->where('pa.id = :pac')
                             ->setParameter(':pac', $paciente->getId());
                     }));
+            
+            $form->add('sesiontratamiento', 'entity', array('required'=>false,
+                    'label'         =>  'Nombre',
+                    'empty_value'=>'Seleccione una opcion',
+                    'class'         =>  'DGPlusbelleBundle:Plantilla',
+                    'query_builder' => function(EntityRepository $repository) {
+                return $repository->obtenerRecetasActivo();
+            },
+                    'mapped' => false
+                ));        
+                    
+            $form->add('registraReceta', 'choice', array(
+                    'label'=> 'Receta',
+                    'choices'  => array('1' => 'Sí', '0' => 'No'),
+                    'multiple' => false,
+                    'expanded'=>'true'
+                   
+                 
+                ));
+            
+            $form->add('reportePlantilla', 'choice', array(
+                    'label'=> 'Registro clínico',
+                    'choices'  => array('1' => 'Sí', '0' => 'No'),
+                    'multiple' => false,
+                    'expanded'=>'true'
+                   
+                 
+                ));
+            
+            $form->add('plantilla', 'entity', array('required'=>false,
+                    'label'         =>  'Historias clínicas',
+                    'empty_value'=>'Seleccione una opcion',
+                    'class'         =>  'DGPlusbelleBundle:Plantilla',
+                    'query_builder' => function(EntityRepository $repository) {
+                    return $repository->otrosDocActivo();
+                },
+                    'mapped' => false
+                ));
+        }
+        else {
+            $form = $this->createForm(new ConsultaConPacienteType(), $entity, array(
+                'action' => $this->generateUrl('admin_consulta_create', array('id' => 3,'identidad'=>$identidad, 'idpac'=>-1)),
+                'method' => 'POST',
+            ));
+
+            $form->add('reportePlantilla', 'choice', array(
+                    'label'=> 'Registro clínico',
+                    'choices'  => array('1' => 'Sí', '0' => 'No'),
+                    'multiple' => false,
+                    'expanded'=>'true'
+                   
+                 
+                ));
+            
+            $form->add('estetica', 'entity', array('required'=>false,
+                    'label'         =>  'Tipo de consulta de estetica',
+                    'empty_value'=>'Seleccione una opcion',
+                    'class'         =>  'DGPlusbelleBundle:Estetica',
+//                    'query_builder' => function(EntityRepository $repository) {
+//                    return $repository->otrosDocActivo();
+//                },
+                    'mapped' => false
+                ));
         }
         
-        
-
         $form->add('submit', 'submit', array('label' => 'Guardar',
-                                               'attr'=>
-                                                        array('class'=>'btn btn-success btn-sm')));
+                                             'attr'  => array(
+                                                     'class'=>'btn btn-success btn-sm'
+                                                    )
+                                            ));
 
         return $form;
     }
@@ -505,22 +662,33 @@ class ConsultaController extends Controller
         //Recuperación del paciente
         $request = $this->getRequest();
         $cadena= $request->get('id');
-        //Obtener el id del parametro
-        $idEntidad = substr($cadena, 1);
+        $flag = 0;
         
-        //$identidad= $request->get('identidad');
-        //Busqueda del paciente
-        $paciente = $em->getRepository('DGPlusbelleBundle:Paciente')->find($idEntidad);
-        
-        //Seteo del paciente en la entidad
-        $entity->setPaciente($paciente);
-        //var_dump($paciente);
-        $form   = $this->createCreateForm($entity,2,$cadena, $paciente);
-        $entity->setPaciente($paciente);
+        if($cadena != NULL) {
+            //Obtener el id del parametro
+            $idEntidad = substr($cadena, 1);
+
+            //$identidad= $request->get('identidad');
+            //Busqueda del paciente
+            $paciente = $em->getRepository('DGPlusbelleBundle:Paciente')->find($idEntidad);
+
+            //Seteo del paciente en la entidad
+            $entity->setPaciente($paciente);
+            //var_dump($paciente);
+            $form   = $this->createCreateForm($entity,2,$cadena, $paciente);
+            $entity->setPaciente($paciente);
+        } else {
+            $paciente = new \DGPlusbelleBundle\Entity\Paciente();
+            $form   = $this->createCreateForm($entity, 3, $cadena, $paciente);
+            $flag = 1;
+        }    
+            
         return array(
             'entity' => $entity,
             'form'   => $form->createView(),
+            'flag'   => $flag,
         );
+            
     }
     
     
@@ -1240,7 +1408,37 @@ class ConsultaController extends Controller
     }
     
     
-    
+    /**
+    * Ajax utilizado para buscar los parametros del reporte de una consulta de estetica
+    *  
+    * @Route("/buscarParametrosEstetica", name="admin_busqueda_parametros_estetica")
+    */
+    public function buscarParametrosEsteticaAction()
+    {
+        $isAjax = $this->get('Request')->isXMLhttpRequest();
+        if($isAjax){
+            $esteticaid = $this->get('request')->request->get('id');
+             
+            $em = $this->getDoctrine()->getManager();            
+            $dql = "SELECT est.id estetica, dest.id, dest.nombre "
+                    . "FROM DGPlusbelleBundle:DetalleEstetica dest "
+                    . "JOIN dest.estetica est "
+                    . "WHERE est.id =  :esteticaid";
+            
+            $parametros = $em->createQuery($dql)
+                        ->setParameter('esteticaid', $esteticaid)
+                        ->getResult();
+            
+            $response = new JsonResponse();
+            $response->setData(array(
+                                'query' => $parametros
+                            )); 
+            
+            return $response; 
+        } else {    
+            return new Response('0');              
+        }  
+    }
     
     
     /**
@@ -1276,7 +1474,37 @@ class ConsultaController extends Controller
     }
     
     
-    
+    /**
+    * Ajax utilizado para buscar los parametros del reporte de una plantilla de estetica
+    *  
+    * @Route("/buscaropcionesParametrosEstetica", name="admin_busqueda_opciones_estetica")
+    */
+    public function buscarpcionesParametrosEsteticaAction()
+    {
+        $isAjax = $this->get('Request')->isXMLhttpRequest();
+        if($isAjax){
+            $id = $this->get('request')->request->get('id');
+             
+            $em = $this->getDoctrine()->getManager();            
+            $dql = "SELECT opcdet.id opcion, opcdet.nombre, det.id "
+                    . "FROM DGPlusbelleBundle:OpcionesDetalleEstetica opcdet "
+                    . "JOIN opcdet.detalleEstetica det "
+                    . "WHERE opcdet.detalleEstetica =  :id";
+            
+            $parametros = $em->createQuery($dql)
+                        ->setParameter('id', $id)
+                        ->getResult();
+            
+            $response = new JsonResponse();
+            $response->setData(array(
+                                'query' => $parametros
+                            )); 
+            
+            return $response; 
+        } else {    
+            return new Response('0');              
+        }  
+    }
     
     
     /**

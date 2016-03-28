@@ -18,6 +18,20 @@ services:
     fpdf_printer:
         class: DGPlusbelleBundle\Service\FPDFService
         arguments: ["@reporte_pdf"]
+    
+    reporte_est_pdf:
+        class: DGPlusbelleBundle\Report\ReporteEsteticaPDF    
+        
+    fpdf_estetica_printer:
+        class: DGPlusbelleBundle\Service\EsteticaFPDFService
+        arguments: ["@reporte_est_pdf"]    
+    
+    facial_est_pdf:
+        class: DGPlusbelleBundle\Report\FacialEsteticaPDF    
+        
+    fpdf_estetica_facial_printer:
+        class: DGPlusbelleBundle\Service\EsteticaFacialFPDFService
+        arguments: ["@facial_est_pdf"]      
         
     bitacora:
         class:  "%mi_bitacora.class%"

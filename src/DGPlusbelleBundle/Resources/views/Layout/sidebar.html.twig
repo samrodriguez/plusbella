@@ -84,6 +84,14 @@
         </li>
     {% endif %}
     {% if is_granted('ROLE_ADMIN') %}
+        <li class="nav-item" role="presentation">
+            <a href="{{path('admin_consulta_nueva_paciente')}}">
+                <span class="nav-icon"><i class="fa fa-calendar-plus-o"></i></span>
+                <span class="nav-text">Consulta de Estetica</span>
+            </a>
+        </li>
+    {% endif %}
+    {% if is_granted('ROLE_ADMIN') %}
         {#<li class="nav-item" role="presentation">
         
             <a href="{{path('admin_paciente')}}">

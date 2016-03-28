@@ -1882,9 +1882,74 @@ class ReporteController extends Controller
         
     }
 
+    /**
+     * Generar reporte pdf de Consulta de estetica corporal
+     *
+     * @Route("/pdf/previa/consulta-estetica/corporal", name="admin_prevpdfcorporal_por_pdf", options ={"expose" = true})
+     */
+    public function prevEsteticaCorporalPdfAction(Request $request)
+    {
+        $em = $this->getDoctrine()->getManager();
+        
+        $pacienteId = $request->get('paciente');
+        $sucursalId = $request->get('sucursal');
+        $esteticaId = $request->get('estetica');
+        $valores = $request->get('valores');
+        $corporal = $request->get('corporal');
+        
+        $paciente = $em->getRepository('DGPlusbelleBundle:Paciente')->find($pacienteId);
+        $sucursal = $em->getRepository('DGPlusbelleBundle:Sucursal')->find($sucursalId);
+        $estetica = $em->getRepository('DGPlusbelleBundle:DetalleEstetica')->findBy(array('estetica'=>$esteticaId));
+
+        $fecha= date('d-m-Y');
+        $path = 'Resources/img/dgplusbelle/images/';
+        $titulo = "Reporte de Consulta estetica corporal";
+        $consulta="prueba";
+
+        $dql = $dql = "SELECT opc.id, opc.nombre, det.id detId, det.nombre detNom FROM DGPlusbelleBundle:OpcionesDetalleEstetica opc"
+                . " INNER JOIN opc.detalleEstetica det"
+                . " INNER JOIN det.estetica est"
+                . " WHERE est.id = :estetica";
+        $opciones = $em->createQuery($dql)
+                       ->setParameter('estetica', $esteticaId)
+                       ->getResult();
+
+        $this->get('fpdf_estetica_printer')->generarCorporalTempPdf($titulo, $paciente, $sucursal, $estetica, $consulta, $fecha, $path, $valores, $corporal, $opciones);
+        
+    }
     
-    
-    
+    /**
+     * Generar reporte pdf de Consulta de estetica facial
+     *
+     * @Route("/pdf/previa/consulta-estetica/facial", name="admin_prevpdf_facial_por_pdf", options ={"expose" = true})
+     */
+    public function prevEsteticaFacialPdfAction(Request $request)
+    {
+        $em = $this->getDoctrine()->getManager();
+        
+        $pacienteId = $request->get('paciente');
+        $sucursalId = $request->get('sucursal');
+        $valores = $request->get('valores');
+        $esteticaId = $request->get('estetica');
+        
+        $paciente = $em->getRepository('DGPlusbelleBundle:Paciente')->find($pacienteId);
+        $sucursal = $em->getRepository('DGPlusbelleBundle:Sucursal')->find($sucursalId);
+        
+        $dql = $dql = "SELECT opc.id, opc.nombre, det.id detId, det.nombre detNom FROM DGPlusbelleBundle:OpcionesDetalleEstetica opc"
+                . " INNER JOIN opc.detalleEstetica det"
+                . " INNER JOIN det.estetica est"
+                . " WHERE est.id = :estetica";
+        
+        $opciones = $em->createQuery($dql)
+                       ->setParameter('estetica', $esteticaId)
+                       ->getResult();
+        
+        $fecha= date('d-m-Y');
+        $path = 'Resources/img/dgplusbelle/images/';
+        
+        $this->get('fpdf_estetica_facial_printer')->generarFacialTempPdf($paciente, $sucursal, $fecha, $path, $valores, $opciones);
+        
+    }
     
     
     

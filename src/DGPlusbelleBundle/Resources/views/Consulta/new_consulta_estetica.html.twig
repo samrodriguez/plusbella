@@ -1,0 +1,924 @@
+{#{% extends 'DGPlusbelleBundle:Layout:general.html.twig' %}#}
+{% extends 'DGPlusbelleBundle:Layout:layout.html.twig' %}
+
+{% block css %}
+    {{parent()}}
+    <style>
+        
+        
+        
+        //Posicion del boton agregar
+        .placas>div:last-child {
+            position:absolute;
+        }
+        
+        div.placas > div:nth-child(2) > div:nth-child(2) > a{
+            display: none;
+        }
+        
+        
+        
+        
+        //Posicion del boton agregar
+        .placas2>div:last-child {
+            position:absolute;
+        }
+        
+        div.placas2 > div:nth-child(2) > div:nth-child(2) > a{
+            display: none;
+        }
+        
+        
+        .addItem{
+            position: absolute;
+            height: 50px;
+            float: right;
+            margin-bottom: 50px;
+            padding-bottom: 100px;
+            top: -65px;
+            left: -2px;
+        }
+        
+            .addItem div {
+                position: absolute;
+            }
+        
+        .col-md-4{
+{#            padding-top: 40px;#}
+        }
+        
+        #dgplusbellebundle_consulta_horaInicio_hourSelectBoxItContainer, #dgplusbellebundle_consulta_horaInicio_minuteSelectBoxItContainer,
+        #dgplusbellebundle_consulta_horaFin_hourSelectBoxItContainer, #dgplusbellebundle_consulta_horaFin_minuteSelectBoxItContainer{
+            width:75px;
+        }
+        
+            #dgplusbellebundle_consulta_horaInicio_hourSelectBoxItContainer,#dgplusbellebundle_consulta_horaFin_hourSelectBoxItContainer {
+                float: left;
+            }
+            #dgplusbellebundle_consulta_horaInicio_minuteSelectBoxItContainer, #dgplusbellebundle_consulta_horaFin_minuteSelectBoxItContainer {
+                float: right;
+            }
+            #dgplusbellebundle_consulta_horaInicio, #dgplusbellebundle_consulta_horaFin{
+                width: 155px;
+            }
+            
+            .productoConsulta{width: 50% }
+            
+            .campos{
+                width: 100%;
+            }
+    </style>
+    
+{% endblock %}
+
+{% block contenido -%}
+    
+    
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <p>Registrar consulta</p>
+    </div>
+    
+    <div class="panel-body">
+    {{ form_start(form) }}
+        {{ form_errors(form) }}
+            {#  {{ form(form) }}  #}
+            
+                
+                        
+                <div class="row">
+                    
+                    
+                    <div class="col-md-12">
+                        <h3>Información general de consulta</h3>
+                        <hr>
+                    </div>
+                </div>
+            {# Paciente #}
+            <div class="row">
+                
+                <div class="col-md-2">{{ form_row(form.paciente) }}</div>
+                
+            </div>
+            {# Formulario de consulta#}
+            <div class="row">
+                <br>
+                {#<div class="col-md-2">
+                    {{ form_row(form.fechaConsulta) }}
+                </div>#}
+                
+                <div class="col-md-2">
+                    {{ form_row(form.tratamiento) }}
+                </div>
+                
+                <div class="col-md-2">
+                    {{ form_row(form.horaInicio) }}
+                </div>
+                
+                <div class="col-md-2">
+                    {{ form_row(form.horaFin) }}
+                </div>
+                {#<div class="col-md-2">
+                    {{ form_row(form.costoConsulta) }}
+                </div>#}
+
+            </div>
+            <div class="row">
+                {#<div class="col-md-3">
+                    {{ form_row(form.tipoConsulta) }}
+                </div>#}
+                
+               {# <div class="col-md-3">
+                    {{ form_row(form.sucursal) }}
+                </div>#}
+                
+                <div class="col-md-5">
+                    {{ form_row(form.observacion) }}
+                </div>
+                
+            </div>  
+               
+            <div class="row">
+               <div class="col-md-12">
+                  <h3 class="text-left">Producto</h3>
+                  <hr>
+                  <br>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <br><br>
+                </div>
+            </div>
+            
+           <div class="row">  
+                 <div id="listadoa">
+                            <div class="listado col-md-6">          
+                               <div class="placas" data-prototype="{% filter escape %}  {% include 'DGPlusbelleBundle:Prototype:producto.html.twig' with { 'form': form.placas.vars.prototype} %}   {% endfilter  %}"> 
+                                    {{ form_widget(form.placas) }}
+                               </div>
+                            </div>
+                 </div>
+                 <div id="listadoa2">
+                            {#<div class="listado col-md-6">          
+                               <div class="placas2" data-prototype="{% filter escape %}  {% include 'DGPlusbelleBundle:Prototype:foto2.html.twig' with { 'form': form.placas2.vars.prototype} %}   {% endfilter  %}"> 
+                                    {{ form_widget(form.placas2) }}
+                               </div>
+                            </div>#}
+                 </div>
+            </div>    
+           <br>
+
+           
+            <br>
+           
+            <div id="plantilla" class="plantilla col-md-6">
+                <div class="row">
+                    <div class="col-md-11 bordered-bottom ">
+                        <div class="col-md-10">
+                            <h3 class="text-left">Historial clínico</h3>
+                            <a id="historialPrevPDF" href="">Generar PDF</a> <i class="fa fa-file-pdf-o"></i>
+                        </div>
+                        
+                                
+                        
+                    </div>
+                    <div class="clearfix"></div>
+                    <div class="col-md-4" style="margin-top: 20px;">
+                        {{ form_row(form.reportePlantilla) }}
+                    </div>
+                    <div class="col-md-8" style="margin-top: 20px;">
+                        <div id="lista_plantilla">
+                            {{ form_row(form.plantilla) }}
+                        </div>
+                    </div>  
+                    <div class="clearfix"></div>
+                    <div class="col-md-12 ">
+                    {#    {{ form_row(form.campos) }} #}
+                    <div id="camposPlantilla" class="camposPlantilla" style="margin-top: 30px">
+                        <div class="row">
+                            <div class="col-md-1"></div>
+                            <div id="campos" class="col-md-11 campos"></div>
+                        </div>
+                    </div> 
+                    </div>    
+                </div>
+            </div>  
+                         
+                    
+            <div id="receta" class="receta col-md-6">
+                <div class="row">
+                    <div class="col-md-11 bordered-bottom ">
+                        <div class="col-md-10">
+                            <h3 class="text-left">Receta médica</h3>
+                            <a id="recetaPrevPDF" href="">Generar PDF</a> <i class="fa fa-file-pdf-o"></i>
+                        </div>
+
+                    </div>
+                    <div class="clearfix"></div>
+                    <div class="col-md-4" style="margin-top: 20px;">
+                        {{ form_row(form.registraReceta) }}
+                    </div>
+                    <div class="col-md-8" style="margin-top: 20px;">
+                        <div id="lista_receta">
+                            {{ form_row(form.sesiontratamiento) }}
+                        </div>
+                    </div>  
+                        <div class="clearfix"></div>
+                    <div class="col-md-12">
+{#                        {{ form_row(form.campos) }} #}
+                        <div id="camposReceta" class="camposReceta" style="margin-top: 30px">
+                            <div class="row">
+                                
+                                <div id="cReceta" class="col-md-12 cReceta"></div>
+                            </div>
+                        </div> 
+                    </div>    
+                </div>
+            </div>  
+            <div class="clearfix"></div>
+             <div class="form-grouphide col-md-12 text-center"> 
+                <hr>
+                <p class="text-center"><a href="{{path('admin_paciente')}}" class="btn btn-default btn-sm" id="cancelarNuevo">Cancelar</a>
+                {{ form_widget(form.submit) }}</p>
+             </div>       
+            
+	        
+      </div>   
+     
+ </div>
+{{ form_widget(form._token) }}
+</div>  
+{{ form_end(form) }}   
+            
+{% endblock %}
+
+
+{% block javascripts_step %}
+     <script src="{{ asset('Resources/js/ConsultaPaciente.js') }}"></script>
+    
+    <script>
+        $(function () { 
+            $( "#dgplusbellebundle_consulta_reportePlantilla_0" ).on( "click", function() {
+                // Se muestra el combobox donde se selecciona la plantilla
+                $("#lista_plantilla").show();
+            });
+            
+            
+            $( "#dgplusbellebundle_consulta_registraReceta_0" ).on( "click", function() {
+                // Se muestra el combobox donde se selecciona la plantilla
+                $("#lista_receta").show();
+            });
+        });
+    </script> 
+    <script>
+        $(function () { 
+            $( "#dgplusbellebundle_consulta_reportePlantilla_1" ).on( "click", function() {
+                // Se obtiene todos elementos que contengan la clase parametro
+                var elements = document.getElementsByClassName('parametro');
+                
+                // Se borran todos los elementohtmls que se encuentran en el div con id = campos
+                $('#campos div').html('');
+                
+                // Se oculta el combobox donde se selecciona la plantilla
+                $("#lista_plantilla").hide();
+                
+                // Se borran todos los elementos que contengan la clase = parametro
+                while(elements.length > 0){
+                    elements[0].parentNode.removeChild(elements[0]);
+                }
+                
+                $('#dgplusbellebundle_consulta_campos option').each(function(index, option) {
+                    $(option).remove();
+                });
+            });
+            
+            
+            $( "#dgplusbellebundle_consulta_registraReceta_1" ).on( "click", function() {
+                // Se obtiene todos elementos que contengan la clase parametro
+                var elements = document.getElementsByClassName('parametro2');
+                
+                // Se borran todos los elementohtmls que se encuentran en el div con id = cReceta
+                $('#cReceta div').html('');
+                
+                // Se oculta el combobox donde se selecciona la plantilla
+                $("#lista_receta").hide();
+                
+                // Se borran todos los elementos que contengan la clase = parametro
+                while(elements.length > 0){
+                    elements[0].parentNode.removeChild(elements[0]);
+                }
+                
+                $('#dgplusbellebundle_receta_campos option').each(function(index, option) {
+                    $(option).remove();
+                });
+            });
+        });
+    </script>
+    <script>
+        $(function () { 
+            $( "#dgplusbellebundle_consulta_plantilla" ).on( "change", function() {
+                // Se obtiene el id de la plantilla
+                var id = $( this ).val();
+                
+                // Se obtiene todos elementos que contengan la clase parametro
+                var elements = document.getElementsByClassName('parametro');
+                
+                // Se borran todos los elementos que se encuentran en el div con id = campos
+                $('#campos div').html('');
+                
+                // Se borran todos los elementos que contengan la clase = parametro
+                while(elements.length > 0){
+                    elements[0].parentNode.removeChild(elements[0]);
+                }
+                
+                $('#dgplusbellebundle_consulta_campos option').each(function(index, option) {
+                    $(option).remove();
+                });
+                
+                // Se obtienen los campos necesarios para la plantilla seleccionada
+                $.post( "{{path('admin_busqueda_parametros')}}", { id: id }, function( data ) {
+                    var par = new Array();
+                    par = data.query;
+                    
+                    // Si la plantilla contiene campos
+                    if(par.length !== 0){
+                        mostrarCampos(data.query);
+                    }
+                    else{
+                        console.log( 'Esta plantilla no tiene campos que mostrar' );
+                    }
+                }, "json");
+                
+            });
+            
+            
+            
+            $( "#dgplusbellebundle_consulta_sesiontratamiento" ).on( "change", function() {
+                // Se obtiene el id de la plantilla
+                var id = $( this ).val();
+                
+                // Se obtiene todos elementos que contengan la clase parametro
+                var elements = document.getElementsByClassName('parametro2');
+                
+{#                $('#cReceta').remove();#}
+                // Se borran todos los elementos que se encuentran en el div con id = campos
+                $('#cReceta div').html('');
+                
+                // Se borran todos los elementos que contengan la clase = parametro
+                while(elements.length > 0){
+                    elements[0].parentNode.removeChild(elements[0]);
+                }
+                
+                $('#dgplusbellebundle_receta_campos option').each(function(index, option) {
+                    $(option).remove();
+                });
+                
+                // Se obtienen los campos necesarios para la plantilla seleccionada
+                $.post( "{{path('admin_busqueda_parametros')}}", { id: id }, function( data ) {
+                    var par = new Array();
+                    par = data.query;
+                    
+                    // Si la plantilla contiene campos
+                    if(par.length !== 0){
+                        mostrarCampos2(data.query);
+                    }
+                    else{
+                        console.log( 'Esta receta no tiene campos que mostrar' );
+                    }
+                }, "json");
+                
+            });
+            
+            
+        });
+        
+        function setCamposPlantilla(id){
+            var lista = document.getElementById("dgplusbellebundle_consulta_campos");
+            var campoPlantilla = $("#" + id).val();
+            var campoNombre = $("#" + id).attr('name');
+            var texto = id + '-' + campoNombre + '-' + campoPlantilla;
+            
+            lista.options.add(new Option(texto));
+           
+        }//  Fin de setCamposPlantilla
+        
+        function getCamposPlantilla(){
+    
+            var lista=document.getElementById("dgplusbellebundle_consulta_campos");
+            var camposInfo = new Array();
+
+           if(lista.length>0)
+            {
+                for(var i=0; i<lista.length; i++)  {
+                camposInfo[i] = lista.options[i].text;
+                }   
+
+                for ( var i = 0, l = lista.options.length, o; i < l; i++ )
+                {
+                    o = lista.options[i];
+                    if ( camposInfo.indexOf( o.text ) != -1 )
+                    {
+                        o.selected = true;                
+                    }
+                } 
+                return false; 
+            } 
+            else {
+                  return false;  
+            }
+        }//Fin de getCamposPlantilla
+        
+        // Funcion que muestra los campos de texto de la plantilla seleccionada
+        function mostrarCampos(data) {
+            var div = document.getElementById('campos');
+            var form = $("form");
+            //console.log(data[0]);
+            //var form = document.createElement('form');
+            //form.setAttribute('action', '{# {{path('admin_set_campos')}} #}');
+            //form.setAttribute('method', 'POST');
+            /*-----------*/
+            
+            var input = new Array();
+            var label = new Array();
+            var label2 = new Array();
+            var campos = new Array();
+            var saltos = new Array();
+            var etiqueta = new Array();
+            
+            // Se recorre el array para mostrar los campos
+            $.each( data, function( key, value ) {
+                //window.print("<div class='col-md-1'>");
+                var t = document.createTextNode(value.nombre);
+                //window.print("</div");
+                
+                
+                // Se crea un div donde se muestran los parametros
+                campos[key] = document.createElement('div');
+                campos[key].setAttribute('class', 'parametro col-md-11');
+                
+                // Se crea el campo de texto del parametro de la plantilla
+                if(value.tipoParametro=='Textarea' || value.tipoParametro==''){
+                    input[key] = document.createElement('textarea');
+                    input[key].setAttribute('type', 'text');
+                    input[key].setAttribute('placeholder', value.nombre);
+                    input[key].setAttribute('class', 'form-control classPlantilla');
+                    input[key].setAttribute('style', 'margin-bottom: 5px;resize:vertical;height:150px;');
+                    input[key].setAttribute('name', value.nombre);
+                    input[key].setAttribute('id', value.id);
+                    
+                    etiqueta[key] = document.createElement('p');
+                    etiqueta[key].setAttribute('style', 'color: #646473; font-size: 13px; font-weight: 700;');
+                    etiqueta[key].appendChild(t);
+
+                    label[key] = document.createElement('label');
+
+                    // Se introducen los elementos en el div con id = campos
+                    label[key].appendChild(etiqueta[key]);
+                    campos[key].appendChild(label[key]);
+                    console.log(input[key]);
+                    campos[key].appendChild(input[key]);
+                    div.appendChild(campos[key]);
+                }
+                if(value.tipoParametro=='Radiobutton'){
+                    $.post( "{{path('admin_busqueda_opciones_parametros')}}", { id: value.id }, function( opc ) {
+                        var par = new Array();
+                        par = opc.query;
+                        //console.log(par[0]);
+                        // Si la plantilla contiene campos
+                        $.each( par, function( key2, value2 ) {
+                            input[key] = document.createElement('input');
+                            input[key].setAttribute('type', 'radio');
+                            //input[key].setAttribute('placeholder', value.nombre);
+                            input[key].setAttribute('class', 'form-control classPlantilla');
+                            //input[key].setAttribute('style', 'margin-bottom: 5px;resize:vertical;height:150px;');
+                            input[key].setAttribute('name', value.nombre);
+                            input[key].setAttribute('id', value.id);
+                            //console.log(input[key2]);  
+                            etiqueta[key] = document.createElement('p');
+                            //etiqueta[key].setAttribute('style', 'color: #646473; font-size: 13px; font-weight: 700;');
+                            etiqueta[key].appendChild(t);
+
+                            label[key] = document.createElement('label');
+
+                            // Se introducen los elementos en el div con id = campos
+                            label[key].appendChild(etiqueta[key]);
+                            campos[key].appendChild(label[key]);
+                            //console.log(input[key]);
+                            campos[key].appendChild(input[key]);
+                            $('#'+value.id).append(value2.nombre);
+                            div.appendChild(campos[key]);
+                        });
+                        //console.log(input[key]);
+
+                    }, "json");
+                    
+                    
+                }
+                if(value.tipoParametro=='Checkbox'){
+                    
+                    $.post( "{{path('admin_busqueda_opciones_parametros')}}", { id: value.id }, function( opc2 ) {
+                        var par2 = new Array();
+                        par2 = opc2.query;
+                        //console.log(par2[0]);
+                        // Si la plantilla contiene campos
+                        $.each( par2, function( key3, value3 ) {
+                            input[key] = document.createElement('input');
+                            input[key].setAttribute('type', 'checkbox');
+                            //input[key].setAttribute('placeholder', value.nombre);
+                            input[key].setAttribute('class', 'form-control classPlantilla');
+                            //input[key].setAttribute('style', 'margin-bottom: 5px;resize:vertical;height:150px;');
+                            input[key].setAttribute('name', value.nombre);
+                            //input[key].setAttribute('val', value.nombre);
+                            input[key].setAttribute('id', value.id);
+                            //console.log(input[key]);  
+                            
+                            
+                            etiqueta[key] = document.createElement('p');
+                            //etiqueta[key].setAttribute('style', 'color: #646473; font-size: 13px; font-weight: 700;');
+                            etiqueta[key].appendChild(t);
+
+                            label[key] = document.createElement('label');
+                            label2[key] = document.createElement('label');
+                            label2[key].htmlFor = "id";
+                            label2[key].appendChild(document.createTextNode(value3.nombre));
+                            
+                            // Se introducen los elementos en el div con id = campos
+                            label[key].appendChild(etiqueta[key]);
+                            campos[key].appendChild(label[key]);
+                            console.log(campos[key]);
+                            campos[key].appendChild(input[key]);
+                            campos[key].appendChild(label2[key]);
+                            //console.log(key3);
+                            //console.log(value3.nombre);
+                            $('#'+value.id).append(value3.nombre);
+                            div.appendChild(campos[key]);
+                
+                        });
+                        
+
+                    }, "json");
+                }
+                
+                
+                
+             //   input[key].setAttribute('onblur', 'setCamposPlantilla(' + value.id + ')');
+                
+                // Se crea el label del parametro de la plantilla
+                
+                
+                if(((key+1)%3)==0){
+                    //console.log(key%3);
+                    //console.log(key+' '+(key+1) + '-'+(key+1)%3);
+                    saltos[key] = document.createElement('hr');
+                    saltos[key] = document.createElement('div');
+                    saltos[key].setAttribute('class', 'clearfix');
+                    div.appendChild(saltos[key]);
+                }
+            });
+            validarConsulta();
+        } // Fin de mostrarCampos
+        
+        
+        
+        function mostrarCampos2(data) {
+            var div = document.getElementById('cReceta');
+            var form = $("form");
+           
+            //var form = document.createElement('form');
+            //form.setAttribute('action', '{# {{path('admin_set_campos')}} #}');
+            //form.setAttribute('method', 'POST');
+            /*-----------*/
+            
+            var input = new Array();
+            var label = new Array();
+            var campos = new Array();
+            var etiqueta = new Array();
+            
+            // Se recorre el array para mostrar los campos
+            $.each( data, function( key, value ) {
+                var t = document.createTextNode(value.nombre);
+                
+                // Se crea un div donde se muestran los parametros
+                campos[key] = document.createElement('div');
+                campos[key].setAttribute('class', 'parametro2 col-md-12');
+                
+                // Se crea el campo de texto del parametro de la plantilla
+                input[key] = document.createElement('textarea');
+                input[key].setAttribute('type', 'text');
+                input[key].setAttribute('placeholder', value.nombre);
+                input[key].setAttribute('class', 'form-control classReceta');
+                input[key].setAttribute('style', 'margin-bottom: 5px;width:100%;resize:vertical;height:150px;');
+                input[key].setAttribute('name', value.nombre+"2");
+                input[key].setAttribute('id', value.id);
+             //   input[key].setAttribute('onblur', 'setCamposPlantilla(' + value.id + ')');
+                
+                // Se crea el label del parametro de la plantilla
+                etiqueta[key] = document.createElement('p');
+                etiqueta[key].setAttribute('style', 'color: #646473; font-size: 13px; font-weight: 700;');
+                etiqueta[key].appendChild(t);
+                
+                label[key] = document.createElement('label');
+                
+                // Se introducen los elementos en el div con id = campos
+                label[key].appendChild(etiqueta[key]);
+                campos[key].appendChild(label[key]);
+                campos[key].appendChild(input[key]);
+                div.appendChild(campos[key]);
+            });
+            validarConsulta();
+        } // Fin de mostrarCampos
+    </script> 
+    <script>
+
+    // Get the ul that holds the collection of tags
+    var collectionHolder = $('div.placas');
+    var collectionHolder2 = $('div.placas2');
+    var col=$('#hnr_sircimbundle_estudioradiologicotype_placas');
+    // setup an "add a tag" link
+    var $addTagLink = $('<div class="row"><div class="col-md-12"><a href="#" class="add_placa_link btn btn-primary">Agregar producto</a></div></div>');
+    var $addTagLink2 = $('<div class="row"><div class="col-md-12"><a href="#" class="add_placa_link2 btn btn-primary">Agregar foto</a></div></div>');
+    var $removeTagLink = $('<a href="#" class="remove_placa_link btn btn-danger">Eliminar</a>');
+    var $removeTagLink2 = $('<a href="#" class="remove_placa_link2 btn btn-danger">Eliminar</a>');
+    var $newLinkLi = $('<div class="col-md-12 addItem"></div>').append($addTagLink);
+    var $newLinkLi2 = $('<div class="col-md-12 addItem"></div>').append($addTagLink2);
+    var $delLinkLi = $('#hnr_sircimbundle_estudioradiologicotype_placas.required').append($removeTagLink);
+    var $delLinkLi2 = $('#hnr_sircimbundle_estudioradiologicotype_placas.required').append($removeTagLink2);
+
+
+
+
+
+    jQuery(document).ready(function() {
+        $('#dgplusbellebundle_consulta_paciente').select2();
+        $('#dgplusbellebundle_consulta_tratamiento').select2();
+        $('#dgplusbellebundle_consulta_tipoConsulta').select2();
+        $('#dgplusbellebundle_consulta_tipoConsulta').select2();
+        $('#dgplusbellebundle_consulta_sucursal').select2();
+        $("#dgplusbellebundle_consulta_pacienteSelectBoxItOptions li").remove();
+        $("#dgplusbellebundle_consulta_reportePlantilla_1").prop("checked", true);
+        $("#dgplusbellebundle_consulta_registraReceta_1").prop("checked", true);
+        $("#lista_plantilla").hide();
+        $("#lista_receta").hide();
+        $('#dgplusbellebundle_consulta_fechaConsulta').daterangepicker({
+                        singleDatePicker: true,
+                        showDropdowns: true,
+                        locale: {
+                            format: 'YYYY-MM-DD'
+                        },
+                    });
+
+        $('select[id$=dgplusbellebundle_consulta_placas_]').selectBoxIt();
+        var valores = new Array();
+        var valores2 = new Array();
+        var id=0;
+        var nombre = 0;
+        $(document).on('click','#historialPrevPDF',function(){
+            valores = [];
+            nombre=$('#dgplusbellebundle_consulta_paciente').val();
+            id=$('#dgplusbellebundle_consulta_plantilla').val();
+            console.log(id);
+            var valor = 0;
+            $('.classPlantilla').each(function(index,element){
+                valor = $(this).val();
+                valores.push(valor);
+
+            });
+            var historial = $('#dgplusbellebundle_consulta_plantilla').val();
+            //alert($('#dgplusbellebundle_consulta_reportePlantilla_0').is(':checked'));
+            if(historial!=0 && $('#dgplusbellebundle_consulta_reportePlantilla_0').is(':checked')){
+           
+            
+                console.log(valores);
+                var url = Routing.generate('admin_prevpdfplantilla_por_pdf', { nombre:nombre, id: id,valores:valores});
+                console.log(url);
+
+                window.open(url);
+            }
+
+            return false;
+        });
+        
+        
+        $(document).on('click','#recetaPrevPDF',function(){
+            valores2 = [];
+            nombre=$('#dgplusbellebundle_consulta_paciente').val();
+            id=$('#dgplusbellebundle_consulta_sesiontratamiento').val();
+            console.log(id);
+            var valor = 0;
+            $('.classReceta').each(function(index,element){
+                valor = $(this).val();
+                valores2.push(valor);
+
+            });
+            var historial = $('#dgplusbellebundle_consulta_sesiontratamiento').val();
+            if(historial!=0){
+           
+            
+                console.log(valores);
+                var url = Routing.generate('admin_prevpdfreceta_por_pdf', { nombre:nombre, id: id,valores:valores2});
+                console.log(url);
+
+                window.open(url);
+            }
+
+            return false;
+        });
+        
+        
+       
+
+        collectionHolder.find('li').each(function() {
+            addTagFormDeleteLink($(this));
+    });
+    collectionHolder2.find('li').each(function() {
+            addTagFormDeleteLink2($(this));
+    });
+    
+                var seleccionado="";
+                //Eliminar options del select de pacientes
+               {# $('#dgplusbellebundle_consulta_paciente option').each(function(index, val) {
+                    
+                    seleccionado = $(this).attr('selected');
+                    if (!seleccionado){
+                        $(this).remove();
+                    }
+                });#}
+
+    
+
+    // add the "add a tag" anchor and li to the tags ul
+    collectionHolder.append($newLinkLi);
+    collectionHolder2.append($newLinkLi2);
+
+    // count the current form inputs we have (e.g. 2), use that as the new
+    // index when inserting a new item (e.g. 2)
+    collectionHolder.data('index', collectionHolder.find(':input').length);
+    collectionHolder2.data('index', collectionHolder2.find(':input').length);
+    
+    //Identificar que form esta activo
+    /*var editar=$('div.placas').attr('id');
+    if(editar!='editar_usuario'){*/
+        addTagForm(collectionHolder, $newLinkLi);   //Muestra un formulario en la carga de la página nuevo
+        addTagForm2(collectionHolder2, $newLinkLi2);   //Muestra un formulario en la carga de la página nuevo
+    //}
+    
+
+
+    $addTagLink.on('click', function(e) {
+        // prevent the link from creating a "#" on the URL
+        e.preventDefault();
+
+        // add a new tag form (see next code block)
+        addTagForm(collectionHolder, $newLinkLi);
+        // $('.btn_radio').attr('name', 'rol_predet');
+    });
+    $addTagLink2.on('click', function(e) {
+        // prevent the link from creating a "#" on the URL
+        e.preventDefault();
+
+        // add a new tag form (see next code block)
+        addTagForm2(collectionHolder2, $newLinkLi2);
+        // $('.btn_radio').attr('name', 'rol_predet');
+    });
+
+ validarConsulta();
+    
+});
+
+
+function addTagForm(collectionHolder, $newLinkLi) {
+    // Get the data-prototype explained earlier
+    var prototype = collectionHolder.data('prototype');
+
+    // get the new index
+    var index = collectionHolder.data('index');
+
+    // Replace '__name__' in the prototype's HTML to
+    // instead be a number based on how many items we have
+    var newForm = prototype.replace(/__name__/g, index);
+
+    // increase the index with one for the next item
+    collectionHolder.data('index', index + 1);
+
+    // Display the form in the page in an li, before the "Add a tag" link li
+    var $newFormLi = $('<div class="col-md-12"></div>').append(newForm);
+    $newLinkLi.before($newFormLi);
+    
+
+
+    // add a delete link to the new form
+    addTagFormDeleteLink($newFormLi);
+     validarConsulta();
+    $('.btn_radio').click(function(event) {
+        /* Act on the event */
+        var id = $(this).attr('id');
+        // alert(id);
+        $('.btn_radio').prop('checked', false);
+        $('#'+id).prop('checked', true);
+        $('.btn_radio').removeClass('errorform');
+    });
+}
+
+
+function addTagForm2(collectionHolder2, $newLinkLi2) {
+    // Get the data-prototype explained earlier
+    var prototype2 = collectionHolder2.data('prototype');
+
+    // get the new index
+    var index2 = collectionHolder2.data('index');
+
+    // Replace '__name__' in the prototype's HTML to
+    // instead be a number based on how many items we have
+    var newForm2 = prototype2.replace(/__name__/g, index2);
+
+    // increase the index with one for the next item
+    collectionHolder2.data('index', index2 + 1);
+
+    // Display the form in the page in an li, before the "Add a tag" link li
+    var $newFormLi2 = $('<div class="col-md-12"></div>').append(newForm2);
+    $newLinkLi2.before($newFormLi2);
+    
+
+
+    // add a delete link to the new form
+    addTagFormDeleteLink2($newFormLi2);
+     
+    $('.btn_radio').click(function(event) {
+        /* Act on the event */
+        var id = $(this).attr('id');
+        // alert(id);
+        $('.btn_radio').prop('checked', false);
+        $('#'+id).prop('checked', true);
+        $('.btn_radio').removeClass('errorform');
+    });
+}
+
+
+function addTagFormDeleteLink($tagFormLi) {
+    var $removeFormA = $('<div class="col-md-1"><a class="link btn btn-danger" href="#">Eliminar</a></div>');
+    $tagFormLi.append($removeFormA);
+
+    $removeFormA.on('click', function(e) {
+        // prevent the link from creating a "#" on the URL
+        e.preventDefault();
+
+        // remove the li for the tag form
+        $('input[name="rol_predet"]:checked').each(function() {
+            //$(this).val() es el valor del checkbox correspondiente
+           // alert('chequeado'); 
+           $('#hnr_sircimbundle_usuariotype_placas_0_usroPredeterminado').prop('checked', true);
+        });
+
+        $tagFormLi.remove();
+        
+    });
+}
+
+
+
+function addTagFormDeleteLink2($tagFormLi2) {
+    var $removeFormA2 = $('<div class="col-md-1"><a class="link2 btn btn-danger" href="#">Eliminar</a></div>');
+    $tagFormLi2.append($removeFormA2);
+
+    $removeFormA2.on('click', function(e) {
+        // prevent the link from creating a "#" on the URL
+        e.preventDefault();
+
+        // remove the li for the tag form
+        $('input[name="rol_predet"]:checked').each(function() {
+            //$(this).val() es el valor del checkbox correspondiente
+           // alert('chequeado'); 
+           $('#hnr_sircimbundle_usuariotype_placas_0_usroPredeterminado').prop('checked', true);
+        });
+
+        $tagFormLi2.remove();
+        
+    });
+}
+
+
+
+
+$('#editar_usuario')
+            .on('mouseover','div', function(){
+                $(this).find('a.link').css('visibility','visible');
+            })
+            .on('mouseout','div', function(){ 
+                $(this).find('a.link').css('visibility','hidden'); 
+            });
+
+$('#editar_usuario')
+            .on('mouseover','li:first-child', function(){
+                $(this).find('a.link').css('visibility','hidden');
+            });
+
+
+    
+var editar=$('div.placas').attr('id');
+if(editar!='editar_usuario'){
+    // $('#hnr_sircimbundle_usuariotype_placas_0_usroPredeterminado').prop('checked', true);//Se carga el radiobutton seleccionado
+}
+     </script>
+
+{% endblock %} 

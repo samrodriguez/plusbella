@@ -1,0 +1,68 @@
+{% extends '::base.html.twig' %}
+
+{% block body -%}
+    <h1>ComposicionCorporal</h1>
+
+    <table class="record_properties">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ entity.id }}</td>
+            </tr>
+            <tr>
+                <th>Peso</th>
+                <td>{{ entity.peso }}</td>
+            </tr>
+            <tr>
+                <th>Grasacorporal</th>
+                <td>{{ entity.grasaCorporal }}</td>
+            </tr>
+            <tr>
+                <th>Aguacorporal</th>
+                <td>{{ entity.aguaCorporal }}</td>
+            </tr>
+            <tr>
+                <th>Fecha</th>
+                <td>{{ entity.fecha|date('Y-m-d H:i:s') }}</td>
+            </tr>
+            <tr>
+                <th>Masamusculo</th>
+                <td>{{ entity.masaMusculo }}</td>
+            </tr>
+            <tr>
+                <th>Valoracionfisica</th>
+                <td>{{ entity.valoracionFisica }}</td>
+            </tr>
+            <tr>
+                <th>Edadmetabolica</th>
+                <td>{{ entity.edadMetabolica }}</td>
+            </tr>
+            <tr>
+                <th>Dcibmr</th>
+                <td>{{ entity.dciBmr }}</td>
+            </tr>
+            <tr>
+                <th>Masaosea</th>
+                <td>{{ entity.masaOsea }}</td>
+            </tr>
+            <tr>
+                <th>Grasavisceral</th>
+                <td>{{ entity.grasaVisceral }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+        <ul class="record_actions">
+    <li>
+        <a href="{{ path('admin_composicioncorporal') }}">
+            Back to the list
+        </a>
+    </li>
+    <li>
+        <a href="{{ path('admin_composicioncorporal_edit', { 'id': entity.id }) }}">
+            Edit
+        </a>
+    </li>
+    <li>{{ form(delete_form) }}</li>
+</ul>
+{% endblock %}

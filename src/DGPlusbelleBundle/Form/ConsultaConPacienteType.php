@@ -62,48 +62,48 @@ class ConsultaConPacienteType extends AbstractType
                          )
                        ))
                 
-            ->add('reportePlantilla', 'choice', array(
-                    'label'=> 'Registro clínico',
-                    'choices'  => array('1' => 'Sí', '0' => 'No'),
-                    'multiple' => false,
-                    'expanded'=>'true'
-                   
-                 
-                ))
+//            ->add('reportePlantilla', 'choice', array(
+//                    'label'=> 'Registro clínico',
+//                    'choices'  => array('1' => 'Sí', '0' => 'No'),
+//                    'multiple' => false,
+//                    'expanded'=>'true'
+//                   
+//                 
+//                ))
                     
                     
-                    ->add('registraReceta', 'choice', array(
-                    'label'=> 'Receta',
-                    'choices'  => array('1' => 'Sí', '0' => 'No'),
-                    'multiple' => false,
-                    'expanded'=>'true'
-                   
-                 
-                ))
+//                    ->add('registraReceta', 'choice', array(
+//                    'label'=> 'Receta',
+//                    'choices'  => array('1' => 'Sí', '0' => 'No'),
+//                    'multiple' => false,
+//                    'expanded'=>'true'
+//                   
+//                 
+//                ))
             ->add('costoConsulta', 'text', array('required'=>false,
                     'attr'=>array(
                          'class'=>'form-control costoConsulta'
                          )
                        ))
-            ->add('plantilla', 'entity', array('required'=>false,
-                    'label'         =>  'Historias clínicas',
-                    'empty_value'=>'Seleccione una opcion',
-                    'class'         =>  'DGPlusbelleBundle:Plantilla',
-                    'query_builder' => function(EntityRepository $repository) {
-                    return $repository->otrosDocActivo();
-                },
-                    'mapped' => false
-                ))   
+//            ->add('plantilla', 'entity', array('required'=>false,
+//                    'label'         =>  'Historias clínicas',
+//                    'empty_value'=>'Seleccione una opcion',
+//                    'class'         =>  'DGPlusbelleBundle:Plantilla',
+//                    'query_builder' => function(EntityRepository $repository) {
+//                    return $repository->otrosDocActivo();
+//                },
+//                    'mapped' => false
+//                ))   
                     
-                    ->add('sesiontratamiento', 'entity', array('required'=>false,
-                    'label'         =>  'Nombre',
-                    'empty_value'=>'Seleccione una opcion',
-                    'class'         =>  'DGPlusbelleBundle:Plantilla',
-                    'query_builder' => function(EntityRepository $repository) {
-                return $repository->obtenerRecetasActivo();
-            },
-                    'mapped' => false
-                ))   
+//                    ->add('sesiontratamiento', 'entity', array('required'=>false,
+//                    'label'         =>  'Nombre',
+//                    'empty_value'=>'Seleccione una opcion',
+//                    'class'         =>  'DGPlusbelleBundle:Plantilla',
+//                    'query_builder' => function(EntityRepository $repository) {
+//                return $repository->obtenerRecetasActivo();
+//            },
+//                    'mapped' => false
+//                ))   
           /*  ->add('campos', 'choice', array(
                     'multiple'  => true,
                     'expanded'  => false,
