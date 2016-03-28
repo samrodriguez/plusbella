@@ -206,7 +206,7 @@ class DevolucionController extends Controller
                        ->getResult();
             //var_dump($id);
             if(count($id==0)){
-                array_push($idtratamientos, $idtra); 
+                array_push($idtratamientos, $idtra);
             }
         }
         
