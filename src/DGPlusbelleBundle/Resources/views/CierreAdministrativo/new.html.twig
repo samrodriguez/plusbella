@@ -26,7 +26,7 @@
     {{ form_start(form) }}
     {{ form_errors(form) }}
         
-        <div class="col-md-3">
+        <div class="col-md-3" style="margin-bottom:20px;">
             {{ form_widget(form.empleado) }}   
         </div>
         
@@ -58,3 +58,12 @@
 </div>    
     
 {% endblock %}
+{% block javascripts_step %}
+    <script>
+        $(document).ready(function(){
+                 var link=0;
+                 var estadoPrevio = "";
+                 
+        }); 
+    </script>
+{%endblock%}

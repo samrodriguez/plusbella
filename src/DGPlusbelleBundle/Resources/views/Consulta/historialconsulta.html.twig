@@ -55,26 +55,31 @@
     MAIN CONTENT SECTION
     =============================================== -->
     
-
-
+    <div class="content">
+        
         <div class="content-body">
+            
+            
+            
+            
           <div class="panel" data-fill-color="true">
-            <div class="panel-heading">
+            {#<div class="panel-heading">
               <div class="panel-control pull-right">
                 {#<a href="#" class="btn btn-icon" data-toggle="panel-refresh" rel="tooltip" data-placement="bottom" title="refresh"><i class="icon-refresh"></i></a>#}
-                <a href="#" class="btn btn-icon" data-toggle="panel-expand" rel="tooltip" data-placement="bottom" title="expand"><i class="arrow_expand"></i></a>
+                {#<a href="#" class="btn btn-icon" data-toggle="panel-expand" rel="tooltip" data-placement="bottom" title="expand"><i class="arrow_expand"></i></a>
                 <a href="#" class="btn btn-icon" data-toggle="panel-collapse" rel="tooltip" data-placement="bottom" title="collapse"><i class="icon_minus_alt2"></i></a>
               </div>
               <h3 class="modal-title" id="myModalLabel">Historial del paciente</h3>
-        
-            </div><!-- /.panel-heading -->
+        #}
+{#            </div><!-- /.panel-heading -->#}
 
             
             
             
             <!-- datatables1 -->
-            <div class="row">
-                
+           {# <div class="row">
+                <div class="content-hero-overlay bg-grd-blue"></div>
+                <div class="clearfix"></div>    
                 <div class="col-md-6">
 
                     <div data-init-panel="true" class="panel bg-grd-light fade in panel-default panel-fill" data-fill-color="true" style="height:270px;">
@@ -85,7 +90,7 @@
                             </span>
                           </div>#}
                             {#<p class="lead mb-1x">   Datos del paciente </p>#}
-                            <p class="text-muted"><i class="fa fa-fw"></i><div class="col-md-4">Nombre: </div><div class="col-md-8">{{ paciente.persona.nombres}} {{ paciente.persona.apellidos}} </div> </p>
+                            {#<p class="text-muted"><i class="fa fa-fw"></i><div class="col-md-4">Nombre: </div><div class="col-md-8">{{ paciente.persona.nombres}} {{ paciente.persona.apellidos}} </div> </p>
                             <p class="text-muted"><i class="fa fa-fw"></i><div class="col-md-4">Expediente:</div><div class="col-md-8"> {{ expediente }} </div> </p>
                             <p class="text-muted"><i class="fa fa-fw"></i><div class="col-md-4">Edad: </div><div class="col-md-8">{{ edad }} </div> </p>
                             <p class="text-muted"><i class="fa fa-fw"></i><div class="col-md-4">En caso de emergencia llamar a: </div><div class="col-md-8">{% if paciente.personaEmergencia %}{{ paciente.personaEmergencia }}{% else %} No se ha registrado ésta información{% endif %}</div> </p>
@@ -101,10 +106,112 @@
                     
                 </div>
                                 
-            </div>
+            </div>#}
+                            
             <div class="row">
-                <div class="col-md-12"><hr></div>
+{#                <div class="col-md-12"><hr></div>#}
             </div>
+                            <div class="content-hero content-hero-lg">
+          <img class="content-hero-embed" src="{{ asset('Photos/')}}people4.jpg" alt="cover">
+          <div class="content-hero-overlay bg-grd-blue"></div>
+          <div class="content-hero-body">
+          </div>
+          <div class="content-hero-bar">
+            <div class="row">
+              
+              <div class="col-lg-6">
+                <div class="float-bar clearfix">
+                  <div class="float-bar-brand">
+                    <a class="kit-avatar kit-avatar-128 no-padding border-white" href="#">
+{#                      <img alt="cover" src="images/dummy/uifaces22.jpg">#}
+                        {% if paciente.sexo=='M'%}
+                            <i class="fa fa-male fa-4x"></i>
+                        {% else %}
+                            <i class="fa fa-female fa-4x"></i>
+                        {% endif  %}
+                    </a>
+                  </div>
+                  <div class="col-sm-11">
+                    <div class="visible-xs">
+                      <h2 class="display-name media-heading text-teal">{{ paciente.persona.nombres}} {{ paciente.persona.apellidos}}</h2>
+{#                      <p class="text-muted mb-4x"><span class="mr-2x">Senior UI Design</span> <span><i class="fa fa-map-marker fa-fw"></i> San Francisco, CA</span></p>#}
+                    </div>
+                    <div class="hidden-xs">
+                      <h2 class="media-heading text-light">{{ paciente.persona.nombres}} {{ paciente.persona.apellidos}}</h2>
+                        <p class="mb-4x text-light">
+                            <span class="mr-1x">
+                                <i class="fa fa-clipboard"></i> {{ expediente }}
+                            </span>
+                            {#<span class="mr-2x">
+                                <i class="fa fa-briefcase"></i>
+                                {% if paciente.ocupacion == ""%}
+                                    No se ha especificado profesión
+                                {% else %}
+                                    {{paciente.ocupacion}}
+                                {% endif %}
+                            </span>#}
+                            <span class="mr-1x">
+                                <i class="fa fa-phone"></i>
+                                {% if paciente.persona.telefono== ""%}
+                                    No ingresado al sistema
+                                {% else %}
+                                    {{paciente.persona.telefono}}
+                                {% endif %}
+                            </span>
+                            
+                            <span class="mr-1x">
+                                <i class="fa fa-birthday-cake"></i>
+                                    {{edad}}
+                            </span>
+                            
+                            <span class="mr-1x">
+                                <i class="fa fa-map-marker fa-fw"></i>
+                                {% if paciente.persona.direccion == ""%}
+                                    No ingresado al sistema
+                                {% else %}
+                                    {{paciente.persona.direccion}}
+                                {% endif %}
+                            </span>
+                                
+                        </p>
+                    </div>
+                    <div class="mt-4x">
+                      <p>{#Información sobre el paciente#}</p>
+                      <p>
+                        {#<a href="#" class="btn btn-danger btn-sm btn-circle" aria-label="google plus"><i class="fa fa-lg fa-google-plus"></i></a>
+                        <a href="#" class="btn btn-primary btn-sm btn-circle ml-1x" aria-label="instagram"><i class="fa fa-lg fa-instagram"></i></a>
+                        <a href="#" class="btn btn-info btn-sm btn-circle ml-1x" aria-label="twitter"><i class="fa fa-lg fa-twitter"></i></a>#}
+{#                        <a href="#" class="btn btn-success btn-sm ml-2x" aria-label="facebook"><i class="fa fa-lg fa-facebook">{{edad}}</i></a>#}
+                      </p>
+                    </div>
+                  </div><!-- /.media-body -->
+                </div><!-- /.float-bar -->
+              </div><!-- /.cols -->
+
+              {#<div class="col-lg-6">
+                <h4 class="text-muted">Achievement</h4>
+                <div class="row">
+                  <div class="col-xs-3">
+                    <span class="headline"><strong>68</strong></span>
+                    <p>Posts</p>
+                  </div>
+                  <div class="col-xs-3">
+                    <span class="headline"><strong>23</strong></span>
+                    <p>Projects</p>
+                  </div>
+                  <div class="col-xs-3">
+                    <span class="headline"><strong>1,2K</strong></span>
+                    <p>Followers</p>
+                  </div>
+                  <div class="col-xs-3">
+                    <span class="headline"><strong>26K</strong></span>
+                    <p>Sales</p>
+                  </div>
+                </div>
+              </div><!-- /.cols -->#}
+            </div><!-- /.row -->
+          </div><!-- /.content-hero-bar -->
+        </div>
             <div class="panel-body">
               <div class="btn-toolbar clearfix" role="toolbar">
                 <div class="btn-group btn-group-sm pull-left">
@@ -417,7 +524,8 @@
             <div class="row" id="tabla4"></div>
           </div><!-- /.panel -->
     
-            
+                        </div>
+                        </div>
     {% endblock %}
     
     
@@ -660,17 +768,7 @@
         
         
         
-        //alert(data0);
-        Morris.Donut({
-            element: 'donut-example',
-            data: [
-
-                { label: "Tratamientos", value: totalTratamientos },
-                { label: "Paquetes", value: totalPaquetes},
-                { label: "Consultas", value: totalConsultas}
-            ],
-            //formatter:function (y, data) { return y + '%' }
-        });
+        
         
     });//Fin document ready
         

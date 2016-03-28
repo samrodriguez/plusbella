@@ -7,7 +7,10 @@
             color: #48CFAD;
         }
     </style>
+        <link rel="stylesheet" href="{{asset('Resources/datatables/serversideprocessing.css')}}" />
 {% endblock %}
+
+
 {% block contenido -%}
 
 
@@ -92,38 +95,36 @@
     <table id = "datatables1" class="table table-bordered table-hover display dt-responsive" style="margin-top: 30px">
         <thead>
             <tr>
-{#                <th>N°</th>  #}
+                <th>ID</th>
                 <th>Expediente</th>
-                <th>Paciente</th>
+                <th>Nombres</th>
+                <th>Apellidos</th>
                 {#<th>DUI</th>#}
-               {# <th>Dirección</th> #}
-{#                <th>Teléfono</th>#}
-{#                <th>Email</th>#}
+                {#<th>Teléfono</th>
+                <th>Email</th>#}
                 {#<th>Ocupación</th>#}
                 {#<th>Lugar de trabajo</th> 
-                <th>F. Nacimiento</th>#}
-                {#<th>Referido por</th>#}
-                
-                {#<th>Acciones</th>#}
-            </tr>
+                <th>Fecha de nacimiento</th>
+                #}<th>Detalle</th>
+           {# </tr>
         </thead>
         <tbody>
          {% for key, entity in pacientes %}
-                <tr id="P{{entity.id}}">
+                <tr id="P{{entity.id}}">#}
              {# <td>{{ entity.idpac }}</td>  #}
                 {#<td>
                     {{key+1}}
                 </td> #}
-                <td>
+               {# <td>
                     {{ entity.numero }}
 
                 </td>
                 <td>
-                    {#<p class="detallePaciente">#}{{ entity.nombres|upper }} {{ entity.apellidos|upper }}{#</p>#}
-                    <i class="expedientePaciente fa fa-th-list pull-right" data-toggle="tooltip" data-original-title="Ver expediente"></i>
+                    {#<p class="detallePaciente">#}{#{{ entity.nombres|upper }} {{ entity.apellidos|upper }}{#</p>#}
+                    {#<i class="expedientePaciente fa fa-th-list pull-right" data-toggle="tooltip" data-original-title="Ver expediente"></i>
                     
                     <i class="detallePaciente fa fa-info-circle pull-right" data-toggle="tooltip" data-original-title="Ver información general" style="margin-right:30px;"></i>
-                </td>
+                </td>#}
                 
                 {#<td>{{ entity.direccion }}</td>#}
 {#                <td>{{ entity.tel}}</td>#}
@@ -146,9 +147,9 @@
                     </li>
                 </ul>
                 </td>#}    
-            </tr>
+            {#</tr>
         {% endfor %}
-        </tbody>
+        </tbody>#}
     </table>
     </div><!-- /.panel -->    
        
@@ -223,13 +224,14 @@
                 });
               #}
                 //Seleccionar un registro
-                $('#datatables1>tbody>tr,.detallePaciente').on('click', function(event) {
-                    idPaciente=$(this).attr("id");
+                $(document).on('click','#datatables1>tbody>tr,.infoPaciente', function(event) {
+                    idPaciente=$(this).children().html();
+                    
                     //alert($(this).prop("tagName"));
                     if($(this).prop("tagName")=="I"){
-                        idPaciente=$(this).parent().parent().attr("id");
+                        idPaciente=$(this).parent().parent().parent().children().html();
                         //alert(idPaciente);
-                        $.getJSON(Routing.generate('get_infopaciente', { id: idPaciente}), 
+                        $.getJSON(Routing.generate('get_infopaciente', { id: "P"+ idPaciente}), 
                         function(data) {
                             var mensaje = "";
                             mensaje += "<div class='container-fluid'>";
@@ -303,12 +305,22 @@
 
                         //alert(link);
                         //Carga del form modificar
-                        //$("#editFormContainer").load(idPaciente+"/edit");
+                        //$("#editFormContainer").load("P"+idPaciente+"/edit");
 
 
                         //var href=link.attr("href");
                         //alert(object);
                     }
+                });
+                
+                
+                $(document).on('click','.expPaciente', function(event) {
+                    //alert('prueba');
+                    var idPaciente=$(this).parent().parent().parent().children().html();
+                    console.log(idPaciente);
+                    var url="{{path('admin_historial_consulta')}}?id=P"+idPaciente;
+                    console.log(url);
+                    window.location=url;
                 });
                 
                 
@@ -404,11 +416,59 @@
                 });
                 
                 
+                //var long = $('datatables1_length').children().children().val();
+                $('#datatables1').DataTable({ 
+                    {#searching:true,
+                    order:[[1,"asc"]],#}
+                    "processing": true,
+                    "serverSide": true,
+                    "ajax": {
+                        "url": '{{path('admin_paciente_expediente')}}',
+                        "type": 'GET'
+                    },
+                    "columns": [
+                        { "data": "id" },
+                        { "data": "expediente"},
+                        { "data": "nombres" },
+                        { "data": "apellidos" },
+                        {#{ "data": "dui" },#}
+                        {#{ "data": "telefono" },
+                        { "data": "email" },#}
+                        {#{ "data": "lugarTrabajo" },
+                        { "data": "fechaNacimiento" },#}
+                        { "data": "link" }
+                    ],
+                    "columnDefs": [
+                           { "orderable": false, "targets": 0 },
+                           { "orderable": false, "targets": 2 },
+                           { "orderable": false, "targets": 3 }
+                           
+                           
+                           
+                           //{ "orderData": [ 2, 3, 4 ], "targets": 2 }
+                    ],
+                    "language": {
+                    "info": "Mostrando página _PAGE_ de _PAGES_",
+                    "infoEmpty": "",
+                    "emptyTable": "No se encontraron registros",
+                    "paginate": { 
+                        "next": "Siguiente",
+                        "previous": "Anterior"
+                    },
+                    "processing": "Procesando petición...",
+                    "search": "Buscar registros:",
+                    "lengthMenu": "Mostrar _MENU_ registros"
+                }, 
+                    
+        });
+    
+    
+             {#   
                 $('#datatables1').DataTable({ 
                     searching:true,
                     "order":[[1,"asc"]],
                     "columnDefs": [
-{#                           { "orderable": false, "targets": 0 },#}
+                           { "orderable": false, "targets": 0 },
                            { "orderable": false, "targets": 1 }
                            
                     ],
@@ -425,7 +485,7 @@
                     "lengthMenu": "Mostrar _MENU_ registros"
                 }, 
                     
-                });
+                });#}
         
         
         //Oculta el filtro de la tabla

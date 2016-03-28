@@ -292,43 +292,50 @@ class ConsultaController extends Controller
             $em->persist($entity);
             $em->flush();
             
-            if(isset($parameters['dgplusbellebundle_consulta']['plantilla'])){
-                $plantillaid = $parameters['dgplusbellebundle_consulta']['plantilla'];
-
-                //var_dump($parameters);
-                //die();
-                $dql = "SELECT det.id, det.nombre "
-                        . "FROM DGPlusbelleBundle:DetallePlantilla det "
-                        . "JOIN det.plantilla pla "
-                        . "WHERE pla.id =  :plantillaid";
-
-                $parametros = $em->createQuery($dql)
-                            ->setParameter('plantillaid', $plantillaid)
-                            ->getResult();
-
-
-                //$valores = array(); 
-                // var_dump($usuario); 
-
-                foreach($parametros as $p){
-                    $dataReporte = new HistorialConsulta;
-                    $detalle = $em->getRepository('DGPlusbelleBundle:DetallePlantilla')->find($p['id']);
-
-                    $dataReporte->setDetallePlantilla($detalle);       
-                    $dataReporte->setConsulta($entity);
-                    $dataReporte->setConsultaReceta(null);
-
-                    $nparam = explode(" ", $p['nombre']);
-                    //var_dump(count($nparam)); 
-                    $lon = count($nparam);
-                    if($lon > 1){
-                        $pnombre = $nparam[0];
-                        foreach($nparam as $key => $par){
-                            //var_dump($key);
-                            if($key +1 != $lon){
-                                //var_dump($lon);
-                                $pnombre .= '_'.$nparam[$key + 1];
-                            }
+            $plantillaid = $parameters['dgplusbellebundle_consulta']['plantilla'];
+            $recetaid = $parameters['dgplusbellebundle_consulta']['sesiontratamiento'];
+            //var_dump($parameters);
+            //die();
+            $dql = "SELECT det.id, det.nombre "
+                    . "FROM DGPlusbelleBundle:DetallePlantilla det "
+                    . "JOIN det.plantilla pla "
+                    . "WHERE pla.id =  :plantillaid";
+            
+            $parametros = $em->createQuery($dql)
+                        ->setParameter('plantillaid', $plantillaid)
+                        ->getResult();
+            
+            
+            $dql = "SELECT det.id, det.nombre "
+                    . "FROM DGPlusbelleBundle:DetallePlantilla det "
+                    . "JOIN det.plantilla pla "
+                    . "WHERE pla.id =  :plantillaid";
+            
+            $parametros2 = $em->createQuery($dql)
+                        ->setParameter('plantillaid', $recetaid)
+                        ->getResult();
+            
+            //$valores = array(); 
+            // var_dump($usuario); 
+            
+            foreach($parametros as $p){
+                $dataReporte = new HistorialConsulta;
+                $detalle = $em->getRepository('DGPlusbelleBundle:DetallePlantilla')->find($p['id']);
+                
+                $dataReporte->setDetallePlantilla($detalle);       
+                $dataReporte->setConsulta($entity);
+                $dataReporte->setConsultaReceta(null);
+                
+                $nparam = explode(" ", $p['nombre']);
+                //var_dump(count($nparam)); 
+                $lon = count($nparam);
+                if($lon > 1){
+                    $pnombre = $nparam[0];
+                    foreach($nparam as $key => $par){
+                        //var_dump($key);
+                        if($key +1 != $lon){
+                            //var_dump($lon);
+                            $pnombre .= '_'.$nparam[$key + 1];
                         }
                         $dataReporte->setValorDetalle($parameters[$pnombre]);
                     } else {

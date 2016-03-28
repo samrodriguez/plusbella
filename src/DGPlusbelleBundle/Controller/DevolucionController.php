@@ -122,7 +122,7 @@ class DevolucionController extends Controller
                                                          ->innerJoin('s.tratamiento', 't')
                                                          
                                                         
-                                                        ->andWhere('t.id IN (:tratamientos)')
+                                                        ->andWhere('s.id IN (:tratamientos)')
                                                         //->setParameter(':idpac', $paciente)
                                                         ->setParameter('tratamientos', $tratamientos)
                                                     ;   
@@ -206,7 +206,7 @@ class DevolucionController extends Controller
                        ->getResult();
             //var_dump($id);
             if(count($id==0)){
-                array_push($idtratamientos, $idtra); 
+                array_push($idtratamientos, $idtra);
             }
         }
         

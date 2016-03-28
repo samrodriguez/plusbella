@@ -10,14 +10,16 @@ use Doctrine\ORM\EntityManager;
 class CalendarEventListener
 {
     private $em;
+    private $c;
 
-    public function __construct(EntityManager $entityManager)
+    public function __construct(EntityManager $entityManager, $controller)
     {
         $this->em = $entityManager;
+        $this->c = $controller;
     }
 
     public function loadEvents(CalendarEvent $calendarEvent)
-    {   
+    {    
         
         $request = $calendarEvent->getRequest();
         $filter = $request->get('filter');
@@ -29,7 +31,9 @@ class CalendarEventListener
 //        $fechaFin = $request->get('fechaFin');
         
         $request   = $calendarEvent->getRequest();
-        $filter        = $request->get('filter');
+        $filter = $request->get('filter');
+        
+        $nombre = $request->get('paciente');
         
         $user = $request->get('user');
         
@@ -40,9 +44,11 @@ class CalendarEventListener
         
         //var_dump($startDate);
         //var_dump($endDate);
+        //var_dump($nombre);
+        
         
         if($sucursal==''){
-            $sucursal =3;
+        //    $sucursal =3;
         }
         //var_dump($sucursal);
         //die();
@@ -70,42 +76,110 @@ class CalendarEventListener
 //        var_dump($sucursal);
 //        die();
         
+        if($nombre!=''){
+            $dql = "SELECT pac.id , per.nombres,per.apellidos FROM DGPlusbelleBundle:Paciente pac "
+                    . "JOIN pac.persona per "
+                    . "WHERE CONCAT(upper(per.nombres),upper(per.apellidos)) LIKE upper(:nombre) ";
+                
+            $paciente = $this->em->createQuery($dql)
+                        ->setParameters(array('nombre'=>'%'.$nombre.'%'))
+                        ->getResult();
+        }
+        else{
+            $paciente=1;
+        }
+        //var_dump($nombre);
+        //var_dump($paciente);
+        
+        //die();
         if($sucursal!=''){
+            //echo "sucursal ";
             if($user==0){
-                $dql = "SELECT c FROM DGPlusbelleBundle:Cita c "
+                //echo "user";
+                if($nombre==''){
+                    //echo " nombre";
+                     $dql = "SELECT c FROM DGPlusbelleBundle:Cita c "
                         . "WHERE c.sucursal=:sucursal AND c.fechaCita BETWEEN :fechaInicio AND :fechaFin";
                 
-                $citas = $this->em->createQuery($dql)
+                    $citas = $this->em->createQuery($dql)
                         ->setParameters(array('sucursal'=>$sucursal,'fechaInicio'=>$startDate,'fechaFin'=>$endDate))
                          ->getResult();
+                 //var_dump($citas);
+                }
+                else{     
+                    if(count($paciente)!=0){
+                        //echo $paciente[0]['id'];
+                        //echo count($paciente);
+                        $dql = "SELECT c FROM DGPlusbelleBundle:Cita c "
+                            . "JOIN c.paciente pac "
+                            . "JOIN pac.persona per "
+                        . "WHERE c.sucursal=:sucursal AND c.fechaCita BETWEEN :fechaInicio AND :fechaFin AND CONCAT(upper(per.nombres),upper(per.apellidos)) LIKE upper(:nombre) ";
+                        $citas = $this->em->createQuery($dql)
+                            ->setParameters(array('sucursal'=>$sucursal,'fechaInicio'=>$startDate,'fechaFin'=>$endDate,'nombre'=>'%'.$nombre.'%'))
+                            ->getResult();
+                        //echo "prueba";
+                    }
+                    //var_dump($citas);
+                }
                 
 //                $citas = $this->em->getRepository('DGPlusbelleBundle:Cita')->findBy(array('sucursal'=>$sucursal));
             }
             else{
                 //$citas = $this->em->getRepository('DGPlusbelleBundle:Cita')->findBy(array('sucursal'=>$sucursal));
+                if($nombre==''){
                 $dql = "SELECT c FROM DGPlusbelleBundle:Cita c "
                         . "WHERE c.sucursal=:sucursal AND c.empleado=:user AND c.fechaCita BETWEEN :fechaInicio AND :fechaFin";
                 
                 $citas = $this->em->createQuery($dql)
                         ->setParameters(array('sucursal'=>$sucursal,'user'=>$user,'fechaInicio'=>$startDate,'fechaFin'=>$endDate))
                          ->getResult();
+                }
+                else{
+//                    $dql = "SELECT c FROM DGPlusbelleBundle:Cita c "
+//                        . "WHERE c.sucursal=:sucursal AND c.fechaCita BETWEEN :fechaInicio AND :fechaFin AND c.paciente=:id";
+//                    if(count($paciente)!=0){
+//                        $citas = $this->em->createQuery($dql)
+//                        ->setParameters(array('sucursal'=>$sucursal,'fechaInicio'=>$startDate,'fechaFin'=>$endDate,'id'=>$paciente[0]['id']))
+//                         ->getResult();
+//                    }
+                    
+                    $dql = "SELECT c FROM DGPlusbelleBundle:Cita c "
+                            . "JOIN c.paciente pac "
+                            . "JOIN pac.persona per "
+                        . "WHERE c.sucursal=:sucursal AND c.empleado=:empleado AND c.fechaCita BETWEEN :fechaInicio AND :fechaFin AND CONCAT(upper(per.nombres),upper(per.apellidos)) LIKE upper(:nombre) ";
+                        $citas = $this->em->createQuery($dql)
+                            ->setParameters(array('sucursal'=>$sucursal,'empleado'=>$user,'fechaInicio'=>$startDate,'fechaFin'=>$endDate,'nombre'=>'%'.$nombre.'%'))
+                            ->getResult();
+                        
+                }
                 //$citas = $this->em->getRepository('DGPlusbelleBundle:Cita')->findBy(array('sucursal'=>$sucursal,'empleado'=>$user));
             }
             
         }
         else{
+            //echo "sucursal todas";
             //$citas = $this->em->getRepository('DGPlusbelleBundle:Cita')->findBy(array('fechaCita'=>$date));
             if($user==0){
-                $citas = $this->em->getRepository('DGPlusbelleBundle:Cita')->findAll();
+                if($nombre==''){
+                    $citas = $this->em->getRepository('DGPlusbelleBundle:Cita')->findAll();
+                }else{
+                    $citas = $this->em->getRepository('DGPlusbelleBundle:Cita')->findBy(array('paciente'=>$paciente[0]['id']));
+                }
+                    
             }
             else{
+                if($nombre==''){
+                    $citas = $this->em->getRepository('DGPlusbelleBundle:Cita')->findBy(array('empleado'=>$user));
+                }else{
+                    $citas = $this->em->getRepository('DGPlusbelleBundle:Cita')->findBy(array('empleado'=>$user,'paciente'=>$paciente[0]['id']));
+                }
                 //$citas = $this->em->getRepository('DGPlusbelleBundle:Cita')->findBy(array('sucursal'=>$sucursal));
-                $citas = $this->em->getRepository('DGPlusbelleBundle:Cita')->findBy(array('empleado'=>$user));
+                
             }
         }
-        
-        
-        /*$cierres = $this->em->getRepository('DGPlusbelleBundle:CierreAdministrativo')->findAll();
+        //die();
+        //var_dump($citas);
+        $cierres = $this->em->getRepository('DGPlusbelleBundle:CierreAdministrativo')->findAll();
         
         
         foreach($cierres as $key => $cierreEvent) {
@@ -121,27 +195,48 @@ class CalendarEventListener
             $empleado = $cierreEvent->getEmpleado()->getPersona()->getNombres().' '.$cierreEvent->getEmpleado()->getPersona()->getApellidos();;
             $motivo=$cierreEvent->getMotivo();
             
-            $title = "Cierre administrativo | ".$empleado.' | '.$motivo;
+            $title = strtoupper("Cierre administrativo | ".$empleado.' | '.$motivo);
             $title = '<div class="fa fa-lock fa-2" style="width: 17px; height: 100%; float: left; background: #69BD45;  position: absolute; margin-left: -3px; padding-left:2px "></div> <div style="width: 91%; height: 100%; float: right; position: relative; "> | '.$title.'</div>'/*' | '.$companyEvent->getEstado().*/;
-          /*  $eventEntity->setTitle($title);
+            $eventEntity->setTitle($title);
             
             $calendarEvent->addEvent($eventEntity);
         }
-        */
         
-        
+        $fechaHoy = date("Y-m-d");
+        //var_dump($this->c->getTransport());
+        if(count($paciente)!=0){
         foreach($citas as $key => $companyEvent) {
             // create an event with a start/end time, or an all day event
             //var_dump($key);
             $fi = $companyEvent->getFechaCita()->format('Y-m-d');
             $ih = $companyEvent->getHoraCita()->format('H:i');
             
+            if($fi==$fechaHoy){
+                //var_dump($request->get($title));
+                //die();
+                
+                //Claro
+                //$this->c->sendEmail("77456982@sms.claro.com.sv","","","","Recordatorio de cita el dia: ".$fi." a las ".$ih);
+                
+                //Tigo 
+                //$this->c->sendEmail("75061915@sms.claro.com.sv","","","","Recordatorio de cita el dia: ".$fi." a las ".$ih);
+                
+                //Movistar, este no funciona
+                //$this->c->sendEmail("71727845@sms.claro.com.sv","","","","Recordatorio de cita el dia: ".$fi." a las ".$ih);
+                
+                //Digicel
+                //$this->c->sendEmail("xxxxxxxx@digimensajes.com","","","","Recordatorio de cita el dia: ".$fi." a las ".$ih);
+                
+                
+                
+            }
+            
             //$fh = $companyEvent->getHoraFin()->format('H:i');
             $h = date("H:i", strtotime('+30 minutes', strtotime($ih)));
             
             //var_dump($h);
             
-            
+            //$this->get('envio_correo')->sendEmail("77456982@sms.claro.com.sv","","","","Recordatorio de cita el dia: ");
             $st    = new \DateTime($fi.' '.$ih);
             $nh    = new \DateTime($fi.' '.$h);
             //$//end   = new \DateTime($fi.' '.$fh);
@@ -185,15 +280,15 @@ class CalendarEventListener
                 //var_dump($index);
                 $eventEntity->setId($companyEvent->getID());
 //                $title = strtoupper($expNumero).' - '.$companyEvent->getPaciente()->getPersona()->getNombres().' '.$companyEvent->getPaciente()->getPersona()->getApellidos();
-		$title = strtoupper($expNumero).' - '.$companyEvent->getPaciente()->getPersona()->getNombres().' '.$companyEvent->getPaciente()->getPersona()->getApellidos().' | '.$doctor.' | '.$horaFin;
+		$title = strtoupper($expNumero).' - '.strtoupper($companyEvent->getPaciente()->getPersona()->getNombres().' '.$companyEvent->getPaciente()->getPersona()->getApellidos()).' | '.$doctor.' | '.$horaFin;
                 //var_dump($expNumero);
             }
             else{
                 $eventEntity->setId($companyEvent->getID());
-                $idPaciente = "Reserva de cita";
+                $idPaciente = strtoupper("Reserva de cita");
                 $expNumero ="";
 //                $title = $idPaciente.$expNumero;
-                $title = $idPaciente.$expNumero.' | '.$doctor.' | '.$horaFin;
+                $title = $idPaciente.$expNumero.' | '.strtoupper($doctor).' | '.$horaFin;
             }
             //var_dump($idPaciente);
             //$expediente = $this->em->getRepository('DGPlusbelleBundle:Expediente')->findBy(array('paciente'=>$idPaciente));
@@ -324,7 +419,9 @@ class CalendarEventListener
             //finally, add the event to the CalendarEvent for displaying on the calendar
             
             $calendarEvent->addEvent($eventEntity);
-        }
+        }// fin de foreach para citas
+    }
+        
     }
     
     

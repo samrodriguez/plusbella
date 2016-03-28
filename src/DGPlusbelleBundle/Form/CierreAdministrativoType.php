@@ -35,7 +35,7 @@ class CierreAdministrativoType extends AbstractType
             ->add('fecha', 'date',
                   array('label'  => 'Fecha','required'=>false,
                         'widget' => 'single_text',
-                        'attr'   => array('class' => 'fechaCierre'),
+                        'attr'   => array('class' => 'fecha1'),
                         'format' => 'dd-MM-yyyy',
                        ))
                 
@@ -52,7 +52,8 @@ class CierreAdministrativoType extends AbstractType
                                                 return $repository->obtenerEmpActivo();
                                              },  
                          'attr'=>array(
-                         'class'=>'form-control input-sm busqueda'
+                         'class'=>'form-control input-sm busquedaEmp',
+                         'style'=>'width: 350px;'    
                          )
                        ))
         ;

@@ -23,7 +23,7 @@ class PacienteType extends AbstractType
                     'class'=>'form-control input-sm duiPaciente'
                     )))
             ->add('estadoCivil','choice',array('label' => 'Estado Civil','required'=>false, 'empty_value'=>'Seleccione estado civil...',
-                    'choices'  => array('Soltero/a' => 'Soltero/a', 'Casado/a' => 'Casado/a', 'Divorciado/a' => 'Divorciado/a', 'Acompañado/a' => 'Acompañado/a'),
+                    'choices'  => array('Soltero/a' => 'Soltero/a', 'Casado/a' => 'Casado/a', 'Divorciado/a' => 'Divorciado/a', 'Acompañado/a' => 'Acompañado/a','Viudo/a'=>'Viudo/a'),
                     'attr'=>array(
                     'class'=>'form-control input-sm estadocivilPaciente'
                     )))
