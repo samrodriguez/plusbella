@@ -1,0 +1,27 @@
+{% extends 'DGPlusbelleBundle:Layout:layout3.html.twig' %}
+
+{% block contenido -%}
+
+    {% if estado is not null %}
+       {% block javascripts_step %} 
+            <script>
+                $(document).ready(function(){
+                    if({{estado}}!=null){
+                    bootbox.alert("Respaldo realizado con éxito!", function() {
+                    });
+                    }
+                });
+            </script>
+        {% endblock %}
+    {% endif %}
+    
+    <div class="text-center">
+        <div class="jumbotron">
+          <a class="btn btn-primary btn-lg" href="{{path('create_backup') }}" role="button">Realizar Respaldo de datos</a>
+        </div>
+    </div>
+
+{% endblock %}
+
+
+   

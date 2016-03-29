@@ -221,6 +221,25 @@
         </li>#}
     {% endif %}
     
+    {% if is_granted('ROLE_ADMIN') %}  
+        <li class="nav-item" role="presentation">
+          <a href="{{ path('admin_backup') }}">
+            <span class="nav-icon"><i class="fa fa-save"></i></span>
+            <span class="nav-text">Crear respaldo de datos</span>
+          </a>
+        </li> 
+        
+       {# <li class="nav-item" role="presentation">
+          <a href="#" data-toggle="nav-child">
+            <span class="nav-icon"><i class="fa fa-exchange"></i></span>
+            <span class="nav-text">Roles</span>
+          </a>
+          <ul class="nav nav-child level-1 nav-stacked nav-pills" role="menu">
+            <li role="presentation"><a role="menuitem" tabindex="-1" href="{{ path('admin_rol') }}"><span class="nav-text">Gestionar roles</span></a></li>
+          </ul>
+        </li>#}
+    {% endif %}
+    
    {# {% if is_granted('ROLE_ADMIN') or is_granted('ROLE_MEDICO') %}
         <li class="nav-item" role="presentation">
           <a href="#" data-toggle="nav-child">
