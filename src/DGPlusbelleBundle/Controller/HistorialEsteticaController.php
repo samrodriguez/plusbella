@@ -267,75 +267,81 @@ class HistorialEsteticaController extends Controller
      */
     public function dataConsultaPacienteAction(Request $request)
     {
+        $em = $this->getDoctrine()->getEntityManager();
+        $rsm = new ResultSetMapping();
         $start = $request->query->get('start');
         $draw = $request->query->get('draw');
         $longitud = $request->query->get('length');
         $busqueda = $request->query->get('search');
         
-        $em = $this->getDoctrine()->getEntityManager();
         $expedientesTotal = $em->getRepository('DGPlusbelleBundle:Paciente')->findAll();
-        
         $paciente['draw']=$draw++;  
         $paciente['recordsTotal'] = count($expedientesTotal);
         $paciente['recordsFiltered']= 0;
         $paciente['data']= array();
         
-        $arrayFiltro = explode(' ',$busqueda['value']);
-        
         $busqueda['value'] = str_replace(' ', '%', $busqueda['value']);
         if($busqueda['value']!=''){
-            $dql = "SELECT tip.nombre as tipo, suc.nombre as sucursal, co.costoConsulta as costo, tra.nombre as tratamiento, DATE_FORMAT(co.fechaConsulta,'%d-%m-%Y') as fechaConsulta, '<a ><i style=\"cursor:pointer;\"  class=\"infoPaciente fa fa-info-circle\"></i></a>' as link "
-                    . "FROM DGPlusbelleBundle:HistorialEstetica his "
-                    . "JOIN his.consulta co "
-                    . "JOIN co.sucursal suc "
-                    . "JOIN co.tratamiento tra "
-                    . "JOIN co.tipoConsulta tip "
-                    //. "JOIN co.paciente pac "
-                    //. "JOIN pac.persona per "
-                    . "JOIN his.detalleEstetica opc ";
-                    //. "WHERE CONCAT(upper(per.nombres),upper(per.apellidos)) LIKE upper(:busqueda) "
-                    //. "ORDER BY per.nombres ASC ";
-            $paciente['data'] = $em->createQuery($dql)
-                    ->setParameters(array('busqueda'=>"%".$busqueda['value']."%"))
-                    ->getResult();
-
+            $sql = "SELECT distinct co.id as historial, ROUND(co.costo_consulta, 2) as costo,  
+                                    DATE_FORMAT(co.fecha_consulta,'%m/%d/%Y') as fechaConsulta, 
+                                    tra.nombre as tratamiento, 
+                                    suc.nombre as sucursal, 
+                                    tip.nombre as tipo, 
+                                    CONCAT(per.nombres, ' ', per.apellidos) as paciente,
+                                    '<a ><i style=\"cursor:pointer;\"  class=\"infoPaciente fa fa-info-circle\"></i></a>' as link
+                    FROM historial_estetica his
+                        INNER JOIN consulta co on his.consulta = co.id
+                        INNER JOIN paciente pac on co.paciente = pac.id
+                        INNER JOIN persona per on pac.persona = per.id
+                        INNER JOIN tratamiento tra on co.tratamiento_id = tra.id
+                        INNER JOIN sucursal suc on co.sucursal = suc.id
+                        INNER JOIN tipo_consulta tip on co.tipo_consulta = tip.id
+                    WHERE CONCAT(upper(per.nombres),upper(per.apellidos)) LIKE upper(:busqueda)
+                    ORDER BY co.fecha_consulta desc ";
+            
+            $rsm->addScalarResult('historial','historial');
+            $rsm->addScalarResult('costo','costo');
+            $rsm->addScalarResult('fechaConsulta','fechaConsulta');
+            $rsm->addScalarResult('tratamiento','tratamiento');
+            $rsm->addScalarResult('sucursal','sucursal');
+            $rsm->addScalarResult('tipo','tipo');
+            $rsm->addScalarResult('paciente','paciente');
+            $rsm->addScalarResult('link','link');
+            
+            $paciente['data'] = $em->createNativeQuery($sql, $rsm)
+                                   ->setParameter('busqueda', "%".$busqueda['value']."%")
+                                   ->getResult();
+            
             $paciente['recordsFiltered']= count($paciente['data']);
-
-//            $dql = "SELECT exp.numero as expediente, pac.id as id,per.nombres,per.apellidos,DATE_FORMAT(pac.fechaNacimiento,'%d-%m-%Y') as fechaNacimiento, '<a ><i style=\"cursor:pointer;\"  class=\"infoPaciente fa fa-info-circle\"></i></a>' as link FROM DGPlusbelleBundle:Paciente pac "
-//                . "JOIN pac.persona per "
-//                . "JOIN pac.expediente exp "
-//                . "WHERE CONCAT(upper(per.nombres),upper(per.apellidos)) LIKE upper(:busqueda) "
-//                . "ORDER BY per.nombres ASC ";
-//            $paciente['data'] = $em->createQuery($dql)
-//                    ->setParameters(array('busqueda'=>"%".$busqueda['value']."%"))
-//                    ->setFirstResult($start)
-//                    ->setMaxResults($longitud)
-//                    ->getResult();
         }
         else{
-//            $dql = "SELECT exp.numero as expediente, pac.id as id,per.nombres,per.apellidos,DATE_FORMAT(pac.fechaNacimiento,'%d-%m-%Y') as fechaNacimiento, '<a ><i style=\"cursor:pointer;\"  class=\"infoPaciente fa fa-info-circle\"></i></a>' as link FROM DGPlusbelleBundle:Paciente pac "
-//                . "JOIN pac.persona per JOIN pac.expediente exp ORDER BY per.nombres ASC ";
-//            $paciente['data'] = $em->createQuery($dql)
-//                    ->setFirstResult($start)
-//                    ->setMaxResults($longitud)
-//                    ->getResult();
-            $dql = "SELECT tip.nombre, suc.nombre, co.costoConsulta as costo, tra.nombre as tratamiento, DATE_FORMAT(co.fechaConsulta,'%d-%m-%Y') as fechaConsulta, '<a ><i style=\"cursor:pointer;\"  class=\"infoPaciente fa fa-info-circle\"></i></a>' as link "
-                    . "FROM DGPlusbelleBundle:HistorialEstetica his "
-                    . "INNER JOIN his.consulta co "
-                    . "INNER JOIN co.sucursal suc "
-                    . "INNER JOIN co.tratamiento tra "
-                    . "INNER JOIN co.tipoConsulta tip "
-                    . "INNER JOIN co.paciente pac "
-                    . "INNER JOIN pac.persona per "
-                    . "INNER JOIN his.detalleEstetica opc "
-                    . "INNER JOIN opc.detalleEstetica det "
-                    . "INNER JOIN det.estetica est "
-                    . "ORDER BY per.nombres ASC ";
+            $sql = "SELECT distinct co.id as historial, ROUND(co.costo_consulta, 2) as costo,  
+                                    DATE_FORMAT(co.fecha_consulta,'%m/%d/%Y') as fechaConsulta, 
+                                    tra.nombre as tratamiento, 
+                                    suc.nombre as sucursal, 
+                                    tip.nombre as tipo, 
+                                    CONCAT(per.nombres, ' ', per.apellidos) as paciente,
+                                    '<a ><i style=\"cursor:pointer;\"  class=\"infoPaciente fa fa-info-circle\"></i></a>' as link
+                    FROM historial_estetica his
+                        INNER JOIN consulta co on his.consulta = co.id
+                        INNER JOIN paciente pac on co.paciente = pac.id
+                        INNER JOIN persona per on pac.persona = per.id
+                        INNER JOIN tratamiento tra on co.tratamiento_id = tra.id
+                        INNER JOIN sucursal suc on co.sucursal = suc.id
+                        INNER JOIN tipo_consulta tip on co.tipo_consulta = tip.id
+                    ORDER BY co.fecha_consulta desc ";
             
-            $paciente['data'] = $em->createQuery($dql)
-                    ->setFirstResult($start)
-                    ->setMaxResults($longitud)
-                    ->getResult();
+            $rsm->addScalarResult('historial','historial');
+            $rsm->addScalarResult('costo','costo');
+            $rsm->addScalarResult('fechaConsulta','fechaConsulta');
+            $rsm->addScalarResult('tratamiento','tratamiento');
+            $rsm->addScalarResult('sucursal','sucursal');
+            $rsm->addScalarResult('tipo','tipo');
+            $rsm->addScalarResult('paciente','paciente');
+            $rsm->addScalarResult('link','link');
+            
+            $paciente['data'] = $em->createNativeQuery($sql, $rsm)
+                                   ->getResult();
             
             $paciente['recordsFiltered']= count($paciente['data']);
         }
