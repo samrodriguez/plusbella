@@ -292,58 +292,47 @@ class ConsultaController extends Controller
             $em->persist($entity);
             $em->flush();
             
-            $plantillaid = $parameters['dgplusbellebundle_consulta']['plantilla'];
-            $recetaid = $parameters['dgplusbellebundle_consulta']['sesiontratamiento'];
-            //var_dump($parameters);
-            //die();
-            $dql = "SELECT det.id, det.nombre "
-                    . "FROM DGPlusbelleBundle:DetallePlantilla det "
-                    . "JOIN det.plantilla pla "
-                    . "WHERE pla.id =  :plantillaid";
-            
-            $parametros = $em->createQuery($dql)
-                        ->setParameter('plantillaid', $plantillaid)
-                        ->getResult();
-            
-            
-            $dql = "SELECT det.id, det.nombre "
-                    . "FROM DGPlusbelleBundle:DetallePlantilla det "
-                    . "JOIN det.plantilla pla "
-                    . "WHERE pla.id =  :plantillaid";
-            
-            $parametros2 = $em->createQuery($dql)
-                        ->setParameter('plantillaid', $recetaid)
-                        ->getResult();
-            
-            //$valores = array(); 
-            // var_dump($usuario); 
-            
-            foreach($parametros as $p){
-                $dataReporte = new HistorialConsulta;
-                $detalle = $em->getRepository('DGPlusbelleBundle:DetallePlantilla')->find($p['id']);
-                
-                $dataReporte->setDetallePlantilla($detalle);       
-                $dataReporte->setConsulta($entity);
-                $dataReporte->setConsultaReceta(null);
-                
-                $nparam = explode(" ", $p['nombre']);
-                //var_dump(count($nparam)); 
-                $lon = count($nparam);
-                if($lon > 1){
-                    $pnombre = $nparam[0];
-                    foreach($nparam as $key => $par){
-                        //var_dump($key);
-                        if($key +1 != $lon){
-                            //var_dump($lon);
-                            $pnombre .= '_'.$nparam[$key + 1];
+            if(isset($parameters['dgplusbellebundle_consulta']['plantilla'])){
+                $plantillaid = $parameters['dgplusbellebundle_consulta']['plantilla'];
+
+                //var_dump($parameters);
+                //die();
+                $dql = "SELECT det.id, det.nombre "
+                        . "FROM DGPlusbelleBundle:DetallePlantilla det "
+                        . "JOIN det.plantilla pla "
+                        . "WHERE pla.id =  :plantillaid";
+
+                $parametros = $em->createQuery($dql)
+                            ->setParameter('plantillaid', $plantillaid)
+                            ->getResult();
+
+
+                //$valores = array(); 
+                // var_dump($usuario); 
+
+                foreach($parametros as $p){
+                    $dataReporte = new HistorialConsulta;
+                    $detalle = $em->getRepository('DGPlusbelleBundle:DetallePlantilla')->find($p['id']);
+
+                    $dataReporte->setDetallePlantilla($detalle);       
+                    $dataReporte->setConsulta($entity);
+                    $dataReporte->setConsultaReceta(null);
+
+                    $nparam = explode(" ", $p['nombre']);
+                    //var_dump(count($nparam)); 
+                    $lon = count($nparam);
+                    if($lon > 1){
+                        $pnombre = $nparam[0];
+                        foreach($nparam as $key => $par){
+                            if($key +1 != $lon){
+                                $pnombre .= '_'.$nparam[$key + 1];
+                            }
                         }
                         $dataReporte->setValorDetalle($parameters[$pnombre]);
                     } else {
                         $dataReporte->setValorDetalle($parameters[$p['nombre']]);
                     }
-                   //var_dump($p['nombre']); 
-
-
+                   
                     $em->persist($dataReporte);
                     $em->flush();
                 }   
@@ -1122,7 +1111,7 @@ class ConsultaController extends Controller
         //Recuperación del id
         $request = $this->getRequest();
         $idPacient= $request->get('id');  
-        //var_dump($idPacient);
+
         $idPaciente=  substr($idPacient, 1);
         $consultas = $em->getRepository('DGPlusbelleBundle:Consulta')->findBy(array('paciente'=>$idPaciente));
         $paciente = $em->getRepository('DGPlusbelleBundle:Paciente')->find($idPaciente);
@@ -1170,7 +1159,7 @@ class ConsultaController extends Controller
         $CompraPaciente = $em->getRepository('DGPlusbelleBundle:Paciente')->find($idPaciente);
         $paciente = $CompraPaciente;
         $paquetes = $em->getRepository('DGPlusbelleBundle:VentaPaquete')->findBy(array('paciente' => $CompraPaciente->getPersona()->getId()));
-        //var_dump($paquetes);
+
         $tratamientos= $em->getRepository('DGPlusbelleBundle:PersonaTratamiento')->findBy(array('paciente' => $CompraPaciente->getPersona()->getId()));
         
         $dql = "SELECT count(vp) FROM DGPlusbelleBundle:VentaPaquete vp"
@@ -1219,7 +1208,7 @@ class ConsultaController extends Controller
         $abonosPaq = $em->createNativeQuery($sql2, $rsm2)
                 ->setParameter('paciente', $CompraPaciente->getPersona()->getId())
                 ->getResult();
-        //var_dump($abonosPaq);
+
         $rsm3 = new ResultSetMapping();
         
         $sql3 = "select p.id tratamiento, cast(sum(abo.monto) as decimal(36,2)) abonos "
@@ -1234,7 +1223,7 @@ class ConsultaController extends Controller
                 ->setParameter('paciente', $CompraPaciente->getPersona()->getId())
                 ->getResult();
         //$seguimientotratamiento= $em->getRepository('DGPlusbelleBundle:PersonaTratamiento')->findBy(array('idVentaPaquete' => 30));
-        //var_dump($seguimientopaquete);
+
         $regnoedittratamiento = array();
         foreach($tratamientos as $row){
             $c=0;
@@ -1245,23 +1234,18 @@ class ConsultaController extends Controller
                 }
                 
                 //array_push($regnoedit, array('idpaquete'=>$row->getId()));
-                
             }
-            //var_dump($c);
+            
             if($c!=0){
                     array_push($regnoedittratamiento, array('idpersonatrat'=>$row->getId()));
-            }
-            
-            
+            }            
         }
-        //var_dump();
-        //sendEmail($to, $cc, $bcc,$replay, $body){
         
+//      sendEmail($to, $cc, $bcc,$replay, $body){
+//      $comision;
+//      Formato: dd-mm-yy
+//      echo calcular_edad(“01-10-1989?); // Resultado: 21
         
-        //var_dump($entity);
-        //$comision;
-// Formato: dd-mm-yy
-//echo calcular_edad(“01-10-1989″); // Resultado: 21
         return array(
             //'entities' => $entities,
             //'entity' => $entity,
@@ -1310,13 +1294,12 @@ class ConsultaController extends Controller
         if($fecha==null){
             $fecha= date('Y-m');
         }
-        //var_dump($fecha);
+
             /*if($fecha<10){
                 $fecha = "0".$fecha;
             }*/
             //$mes = '02';
             foreach($empleados as $key=>$empleado){
-                //var_dump($empleado);
                 $dql = "SELECT sum(p.costo)"
                     . " FROM"
                     . " DGPlusbelleBundle:VentaPaquete vp"
@@ -1324,10 +1307,10 @@ class ConsultaController extends Controller
                     . " JOIN vp.empleado emp"
                     . " JOIN emp.empleado em"
                     . " WHERE vp.fechaVenta LIKE :mes AND em.estado=true AND em.id=:idEmpleado";
+                
                 $ventaspaquete = $em->createQuery($dql)
                        ->setParameters(array('mes'=>$fecha.'___','idEmpleado'=>$empleado['id']))
                        ->getResult();
-                
                 
                 $dql = "SELECT sum(vp.costoConsulta)"
                     . " FROM"
@@ -1541,8 +1524,6 @@ class ConsultaController extends Controller
     public function progresoventaajaxAction(Request $request)
     {
         $fecha= $request->get('fecha');
-        
-        //var_dump($fecha);
         
         $time = new \DateTime('01-'.$fecha);
         

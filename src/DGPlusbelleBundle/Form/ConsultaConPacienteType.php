@@ -81,6 +81,7 @@ class ConsultaConPacienteType extends AbstractType
 //                 
 //                ))
             ->add('costoConsulta', 'text', array('required'=>false,
+                    'label'         =>  'Costo de consulta ($)',
                     'attr'=>array(
                          'class'=>'form-control costoConsulta'
                          )
