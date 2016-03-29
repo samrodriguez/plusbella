@@ -12,6 +12,7 @@ parameters:
     photo.tmp: %kernel.root_dir%/../Photos/Tmp/
     plusbelle.logo: %kernel.root_dir%/../Resources/img/dgplusbelle/images/
     plusbelle.graph: %kernel.root_dir%/../Resources/
+    plusbelle.backup: %kernel.root_dir%/../Resources/backup/
     
 framework:
     #esi:             ~
@@ -113,13 +114,13 @@ knp_paginator:
     template:
         pagination: KnpPaginatorBundle:Pagination:sliding.html.twig     # sliding pagination controls template
         sortable: KnpPaginatorBundle:Pagination:sortable_link.html.twig # sort link template
-easy_admin:
-    site_name: 'PLUS BELLE'
-    design:
-        brand_color: '#1ABC9C'
-    entities:
-        Test:
-            class: DGPlusbelleBundle\Entity\Test
-            label: 'Test'
-            list:
-                title: "Test"
+# easy_admin:
+#     site_name: 'PLUS BELLE'
+#     design:
+#         brand_color: '#1ABC9C'
+#     entities:
+#         Test:
+#             class: DGPlusbelleBundle\Entity\Test
+#             label: 'Test'
+#             list:
+#                 title: "Test"
