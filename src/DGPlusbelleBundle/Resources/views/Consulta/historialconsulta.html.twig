@@ -111,26 +111,16 @@
             <div class="row">
 {#                <div class="col-md-12"><hr></div>#}
             </div>
-                            <div class="content-hero content-hero-lg">
-          <img class="content-hero-embed" src="{{ asset('Photos/')}}people4.jpg" alt="cover">
-          <div class="content-hero-overlay bg-grd-blue"></div>
-          <div class="content-hero-body">
+          <div class="content-hero content-hero-lg" style="min-height:140px;">
+{#            <img class="content-hero-embed" src="{{ asset('Photos/')}}logo-01.png" alt="cover" style="background: #649579;height:200px;">#}
+          <div style="height:150px;background: #649579; opacity: 1.0" class="content-hero-overlay "></div>
+          <div  style="" class="content-hero-body" >
           </div>
-          <div class="content-hero-bar">
-            <div class="row">
+          <div  style="" class="content-hero-bar" {#style="margin-top:-180px; background-color: red; position: relative;"#}>
+            <div class="row" {#style="margin-top:-180px; background-color: red; position: relative;"#}>
               
-              <div class="col-lg-6">
-                <div class="float-bar clearfix">
-                  <div class="float-bar-brand">
-                    <a class="kit-avatar kit-avatar-128 no-padding border-white" href="#">
-{#                      <img alt="cover" src="images/dummy/uifaces22.jpg">#}
-                        {% if paciente.sexo=='M'%}
-                            <i class="fa fa-male fa-4x"></i>
-                        {% else %}
-                            <i class="fa fa-female fa-4x"></i>
-                        {% endif  %}
-                    </a>
-                  </div>
+              <div class="col-lg-6" >
+                <div class="float-bar clearfix" >
                   <div class="col-sm-11">
                     <div class="visible-xs">
                       <h2 class="display-name media-heading text-teal">{{ paciente.persona.nombres}} {{ paciente.persona.apellidos}}</h2>
@@ -175,15 +165,7 @@
                                 
                         </p>
                     </div>
-                    <div class="mt-4x">
-                      <p>{#Información sobre el paciente#}</p>
-                      <p>
-                        {#<a href="#" class="btn btn-danger btn-sm btn-circle" aria-label="google plus"><i class="fa fa-lg fa-google-plus"></i></a>
-                        <a href="#" class="btn btn-primary btn-sm btn-circle ml-1x" aria-label="instagram"><i class="fa fa-lg fa-instagram"></i></a>
-                        <a href="#" class="btn btn-info btn-sm btn-circle ml-1x" aria-label="twitter"><i class="fa fa-lg fa-twitter"></i></a>#}
-{#                        <a href="#" class="btn btn-success btn-sm ml-2x" aria-label="facebook"><i class="fa fa-lg fa-facebook">{{edad}}</i></a>#}
-                      </p>
-                    </div>
+                    
                   </div><!-- /.media-body -->
                 </div><!-- /.float-bar -->
               </div><!-- /.cols -->
@@ -302,7 +284,7 @@
                                                 </div>
                                             </div> 
                                             {% endif %}        
-                                            <div class="col-md-5">
+                                            <div class="col-md-3">
                                                 <div class="btn-group btn-group-sm pull-left">
                                                     <button id="seguimiento-fototratamiento" data-toggle="tooltip" data-container="body" title="Ver imagenes" class="btn btn-default datatables1-actions seguimiento" role="button" onclick="imagenTratamiento({{ entity.id }});">
                                                         <i class="glyphicon glyphicon-picture"></i><a href="{{path('admin_imagentratamiento_galeria',{id:entity.id})}}"> </a>
@@ -324,7 +306,7 @@
                                                 </div>
                                             </div>
                                                 {% for ent in entity.sestratamiento%}
-                                                    <div class="col-md-1">
+                                                    <div class="">
                                                         <div class="btn-group btn-group-sm pull-left">
                                                             <button id="ver-receta" data-toggle="tooltip" data-container="body" title="Consultar receta" class="btn btn-default datatables1-actions" role="button" onclick="exportarRecetaVentaTratamientoPDF({{ entity.id }});">
                                                                 <i class="fa fa-file-pdf-o"></i><a href=""> </a>
