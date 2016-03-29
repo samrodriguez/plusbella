@@ -416,7 +416,7 @@ class ConsultaController extends Controller
                     $compCorporal->setFecha(new \DateTime('now'));
                     $compCorporal->setConsulta($entity);
                     $compCorporal->setEstetica($estetica);
-                    var_dump($parameters['corporal']['masa_osea']); 
+                    //var_dump($parameters['corporal']['masa_osea']); 
                     $em->persist($compCorporal);
                     $em->flush();
                     

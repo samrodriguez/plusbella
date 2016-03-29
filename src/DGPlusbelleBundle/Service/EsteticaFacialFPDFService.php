@@ -82,13 +82,17 @@ class EsteticaFacialFPDFService {
                     $h+=10;
                 } 
                 
-                if(in_array($value['id'], $valores)){
-                    
-                    $this->pdf->Image($path . 'check_est.jpg', $i, $h, 4.5, 4);
+                if(isset($valores)){
+                    if(in_array($value['id'], $valores)){
+
+                        $this->pdf->Image($path . 'check_est.jpg', $i, $h, 4.5, 4);
+                    } else {
+                        $this->pdf->Image($path . 'cuadro_est.jpg', $i, $h, 3.5, 3.5);
+                    }
                 } else {
                     $this->pdf->Image($path . 'cuadro_est.jpg', $i, $h, 3.5, 3.5);
                 }
-                
+                    
                 $this->pdf->Cell(37, 27, utf8_decode($value['nombre']));
                 $i+=37;
                 $cont++;
@@ -117,8 +121,12 @@ class EsteticaFacialFPDFService {
                     $h+=10;
                 }
                 
-                if(in_array($value['id'], $valores)){
-                    $this->pdf->Image($path . 'check_est.jpg', $i, $h, 4.5, 4);
+                if(isset($valores)){
+                    if(in_array($value['id'], $valores)){
+                        $this->pdf->Image($path . 'check_est.jpg', $i, $h, 4.5, 4);
+                    } else {
+                        $this->pdf->Image($path . 'cuadro_est.jpg', $i, $h, 3.5, 3.5);
+                    }
                 } else {
                     $this->pdf->Image($path . 'cuadro_est.jpg', $i, $h, 3.5, 3.5);
                 }
@@ -151,12 +159,16 @@ class EsteticaFacialFPDFService {
                     $h+=10;
                 }
                 
-                if(in_array($value['id'], $valores)){
-                    $this->pdf->Image($path . 'check_est.jpg', $i, $h, 4.5, 4);
+                if(isset($valores)){
+                    if(in_array($value['id'], $valores)){
+                        $this->pdf->Image($path . 'check_est.jpg', $i, $h, 4.5, 4);
+                    } else {
+                        $this->pdf->Image($path . 'cuadro_est.jpg', $i, $h, 3.5, 3.5);
+                    }
                 } else {
                     $this->pdf->Image($path . 'cuadro_est.jpg', $i, $h, 3.5, 3.5);
                 }
-                
+                    
                 $this->pdf->Cell(45, 27, utf8_decode($value['nombre']));
                 $i+=45;
                 $cont++;

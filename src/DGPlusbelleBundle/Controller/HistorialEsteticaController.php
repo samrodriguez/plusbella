@@ -3,12 +3,15 @@
 namespace DGPlusbelleBundle\Controller;
 
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use DGPlusbelleBundle\Entity\HistorialEstetica;
 use DGPlusbelleBundle\Form\HistorialEsteticaType;
+use Doctrine\ORM\EntityRepository;
+use Doctrine\ORM\Query\ResultSetMapping;
 
 /**
  * HistorialEstetica controller.
@@ -35,6 +38,18 @@ class HistorialEsteticaController extends Controller
             'entities' => $entities,
         );
     }
+    
+    /**
+     * Lists all Consultas de estetica paciente.
+     *
+     * @Route("/consulta-estetica", name="admin_consultas_paciente")
+     * @Method("GET")
+     */
+    public function ConsultasPacienteAction()
+    {
+        return $this->render('DGPlusbelleBundle:HistorialEstetica:consulta_paciente.html.twig');     
+    }
+    
     /**
      * Creates a new HistorialEstetica entity.
      *
@@ -244,4 +259,87 @@ class HistorialEsteticaController extends Controller
             ->getForm()
         ;
     }
+    
+    /**
+     * 
+     *
+     * @Route("/consulta-paciente/data", name="admin_consultas_paciente_data")
+     */
+    public function dataConsultaPacienteAction(Request $request)
+    {
+        $start = $request->query->get('start');
+        $draw = $request->query->get('draw');
+        $longitud = $request->query->get('length');
+        $busqueda = $request->query->get('search');
+        
+        $em = $this->getDoctrine()->getEntityManager();
+        $expedientesTotal = $em->getRepository('DGPlusbelleBundle:Paciente')->findAll();
+        
+        $paciente['draw']=$draw++;  
+        $paciente['recordsTotal'] = count($expedientesTotal);
+        $paciente['recordsFiltered']= 0;
+        $paciente['data']= array();
+        
+        $arrayFiltro = explode(' ',$busqueda['value']);
+        
+        $busqueda['value'] = str_replace(' ', '%', $busqueda['value']);
+        if($busqueda['value']!=''){
+            $dql = "SELECT tip.nombre as tipo, suc.nombre as sucursal, co.costoConsulta as costo, tra.nombre as tratamiento, DATE_FORMAT(co.fechaConsulta,'%d-%m-%Y') as fechaConsulta, '<a ><i style=\"cursor:pointer;\"  class=\"infoPaciente fa fa-info-circle\"></i></a>' as link "
+                    . "FROM DGPlusbelleBundle:HistorialEstetica his "
+                    . "JOIN his.consulta co "
+                    . "JOIN co.sucursal suc "
+                    . "JOIN co.tratamiento tra "
+                    . "JOIN co.tipoConsulta tip "
+                    //. "JOIN co.paciente pac "
+                    //. "JOIN pac.persona per "
+                    . "JOIN his.detalleEstetica opc ";
+                    //. "WHERE CONCAT(upper(per.nombres),upper(per.apellidos)) LIKE upper(:busqueda) "
+                    //. "ORDER BY per.nombres ASC ";
+            $paciente['data'] = $em->createQuery($dql)
+                    ->setParameters(array('busqueda'=>"%".$busqueda['value']."%"))
+                    ->getResult();
+
+            $paciente['recordsFiltered']= count($paciente['data']);
+
+//            $dql = "SELECT exp.numero as expediente, pac.id as id,per.nombres,per.apellidos,DATE_FORMAT(pac.fechaNacimiento,'%d-%m-%Y') as fechaNacimiento, '<a ><i style=\"cursor:pointer;\"  class=\"infoPaciente fa fa-info-circle\"></i></a>' as link FROM DGPlusbelleBundle:Paciente pac "
+//                . "JOIN pac.persona per "
+//                . "JOIN pac.expediente exp "
+//                . "WHERE CONCAT(upper(per.nombres),upper(per.apellidos)) LIKE upper(:busqueda) "
+//                . "ORDER BY per.nombres ASC ";
+//            $paciente['data'] = $em->createQuery($dql)
+//                    ->setParameters(array('busqueda'=>"%".$busqueda['value']."%"))
+//                    ->setFirstResult($start)
+//                    ->setMaxResults($longitud)
+//                    ->getResult();
+        }
+        else{
+//            $dql = "SELECT exp.numero as expediente, pac.id as id,per.nombres,per.apellidos,DATE_FORMAT(pac.fechaNacimiento,'%d-%m-%Y') as fechaNacimiento, '<a ><i style=\"cursor:pointer;\"  class=\"infoPaciente fa fa-info-circle\"></i></a>' as link FROM DGPlusbelleBundle:Paciente pac "
+//                . "JOIN pac.persona per JOIN pac.expediente exp ORDER BY per.nombres ASC ";
+//            $paciente['data'] = $em->createQuery($dql)
+//                    ->setFirstResult($start)
+//                    ->setMaxResults($longitud)
+//                    ->getResult();
+            $dql = "SELECT tip.nombre, suc.nombre, co.costoConsulta as costo, tra.nombre as tratamiento, DATE_FORMAT(co.fechaConsulta,'%d-%m-%Y') as fechaConsulta, '<a ><i style=\"cursor:pointer;\"  class=\"infoPaciente fa fa-info-circle\"></i></a>' as link "
+                    . "FROM DGPlusbelleBundle:HistorialEstetica his "
+                    . "INNER JOIN his.consulta co "
+                    . "INNER JOIN co.sucursal suc "
+                    . "INNER JOIN co.tratamiento tra "
+                    . "INNER JOIN co.tipoConsulta tip "
+                    . "INNER JOIN co.paciente pac "
+                    . "INNER JOIN pac.persona per "
+                    . "INNER JOIN his.detalleEstetica opc "
+                    . "INNER JOIN opc.detalleEstetica det "
+                    . "INNER JOIN det.estetica est "
+                    . "ORDER BY per.nombres ASC ";
+            
+            $paciente['data'] = $em->createQuery($dql)
+                    ->setFirstResult($start)
+                    ->setMaxResults($longitud)
+                    ->getResult();
+            
+            $paciente['recordsFiltered']= count($paciente['data']);
+        }
+        
+        return new Response(json_encode($paciente));
+    }    
 }

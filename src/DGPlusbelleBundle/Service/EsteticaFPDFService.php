@@ -78,9 +78,14 @@ class EsteticaFPDFService {
         
         foreach ($opciones as $key => $value) {
             if($value['detNom'] == 'Tratamiento' ){
-                if(in_array($value['id'], $valores)){
-                    //var_dump($valor);
-                    $this->pdf->Image($path . 'check_est.jpg', $i, 88.5, 4.5, 4);
+                
+                if(isset($valores)){
+                    if(in_array($value['id'], $valores)){
+                        //var_dump($valor);
+                        $this->pdf->Image($path . 'check_est.jpg', $i, 88.5, 4.5, 4);
+                    } else {
+                        $this->pdf->Image($path . 'cuadro_est.jpg', $i, 88.5, 3.5, 3.5);
+                    }
                 } else {
                     $this->pdf->Image($path . 'cuadro_est.jpg', $i, 88.5, 3.5, 3.5);
                 }
@@ -124,10 +129,13 @@ class EsteticaFPDFService {
         $this->pdf->Cell(20, 27, 'Grasa Visceral',0,0,'C');
         
         $this->pdf->Image($path . 'peso.jpg', 23, 120, 10, 10);
-        $this->pdf->Image($path . 'muscle.jpg', 107, 120, 10, 10);
+        $this->pdf->Image($path . 'muscle.jpg', 108, 120, 10, 10);
         $this->pdf->Image($path . 'muscle.jpg', 87, 120, 10, 10);
-        $this->pdf->Image($path . 'mass_bone.jpg', 166, 120, 10, 10);
-        $this->pdf->Image($path . 'visceral.jpg', 180, 120, 10, 10);
+        $this->pdf->Image($path . 'mass_bone.jpg', 167, 120, 10, 10);
+        $this->pdf->Image($path . 'bmr_dci.jpg', 139, 120, 10, 10);
+        $this->pdf->Image($path . 'body_fat.jpg', 40, 120, 16, 10);
+        $this->pdf->Image($path . 'agua_corp.jpg', 67, 120, 10, 10);
+        $this->pdf->Image($path . 'visceral.jpg', 185, 120, 10, 10);
         
         $this->pdf->Ln(8);
         $this->pdf->SetFont('Arial','',8);
@@ -160,12 +168,16 @@ class EsteticaFPDFService {
                     $h+=12;
                 }
                 
-                if(in_array($value['id'], $valores)){
-                    $this->pdf->Image($path . 'check_est.jpg', $i, $h, 4.5, 4);
+                if(isset($valores)){
+                    if(in_array($value['id'], $valores)){
+                        $this->pdf->Image($path . 'check_est.jpg', $i, $h, 4.5, 4);
+                    } else {
+                        $this->pdf->Image($path . 'cuadro_est.jpg', $i, $h, 3.5, 3.5);
+                    }
                 } else {
                     $this->pdf->Image($path . 'cuadro_est.jpg', $i, $h, 3.5, 3.5);
                 }
-                
+                    
                 $this->pdf->Cell(42, 27, $value['nombre']);
                 $i+=42;
                 $cont++;
