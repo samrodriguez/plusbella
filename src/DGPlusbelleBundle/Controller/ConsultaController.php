@@ -166,6 +166,7 @@ class ConsultaController extends Controller
         
         if($idpac == -1){
             $flag = 1;
+            $accion = 'E';
             $pacient = new \DGPlusbelleBundle\Entity\Paciente();
             $form = $this->createCreateForm($entity,3,$idEntidad,$pacient);
         } else {
@@ -468,25 +469,20 @@ class ConsultaController extends Controller
                     $em->flush();
                 }
             }
-            //var_dump($dataReporte);
-           //var_dump($entity->getId());
-            //var_dump($parametros);
-            //var_dump($valores);
+            
             
             //$f = $gg;
             /*  if($producto){
                 $this->establecerConsultaProducto($entity, $producto, $indicaciones);
             } */
             $idEmpleado = $usuario->getPersona()->getEmpleado()[0]->getId();
-            //var_dump($idEmpleado);
             $empleados=$this->verificarComision($idEmpleado,null);
-            //var_dump($empleados);
+            
             if($empleados[0]['suma'] >= $empleados[0]['meta'] && !$empleados[0]['comisionCompleta']){
                 $this->get('envio_correo')->sendEmail($empleados[0]['email'],"","","","cumplio su objetivo");
                 $empComision = $em->getRepository('DGPlusbelleBundle:Empleado')->find($empleado[0]->getId());
                 $empComision->setComisionCompleta(1);
-                //var_dump($empComision);
-                //die();
+                
                 $em->persist($empComision);
                 $em->flush();
             }
@@ -499,6 +495,9 @@ class ConsultaController extends Controller
                     break;
                 case 'P';
                     return $this->redirect($this->generateUrl('admin_paciente'));
+                    break;
+                case 'E';
+                    return $this->redirect($this->generateUrl('admin_consultas_paciente'));
                     break;
             }
             

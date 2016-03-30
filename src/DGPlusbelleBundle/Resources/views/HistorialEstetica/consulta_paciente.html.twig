@@ -59,10 +59,52 @@
             $(document).ready(function(){
                 var idPaciente = 0;
 
-                //Seleccionar un registro
-                $(document).on('click','#datatables1>tbody>tr,.infoPaciente', function(event) {
-                    idPaciente=$(this).children().html();
+                //Exportar a pdf 
+                $(document).on('click','.infoPaciente', function(event) {
+                    var idcon = $(this).attr('id');
+                    var estetica = 0;
                     
+                    $.ajax({
+                        url:"{{path('busqueda_estetica_pdf')}}",
+                        type: "POST",
+                        data:"idcon="+$(this).attr('id'),
+                        success: function(respuesta){
+                            var corporal = [];
+                            
+                            // Se obtiene el id del paciente
+                            var paciente = respuesta.data['paciente'];
+
+                            // Se obtiene el id de la sucursal 
+                            var sucursal = respuesta.data['sucursal'];
+
+                            // Se obtiene el tipo de consulta de estetica del registro seleccionado
+                            var tipo_estetica = respuesta.data['estetica'];
+                            
+                            // Si el tipo de consulta es corporal
+                            if(tipo_estetica == 'Corporal') {
+                                corporal.push(respuesta.corporal[0]['peso']);
+                                corporal.push(respuesta.corporal[0]['grasa_corporal']);
+                                corporal.push(respuesta.corporal[0]['agua_corporal']);
+                                corporal.push(respuesta.corporal[0]['masa_musculo']);
+                                corporal.push(respuesta.corporal[0]['valoracion_fisica']);
+                                corporal.push(respuesta.corporal[0]['dci_bmr']);
+                                corporal.push(respuesta.corporal[0]['edad_metabolica']);
+                                corporal.push(respuesta.corporal[0]['masa_osea']);
+                                corporal.push(respuesta.corporal[0]['grasa_visceral']);
+                                estetica = 1;
+                                
+                                var url = Routing.generate('admin_prevpdfcorporal_por_pdf', { paciente:paciente, sucursal: sucursal, estetica: estetica, valores: respuesta.valores, corporal: corporal});
+                                window.open(url);
+                            } 
+                            // Si el tipo de consulta es facial
+                            else if(tipo_estetica == 'Facial') {
+                                estetica = 2;
+                                
+                                var url = Routing.generate('admin_prevpdf_facial_por_pdf', { paciente: paciente, sucursal: sucursal, valores: respuesta.valores, estetica: estetica});
+                                window.open(url);
+                            }
+                        }
+                    });
                 });
                 
                 $('#filterDatatables1').on('keyup', function(event) {
@@ -114,7 +156,7 @@
         $('#datatables1_filter').hide();
         $('#filterDatatables1').val('');
         
-           validarPaciente();          
+           //validarPaciente();          
     });//Fin document ready
         
     //Definición de funciones

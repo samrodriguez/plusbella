@@ -59,10 +59,10 @@ class EsteticaFPDFService {
         $sexoPaciente = $paciente->getSexo();
 
         $sexo = '';
-        if($sexoPaciente == 'm'){
+        if($sexoPaciente == 'm' || $sexoPaciente == 'M'){
             $sexo = 'Masculino';
         }
-        if($sexoPaciente == 'f'){
+        if($sexoPaciente == 'f' || $sexoPaciente == 'F'){
             $sexo = 'Femenino';
         }
         
