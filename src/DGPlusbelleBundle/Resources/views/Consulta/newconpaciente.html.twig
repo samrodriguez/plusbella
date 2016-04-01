@@ -242,7 +242,12 @@
 
                 {# Paciente #}
                 <div class="row">
-                    <div class="col-md-3 col-md-offset-1">{{ form_row(form.paciente) }}</div>
+                    <div class="col-md-3 col-md-offset-1">
+                        {#{{ form_row(form.paciente) }}#}
+                        <select id="dgplusbellebundle_consulta_paciente" name="dgplusbellebundle_consulta[paciente]" class="form-control input-sm">
+                            <option value="0" selected>Seleccione un paciente...</option>
+                        </select>    
+                    </div>
                 </div>
                 {# Formulario de consulta#}
                 <div class="row">

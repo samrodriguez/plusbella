@@ -171,7 +171,7 @@ class ConsultaController extends Controller
             $paciente_est = $em->getRepository('DGPlusbelleBundle:Paciente')->find($parameters['dgplusbellebundle_consulta']['paciente']);
             
             $entity->setPaciente($paciente_est);
-            var_dump($entity);
+            //var_dump($entity);
             $flag = 1;
             $accion = 'E';
             $pacient = new \DGPlusbelleBundle\Entity\Paciente();
@@ -532,16 +532,13 @@ class ConsultaController extends Controller
                 'action' => $this->generateUrl('admin_consulta_create', array('id' => 1,'identidad'=>$identidad, 'idpac'=>$paciente->getId())),
                 'method' => 'POST',
             ));
-            $form->add('paciente', 'entity', array(
-                        'label'         =>  'Paciente',
-                        //'empty_value'=>'Seleccione una actividad',
-                        'class'         =>  'DGPlusbelleBundle:Paciente',
-                        'query_builder' =>  function(EntityRepository $repositorio) use (  $paciente ){
-                return $repositorio
-                            ->createQueryBuilder('pa')
-                            ->where('pa.id = :pac')
-                            ->setParameter(':pac', $paciente->getId());
-                    }));
+            $form->add('paciente','entity', array( 'label' => 'Paciente','required'=>false,
+                         'empty_value'   => 'Seleccione un paciente...',
+                         'class'         => 'DGPlusbelleBundle:Paciente',
+                         'attr'=>array(
+                         'class'=>'form-control input-sm pacienteConsulta'
+                         )
+                       ));
         }
         elseif($tipo == 2) {
             $form = $this->createForm(new ConsultaConPacienteType(), $entity, array(
@@ -605,11 +602,11 @@ class ConsultaController extends Controller
                 'method' => 'POST',
             ));
 
-            $form->add('paciente', 'choice', array(
-                        'label'         =>  'Paciente',
-                        'empty_value'=>'Seleccione un paciente',
-                        'choices'   => array()
-                        ));
+//            $form->add('paciente', 'choice', array(
+//                        'label'         =>  'Paciente',
+//                        'empty_value'=>'Seleccione un paciente',
+//                        'choices'   => array()
+//                        ));
             
             $form->add('reportePlantilla', 'choice', array(
                     'label'=> 'Registro clínico',
