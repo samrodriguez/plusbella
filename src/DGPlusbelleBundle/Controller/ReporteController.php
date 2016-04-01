@@ -508,7 +508,7 @@ class ReporteController extends Controller
                     ->getResult();
         
         //$titulo = 'Reporte de Videoendoscopia';
-        var_dump($id);
+        //var_dump($id);
         
         $medico = array(
                     "nombre" => "Dr. Juan Carlos Pacheco",

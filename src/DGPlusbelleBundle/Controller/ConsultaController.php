@@ -121,19 +121,22 @@ class ConsultaController extends Controller
     {
         $entity = new Consulta();
         $em = $this->getDoctrine()->getManager();
+        
         //Obtiene el usuario
         $id= $request->get('id');
+        
         $flag = 0;
         $cadena= $request->get('identidad');
+        $parameters = $request->request->all();
         
         //Obtener del parametro el valor que se debe usar para programar la consulta
         $accion = $cadena[0];
+        
         //Obtener el id del parametro
         $idEntidad = substr($cadena, 1);
         
         $pac = $em->getRepository('DGPlusbelleBundle:Paciente')->find($idpac);
         
-        //var_dump($cadena);
         
         
         $user = $this->get('security.token_storage')->getToken()->getUser();
@@ -165,6 +168,10 @@ class ConsultaController extends Controller
         
         
         if($idpac == -1){
+            $paciente_est = $em->getRepository('DGPlusbelleBundle:Paciente')->find($parameters['dgplusbellebundle_consulta']['paciente']);
+            
+            $entity->setPaciente($paciente_est);
+            var_dump($entity);
             $flag = 1;
             $accion = 'E';
             $pacient = new \DGPlusbelleBundle\Entity\Paciente();
@@ -175,16 +182,17 @@ class ConsultaController extends Controller
             
         $form->handleRequest($request);
         
+        
         //$campos = $form->get('campos')->getData();
        // $indicaciones = $form->get('indicaciones')->getData();
-        $parameters = $request->request->all();
+        
        // foreach($parameters as $p){
        //     $campos = $parameters->campos;
         //}
         
         //var_dump($parameters['dgplusbellebundle_consulta']['campos']);
         //die();
-        if ($form->isValid()) {
+        //if ($form->isValid()) {
             $em = $this->getDoctrine()->getManager();
             $tratamiento = null;
             switch ($accion){
@@ -501,7 +509,7 @@ class ConsultaController extends Controller
                     break;
             }
             
-        }
+        //}
 
         return array(
             'entity' => $entity,
@@ -524,6 +532,16 @@ class ConsultaController extends Controller
                 'action' => $this->generateUrl('admin_consulta_create', array('id' => 1,'identidad'=>$identidad, 'idpac'=>$paciente->getId())),
                 'method' => 'POST',
             ));
+            $form->add('paciente', 'entity', array(
+                        'label'         =>  'Paciente',
+                        //'empty_value'=>'Seleccione una actividad',
+                        'class'         =>  'DGPlusbelleBundle:Paciente',
+                        'query_builder' =>  function(EntityRepository $repositorio) use (  $paciente ){
+                return $repositorio
+                            ->createQueryBuilder('pa')
+                            ->where('pa.id = :pac')
+                            ->setParameter(':pac', $paciente->getId());
+                    }));
         }
         elseif($tipo == 2) {
             $form = $this->createForm(new ConsultaConPacienteType(), $entity, array(
@@ -587,6 +605,12 @@ class ConsultaController extends Controller
                 'method' => 'POST',
             ));
 
+            $form->add('paciente', 'choice', array(
+                        'label'         =>  'Paciente',
+                        'empty_value'=>'Seleccione un paciente',
+                        'choices'   => array()
+                        ));
+            
             $form->add('reportePlantilla', 'choice', array(
                     'label'=> 'Registro clínico',
                     'choices'  => array('1' => 'Sí', '0' => 'No'),

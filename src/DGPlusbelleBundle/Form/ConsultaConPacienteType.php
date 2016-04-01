@@ -43,13 +43,13 @@ class ConsultaConPacienteType extends AbstractType
 //                    'data'=>0
 //                ))
             //->add('cita')
-            ->add('paciente','entity', array( 'label' => 'Paciente','required'=>false,
-                         'empty_value'   => 'Seleccione un paciente...',
-                         'class'         => 'DGPlusbelleBundle:Paciente',
-                         'attr'=>array(
-                         'class'=>'form-control input-sm pacienteConsulta'
-                         )
-                       ))
+//            ->add('paciente','entity', array( 'label' => 'Paciente','required'=>false,
+//                         'empty_value'   => 'Seleccione un paciente...',
+//                         'class'         => 'DGPlusbelleBundle:Paciente',
+//                         'attr'=>array(
+//                         'class'=>'form-control input-sm pacienteConsulta'
+//                         )
+//                       ))
             ->add('tipoConsulta','entity', array( 'label' => 'Tipo de consulta','required'=>false,
                          'empty_value'   => 'Seleccione un tipo de consulta...',
                          'class'         => 'DGPlusbelleBundle:TipoConsulta',
@@ -156,7 +156,7 @@ class ConsultaConPacienteType extends AbstractType
                 'allow_delete' => true,
                 ))    
                     
-            ->add('sucursal','entity',array('label' => 'Seleccione sucursal...','required'=>false,
+            ->add('sucursal','entity',array('label' => 'Sucursal','required'=>false,
                 'class'=>'DGPlusbelleBundle:Sucursal',
                 'empty_value' => 'Seleccione una sucursal...',
                 'query_builder' => function(EntityRepository $repository) {

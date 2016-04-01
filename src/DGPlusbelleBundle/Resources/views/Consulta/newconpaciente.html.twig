@@ -31,6 +31,16 @@
             left: -2px;
         }
         
+        .addItemEst{
+            position: absolute;
+            height: 50px;
+            float: right;
+            margin-bottom: 50px;
+            padding-bottom: 100px;
+            top: 82px;
+            left: 5px;
+        }
+        
         .addItem div {
             position: absolute;
         }
@@ -83,7 +93,7 @@
 
                     {# Paciente #}
                     <div class="row">
-                        <div class="col-md-2">{{ form_row(form.paciente) }}</div>
+                        <div class="col-md-2 col-md-offset-1">{{ form_row(form.paciente) }}</div>
                     </div>
 
                     {# Formulario de consulta#}
@@ -92,27 +102,24 @@
                         {#<div class="col-md-2">
                             {{ form_row(form.fechaConsulta) }}
                         </div>#}
-                        <div class="col-md-2">
+                        <div class="col-md-3 col-md-offset-1">
                             {{ form_row(form.tratamiento) }}
                         </div>
-                        <div class="col-md-2">
+                        <div class="col-md-2" style="display: none">
                             {{ form_row(form.horaInicio) }}
                         </div>
-                        <div class="col-md-2">
+                        <div class="col-md-2" style="display: none">
                             {{ form_row(form.horaFin) }}
                         </div>
-                      {#  <div class="col-md-1">
-                            {{ form_row(form.incapacidad) }}
-                        </div>#}
+                        <div class="col-md-3">
+                            {{ form_row(form.tipoConsulta) }}
+                        </div>
                         <div class="col-md-2">
                             {{ form_row(form.costoConsulta) }}
                         </div>
                     </div>
-                    <div class="row">
-                        <div class="col-md-3">
-                            {{ form_row(form.tipoConsulta) }}
-                        </div>
-                        <div class="col-md-3">
+                    <div class="row" style="margin-top: 7px;">
+                        <div class="col-md-3 col-md-offset-1">
                             {{ form_row(form.sucursal) }}
                         </div>
                         <div class="col-md-5">
@@ -235,7 +242,7 @@
 
                 {# Paciente #}
                 <div class="row">
-                    <div class="col-md-2">{{ form_row(form.paciente) }}</div>
+                    <div class="col-md-3 col-md-offset-1">{{ form_row(form.paciente) }}</div>
                 </div>
                 {# Formulario de consulta#}
                 <div class="row">
@@ -243,36 +250,33 @@
                     {#<div class="col-md-2">
                         {{ form_row(form.fechaConsulta) }}
                     </div>#}
-                    <div class="col-md-2">
+                    <div class="col-md-3 col-md-offset-1">
                         {{ form_row(form.tratamiento) }}
                     </div>
-                    <div class="col-md-2">
+                    <div class="col-md-2" style="display: none">
                         {{ form_row(form.horaInicio) }}
                     </div>
-                    <div class="col-md-2">
+                    <div class="col-md-2" style="display: none">
                         {{ form_row(form.horaFin) }}
                     </div>
-                  {#  <div class="col-md-1">
-                        {{ form_row(form.incapacidad) }}
-                    </div>#}
-                    <div class="col-md-2">
-                        {{ form_row(form.costoConsulta) }}
-                    </div>
-                </div>
-                <div class="row">
                     <div class="col-md-3">
                         {{ form_row(form.tipoConsulta) }}
                     </div>
                     <div class="col-md-3">
+                        {{ form_row(form.costoConsulta) }}
+                    </div>
+                </div>
+                <div class="row" style="margin-top: 7px;">
+                    <div class="col-md-3 col-md-offset-1">
                         {{ form_row(form.sucursal) }}
                     </div>
-                    <div class="col-md-5">
+                    <div class="col-md-6">
                         {{ form_row(form.observacion) }}
                     </div>
                 </div>  
 
-                <div class="row">
-                    <div class="col-md-12">
+                {#<div class="row">
+                    <div class="col-md-6">
                         <h3 class="text-left">Producto</h3>
                         <hr>
                         <br>
@@ -282,24 +286,78 @@
                     <div class="col-md-12">
                         <br><br>
                     </div>
-                </div>
-
-                <div class="row">  
-                    <div id="listadoa">
-                        <div class="listado col-md-6">          
-                           <div class="placas" data-prototype="{% filter escape %}  {% include 'DGPlusbelleBundle:Prototype:producto.html.twig' with { 'form': form.placas.vars.prototype} %}   {% endfilter  %}"> 
+                </div>#}
+                <div class="clearfix"></div>
+                <div class="row" style="margin-top: 10px;">
+                    <div id="plantilla" class="plantilla col-md-6" style="left: 8px;">
+                        <div class="row">
+                            <div class="col-md-11 bordered-bottom" style="margin-top: 7px;">
+                                <div class="col-md-10">
+                                    <h3 class="text-left">Detalle de consulta</h3>
+                                    <div id="previaEstPdf" style="display: none"><a id="esteticaPrevPDF" href="">Generar PDF</a> <i class="fa fa-file-pdf-o"></i></div>
+                                </div>
+                            </div>
+                            <div class="clearfix"></div>
+                            <div class="col-md-3" style="margin-top: 20px;">
+                                {{ form_row(form.reportePlantilla) }}
+                            </div>
+                            <div class="col-md-8" style="margin-top: 20px;">
+                                <div id="lista_plantilla">
+                                    {{ form_row(form.estetica) }}
+                                </div>
+                            </div>  
+                            <div class="clearfix"></div>
+                            <div class="col-md-12 ">
+                                {#    {{ form_row(form.campos) }} #}
+                                <div id="camposPlantilla" class="camposPlantilla" style="margin-top: 30px">
+                                    <div class="row">
+                                        <div class="col-md-1"></div>
+                                        <div id="campos" class="col-md-11 campos"></div>
+                                    </div>
+                                </div> 
+                            </div>    
+                        </div>
+                    </div> 
+                    <div id="listado-est" style="display: none">
+                        <div class="listado"> 
+                            <div class="placas" data-prototype="{% filter escape %}  {% include 'DGPlusbelleBundle:Prototype:producto.html.twig' with { 'form': form.placas.vars.prototype} %}   {% endfilter  %}"> 
                                 {{ form_widget(form.placas) }}
-                           </div>
+                            </div>
                         </div>
                     </div>
-                    <div id="listadoa2">
-                        <div class="listado col-md-6">          
-                           <div class="placas2" data-prototype="{% filter escape %}  {% include 'DGPlusbelleBundle:Prototype:foto2.html.twig' with { 'form': form.placas2.vars.prototype} %}   {% endfilter  %}"> 
+                    <div id="listadoa2-est">
+                        <div class="listado col-md-6" > 
+                             <h3 class="text-left">Foto de consulta</h3>
+                            <hr>
+                            <br>
+                            <div style="margin-top: 18px;">
+                                <div class="placas2" data-prototype="{% filter escape %}  {% include 'DGPlusbelleBundle:Prototype:foto2.html.twig' with { 'form': form.placas2.vars.prototype} %}   {% endfilter  %}"> 
+                                    {{ form_widget(form.placas2) }}
+                                </div>
+                            </div>
+                        </div>
+                    </div>            
+                </div>  
+                {#<div class="row">  
+                    <div id="listado-est">
+                        <div class="listado col-md-6" id="col"> 
+                            <div class="placas" data-prototype="{% filter escape %}  {% include 'DGPlusbelleBundle:Prototype:producto.html.twig' with { 'form': form.placas.vars.prototype} %}   {% endfilter  %}"> 
+                                {{ form_widget(form.placas) }}
+                            </div>
+                        </div>
+                    </div>
+                    <div id="listadoa2-est">
+                        <div class="listado col-md-6"> 
+                             <h3 class="text-left">Foto de consulta</h3>
+                            <hr>
+                            <br>
+                            
+                            <div class="placas2" data-prototype="{% filter escape %}  {% include 'DGPlusbelleBundle:Prototype:foto2.html.twig' with { 'form': form.placas2.vars.prototype} %}   {% endfilter  %}"> 
                                 {{ form_widget(form.placas2) }}
-                           </div>
+                            </div>
                         </div>
-                    </div>
-                </div>
+                    </div>#}
+                {#</div>
                 <br>
                 <br>
                 <div id="plantilla" class="plantilla col-md-6">
@@ -321,7 +379,7 @@
                         </div>  
                         <div class="clearfix"></div>
                         <div class="col-md-12 ">
-                            {#    {{ form_row(form.campos) }} #}
+                                {{ form_row(form.campos) }} 
                             <div id="camposPlantilla" class="camposPlantilla" style="margin-top: 30px">
                                 <div class="row">
                                     <div class="col-md-1"></div>
@@ -331,6 +389,7 @@
                         </div>    
                     </div>
                 </div> 
+                </div>#}             
                 <div class="clearfix"></div>
                 <div class="form-grouphide col-md-12 text-center"> 
                     <hr>
@@ -350,6 +409,7 @@
 
 {% block javascripts_step %}
      <script src="{{ asset('Resources/js/ConsultaPaciente.js') }}"></script>
+     <script src="{{ asset('Resources/js/ConsultaEstetica.js') }}"></script>
     
     <script>
         $(function () { 
@@ -1060,7 +1120,7 @@
             clearfix.setAttribute('class', 'clearfix');
             div.appendChild(clearfix);
             
-            
+            validarConsultaEstetica();
             validarConsulta();
         } // Fin de mostrarCampos
         
@@ -1159,6 +1219,7 @@
                 i++;
             });
             validarConsulta();
+            validarConsultaEstetica();
         } // Fin de mostrarCampos
         
         function mostrarCampos2(data) {
@@ -1220,17 +1281,86 @@
     var $addTagLink2 = $('<div class="row"><div class="col-md-12"><a href="#" class="add_placa_link2 btn btn-primary">Agregar foto</a></div></div>');
     var $removeTagLink = $('<a href="#" class="remove_placa_link btn btn-danger">Eliminar</a>');
     var $removeTagLink2 = $('<a href="#" class="remove_placa_link2 btn btn-danger">Eliminar</a>');
-    var $newLinkLi = $('<div class="col-md-12 addItem"></div>').append($addTagLink);
-    var $newLinkLi2 = $('<div class="col-md-12 addItem"></div>').append($addTagLink2);
+    
+    {% if flag == 0 %}    
+        var $newLinkLi = $('<div class="col-md-12 addItem"></div>').append($addTagLink);
+        var $newLinkLi2 = $('<div class="col-md-12 addItem"></div>').append($addTagLink2);
+    {% else %}
+        var $newLinkLi = $('<div class="col-md-12 addItemEst"></div>').append($addTagLink);
+        var $newLinkLi2 = $('<div class="col-md-12 addItemEst"></div>').append($addTagLink2);
+    {% endif %}
+        
     var $delLinkLi = $('#hnr_sircimbundle_estudioradiologicotype_placas.required').append($removeTagLink);
     var $delLinkLi2 = $('#hnr_sircimbundle_estudioradiologicotype_placas.required').append($removeTagLink2);
 
+    function formatRepo (data) {
+        if(data.nombres){
+            var markup = "<div class='select2-result-repository clearfix'>" +
+                         "<div class='select2-result-repository__meta'>" +
+                         "<div class='select2-result-repository__title'>" + data.nombres + " " + data.apellidos + "</div>" +
+                         "</div></div>";
+        } else {
+            var markup = "Seleccione un paciente"; 
+        }
 
 
+        {#if (repo.description) {
+          markup += "<div class='select2-result-repository__description'>" + repo.description + "</div>";
+        }
 
+        markup += "<div class='select2-result-repository__statistics'>" +
+                "<div class='select2-result-repository__forks'><i class='fa fa-flash'></i> " + repo.forks_count + " Forks</div>" +
+                "<div class='select2-result-repository__stargazers'><i class='fa fa-star'></i> " + repo.stargazers_count + " Stars</div>" +
+                "<div class='select2-result-repository__watchers'><i class='fa fa-eye'></i> " + repo.watchers_count + " Watchers</div>" +
+            "</div>" +
+            "</div></div>";#}
+
+        return markup;
+    }
+
+    function formatRepoSelection (data) {
+        if(data.nombres){
+            return data.nombres + " " + data.apellidos;
+        } else {
+            return "Seleccione un paciente"; 
+        }    
+    }
 
     jQuery(document).ready(function() {
-        $('#dgplusbellebundle_consulta_paciente').select2();
+        $('#dgplusbellebundle_consulta_paciente').select2({
+            ajax: {
+                url: "{{path('busqueda_paciente_select')}}",
+                dataType: 'json',
+                delay: 250,
+                data: function (params) {
+                  return {
+                    q: params.term, 
+                    page: params.page
+                  };
+                },
+                processResults: function (data, params) {
+                    var select2Data = $.map(data.data, function (obj) {
+                        obj.id = obj.pacienteid;
+                        obj.text = obj.nombres + ' ' + obj.apelllidos;
+
+                        return obj;
+                    });
+                  
+                    return {
+                        results: select2Data
+                        {#pagination: {
+                            more: (params.page * 30) < data.total_count
+                        }#}
+                    };
+                },
+                cache: true
+            },
+            escapeMarkup: function (markup) { return markup; }, 
+            minimumInputLength: 1,
+            templateResult: formatRepo, 
+            templateSelection: formatRepoSelection 
+        });
+        
         $('#dgplusbellebundle_consulta_tratamiento').select2();
         $('#dgplusbellebundle_consulta_tipoConsulta').select2();
         $('#dgplusbellebundle_consulta_tipoConsulta').select2();
@@ -1252,11 +1382,12 @@
                         },
                     });
 
-        $('select[id$=dgplusbellebundle_consulta_placas_]').selectBoxIt();
+        $('select[id$=dgplusbellebundle_consulta_placas_]').selectBoxIt();      
         var valores = new Array();
         var valores2 = new Array();
         var id=0;
         var nombre = 0;
+        
         $(document).on('click','#historialPrevPDF',function(){
             valores = [];
             nombre=$('#dgplusbellebundle_consulta_paciente').val();
