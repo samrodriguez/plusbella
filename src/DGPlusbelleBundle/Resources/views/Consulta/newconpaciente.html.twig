@@ -1176,8 +1176,12 @@
 
                     // Si la plantilla contiene campos
                     $.each( par2, function( key3, value3 ) {
+                        var row = document.createElement('div');
+                        var ax = document.createElement('div');
                         var chk = document.createElement('div');
-
+                        var lbl = document.createElement('div');
+                        lbl.setAttribute('class', 'lbl col-md-8');
+                        lbl.setAttribute('class', 'row');
                         input[key3] = document.createElement('input');
                         input[key3].setAttribute('type', 'checkbox');
                         input[key3].setAttribute('class', 'form-control classCorporal');
@@ -1186,43 +1190,52 @@
                         input[key3].setAttribute('value', value3.opcion);
 
                         var chk = document.createElement('div');
-                        chk.setAttribute('class', 'checkbox');
-
+                        chk.setAttribute('class', 'checkbox col-md-2');
+                        chk.setAttribute('style', 'margin-top: -10px;');
                         label2[key3] = document.createElement('label');
                         label2[key3].htmlFor = "id";
 
                         chk.appendChild(input[key3]);
-                        chk.appendChild(document.createTextNode(value3.nombre));
-
-                        formgroup.appendChild(chk);
+                        lbl.appendChild(document.createTextNode(value3.nombre));
+                        
+                        ax.appendChild(chk);
+                        ax.appendChild(lbl);
+                        row.appendChild(ax);
+                        formgroup.appendChild(row);
 
                     });
                     console.log(key);
                     campos[key].appendChild(formgroup);
                     div.appendChild(campos[key]);
 
+                    {#if( ((i + 1) % 2) === 0 ) {
+                        //console.log(((i + 1) % 2)+' '+i);
+                        clear[key] = document.createElement('div');
+                        clear[key].setAttribute('class', 'clearfix');
+                        div.appendChild(clear[key]);
+                    } #}  
+                    
 
-
-
-
+                    i++;
+                    console.log(i);
                 }, "json");
                 
-                if( ((i + 1) % 2) == 0 ) {
+                if( ((i + 1) % 2) === 0 ) {
                         //console.log(((i + 1) % 2)+' '+i);
                         clear[key] = document.createElement('div');
                         clear[key].setAttribute('class', 'clearfix');
                         div.appendChild(clear[key]);
                 }
                
-                if(((key+1)%3)==0){
+                {#if(((key+1)%3)==0){
                     //console.log(key%3);
                     //console.log(key+' '+(key+1) + '-'+(key+1)%3);
                     saltos[key] = document.createElement('hr');
                     saltos[key] = document.createElement('div');
                     saltos[key].setAttribute('class', 'clearfix');
                     div.appendChild(saltos[key]);
-                }
-                i++;
+                }#}
+                
             });
             validarConsulta();
             validarConsultaEstetica();
