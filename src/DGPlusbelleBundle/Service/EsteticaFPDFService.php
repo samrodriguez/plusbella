@@ -40,7 +40,7 @@ class EsteticaFPDFService {
         $this->mostrarCelda($this->pdf, 32, 'Fecha: ', $fecha);
         $this->mostrarCelda($this->pdf, 18, 'Sucursal: ', $sucursal->getNombre());
         $this->pdf->Ln(7);
-        $this->mostrarCelda($this->pdf, 32, 'Nombre: ', $paciente->getPersona()->getNombres().' '.$paciente->getPersona()->getApellidos());
+        $this->mostrarCelda($this->pdf, 32, 'Nombre: ', utf8_decode($paciente->getPersona()->getNombres()).' '.utf8_decode($paciente->getPersona()->getApellidos()));
         if($paciente->getFechaNacimiento()!=null){
            $fecha = $paciente->getFechaNacimiento()->format("Y-m-d");    
            list($Y,$m,$d) = explode("-",$fecha);
@@ -54,16 +54,22 @@ class EsteticaFPDFService {
         $this->mostrarCelda($this->pdf, 18, 'Edad: ', $edad.' '.utf8_decode('años'));
         
         $this->pdf->Ln(7);
-        $this->mostrarCelda($this->pdf, 32, 'Expediente No.: ', $paciente->getExpediente()[0]->getNumero());
+        
+        if($paciente->getExpediente()[0]){
+            $this->mostrarCelda($this->pdf, 32, 'Expediente No.: ', utf8_decode($paciente->getExpediente()[0]->getNumero()));
+        } else {
+            $this->mostrarCelda($this->pdf, 32, 'Expediente No.: ', 'No definido');
+        }
         
         $sexoPaciente = $paciente->getSexo();
-
+        
         $sexo = '';
         if($sexoPaciente == 'm' || $sexoPaciente == 'M'){
             $sexo = 'Masculino';
-        }
-        if($sexoPaciente == 'f' || $sexoPaciente == 'F'){
+        } elseif($sexoPaciente == 'f' || $sexoPaciente == 'F'){
             $sexo = 'Femenino';
+        } else {
+            $sexo = $sexoPaciente;
         }
         
         $this->mostrarCelda($this->pdf, 18, 'Sexo: ', $sexo);
