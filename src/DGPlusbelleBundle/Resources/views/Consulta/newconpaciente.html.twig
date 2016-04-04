@@ -244,6 +244,7 @@
                 <div class="row">
                     <div class="col-md-3 col-md-offset-1">
                         {#{{ form_row(form.paciente) }}#}
+                        <strong>Paciente</strong>
                         <select id="dgplusbellebundle_consulta_paciente" name="dgplusbellebundle_consulta[paciente]" class="form-control input-sm">
                             <option value="0" selected>Seleccione un paciente...</option>
                         </select>    
@@ -1427,7 +1428,7 @@
            
             // Se obtiene el id del paciente
             var paciente = $('#dgplusbellebundle_consulta_paciente').val();
-            
+            //console.log(paciente);
             // Se obtiene el id de la sucursal seleccionada
             var sucursal = $('#dgplusbellebundle_consulta_sucursal').val();
             
@@ -1449,7 +1450,7 @@
             });
             
             // Generacion del pdf dependiendo del tipo de consulta de estetica que ha seleccionado
-            if(paciente != "") {
+            if(paciente != 0) {
                 if(sucursal != "") {
                     // Si se ha seleccionado tipo de consulta corporal
                     if(estetica == 1) {
