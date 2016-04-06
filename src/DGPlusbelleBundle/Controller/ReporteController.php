@@ -1951,8 +1951,76 @@ class ReporteController extends Controller
         
     }
     
+    /**
+     * Generar reporte pdf de Consulta de estetica corporal
+     *
+     * @Route("/pdf/previa/consulta-estetica/comparativo-corporal", name="admin_comparativo_corporal_por_pdf", options ={"expose" = true})
+     */
+    public function ComparativoEsteticaCorporalPdfAction(Request $request)
+    {
+        $em = $this->getDoctrine()->getManager();
+        
+        $pacienteId = $request->get('paciente');
+        $sucursalId = $request->get('sucursal');
+        $esteticaId = $request->get('estetica');
+        $corporal = $request->get('corporal');
+        
+        $paciente = $em->getRepository('DGPlusbelleBundle:Paciente')->find($pacienteId);
+        $sucursal = $em->getRepository('DGPlusbelleBundle:Sucursal')->find($sucursalId);
+        $estetica = $em->getRepository('DGPlusbelleBundle:DetalleEstetica')->findBy(array('estetica'=>$esteticaId));
+
+        $fecha= date('d-m-Y');
+        $path = 'Resources/img/dgplusbelle/images/';
+        $titulo = "Reporte de Consulta estetica corporal";
+        $consulta="prueba";
+
+        $dql = $dql = "SELECT crp"
+                . " FROM DGPlusbelleBundle:ComposicionCorporal crp"
+                . " INNER JOIN crp.consulta con"
+                . " WHERE con.paciente = :paciente";
+        $comparativo = $em->createQuery($dql)
+                       ->setParameter('paciente', $pacienteId)
+                       ->getResult();
+               
+        $this->get('fpdf_comparativo_corporal_printer')->generarCorporalTempPdf($titulo, $paciente, $sucursal, $estetica, $consulta, $fecha, $path, $corporal, $comparativo);
+        
+    }
     
-    
+    /**
+     * Generar reporte pdf de Consulta de estetica corporal
+     *
+     * @Route("/pdf/previa/consulta-estetica/comparativo-botox", name="admin_comparativo_botox_por_pdf", options ={"expose" = true})
+     */
+    public function ComparativoEsteticaBotoxPdfAction(Request $request)
+    {
+        $em = $this->getDoctrine()->getManager();
+        
+        $pacienteId = $request->get('paciente');
+        $sucursalId = $request->get('sucursal');
+        $esteticaId = $request->get('estetica');
+        $corporal = $request->get('corporal');
+        
+        $paciente = $em->getRepository('DGPlusbelleBundle:Paciente')->find($pacienteId);
+        $sucursal = $em->getRepository('DGPlusbelleBundle:Sucursal')->find($sucursalId);
+        $estetica = $em->getRepository('DGPlusbelleBundle:DetalleEstetica')->findBy(array('estetica'=>$esteticaId));
+
+        $fecha= date('d-m-Y');
+        $path = 'Resources/img/dgplusbelle/images/';
+        $titulo = "Reporte de Consulta estetica de Botox";
+        $consulta="prueba";
+
+        $dql = $dql = "SELECT btx"
+                . " FROM DGPlusbelleBundle:ConsultaBotox btx"
+                . " INNER JOIN btx.consulta con"
+                . " WHERE con.paciente = :paciente";
+        
+        $comparativo = $em->createQuery($dql)
+                       ->setParameter('paciente', $pacienteId)
+                       ->getResult();
+               
+        $this->get('fpdf_comparativo_botox_printer')->generarCorporalTempPdf($titulo, $paciente, $sucursal, $estetica, $consulta, $fecha, $path, $corporal, $comparativo);
+        
+    }
     
     /**
      * Generar reporte pdf de Ingreso por consulta de emergencia

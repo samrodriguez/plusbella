@@ -432,6 +432,27 @@ class ConsultaController extends Controller
                     
 //                  die();
                 }    
+                
+                if(isset($parameters['botox'])){
+                    $botox = new \DGPlusbelleBundle\Entity\ConsultaBotox();
+                    
+                    $estetica = $em->getRepository('DGPlusbelleBundle:Estetica')->find($parameters['dgplusbellebundle_consulta']['estetica']);
+                    
+                    $botox->setAreaInyectar($parameters['botox']['area_inyectar']);
+                    $botox->setUnidades($parameters['botox']['unidades']);
+                    
+                    $botox->setFechaCaducidad(new \DateTime($parameters['botox']['caducidad']));
+                    $botox->setLote($parameters['botox']['lote']);
+                    $botox->setMarcaProducto($parameters['botox']['marca_producto']);
+                    $botox->setNumAplicacion($parameters['botox']['num_aplicacion']);
+                    $botox->setValor($parameters['botox']['valor']);
+                    
+                    $botox->setConsulta($entity);
+                    $botox->setEstetica($estetica);
+                    $em->persist($botox);
+                    $em->flush();
+                    
+                } 
             }
                 
             if(isset($parameters['dgplusbellebundle_consulta']['sesiontratamiento'])){
@@ -1428,23 +1449,40 @@ class ConsultaController extends Controller
         $isAjax = $this->get('Request')->isXMLhttpRequest();
         if($isAjax){
             $esteticaid = $this->get('request')->request->get('id');
-             
             $em = $this->getDoctrine()->getManager();            
-            $dql = "SELECT est.id estetica, dest.id, dest.nombre "
-                    . "FROM DGPlusbelleBundle:DetalleEstetica dest "
-                    . "JOIN dest.estetica est "
-                    . "WHERE est.id =  :esteticaid";
-            
-            $parametros = $em->createQuery($dql)
-                        ->setParameter('esteticaid', $esteticaid)
-                        ->getResult();
-            
-            $response = new JsonResponse();
-            $response->setData(array(
-                                'query' => $parametros
-                            )); 
-            
-            return $response; 
+                
+            if($esteticaid != 3){
+                $dql = "SELECT est.id estetica, dest.id, dest.nombre "
+                        . "FROM DGPlusbelleBundle:DetalleEstetica dest "
+                        . "JOIN dest.estetica est "
+                        . "WHERE est.id =  :esteticaid";
+
+                $parametros = $em->createQuery($dql)
+                            ->setParameter('esteticaid', $esteticaid)
+                            ->getResult();
+
+                $response = new JsonResponse();
+                $response->setData(array(
+                                    'query' => $parametros
+                                )); 
+
+                return $response; 
+            } else {
+                $dql = "SELECT est.id estetica "
+                        . "FROM DGPlusbelleBundle:Estetica est "
+                        . "WHERE est.id =  :esteticaid";
+
+                $parametros = $em->createQuery($dql)
+                            ->setParameter('esteticaid', $esteticaid)
+                            ->getResult();
+
+                $response = new JsonResponse();
+                $response->setData(array(
+                                    'query' => $parametros
+                                )); 
+
+                return $response; 
+            }    
         } else {    
             return new Response('0');              
         }  

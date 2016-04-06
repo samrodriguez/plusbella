@@ -1,0 +1,56 @@
+{% extends '::base.html.twig' %}
+
+{% block body -%}
+    <h1>ConsultaBotox</h1>
+
+    <table class="record_properties">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ entity.id }}</td>
+            </tr>
+            <tr>
+                <th>Areainyectar</th>
+                <td>{{ entity.areaInyectar }}</td>
+            </tr>
+            <tr>
+                <th>Unidades</th>
+                <td>{{ entity.unidades }}</td>
+            </tr>
+            <tr>
+                <th>Fechacaducidad</th>
+                <td>{{ entity.fechaCaducidad|date('Y-m-d H:i:s') }}</td>
+            </tr>
+            <tr>
+                <th>Lote</th>
+                <td>{{ entity.lote }}</td>
+            </tr>
+            <tr>
+                <th>Marcaproducto</th>
+                <td>{{ entity.marcaProducto }}</td>
+            </tr>
+            <tr>
+                <th>Numaplicacion</th>
+                <td>{{ entity.numAplicacion }}</td>
+            </tr>
+            <tr>
+                <th>Valor</th>
+                <td>{{ entity.valor }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+        <ul class="record_actions">
+    <li>
+        <a href="{{ path('admin_consulta-botox') }}">
+            Back to the list
+        </a>
+    </li>
+    <li>
+        <a href="{{ path('admin_consulta-botox_edit', { 'id': entity.id }) }}">
+            Edit
+        </a>
+    </li>
+    <li>{{ form(delete_form) }}</li>
+</ul>
+{% endblock %}

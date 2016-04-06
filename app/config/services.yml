@@ -32,6 +32,20 @@ services:
     fpdf_estetica_facial_printer:
         class: DGPlusbelleBundle\Service\EsteticaFacialFPDFService
         arguments: ["@facial_est_pdf"]      
+    
+    reporte_comparativo_pdf:
+        class: DGPlusbelleBundle\Report\ComparativoEsteticaCorporalPDF    
+        
+    fpdf_comparativo_corporal_printer:
+        class: DGPlusbelleBundle\Service\ComparativoEsteticaCorporalFPDFService
+        arguments: ["@reporte_comparativo_pdf"]      
+    
+    reporte_comparativo_botox_pdf:
+        class: DGPlusbelleBundle\Report\ComparativoEsteticaBotoxPDF    
+        
+    fpdf_comparativo_botox_printer:
+        class: DGPlusbelleBundle\Service\ComparativoEsteticaBotoxFPDFService
+        arguments: ["@reporte_comparativo_botox_pdf"]     
         
     bitacora:
         class:  "%mi_bitacora.class%"

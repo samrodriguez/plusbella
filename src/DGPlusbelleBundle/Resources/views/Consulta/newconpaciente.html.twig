@@ -307,7 +307,7 @@
                             <div class="col-md-3" style="margin-top: 20px;">
                                 {{ form_row(form.reportePlantilla) }}
                             </div>
-                            <div class="col-md-8" style="margin-top: 20px;">
+                            <div class="col-md-6" style="margin-top: 20px;">
                                 <div id="lista_plantilla">
                                     {{ form_row(form.estetica) }}
                                 </div>
@@ -484,6 +484,8 @@
         });
     </script>
     <script>
+        var count = 0;
+        
         $(function () { 
             $( "#dgplusbellebundle_consulta_plantilla" ).on( "change", function() {
                 // Se obtiene el id de la plantilla
@@ -543,14 +545,18 @@
                 $.post( "{{path('admin_busqueda_parametros_estetica')}}", { id: id }, function( data ) {
                     var par = new Array();
                     par = data.query;
-                    
+                    //console.log(data.query);
                     // Si la consulta de estetica es de Corporal
                     if(data.query[0].estetica == 1){
                         mostrarCamposCorporal(data.query);
                     }
                     // Si la consulta de estetica es de Facial
-                    else{
+                    else if(data.query[0].estetica == 2){
                         mostrarCamposFacial(data.query);
+                    }
+                    // Si la consulta de estetica es de Facial
+                    else if(data.query[0].estetica == 3){
+                        mostrarCamposBotox();
                     }
                 }, "json");
                 
@@ -818,6 +824,23 @@
             var clear = new Array();
             var i = 0;
             
+            var comparativo = document.createElement('div');
+            comparativo.setAttribute('id', 'comparativoCorp');
+            comparativo.setAttribute('class', 'text-right');
+            
+            var comparativoUrl = document.createElement('a');
+            comparativoUrl.setAttribute('id', 'urlComparativoCrp');
+    
+            var comparativoText = document.createTextNode('Ver comparativo');
+            var comparativoHr = document.createElement('hr');
+            
+            comparativoUrl.appendChild(comparativoText);
+            
+            comparativo.appendChild(comparativoUrl);
+            comparativo.appendChild(comparativoHr);
+            
+            div.appendChild(comparativo);
+            
             // Se recorre el array para mostrar los campos
             $.each( data, function( key, value ) {
                 var t = document.createTextNode(value.nombre);
@@ -851,8 +874,13 @@
 
                     // Si la plantilla contiene campos
                     $.each( par2, function( key3, value3 ) {
+                        var row = document.createElement('div');
+                        var ax = document.createElement('div');
                         var chk = document.createElement('div');
-
+                        var lbl = document.createElement('div');
+                        lbl.setAttribute('class', 'lbl col-md-8');
+                        lbl.setAttribute('class', 'row');
+                        
                         input[key3] = document.createElement('input');
                         input[key3].setAttribute('type', 'checkbox');
                         input[key3].setAttribute('class', 'form-control classCorporal');
@@ -861,17 +889,20 @@
                         input[key3].setAttribute('value', value3.opcion);
 
                         var chk = document.createElement('div');
-                        chk.setAttribute('class', 'checkbox');
-
+                        chk.setAttribute('class', 'checkbox col-md-2');
+                        chk.setAttribute('style', 'margin-top: -10px;');
                         label2[key3] = document.createElement('label');
                         label2[key3].htmlFor = "id";
 
                         chk.appendChild(input[key3]);
-                        chk.appendChild(document.createTextNode(value3.nombre));
-
-                        formgroup.appendChild(chk);
-
+                        lbl.appendChild(document.createTextNode(value3.nombre));
+                        
+                        ax.appendChild(chk);
+                        ax.appendChild(lbl);
+                        row.appendChild(ax);
+                        formgroup.appendChild(row);
                     });
+
                     console.log(key);
                     campos[key].appendChild(formgroup);
                     div.appendChild(campos[key]);
@@ -1241,6 +1272,263 @@
             validarConsultaEstetica();
         } // Fin de mostrarCampos
         
+        // Funcion que muestra los campos de texto de la consulta de estetica de Botox
+        function mostrarCamposBotox() {
+            var div = document.getElementById('campos');
+            
+            var comparativo = document.createElement('div');
+            comparativo.setAttribute('id', 'comparativoBotox');
+            comparativo.setAttribute('class', 'text-right');
+            
+            
+            
+            if(count == 0){
+                var comparativoUrl = document.createElement('a');
+                comparativoUrl.setAttribute('id', 'urlComparativoBotox');
+                
+                var nuevoUrl = document.createElement('a');
+                nuevoUrl.setAttribute('id', 'nuevoUrlBotox');
+
+                var nuevoText = document.createTextNode('Nuevo');
+                nuevoUrl.appendChild(nuevoText);
+
+                comparativo.appendChild(nuevoUrl);
+
+                var separador = document.createTextNode(' | ');
+                comparativo.appendChild(separador);
+                
+                var comparativoText = document.createTextNode('Ver comparativo');
+                comparativoUrl.appendChild(comparativoText);
+                comparativo.appendChild(comparativoUrl);
+            }
+            
+            var comparativoHr = document.createElement('hr');
+            
+            comparativo.appendChild(comparativoHr);
+            div.appendChild(comparativo);
+            
+            var clearfix = document.createElement('div');
+            clearfix.setAttribute('class', 'clearfix');
+            div.appendChild(clearfix);
+            
+            var botox = document.createElement('div');
+            botox.setAttribute('class', 'col-md-12 botox');
+            botox.setAttribute('style', 'margin-bottom: 15px;');
+            
+            var rowCorp = document.createElement('div');
+            rowCorp.setAttribute('class', 'row');
+            
+            // Elemento para registrar Area a inyectar 
+            var formgroupAreaInyectar = document.createElement('div');
+            formgroupAreaInyectar.setAttribute('class', 'form-group col-md-4');
+            formgroupAreaInyectar.setAttribute('style', 'margin-bottom: 10px;');
+            
+            var labelAreaInyectar = document.createElement('label');
+            var etiquetaInyectar = document.createElement('p');
+            etiquetaInyectar.setAttribute('style', 'color: #646473; font-size: 13px;');
+            etiquetaInyectar.appendChild(document.createTextNode('Area a inyectar'));
+            labelAreaInyectar.appendChild(etiquetaInyectar);
+            var divLabelAreaInyectar = document.createElement('div');
+            divLabelAreaInyectar.appendChild(labelAreaInyectar);
+            formgroupAreaInyectar.appendChild(divLabelAreaInyectar);
+            
+            var inputAreaInyectar = document.createElement('input');
+            inputAreaInyectar.setAttribute('type', 'text');
+            inputAreaInyectar.setAttribute('class', 'form-control cbotox');
+            inputAreaInyectar.setAttribute('name', 'botox[area_inyectar]');
+            inputAreaInyectar.setAttribute('id', 'area_inyectar');
+            //inputPeso.setAttribute('value', value3.opcion);
+            formgroupAreaInyectar.appendChild(inputAreaInyectar);
+            rowCorp.appendChild(formgroupAreaInyectar);
+            //corporal.appendChild(rowCorp);  
+            //div.appendChild(corporal);
+            
+            // Elemento para registrar Unidades
+            var formgroupUnidades = document.createElement('div');
+            formgroupUnidades.setAttribute('class', 'form-group col-md-4');
+            formgroupUnidades.setAttribute('style', 'margin-bottom: 10px;');
+            
+            var labelUnidades = document.createElement('label');
+            var etiquetaUnidades = document.createElement('p');
+            etiquetaUnidades.setAttribute('style', 'color: #646473; font-size: 13px;');
+            etiquetaUnidades.appendChild(document.createTextNode('Unidades'));
+            labelUnidades.appendChild(etiquetaUnidades);
+            var divLabelUnidades = document.createElement('div');
+            divLabelUnidades.appendChild(labelUnidades);
+            formgroupUnidades.appendChild(divLabelUnidades);
+            
+            var inputUnidades = document.createElement('input');
+            inputUnidades.setAttribute('type', 'text');
+            inputUnidades.setAttribute('class', 'form-control cbotox');
+            inputUnidades.setAttribute('name', 'botox[unidades]');
+            inputUnidades.setAttribute('id', 'unidades');
+            
+            formgroupUnidades.appendChild(inputUnidades);
+            rowCorp.appendChild(formgroupUnidades);
+            //corporal.appendChild(rowCorp);  
+            //div.appendChild(corporal);
+            
+            // Elemento para registrar Fecha de Caducidad
+            var formgroupFechaCaducidad = document.createElement('div');
+            formgroupFechaCaducidad.setAttribute('class', 'form-group col-md-4');
+            formgroupFechaCaducidad.setAttribute('style', 'margin-bottom: 10px;');
+            
+            var labelFechaCaducidad = document.createElement('label');
+            var etiquetaFechaCaducidad = document.createElement('p');
+            etiquetaFechaCaducidad.setAttribute('style', 'color: #646473; font-size: 13px;');
+            etiquetaFechaCaducidad.appendChild(document.createTextNode('Fecha de caducidad'));
+            labelFechaCaducidad.appendChild(etiquetaFechaCaducidad);
+            var divLabelFechaCaducidad = document.createElement('div');
+            divLabelFechaCaducidad.appendChild(labelFechaCaducidad);
+            formgroupFechaCaducidad.appendChild(divLabelFechaCaducidad);
+            
+            var inputFechaCaducidad = document.createElement('input');
+            inputFechaCaducidad.setAttribute('type', 'text');
+            inputFechaCaducidad.setAttribute('class', 'form-control cbotox calZebra');
+            inputFechaCaducidad.setAttribute('name', 'botox[caducidad]');
+            inputFechaCaducidad.setAttribute('id', 'caducidad');
+            
+            formgroupFechaCaducidad.appendChild(inputFechaCaducidad);
+            rowCorp.appendChild(formgroupFechaCaducidad);
+            
+            // Elemento para registrar Número de Lote
+            var formgroupLote = document.createElement('div');
+            formgroupLote.setAttribute('class', 'form-group col-md-4');
+            formgroupLote.setAttribute('style', 'margin-bottom: 10px;');
+            
+            var labelLote = document.createElement('label');
+            var etiquetaLote = document.createElement('p');
+            etiquetaLote.setAttribute('style', 'color: #646473; font-size: 13px;');
+            etiquetaLote.appendChild(document.createTextNode('Lote No.'));
+            labelLote.appendChild(etiquetaLote);
+            var divLabelLote = document.createElement('div');
+            divLabelLote.appendChild(labelLote);
+            formgroupLote.appendChild(divLabelLote);
+            
+            var inputLote = document.createElement('input');
+            inputLote.setAttribute('type', 'text');
+            inputLote.setAttribute('class', 'form-control cbotox');
+            inputLote.setAttribute('name', 'botox[lote]');
+            inputLote.setAttribute('id', 'lote');
+            
+            formgroupLote.appendChild(inputLote);
+            rowCorp.appendChild(formgroupLote);
+            
+            // Elemento para registrar Marca del producto
+            var formgroupMarcaProducto = document.createElement('div');
+            formgroupMarcaProducto.setAttribute('class', 'form-group col-md-4');
+            formgroupMarcaProducto.setAttribute('style', 'margin-bottom: 10px;');
+            
+            var labelMarcaProducto = document.createElement('label');
+            var etiquetaMarcaProducto = document.createElement('p');
+            etiquetaMarcaProducto.setAttribute('style', 'color: #646473; font-size: 13px;');
+            etiquetaMarcaProducto.appendChild(document.createTextNode('Marca del producto'));
+            labelMarcaProducto.appendChild(etiquetaMarcaProducto);
+            var divLabelMarcaProducto = document.createElement('div');
+            divLabelMarcaProducto.appendChild(labelMarcaProducto);
+            formgroupMarcaProducto.appendChild(divLabelMarcaProducto);
+            
+            var inputMarcaProducto = document.createElement('input');
+            inputMarcaProducto.setAttribute('type', 'text');
+            inputMarcaProducto.setAttribute('class', 'form-control cbotox');
+            inputMarcaProducto.setAttribute('name', 'botox[marca_producto]');
+            inputMarcaProducto.setAttribute('id', 'marca_producto');
+            
+            formgroupMarcaProducto.appendChild(inputMarcaProducto);
+            rowCorp.appendChild(formgroupMarcaProducto);
+            
+            // Elemento para registrar Número de aplicación
+            var formgroupNumAplicacion = document.createElement('div');
+            formgroupNumAplicacion.setAttribute('class', 'form-group col-md-4');
+            formgroupNumAplicacion.setAttribute('style', 'margin-bottom: 10px;');
+            
+            var labelNumAplicacion = document.createElement('label');
+            var etiquetaNumAplicacion = document.createElement('p');
+            etiquetaNumAplicacion.setAttribute('style', 'color: #646473; font-size: 13px;');
+            etiquetaNumAplicacion.appendChild(document.createTextNode('No. Aplicacion'));
+            labelNumAplicacion.appendChild(etiquetaNumAplicacion);
+            var divLabelNumAplicacion = document.createElement('div');
+            divLabelNumAplicacion.appendChild(labelNumAplicacion);
+            formgroupNumAplicacion.appendChild(divLabelNumAplicacion);
+            
+            var inputNumAplicacion = document.createElement('input');
+            inputNumAplicacion.setAttribute('type', 'text');
+            inputNumAplicacion.setAttribute('class', 'form-control cbotox');
+            inputNumAplicacion.setAttribute('name', 'botox[num_aplicacion]');
+            inputNumAplicacion.setAttribute('id', 'num_aplicacion');
+            
+            formgroupNumAplicacion.appendChild(inputNumAplicacion);
+            rowCorp.appendChild(formgroupNumAplicacion);
+            
+            // Elemento para registrar Valor
+            var formgroupValor = document.createElement('div');
+            formgroupValor.setAttribute('class', 'form-group col-md-4');
+            formgroupValor.setAttribute('style', 'margin-bottom: 10px;');
+            
+            var labelValor = document.createElement('label');
+            var etiquetaValor = document.createElement('p');
+            etiquetaValor.setAttribute('style', 'color: #646473; font-size: 13px;');
+            etiquetaValor.appendChild(document.createTextNode('Valor'));
+            labelValor.appendChild(etiquetaValor);
+            var divLabelValor = document.createElement('div');
+            divLabelValor.appendChild(labelValor);
+            formgroupValor.appendChild(divLabelValor);
+            
+            var inputValor = document.createElement('input');
+            inputValor.setAttribute('type', 'text');
+            inputValor.setAttribute('class', 'form-control cbotox');
+            inputValor.setAttribute('name', 'botox[valor]');
+            inputValor.setAttribute('id', 'botox_valor');
+            
+            formgroupValor.appendChild(inputValor);
+            rowCorp.appendChild(formgroupValor);
+            
+            if(count == 0){
+                // Elemento para registrar Recomendaciones
+                var formgroupRecomendaciones = document.createElement('div');
+                formgroupRecomendaciones.setAttribute('class', 'form-group col-md-8');
+                formgroupRecomendaciones.setAttribute('style', 'margin-bottom: 10px;');
+
+                var labelRecomendaciones = document.createElement('label');
+                var etiquetaRecomendaciones = document.createElement('p');
+                etiquetaRecomendaciones.setAttribute('style', 'color: #646473; font-size: 13px;');
+                etiquetaRecomendaciones.appendChild(document.createTextNode('Recomendaciones'));
+                labelRecomendaciones.appendChild(etiquetaRecomendaciones);
+                var divLabelRecomendaciones = document.createElement('div');
+                divLabelRecomendaciones.appendChild(labelRecomendaciones);
+                formgroupRecomendaciones.appendChild(divLabelRecomendaciones);
+
+                var inputRecomendaciones = document.createElement('textarea');
+                inputRecomendaciones.setAttribute('type', 'text');
+                inputRecomendaciones.setAttribute('class', 'form-control cbotox');
+                inputRecomendaciones.setAttribute('name', 'botox[valor]');
+                inputRecomendaciones.setAttribute('id', 'botox_valor');
+
+                formgroupRecomendaciones.appendChild(inputRecomendaciones);
+                rowCorp.appendChild(formgroupRecomendaciones);
+            }
+            
+            botox.appendChild(rowCorp);  
+            div.appendChild(botox);
+            
+            var clearfix = document.createElement('div');
+            clearfix.setAttribute('class', 'clearfix');
+            div.appendChild(clearfix);
+            
+            count++;
+            
+            //validarConsultaBotox();
+            validarConsulta();
+            
+            $('#caducidad').daterangepicker({
+                singleDatePicker: true,
+                showDropdowns: true,
+                locale: {
+                    format: 'YYYY-MM-DD'
+                },
+            }); 
+        } // Fin de mostrarCamposBotox 
+        
         function mostrarCampos2(data) {
             var div = document.getElementById('cReceta');
             var form = $("form");
@@ -1513,8 +1801,97 @@
         });
         
         
+        // Si se hace click en ver vista previa en pdf del comparativo de lectura 
+        // de composicion corporal de consulta de estetica
+        $(document).on('click','#urlComparativoCrp',function(){
+            var corporal = [];
+            var valor = 0;
+           
+            // Se obtiene el id del paciente
+            var paciente = $('#dgplusbellebundle_consulta_paciente').val();
+            //console.log(paciente);
+            // Se obtiene el id de la sucursal seleccionada
+            var sucursal = $('#dgplusbellebundle_consulta_sucursal').val();
+            
+            // Se obtiene el id de la consulta de estetica seleccionada
+            var estetica = $('#dgplusbellebundle_consulta_estetica').val();
+            
+            // Se obtiene la informacion ingresada acerca de la composicion corporal (peso, grasa corporal, ...)
+            $('.corporall').each(function(index,element){
+                valor = $(this).val();
+                corporal.push(valor);
+            });
+            
+            // Generacion del pdf del tipo de consulta de estetica corporal
+            if(paciente != 0) {
+                if(sucursal != "") {
+                    // Si se ha seleccionado tipo de consulta corporal
+                    if(estetica == 1) {
+                        var url = Routing.generate('admin_comparativo_corporal_por_pdf', { paciente:paciente, sucursal: sucursal, estetica:estetica, corporal:corporal});
+                        window.open(url);
+                    } 
+                    // Si no se ha seleccionado tipo de consulta corporal
+                    else  {
+                        bootbox.alert('No se ha seleccionado la opción de tipo de consulta de estetica corporal');
+                    }
+                } else {
+                    bootbox.alert('No se ha seleccionado una sucursal');
+                }
+            } else {
+                bootbox.alert('No se ha seleccionado un paciente');
+            }
+            
+            return false;
+        });
        
-
+        // Nuevo registro de detalle de consulta de estetica de Botox
+        $(document).on('click','#nuevoUrlBotox',function(){
+            mostrarCamposBotox();
+        });
+       
+        // Si se hace click en ver vista previa en pdf del comparativo de consulta
+        // de consulta de estetica de Botox
+        $(document).on('click','#urlComparativoBotox',function(){
+            var corporal = [];
+            var valor = 0;
+           
+            // Se obtiene el id del paciente
+            var paciente = $('#dgplusbellebundle_consulta_paciente').val();
+            //console.log(paciente);
+            // Se obtiene el id de la sucursal seleccionada
+            var sucursal = $('#dgplusbellebundle_consulta_sucursal').val();
+            
+            // Se obtiene el id de la consulta de estetica seleccionada
+            var estetica = $('#dgplusbellebundle_consulta_estetica').val();
+            
+            // Se obtiene la informacion ingresada acerca de la composicion corporal (peso, grasa corporal, ...)
+            $('.corporall').each(function(index,element){
+                valor = $(this).val();
+                corporal.push(valor);
+            });
+            
+            // Generacion del pdf del tipo de consulta de estetica de botox
+            if(paciente != 0) {
+                if(sucursal != "") {
+                    // Si se ha seleccionado tipo de consulta de botox
+                    if(estetica == 3) {
+                        var url = Routing.generate('admin_comparativo_botox_por_pdf', { paciente:paciente, sucursal: sucursal, estetica:estetica, corporal:corporal});
+                        window.open(url);
+                    } 
+                    // Si no se ha seleccionado tipo de consulta de botox
+                    else  {
+                        bootbox.alert('No se ha seleccionado la opción de tipo de consulta de estetica de botox');
+                    }
+                } else {
+                    bootbox.alert('No se ha seleccionado una sucursal');
+                }
+            } else {
+                bootbox.alert('No se ha seleccionado un paciente');
+            }
+            
+            return false;
+        });
+        
         collectionHolder.find('li').each(function() {
             addTagFormDeleteLink($(this));
     });
@@ -1706,6 +2083,16 @@ var editar=$('div.placas').attr('id');
 if(editar!='editar_usuario'){
     // $('#hnr_sircimbundle_usuariotype_placas_0_usroPredeterminado').prop('checked', true);//Se carga el radiobutton seleccionado
 }
-     </script>
-
+    </script>
+    <script>
+        $(document).ready(function(){
+            $('#dgplusbellebundle_paciente_fechaNacimiento').daterangepicker({
+                singleDatePicker: true,
+                showDropdowns: true,
+                locale: {
+                    format: 'YYYY-MM-DD'
+                },
+            }); 
+        });
+   </script>
 {% endblock %} 
