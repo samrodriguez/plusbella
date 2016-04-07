@@ -14,7 +14,10 @@ $('.tipoConsulta').
   
 $('#dgplusbellebundle_consulta_paciente').
   attr('data-bvalidator', 'required,required');   
-  
+
+$('.consulta-paciente').
+  attr('data-bvalidator', 'required,required');    
+    
 $('.corporal').
   attr('data-bvalidator', 'required,required'); 
     

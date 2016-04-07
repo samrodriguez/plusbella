@@ -434,24 +434,31 @@ class ConsultaController extends Controller
                 }    
                 
                 if(isset($parameters['botox'])){
-                    $botox = new \DGPlusbelleBundle\Entity\ConsultaBotox();
-                    
                     $estetica = $em->getRepository('DGPlusbelleBundle:Estetica')->find($parameters['dgplusbellebundle_consulta']['estetica']);
                     
-                    $botox->setAreaInyectar($parameters['botox']['area_inyectar']);
-                    $botox->setUnidades($parameters['botox']['unidades']);
-                    
-                    $botox->setFechaCaducidad(new \DateTime($parameters['botox']['caducidad']));
-                    $botox->setLote($parameters['botox']['lote']);
-                    $botox->setMarcaProducto($parameters['botox']['marca_producto']);
-                    $botox->setNumAplicacion($parameters['botox']['num_aplicacion']);
-                    $botox->setValor($parameters['botox']['valor']);
-                    
-                    $botox->setConsulta($entity);
-                    $botox->setEstetica($estetica);
-                    $em->persist($botox);
-                    $em->flush();
-                    
+                    foreach ($parameters['botox'] as $value) {
+                        //var_dump($value['area_inyectar']);
+                        //die();
+                        $botox = new \DGPlusbelleBundle\Entity\ConsultaBotox();
+
+                        $botox->setAreaInyectar($value['area_inyectar']);
+                        $botox->setUnidades($value['unidades']);
+
+                        $botox->setFechaCaducidad(new \DateTime($value['caducidad']));
+                        $botox->setLote($value['lote']);
+                        $botox->setMarcaProducto($value['marca_producto']);
+                        $botox->setNumAplicacion($value['num_aplicacion']);
+                        $botox->setValor($value['valor']);
+                        
+                        if(isset($value['recomendaciones'])){
+                            $botox->setRecomendaciones($value['recomendaciones']);
+                        }
+                        
+                        $botox->setConsulta($entity);
+                        $botox->setEstetica($estetica);
+                        $em->persist($botox);
+                        $em->flush();
+                    }
                 } 
             }
                 

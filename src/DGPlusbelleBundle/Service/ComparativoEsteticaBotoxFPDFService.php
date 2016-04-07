@@ -13,7 +13,7 @@ class ComparativoEsteticaBotoxFPDFService {
         $this->pdf = $pdf;
     }
     
-    public function generarCorporalTempPdf($titulo, $paciente, $sucursal, $estetica, $consulta, $fecha, $path, $corporal, $comparativo){
+    public function generarCorporalTempPdf($titulo, $paciente, $sucursal, $estetica, $consulta, $fecha, $path, $corporal, $botox){
         $this->pdf->FPDF('P','mm','Letter');
 	$this->pdf->SetTopMargin(20);
 	$this->pdf->SetLeftMargin(15);
@@ -109,31 +109,37 @@ class ComparativoEsteticaBotoxFPDFService {
         
         $cont = 0;
         $j = 0;
-        foreach ($comparativo as $key => $value) {
+        
+        //var_dump($botox);
+        
+        foreach ($botox as $key => $value) {
             $this->pdf->Cell(45);
-            $this->pdf->Cell(20, 27, $value->getAreaInyectar(),0,0,'C');
-            $this->pdf->Cell(15, 27, $value->getUnidades(),0,0,'C');
-            $this->pdf->Cell(25, 27, $value->getFechaCaducidad()->format("d/m/y"),0,0,'C');
-            $this->pdf->Cell(19, 27, $value->getLote(),0,0,'C');
-            $this->pdf->Cell(28, 27, $value->getMarcaProducto(),0,0,'C');
-            $this->pdf->Cell(25, 27, $value->getNumAplicacion(),0,0,'C');
-            $this->pdf->Cell(12, 27, $value->getValor(),0,0,'C');
+            $this->pdf->Cell(20, 27, $value[0],0,0,'C');
+            $this->pdf->Cell(15, 27, $value[1],0,0,'C');
+            
+            $fechaCad = explode('-', $value[2]);
+            
+            $this->pdf->Cell(25, 27, $fechaCad[2].'/'.$fechaCad[1].'/'.$fechaCad[0],0,0,'C');
+            $this->pdf->Cell(19, 27, $value[3],0,0,'C');
+            $this->pdf->Cell(28, 27, $value[4],0,0,'C');
+            $this->pdf->Cell(25, 27, $value[5],0,0,'C');
+            $this->pdf->Cell(12, 27, $value[6],0,0,'C');
             $cont++;
             
             if($cont == 10){
             $this->pdf->Ln(40);
             
-            $this->pdf->Cell(13, 27, 'Fecha',0,0,'C');
-            $this->pdf->Cell(12, 27, 'Peso',0,0,'C');
-            $this->pdf->Cell(25, 27, '% Grasa Corporal',0,0,'C');
-            $this->pdf->Cell(23, 27, '% Agua Corporal',0,0,'C');
-            $this->pdf->Cell(21, 27, utf8_decode('Masa músculo'),0,0,'C');
-            $this->pdf->Cell(23, 27, utf8_decode('Valoración Física'),0,0,'C');
-            $this->pdf->Cell(14, 27, 'DCI/BMR',0,0,'C');
-            $this->pdf->Cell(24, 27, utf8_decode('Edad Metabólica'),0,0,'C');
-            $this->pdf->Cell(15, 27, utf8_decode('Masa Ósea'),0,0,'C');
-            $this->pdf->Cell(20, 27, 'Grasa Visceral',0,0,'C');
-            $this->pdf->Ln(10);
+//            $this->pdf->Cell(13, 27, 'Fecha',0,0,'C');
+//            $this->pdf->Cell(12, 27, 'Peso',0,0,'C');
+//            $this->pdf->Cell(25, 27, '% Grasa Corporal',0,0,'C');
+//            $this->pdf->Cell(23, 27, '% Agua Corporal',0,0,'C');
+//            $this->pdf->Cell(21, 27, utf8_decode('Masa músculo'),0,0,'C');
+//            $this->pdf->Cell(23, 27, utf8_decode('Valoración Física'),0,0,'C');
+//            $this->pdf->Cell(14, 27, 'DCI/BMR',0,0,'C');
+//            $this->pdf->Cell(24, 27, utf8_decode('Edad Metabólica'),0,0,'C');
+//            $this->pdf->Cell(15, 27, utf8_decode('Masa Ósea'),0,0,'C');
+//            $this->pdf->Cell(20, 27, 'Grasa Visceral',0,0,'C');
+//            $this->pdf->Ln(10);
 
             $this->pdf->Line(15, 30, 205, 30);
             $h = 30;
@@ -202,6 +208,18 @@ class ComparativoEsteticaBotoxFPDFService {
             
             }
         }
+        
+        //$this->pdf->SetY(210);
+        $this->pdf->SetXY(60, 200); 
+        $this->pdf->SetFont('Arial','B',10);
+        $this->pdf->Cell(0, 27, 'Recomendaciones:',0,0);
+        //$this->pdf->Ln(10);
+        $this->pdf->SetDrawColor(255,255,255);
+        $this->pdf->SetFont('Arial','',10);
+        $this->pdf->SetXY(60, 220); 
+        $this->pdf->SetWidths(array(146));
+        $this->pdf->Row(array($botox[0][7]));
+        $this->pdf->SetDrawColor(0,0,0);
         
         $this->pdf->Output();
         // return $pdf;

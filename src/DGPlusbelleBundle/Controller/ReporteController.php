@@ -1989,6 +1989,110 @@ class ReporteController extends Controller
     /**
      * Generar reporte pdf de Consulta de estetica corporal
      *
+     * @Route("/pdf/previa/consulta-estetica/botox", name="admin_botox_por_pdf_previa", options ={"expose" = true})
+     */
+    public function EsteticaBotoxPdfPreviaAction(Request $request)
+    {
+        $em = $this->getDoctrine()->getManager();
+        
+        $pacienteId = $request->get('paciente');
+        $sucursalId = $request->get('sucursal');
+        $esteticaId = $request->get('estetica');
+        $corporal = $request->get('corporal');
+        $valores = $request->get('botox');
+        
+        $paciente = $em->getRepository('DGPlusbelleBundle:Paciente')->find($pacienteId);
+        $sucursal = $em->getRepository('DGPlusbelleBundle:Sucursal')->find($sucursalId);
+        $estetica = $em->getRepository('DGPlusbelleBundle:DetalleEstetica')->findBy(array('estetica'=>$esteticaId));
+
+        $fecha= date('d-m-Y');
+        $path = 'Resources/img/dgplusbelle/images/';
+        $titulo = "Reporte de Consulta estetica de Botox";
+        $consulta="prueba";
+
+        $i =0;
+        $botox = array(); 
+        $aux = array();
+        foreach ($valores as $key => $value) {
+            array_push($aux, $value);
+            
+            if(($key % 7) ==0 && $key != 0){
+                array_push($botox, $aux);
+                unset($aux);
+                $aux = array();
+                $i++;
+                
+            }
+            
+        }
+        
+        $dql = $dql = "SELECT btx"
+                . " FROM DGPlusbelleBundle:ConsultaBotox btx"
+                . " INNER JOIN btx.consulta con"
+                . " WHERE con.paciente = :paciente";
+        
+        $comparativo = $em->createQuery($dql)
+                       ->setParameter('paciente', $pacienteId)
+                       ->getResult();
+               
+        $this->get('fpdf_comparativo_botox_printer')->generarCorporalTempPdf($titulo, $paciente, $sucursal, $estetica, $consulta, $fecha, $path, $corporal, $botox);
+        
+    }
+    
+    /**
+     * Generar reporte pdf de Consulta de estetica corporal
+     *
+     * @Route("/pdf/consulta-estetica/botox", name="admin_pdf_botox_por_pdf", options ={"expose" = true})
+     */
+    public function EsteticaBotoxPdfAction(Request $request)
+    {
+        $em = $this->getDoctrine()->getManager();
+        
+        $pacienteId = $request->get('paciente');
+        $sucursalId = $request->get('sucursal');
+        $esteticaId = $request->get('estetica');
+        $corporal = $request->get('corporal');
+        $valores = $request->get('botox');
+        
+        $paciente = $em->getRepository('DGPlusbelleBundle:Paciente')->find($pacienteId);
+        $sucursal = $em->getRepository('DGPlusbelleBundle:Sucursal')->find($sucursalId);
+        $estetica = $em->getRepository('DGPlusbelleBundle:DetalleEstetica')->findBy(array('estetica'=>$esteticaId));
+
+        $fecha= date('d-m-Y');
+        $path = 'Resources/img/dgplusbelle/images/';
+        $titulo = "Reporte de Consulta estetica de Botox";
+        $consulta="prueba";
+        
+        $botox = array(); 
+        $aux = array();
+        foreach ($valores as $key => $value) {
+            array_push($aux, $value['area_inyectar']);
+            array_push($aux, $value['unidades']);
+            
+            $fechaCaducidad = explode(' ', $value['fecha_caducidad']);
+            
+            array_push($aux, $fechaCaducidad[0]);
+            array_push($aux, $value['lote']);
+            array_push($aux, $value['marca_producto']);
+            array_push($aux, $value['num_aplicacion']);
+            array_push($aux, $value['valor']);
+            
+            if(isset($value['recomendaciones'])){
+                array_push($aux, $value['recomendaciones']);
+            }   
+            
+            array_push($botox, $aux);
+            unset($aux);
+            $aux = array();
+        }
+        
+        $this->get('fpdf_comparativo_botox_printer')->generarCorporalTempPdf($titulo, $paciente, $sucursal, $estetica, $consulta, $fecha, $path, $corporal, $botox);
+        
+    }
+    
+    /**
+     * Generar reporte pdf de Consulta de estetica corporal
+     *
      * @Route("/pdf/previa/consulta-estetica/comparativo-botox", name="admin_comparativo_botox_por_pdf", options ={"expose" = true})
      */
     public function ComparativoEsteticaBotoxPdfAction(Request $request)

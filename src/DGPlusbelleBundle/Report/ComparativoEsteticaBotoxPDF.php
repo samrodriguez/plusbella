@@ -21,7 +21,7 @@ class ComparativoEsteticaBotoxPDF extends \FPDF_FPDF {
         $this->Line(15, 26, 205, 26);
         // Title
         //var_dump($this->tituloReporte);
-        $this->Cell(25, 0, utf8_decode('Comparativo de Consultas de Botox'));
+        $this->Cell(25, 0, utf8_decode('Consulta de Botox'));
         // Line break
        $this->Ln(0);
     }
@@ -42,7 +42,7 @@ class ComparativoEsteticaBotoxPDF extends \FPDF_FPDF {
 //        
 //        $tot = count($this->pages);
 //        $this->SetX(-35);
-        $this->Cell(0,10,utf8_decode('Página ').$this->PageNo(), 0, 0, 'R'); 
+//        $this->Cell(0,10,utf8_decode('Página ').$this->PageNo(), 0, 0, 'R'); 
     }
     
     // Set Titulo Reporte

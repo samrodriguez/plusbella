@@ -245,7 +245,7 @@
                     <div class="col-md-3 col-md-offset-1">
                         {#{{ form_row(form.paciente) }}#}
                         <strong>Paciente</strong>
-                        <select id="dgplusbellebundle_consulta_paciente" name="dgplusbellebundle_consulta[paciente]" class="form-control input-sm">
+                        <select id="dgplusbellebundle_consulta_paciente" name="dgplusbellebundle_consulta[paciente]" class="form-control input-sm consulta-paciente">
                             <option value="0" selected>Seleccione un paciente...</option>
                         </select>    
                     </div>
@@ -556,6 +556,7 @@
                     }
                     // Si la consulta de estetica es de Facial
                     else if(data.query[0].estetica == 3){
+                        count = 0;
                         mostrarCamposBotox();
                     }
                 }, "json");
@@ -830,6 +831,7 @@
             
             var comparativoUrl = document.createElement('a');
             comparativoUrl.setAttribute('id', 'urlComparativoCrp');
+            comparativoUrl.setAttribute('style', 'color: blue;');
     
             var comparativoText = document.createTextNode('Ver comparativo');
             var comparativoHr = document.createElement('hr');
@@ -1278,7 +1280,7 @@
             
             var comparativo = document.createElement('div');
             comparativo.setAttribute('id', 'comparativoBotox');
-            comparativo.setAttribute('class', 'text-right');
+            comparativo.setAttribute('class', 'text-right comparativoBotox-' + count);
             
             
             
@@ -1288,18 +1290,29 @@
                 
                 var nuevoUrl = document.createElement('a');
                 nuevoUrl.setAttribute('id', 'nuevoUrlBotox');
-
-                var nuevoText = document.createTextNode('Nuevo');
+                nuevoUrl.setAttribute('style', 'color: blue;');
+                
+                var nuevoText = document.createTextNode('Nuevo registro de detalle de consulta');
                 nuevoUrl.appendChild(nuevoText);
 
                 comparativo.appendChild(nuevoUrl);
 
-                var separador = document.createTextNode(' | ');
-                comparativo.appendChild(separador);
+                {#var separador = document.createTextNode(' | ');
+                comparativo.appendChild(separador);#}
                 
                 var comparativoText = document.createTextNode('Ver comparativo');
                 comparativoUrl.appendChild(comparativoText);
-                comparativo.appendChild(comparativoUrl);
+                //comparativo.appendChild(comparativoUrl);
+            } else {
+                var borrarUrl = document.createElement('a');
+                borrarUrl.setAttribute('id', 'borrarUrlBotox-' + count);
+                borrarUrl.setAttribute('class', 'borrarRegistro');
+                borrarUrl.setAttribute('style', 'color: red;');
+                
+                var borrarText = document.createTextNode('Eliminar registro');
+                borrarUrl.appendChild(borrarText);
+                
+                comparativo.appendChild(borrarUrl);
             }
             
             var comparativoHr = document.createElement('hr');
@@ -1312,7 +1325,7 @@
             div.appendChild(clearfix);
             
             var botox = document.createElement('div');
-            botox.setAttribute('class', 'col-md-12 botox');
+            botox.setAttribute('class', 'col-md-12 botox-' + count);
             botox.setAttribute('style', 'margin-bottom: 15px;');
             
             var rowCorp = document.createElement('div');
@@ -1335,7 +1348,7 @@
             var inputAreaInyectar = document.createElement('input');
             inputAreaInyectar.setAttribute('type', 'text');
             inputAreaInyectar.setAttribute('class', 'form-control cbotox');
-            inputAreaInyectar.setAttribute('name', 'botox[area_inyectar]');
+            inputAreaInyectar.setAttribute('name', 'botox['+ count +'][area_inyectar]');
             inputAreaInyectar.setAttribute('id', 'area_inyectar');
             //inputPeso.setAttribute('value', value3.opcion);
             formgroupAreaInyectar.appendChild(inputAreaInyectar);
@@ -1360,7 +1373,7 @@
             var inputUnidades = document.createElement('input');
             inputUnidades.setAttribute('type', 'text');
             inputUnidades.setAttribute('class', 'form-control cbotox');
-            inputUnidades.setAttribute('name', 'botox[unidades]');
+            inputUnidades.setAttribute('name', 'botox['+ count +'][unidades]');
             inputUnidades.setAttribute('id', 'unidades');
             
             formgroupUnidades.appendChild(inputUnidades);
@@ -1384,9 +1397,9 @@
             
             var inputFechaCaducidad = document.createElement('input');
             inputFechaCaducidad.setAttribute('type', 'text');
-            inputFechaCaducidad.setAttribute('class', 'form-control cbotox calZebra');
-            inputFechaCaducidad.setAttribute('name', 'botox[caducidad]');
-            inputFechaCaducidad.setAttribute('id', 'caducidad');
+            inputFechaCaducidad.setAttribute('class', 'form-control cbotox calZebra caducidad');
+            inputFechaCaducidad.setAttribute('name', 'botox['+ count +'][caducidad]');
+            inputFechaCaducidad.setAttribute('id', 'caducidad-' + count);
             
             formgroupFechaCaducidad.appendChild(inputFechaCaducidad);
             rowCorp.appendChild(formgroupFechaCaducidad);
@@ -1408,7 +1421,7 @@
             var inputLote = document.createElement('input');
             inputLote.setAttribute('type', 'text');
             inputLote.setAttribute('class', 'form-control cbotox');
-            inputLote.setAttribute('name', 'botox[lote]');
+            inputLote.setAttribute('name', 'botox['+ count +'][lote]');
             inputLote.setAttribute('id', 'lote');
             
             formgroupLote.appendChild(inputLote);
@@ -1431,7 +1444,7 @@
             var inputMarcaProducto = document.createElement('input');
             inputMarcaProducto.setAttribute('type', 'text');
             inputMarcaProducto.setAttribute('class', 'form-control cbotox');
-            inputMarcaProducto.setAttribute('name', 'botox[marca_producto]');
+            inputMarcaProducto.setAttribute('name', 'botox['+ count +'][marca_producto]');
             inputMarcaProducto.setAttribute('id', 'marca_producto');
             
             formgroupMarcaProducto.appendChild(inputMarcaProducto);
@@ -1454,7 +1467,7 @@
             var inputNumAplicacion = document.createElement('input');
             inputNumAplicacion.setAttribute('type', 'text');
             inputNumAplicacion.setAttribute('class', 'form-control cbotox');
-            inputNumAplicacion.setAttribute('name', 'botox[num_aplicacion]');
+            inputNumAplicacion.setAttribute('name', 'botox['+ count +'][num_aplicacion]');
             inputNumAplicacion.setAttribute('id', 'num_aplicacion');
             
             formgroupNumAplicacion.appendChild(inputNumAplicacion);
@@ -1477,7 +1490,7 @@
             var inputValor = document.createElement('input');
             inputValor.setAttribute('type', 'text');
             inputValor.setAttribute('class', 'form-control cbotox');
-            inputValor.setAttribute('name', 'botox[valor]');
+            inputValor.setAttribute('name', 'botox['+ count +'][valor]');
             inputValor.setAttribute('id', 'botox_valor');
             
             formgroupValor.appendChild(inputValor);
@@ -1501,8 +1514,8 @@
                 var inputRecomendaciones = document.createElement('textarea');
                 inputRecomendaciones.setAttribute('type', 'text');
                 inputRecomendaciones.setAttribute('class', 'form-control cbotox');
-                inputRecomendaciones.setAttribute('name', 'botox[valor]');
-                inputRecomendaciones.setAttribute('id', 'botox_valor');
+                inputRecomendaciones.setAttribute('name', 'botox['+ count +'][recomendaciones]');
+                inputRecomendaciones.setAttribute('id', 'botox_recomendaciones');
 
                 formgroupRecomendaciones.appendChild(inputRecomendaciones);
                 rowCorp.appendChild(formgroupRecomendaciones);
@@ -1520,13 +1533,15 @@
             //validarConsultaBotox();
             validarConsulta();
             
-            $('#caducidad').daterangepicker({
+            $('.caducidad').daterangepicker({
                 singleDatePicker: true,
                 showDropdowns: true,
                 locale: {
                     format: 'YYYY-MM-DD'
                 },
-            }); 
+            });
+            
+            $('.caducidad').val('');
         } // Fin de mostrarCamposBotox 
         
         function mostrarCampos2(data) {
@@ -1725,6 +1740,12 @@
         $(document).on('click','#esteticaPrevPDF',function(){
             var valores = [];
             var corporal = [];
+            var botox = [];
+            var abtx = 1;
+            {#botox.push({
+                item: []
+            });#}
+            var consulta_botox = [];
             var valor = 0;
            
             // Se obtiene el id del paciente
@@ -1762,7 +1783,27 @@
                     else if(estetica == 2) {
                         var url = Routing.generate('admin_prevpdf_facial_por_pdf', { paciente: paciente, sucursal: sucursal, valores: valores, estetica: estetica});
                         window.open(url);
-                    } else {
+                    } // Si se ha seleccionado tipo de consulta de botox
+                    else if(estetica == 3) {
+                        var idx = 0;
+                        $('.cbotox').each(function(index,element){
+                            valor = $(this).val();
+                            
+                            if(valor != "") {
+                                botox.push(valor);
+                            } else {
+                                abtx = 0;
+                            }
+                            
+                        });
+                        
+                        if(abtx == 1){
+                            var url = Routing.generate('admin_botox_por_pdf_previa', { paciente:paciente, sucursal: sucursal, estetica:estetica, corporal:corporal, botox: botox});
+                            window.open(url);
+                        } else { 
+                            bootbox.alert('No debe de dejar en blanco ningun detalle de consulta de botox');
+                        }
+                    }else {
                         bootbox.alert('No se ha seleccionado una opción en el tipo de consulta de estetica');
                     }
                 } else {
@@ -1848,7 +1889,31 @@
         $(document).on('click','#nuevoUrlBotox',function(){
             mostrarCamposBotox();
         });
-       
+        
+        // Borrar registro de detalle de consulta de estetica de Botox
+        $(document).on('click','.borrarRegistro',function(){
+            // Se obtiene el id del link que se ha hecho click
+            id = $(this).attr('id');
+            
+            var actualElem = id.split("-");
+            
+            // Se obtiene todos elementos que contengan la clase comparativoBotox
+            var elements1 = document.getElementsByClassName('comparativoBotox-' + actualElem[1]);
+            var elements2 = document.getElementsByClassName('botox-' + actualElem[1]);
+            
+            // Se borran todos los elementohtmls que se encuentran en el div con id = campos
+            //$('#campos div').html('');
+
+            // Se borran todos los elementos que contengan la clase = parametro
+            while(elements1.length > 0){
+                elements1[0].parentNode.removeChild(elements1[0]);
+            }
+            
+            while(elements2.length > 0){
+                elements2[0].parentNode.removeChild(elements2[0]);
+            }
+        });
+        
         // Si se hace click en ver vista previa en pdf del comparativo de consulta
         // de consulta de estetica de Botox
         $(document).on('click','#urlComparativoBotox',function(){
@@ -2086,7 +2151,7 @@ if(editar!='editar_usuario'){
     </script>
     <script>
         $(document).ready(function(){
-            $('#dgplusbellebundle_paciente_fechaNacimiento').daterangepicker({
+            $('.caducidad').daterangepicker({
                 singleDatePicker: true,
                 showDropdowns: true,
                 locale: {

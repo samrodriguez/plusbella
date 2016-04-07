@@ -103,6 +103,13 @@
                                 var url = Routing.generate('admin_prevpdf_facial_por_pdf', { paciente: paciente, sucursal: sucursal, valores: respuesta.valores, estetica: estetica});
                                 window.open(url);
                             }
+                            // Si el tipo de consulta es de Botox
+                            else if(tipo_estetica == 'Botox') {
+                                estetica = 3;
+                                //console.log(respuesta.botox);
+                                var url = Routing.generate('admin_pdf_botox_por_pdf', { paciente: paciente, sucursal: sucursal, valores: respuesta.valores, estetica: estetica, botox: respuesta.botox});
+                                window.open(url);
+                            }
                         }
                     });
                 });
