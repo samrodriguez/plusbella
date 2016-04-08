@@ -80,7 +80,7 @@ class ComparativoEsteticaBotoxFPDFService {
         $this->pdf->Line(58, 90, 205, 90);
         $h = 90;
         
-        for ($i = 1; $i <= 12; $i++) {
+        for ($i = 1; $i <= 15; $i++) {
             $h+=9;
             $this->pdf->Line(58, $h, 205, $h);            
         }
@@ -210,14 +210,14 @@ class ComparativoEsteticaBotoxFPDFService {
         }
         
         //$this->pdf->SetY(210);
-        $this->pdf->SetXY(60, 200); 
+        $this->pdf->SetXY(20, 220); 
         $this->pdf->SetFont('Arial','B',10);
         $this->pdf->Cell(0, 27, 'Recomendaciones:',0,0);
         //$this->pdf->Ln(10);
         $this->pdf->SetDrawColor(255,255,255);
         $this->pdf->SetFont('Arial','',10);
-        $this->pdf->SetXY(60, 220); 
-        $this->pdf->SetWidths(array(146));
+        $this->pdf->SetXY(20, 236); 
+        $this->pdf->SetWidths(array(185));
         $this->pdf->Row(array($botox[0][7]));
         $this->pdf->SetDrawColor(0,0,0);
         
