@@ -13,7 +13,11 @@
     
     <div class="row">
         <div class="col-md-3">
-         {{ form_row(form.paciente ) }}   
+{#         {{ form_row(form.paciente ) }}   #}
+            <label class="control-label" for="dgplusbellebundle_cita_paciente">Paciente</label>
+            <select id="carrusel" name="carrusel" class="form-control input-sm carrusel">
+                    <option value="0" selected>Seleccione un paciente...</option>
+                </select>  
         </div>
     </div>
     

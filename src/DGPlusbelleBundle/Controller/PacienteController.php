@@ -496,7 +496,7 @@ class PacienteController extends Controller
             //var_dump($paciente['data']);
         }
         else{
-            $dql = "SELECT exp.numero as expediente, pac.id as id,per.nombres,per.apellidos,DATE_FORMAT(pac.fechaNacimiento,'%d-%m-%Y') as fechaNacimiento, '<a ><i style=\"cursor:pointer;\"  class=\"infoPaciente fa fa-info-circle\"></i></a>' as link FROM DGPlusbelleBundle:Paciente pac "
+            $dql = "SELECT exp.numero as expediente, DATE_FORMAT(pac.fechaNacimiento,'%d-%m-%Y') as fechaNacimiento, '<a ><i style=\"cursor:pointer;\"  class=\"infoPaciente fa fa-info-circle\"></i></a>' as link FROM DGPlusbelleBundle:Paciente pac "
                 . "JOIN pac.persona per JOIN pac.expediente exp ORDER BY per.nombres ASC ";
             $paciente['data'] = $em->createQuery($dql)
                     ->setFirstResult($start)
