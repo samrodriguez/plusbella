@@ -21,7 +21,7 @@ class ReporteEsteticaPDF extends \FPDF_FPDF {
         $this->Line(20, 26, 200, 26);
         // Title
         //var_dump($this->tituloReporte);
-        $this->Cell(30, 0, 'Reporte de Consulta Estetica Corporal');
+        $this->Cell(30, 0, utf8_decode('Reporte de Consulta Estética Corporal'));
         // Line break
        $this->Ln(0);
     }

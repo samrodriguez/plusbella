@@ -1,0 +1,53 @@
+{% extends '::base.html.twig' %}
+
+{% block body -%}
+    <h1>ConsultaBotox list</h1>
+
+    <table class="records_list">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Areainyectar</th>
+                <th>Unidades</th>
+                <th>Fechacaducidad</th>
+                <th>Lote</th>
+                <th>Marcaproducto</th>
+                <th>Numaplicacion</th>
+                <th>Valor</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for entity in entities %}
+            <tr>
+                <td><a href="{{ path('admin_consulta-botox_show', { 'id': entity.id }) }}">{{ entity.id }}</a></td>
+                <td>{{ entity.areaInyectar }}</td>
+                <td>{{ entity.unidades }}</td>
+                <td>{% if entity.fechaCaducidad %}{{ entity.fechaCaducidad|date('Y-m-d H:i:s') }}{% endif %}</td>
+                <td>{{ entity.lote }}</td>
+                <td>{{ entity.marcaProducto }}</td>
+                <td>{{ entity.numAplicacion }}</td>
+                <td>{{ entity.valor }}</td>
+                <td>
+                <ul>
+                    <li>
+                        <a href="{{ path('admin_consulta-botox_show', { 'id': entity.id }) }}">show</a>
+                    </li>
+                    <li>
+                        <a href="{{ path('admin_consulta-botox_edit', { 'id': entity.id }) }}">edit</a>
+                    </li>
+                </ul>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+        <ul>
+        <li>
+            <a href="{{ path('admin_consulta-botox_new') }}">
+                Create a new entry
+            </a>
+        </li>
+    </ul>
+    {% endblock %}

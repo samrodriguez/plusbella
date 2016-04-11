@@ -2,7 +2,7 @@
 
 namespace DGPlusbelleBundle\Report;
 
-class FacialEsteticaPDF extends \FPDF_FPDF {
+class ComparativoEsteticaBotoxPDF extends \FPDF_FPDF {
 //    private $tituloReporte;
 //
 //    public function __construct($tituloReporte)
@@ -15,13 +15,13 @@ class FacialEsteticaPDF extends \FPDF_FPDF {
         
          $this->SetFont('Arial','B',15);
         // Move to the right
-        $this->Cell(10);
-        $this->Image('Resources/img/dgplusbelle/images/laplusbelle.jpg', 150, 5, 50, 20);
-        $this->Line(20, 25.5, 200, 25.5);
-        $this->Line(20, 26, 200, 26);
+        $this->Cell(5);
+        $this->Image('Resources/img/dgplusbelle/images/laplusbelle.jpg', 155, 5, 50, 20);
+        $this->Line(15, 25.5, 205, 25.5);
+        $this->Line(15, 26, 205, 26);
         // Title
         //var_dump($this->tituloReporte);
-        $this->Cell(30, 0, utf8_decode('Reporte de Consulta Estética Facial'));
+        $this->Cell(25, 0, utf8_decode('Consulta de Botox'));
         // Line break
        $this->Ln(0);
     }
@@ -35,14 +35,14 @@ class FacialEsteticaPDF extends \FPDF_FPDF {
         $this->SetFont('Arial','I',6);
         // Número de página
         
-        $this->Line(20, 260.5, 200, 260.5);
-        $this->Line(20, 261, 200, 261);
+        $this->Line(15, 260.5, 205, 260.5);
+        $this->Line(15, 261, 205, 261);
         
         $this->Cell(0, 10, 'San Salvador, Colonia Escalon, Calle Cuscatlan, No. 448. entre la 83 Av. y 85 Av. Sur. Tel. 2519-2857.',0,0);
 //        
 //        $tot = count($this->pages);
 //        $this->SetX(-35);
-//        $this->Cell(0,10,'Pagina '.$this->PageNo().' de '. $tot, 0, 0, 'C'); 
+//        $this->Cell(0,10,utf8_decode('Página ').$this->PageNo(), 0, 0, 'R'); 
     }
     
     // Set Titulo Reporte

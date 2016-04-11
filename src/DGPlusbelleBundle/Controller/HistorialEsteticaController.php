@@ -306,7 +306,23 @@ class HistorialEsteticaController extends Controller
                                 INNER JOIN persona per on pac.persona = per.id
                                 INNER JOIN tratamiento tra on co.tratamiento_id = tra.id
                                 INNER JOIN sucursal suc on co.sucursal = suc.id
-                                INNER JOIN tipo_consulta tip on co.tipo_consulta = tip.id) a
+                                INNER JOIN tipo_consulta tip on co.tipo_consulta = tip.id
+                        union distinct
+                            SELECT distinct co.id as historial, ROUND(co.costo_consulta, 2) as costo,  
+                                    DATE_FORMAT(co.fecha_consulta,'%d/%m/%Y') as fechaConsulta, 
+                                    tra.nombre as tratamiento, 
+                                    suc.nombre as sucursal, 
+                                    tip.nombre as tipo, 
+                                    CONCAT(per.nombres, ' ', per.apellidos) as paciente,
+                                    '<a ><i style=\"cursor:pointer;\"  class=\"infoPaciente fa fa-file-pdf-o\"></i></a>' as link,
+                                    'Botox' as estetica
+                            FROM consulta_botox his
+                                INNER JOIN consulta co on his.consulta = co.id
+                                INNER JOIN paciente pac on co.paciente = pac.id
+                                INNER JOIN persona per on pac.persona = per.id
+                                INNER JOIN tratamiento tra on co.tratamiento_id = tra.id
+                                INNER JOIN sucursal suc on co.sucursal = suc.id
+                                INNER JOIN tipo_consulta tip on co.tipo_consulta = tip.id) a      
                     GROUP BY historial
                     ORDER BY fechaConsulta desc, estetica ";
             
@@ -339,6 +355,7 @@ class HistorialEsteticaController extends Controller
                                     tip.nombre as tipo, 
                                     CONCAT(per.nombres, ' ', per.apellidos) as paciente,
                                     CONCAT('<a ><i style=\"cursor:pointer;\"  class=\"infoPaciente fa fa-file-pdf-o\" id=\"', co.id, '\" ></i></a>') as link,
+                                    CONCAT('<a ><i style=\"cursor:pointer;\"  class=\"infoPaciente fa fa-eye\" id=\"', co.id, '\" ></i></a>') as link2,
                                     'Corporal' as estetica
                             FROM composicion_corporal his
                                 INNER JOIN consulta co on his.consulta = co.id
@@ -356,6 +373,7 @@ class HistorialEsteticaController extends Controller
                                     tip.nombre as tipo, 
                                     CONCAT(per.nombres, ' ', per.apellidos) as paciente,
                                     CONCAT('<a ><i style=\"cursor:pointer;\"  class=\"infoPaciente fa fa-file-pdf-o\" id=\"', co.id, '\" ></i></a>') as link,
+                                    CONCAT('<a ><i style=\"cursor:pointer;\"  class=\"infoPaciente fa fa-eye\" id=\"', co.id, '\" ></i></a>') as link2,
                                     'Facial' as estetica
                             FROM historial_estetica his
                                 INNER JOIN consulta co on his.consulta = co.id
@@ -364,6 +382,24 @@ class HistorialEsteticaController extends Controller
                                 INNER JOIN tratamiento tra on co.tratamiento_id = tra.id
                                 INNER JOIN sucursal suc on co.sucursal = suc.id
                                 INNER JOIN tipo_consulta tip on co.tipo_consulta = tip.id
+                                WHERE CONCAT(upper(per.nombres),upper(per.apellidos)) LIKE upper(:busqueda)
+                        union distinct     
+                            SELECT distinct co.id as historial, ROUND(co.costo_consulta, 2) as costo,  
+                                    DATE_FORMAT(co.fecha_consulta,'%d/%m/%Y') as fechaConsulta, 
+                                    tra.nombre as tratamiento, 
+                                    suc.nombre as sucursal, 
+                                    tip.nombre as tipo, 
+                                    CONCAT(per.nombres, ' ', per.apellidos) as paciente,
+                                    CONCAT('<a ><i style=\"cursor:pointer;\"  class=\"infoPaciente fa fa-file-pdf-o\" id=\"', co.id, '\" ></i></a>') as link,
+                                    CONCAT('<a ><i style=\"cursor:pointer;\"  class=\"infoPaciente fa fa-eye\" id=\"', co.id, '\" ></i></a>') as link2,
+                                    'Botox' as estetica
+                            FROM consulta_botox his
+                                INNER JOIN consulta co on his.consulta = co.id
+                                INNER JOIN paciente pac on co.paciente = pac.id
+                                INNER JOIN persona per on pac.persona = per.id
+                                INNER JOIN tratamiento tra on co.tratamiento_id = tra.id
+                                INNER JOIN sucursal suc on co.sucursal = suc.id
+                                INNER JOIN tipo_consulta tip on co.tipo_consulta = tip.id  
                                 WHERE CONCAT(upper(per.nombres),upper(per.apellidos)) LIKE upper(:busqueda)) a
                     GROUP BY historial
                     ORDER BY fechaConsulta desc, estetica ";
@@ -377,6 +413,7 @@ class HistorialEsteticaController extends Controller
             $rsm->addScalarResult('estetica','estetica');
             $rsm->addScalarResult('paciente','paciente');
             $rsm->addScalarResult('link','link');
+            $rsm->addScalarResult('link2','link2');
             
             $paciente['data'] = $em->createNativeQuery($sql, $rsm)
                                    ->setParameter('busqueda', "%".$busqueda['value']."%")
@@ -393,6 +430,7 @@ class HistorialEsteticaController extends Controller
                                     tip.nombre as tipo, 
                                     CONCAT(per.nombres, ' ', per.apellidos) as paciente,
                                     CONCAT('<a ><i style=\"cursor:pointer;\"  class=\"infoPaciente fa fa-file-pdf-o\" id=\"', co.id, '\" ></i></a>') as link,
+                                    CONCAT('<a ><i style=\"cursor:pointer;\"  class=\"infoPaciente fa fa-eye\" id=\"', co.id, '\" ></i></a>') as link2,
                                     'Corporal' as estetica
                             FROM composicion_corporal his
                                 INNER JOIN consulta co on his.consulta = co.id
@@ -409,6 +447,7 @@ class HistorialEsteticaController extends Controller
                                     tip.nombre as tipo, 
                                     CONCAT(per.nombres, ' ', per.apellidos) as paciente,
                                     CONCAT('<a ><i style=\"cursor:pointer;\"  class=\"infoPaciente fa fa-file-pdf-o\" id=\"', co.id, '\" ></i></a>') as link,
+                                    CONCAT('<a ><i style=\"cursor:pointer;\"  class=\"infoPaciente fa fa-eye\" id=\"', co.id, '\" ></i></a>') as link2,
                                     'Facial' as estetica
                             FROM historial_estetica his
                                 INNER JOIN consulta co on his.consulta = co.id
@@ -416,7 +455,24 @@ class HistorialEsteticaController extends Controller
                                 INNER JOIN persona per on pac.persona = per.id
                                 INNER JOIN tratamiento tra on co.tratamiento_id = tra.id
                                 INNER JOIN sucursal suc on co.sucursal = suc.id
-                                INNER JOIN tipo_consulta tip on co.tipo_consulta = tip.id) a
+                                INNER JOIN tipo_consulta tip on co.tipo_consulta = tip.id
+                        union distinct     
+                            SELECT distinct co.id as historial, ROUND(co.costo_consulta, 2) as costo,  
+                                    DATE_FORMAT(co.fecha_consulta,'%d/%m/%Y') as fechaConsulta, 
+                                    tra.nombre as tratamiento, 
+                                    suc.nombre as sucursal, 
+                                    tip.nombre as tipo, 
+                                    CONCAT(per.nombres, ' ', per.apellidos) as paciente,
+                                    CONCAT('<a ><i style=\"cursor:pointer;\"  class=\"infoPaciente fa fa-file-pdf-o\" id=\"', co.id, '\" ></i></a>') as link,
+                                    CONCAT('<a ><i style=\"cursor:pointer;\"  class=\"infoPaciente fa fa-eye\" id=\"', co.id, '\" ></i></a>') as link2,
+                                    'Botox' as estetica
+                            FROM consulta_botox his
+                                INNER JOIN consulta co on his.consulta = co.id
+                                INNER JOIN paciente pac on co.paciente = pac.id
+                                INNER JOIN persona per on pac.persona = per.id
+                                INNER JOIN tratamiento tra on co.tratamiento_id = tra.id
+                                INNER JOIN sucursal suc on co.sucursal = suc.id
+                                INNER JOIN tipo_consulta tip on co.tipo_consulta = tip.id) a        
                     GROUP BY historial
                     ORDER BY fechaConsulta desc, estetica ";
             
@@ -429,6 +485,7 @@ class HistorialEsteticaController extends Controller
             $rsm->addScalarResult('estetica','estetica');
             $rsm->addScalarResult('paciente','paciente');
             $rsm->addScalarResult('link','link');
+            $rsm->addScalarResult('link2','link2');
             
             $paciente['data'] = $em->createNativeQuery($sql, $rsm)
                                    ->getResult();
@@ -483,6 +540,22 @@ class HistorialEsteticaController extends Controller
                                 INNER JOIN tratamiento tra on co.tratamiento_id = tra.id
                                 INNER JOIN sucursal suc on co.sucursal = suc.id
                                 INNER JOIN tipo_consulta tip on co.tipo_consulta = tip.id
+                                WHERE co.id = :busqueda
+                        union distinct        
+                            SELECT distinct co.id as historial, ROUND(co.costo_consulta, 2) as costo,  
+                                    DATE_FORMAT(co.fecha_consulta,'%m/%d/%Y') as fechaConsulta, 
+                                    tra.id as tratamiento, 
+                                    suc.id as sucursal, 
+                                    tip.id as tipo, 
+                                    pac.id as paciente,
+                                    'Botox' as estetica
+                            FROM consulta_botox his
+                                INNER JOIN consulta co on his.consulta = co.id
+                                INNER JOIN paciente pac on co.paciente = pac.id
+                                INNER JOIN persona per on pac.persona = per.id
+                                INNER JOIN tratamiento tra on co.tratamiento_id = tra.id
+                                INNER JOIN sucursal suc on co.sucursal = suc.id
+                                INNER JOIN tipo_consulta tip on co.tipo_consulta = tip.id 
                                 WHERE co.id = :busqueda) a
                     GROUP BY historial
                     ORDER BY fechaConsulta desc, estetica ";
@@ -499,7 +572,7 @@ class HistorialEsteticaController extends Controller
             $estetica = $em->createNativeQuery($sql, $rsm)
                                    ->setParameter('busqueda', $consultaId)
                                    ->getSingleResult();
-            
+                           
             $sql3 = "SELECT opc.id as historial
                      FROM historial_estetica his
                         INNER JOIN opciones_detalle_estetica opc on his.detalle_estetica = opc.id
@@ -551,11 +624,40 @@ class HistorialEsteticaController extends Controller
                                    ->setParameter('busqueda', $consultaId)
                                    ->getResult();
             
+            $sql4 = "SELECT his.id as botoxId,
+                            his.area_inyectar as area_inyectar,
+                            his.unidades  as unidades,
+                            his.fecha_caducidad as fecha_caducidad,
+                            his.lote as lote,
+                            his.marca_producto as marca_producto,
+                            his.num_aplicacion as num_aplicacion,
+                            his.valor as valor,
+                            his.recomendaciones as recomendaciones
+                     FROM consulta_botox his
+                        INNER JOIN consulta co on his.consulta = co.id
+                     WHERE co.id = :busqueda ";
+            
+            $rsm4 = new ResultSetMapping();
+            $rsm4->addScalarResult('botoxId','botoxId');
+            $rsm4->addScalarResult('area_inyectar','area_inyectar');
+            $rsm4->addScalarResult('unidades','unidades');
+            $rsm4->addScalarResult('fecha_caducidad','fecha_caducidad');
+            $rsm4->addScalarResult('lote','lote');
+            $rsm4->addScalarResult('marca_producto','marca_producto');
+            $rsm4->addScalarResult('num_aplicacion','num_aplicacion');
+            $rsm4->addScalarResult('valor','valor');
+            $rsm4->addScalarResult('recomendaciones','recomendaciones');
+            
+            $botox = $em->createNativeQuery($sql4, $rsm4)
+                                   ->setParameter('busqueda', $consultaId)
+                                   ->getResult();
+            
             $response = new JsonResponse();
             $response->setData(array(
                                 'data' => $estetica,
                                 'corporal' => $corporal,
-                                'valores' => $valores
+                                'valores' => $valores,
+                                'botox'   => $botox
                             )); 
             
             return $response; 
