@@ -36,6 +36,13 @@ class VentaPaquete
     private $fechaRegistro;
     
     /**
+     * @var float
+     *
+     * @ORM\Column(name="costo", type="float", precision=10, scale=0, nullable=false)
+     */
+    private $costo;
+    
+    /**
      * @var integer
      *
      * @ORM\Column(name="estado", type="integer", nullable=false)
@@ -172,6 +179,30 @@ class VentaPaquete
         return $this->fechaRegistro;
     }
 
+    /**
+     * Set costo
+     *
+     * @param float $costo
+     *
+     * @return Paquete
+     */
+    public function setCosto($costo)
+    {
+        $this->costo = $costo;
+
+        return $this;
+    }
+
+    /**
+     * Get costo
+     *
+     * @return float
+     */
+    public function getCosto()
+    {
+        return $this->costo;
+    }
+    
     /**
      * Set estado
      *

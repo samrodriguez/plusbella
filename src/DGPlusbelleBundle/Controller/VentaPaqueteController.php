@@ -3,6 +3,7 @@
 namespace DGPlusbelleBundle\Controller;
 
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -360,7 +361,48 @@ class VentaPaqueteController extends Controller
 
     }
     
-    
+    /**
+    * Ajax utilizado para buscar informacion del producto
+    *  
+    * @Route("/venta/costo_paquete/get", name="admin_costo_paquete")
+    */
+    public function costoPaqueteAction()
+    {
+        $isAjax = $this->get('Request')->isXMLhttpRequest();
+        if($isAjax){
+            $em = $this->getDoctrine()->getManager();
+            $id = $this->get('request')->request->get('id');
+            $entity = $em->getRepository('DGPlusbelleBundle:Paquete')->find($id);
+            $paqueteTratamiento = $em->getRepository('DGPlusbelleBundle:PaqueteTratamiento')->findBy(array( 'paquete' => $entity ));
+
+            $exito=array();
+            if($entity!=null){
+                $exito['regs']=$entity->getCosto();
+            }
+            else{
+                $exito['regs']=-1;
+            }
+            //var_dump($paqueteTratamiento);
+           
+            $paqueteTrat = array();
+            foreach ($paqueteTratamiento as $key => $value) {
+                 $paqueteTrat[$key]['id'] = $value->getId();
+                 $paqueteTrat[$key]['idtrat'] = $value->getTratamiento()->getId();
+                 $paqueteTrat[$key]['idNombretrat'] = $value->getTratamiento()->getNombre();
+                 $paqueteTrat[$key]['sesiones'] = $value->getNumSesiones();
+            }
+            //var_dump($paqueteTrat);
+            $response = new JsonResponse();
+            $response->setData(array(
+                                'data'       => $exito,
+                                'paqueteTrat' => $paqueteTrat
+                            )); 
+            
+            return $response; 
+        } else {    
+            return new Response('0');              
+        } 
+   } 
     
 
 
