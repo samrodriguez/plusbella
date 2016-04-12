@@ -98,7 +98,7 @@
         <thead>
             <tr>
 {#                <th>N°</th>  #}
-                <th>ID</th>
+{#                <th>ID</th>#}
                 <th>Expediente</th>
                 
                 <th>Nombres</th>
@@ -231,7 +231,7 @@
                 $(document).on('click','#datatables1>tbody>tr,.infoPaciente', function(event) {
                     idPaciente=$(this).children().html();
                     
-                    //alert($(this).prop("tagName"));
+                    alert($(this).prop("tagName"));
                     if($(this).prop("tagName")=="I"){
                         idPaciente=$(this).parent().parent().parent().children().html();
                         //alert(idPaciente);
@@ -415,7 +415,7 @@
                         "type": 'GET'
                     },
                     "columns": [
-                        { "data": "id" },   
+                        {#{ "data": "id" },   #}
                         { "data": "expediente" },                       
 
                         { "data": "nombres" },

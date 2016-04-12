@@ -89,7 +89,7 @@
         
     </div>
     
-    <div class="col-md-4 dropdown pull-right open">
+    {#<div class="col-md-4 dropdown pull-right open">
         <ul id="navbarDemoContext" class=" dropdown-inline color-lists dropdown-menu-right" role="menu" style="opacity: 1; display: block; transform: translateY(0px) scaleX(1) scaleY(1); transform-origin: 50% 50% 0px;">
             {% for categoria in categorias%}
                 {% if categoria.id == 1 %}    
@@ -103,7 +103,7 @@
                 {% endif %}
                 {% if categoria.id == 4 %}    
                     {#<li class="" style="opacity: 1; display: list-item; transform: translateY(0px);"><a data-toggle="tooltip" data-original-title="{{categoria.nombre}}" href="#" style="background: #B2B064" data-navbar="yellow" rel="tooltip" title=""></a></li>#}
-                    <li class="" style="opacity: 1; display: list-item; transform: translateY(0px);"><a data-toggle="tooltip" data-original-title="{{categoria.nombre}}" href="#" style="background: #EA92C3" data-navbar="yellow" rel="tooltip" title=""></a></li>
+                    {#<li class="" style="opacity: 1; display: list-item; transform: translateY(0px);"><a data-toggle="tooltip" data-original-title="{{categoria.nombre}}" href="#" style="background: #EA92C3" data-navbar="yellow" rel="tooltip" title=""></a></li>
                 {% endif %}
                 {% if categoria.id == 5 %}    
                     <li class="" style="opacity: 1; display: list-item; transform: translateY(0px);"><a data-toggle="tooltip" data-original-title="{{categoria.nombre}}" href="#" style="background: #7E9499" data-navbar="green" rel="tooltip" title=""></a></li>
@@ -145,7 +145,7 @@
                 {% endif %}
                 
             {% endfor %}
-        </ul>
+        </ul>#}
         {#<a href="#" class="btn btn-icon btn-default dropdown-toggle" data-toggle="dropdown" title="Change color" aria-expanded="true"><i class="fa fa-tint"></i></a>
         <ul id="navbarDemoContext" class="dropdown-menu dropdown-inline color-lists dropdown-menu-right" role="menu" style="opacity: 1; display: block; transform: translateY(0px) scaleX(1) scaleY(1); transform-origin: 50% 50% 0px;">
             <li class="" style="opacity: 1; display: list-item; transform: translateY(0px);"><a data-original-title="default" href="#" class="bg-white" data-navbar="default" rel="tooltip" title=""></a></li>
@@ -160,22 +160,22 @@
             <li class="" style="opacity: 1; display: list-item; transform: translateY(0px);"><a data-original-title="blue" href="#" class="bg-blue" data-navbar="blue" rel="tooltip" title=""></a></li>
             <li class="" style="opacity: 1; display: list-item; transform: translateY(0px);"><a data-original-title="violet" href="#" class="bg-violet" data-navbar="violet" rel="tooltip" title=""></a></li>
         </ul>#}
-    </div>
+{#    </div>#}
     <div class="col-md-3 pull-right" style="height:20px;">
         
-        <button data-toggle="tooltip" data-container="body" title="Cita completada" class="btn btn-default datatables1-actions" style="color:#FFF;background:#69BD45;" role="button">
+        <button data-toggle="tooltip" data-container="body" title="Cita completada" class="btn btn-default datatables1-actions" style="color:#FFF;background:#69BD45; float: right;" role="button">
             <i class="fa fa-calendar-check-o"></i>
         </button>
-        <button data-toggle="tooltip" data-container="body" title="Cita pediente" class="btn btn-default datatables1-actions" style="color:#FFF;background:#3852A4;" role="button">
+        <button data-toggle="tooltip" data-container="body" title="Cita pediente" class="btn btn-default datatables1-actions" style="color:#FFF;background:#3852A4; float: right;" role="button">
             <i class="fa fa-calendar-minus-o"></i>
         </button>
-        <button data-toggle="tooltip" data-container="body" title="Cita perdida" class="btn btn-default datatables1-actions" style="color:#FFF;background:#421E5B;" role="button">
+        <button data-toggle="tooltip" data-container="body" title="Cita perdida" class="btn btn-default datatables1-actions" style="color:#FFF;background:#421E5B; float: right;" role="button">
             <i class="fa fa-calendar-o"></i>
         </button>
         {#<button data-toggle="tooltip" data-container="body" title="Cita " class="btn btn-default datatables1-actions  " role="button">
             <i class="fa fa-calendar-plus-o"></i>
         </button>#}
-        <button data-toggle="tooltip" data-container="body" title="Cita cancelada" class="btn btn-default datatables1-actions  " style="color:#FFF;background:#F00;" role="button">
+        <button data-toggle="tooltip" data-container="body" title="Cita cancelada" class="btn btn-default datatables1-actions  " style="color:#FFF;background:#F00; float: right;" role="button">
             <i class="fa fa-calendar-times-o"></i>
         </button>
     </div>

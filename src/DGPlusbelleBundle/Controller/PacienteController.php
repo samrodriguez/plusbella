@@ -4,6 +4,7 @@ namespace DGPlusbelleBundle\Controller;
 
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -460,7 +461,7 @@ class PacienteController extends Controller
                 //var_dump($row);
               //  if($row!=''){
                     
-                    $dql = "SELECT exp.numero as expediente, pac.id as id,per.nombres,per.apellidos,DATE_FORMAT(pac.fechaNacimiento,'%d-%m-%Y') as fechaNacimiento, '<a ><i style=\"cursor:pointer;\"  class=\"infoPaciente fa fa-info-circle\"></i></a>' as link FROM DGPlusbelleBundle:Paciente pac "
+                    $dql = "SELECT exp.numero as expediente, pac.id as id,per.nombres,per.apellidos,DATE_FORMAT(pac.fechaNacimiento,'%d-%m-%Y') as fechaNacimiento, CONCAT('<a ><i id=\"',pac.id,'\" style=\"cursor:pointer;\"  class=\"infoPaciente fa fa-info-circle\"></i></a>') as link FROM DGPlusbelleBundle:Paciente pac "
                         . "JOIN pac.persona per "
                         . "JOIN pac.expediente exp "
                         . "WHERE CONCAT(upper(per.nombres),upper(per.apellidos)) LIKE upper(:busqueda) "
@@ -471,7 +472,7 @@ class PacienteController extends Controller
                     
                     $paciente['recordsFiltered']= count($paciente['data']);
                     
-                    $dql = "SELECT exp.numero as expediente, pac.id as id,per.nombres,per.apellidos,DATE_FORMAT(pac.fechaNacimiento,'%d-%m-%Y') as fechaNacimiento, '<a ><i style=\"cursor:pointer;\"  class=\"infoPaciente fa fa-info-circle\"></i></a>' as link FROM DGPlusbelleBundle:Paciente pac "
+                    $dql = "SELECT exp.numero as expediente, pac.id as id,per.nombres,per.apellidos,DATE_FORMAT(pac.fechaNacimiento,'%d-%m-%Y') as fechaNacimiento, CONCAT('<a ><i id=\"',pac.id,'\" style=\"cursor:pointer;\"  class=\"infoPaciente fa fa-info-circle\"></i></a>') as link FROM DGPlusbelleBundle:Paciente pac "
                         . "JOIN pac.persona per "
                         . "JOIN pac.expediente exp "
                         . "WHERE CONCAT(upper(per.nombres),upper(per.apellidos)) LIKE upper(:busqueda) "
@@ -496,7 +497,7 @@ class PacienteController extends Controller
             //var_dump($paciente['data']);
         }
         else{
-            $dql = "SELECT exp.numero as expediente, DATE_FORMAT(pac.fechaNacimiento,'%d-%m-%Y') as fechaNacimiento, '<a ><i style=\"cursor:pointer;\"  class=\"infoPaciente fa fa-info-circle\"></i></a>' as link FROM DGPlusbelleBundle:Paciente pac "
+            $dql = "SELECT exp.numero as expediente, per.nombres, per.apellidos, DATE_FORMAT(pac.fechaNacimiento,'%d-%m-%Y') as fechaNacimiento, CONCAT('<a ><i id=\"',pac.id,'\" style=\"cursor:pointer;\"  class=\"infoPaciente fa fa-info-circle\"></i></a>') as link FROM DGPlusbelleBundle:Paciente pac "
                 . "JOIN pac.persona per JOIN pac.expediente exp ORDER BY per.nombres ASC ";
             $paciente['data'] = $em->createQuery($dql)
                     ->setFirstResult($start)
@@ -571,7 +572,7 @@ class PacienteController extends Controller
         $busqueda = $request->query->get('search');
         
         $em = $this->getDoctrine()->getEntityManager();
-        $expedientesTotal = $em->getRepository('DGPlusbelleBundle:Expediente')->findAll();
+        $expedientesTotal = 0;/*$em->getRepository('DGPlusbelleBundle:Expediente')->findAll();*/
         
         $paciente['draw']=$draw++;  
         $paciente['recordsTotal'] = count($expedientesTotal);
@@ -585,37 +586,54 @@ class PacienteController extends Controller
         $busqueda['value'] = str_replace(' ', '%', $busqueda['value']);
         if($busqueda['value']!=''){
                                 
-                    $dql = "SELECT exp.numero as expediente, pac.id as id,per.nombres,per.apellidos,DATE_FORMAT(pac.fechaNacimiento,'%d-%m-%Y') as fechaNacimiento, '<a><i style=\"cursor:pointer;\" data-toggle=\"tooltip\" data-original-title=\"Atrás\" class=\"infoPaciente fa fa-info-circle\"></i></a><a style=\"position:absolute; margin-left:10px;\"><i style=\"cursor:pointer;\"  class=\"expPaciente fa fa-list\"></i></a>'  as link FROM DGPlusbelleBundle:Paciente pac "
-                        . "JOIN pac.persona per "
-                        . "JOIN pac.expediente exp "
-                        . "WHERE CONCAT(CONCAT(upper(per.nombres),upper(per.apellidos)),exp.numero) LIKE upper(:busqueda) "
-                        . "ORDER BY per.nombres ASC ";
-                    $paciente['data'] = $em->createQuery($dql)
-                            ->setParameters(array('busqueda'=>"%".$busqueda['value']."%"))
-                            ->getResult();
+//                    $dql = "SELECT exp.numero as expediente, per.nombres,per.apellidos,DATE_FORMAT(pac.fechaNacimiento,'%d-%m-%Y') as fechaNacimiento, CONCAT('<a id=\"',pac.id,'\"><i style=\"cursor:pointer;\" data-toggle=\"tooltip\" data-original-title=\"Atrás\" class=\"infoPaciente fa fa-info-circle\"></i></a>') as link FROM DGPlusbelleBundle:Paciente pac "
+//                        . "JOIN pac.persona per "
+//                        . "JOIN pac.expediente exp "
+//                        . "WHERE CONCAT(CONCAT(upper(per.nombres),upper(per.apellidos)),exp.numero) LIKE upper(:busqueda) OR exp.numero LIKE (:busqueda) "
+//                        . "ORDER BY per.nombres ASC ";
+//                    $paciente['data'] = $em->createQuery($dql)
+//                            ->setParameters(array('busqueda'=>"%".$busqueda['value']."%"))
+//                            ->getResult();
                     
-                    $paciente['recordsFiltered']= count($paciente['data']);
+//            $dql = "SELECT exp.numero as expediente, per.nombres,per.apellidos,DATE_FORMAT(pac.fechaNacimiento,'%d-%m-%Y') as fechaNacimiento, CONCAT('<a id=\"',pac.id,'\"><i style=\"cursor:pointer;\" data-toggle=\"tooltip\" data-original-title=\"Atrás\" class=\"infoPaciente fa fa-info-circle\"></i></a>') as link FROM DGPlusbelleBundle:Paciente pac "
+//                . "JOIN pac.persona per JOIN pac.expediente exp ORDER BY per.nombres ASC ";
+            $sql = "SELECT count(*) FROM listadoexpediente WHERE expediente ORDER BY fecha DESC LIMIT ".$start.",".$longitud;
+        
+            $em = $this->getDoctrine()->getManager();
+            $stmt = $em->getConnection()->prepare($sql);
+            $stmt->execute();
+            $paciente['data'] = $stmt->fetchAll();
+            $paciente['recordsTotal'] = $paciente['data'];
                     
-                    $dql = "SELECT exp.numero as expediente, pac.id as id,per.nombres,per.apellidos,DATE_FORMAT(pac.fechaNacimiento,'%d-%m-%Y') as fechaNacimiento, '<a><i style=\"cursor:pointer;\" data-toggle=\"tooltip\" data-original-title=\"Atrás\" class=\"infoPaciente fa fa-info-circle\"></i></a><a style=\"position:absolute; margin-left:10px;\"><i style=\"cursor:pointer;\"  class=\"expPaciente fa fa-list\"></i></a>'  as link FROM DGPlusbelleBundle:Paciente pac "
-                        . "JOIN pac.persona per "
-                        . "JOIN pac.expediente exp "
-                        . "WHERE CONCAT(CONCAT(upper(per.nombres),upper(per.apellidos)),exp.numero) LIKE upper(:busqueda) "
-                        . "ORDER BY per.nombres ASC ";
-                    $paciente['data'] = $em->createQuery($dql)
-                            ->setParameters(array('busqueda'=>"%".$busqueda['value']."%"))
-                            ->setFirstResult($start)
-                            ->setMaxResults($longitud)
-                            ->getResult();
+            
+            
+                    
+            $sql = "SELECT * FROM listadoexpediente WHERE expediente='".strtoupper($busqueda['value'])."' ORDER BY fecha DESC LIMIT ".$start.",".$longitud;
+        
+            $em = $this->getDoctrine()->getManager();
+            $stmt = $em->getConnection()->prepare($sql);
+            $stmt->execute();
+            $paciente['data'] = $stmt->fetchAll();
+            $paciente['recordsTotal'] = $paciente['data'];
+            
+            $paciente['recordsFiltered']= count($paciente['data']);
         }
         else{
-            $dql = "SELECT exp.numero as expediente, pac.id as id,per.nombres,per.apellidos,DATE_FORMAT(pac.fechaNacimiento,'%d-%m-%Y') as fechaNacimiento, '<a><i style=\"cursor:pointer;\" data-toggle=\"tooltip\" data-original-title=\"Atrás\" class=\"infoPaciente fa fa-info-circle\"></i></a><a style=\"position:absolute; margin-left:10px;\"><i style=\"cursor:pointer;\"  class=\"expPaciente fa fa-list\"></i></a>'  as link FROM DGPlusbelleBundle:Paciente pac "
-                . "JOIN pac.persona per JOIN pac.expediente exp ORDER BY per.nombres ASC ";
-            $paciente['data'] = $em->createQuery($dql)
-                    ->setFirstResult($start)
-                    ->setMaxResults($longitud)
-                    ->getResult();
-            $paciente['recordsTotal'] = count($paciente['data']);
+//            $sql = "SELECT * FROM listadoexpediente ORDER BY fecha DESC LIMIT ".$start.",".$longitud;
+//        
+//            $em = $this->getDoctrine()->getManager();
+//            $stmt = $em->getConnection()->prepare($sql);
+//            $stmt->execute();
+            $paciente['draw']=$draw++;  
+            $paciente['recordsTotal'] = 0;
+            $paciente['recordsFiltered']= 0;
+            
+            $paciente['data'] = array();
+//            $paciente['recordsTotal'] = count($paciente['data']);
         }
+        
+        
+        
         //$longitud = $request->query->get('length');
         //var_dump($start);
         
@@ -632,5 +650,73 @@ class PacienteController extends Controller
         
         
         return new Response(json_encode($paciente));
+    }
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    /**
+     * 
+     *
+     * @Route("/busqueda/expediente_data/registros", name="busqueda_expediente_data")
+     */
+    public function databusquedaAction(Request $request)
+    {
+        
+        
+        
+        $busqueda = $request->get('expediente');
+//        $inicioRegistro = ($paginaActual*10)-10;
+        //var_dump($busqueda);
+        
+        $response = new JsonResponse();
+//        $start = $request->query->get('start');
+//        $draw = $request->query->get('draw');
+//        $longitud = $request->query->get('length');
+//        $busqueda = $request->query->get('search');
+        //var_dump($inicioRegistro);
+        //var_dump($longitud);
+        
+        $em = $this->getDoctrine()->getEntityManager();
+        $dql = "SELECT pac.ocupacion,per.direccion,per.telefono,per.nombres as nombres,per.apellidos as apellidos, DATE_FORMAT(pac.fechaNacimiento,'%d-%m-%Y'), per.direccion "
+                        . "FROM DGPlusbelleBundle:Expediente exp "
+                        . "JOIN exp.paciente pac "
+                        . "JOIN pac.persona per "
+                        . "WHERE exp.numero=:busqueda";
+        
+        $paciente['data'] = $em->createQuery($dql)
+                ->setParameters(array('busqueda'=>strtoupper($busqueda)))
+                ->getResult();
+            
+        //var_dump(count($paciente['data']));
+        //die();
+        //$data = new \stdClass();
+        if(count($paciente['data']==0)){
+            //$data->estado = true;//vacio
+//            $data->nombre = $paciente['data']["nombres"]. ' '. $paciente['data']["apellidos"];
+//            $data->fecha = $paciente['data']["fechaNacimiento"];
+//            $data->direccion = $paciente['data']["direccion"];
+            
+        }
+        else{
+            //$data->estado = false;//encontrado
+//            $data->nombre = $paciente['data']["nombres"]. ' '. $paciente['data']["apellidos"];
+//            $data->fecha = $paciente['data']["fechaNacimiento"];
+//            $data->direccion = $paciente['data']["direccion"];
+        }
+        
+        $response->setData($paciente);    
+        return $response; 
+        //return new Response(json_encode($reg));
     }
 }

@@ -35,14 +35,14 @@
 
     <li class="divider"></li>
     <li class="nav-header" role="presentation">ACCESO RAPIDO</li>
-    {% if is_granted('ROLE_ADMIN') or is_granted('ROLE_USER')%}
+    {#{% if is_granted('ROLE_ADMIN') or is_granted('ROLE_USER')%}
         <li class="nav-item" role="presentation">
             <a href="{{path('admin_ventapaquete_new')}}">
                 <span class="nav-icon"><i class="fa fa-briefcase"></i></span>
                 <span class="nav-text">Venta de paquetes</span>
             </a>
         </li>
-    {% endif %}
+    {% endif %}#}
     {% if is_granted('ROLE_ADMIN') or is_granted('ROLE_USER')%}
         <li class="nav-item" role="presentation">
             <a href="{{path('admin_cita_new2')}}">
@@ -83,6 +83,23 @@
             </a>
         </li>
     {% endif %}
+    {% if is_granted('ROLE_ADMIN') or is_granted('ROLE_USER') %}
+        <li class="nav-item" role="presentation">
+            <a href="{{path('admin_paciente')}}">
+              <span class="nav-icon"><i class="fa fa-hospital-o"></i></span>
+              <span  class="nav-text">Gestión de pacientes</span>
+            </a>
+        </li>
+    {% endif %}
+    {% if is_granted('ROLE_ADMIN') or is_granted('ROLE_USER')%}
+        <li class="nav-item" role="presentation">
+            <a href="{{path('admin_cierreadministrativo')}}">
+                <span class="nav-icon"><i class="fa fa-clock-o"></i></span>
+                <span class="nav-text">Reservar tiempo</span>
+            </a>
+        </li>
+    {% endif %}
+    <li class="nav-header" role="presentation">LA PLUS BELLE</li>
     {% if is_granted('ROLE_ADMIN') %}
         <li class="nav-item" role="presentation">
           <a href="#" data-toggle="nav-child">
@@ -113,32 +130,28 @@
             </a>
         </li>#}
     {% endif %} 
-    {% if is_granted('ROLE_ADMIN') or is_granted('ROLE_USER') %}
-        <li class="nav-item" role="presentation">
-            <a href="{{path('admin_paciente')}}">
-              <span class="nav-icon"><i class="fa fa-hospital-o"></i></span>
-              <span  class="nav-text">Gestión de pacientes</span>
-            </a>
-        </li>
-    {% endif %}
+    
     {% if is_granted('ROLE_ADMIN') or is_granted('ROLE_USER')%}
         <li class="nav-item" role="presentation">
             <a href="{{path('admin_consulta_expediente')}}">
                 <span class="nav-icon"><i class="fa fa-book"></i></span>
-                <span class="nav-text">Consultar expediente</span>
+                <span class="nav-text">Expediente</span>
             </a>
         </li>
     {% endif %}
-     {% if is_granted('ROLE_ADMIN') or is_granted('ROLE_USER')%}
-        <li class="nav-item" role="presentation">
-            <a href="{{path('admin_cierreadministrativo')}}">
-                <span class="nav-icon"><i class="fa fa-clock-o"></i></span>
-                <span class="nav-text">Reservar tiempo</span>
-            </a>
-        </li>
-    {% endif %}
+     
     <li class="divider"></li>
+    <li class="nav-header" role="presentation">SONODIGEST</li>
+    {% if is_granted('ROLE_ADMIN') or is_granted('ROLE_USER')%}
+        <li class="nav-item" role="presentation">
+            <a href="{{path('admin_consulta_expediente')}}">
+                <span class="nav-icon"><i class="fa fa-book"></i></span>
+                <span class="nav-text">Expediente</span>
+            </a>
+        </li>
+    {% endif %}
     <li class="nav-header" role="presentation">MENU</li>
+    
    {# {% if is_granted('ROLE_ADMIN') or is_granted('ROLE_USER')%}
         <li class="nav-item" role="presentation">
           <a href="#" data-toggle="nav-child">
