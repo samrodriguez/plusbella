@@ -736,6 +736,71 @@ class ConsultaController extends Controller
     }
     
     
+    
+    
+    
+    /**
+     * Displays a form to create a new Consulta entity.
+     *
+     * @Route("/newconpacienteSD", name="admin_consulta_nueva_paciente_SD")
+     * @Method("GET")
+     * @Template()
+     */
+    public function newconpacienteSDAction()
+    {
+        //Metodo para consulta nueva con id de paciente
+        $entity = new Consulta();
+        
+        $em = $this->getDoctrine()->getManager();
+        
+        //Recuperación del paciente
+        $request = $this->getRequest();
+        $cadena= $request->get('id');
+        $flag = 0;
+        
+        if($cadena != NULL) {
+            //Obtener el id del parametro
+            $idEntidad = substr($cadena, 1);
+
+            //$identidad= $request->get('identidad');
+            //Busqueda del paciente
+            $paciente = $em->getRepository('DGPlusbelleBundle:Paciente')->find($idEntidad);
+
+            //Seteo del paciente en la entidad
+            $entity->setPaciente($paciente);
+            //var_dump($paciente);
+            $form   = $this->createCreateForm($entity,2,$cadena, $paciente);
+            $entity->setPaciente($paciente);
+        } else {
+            $paciente = new \DGPlusbelleBundle\Entity\Paciente();
+            $form   = $this->createCreateForm($entity, 3, $cadena, $paciente);
+            $flag = 1;
+        }    
+        
+        if($paciente->getFechaNacimiento()!=null){
+            $fecha = $paciente->getFechaNacimiento()->format("Y-m-d");
+
+            //Calculo de la edad
+            list($Y,$m,$d) = explode("-",$fecha);
+            $edad = date("md") < $m.$d ? date("Y")-$Y-1 : date("Y")-$Y;       
+            $edad = $edad. " años";
+        }
+        else{
+            $edad = "No se ha ingresado fecha de nacimiento";
+        }
+            
+        return array(
+            'entity' => $entity,
+            'edad' => $edad,
+            'paciente' => $paciente,
+            'form'   => $form->createView(),
+            'flag'   => $flag,
+        );
+            
+    }
+    
+    
+    
     /**
      * Displays a form to create a new Consulta entity.
      *v

@@ -13,18 +13,104 @@
 
 {% block contenido -%}
 
-
+        
         <div class="content-body">
           <div class="panel" data-fill-color="true">
+              
             <div class="panel-heading">
-              <div class="panel-control pull-right">
+              {#<div class="panel-control pull-right">
                 <a href="#" class="btn btn-icon" data-toggle="panel-refresh" rel="tooltip" data-placement="bottom" title="refresh"><i class="icon-refresh"></i></a>
                 <a href="#" class="btn btn-icon" data-toggle="panel-expand" rel="tooltip" data-placement="bottom" title="expand"><i class="arrow_expand"></i></a>
                 <a href="#" class="btn btn-icon" data-toggle="panel-collapse" rel="tooltip" data-placement="bottom" title="collapse"><i class="icon_minus_alt2"></i></a>
-              </div>
+              </div>#}
               <h3 class="panel-title">Expediente</h3>
             </div><!-- /.panel-heading -->
+            <div class="content-hero content-hero-lg" style="min-height:140px; display:none;" id="infoExpediente" >
+{#            <img class="content-hero-embed" src="{{ asset('Photos/')}}logo-01.png" alt="cover" style="background: #649579;height:200px;">#}
+          <div style="height:150px;background: #39a58a; opacity: 1.0" class="content-hero-overlay "></div>
+          <div  style="" class="content-hero-body" >
+          </div>
+          <div class="content-hero-bar" {#style="margin-top:-180px; background-color: red; position: relative;"#}>
+            <div class="row" {#style="margin-top:-180px; background-color: red; position: relative;"#}>
+              
+              <div class="col-lg-6" >
+                <div class="float-bar clearfix" >
+                  <div class="col-sm-11">
+                    <div class="visible-xs">
+                      <h2 class="display-name media-heading text-teal"></h2>
+{#                      <p class="text-muted mb-4x"><span class="mr-2x">Senior UI Design</span> <span><i class="fa fa-map-marker fa-fw"></i> San Francisco, CA</span></p>#}
+                    </div>
+                    <div class="hidden-xs">
+                      <h2 class="media-heading text-light" id="nombrePaciente">{#{{ paciente.persona.nombres}} {{ paciente.persona.apellidos}}#}</h2>
+                        <p class="mb-4x text-light">
+                            <span class="mr-1x" id="expediente">
+                                <i class="fa fa-clipboard"></i> {#{{ expediente }}#}
+                            </span>
+                            {#<span class="mr-2x">
+                                <i class="fa fa-briefcase"></i>
+                                {% if paciente.ocupacion == ""%}
+                                    No se ha especificado profesión
+                                {% else %}
+                                    {{paciente.ocupacion}}
+                                {% endif %}
+                            </span>#}
+                            <span class="mr-1x" id="telefono">
+                                <i class="fa fa-phone"></i>
+                                
+                                {#{% if paciente.persona.telefono== ""%}
+                                    No ingresado al sistema
+                                {% else %}
+                                    {{paciente.persona.telefono}}
+                                {% endif %}#}
+                            </span>
+                            
+                            <span class="mr-1x" id="edad">
+                                <i class="fa fa-birthday-cake"></i>
+                                
+                                    {#{{edad}}#}
+                            </span>
+                            
+                            <span class="mr-1x" id="direccion">
+                                <i class="fa fa-map-marker fa-fw"></i>
+                                
+                                {#{% if paciente.persona.direccion == ""%}
+                                    No ingresado al sistema
+                                {% else %}
+                                    {{paciente.persona.direccion}}
+                                {% endif %}#}
+                            </span>
+                                
+                        </p>
+                    </div>
+                    
+                  </div><!-- /.media-body -->
+                </div><!-- /.float-bar -->
+              </div><!-- /.cols -->
 
+              {#<div class="col-lg-6">
+                <h4 class="text-muted">Achievement</h4>
+                <div class="row">
+                  <div class="col-xs-3">
+                    <span class="headline"><strong>68</strong></span>
+                    <p>Posts</p>
+                  </div>
+                  <div class="col-xs-3">
+                    <span class="headline"><strong>23</strong></span>
+                    <p>Projects</p>
+                  </div>
+                  <div class="col-xs-3">
+                    <span class="headline"><strong>1,2K</strong></span>
+                    <p>Followers</p>
+                  </div>
+                  <div class="col-xs-3">
+                    <span class="headline"><strong>26K</strong></span>
+                    <p>Sales</p>
+                  </div>
+                </div>
+              </div><!-- /.cols -->#}
+            </div><!-- /.row -->
+          </div><!-- /.content-hero-bar -->
+        </div>
             <div class="panel-body">
               <div class="btn-toolbar clearfix" role="toolbar">
                
@@ -76,18 +162,18 @@
                 <div class="btn-group pull-left">
                   <input id="filterDatatables1" class="form-control input-sm" placeholder="Buscar...">
                 </div>
+                <div class="btn-group pull-right">
+                    <button class="btn btn-success btn-sm btn">Venta</button>
+                </div>
+                <div class="btn-group pull-right">
+                    <button class="btn btn-success btn-sm btn">Nueva consulta</button>
+                </div>
               </div><!-- /btn-toolbar -->
             </div><!-- /.panel-body -->
 
             
             
-            <div class="panel-body hide" id="editFormContainer">
             
-            </div>
-            
-            <div class="panel-body hide" id="opcionesFormContainer">
-            
-            </div>
 
        
  <!--    <a href="{{ path('admin_paciente_new') }}" class="btn btn-success"> Crear nuevo paciente</a>  -->
@@ -96,18 +182,18 @@
         <thead>
             <tr>
                 {#<th>ID</th>#}
-                <th>Fecha transacción</th>
+                <th>Fecha</th>
                 <th>Transacción</th>
-                <th>Empleado</th>
-                
+                <th>Atendido por</th>
+                <th>Se realizó</th>
                 {#<th>DUI</th>#}
                 {#<th>Teléfono</th>
                 <th>Email</th>#}
                 {#<th>Ocupación</th>#}
                 {#<th>Lugar de trabajo</th> 
                 <th>Fecha de nacimiento</th>
-                #}<th>Sucursal</th>
-                <th>Valor ($)</th>
+                #}
+{#                <th>Valor ($)</th>#}
            {# </tr>
         </thead>
         <tbody>
@@ -226,7 +312,8 @@
                 });
               #}
                 //Seleccionar un registro
-                $(document).on('click','#datatables1>tbody>tr,.infoPaciente', function(event) {
+{#                $(document).on('click','#datatables1>tbody>tr,.infoPaciente', function(event) {#}
+                $(document).on('click','a', function(event) {
                     idPaciente=$(this).children().html();
                     
                     //alert($(this).prop("tagName"));
@@ -414,7 +501,6 @@
                     //alert(filtro);
                     $('#datatables1_filter>label>input').val($(this).val());
                     $('#datatables1_filter>label>input').keyup();
-
                 });
                 
                                 
@@ -423,6 +509,7 @@
                     {#searching:true,
                     order:[[1,"asc"]],#}
 {#                    "processing": true,#}
+                    "deferLoading":11,
                     "serverSide": true,
                     "ajax": {
                         "url": '{{path('admin_paciente_expediente')}}',
@@ -430,20 +517,19 @@
                     },
                     "columns": [
                         
-                        { "data": "expediente"},
-                        { "data": "nombres" },
-                        { "data": "apellidos" },
+                        { "data": "fecha"},
+                        { "data": "transaccion" },
+                        { "data": "atendido" },
+                        { "data": "realizado" },
                         {#{ "data": "dui" },#}
                         {#{ "data": "telefono" },
                         { "data": "email" },#}
                         {#{ "data": "lugarTrabajo" },
                         { "data": "fechaNacimiento" },#}
-                        { "data": "link" }
+                        
                     ],
                     "columnDefs": [
-                           { "orderable": false, "targets": 0 },
-                           { "orderable": false, "targets": 2 },
-                           { "orderable": false, "targets": 3 }
+                           { "orderable": false, "targets": 0 }
                            
                            
                            
@@ -493,7 +579,72 @@
         $('#datatables1_filter').hide();
         $('#filterDatatables1').val('');
         
-        
+        $('#filterDatatables1').on('input',function(){
+            var expediente = $(this).val();
+            $('#infoExpediente').hide();
+            console.log(expediente);
+            $.ajax({
+                        data:{expediente:expediente},
+                        url:"{{path('busqueda_expediente_data')}}",
+                        type: "post",
+                        success: function (data) {
+                                if(data.data.length!=0){
+                                    
+                                    $('#infoExpediente').show();
+                                    var exp = ""; 
+                                    //exp = $('#expedientePaciente').html();
+                                    
+                                    var nombres = ""; 
+                                    nombres = data.data[0].nombres+" "+ data.data[0].apellidos;
+                                    $('#nombrePaciente').html(nombres);
+                                    
+                                    var telefono= '<i class="fa fa-phone"></i>';
+                                    if(data.data[0].telefono==null){
+                                        $('#telefono').html(telefono+"N/A");
+                                    }
+                                    else{
+                                        $('#telefono').html(telefono+ " "+data.data[0].telefono);
+                                    }
+                                    
+                                    var direccion = '<i class="fa fa-map-marker fa-fw"></i>';
+                                    if(data.data[0].direccion==null){
+                                        $('#direccion').html(direccion+" N/A");
+                                    }
+                                    else{
+                                        $('#direccion').html(direccion+" "+data.data[0].direccion);
+                                    }
+                                    
+                                    var expediente ='<i class="fa fa-clipboard"></i>';
+                                    $('#expediente').html(expediente +" "+$('#filterDatatables1').val().toString().toUpperCase());
+                                    
+                                    var edad='<i class="fa fa-birthday-cake"></i>';
+                                    if(data.data[0].direccion==null){
+                                        $('#edad').html(edad+" N/A");
+                                    }
+                                    else{
+                                        $('#edad').html(edad+" "+data.data[0].fechaNacimiento);
+                                    }
+                                    
+                                {#<i class="fa fa-birthday-cake"></i>#}
+                                    
+                                    //$('#expedientePaciente').html(exp);
+                                    //$('#nombrePaciente').html(data.nombres + " "+data.apellidos);
+                                }
+                                else{
+                                    
+                                }
+                               
+                                //inicio = data.inicio++;
+{#                                console.log(data.data.length);#}
+                                console.log(data.data.length);
+                            },
+                        error: function (data) {
+                                
+                            }
+                        });
+            
+            
+        });
            validarPaciente();  
         
     });//Fin document ready

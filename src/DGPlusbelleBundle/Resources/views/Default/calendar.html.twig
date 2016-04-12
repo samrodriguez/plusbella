@@ -682,10 +682,14 @@ $(document).ready(function() {
                                         }
                                     },#}
                                     main: {
-                                        label: "Aceptar",
+                                        label: "Nueva consulta",
                                         className: "btn-primary",
                                         callback: function() {
-                                            
+                                            var evento = calendario.fullCalendar('clientEvents',startDate.id);
+                                            var tituloEvento = "";
+                                            var eventoId = 0;
+                                            console.log(evento);
+{#                                            window.location = {{path('')}};#}
                                         }
                                     }
                                 }
