@@ -365,6 +365,112 @@ class PacienteController extends Controller
         $em->flush();
     }
     
+    /**
+    * Ajax utilizado para buscar informacion del producto
+    *  
+    * @Route("/registro/datos_generales/set", name="admin_registro_datos_generales_paciente")
+    */
+    public function registrarDatosGeneralesPacienteAction()
+    {
+        $isAjax = $this->get('Request')->isXMLhttpRequest();
+        if($isAjax){
+            $em = $this->getDoctrine()->getManager();
+            $usuario= $this->get('security.token_storage')->getToken()->getUser();
+            
+            $id = $this->get('request')->request->get('id');
+            $nombres = $this->get('request')->request->get('nombres');
+            $apellidos = $this->get('request')->request->get('apellidos');
+            $telefono = $this->get('request')->request->get('telefono');
+            $telefono2 = $this->get('request')->request->get('telefono2');
+            $direccion = $this->get('request')->request->get('direccion');
+            $correo = $this->get('request')->request->get('correo');
+            $dui = $this->get('request')->request->get('dui');
+            $ecivil = $this->get('request')->request->get('ecivil');
+            $sexo = $this->get('request')->request->get('sexo');
+            $ocupacion = $this->get('request')->request->get('ocupacion');
+            $lugarTrabajo = $this->get('request')->request->get('lugarTrabajo');
+            $fechaNacimiento = $this->get('request')->request->get('fechaNacimiento');
+            $referidoPor = $this->get('request')->request->get('referidoPor');
+            $personaEmergencia = $this->get('request')->request->get('personaEmergencia');
+            $telefonoEmergencia = $this->get('request')->request->get('telefonoEmergencia');
+            
+            $paciente = $em->getRepository('DGPlusbelleBundle:Paciente')->find($id);
+            $persona = $em->getRepository('DGPlusbelleBundle:Persona')->find($paciente->getPersona()->getId());
+            
+            $persona->setNombres($nombres);
+            $persona->setApellidos($apellidos);
+            
+            if($telefono != ''){
+                $persona->setTelefono($telefono);
+            }
+            
+            if($direccion != ''){
+                $persona->setDireccion($direccion);
+            }
+            
+            if($telefono2 != ''){
+                $persona->setTelefono2($telefono2);
+            }
+            
+            if($correo != ''){
+                $persona->setEmail($correo);
+            }
+            
+            $em->merge($persona);
+            $em->flush();
+            
+            if($dui != ''){
+                $paciente->setDui($dui);
+            }
+            
+            if($ecivil != ''){
+                $paciente->setEstadoCivil($ecivil);
+            }
+            
+            if($sexo != ''){
+                $paciente->setSexo($sexo);
+            }
+            
+            if($ocupacion != ''){
+                $paciente->setOcupacion($ocupacion);
+            }
+            
+            if($lugarTrabajo != ''){
+                $paciente->setLugarTrabajo($lugarTrabajo);
+            }
+            
+            if($referidoPor != ''){
+                $paciente->setReferidoPor($referidoPor);
+            }
+            
+            if($fechaNacimiento != ''){
+                $fecha = explode('-', $fechaNacimiento);
+                $paciente->setFechaNacimiento(new \DateTime($fecha[0].'-'.$fecha[1].'-'.$fecha[2]));
+            }
+                
+            if($personaEmergencia != ''){
+                $paciente->setPersonaEmergencia($personaEmergencia);
+                
+                if($telefonoEmergencia != ''){
+                    $paciente->setTelefonoEmergencia($telefonoEmergencia);
+                }
+            }
+            
+            $em->merge($paciente);
+            $em->flush();
+            
+            $this->get('bitacora')->escribirbitacora("Se edito la informacion general del paciente", $usuario->getId());
+            
+            $response = new JsonResponse();
+            $response->setData(array(
+                                'exito' => '1'
+                            )); 
+            
+            return $response; 
+        } else {    
+            return new Response('0');              
+        } 
+   } 
     
     /**
      * @Route("/infopaciente/get/{id}", name="get_infopaciente", options={"expose"=true})

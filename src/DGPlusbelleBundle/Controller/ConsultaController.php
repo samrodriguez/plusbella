@@ -1214,7 +1214,7 @@ class ConsultaController extends Controller
     /**
      * Lista todas las consultas de un paciente
      *
-     * @Route("/historialconsulta/", name="admin_historial_consulta")
+     * @Route("/historialconsulta/", name="admin_historial_consulta", options={"expose"=true})
      * @Method("GET")
      * @Template()
      */
@@ -1353,7 +1353,7 @@ class ConsultaController extends Controller
                     array_push($regnoedittratamiento, array('idpersonatrat'=>$row->getId()));
             }            
         }
-        
+        //var_dump($paciente);
         $ventaPaquetes = $em->getRepository('DGPlusbelleBundle:Paquete')->findBy(array('estado' => true));
         $ventaTratamientos = $em->getRepository('DGPlusbelleBundle:Tratamiento')->findBy(array('estado' => true));
         $sucursales = $em->getRepository('DGPlusbelleBundle:Sucursal')->findBy(array('estado' => true));

@@ -388,7 +388,7 @@ class VentaPaqueteController extends Controller
             foreach ($paqueteTratamiento as $key => $value) {
                  $paqueteTrat[$key]['id'] = $value->getId();
                  $paqueteTrat[$key]['idtrat'] = $value->getTratamiento()->getId();
-                 $paqueteTrat[$key]['idNombretrat'] = $value->getTratamiento()->getNombre();
+                 $paqueteTrat[$key]['Nombretrat'] = $value->getTratamiento()->getNombre();
                  $paqueteTrat[$key]['sesiones'] = $value->getNumSesiones();
             }
             //var_dump($paqueteTrat);
