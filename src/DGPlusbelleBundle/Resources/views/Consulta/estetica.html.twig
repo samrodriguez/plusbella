@@ -1,0 +1,79 @@
+{% extends 'DGPlusbelleBundle:Layout:layout.html.twig' %}
+{% block css %}
+    {{parent()}}
+    <style>
+        //Posicion del boton agregar
+        .placas>div:last-child {
+            position:absolute;
+        }
+        
+        div.placas > div:nth-child(2) > div:nth-child(2) > a{
+            display: none;
+        }
+        
+        //Posicion del boton agregar
+        .placas2>div:last-child {
+            position:absolute;
+        }
+        
+        div.placas2 > div:nth-child(2) > div:nth-child(2) > a{
+            display: none;
+        }
+        
+        .addItem{
+            position: absolute;
+            height: 50px;
+            float: right;
+            margin-bottom: 50px;
+            padding-bottom: 100px;
+            top: -65px;
+            left: -2px;
+        }
+        
+        .addItemEst{
+            position: absolute;
+            height: 50px;
+            float: right;
+            margin-bottom: 50px;
+            padding-bottom: 100px;
+            top: 82px;
+            left: 5px;
+        }
+        
+        .addItem div {
+            position: absolute;
+        }
+        
+        #dgplusbellebundle_consulta_horaInicio_hourSelectBoxItContainer, #dgplusbellebundle_consulta_horaInicio_minuteSelectBoxItContainer,
+        #dgplusbellebundle_consulta_horaFin_hourSelectBoxItContainer, #dgplusbellebundle_consulta_horaFin_minuteSelectBoxItContainer{
+            width:75px;
+        }
+        
+        #dgplusbellebundle_consulta_horaInicio_hourSelectBoxItContainer,#dgplusbellebundle_consulta_horaFin_hourSelectBoxItContainer {
+            float: left;
+        }
+        
+        #dgplusbellebundle_consulta_horaInicio_minuteSelectBoxItContainer, #dgplusbellebundle_consulta_horaFin_minuteSelectBoxItContainer {
+            float: right;
+        }
+        
+        #dgplusbellebundle_consulta_horaInicio, #dgplusbellebundle_consulta_horaFin{
+            width: 155px;
+        }
+
+        .productoConsulta{width: 50% }
+
+        .campos{
+            width: 100%;
+        }
+    </style>
+{% endblock %}
+{% block contenido -%}
+    <div class="panel-heading">
+        <p>Registrar consulta</p>
+    </div>
+
+    <div class="panel-body">
+        
+    </div>
+{% endblock %}

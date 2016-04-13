@@ -1354,6 +1354,11 @@ class ConsultaController extends Controller
             }            
         }
         
+        $ventaPaquetes = $em->getRepository('DGPlusbelleBundle:Paquete')->findBy(array('estado' => true));
+        $ventaTratamientos = $em->getRepository('DGPlusbelleBundle:Tratamiento')->findBy(array('estado' => true));
+        $sucursales = $em->getRepository('DGPlusbelleBundle:Sucursal')->findBy(array('estado' => true));
+        $empleadosVenta = $em->getRepository('DGPlusbelleBundle:Empleado')->findBy(array('estado' => true));
+        $descuentos = $em->getRepository('DGPlusbelleBundle:Descuento')->findBy(array('estado' => true));
 //      sendEmail($to, $cc, $bcc,$replay, $body){
 //      $comision;
 //      Formato: dd-mm-yy
@@ -1376,6 +1381,11 @@ class ConsultaController extends Controller
             'expediente'=>$expnum,
             'paquetesnoedit'=>$regnoeditpaquete,
             'tratamientosnoedit'=>$regnoedittratamiento,
+            'ventaPaquetes' => $ventaPaquetes,
+            'ventaTratamientos' => $ventaTratamientos,
+            'sucursales' => $sucursales,
+            'empleadosVenta' => $empleadosVenta,
+            'descuentos' => $descuentos,
             'idPaciente'=>$idPacient
             );
     }

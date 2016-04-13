@@ -4,6 +4,7 @@ namespace DGPlusbelleBundle\Controller;
 
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -277,29 +278,35 @@ class PersonaTratamientoController extends Controller
     
     
     /**
-    * Deletes a Cuenta entity.
-    *
-    * @Route("/costo_tratamiento/{id}", name="admin_costo_tratamiento", options={"expose"=true})
-    * @Method("GET")
+    * Ajax utilizado para buscar informacion del producto
+    *  
+    * @Route("/venta/costo_tratamiento/get", name="admin_costo_tratamiento")
     */
-   public function costotratamAction(Request $request, $id)
-   {
+    public function costoTratamAction()
+    {
+        $isAjax = $this->get('Request')->isXMLhttpRequest();
+        if($isAjax){
+            $em = $this->getDoctrine()->getManager();
+            $id = $this->get('request')->request->get('id');
+            $entity = $em->getRepository('DGPlusbelleBundle:Tratamiento')->find($id);
 
-       $em = $this->getDoctrine()->getManager();
-       $entity = $em->getRepository('DGPlusbelleBundle:Tratamiento')->find($id);
+            $exito=array();
+            if($entity!=null){
+                $exito['regs']=$entity->getCosto();
+            }
+            else{
+                $exito['regs']=-1;
+            }
 
-       $exito=array();
-
-       if($entity!=null){
-          
-           $exito['regs']=$entity->getCosto();
-       }
-       else{
-           $exito['regs']=-1;
-       }
-
-       return new Response(json_encode($exito));
-       
+            $response = new JsonResponse();
+            $response->setData(array(
+                                'data' => $exito
+                            )); 
+            
+            return $response; 
+        } else {    
+            return new Response('0');              
+        } 
    }  
     
 }
