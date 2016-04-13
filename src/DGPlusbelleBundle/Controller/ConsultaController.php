@@ -1749,4 +1749,137 @@ class ConsultaController extends Controller
     
     
     
+    /**
+     * @Route("/ingresar_empresa_persona/get", name="ingresar_foto_persona", options={"expose"=true})
+     * @Method("POST")
+     */
+    public function RegistrarFotoAction(Request $request) {
+            //data es el valor de retorno de ajax donde puedo ver los valores que trae dependiendo de las instrucciones que hace dentro del controlador
+           
+            $nombreimagen2=" ";
+            $dataForm = $request->get('frm');
+            
+            $personaId = $_POST["empresaId"];
+            
+           
+ 
+            $nombreimagen=$_FILES['file']['name'];
+
+            $tipo = $_FILES['file']['type'];
+            $extension= explode('/',$tipo);
+            $nombreimagen2.=".".$extension[1];
+         
+         if ($nombreimagen != null){
+             
+            //Direccion fisica del la imagen  
+                $path1 = $this->container->getParameter('photo.tmp');
+               
+                $path = "Photos/perfil/E";
+                $fecha = date('Y-m-d His');
+                
+                $nombreArchivo = $nombreimagen."-".$fecha.$nombreimagen2;
+                
+                $nombreBASE=$path.$nombreArchivo;
+                $nombreBASE=str_replace(" ","", $nombreBASE);
+                $nombreSERVER =str_replace(" ","", $nombreArchivo);
+             
+                $resultado = move_uploaded_file($_FILES["file"]["tmp_name"], $path1.$nombreSERVER);
+                
+                
+                //Codigo para poder redimensionar la  imagenes que se suben
+//                    \Tinify\setKey("TGdnhEaY1ZrJB1J_NSAYYLeqno6FdIYF");
+//
+//                     $source = \Tinify\fromFile($path1.$nombreSERVER);
+//                     $resized = $source->resize(array(
+//                         "method" => "cover",
+//                         "width" => 300,
+//                         "height" => 300
+//                     ));
+                     
+                
+                     
+                $resized->toFile($path1."E".$nombreSERVER);
+                $numero =unlink($path1.$nombreSERVER);
+                
+                
+
+                
+                if ($numero){
+               
+                    
+                    
+                }
+                
+                
+                if ($resultado){
+                                $abgPersona = new AbgPersona();
+                                $foto = new AbgFoto();
+                                $em = $this->getDoctrine()->getManager();
+                                //Ojo que posteriormente tengo que sacar los valores con el id de la variable de sesion que este presente
+                                 //Este numero 6 es el id de la empresa, posteriormente hay que trabajarlo con la variable de sesion
+                                $idPersona = $this->getDoctrine()->getRepository('DGAbgSistemaBundle:AbgPersona')->find($personaId);
+                                $src = $this->getDoctrine()->getRepository('DGAbgSistemaBundle:AbgFoto')->findBy(array("abgPersona" =>$idPersona,"tipoFoto"=>1));
+                                $direccion = $src[0]->getSrc();
+                                
+                                $direccion = str_replace("\\","" , $direccion);
+                                $direccion = str_replace("Photos/perfil/","", $direccion);
+
+                                if($direccion!=''){
+                                    $eliminacionRegistroExixtente =unlink($path1.$direccion);
+                                    if($eliminacionRegistroExixtente){
+                                        $entity = $em->getRepository('DGAbgSistemaBundle:AbgFoto')->findBy(array("abgPersona" =>$idPersona,"tipoFoto"=>1));
+                                        $entity[0]->setSrc($nombreBASE);
+                                        $entity[0]->setFechaRegistro(new \DateTime("now"));
+                                        $entity[0]->setFechaExpiracion(null);
+                                        $entity[0]->setEstado(1);
+                                        $em->merge($entity[0]);
+                                        $em->flush();
+                                        $src = $this->getDoctrine()->getRepository('DGAbgSistemaBundle:AbgFoto')->findBy(array("abgPersona" =>$idPersona,"tipoFoto"=>1));
+                                        $direccion = $src[0]->getSrc();
+                                        $direccionParaAjax = str_replace("\\","" , $direccion);
+                                        $data['direccion']=$direccionParaAjax;
+                                    }
+                                }
+                            else{
+                                                $entity = $em->getRepository('DGAbgSistemaBundle:AbgFoto')->findBy(array("abgPersona" =>$idPersona,"tipoFoto"=>1));
+                                                $entity[0]->setSrc($nombreBASE);
+                                                $entity[0]->setFechaRegistro(new \DateTime("now"));
+                                                $entity[0]->setFechaExpiracion(null);
+                                                $entity[0]->setEstado(1);
+                                                $em->merge($entity[0]);
+                                                $em->flush();
+                                                
+                                                $enti = $em->getRepository('DGAbgSistemaBundle:AbgFoto')->findBy(array("abgPersona" =>$idPersona,"tipoFoto"=>1));
+                                                
+                                                $direccion = $enti[0]->getSrc();
+                                                $direccionParaAjax = str_replace("\\","" , $direccion);
+                                                $data['direccion']=$direccionParaAjax;
+                                                
+                            }
+
+
+                    
+                }else{
+                         $data['servidor'] = "No se pudo mover la imagen al servidor";
+                    
+                    
+                }
+               
+                
+            }
+            else{
+                $data['imagen'] = "Imagen invalida";
+                
+                
+            }
+            
+         
+            
+           return new Response(json_encode($data));
+           
+      
+    }
+    
+    
+    
 }

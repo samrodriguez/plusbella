@@ -10,6 +10,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use DGPlusbelleBundle\Entity\Paciente;
+use DGPlusbelleBundle\Entity\Signos;
 use DGPlusbelleBundle\Entity\Expediente;
 use DGPlusbelleBundle\Form\PacienteType;
 use Doctrine\ORM\EntityRepository;
@@ -447,8 +448,8 @@ class PacienteController extends Controller
         $expedientesTotal = $em->getRepository('DGPlusbelleBundle:Paciente')->findAll();
         
         $paciente['draw']=$draw++;  
-        $paciente['recordsTotal'] = count($expedientesTotal);
-        $paciente['recordsFiltered']= count($expedientesTotal);
+        $paciente['recordsTotal'] = 0;
+        $paciente['recordsFiltered']= 0;
         $paciente['data']= array();
         //var_dump($busqueda);
         //die();
@@ -471,7 +472,7 @@ class PacienteController extends Controller
                             ->getResult();
                     
                     $paciente['recordsFiltered']= count($paciente['data']);
-                    
+                    $paciente['recordsTotal'] = count($paciente['data']);
                     $dql = "SELECT exp.numero as expediente, pac.id as id,per.nombres,per.apellidos,DATE_FORMAT(pac.fechaNacimiento,'%d-%m-%Y') as fechaNacimiento, CONCAT('<a ><i id=\"',pac.id,'\" style=\"cursor:pointer;\"  class=\"infoPaciente fa fa-info-circle\"></i></a>') as link FROM DGPlusbelleBundle:Paciente pac "
                         . "JOIN pac.persona per "
                         . "JOIN pac.expediente exp "
@@ -503,6 +504,8 @@ class PacienteController extends Controller
                     ->setFirstResult($start)
                     ->setMaxResults($longitud)
                     ->getResult();
+            $paciente['recordsFiltered']= count($paciente['data']);
+            $paciente['recordsTotal'] = count($paciente['data']);
         }
         //$longitud = $request->query->get('length');
         //var_dump($start);
@@ -718,5 +721,222 @@ class PacienteController extends Controller
         $response->setData($paciente);    
         return $response; 
         //return new Response(json_encode($reg));
+    }
+    
+    
+    
+    /**
+     * 
+     *
+     * @Route("/pacienteguardar/data/guardar", name="admin_paciente_guardar_ajax")
+     */
+    public function dataPacienteGuardarAction(Request $request)
+    {
+        
+        /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+	 * Easy set variables
+	 */
+	
+	/* Array of database columns which should be read and sent back to DataTables. Use a space where
+	 * you want to insert a non-database field (for example a counter or static image)
+	 */
+        
+
+        $id = $request->get('id');
+        
+        
+        
+                    
+        
+        $nombres = $request->get('nombres');
+        $apellidos = $request->get('apellidos');
+        
+        $telefono1 =$request->get('telefono1');
+        $telefono2 =$request->get('telefono2');
+        $direccion =$request->get('direccion');
+        $correo =$request->get('correo');
+        $dui =$request->get('dui');
+        $estadoCivil =$request->get('estadoCivil');
+        $sexo=$request->get('sexo');
+        $ocupacion=$request->get('ocupacion');
+        $lugarTrabajo=$request->get('lugarTrabajo');
+        
+        $fechaNacimiento = $request->get('fechaNacimiento');
+        $referidoPor = $request->get('referidoPor');
+        $llamarA = $request->get('llamarA');
+        $telefonoEmergencia = $request->get('telefonoEmergencia');
+        
+//        var_dump($nombres);
+//        var_dump($apellidos);
+//        var_dump($telefono1);
+//        var_dump($telefono2);
+//        var_dump($direccion);
+        
+        
+        
+        //var_dump($fechaNacimiento);
+        $em = $this->getDoctrine()->getEntityManager();
+        
+        $paciente = $em->getRepository('DGPlusbelleBundle:Paciente')->find($id);
+        
+        
+        if(count($paciente)!=0){
+            $persona = $em->getRepository('DGPlusbelleBundle:Persona')->find($paciente->getPersona()->getId());
+            $persona->setNombres($nombres);
+            $persona->setApellidos($apellidos);
+            $persona->setTelefono($telefono1);
+            $persona->setTelefono2($telefono2);
+            
+            $persona->setDireccion($direccion);
+            $persona->setEmail($correo);
+            $paciente->setDui($dui);
+            $paciente->setEstadoCivil($estadoCivil);
+            $paciente->setSexo($sexo);
+            $paciente->setOcupacion($ocupacion);
+            $paciente->setLugarTrabajo($lugarTrabajo);
+            $paciente->setFechaNacimiento(new \DateTime($fechaNacimiento));
+            
+            $paciente->setReferidoPor($referidoPor);
+            
+            $paciente->setTelefonoEmergencia($telefonoEmergencia);
+            
+            
+            
+            $paciente->setPersonaEmergencia($llamarA);
+            
+            
+            
+            
+            $em->merge($persona);
+            $em->merge($paciente);
+            $em->flush();
+            return new Response(json_encode(0));
+        }
+        else{
+            return new Response(json_encode(1));
+        }
+        
+        
+        
+    }
+    
+    
+    
+    
+    /**
+     * 
+     *
+     * @Route("/pacienteguardar/data/antecedentes", name="admin_paciente_guardar_antecedentes_ajax")
+     */
+    public function dataPacienteGuardarAntecedentesAction(Request $request)
+    {
+        
+        /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+	 * Easy set variables
+	 */
+	
+	/* Array of database columns which should be read and sent back to DataTables. Use a space where
+	 * you want to insert a non-database field (for example a counter or static image)
+	 */
+        
+
+        $id = $request->get('id');
+        
+        $patologicos = $request->get('patologicos');
+        $familiares = $request->get('familiares');
+        $alergias = $request->get('alergias');
+        
+        
+        
+        $em = $this->getDoctrine()->getEntityManager();
+        
+        $paciente = $em->getRepository('DGPlusbelleBundle:Paciente')->find($id);
+        
+        
+        if(count($paciente)!=0){
+            //$persona = $em->getRepository('DGPlusbelleBundle:Persona')->find($paciente->getPersona()->getId());
+            
+            
+            $paciente->setPatologicos($patologicos);
+            $paciente->setFamiliares($familiares);
+            $paciente->setAlergias($alergias);
+            
+            $em->merge($paciente);
+            $em->flush();
+            return new Response(json_encode(0));
+        }
+        else{
+            return new Response(json_encode(1));
+        }   
+    }
+    
+    
+    /**
+     * 
+     *
+     * @Route("/pacientesignos/data/signos", name="admin_paciente_guardar_signos_ajax")
+     */
+    public function dataPacienteSignosAction(Request $request)
+    {
+        
+        /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+	 * Easy set variables
+	 */
+	
+	/* Array of database columns which should be read and sent back to DataTables. Use a space where
+	 * you want to insert a non-database field (for example a counter or static image)
+	 */
+        
+
+        $id = $request->get('id');
+        
+        $peso = $request->get('peso');
+        $talla = $request->get('talla');
+        $frecRespiratoria = $request->get('frecRespiratoria');
+        $presionDiastolica = $request->get('presionDiastolica');
+        $presionSistolica = $request->get('presionSistolica');
+        $temperatura = $request->get('temperatura');
+        $frecCardiaca = $request->get('frecCardiaca');
+        
+//        $patologicos = $request->get('patologicos');
+//        $familiares = $request->get('familiares');
+//        $alergias = $request->get('alergias');
+//        
+//        $patologicos = $request->get('patologicos');
+//        $familiares = $request->get('familiares');
+//        $alergias = $request->get('alergias');
+        
+        
+        
+        $em = $this->getDoctrine()->getEntityManager();
+        
+        $paciente = $em->getRepository('DGPlusbelleBundle:Paciente')->find($id);
+        
+        $signos = new Signos();
+        
+        if(count($paciente)!=0){
+            //$persona = $em->getRepository('DGPlusbelleBundle:Persona')->find($paciente->getPersona()->getId());
+            
+            $signos->setPeso($peso);
+            $signos->setTalla($talla);
+            $signos->setPresionSistolica($presionSistolica);
+            $signos->setPresionDiastolica($presionDiastolica);
+            $signos->setFrecRespiratotira($frecRespiratoria);
+            $signos->setFrecCardiaca($frecCardiaca);
+            $signos->setTemperatura($temperatura);
+            $signos->setPaciente($paciente);
+            
+            
+            $em->persist($signos);
+            $em->flush();
+            
+            return new Response(json_encode(0));
+        }
+        else{
+            return new Response(json_encode(1));
+        }
+        
+        
+        
     }
 }
