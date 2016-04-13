@@ -135,7 +135,7 @@
                                     {{edad}}
                             </span>
                             
-                            <span class="mr-1x" id="direccion">
+                            <span class="mr-1x" id="direccionD">
                                 <i class="fa fa-map-marker fa-fw"></i>
                                 
                                 {% if paciente.persona.direccion == ""%}
@@ -184,112 +184,203 @@
     <div class="panel-body">
         <div data-init-panel="true" class=" fade in">
             <ul class="nav nav-tabs" id="demo1-tabs">
-              <li class=""><a aria-expanded="false" href="#botabs1" data-toggle="tab">Datos generales</a></li>
-              <li class="active"><a aria-expanded="false" href="#botabs2" data-toggle="tab">Consulta</a></li>
-              <li class=""><a aria-expanded="true" href="#botabs3" data-toggle="tab">Signos</a></li>
-              <li class=""><a aria-expanded="true" href="#botabs4" data-toggle="tab">Antecedentes y alergias</a></li>
-              <li class=""><a aria-expanded="true" href="#botabs5" data-toggle="tab">Costo</a></li>
-              <li class=""><a aria-expanded="true" href="#botabs6" data-toggle="tab">Imágenes</a></li>
+              {#<li class="active"><a aria-expanded="false" href="#botabs1" data-toggle="tab">Datos generales</a></li>#}
+              <li class=""><a href="#botabs1" data-toggle="tab">Datos generales</a></li>
+              <li class="active"><a href="#botabs2" data-toggle="tab">Consulta</a></li>
+              <li class=""><a href="#botabs3" data-toggle="tab">Signos</a></li>
+              <li class=""><a href="#botabs4" data-toggle="tab">Antecedentes y alergias</a></li>
+              <li class=""><a href="#botabs5" data-toggle="tab">Costo</a></li>
+              <li class=""><a href="#botabs6" data-toggle="tab">Imágenes</a></li>
+              <li class=""><a href="#botabs7" data-toggle="tab">Plantilla</a></li>
+              
             </ul>
             <div class="panel-body">
                 <div class="tab-content">
-                    
                     <div class="tab-pane fade in" id="botabs1">
-                      <p><strong>Datos generales</strong>
-                            {#<div class="row">
-                                <div class="col-md-12">
-                                    
-                                    <div class="row" style="margin-top:20px;">
-                                        <div class="col-md-6">
-                                            <label>
-                                                Tratamiento
-                                            </label>
-                                        </div>
-                                        
-                                        <div class="col-md-6">
-                                            <label>
-                                                Tipo consulta
-                                            </label>
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-md-6">
-                                            
-                                        </div>
-                                        
-                                        <div class="col-md-6">
-                                            
-                                        </div>
-                                        
-                                    </div>
-                                    
-                                    <div class="row" style="margin-top:20px;">
-                                        <div class="col-md-6">
-                                            <label>
-                                                Observación
-                                            </label>
-                                        </div>
-                                        
-                                        <div class="col-md-6">
-                                            <label>
-                                                Sucursal
-                                            </label>
-                                        </div>
-                                        
-                                    </div>
-                                    <div class="row">
-                                                                               
-                                        <div class="col-md-6">
-                                            
-                                        </div>
-                                        
-                                        <div class="col-md-6">
-                                                
-                                        </div>
-                                        
-                                        
-                                    </div>
-                                    
-                                    
-                                    <div class="row" style="display:none;margin-top:20px;">
-                                        <div class="col-md-12">
-                                            <label>
-                                                Receta médica
-                                            </label>
-                                        </div>
-                                    </div>
-                                    
-                                    <div class="row" style="margin-top:10px;height: 100px; display:none;">
-                                        <div class="col-md-2">
-                                            <input id="dgplusbellebundle_consulta_registraReceta_0" name="dgplusbellebundle_consulta[registraReceta]" required="required" value="1" type="radio"> Sí
-                                            <br>
-                                            <input id="dgplusbellebundle_consulta_registraReceta_1" name="dgplusbellebundle_consulta[registraReceta]" required="required" value="0" type="radio"> No
-                                        </div>
-                                        <div class="col-md-10">
-                                            <textarea id="textareaReceta" class="form-control input-sm col-md-8" placeholder="Receta médica"></textarea>
-                                        </div>
-                                    </div>
-                                    
-                                    
-                                    
-                                    
-                                    
-                                    <div class="row" style="margin-top:10px;">
-                                        <div class="col-md-12">
-                                            <hr>
-                                        </div>
-                                    </div>
-                                    
-                                    <div class="row  pull-right" style="margin-top:10px;">
-                                        <div class="col-md-12">
-                                            <div class="form-grouphide col-sm-12">
-                                                <a class="btn btn-default btn-sm" id="cancelarNuevoConsulta">Cancelar</a>
-                                                <button type="submit" id="guardarNuevoConsulta" name="dgplusbellebundle_consulta[submit]" class="btn btn-success btn-sm btn btn">Guardar</button>
-                                            </div>
-                                        </div>
-                                    </div>  
+                        <p><strong></strong>
+                            <div class="row" style="margin-top:20px;">
+                                <div class="col-md-3">
+                                    <label>
+                                        Nombres
+                                    </label>
                                 </div>
-                            </div>#}
+                                <div class="col-md-3">
+                                    <label>
+                                        Apellidos
+                                    </label>
+                                </div>
+                                <div class="col-md-1">
+                                    <label>
+                                        Telefono 1
+                                    </label>
+                                </div>
+                                <div class="col-md-1">
+                                    <label>
+                                        Telefono 2
+                                    </label>
+                                </div>
+
+                                <div class="col-md-2">
+                                    <label>
+                                        Dirección
+                                    </label>
+                                </div>                            </div>
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <input id="nombresPaciente" value="{{paciente.persona.nombres}}" name="nombresPaciente" class="form-control input-sm"/>
+                                </div>
+                                                        
+                                <div class="col-md-3">
+                                    <input id="apellidosPaciente" value="{{paciente.persona.apellidos}}" name="apellidosPaciente" class="form-control input-sm"/>
+                                </div>
+
+                                <div class="col-md-1">
+                                    <input id="telefono1" value="{{paciente.persona.telefono}}" name="telefono1" class="form-control input-sm"/>
+                                </div>
+                                <div class="col-md-1">
+                                    <input id="telefono2" value="{{paciente.persona.telefono2}}" name="telefono2" class="form-control input-sm"/>
+                                </div>
+                                <div class="col-md-4">
+                                    <input id="direccion" value="{{paciente.persona.direccion}}" name="direccion" class="form-control input-sm"/>
+                                </div>
+                                <div class="col-md-4">
+                                    <input type="hidden" id="idPaciente" value="{{paciente.id}}" name="idPaciente" class="form-control input-sm"/>
+                                </div>
+                            </div>
+                        
+                            <div class="row" style="margin-top:20px;">
+                                <div class="col-md-3">
+                                    <label>
+                                        Correo
+                                    </label>
+                                </div>
+                                <div class="col-md-3">
+                                    <label>
+                                        DUI
+                                    </label>
+                                </div>
+                                <div class="col-md-3">
+                                    <label>
+                                        Estado civil
+                                    </label>
+                                </div>
+                                <div class="col-md-3">
+                                    <label>
+                                        Sexo
+                                    </label>
+                                </div>
+                            </div>
+                                
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <input id="correo" value="{{paciente.persona.email}}" name="correo" class="form-control input-sm"/>
+                                </div>
+                                
+                                <div class="col-md-3">
+                                    <input id="dui" value="{{paciente.dui}}" name="dui" class="form-control input-sm"/>
+                                </div>                        
+                                
+                                <div class="col-md-3">
+                                    <select id="estadoCivil" name="estadoCivil" class="form-control input-sm estadocivilPaciente form-control">
+                                        <option {% if paciente.estadoCivil== ''%} selected {% endif %} value="">Seleccione estado civil...</option>            
+                                        <option {% if paciente.estadoCivil== 'Soltero/a' %} selected {% endif %} value="Soltero/a">Soltero/a</option>            
+                                        <option {% if paciente.estadoCivil== 'Casado/a' %} selected {% endif %} value="Casado/a">Casado/a</option>            
+                                        <option {% if paciente.estadoCivil== 'Divorciado/a' %} selected {% endif %} value="Divorciado/a">Divorciado/a</option>            
+                                        <option {% if paciente.estadoCivil== 'Acompañado/a'%} selected {% endif %} value="Acompañado/a">Acompañado/a</option>            
+                                        <option {% if paciente.estadoCivil== 'Viudo/a'%} selected {% endif %} value="Viudo/a">Viudo/a</option>
+                                    </select>
+                                </div>
+                            
+                                <div class="col-md-3">
+                                    <select id="sexo" name="sexo" class="form-control input-sm estadocivilPaciente form-control">
+                                        <option {% if paciente.sexo== ''%} selected {% endif %} value="">Seleccione estado civil...</option>            
+                                        <option {% if paciente.sexo== 'm' or paciente.sexo=='M' %} selected {% endif %} value="M">Masculino</option>            
+                                        <option {% if paciente.sexo== 'f' or paciente.sexo=='F' %} selected {% endif %} value="M">Femenino</option>            
+                                    </select>
+                                </div>                                
+                            </div>
+                                    
+                                    
+                            <div class="row" style="margin-top:20px;">
+                                <div class="col-md-3">
+                                    <label>
+                                        Ocupación
+                                    </label>
+                                </div>
+                                <div class="col-md-3">
+                                    <label>
+                                        Lugar de trabajo
+                                    </label>
+                                </div>
+                                <div class="col-md-3">
+                                    <label>
+                                        Fecha de nacimiento
+                                    </label>
+                                </div>
+                                <div class="col-md-3">
+                                    <label>
+                                        Referido por
+                                    </label>
+                                </div>
+                            </div>
+                                    
+                                    
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <input id="ocupacion" value="{{paciente.ocupacion}}" name="ocupacion" class="form-control input-sm"/>
+                                </div>
+                                
+                                <div class="col-md-3">
+                                    <input id="lugarTrabajo" value="{{paciente.lugarTRabajo}}" name="lugarTrabajo" class="form-control input-sm"/>
+                                </div>                        
+                                
+                                <div class="col-md-3">
+                                    <input id="fechaNacimiento" value="{{paciente.fechaNacimiento|date('d-m-Y')}}" name="fechaNacimiento" class="form-control calZebra input-sm"/>
+                                </div>
+                            
+                                <div class="col-md-3">
+                                    <input id="referidoPor" value="{{paciente.referidoPor}}" name="referidoPor" class="form-control input-sm"/>
+                                </div>                        
+                            </div>
+                                
+                                
+                            <div class="row" style="margin-top:20px;">
+                                <div class="col-md-3">
+                                    <label>
+                                        En caso de emergencia llamar a
+                                    </label>
+                                </div>
+                                <div class="col-md-3">
+                                    <label>
+                                        Al teléfono
+                                    </label>
+                                </div>
+                            </div>
+                                
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <input id="llamarA" value="{{paciente.personaEmergencia }}" name="llamarA" class="form-control input-sm"/>
+                                </div>
+                                <div class="col-md-3">
+                                    <input id="telefonoEmergencia" value="{{paciente.telefonoEmergencia }}" name="telefonoEmergencia" class="form-control input-sm"/>
+                                </div>
+                            </div>
+                                
+                                    
+                                    
+                            <div class="row" style="margin-top:10px;">
+                                <div class="col-md-12">
+                                    <hr>
+                                </div>
+                            </div>
+
+                            <div class="row  pull-right" style="margin-top:10px;">
+                                <div class="col-md-12">
+                                    <div class="form-grouphide col-sm-12">
+                                        <button type="submit" id="guardarNuevoDatosGenerales" name="dgplusbellebundle_consulta[submit]" class="btn btn-success btn-xs btn btn">Guardar</button>
+                                    </div>
+                                </div>
+                            </div>
                       </p>
                     </div>
 
@@ -378,9 +469,6 @@
                                     </div>
                                     
                                     
-                                    
-                                    
-                                    
                                     <div class="row" style="margin-top:10px;">
                                         <div class="col-md-12">
                                             <hr>
@@ -390,8 +478,8 @@
                                     <div class="row  pull-right" style="margin-top:10px;">
                                         <div class="col-md-12">
                                             <div class="form-grouphide col-sm-12">
-                                                <a class="btn btn-default btn-sm" id="cancelarNuevoConsulta">Cancelar</a>
-                                                <button type="submit" id="guardarNuevoConsulta" name="dgplusbellebundle_consulta[submit]" class="btn btn-success btn-sm btn btn">Guardar</button>
+                                                <a class="btn btn-default btn-xs" id="cancelarNuevoConsulta">Cancelar</a>
+                                                <button type="submit" id="guardarNuevoConsulta" name="dgplusbellebundle_consulta[submit]" class="btn btn-success btn-xs btn btn">Guardar</button>
                                             </div>
                                         </div>
                                     </div>
@@ -430,13 +518,13 @@
                                         
                                         <div class="clearfix"></div>
                                         <div class="col-md-4">
-                                            <input id="peso_paciente" name="peso_paciente" class="form-control input-sm form-control"/>
+                                            <input id="pesoPaciente" name="peso_paciente" class="form-control input-sm form-control"/>
                                         </div>
                                         <div class="col-md-4">
-                                            <input id="peso_talla" name="peso_paciente" class="form-control input-sm form-control"/>
+                                            <input id="tallaPaciente" name="peso_paciente" class="form-control input-sm form-control"/>
                                         </div>
                                         <div class="col-md-4">
-                                            <input id="peso_frecuenciaResp" name="peso_paciente" class="form-control input-sm form-control"/>
+                                            <input id="frecRespiratoria" name="peso_paciente" class="form-control input-sm form-control"/>
                                         </div>
                                     </div>
                                     
@@ -460,18 +548,18 @@
                                         <div class="clearfix"></div>
                                         <div class="col-md-4">
                                             <div class="col-md-4">
-                                                <input id="peso_paciente" name="peso_paciente" class="form-control input-sm form-control"/>
+                                                <input id="presionSistolica" name="presionSistolica" class="form-control input-sm form-control"/>
                                             </div>
                                             <div class="col-md-1"><label style="font-size:1.3em;">/</label></div>
                                             <div class="col-md-4">
-                                                <input id="peso_paciente" name="peso_paciente" class="form-control input-sm form-control"/>
+                                                <input id="presionDiastolica" name="presionDiastolica" class="form-control input-sm form-control"/>
                                             </div>
                                         </div>
                                         <div class="col-md-4">
-                                            <input id="peso_paciente" name="peso_paciente" class="form-control input-sm form-control"/>
+                                            <input id="temperaturaPaciente" name="temperaturaPaciente" class="form-control input-sm form-control"/>
                                         </div>
                                         <div class="col-md-4">
-                                            <input id="peso_paciente" name="peso_paciente" class="form-control input-sm form-control"/>
+                                            <input id="frecCardiaca" name="frecCardiaca" class="form-control input-sm form-control"/>
                                         </div>
                                     </div>
                                     
@@ -484,8 +572,7 @@
                                     <div class="row  pull-right" style="margin-top:10px;">
                                         <div class="col-md-12">
                                             <div class="form-grouphide col-sm-12">
-                                                <a class="btn btn-default btn-sm" id="cancelarNuevoConsulta">Cancelar</a>
-                                                <button type="submit" id="guardarNuevoConsulta" name="dgplusbellebundle_consulta[submit]" class="btn btn-success btn-sm btn btn">Guardar</button>
+                                                <button type="submit" id="guardarSignosConsulta" name="dgplusbellebundle_consulta[submit]" class="btn btn-success btn-xs btn btn">Guardar</button>
                                             </div>
                                         </div>
                                     </div>
@@ -499,7 +586,7 @@
                         </p>
                         <div class="row">
                             <div class="col-md-4">
-                                <label>Patologicos</label>
+                                <label>Patológicos</label>
                             </div>
                             <div class="col-md-4">
                                 <label>Familiares</label>
@@ -510,22 +597,122 @@
                         </div>
                         <div class="row" style="margin-top:20px;">
                             <div class="col-md-4">
-                                <textarea id="textareaReceta" class="form-control input-sm col-md-8" placeholder="Receta médica"></textarea>
+                                <textarea style="height:100px;" id="antecedentesPatologicos" value="{{paciente.patologicos}}" class="form-control">{{paciente.patologicos}}</textarea>
                             </div>
                             <div class="col-md-4">
-                                <textarea id="textareaReceta" class="form-control input-sm col-md-8" placeholder="Receta médica"></textarea>
+                                <textarea style="height:100px;" id="antecedentesFamiliares" value="{{paciente.familiares}}" class="form-control">{{paciente.familiares}}</textarea>
                             </div>
                             <div class="col-md-4">
-                                <textarea id="textareaReceta" class="form-control input-sm col-md-8" placeholder="Receta médica"></textarea>
+                                <textarea style="height:100px;" id="antecedentesAlergias" value="{{paciente.alergias}}" class="form-control">{{paciente.alergias}}</textarea>
+                            </div>
+                        </div>
+                            
+                        <div class="row" style="margin-top:10px;">
+                            <div class="col-md-12">
+                                <hr>
+                            </div>
+                        </div>
+
+                        <div class="row  pull-right" style="margin-top:10px;">
+                            <div class="col-md-12">
+                                <div class="form-grouphide col-sm-12">
+                                    {#<a class="btn btn-default btn-xs" id="cancelarNuevoConsulta">Cancelar</a>#}
+                                    <button type="submit" id="guardarAntecedentes" name="dgplusbellebundle_antecedentes[submit]" class="btn btn-success btn-xs btn btn">Guardar</button>
+                                </div>
                             </div>
                         </div>
                         
                     </div>
                     <div class="tab-pane fade in" id="botabs5">
-                      <p><strong>Vacunas</strong>Raw denim you probably haven't heard of them jean shorts Austin. Nesciunt tofu stumptown aliqua, retro synth master cleanse. Mustache cliche tempor, williamsburg carles vegan helvetica. Reprehenderit butcher retro keffiyeh dreamcatcher synth. Cosby sweater eu banh mi, qui irure terry richardson ex squid. Aliquip placeat salvia cillum iphone. Seitan aliquip quis cardigan american apparel, butcher voluptate nisi qui.</p>
+                        <p><strong></strong>
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <label>Costo de consulta</label>
+                                </div>
+                            </div>
+                            <div class="row" style="margin-top:20px;">
+                                <div class="col-md-4">
+                                    <input type="text" id="costoConsultaAlergias" class="form-control" placeholder="$"/>
+                                    <input id="costoConsultaAlergias" class="form-control"/>
+                                </div>
+                            </div>
+                                <div class="row" style="margin-top:10px;">
+                                <div class="col-md-12">
+                                    <hr>
+                                </div>
+                            </div>
+
+                            <div class="row  pull-right" style="margin-top:10px;">
+                                <div class="col-md-12">
+                                    <div class="form-grouphide col-sm-12">
+                                        {#<a class="btn btn-default btn-xs" id="cancelarNuevoConsulta">Cancelar</a>#}
+                                        <button type="submit" id="guardarCostoConsulta" name="dgplusbellebundle_antecedentes[submit]" class="btn btn-success btn-xs btn btn">Guardar</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </p>
                     </div>
                     <div class="tab-pane fade in" id="botabs6">
-                      <p><strong>Imágenes</strong>Raw denim you probably haven't heard of them jean shorts Austin. Nesciunt tofu stumptown aliqua, retro synth master cleanse. Mustache cliche tempor, williamsburg carles vegan helvetica. Reprehenderit butcher retro keffiyeh dreamcatcher synth. Cosby sweater eu banh mi, qui irure terry richardson ex squid. Aliquip placeat salvia cillum iphone. Seitan aliquip quis cardigan american apparel, butcher voluptate nisi qui.</p>
+                        <p>
+                            <strong>Subir imagen</strong>
+                            <div class="row" style="margin-top:20px;">
+                                <div class="col-md-12">
+                                    <form id="formImagen" enctype="multipart/form-data"  method="post">
+                                        <input id="file-input" type="file" name="file">
+                                        <input type="hidden" id="empresaId"  value="5" name="empresaId">
+                                    </form>
+                                    {#<form action="#" id="formImagen" enctype="multipart/form-data"  method="post">
+                                        <div class="form-group">
+                                          <div class="fileinput fileinput-new input-group" data-provides="fileinput">
+                                            <div class="form-control" data-trigger="fileinput"><i class="glyphicon glyphicon-file fileinput-exists"></i> <span class="fileinput-filename"></span></div>
+                                            <div class="input-group-btn">
+                                              <span class="btn btn-default btn-file"><span class="fileinput-new">Select file</span><span class="fileinput-exists">Change</span><input name="..." type="file"></span>
+                                              <a href="#" class="btn btn-danger fileinput-exists" data-dismiss="fileinput">Remove</a>
+                                            </div>
+                                          </div><!-- /.fileinput -->
+                                        </div><!-- /.form-group -->
+                                    </form>#}
+                                </div>
+                            </div>
+                            
+                            <div class="row" style="margin-top:10px;">
+                            <div class="col-md-12">
+                                <hr>
+                            </div>
+                        </div>
+
+                        <div class="row  pull-right" style="margin-top:10px;">
+                            <div class="col-md-12">
+                                <div class="form-grouphide col-sm-12">
+                                    {#<a class="btn btn-default btn-xs" id="cancelarNuevoConsulta">Cancelar</a>#}
+                                    <button type="submit" id="guardarImagenes" name="dgplusbellebundle_antecedentes[submit]" class="btn btn-success btn-xs btn btn">Guardar</button>
+                                </div>
+                            </div>
+                        </div>
+                        </p>
+                    </div>
+                                    
+                    <div class="tab-pane fade in" id="botabs7">
+                        <p>
+                            <strong>Plantilla</strong>
+                            
+                            
+                            
+                            <div class="row" style="margin-top:10px;">
+                            <div class="col-md-12">
+                                <hr>
+                            </div>
+                        </div>
+
+                        <div class="row  pull-right" style="margin-top:10px;">
+                            <div class="col-md-12">
+                                <div class="form-grouphide col-sm-12">
+                                    {#<a class="btn btn-default btn-xs" id="cancelarNuevoConsulta">Cancelar</a>#}
+                                    <button type="submit" id="guardarImagenes" name="dgplusbellebundle_antecedentes[submit]" class="btn btn-success btn-xs btn btn">Guardar</button>
+                                </div>
+                            </div>
+                        </div>
+                        </p>
                     </div>
                 </div><!-- /tab-content -->
             </div><!-- /panel-body -->
@@ -1777,6 +1964,229 @@
     }
 
     jQuery(document).ready(function() {
+        
+        $('.calZebra').Zebra_DatePicker({
+            months:['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
+            days: ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'],
+            format: 'd-m-Y',
+            show_clear_date:false,
+            show_select_today: "Hoy",
+        });
+            
+        /**********************************************
+         * Metodos de guardar con ajax
+         */
+        $(document).on('click','#guardarNuevoDatosGenerales', function(){
+            var id = $('#idPaciente').val();
+            var nombres = $('#nombresPaciente').val();
+            var apellidos = $('#apellidosPaciente').val();
+            var telefono1= $('#telefono1').val();
+            var telefono2= $('#telefono2').val();
+            var direccion = $('#direccion').val();
+            var correo= $('#correo').val();
+            var dui= $('#dui').val();
+            var estadoCivil= $('#estadoCivil').val();
+            var sexo = $('#sexo').val();
+            var ocupacion = $('#ocupacion').val();
+            var lugarTrabajo= $('#lugarTrabajo').val();
+            var fechaNacimiento = $('#fechaNacimiento').val();
+            var referidoPor= $('#referidoPor').val();
+            var llamarA= $('#llamarA').val();
+            var telefonoEmergencia = $('#telefonoEmergencia').val();
+            
+            
+{#            alert(direccion);#}
+            
+            //alert(fechaNacimiento);
+            
+            
+            $.ajax({
+                data:{id:id,nombres:nombres,apellidos:apellidos,telefono1:telefono1,telefono2:telefono2,direccion:direccion,correo:correo,dui:dui,estadoCivil:estadoCivil,sexo:sexo,ocupacion:ocupacion,
+                    lugarTrabajo:lugarTrabajo,fechaNacimiento:fechaNacimiento, referidoPor:referidoPor, llamarA:llamarA, telefonoEmergencia:telefonoEmergencia
+                },
+                url:"{{path('admin_paciente_guardar_ajax')}}",
+                type: "post",
+                success: function (data) {
+                        //inicio = data.inicio++;
+                        if(data==0){
+                            var iTel='<i class="fa fa-phone"></i>';
+                            var dir='<i class="fa fa-map-marker fa-fw"></i>';
+                            $('#telefono').html(iTel+" "+telefono1);
+                            $('#direccionD').html(dir+" "+direccion);
+
+                            $('#nombrePaciente').html(nombres+" "+apellidos);
+
+                        }
+                        bootbox.alert("Cambios guardados!", function() {});
+                        {#console.log("pagina actual: "+data);
+                        console.log("Inicio de registro: "+data.inicioRegistro);#}
+                    },
+                error: function (data) {
+
+
+                }
+            });
+        });
+        
+        $(document).on('click','#guardarAntecedentes', function(){
+            var id = $('#idPaciente').val();
+            var patologicos = $('#antecedentesPatologicos').val();
+            var familiares = $('#antecedentesFamiliares').val();
+            var alergias = $('#antecedentesAlergias').val();
+            
+            //alert(fechaNacimiento);
+            
+            $.ajax({
+                data:{id:id,patologicos:patologicos,familiares:familiares,alergias:alergias},
+                url:"{{path('admin_paciente_guardar_antecedentes_ajax')}}",
+                type: "post",
+                success: function (data) {
+                        //inicio = data.inicio++;
+                        if(data==0){
+                            
+                        }
+                        bootbox.alert("Cambios guardados!", function() {});
+                        {#console.log("pagina actual: "+data);
+                        console.log("Inicio de registro: "+data.inicioRegistro);#}
+                    },
+                error: function (data) {
+
+                }
+            });
+        });
+        
+        
+        
+        $(document).on('click','#guardarSignosConsulta', function(){
+            var id = $('#idPaciente').val();
+            var peso = $('#pesoPaciente').val();
+            var talla = $('#tallaPaciente').val();
+            var frecRespiratoria = $('#frecRespiratoria').val();
+            var presionDiastolica = $('#presionDiastolica').val();
+            var presionSistolica= $('#presionSistolica').val();
+            var temperatura = $('#temperaturaPaciente').val();
+            var frecCardiaca = $('#frecCardiaca').val();
+            
+            
+            
+            {#console.log("peso: "+peso);
+            console.log("talla: "+talla);
+            console.log("frecres: "+frecRespiratoria);
+            
+            console.log("presion: "+presionSistolica);
+            console.log("presion: "+presionDiastolica);
+            
+            console.log("temperatura: "+temperatura);
+            console.log("frecCar: "+frecCardiaca);#}
+            
+            $.ajax({
+                data:{id:id,peso:peso,talla:talla,frecRespiratoria:frecRespiratoria,presionDiastolica:presionDiastolica,presionSistolica:presionSistolica,temperatura:temperatura,frecCardiaca:frecCardiaca},
+                url:"{{path('admin_paciente_guardar_signos_ajax')}}",
+                type: "post",
+                success: function (data) {
+                        //inicio = data.inicio++;
+                        if(data==0){
+                            
+
+                        }
+{#                        console.log("pagina actual: "+data);
+                        console.log("Inicio de registro: "+data.inicioRegistro);#}
+                        bootbox.alert("Cambios guardados!", function() {});
+                    },
+                error: function (data) {
+
+
+                }
+            });
+        });
+        
+        $(document).on("change","#file-input",function(){
+        $("#prev").show();
+        
+        $("#saveImagen").hide();
+        
+        //obtenemos un array con los datos del archivo
+        var file = $(this)[0].files[0];
+        //obtenemos el nombre del archivo
+        var fileName = file.name;
+        //obtenemos la extensión del archivo
+        fileExtension = fileName.substring(fileName.lastIndexOf('.') + 1);
+        //obtenemos el tamaño del archivo
+        var fileSize = file.size;
+        
+        //obtenemos el tipo de archivo image/png ejemplo
+        var fileType = file.type;
+        console.log(fileType);
+        console.log(fileExtension);
+        if (fileExtension == 'PNG' || fileExtension == 'png' ||fileExtension == 'JPG'|| fileExtension == 'jpg' && fileType =='imagen' || fileType =='image' || fileType =='image/jpeg' )
+        {
+            flag = true;
+        }else{
+            flag = false;
+        }
+        
+                if (flag==false){
+                    alert("Archivo invalido, seleccione una imagen ");
+                    $("#file-input").val("");
+                    $("#prev").hide();
+                    $("#saveImagen").hide();
+                     
+
+                }else{  
+                    
+                     var pesoKb=(fileSize/1024);
+                     if (pesoKb<=1024){
+
+                        
+                        var frm = new FormData($("#formImagen")[0]);
+                      
+                             if (flag != false) {
+
+                                $.ajax({ 
+                                       data:frm,
+                                       url:Routing.generate('ingresar_foto_persona'),
+                                       type: 'POST',
+                                       dataType: 'json',
+                                      
+                                       cache: false,
+                                       contentType: false,
+                                       processData: false,
+
+                                      
+                                       success: function(data){
+                                           
+                                        $("#prev").attr('src', "/abgsistema/web/"+data.direccion);
+                                        
+                                            
+                                             
+                                       }
+                                             
+                                             
+                                     });
+
+
+                                 }
+                        }
+                        else{
+                            console.log(pesoKb);
+                            alert("Imagen demasiado grande, intente con una mas pequeña");
+                        }
+                }
+
+        });
+        
+        
+        
+        
+        
+        
+        
+        
+        /******************
+         * Fin de metodos de guardar con ajax
+         */
+        
+        
         $('#dgplusbellebundle_consulta_paciente').select2({
             ajax: {
                 url: "{{path('busqueda_paciente_select')}}",

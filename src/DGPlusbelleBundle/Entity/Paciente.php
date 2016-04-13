@@ -131,6 +131,31 @@ class Paciente
     
     
     /**
+     * @var string
+     *
+     * @ORM\Column(name="patologicos", type="string", length=400, nullable=true)
+     */
+    private $patologicos;
+    
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="familiares", type="string", length=400, nullable=true)
+     */
+    private $familiares;
+    
+    
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="alergias", type="string", length=400, nullable=true)
+     */
+    private $alergias;
+    
+    
+    
+    
+    /**
      * Get id
      *
      * @return integer
@@ -510,6 +535,86 @@ class Paciente
     public function getFechaRegistro()
     {
         return $this->fechaRegistro;
+    }
+    
+    
+    
+    /**
+     * Set patologicos
+     *
+     * @param string $patologicos
+     *
+     * @return Paciente
+     */
+    public function setPatologicos($patologicos)
+    {
+        $this->patologicos = $patologicos;
+
+        return $this;
+    }
+
+    /**
+     * Get patologicos
+     *
+     * @return string
+     */
+    public function getPatologicos()
+    {
+        return $this->patologicos;
+    }
+    
+    
+    
+    
+    
+    
+    /**
+     * Set familiares
+     *
+     * @param string $familiares
+     *
+     * @return Paciente
+     */
+    public function setFamiliares($familiares)
+    {
+        $this->familiares= $familiares;
+
+        return $this;
+    }
+
+    /**
+     * Get familiares
+     *
+     * @return string
+     */
+    public function getFamiliares()
+    {
+        return $this->familiares;
+    }
+    
+    
+    /**
+     * Set alergias
+     *
+     * @param string $alergias
+     *
+     * @return Paciente
+     */
+    public function setAlergias($alergias)
+    {
+        $this->alergias = $alergias;
+
+        return $this;
+    }
+
+    /**
+     * Get alergias
+     *
+     * @return string
+     */
+    public function getAlergias()
+    {
+        return $this->alergias;
     }
     
 }
