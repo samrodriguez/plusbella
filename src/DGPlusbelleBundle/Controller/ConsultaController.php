@@ -66,7 +66,7 @@ class ConsultaController extends Controller
         
         
         
-        $entities = $em->getRepository('DGPlusbelleBundle:Paciente')->findAll();
+        //$entities = $em->getRepository('DGPlusbelleBundle:Paciente')->findAll();
         $dql = $dql = "SELECT p.id, exp.numero, per.nombres, per.apellidos  FROM DGPlusbelleBundle:Paciente p"
                 . " INNER JOIN p.persona per"
                 . " JOIN p.expediente exp";
@@ -77,7 +77,7 @@ class ConsultaController extends Controller
         //var_dump($entities[0]->getExpediente()[0]->getNumero());
         //die();
         return array(
-            'pacientes' => $entities,
+            //'pacientes' => $entities,
             'tipo'  => 1,
         );
     }
@@ -765,6 +765,8 @@ class ConsultaController extends Controller
             //$identidad= $request->get('identidad');
             //Busqueda del paciente
             $paciente = $em->getRepository('DGPlusbelleBundle:Paciente')->find($idEntidad);
+            
+            $plantillas = $em->getRepository('DGPlusbelleBundle:Plantilla')->findAll();
 
             //Seteo del paciente en la entidad
             $entity->setPaciente($paciente);
@@ -775,7 +777,7 @@ class ConsultaController extends Controller
             $paciente = new \DGPlusbelleBundle\Entity\Paciente();
             $form   = $this->createCreateForm($entity, 3, $cadena, $paciente);
             $flag = 1;
-        }    
+        }
         
         if($paciente->getFechaNacimiento()!=null){
             $fecha = $paciente->getFechaNacimiento()->format("Y-m-d");
@@ -788,9 +790,17 @@ class ConsultaController extends Controller
         else{
             $edad = "No se ha ingresado fecha de nacimiento";
         }
+        $sucursales = $em->getRepository('DGPlusbelleBundle:Sucursal')->findBy(array('estado'=>1));
+        $empleados = $em->getRepository('DGPlusbelleBundle:Empleado')->findBy(array('id'=>array(3,5),'estado'=>1));
+        $tipoConsulta= $em->getRepository('DGPlusbelleBundle:TipoConsulta')->findBy(array('estado'=>1));
+        
             
         return array(
+            'plantillas'=>$plantillas,
             'entity' => $entity,
+            'sucursales' => $sucursales,
+            'tipoConsulta' => $tipoConsulta,
+            'empleados' => $empleados,
             'edad' => $edad,
             'paciente' => $paciente,
             'form'   => $form->createView(),
@@ -1767,129 +1777,691 @@ class ConsultaController extends Controller
             //data es el valor de retorno de ajax donde puedo ver los valores que trae dependiendo de las instrucciones que hace dentro del controlador
            
             $nombreimagen2=" ";
+            $idConsulta = $request->get('id');
             $dataForm = $request->get('frm');
             
             $personaId = $_POST["empresaId"];
             
            
- 
-            $nombreimagen=$_FILES['file']['name'];
+            //toca hacer un for para iterar los elementos del file para los diferentes archivos
+            
+            
+            
+//            var_dump(count($_FILES['file']['name']));
+            
+            for($i=0;$i<count($_FILES['file']['name']);$i++){
+                $nombreimagen=$_FILES['file']['name'][$i];    
 
-            $tipo = $_FILES['file']['type'];
-            $extension= explode('/',$tipo);
-            $nombreimagen2.=".".$extension[1];
-         
-         if ($nombreimagen != null){
-             
-            //Direccion fisica del la imagen  
-                $path1 = $this->container->getParameter('photo.tmp');
-               
-                $path = "Photos/perfil/E";
-                $fecha = date('Y-m-d His');
-                
-                $nombreArchivo = $nombreimagen."-".$fecha.$nombreimagen2;
-                
-                $nombreBASE=$path.$nombreArchivo;
-                $nombreBASE=str_replace(" ","", $nombreBASE);
-                $nombreSERVER =str_replace(" ","", $nombreArchivo);
-             
-                $resultado = move_uploaded_file($_FILES["file"]["tmp_name"], $path1.$nombreSERVER);
-                
-                
-                //Codigo para poder redimensionar la  imagenes que se suben
-//                    \Tinify\setKey("TGdnhEaY1ZrJB1J_NSAYYLeqno6FdIYF");
+
+
+
+                $tipo = $_FILES['file']['type'][$i];
+                $extension= explode('/',$tipo);
+                $nombreimagen2.=".".$extension[1];
+            
+                if ($nombreimagen != null){
+                    $em = $this->getDoctrine()->getManager();
+                    $imagen = new ImagenConsulta();
+                    
+                    
+                    die();
+                    $imagen->setConsulta();
+                    
+                    //Direccion fisica del la imagen  
+                    $path1 = $this->container->getParameter('photo.tmp');
+
+                    $path = "Photos/perfil/E";
+                    $fecha = date('Y-m-d His');
+
+                    $nombreArchivo = $nombreimagen."-".$fecha.$nombreimagen2;
+
+                    $nombreBASE=$path.$nombreArchivo;
+                    $nombreBASE=str_replace(" ","", $nombreBASE);
+                    $nombreSERVER =str_replace(" ","", $nombreArchivo);
+
+                    $resultado = move_uploaded_file($_FILES["file"]["tmp_name"][$i], $path1.$nombreSERVER);
+
+
+                    //Codigo para poder redimensionar la  imagenes que se suben
+    //                    \Tinify\setKey("TGdnhEaY1ZrJB1J_NSAYYLeqno6FdIYF");
+    //
+    //                     $source = \Tinify\fromFile($path1.$nombreSERVER);
+    //                     $resized = $source->resize(array(
+    //                         "method" => "cover",
+    //                         "width" => 300,
+    //                         "height" => 300
+    //                     ));
+
+
+
+    //                $resized->toFile($path1."E".$nombreSERVER);
+    //                $numero =unlink($path1.$nombreSERVER);
+
+
+
+
+    //                if ($numero){
+    //               
+    //                    
+    //                    
+    //                }
+
+
+                    if ($resultado){
+//                                $imagenConsulta = new ImagenConsulta();
+//                                $foto = new AbgFoto();
+//                                $em = $this->getDoctrine()->getManager();
+//                                //Ojo que posteriormente tengo que sacar los valores con el id de la variable de sesion que este presente
+//                                 //Este numero 6 es el id de la empresa, posteriormente hay que trabajarlo con la variable de sesion
+//                                $idPersona = $this->getDoctrine()->getRepository('DGAbgSistemaBundle:AbgPersona')->find($personaId);
+//                                $src = $this->getDoctrine()->getRepository('DGAbgSistemaBundle:AbgFoto')->findBy(array("abgPersona" =>$idPersona,"tipoFoto"=>1));
+//                                $direccion = $src[0]->getSrc();
+//                                
+//                                $direccion = str_replace("\\","" , $direccion);
+//                                $direccion = str_replace("Photos/perfil/","", $direccion);
 //
-//                     $source = \Tinify\fromFile($path1.$nombreSERVER);
-//                     $resized = $source->resize(array(
-//                         "method" => "cover",
-//                         "width" => 300,
-//                         "height" => 300
-//                     ));
-                     
-                
-                     
-                $resized->toFile($path1."E".$nombreSERVER);
-                $numero =unlink($path1.$nombreSERVER);
-                
-                
+//                                if($direccion!=''){
+//                                    $eliminacionRegistroExixtente =unlink($path1.$direccion);
+//                                    if($eliminacionRegistroExixtente){
+//                                        $entity = $em->getRepository('DGAbgSistemaBundle:AbgFoto')->findBy(array("abgPersona" =>$idPersona,"tipoFoto"=>1));
+//                                        $entity[0]->setSrc($nombreBASE);
+//                                        $entity[0]->setFechaRegistro(new \DateTime("now"));
+//                                        $entity[0]->setFechaExpiracion(null);
+//                                        $entity[0]->setEstado(1);
+//                                        $em->merge($entity[0]);
+//                                        $em->flush();
+//                                        $src = $this->getDoctrine()->getRepository('DGAbgSistemaBundle:AbgFoto')->findBy(array("abgPersona" =>$idPersona,"tipoFoto"=>1));
+//                                        $direccion = $src[0]->getSrc();
+//                                        $direccionParaAjax = str_replace("\\","" , $direccion);
+//                                        $data['direccion']=$direccionParaAjax;
+//                                    }
+//                                }
+//                            else{
+//                                                $entity = $em->getRepository('DGAbgSistemaBundle:AbgFoto')->findBy(array("abgPersona" =>$idPersona,"tipoFoto"=>1));
+//                                                $entity[0]->setSrc($nombreBASE);
+//                                                $entity[0]->setFechaRegistro(new \DateTime("now"));
+//                                                $entity[0]->setFechaExpiracion(null);
+//                                                $entity[0]->setEstado(1);
+//                                                $em->merge($entity[0]);
+//                                                $em->flush();
+//                                                
+//                                                $enti = $em->getRepository('DGAbgSistemaBundle:AbgFoto')->findBy(array("abgPersona" =>$idPersona,"tipoFoto"=>1));
+//                                                
+//                                                $direccion = $enti[0]->getSrc();
+//                                                $direccionParaAjax = str_replace("\\","" , $direccion);
+//                                                $data['direccion']=$direccionParaAjax;
+//                                                
+//                            }
+                    //$data['direccion']=$direccionParaAjax;
 
-                
-                if ($numero){
-               
                     
-                    
+                    }else{
+                             $data['servidor'] = "No se pudo mover la imagen al servidor";
+
+
+                    }
+
+
                 }
-                
-                
-                if ($resultado){
-                                $abgPersona = new AbgPersona();
-                                $foto = new AbgFoto();
-                                $em = $this->getDoctrine()->getManager();
-                                //Ojo que posteriormente tengo que sacar los valores con el id de la variable de sesion que este presente
-                                 //Este numero 6 es el id de la empresa, posteriormente hay que trabajarlo con la variable de sesion
-                                $idPersona = $this->getDoctrine()->getRepository('DGAbgSistemaBundle:AbgPersona')->find($personaId);
-                                $src = $this->getDoctrine()->getRepository('DGAbgSistemaBundle:AbgFoto')->findBy(array("abgPersona" =>$idPersona,"tipoFoto"=>1));
-                                $direccion = $src[0]->getSrc();
-                                
-                                $direccion = str_replace("\\","" , $direccion);
-                                $direccion = str_replace("Photos/perfil/","", $direccion);
-
-                                if($direccion!=''){
-                                    $eliminacionRegistroExixtente =unlink($path1.$direccion);
-                                    if($eliminacionRegistroExixtente){
-                                        $entity = $em->getRepository('DGAbgSistemaBundle:AbgFoto')->findBy(array("abgPersona" =>$idPersona,"tipoFoto"=>1));
-                                        $entity[0]->setSrc($nombreBASE);
-                                        $entity[0]->setFechaRegistro(new \DateTime("now"));
-                                        $entity[0]->setFechaExpiracion(null);
-                                        $entity[0]->setEstado(1);
-                                        $em->merge($entity[0]);
-                                        $em->flush();
-                                        $src = $this->getDoctrine()->getRepository('DGAbgSistemaBundle:AbgFoto')->findBy(array("abgPersona" =>$idPersona,"tipoFoto"=>1));
-                                        $direccion = $src[0]->getSrc();
-                                        $direccionParaAjax = str_replace("\\","" , $direccion);
-                                        $data['direccion']=$direccionParaAjax;
-                                    }
-                                }
-                            else{
-                                                $entity = $em->getRepository('DGAbgSistemaBundle:AbgFoto')->findBy(array("abgPersona" =>$idPersona,"tipoFoto"=>1));
-                                                $entity[0]->setSrc($nombreBASE);
-                                                $entity[0]->setFechaRegistro(new \DateTime("now"));
-                                                $entity[0]->setFechaExpiracion(null);
-                                                $entity[0]->setEstado(1);
-                                                $em->merge($entity[0]);
-                                                $em->flush();
-                                                
-                                                $enti = $em->getRepository('DGAbgSistemaBundle:AbgFoto')->findBy(array("abgPersona" =>$idPersona,"tipoFoto"=>1));
-                                                
-                                                $direccion = $enti[0]->getSrc();
-                                                $direccionParaAjax = str_replace("\\","" , $direccion);
-                                                $data['direccion']=$direccionParaAjax;
-                                                
-                            }
+                else{
+                    //$data['imagen'] = "Imagen invalida";
 
 
-                    
-                }else{
-                         $data['servidor'] = "No se pudo mover la imagen al servidor";
-                    
-                    
                 }
-               
-                
             }
-            else{
-                $data['imagen'] = "Imagen invalida";
-                
-                
-            }
-            
          
             
-           return new Response(json_encode($data));
-           
+            //return new Response(json_encode($data));
+            return new Response(json_encode(0));
+
       
+            
     }
     
+     
+    /**
+     * 
+     *
+     * @Route("/pacienteconsulta/data/consulta", name="admin_consulta_guardar_ajax")
+     */
+    public function dataConsultaAction(Request $request)
+    {
+        
+        /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+	 * Easy set variables
+	 */
+	
+	/* Array of database columns which should be read and sent back to DataTables. Use a space where
+	 * you want to insert a non-database field (for example a counter or static image)
+	 */
+        
+
+        $id = $request->get('id');
+        
+        $medico = $request->get('medico');
+        $tratamiento = $request->get('tratamiento');
+        $tipoConsulta = $request->get('tipoConsulta');
+        $sucursal = $request->get('sucursal');
+        $observaciones = $request->get('observaciones');
+        
+//        $patologicos = $request->get('patologicos');
+//        $familiares = $request->get('familiares');
+//        $alergias = $request->get('alergias');
+//        
+//        $patologicos = $request->get('patologicos');
+//        $familiares = $request->get('familiares');
+//        $alergias = $request->get('alergias');
+        
+        $consulta = new Consulta();
+                
+        
+        $em = $this->getDoctrine()->getEntityManager();
+        
+        $paciente = $em->getRepository('DGPlusbelleBundle:Paciente')->find($id);
+        $empleado= $em->getRepository('DGPlusbelleBundle:Empleado')->find($medico);
+        $tratamientoObj = $em->getRepository('DGPlusbelleBundle:Tratamiento')->find($tratamiento);
+        $tipoConsultaObj = $em->getRepository('DGPlusbelleBundle:TipoConsulta')->find($tipoConsulta);
+        $sucursalObj = $em->getRepository('DGPlusbelleBundle:Sucursal')->find($sucursal);
+        
+        
+        
+        if(count($paciente)!=0){
+            //$persona = $em->getRepository('DGPlusbelleBundle:Persona')->find($paciente->getPersona()->getId());
+            $consulta->setPaciente($paciente);
+            $consulta->setEmpleado($empleado);
+            $consulta->setTipoConsulta($tipoConsultaObj);
+            
+            $consulta->setFechaConsulta(new \DateTime('now'));
+            
+
+            //hora inicio 
+            $consulta->setHoraInicio(new \DateTime('now'));
+            //hora fin
+            $consulta->setHoraFin(new \DateTime('now'));
+            $consulta->setObservacion($observaciones);
+            $consulta->setTratamiento($tratamientoObj);
+            $consulta->setSucursal($sucursalObj);
+            
+            $consulta->setReportePlantilla(1);
+            $consulta->setCostoConsulta(0);
+            
+            $em->persist($consulta);
+            $em->flush();
+            
+            return new Response(json_encode($consulta->getId()));
+        }
+        else{
+            return new Response(json_encode(1));
+        }
+        
+        
+        
+    }
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    /**
+     * Creates a new Consulta entity.
+     *
+     * @Route("/create/insert/plantilla/", name="admin_consulta_insert_plantilla", options={"expose"=true})
+     * @Method("POST")
+     */
+    public function insertPlantillaAction(Request $request)
+    {
+        //$entity = new Consulta();
+        $em = $this->getDoctrine()->getManager();
+        
+        //Obtiene el usuario
+        $idpac= $request->get('id');
+        $idConsulta = $request->get('idConsulta');
+        
+        //var_dump($idpac);
+        $entity= $em->getRepository('DGPlusbelleBundle:Consulta')->find($idConsulta);
+        $flag = 0;
+        $cadena= $request->get('identidad');
+        
+        $parameters = $request->request->all();
+        //var_dump($parameters);
+        //die();
+        //Obtener del parametro el valor que se debe usar para programar la consulta
+        $accion = $cadena[0];
+        
+        //Obtener el id del parametro
+        $idEntidad = substr($cadena, 1);
+        
+        $pac = $em->getRepository('DGPlusbelleBundle:Paciente')->find($idpac);
+        
+        //var_dump($pac);
+        
+        $user = $this->get('security.token_storage')->getToken()->getUser();
+        //Entidades para insertar en el proceso de la consulta de emergencia
+//        $historial = new HistorialClinico();
+        $expediente = new Expediente();
+        
+        
+        //Seteo de valores
+        $expediente->setFechaCreacion(new \DateTime('now'));
+        $expediente->setHoraCreacion(new \DateTime('now'));
+        $expediente->setEstado(true);
+        //$historial->setConsulta($entity);
+        
+        $entity->setFechaConsulta(new \DateTime('now'));
+        
+        //Tipo de consulta actica, emergencia
+        /*$dql = "SELECT tc FROM DGPlusbelleBundle:TipoConsulta tc WHERE tc.estado = :estado AND tc.id=:id";
+        $tipoConsulta = $em->createQuery($dql)
+                       ->setParameters(array('estado'=>1,'id'=>1))
+                       ->getResult();
+               //var_dump($tipoConsulta[0]);
+               //die();
+        $tipoConsulta = $tipoConsulta[0];*/
+        //var_dump($tipoConsulta);
+               //die();
+        //$entity->setTipoConsulta($tipoConsulta);
+        //var_dump($this->tipo);
+        
+        
+        if($idpac == -1){
+            $paciente_est = $em->getRepository('DGPlusbelleBundle:Paciente')->find($parameters['dgplusbellebundle_consulta']['paciente']);
+            
+            $entity->setPaciente($paciente_est);
+            //var_dump($entity);
+            $flag = 1;
+            $accion = 'E';
+            $pacient = new \DGPlusbelleBundle\Entity\Paciente();
+            $form = $this->createCreateForm($entity,3,$idEntidad,$pacient);
+        } else {
+            $paciente_est = $em->getRepository('DGPlusbelleBundle:Paciente')->find($idpac);
+            $form = $this->createCreateForm($entity,2,$idEntidad,$pac);
+        }
+            
+        $form->handleRequest($request);
+        
+        
+        //$campos = $form->get('campos')->getData();
+       // $indicaciones = $form->get('indicaciones')->getData();
+        
+       // foreach($parameters as $p){
+       //     $campos = $parameters->campos;
+        //}
+        
+        //var_dump($parameters['dgplusbellebundle_consulta']['campos']);
+        //die();
+        //if ($form->isValid()) {
+            $em = $this->getDoctrine()->getManager();
+            $tratamiento = null;
+            switch ($accion){
+                case 'C':
+                    $cita = $em->getRepository('DGPlusbelleBundle:Cita')->find($idEntidad);
+                    $cita->setEstado("A");
+                    $tratamiento = $cita->getTratamiento();
+                    $entity->setCita($cita);
+                    $em->persist($cita);
+                    $em->flush();
+                    break;
+                case 'P':
+                    //$entity->setCita(null);
+                    break;
+            }
+        
+            
+            
+            
+            $paciente = $entity->getPaciente();
+            //$paciente = $paciente_est;
+            $paciente->setEstado(true);
+            
+            $apellido = $paciente->getPersona()->getApellidos();
+            $nombre= $paciente->getPersona()->getNombres();
+            
+            
+            $dql = "SELECT p.id, exp.numero FROM DGPlusbelleBundle:Paciente p "
+                    . "JOIN p.expediente exp WHERE p.id=:id ";
+            $exp = $em->createQuery($dql)
+                       ->setParameter('id',$paciente->getId())
+                       ->getResult();
+            
+            //var_dump($exp);
+            //$paciente
+            //die();
+            if(count($exp)==0){
+                //Generacion del numero de expediente
+                $numeroExp = $nombre[0].$apellido[0].date("Y");
+                $dql = "SELECT COUNT(exp)+1 FROM DGPlusbelleBundle:Expediente exp WHERE exp.numero LIKE :numero";
+
+                $num = $em->createQuery($dql)
+                           ->setParameter('numero','%'.$numeroExp.'%')
+                           ->getResult();
+                //var_dump($user);
+                $numString = $num[0]["1"];
+                //var_dump($numString);
+
+                switch(strlen($numString)){
+                    case 1:
+                            $numeroExp .= "00".$numString;
+                        break;
+                    case 2:
+                            $numeroExp .= "0".$numString;
+                        break;
+                    case 3:
+                            $numeroExp .= $numString;
+                        break;
+                }
+                //var_dump($numeroExp);
+                //die();
+                $expediente->setNumero($numeroExp);
+                $expediente->setPaciente($paciente);
+                $expediente->setUsuario($user);
+                $em->persist($expediente);
+            }
+            
+            $usuario= $this->get('security.token_storage')->getToken()->getUser();
+            $empleado = $em->getRepository('DGPlusbelleBundle:Empleado')->findBy(array('persona'=>$usuario->getPersona()->getId()));
+            $entity->setEmpleado($empleado[0]);
+
+            //$historial->setConsulta($consulta);
+            //$historial->setExpediente($expediente);
+            
+            
+            $placas = new ArrayCollection();
+            $path = $this->container->getParameter('photo.paciente');
+            $i=0;
+            foreach($entity->getPlacas2() as $key => $row){
+                //var_dump($row);    
+                $imagenConsulta = new ImagenConsulta();
+                
+                if($row->getFile()!=null){
+                    //echo "vc";
+                    $fecha = date('Y-m-d His');
+                    $extension = $row->getFile()->getClientOriginalExtension();
+                    $nombreArchivo = "consulta - ".$i." - ".$fecha.".".$extension;
+
+                    //echo $nombreArchivo;
+                    //$seguimiento->setFotoAntes($nombreArchivo);
+
+                    $imagenConsulta->setFoto($nombreArchivo);
+                    $row->setFoto($nombreArchivo);
+                    //$imagenConsulta->setConsulta($entity);
+                    //array_push($placas, $imagenConsulta);
+                    $row->getFile()->move($path,$nombreArchivo);
+                    //$em->merge($seguimiento);
+                    $em->persist($row);
+                    //$em->flush();
+                    $i++;
+                }
+                //var_dump($row->getFile());  
+            }
+            //die();
+            //$entity->setPlacas2($placas);
+            //$entity->setRegistraReceta(1);
+            $em->persist($entity);
+            $em->flush();
+            
+            if(isset($parameters['idPlantilla'])){
+                $plantillaid = $parameters['idPlantilla'];
+
+                //var_dump($parameters);
+                //die();
+                $dql = "SELECT det.id, det.nombre "
+                        . "FROM DGPlusbelleBundle:DetallePlantilla det "
+                        . "JOIN det.plantilla pla "
+                        . "WHERE pla.id =  :plantillaid";
+
+                $parametros = $em->createQuery($dql)
+                            ->setParameter('plantillaid', $plantillaid)
+                            ->getResult();
+
+
+                //$valores = array(); 
+                // var_dump($usuario); 
+                //var_dump($parametros);
+                //die();
+                foreach($parametros as $key=> $p){
+                    $dataReporte = new HistorialConsulta;
+                    $detalle = $em->getRepository('DGPlusbelleBundle:DetallePlantilla')->find($p['id']);
+
+                    $dataReporte->setDetallePlantilla($detalle);       
+                    $dataReporte->setConsulta($entity);
+                    $dataReporte->setConsultaReceta(null);
+
+                    $nparam = explode(" ", $p['nombre']);
+                    //var_dump(count($nparam)); 
+                    $lon = count($nparam);
+                    $dataReporte->setValorDetalle($parameters['valores'][$key]);
+                    /*if($lon > 1){
+                        $pnombre = $nparam[0];
+                        foreach($nparam as $key => $par){
+                            if($key +1 != $lon){
+                                $pnombre .= '_'.$nparam[$key + 1];
+                            }
+                        }
+                        $dataReporte->setValorDetalle($parameters[$pnombre]);
+                    } else {
+                        $dataReporte->setValorDetalle($parameters[$p['nombre']]);
+                    }*/
+                   
+                    $em->persist($dataReporte);
+                    $em->flush();
+                }
+            }
+            else {
+                
+                /*$esteticaid = $parameters['dgplusbellebundle_consulta']['estetica'];
+
+
+                $dql = "SELECT det.id, det.nombre, opc.id opcid, opc.nombre opcnom "
+                        . "FROM DGPlusbelleBundle:OpcionesDetalleEstetica opc "
+                        . "JOIN opc.detalleEstetica det "
+                        . "JOIN det.estetica est "
+                        . "WHERE est.id =  :esteticaid";
+
+                $parametros = $em->createQuery($dql)
+                            ->setParameter('esteticaid', $esteticaid)
+                            ->getResult();
+
+
+                //$valores = array(); 
+                //var_dump($parameters); 
+                //die();
+                foreach($parametros as $p){
+                    $dataReporte = new \DGPlusbelleBundle\Entity\HistorialEstetica;
+                    
+                    $detalle = $em->getRepository('DGPlusbelleBundle:OpcionesDetalleEstetica')->find($p['opcid']);
+                    
+                    
+                    
+                    $dataReporte->setdetalleEstetica($detalle);       
+                    $dataReporte->setConsulta($entity);
+                    //$dataReporte->setConsultaReceta(null);
+                    //var_dump($p['opcnom']);
+                    $nparam = explode(" ", $p['opcnom']);
+                    //var_dump(count($nparam)); 
+                    $lon = count($nparam);
+                    if($lon > 1){
+                        $pnombre = $nparam[0];
+                        foreach($nparam as $key => $par){
+                            //var_dump($key);
+                            if($key +1 != $lon){
+                                //var_dump($lon);
+                                $pnombre .= '_'.$nparam[$key + 1];
+                            }
+                        }
+                        
+                        if(isset($parameters[$pnombre])){
+                            $dataReporte->setValor($pnombre);
+                            
+                            $em->persist($dataReporte);
+                            $em->flush();
+                        }    
+                    } else {
+                        if(isset($parameters[$p['opcnom']])){
+                            $dataReporte->setValor($p['opcnom']);
+                             //var_dump($parameters[$p['opcnom']]); 
+                             
+                            $em->persist($dataReporte);
+                            $em->flush();
+                        }
+                    }
+                
+//                    $em->persist($dataReporte);
+//                    $em->flush();
+                }
+                
+                if(isset($parameters['corporal'])){
+                    $compCorporal = new \DGPlusbelleBundle\Entity\ComposicionCorporal;
+                    $estetica = $em->getRepository('DGPlusbelleBundle:Estetica')->find($parameters['dgplusbellebundle_consulta']['estetica']);
+                    
+                    $compCorporal->setPeso($parameters['corporal']['peso']);
+                    $compCorporal->setGrasaCorporal($parameters['corporal']['grasa_corporal']);
+                    $compCorporal->setAguaCorporal($parameters['corporal']['agua_corporal']);
+                    $compCorporal->setMasaMusculo($parameters['corporal']['masa_musculo']);
+                    $compCorporal->setValoracionFisica($parameters['corporal']['valoracion_fisica']);
+                    $compCorporal->setEdadMetabolica($parameters['corporal']['edad_metabolica']);
+                    $compCorporal->setDciBmr($parameters['corporal']['dci_bmr']);
+                    $compCorporal->setMasaOsea($parameters['corporal']['masa_osea']);
+                    $compCorporal->setGrasaVisceral($parameters['corporal']['grasa_visceral']);
+                    $compCorporal->setFecha(new \DateTime('now'));
+                    $compCorporal->setConsulta($entity);
+                    $compCorporal->setEstetica($estetica);
+                    //var_dump($parameters['corporal']['masa_osea']); 
+                    $em->persist($compCorporal);
+                    $em->flush();
+                    
+                    
+//                  die();
+                }    
+                
+                if(isset($parameters['botox'])){
+                    $estetica = $em->getRepository('DGPlusbelleBundle:Estetica')->find($parameters['dgplusbellebundle_consulta']['estetica']);
+                    
+                    foreach ($parameters['botox'] as $value) {
+                        //var_dump($value['area_inyectar']);
+                        //die();
+                        $botox = new \DGPlusbelleBundle\Entity\ConsultaBotox();
+
+                        $botox->setAreaInyectar($value['area_inyectar']);
+                        $botox->setUnidades($value['unidades']);
+
+                        $botox->setFechaCaducidad(new \DateTime($value['caducidad']));
+                        $botox->setLote($value['lote']);
+                        $botox->setMarcaProducto($value['marca_producto']);
+                        $botox->setNumAplicacion($value['num_aplicacion']);
+                        $botox->setValor($value['valor']);
+                        
+                        if(isset($value['recomendaciones'])){
+                            $botox->setRecomendaciones($value['recomendaciones']);
+                        }
+                        
+                        $botox->setConsulta($entity);
+                        $botox->setEstetica($estetica);
+                        $em->persist($botox);
+                        $em->flush();
+                    }
+                } */
+            }
+                
+            if(isset($parameters['dgplusbellebundle_consulta']['sesiontratamiento'])){
+                $recetaid = $parameters['dgplusbellebundle_consulta']['sesiontratamiento'];
+            
+                $dql = "SELECT det.id, det.nombre "
+                        . "FROM DGPlusbelleBundle:DetallePlantilla det "
+                        . "JOIN det.plantilla pla "
+                        . "WHERE pla.id =  :plantillaid";
+
+                $parametros2 = $em->createQuery($dql)
+                            ->setParameter('plantillaid', $recetaid)
+                            ->getResult();
+            
+                foreach($parametros2 as $p){
+                    $dataReporte2 = new HistorialConsulta;
+                    $detalle = $em->getRepository('DGPlusbelleBundle:DetallePlantilla')->find($p['id']);
+
+                    $dataReporte2->setDetallePlantilla($detalle);       
+                    $dataReporte2->setConsulta(null);
+                    $dataReporte2->setConsultaReceta($entity);
+
+                    $nparam = explode(" ", $p['nombre']);
+                    //var_dump(count($nparam)); 
+                    $lon = count($nparam);
+                    if($lon > 1){
+                        $pnombre = $nparam[0];
+                        foreach($nparam as $key => $par){
+                            //var_dump($key);
+                            if($key +1 != $lon){
+                                //var_dump($lon);
+                                $pnombre .= '_'.$nparam[$key + 1];
+                            }
+                        }
+                        $dataReporte2->setValorDetalle($parameters[$pnombre."2"]);
+                    } else {
+                        $dataReporte2->setValorDetalle($parameters[$p['nombre']."2"]);
+                    }
+                   //var_dump($p['nombre']); 
+
+
+                    $em->persist($dataReporte2);
+                    $em->flush();
+                }
+            }
+            
+            
+            //$f = $gg;
+            /*  if($producto){
+                $this->establecerConsultaProducto($entity, $producto, $indicaciones);
+            } */
+            $idEmpleado = $usuario->getPersona()->getEmpleado()[0]->getId();
+            $empleados=$this->verificarComision($idEmpleado,null);
+            
+            if($empleados[0]['suma'] >= $empleados[0]['meta'] && !$empleados[0]['comisionCompleta']){
+                $this->get('envio_correo')->sendEmail($empleados[0]['email'],"","","","cumplio su objetivo");
+                $empComision = $em->getRepository('DGPlusbelleBundle:Empleado')->find($empleado[0]->getId());
+                $empComision->setComisionCompleta(1);
+                
+                $em->persist($empComision);
+                $em->flush();
+            }
+            //$usuario= $this->get('security.token_storage')->getToken()->getUser();
+            $this->get('bitacora')->escribirbitacora("Se registro una nueva consulta",$usuario->getId());
+            
+            switch($accion){
+                case 'C';
+                    return $this->redirect($this->generateUrl('admin_cita'));
+                    break;
+                case 'P';
+                    return $this->redirect($this->generateUrl('admin_paciente'));
+                    break;
+                case 'E';
+                    return $this->redirect($this->generateUrl('admin_consultas_paciente'));
+                    break;
+            }
+            
+        //}
+        $response = new JsonResponse();
+            $response->setData(array(
+                                'query' => 0
+                            )); 
+            
+            return $response; 
+        return array(
+            'entity' => $entity,
+            'form'   => $form->createView(),
+            'flag'   => $flag,
+        );
+    }
     
     
 }

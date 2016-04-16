@@ -290,4 +290,32 @@ class TratamientoController extends Controller
         return new Response(json_encode($exito));
         
     }
+    
+    
+    
+    /**
+    * Ajax utilizado para buscar informacion de una consulta de estetica
+    *  
+    * @Route("/busqueda-tratamiento-select/data", name="busqueda_tratamiento_select")
+    */
+    public function busquedaTratamientoAction(Request $request)
+    {
+        $busqueda = $request->query->get('q');
+        $page = $request->query->get('page');
+        
+        //var_dump($page);
+        
+        $em = $this->getDoctrine()->getEntityManager();
+        $dql = "SELECT trat.id tratamientoid, trat.nombre nombre "
+                        . "FROM DGPlusbelleBundle:Tratamiento trat "
+                        . "WHERE upper(trat.nombre) LIKE upper(:busqueda) AND trat.estado=1 "
+                        . "ORDER BY trat.nombre ASC ";
+        
+        $paciente['data'] = $em->createQuery($dql)
+                ->setParameters(array('busqueda'=>"%".$busqueda."%"))
+                ->setMaxResults( 10 )
+                ->getResult();
+        
+        return new Response(json_encode($paciente));
+    }
 }
