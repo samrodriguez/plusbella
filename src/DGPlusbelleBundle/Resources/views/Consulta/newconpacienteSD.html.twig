@@ -65,6 +65,10 @@
         #dgplusbellebundle_consulta_horaInicio, #dgplusbellebundle_consulta_horaFin{
             width: 155px;
         }
+        
+        {##selectPlantillas{
+            width:80%;
+        }#}
 
         .productoConsulta{width: 50% }
         
@@ -111,7 +115,7 @@
                                 <i class="fa fa-clipboard"></i> {#{{ expediente }}#}
                                 {{paciente.expediente[0].numero}}
                             </span>
-                            <span class="mr-2x">
+                            <span class="mr-2x" id="ocupacionPaciente">
                                 <i class="fa fa-briefcase"></i>
                                 {% if paciente.ocupacion == ""%}
                                     No se ha especificado profesión
@@ -224,7 +228,8 @@
                                     <label>
                                         Dirección
                                     </label>
-                                </div>                            </div>
+                                </div>                            
+                            </div>
                             <div class="row">
                                 <div class="col-md-3">
                                     <input id="nombresPaciente" value="{{paciente.persona.nombres}}" name="nombresPaciente" class="form-control input-sm"/>
@@ -245,6 +250,7 @@
                                 </div>
                                 <div class="col-md-4">
                                     <input type="hidden" id="idPaciente" value="{{paciente.id}}" name="idPaciente" class="form-control input-sm"/>
+                                    <input type="hidden" id="idConsulta" value="" name="idConsulta" class="form-control input-sm"/>
                                 </div>
                             </div>
                         
@@ -281,7 +287,7 @@
                                 </div>                        
                                 
                                 <div class="col-md-3">
-                                    <select id="estadoCivil" name="estadoCivil" class="form-control input-sm estadocivilPaciente form-control">
+                                    <select id="estadoCivil" name="estadoCivil" class="col-md-12 form-control input-sm estadocivilPaciente form-control" style="width:100%;">
                                         <option {% if paciente.estadoCivil== ''%} selected {% endif %} value="">Seleccione estado civil...</option>            
                                         <option {% if paciente.estadoCivil== 'Soltero/a' %} selected {% endif %} value="Soltero/a">Soltero/a</option>            
                                         <option {% if paciente.estadoCivil== 'Casado/a' %} selected {% endif %} value="Casado/a">Casado/a</option>            
@@ -292,7 +298,7 @@
                                 </div>
                             
                                 <div class="col-md-3">
-                                    <select id="sexo" name="sexo" class="form-control input-sm estadocivilPaciente form-control">
+                                    <select id="sexo" name="sexo" class="form-control input-sm" style="width:100%;">
                                         <option {% if paciente.sexo== ''%} selected {% endif %} value="">Seleccione estado civil...</option>            
                                         <option {% if paciente.sexo== 'm' or paciente.sexo=='M' %} selected {% endif %} value="M">Masculino</option>            
                                         <option {% if paciente.sexo== 'f' or paciente.sexo=='F' %} selected {% endif %} value="M">Femenino</option>            
@@ -390,7 +396,12 @@
                                 <div class="col-md-12">
                                     
                                     <div class="row" style="margin-top:20px;">
-                                        <div class="col-md-6">
+                                        <div class="col-md-3">
+                                            <label>
+                                                Médico
+                                            </label>
+                                        </div>
+                                        <div class="col-md-3">
                                             <label>
                                                 Tratamiento
                                             </label>
@@ -403,7 +414,15 @@
                                         </div>
                                     </div>
                                     <div class="row">
-                                        <div class="col-md-6">
+                                        <div class="col-md-3">
+                                            <select id="medico_consulta" name="tratamiento" class="form-control input-sm">
+{#                                                <option value="0" selected>Seleccione un médico...</option>#}
+                                                {% for empleado in empleados %}
+                                                    <option value="{{empleado.id}}" selected>{{empleado.persona.nombres}} {{empleado.persona.apellidos}}</option>
+                                                {% endfor %}
+                                            </select>  
+                                        </div>
+                                        <div class="col-md-3">
                                             <select id="tratamiento_consulta" name="tratamiento" class="form-control input-sm">
                                                 <option value="0" selected>Seleccione un tratamiento...</option>
                                             </select>  
@@ -412,8 +431,9 @@
                                         <div class="col-md-6">
                                             <select id="tipo_consulta" class="form-control input-sm">
                                                 <option value="0" selected>Seleccione un tipo de consulta...</option>
-                                                <option value="PRIMERA VEZ">PRIMERA VEZ</option>
-                                                <option value="EMERGENCIA">EMERGENCIA</option>
+                                                {%for tipo in tipoConsulta %}
+                                                    <option value="{{tipo.id}}">{{tipo.nombre}}</option>
+                                                {% endfor %}
                                             </select>
                                         </div>
                                         
@@ -441,7 +461,10 @@
                                         
                                         <div class="col-md-6">
                                             <select id="sucursal_consulta" class="form-control input-sm">
-                                                <option value="0" selected>Seleccione una sucursal...</option>
+{#                                                <option value="0" selected>Seleccione una sucursal...</option>#}
+                                                {% for sucursal in sucursales %}
+                                                    <option value="{{sucursal.id}}" selected>{{sucursal.nombre}}</option>
+                                                {% endfor %}
                                             </select>
                                         </div>
                                         
@@ -597,13 +620,13 @@
                         </div>
                         <div class="row" style="margin-top:20px;">
                             <div class="col-md-4">
-                                <textarea style="height:100px;" id="antecedentesPatologicos" value="{{paciente.patologicos}}" class="form-control">{{paciente.patologicos}}</textarea>
+                                <textarea maxlength="400" style="height:100px;" id="antecedentesPatologicos" value="{{paciente.patologicos}}" class="form-control">{{paciente.patologicos}}</textarea>
                             </div>
                             <div class="col-md-4">
-                                <textarea style="height:100px;" id="antecedentesFamiliares" value="{{paciente.familiares}}" class="form-control">{{paciente.familiares}}</textarea>
+                                <textarea maxlength="400" style="height:100px;" id="antecedentesFamiliares" value="{{paciente.familiares}}" class="form-control">{{paciente.familiares}}</textarea>
                             </div>
                             <div class="col-md-4">
-                                <textarea style="height:100px;" id="antecedentesAlergias" value="{{paciente.alergias}}" class="form-control">{{paciente.alergias}}</textarea>
+                                <textarea maxlength="400" style="height:100px;" id="antecedentesAlergias" value="{{paciente.alergias}}" class="form-control">{{paciente.alergias}}</textarea>
                             </div>
                         </div>
                             
@@ -672,6 +695,19 @@
                                           </div><!-- /.fileinput -->
                                         </div><!-- /.form-group -->
                                     </form>#}
+                                    
+                                </div>
+                            </div>
+                            
+                            <div class="row" style="margin-top:20px;">
+                                <strong style="margin-top:80px;">Archivos adjuntos</strong>
+                                <div class="col-md-12">
+                                    {#{% for imagen in imagenes %}
+                                    
+                                        
+                                        
+                                    {% endfor %}#}
+                                    
                                 </div>
                             </div>
                             
@@ -694,10 +730,35 @@
                                     
                     <div class="tab-pane fade in" id="botabs7">
                         <p>
-                            <strong>Plantilla</strong>
+                            <strong></strong>
                             
-                            
-                            
+                            <div class="row" style="margin-top:10px;">
+                                <div class="col-md-2">
+                                    Seleccione historial clínico:
+                                </div>
+                                
+                                <div class="col-md-10">
+                                    <select id="dgplusbellebundle_consulta_plantilla" class="col-md-8 form-control input-sm" style="width:50%" >
+                                        {% for plantilla in plantillas %}
+                                            <option value="{{plantilla.id}}">
+                                                {{plantilla.nombre|upper}}
+                                            </option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                                <div class="clearfix"></div>
+                                <div class="col-md-12" style="margin-top:20px;">
+                                    <i class="fa fa-file-pdf-o" style="margin-right:10px;"></i><a id="historialPrevPDF" style="cursor:pointer;">Generar PDF</a>
+                                    <hr>
+                                </div>
+                                
+                            <div id="camposPlantilla" class="camposPlantilla" style="margin-top: 30px">
+                                <div class="row">
+                                    <div class="col-md-12"></div>
+                                    <div id="campos" class="col-md-12 campos"></div>
+                                </div>
+                            </div> 
+                        
                             <div class="row" style="margin-top:10px;">
                             <div class="col-md-12">
                                 <hr>
@@ -708,7 +769,7 @@
                             <div class="col-md-12">
                                 <div class="form-grouphide col-sm-12">
                                     {#<a class="btn btn-default btn-xs" id="cancelarNuevoConsulta">Cancelar</a>#}
-                                    <button type="submit" id="guardarImagenes" name="dgplusbellebundle_antecedentes[submit]" class="btn btn-success btn-xs btn btn">Guardar</button>
+                                    <button type="submit" id="guardarPlantilla" name="dgplusbellebundle_antecedentes[submit]" class="btn btn-success btn-xs btn btn">Guardar</button>
                                 </div>
                             </div>
                         </div>
@@ -837,82 +898,7 @@
                 
             });
             
-            $( "#dgplusbellebundle_consulta_estetica" ).on( "change", function() {
-                // Se obtiene el id de la plantilla
-                var id = $( this ).val();
-                
-                // Se obtiene todos elementos que contengan la clase parametro
-                var elements = document.getElementsByClassName('parametro');
-                
-                // Se borran todos los elementos que se encuentran en el div con id = campos
-                $('#campos div').html('');
-                
-                // Se borran todos los elementos que contengan la clase = parametro
-                while(elements.length > 0){
-                    elements[0].parentNode.removeChild(elements[0]);
-                }
-                
-                $('#dgplusbellebundle_consulta_campos option').each(function(index, option) {
-                    $(option).remove();
-                });
-                
-                // Se obtienen los campos necesarios para la plantilla seleccionada
-                $.post( "{{path('admin_busqueda_parametros_estetica')}}", { id: id }, function( data ) {
-                    var par = new Array();
-                    par = data.query;
-                    //console.log(data.query);
-                    // Si la consulta de estetica es de Corporal
-                    if(data.query[0].estetica == 1){
-                        mostrarCamposCorporal(data.query);
-                    }
-                    // Si la consulta de estetica es de Facial
-                    else if(data.query[0].estetica == 2){
-                        mostrarCamposFacial(data.query);
-                    }
-                    // Si la consulta de estetica es de Facial
-                    else if(data.query[0].estetica == 3){
-                        count = 0;
-                        mostrarCamposBotox();
-                    }
-                }, "json");
-                
-            });
             
-            $( "#dgplusbellebundle_consulta_sesiontratamiento" ).on( "change", function() {
-                // Se obtiene el id de la plantilla
-                var id = $( this ).val();
-                
-                // Se obtiene todos elementos que contengan la clase parametro
-                var elements = document.getElementsByClassName('parametro2');
-                
-{#                $('#cReceta').remove();#}
-                // Se borran todos los elementos que se encuentran en el div con id = campos
-                $('#cReceta div').html('');
-                
-                // Se borran todos los elementos que contengan la clase = parametro
-                while(elements.length > 0){
-                    elements[0].parentNode.removeChild(elements[0]);
-                }
-                
-                $('#dgplusbellebundle_receta_campos option').each(function(index, option) {
-                    $(option).remove();
-                });
-                
-                // Se obtienen los campos necesarios para la plantilla seleccionada
-                $.post( "{{path('admin_busqueda_parametros')}}", { id: id }, function( data ) {
-                    var par = new Array();
-                    par = data.query;
-                    
-                    // Si la plantilla contiene campos
-                    if(par.length !== 0){
-                        mostrarCampos2(data.query);
-                    }
-                    else{
-                        console.log( 'Esta receta no tiene campos que mostrar' );
-                    }
-                }, "json");
-                
-            });
             
             
         });
@@ -932,7 +918,7 @@
             var lista=document.getElementById("dgplusbellebundle_consulta_campos");
             var camposInfo = new Array();
 
-           if(lista.length>0)
+            if(lista.length>0)
             {
                 for(var i=0; i<lista.length; i++)  {
                 camposInfo[i] = lista.options[i].text;
@@ -981,7 +967,7 @@
                 
                 // Se crea un div donde se muestran los parametros
                 campos[key] = document.createElement('div');
-                campos[key].setAttribute('class', 'parametro col-md-11');
+                campos[key].setAttribute('class', 'parametro col-md-12');
                 
                 // Se crea el campo de texto del parametro de la plantilla
                 if(value.tipoParametro=='Textarea' || value.tipoParametro==''){
@@ -1931,13 +1917,13 @@
     var $delLinkLi2 = $('#hnr_sircimbundle_estudioradiologicotype_placas.required').append($removeTagLink2);
 
     function formatRepo (data) {
-        if(data.nombres){
+        if(data.nombre){
             var markup = "<div class='select2-result-repository clearfix'>" +
                          "<div class='select2-result-repository__meta'>" +
-                         "<div class='select2-result-repository__title'>" + data.nombres + " " + data.apellidos + "</div>" +
+                         "<div class='select2-result-repository__title'>" + data.nombre+"</div>" +
                          "</div></div>";
         } else {
-            var markup = "Seleccione un paciente"; 
+            var markup = "Seleccione un tratamiento"; 
         }
 
 
@@ -1956,12 +1942,638 @@
     }
 
     function formatRepoSelection (data) {
-        if(data.nombres){
-            return data.nombres + " " + data.apellidos;
+        if(data.nombre){
+            return data.nombre;
         } else {
-            return "Seleccione un paciente"; 
+            return "Seleccione un tratamiento"; 
         }    
     }
+    
+    
+    
+    
+    
+    
+    
+    $(function () { 
+            
+            
+            $( "#dgplusbellebundle_consulta_estetica" ).on( "change", function() {
+                // Se obtiene el id de la plantilla
+                var id = $( this ).val();
+                
+                // Se obtiene todos elementos que contengan la clase parametro
+                var elements = document.getElementsByClassName('parametro');
+                
+                // Se borran todos los elementos que se encuentran en el div con id = campos
+                $('#campos div').html('');
+                
+                // Se borran todos los elementos que contengan la clase = parametro
+                while(elements.length > 0){
+                    elements[0].parentNode.removeChild(elements[0]);
+                }
+                
+                $('#dgplusbellebundle_consulta_campos option').each(function(index, option) {
+                    $(option).remove();
+                });
+                
+                // Se obtienen los campos necesarios para la plantilla seleccionada
+                $.post( "{{path('admin_busqueda_parametros_estetica')}}", { id: id }, function( data ) {
+                    var par = new Array();
+                    par = data.query;
+                    //console.log(data.query);
+                    // Si la consulta de estetica es de Corporal
+                    if(data.query[0].estetica == 1){
+                        mostrarCamposCorporal(data.query);
+                    }
+                    // Si la consulta de estetica es de Facial
+                    else if(data.query[0].estetica == 2){
+                        mostrarCamposFacial(data.query);
+                    }
+                    // Si la consulta de estetica es de Facial
+                    else if(data.query[0].estetica == 3){
+                        count = 0;
+                        mostrarCamposBotox();
+                    }
+                }, "json");
+                
+            });
+            
+            
+            
+            
+        });
+        
+        function setCamposPlantilla(id){
+            var lista = document.getElementById("dgplusbellebundle_consulta_campos");
+            var campoPlantilla = $("#" + id).val();
+            var campoNombre = $("#" + id).attr('name');
+            var texto = id + '-' + campoNombre + '-' + campoPlantilla;
+            
+            lista.options.add(new Option(texto));
+           
+        }//  Fin de setCamposPlantilla
+        
+        function getCamposPlantilla(){
+    
+            var lista=document.getElementById("dgplusbellebundle_consulta_campos");
+            var camposInfo = new Array();
+
+           if(lista.length>0)
+            {
+                for(var i=0; i<lista.length; i++)  {
+                camposInfo[i] = lista.options[i].text;
+                }   
+
+                for ( var i = 0, l = lista.options.length, o; i < l; i++ )
+                {
+                    o = lista.options[i];
+                    if ( camposInfo.indexOf( o.text ) != -1 )
+                    {
+                        o.selected = true;                
+                    }
+                } 
+                return false; 
+            } 
+            else {
+                  return false;  
+            }
+        }//Fin de getCamposPlantilla
+        
+        // Funcion que muestra los campos de texto de la plantilla seleccionada
+        function mostrarCampos(data) {
+            var div = document.getElementById('campos');
+            var form = $("form");
+            //console.log(data[0]);
+            //var form = document.createElement('form');
+            //form.setAttribute('action', '{# {{path('admin_set_campos')}} #}');
+            //form.setAttribute('method', 'POST');
+            /*-----------*/
+            
+            var input = new Array();
+            var label = new Array();
+            var label2 = new Array();
+            var campos = new Array();
+            var saltos = new Array();
+            var etiqueta = new Array();
+            var clear = new Array();
+            var i = 0;
+            
+            // Se recorre el array para mostrar los campos
+            $.each( data, function( key, value ) {
+                //window.print("<div class='col-md-1'>");
+                var t = document.createTextNode(value.nombre);
+                //window.print("</div");
+                
+                
+                // Se crea un div donde se muestran los parametros
+                campos[key] = document.createElement('div');
+                campos[key].setAttribute('class', 'parametro col-md-11');
+                
+                // Se crea el campo de texto del parametro de la plantilla
+                if(value.tipoParametro=='Textarea' || value.tipoParametro==''){
+                    input[key] = document.createElement('textarea');
+                    input[key].setAttribute('type', 'text');
+                    input[key].setAttribute('placeholder', value.nombre);
+                    input[key].setAttribute('class', 'form-control classPlantilla');
+                    input[key].setAttribute('style', 'margin-bottom: 5px;resize:vertical;height:150px;');
+                    input[key].setAttribute('name', value.nombre);
+                    input[key].setAttribute('id', value.id);
+                    
+                    etiqueta[key] = document.createElement('p');
+                    etiqueta[key].setAttribute('style', 'color: #646473; font-size: 13px; font-weight: 700;');
+                    etiqueta[key].appendChild(t);
+
+                    label[key] = document.createElement('label');
+
+                    // Se introducen los elementos en el div con id = campos
+                    label[key].appendChild(etiqueta[key]);
+                    campos[key].appendChild(label[key]);
+                    console.log(input[key]);
+                    campos[key].appendChild(input[key]);
+                    div.appendChild(campos[key]);
+                }
+                if(value.tipoParametro=='Radiobutton'){
+                    $.post( "{{path('admin_busqueda_opciones_parametros')}}", { id: value.id }, function( opc ) {
+                        var par = new Array();
+                        par = opc.query;
+                        //console.log(par[0]);
+                        // Si la plantilla contiene campos
+                        $.each( par, function( key2, value2 ) {
+                            input[key] = document.createElement('input');
+                            input[key].setAttribute('type', 'radio');
+                            input[key].setAttribute('class', 'form-control classPlantilla');
+                            input[key].setAttribute('name', value.nombre);
+                            input[key].setAttribute('id', value.id);
+
+                            etiqueta[key] = document.createElement('p');
+                            etiqueta[key].appendChild(t);
+
+                            label[key] = document.createElement('label');
+
+                            // Se introducen los elementos en el div con id = campos
+                            label[key].appendChild(etiqueta[key]);
+                            campos[key].appendChild(label[key]);
+                            
+                            campos[key].appendChild(input[key]);
+                            $('#'+value.id).append(value2.nombre);
+                            div.appendChild(campos[key]);
+                        });
+
+                    }, "json");
+                    
+                    
+                }
+                if(value.tipoParametro=='Checkbox'){
+                    campos[key].setAttribute('class', 'parametro col-md-6');
+                    
+                    var formgroup = document.createElement('div');
+                    formgroup.setAttribute('class', 'form-group');
+
+                    label[key] = document.createElement('label');
+                    etiqueta[key] = document.createElement('p');
+
+                    etiqueta[key].setAttribute('style', 'color: #646473; font-size: 13px;');
+                    etiqueta[key].appendChild(t);
+
+                    label[key].appendChild(etiqueta[key]);
+
+                    var divLabel = document.createElement('div');
+                    formgroup.setAttribute('style', 'margin-bottom: 10px;');
+
+                    divLabel.appendChild(label[key]);
+                    formgroup.appendChild(divLabel);
+                    
+                    $.post( "{{path('admin_busqueda_opciones_parametros')}}", { id: value.id }, function( opc2 ) {
+                        var par2 = new Array();
+                        par2 = opc2.query;
+                        
+                        // Si la plantilla contiene campos
+                        $.each( par2, function( key3, value3 ) {
+                            var chk = document.createElement('div');
+                            
+                            input[key3] = document.createElement('input');
+                            input[key3].setAttribute('type', 'checkbox');
+                            input[key3].setAttribute('class', 'form-control');
+                            input[key3].setAttribute('name', value.nombre);
+                            input[key3].setAttribute('id', value.id);
+                            
+                            var chk = document.createElement('div');
+                            chk.setAttribute('class', 'checkbox');
+                            //chk.setAttribute('style', 'margin-top: 10px');
+                            //formgroup.appendChild(divLabel);
+                            
+                            label2[key3] = document.createElement('label');
+                            label2[key3].htmlFor = "id";
+                            //label2[key3].appendChild(document.createTextNode(value3.nombre));
+                           
+                            {#var chk = document.createElement('div');
+                            chk.setAttribute('class', 'nice-checkbox checkbox-inline');#}
+                            
+                            chk.appendChild(input[key3]);
+                            chk.appendChild(document.createTextNode(value3.nombre));
+                            
+                            formgroup.appendChild(chk);
+                        
+                        });
+                        console.log(key);
+                        campos[key].appendChild(formgroup);
+                        div.appendChild(campos[key]);
+                        
+                        
+                        
+                        
+                        
+                    }, "json");
+                    if( ((i + 1) % 2) == 0 ) {
+                            console.log(((i + 1) % 2)+' '+i);
+                            clear[key] = document.createElement('div');
+                            clear[key].setAttribute('class', 'clearfix');
+                            div.appendChild(clear[key]);
+                        }
+                }
+                
+                
+                
+             //   input[key].setAttribute('onblur', 'setCamposPlantilla(' + value.id + ')');
+                
+                // Se crea el label del parametro de la plantilla
+                
+                
+                if(((key+1)%3)==0){
+                    //console.log(key%3);
+                    //console.log(key+' '+(key+1) + '-'+(key+1)%3);
+                    saltos[key] = document.createElement('hr');
+                    saltos[key] = document.createElement('div');
+                    saltos[key].setAttribute('class', 'clearfix');
+                    div.appendChild(saltos[key]);
+                }
+                i++;
+            });
+            validarConsulta();
+        } // Fin de mostrarCampos
+        
+        // Funcion que muestra los campos de texto de la plantilla seleccionada
+        function mostrarCamposCorporal(data) {
+            var div = document.getElementById('campos');
+            var form = $("form");
+            
+            var input = new Array();
+            var label = new Array();
+            var label2 = new Array();
+            var campos = new Array();
+            var saltos = new Array();
+            var etiqueta = new Array();
+            var clear = new Array();
+            var i = 0;
+            
+            var comparativo = document.createElement('div');
+            comparativo.setAttribute('id', 'comparativoCorp');
+            comparativo.setAttribute('class', 'text-right');
+            
+            var comparativoUrl = document.createElement('a');
+            comparativoUrl.setAttribute('id', 'urlComparativoCrp');
+            comparativoUrl.setAttribute('style', 'color: blue;');
+    
+            var comparativoText = document.createTextNode('Ver comparativo');
+            var comparativoHr = document.createElement('hr');
+            
+            comparativoUrl.appendChild(comparativoText);
+            
+            comparativo.appendChild(comparativoUrl);
+            comparativo.appendChild(comparativoHr);
+            
+            div.appendChild(comparativo);
+            
+            // Se recorre el array para mostrar los campos
+            $.each( data, function( key, value ) {
+                var t = document.createTextNode(value.nombre);
+                
+                // Se crea un div donde se muestran los parametros
+                campos[key] = document.createElement('div');
+                //campos[key].setAttribute('class', 'parametro col-md-11');
+                
+                campos[key].setAttribute('class', 'parametro col-md-6');
+                campos[key].setAttribute('style', 'margin-top: 15px;');
+
+                var formgroup = document.createElement('div');
+                formgroup.setAttribute('class', 'form-group');
+                formgroup.setAttribute('style', 'margin-bottom: 10px;');
+
+                label[key] = document.createElement('label');
+                
+                etiqueta[key] = document.createElement('p');
+                etiqueta[key].setAttribute('style', 'color: #646473; font-size: 13px;');
+                etiqueta[key].appendChild(t);
+                label[key].appendChild(etiqueta[key]);
+
+                var divLabel = document.createElement('div');
+
+                divLabel.appendChild(label[key]);
+                formgroup.appendChild(divLabel);
+                    
+                $.post( "{{path('admin_busqueda_opciones_estetica')}}", { id: value.id }, function( opc2 ) {
+                    var par2 = new Array();
+                    par2 = opc2.query;
+
+                    // Si la plantilla contiene campos
+                    $.each( par2, function( key3, value3 ) {
+                        var row = document.createElement('div');
+                        var ax = document.createElement('div');
+                        var chk = document.createElement('div');
+                        var lbl = document.createElement('div');
+                        lbl.setAttribute('class', 'lbl col-md-8');
+                        lbl.setAttribute('class', 'row');
+                        
+                        input[key3] = document.createElement('input');
+                        input[key3].setAttribute('type', 'checkbox');
+                        input[key3].setAttribute('class', 'form-control classCorporal');
+                        input[key3].setAttribute('name', value3.nombre);
+                        input[key3].setAttribute('id', value3.opcion);
+                        input[key3].setAttribute('value', value3.opcion);
+
+                        var chk = document.createElement('div');
+                        chk.setAttribute('class', 'checkbox col-md-2');
+                        chk.setAttribute('style', 'margin-top: -10px;');
+                        label2[key3] = document.createElement('label');
+                        label2[key3].htmlFor = "id";
+
+                        chk.appendChild(input[key3]);
+                        lbl.appendChild(document.createTextNode(value3.nombre));
+                        
+                        ax.appendChild(chk);
+                        ax.appendChild(lbl);
+                        row.appendChild(ax);
+                        formgroup.appendChild(row);
+                    });
+
+                    console.log(key);
+                    campos[key].appendChild(formgroup);
+                    div.appendChild(campos[key]);
+
+
+                }, "json");
+                
+                if( ((i + 1) % 2) == 0 ) {
+                        //console.log(((i + 1) % 2)+' '+i);
+                        clear[key] = document.createElement('div');
+                        clear[key].setAttribute('class', 'clearfix');
+                        div.appendChild(clear[key]);
+                }
+               
+                if(((key+1)%3)==0){
+                    //console.log(key%3);
+                    //console.log(key+' '+(key+1) + '-'+(key+1)%3);
+                    saltos[key] = document.createElement('hr');
+                    saltos[key] = document.createElement('div');
+                    saltos[key].setAttribute('class', 'clearfix');
+                    div.appendChild(saltos[key]);
+                }
+                i++;
+            });
+            
+            var clearfix = document.createElement('div');
+            clearfix.setAttribute('class', 'clearfix');
+            div.appendChild(clearfix);
+            
+            var corporal = document.createElement('div');
+            corporal.setAttribute('class', 'col-md-12 corporal');
+            corporal.setAttribute('style', 'margin-bottom: 15px;');
+            
+            var rowCorp = document.createElement('div');
+            rowCorp.setAttribute('class', 'row');
+            
+            // Elemento para registrar peso 
+            var formgroupCrpPeso = document.createElement('div');
+            formgroupCrpPeso.setAttribute('class', 'form-group col-md-4');
+            formgroupCrpPeso.setAttribute('style', 'margin-bottom: 10px;');
+            
+            var labelPeso = document.createElement('label');
+            var etiquetaPeso = document.createElement('p');
+            etiquetaPeso.setAttribute('style', 'color: #646473; font-size: 13px;');
+            etiquetaPeso.appendChild(document.createTextNode('Peso'));
+            labelPeso.appendChild(etiquetaPeso);
+            var divLabelPeso = document.createElement('div');
+            divLabelPeso.appendChild(labelPeso);
+            formgroupCrpPeso.appendChild(divLabelPeso);
+            
+            var inputPeso = document.createElement('input');
+            inputPeso.setAttribute('type', 'text');
+            inputPeso.setAttribute('class', 'form-control corporall');
+            inputPeso.setAttribute('name', 'corporal[peso]');
+            inputPeso.setAttribute('id', 'peso');
+            //inputPeso.setAttribute('value', value3.opcion);
+            formgroupCrpPeso.appendChild(inputPeso);
+            rowCorp.appendChild(formgroupCrpPeso);
+            //corporal.appendChild(rowCorp);  
+            //div.appendChild(corporal);
+            
+            // Elemento para registrar Grasa corporal
+            var formgroupCrpGrasaCorp = document.createElement('div');
+            formgroupCrpGrasaCorp.setAttribute('class', 'form-group col-md-4');
+            formgroupCrpGrasaCorp.setAttribute('style', 'margin-bottom: 10px;');
+            
+            var labelGrasaCorp = document.createElement('label');
+            var etiquetaGrasaCorp = document.createElement('p');
+            etiquetaGrasaCorp.setAttribute('style', 'color: #646473; font-size: 13px;');
+            etiquetaGrasaCorp.appendChild(document.createTextNode('Grasa corporal'));
+            labelGrasaCorp.appendChild(etiquetaGrasaCorp);
+            var divLabelGrasaCorp = document.createElement('div');
+            divLabelGrasaCorp.appendChild(labelGrasaCorp);
+            formgroupCrpGrasaCorp.appendChild(divLabelGrasaCorp);
+            
+            var inputGrasaCorp = document.createElement('input');
+            inputGrasaCorp.setAttribute('type', 'text');
+            inputGrasaCorp.setAttribute('class', 'form-control corporall');
+            inputGrasaCorp.setAttribute('name', 'corporal[grasa_corporal]');
+            inputGrasaCorp.setAttribute('id', 'grasa_corporal');
+            
+            formgroupCrpGrasaCorp.appendChild(inputGrasaCorp);
+            rowCorp.appendChild(formgroupCrpGrasaCorp);
+            //corporal.appendChild(rowCorp);  
+            //div.appendChild(corporal);
+            
+            // Elemento para registrar Agua Corporal
+            var formgroupCrpAguaCorp = document.createElement('div');
+            formgroupCrpAguaCorp.setAttribute('class', 'form-group col-md-4');
+            formgroupCrpAguaCorp.setAttribute('style', 'margin-bottom: 10px;');
+            
+            var labelAguaCorp = document.createElement('label');
+            var etiquetaAguaCorp = document.createElement('p');
+            etiquetaAguaCorp.setAttribute('style', 'color: #646473; font-size: 13px;');
+            etiquetaAguaCorp.appendChild(document.createTextNode('Agua corporal'));
+            labelAguaCorp.appendChild(etiquetaAguaCorp);
+            var divLabelAguaCorp = document.createElement('div');
+            divLabelAguaCorp.appendChild(labelAguaCorp);
+            formgroupCrpAguaCorp.appendChild(divLabelAguaCorp);
+            
+            var inputAguaCorp = document.createElement('input');
+            inputAguaCorp.setAttribute('type', 'text');
+            inputAguaCorp.setAttribute('class', 'form-control corporall');
+            inputAguaCorp.setAttribute('name', 'corporal[agua_corporal]');
+            inputAguaCorp.setAttribute('id', 'agua_corporal');
+            
+            formgroupCrpAguaCorp.appendChild(inputAguaCorp);
+            rowCorp.appendChild(formgroupCrpAguaCorp);
+            
+            // Elemento para registrar Masa musculo
+            var formgroupCrpMMusculo = document.createElement('div');
+            formgroupCrpMMusculo.setAttribute('class', 'form-group col-md-4');
+            formgroupCrpMMusculo.setAttribute('style', 'margin-bottom: 10px;');
+            
+            var labelMMusculo = document.createElement('label');
+            var etiquetaMMusculo = document.createElement('p');
+            etiquetaMMusculo.setAttribute('style', 'color: #646473; font-size: 13px;');
+            etiquetaMMusculo.appendChild(document.createTextNode('Masa musculo'));
+            labelMMusculo.appendChild(etiquetaMMusculo);
+            var divLabelMMusculo = document.createElement('div');
+            divLabelMMusculo.appendChild(labelMMusculo);
+            formgroupCrpMMusculo.appendChild(divLabelMMusculo);
+            
+            var inputMMusculo = document.createElement('input');
+            inputMMusculo.setAttribute('type', 'text');
+            inputMMusculo.setAttribute('class', 'form-control corporall');
+            inputMMusculo.setAttribute('name', 'corporal[masa_musculo]');
+            inputMMusculo.setAttribute('id', 'masa_musculo');
+            
+            formgroupCrpMMusculo.appendChild(inputMMusculo);
+            rowCorp.appendChild(formgroupCrpMMusculo);
+            
+            // Elemento para registrar Valoracion fisica
+            var formgroupCrpValFisica = document.createElement('div');
+            formgroupCrpValFisica.setAttribute('class', 'form-group col-md-4');
+            formgroupCrpValFisica.setAttribute('style', 'margin-bottom: 10px;');
+            
+            var labelValFisica = document.createElement('label');
+            var etiquetaValFisica = document.createElement('p');
+            etiquetaValFisica.setAttribute('style', 'color: #646473; font-size: 13px;');
+            etiquetaValFisica.appendChild(document.createTextNode('Valoracion Fisica'));
+            labelValFisica.appendChild(etiquetaValFisica);
+            var divLabelValFisica = document.createElement('div');
+            divLabelValFisica.appendChild(labelValFisica);
+            formgroupCrpValFisica.appendChild(divLabelValFisica);
+            
+            var inputValFisica = document.createElement('input');
+            inputValFisica.setAttribute('type', 'text');
+            inputValFisica.setAttribute('class', 'form-control corporall');
+            inputValFisica.setAttribute('name', 'corporal[valoracion_fisica]');
+            inputValFisica.setAttribute('id', 'valoracion_fisica');
+            
+            formgroupCrpValFisica.appendChild(inputValFisica);
+            rowCorp.appendChild(formgroupCrpValFisica);
+            
+            // Elemento para registrar DCI / BMR
+            var formgroupCrpDCIBMR = document.createElement('div');
+            formgroupCrpDCIBMR.setAttribute('class', 'form-group col-md-4');
+            formgroupCrpDCIBMR.setAttribute('style', 'margin-bottom: 10px;');
+            
+            var labelDCIBMR = document.createElement('label');
+            var etiquetaDCIBMR = document.createElement('p');
+            etiquetaDCIBMR.setAttribute('style', 'color: #646473; font-size: 13px;');
+            etiquetaDCIBMR.appendChild(document.createTextNode('DCI / BMR'));
+            labelDCIBMR.appendChild(etiquetaDCIBMR);
+            var divLabelDCIBMR = document.createElement('div');
+            divLabelDCIBMR.appendChild(labelDCIBMR);
+            formgroupCrpDCIBMR.appendChild(divLabelDCIBMR);
+            
+            var inputDCIBMR = document.createElement('input');
+            inputDCIBMR.setAttribute('type', 'text');
+            inputDCIBMR.setAttribute('class', 'form-control corporall');
+            inputDCIBMR.setAttribute('name', 'corporal[dci_bmr]');
+            inputDCIBMR.setAttribute('id', 'dci_bmr');
+            
+            formgroupCrpDCIBMR.appendChild(inputDCIBMR);
+            rowCorp.appendChild(formgroupCrpDCIBMR);
+            
+            // Elemento para registrar Edad metabolica
+            var formgroupCrpEdadMet = document.createElement('div');
+            formgroupCrpEdadMet.setAttribute('class', 'form-group col-md-4');
+            formgroupCrpEdadMet.setAttribute('style', 'margin-bottom: 10px;');
+            
+            var labelEdadMet = document.createElement('label');
+            var etiquetaEdadMet = document.createElement('p');
+            etiquetaEdadMet.setAttribute('style', 'color: #646473; font-size: 13px;');
+            etiquetaEdadMet.appendChild(document.createTextNode('Edad metabolica'));
+            labelEdadMet.appendChild(etiquetaEdadMet);
+            var divLabelEdadMet = document.createElement('div');
+            divLabelEdadMet.appendChild(labelEdadMet);
+            formgroupCrpEdadMet.appendChild(divLabelEdadMet);
+            
+            var inputEdadMet = document.createElement('input');
+            inputEdadMet.setAttribute('type', 'text');
+            inputEdadMet.setAttribute('class', 'form-control corporall');
+            inputEdadMet.setAttribute('name', 'corporal[edad_metabolica]');
+            inputEdadMet.setAttribute('id', 'edad_metabolica');
+            
+            formgroupCrpEdadMet.appendChild(inputEdadMet);
+            rowCorp.appendChild(formgroupCrpEdadMet);
+            
+            // Elemento para registrar Masa osea
+            var formgroupCrpMasaOsea = document.createElement('div');
+            formgroupCrpMasaOsea.setAttribute('class', 'form-group col-md-4');
+            formgroupCrpMasaOsea.setAttribute('style', 'margin-bottom: 10px;');
+            
+            var labelMasaOsea = document.createElement('label');
+            var etiquetaMasaOsea = document.createElement('p');
+            etiquetaMasaOsea.setAttribute('style', 'color: #646473; font-size: 13px;');
+            etiquetaMasaOsea.appendChild(document.createTextNode('Masa Osea'));
+            labelMasaOsea.appendChild(etiquetaMasaOsea);
+            var divLabelMasaOsea = document.createElement('div');
+            divLabelMasaOsea.appendChild(labelMasaOsea);
+            formgroupCrpMasaOsea.appendChild(divLabelMasaOsea);
+            
+            var inputMasaOsea = document.createElement('input');
+            inputMasaOsea.setAttribute('type', 'text');
+            inputMasaOsea.setAttribute('class', 'form-control corporall');
+            inputMasaOsea.setAttribute('name', 'corporal[masa_osea]');
+            inputMasaOsea.setAttribute('id', 'masa_osea');
+            
+            formgroupCrpMasaOsea.appendChild(inputMasaOsea);
+            rowCorp.appendChild(formgroupCrpMasaOsea);
+            
+            // Elemento para registrar Grasa visceral
+            var formgroupCrpGrVisceral = document.createElement('div');
+            formgroupCrpGrVisceral.setAttribute('class', 'form-group col-md-4');
+            formgroupCrpGrVisceral.setAttribute('style', 'margin-bottom: 10px;');
+            
+            var labelGrVisceral = document.createElement('label');
+            var etiquetaGrVisceral = document.createElement('p');
+            etiquetaGrVisceral.setAttribute('style', 'color: #646473; font-size: 13px;');
+            etiquetaGrVisceral.appendChild(document.createTextNode('Grasa visceral'));
+            labelGrVisceral.appendChild(etiquetaGrVisceral);
+            var divLabelGrVisceral = document.createElement('div');
+            divLabelGrVisceral.appendChild(labelGrVisceral);
+            formgroupCrpGrVisceral.appendChild(divLabelGrVisceral);
+            
+            var inputGrVisceral = document.createElement('input');
+            inputGrVisceral.setAttribute('type', 'text');
+            inputGrVisceral.setAttribute('class', 'form-control corporall');
+            inputGrVisceral.setAttribute('name', 'corporal[grasa_visceral]');
+            inputGrVisceral.setAttribute('id', 'grasa_visceral');
+            
+            formgroupCrpGrVisceral.appendChild(inputGrVisceral);
+            rowCorp.appendChild(formgroupCrpGrVisceral);
+            
+            corporal.appendChild(rowCorp);  
+            div.appendChild(corporal);
+            
+            var clearfix = document.createElement('div');
+            clearfix.setAttribute('class', 'clearfix');
+            div.appendChild(clearfix);
+            
+            validarConsultaEstetica();
+            validarConsulta();
+        } // Fin de mostrarCampos
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
 
     jQuery(document).ready(function() {
         
@@ -1972,6 +2584,16 @@
             show_clear_date:false,
             show_select_today: "Hoy",
         });
+            
+            
+            
+        {#$(document).on('click','#historialPrevPDF', function(){
+            
+            return false;            
+        });#}
+            
+            
+            
             
         /**********************************************
          * Metodos de guardar con ajax
@@ -2011,13 +2633,16 @@
                         if(data==0){
                             var iTel='<i class="fa fa-phone"></i>';
                             var dir='<i class="fa fa-map-marker fa-fw"></i>';
+                            var ocup = '<i class="fa fa-briefcase"></i>';
                             $('#telefono').html(iTel+" "+telefono1);
                             $('#direccionD').html(dir+" "+direccion);
 
+                            
                             $('#nombrePaciente').html(nombres+" "+apellidos);
-
+                            $('#ocupacionPaciente').html(ocup+" "+ocupacion);
+                            bootbox.alert("Cambios guardados!", function() {});
                         }
-                        bootbox.alert("Cambios guardados!", function() {});
+                        
                         {#console.log("pagina actual: "+data);
                         console.log("Inicio de registro: "+data.inicioRegistro);#}
                     },
@@ -2027,6 +2652,66 @@
                 }
             });
         });
+        
+        
+        
+        
+        $(document).on('click','#guardarNuevoConsulta', function(){
+            var id = $('#idPaciente').val();
+            var medico = $('#medico_consulta').val();
+            var tratamiento = $('#tratamiento_consulta').val();
+            var tipoConsulta = $('#tipo_consulta').val();
+            var sucursal = $('#sucursal_consulta').val();
+            var observaciones = $('#observacionConsulta').val();
+            
+            //alert(medico+","+tratamiento+","+tipoConsulta+","+observaciones+","+sucursal);
+            
+            
+            
+            
+            
+            //return false;
+            
+            if(tratamiento==0){
+                bootbox.alert("Debe seleccionar un tratamiento!", function() {});
+            }
+            else{
+                if(tipoConsulta==0){
+                    bootbox.alert("Debe seleccionar un tipo de consulta!", function() {});
+                }
+                else{
+                        bootbox.confirm("Desea registrar esta consulta para el paciente?", function(result) {
+                            {#Example.show("Confirm result: "+result);#}
+                            if(result){
+                                //console.log(result);
+                                $.ajax({
+                                    data:{id:id,medico:medico,tratamiento:tratamiento,tipoConsulta:tipoConsulta,sucursal:sucursal,observaciones:observaciones},
+                                    url:"{{path('admin_consulta_guardar_ajax')}}",
+                                    type: "post",
+                                    success: function (data) {
+                                            //inicio = data.inicio++;
+                                            if(data!=0){
+                                                $('#idConsulta').val(data);
+                                                console.log(data);
+                                                bootbox.alert("Consulta registrada!", function() {});
+                                                console.log($('#idConsulta').val());
+                                            }
+                                        },
+                                    error: function (data) {
+
+                                    }
+                                });
+                            }
+                            else{
+                                //console.log(result);
+                            }
+                        }); 
+
+                }
+            }
+            
+        });
+        
         
         $(document).on('click','#guardarAntecedentes', function(){
             var id = $('#idPaciente').val();
@@ -2043,9 +2728,9 @@
                 success: function (data) {
                         //inicio = data.inicio++;
                         if(data==0){
-                            
+                            bootbox.alert("Cambios guardados!", function() {});
                         }
-                        bootbox.alert("Cambios guardados!", function() {});
+                        
                         {#console.log("pagina actual: "+data);
                         console.log("Inicio de registro: "+data.inicioRegistro);#}
                     },
@@ -2086,12 +2771,12 @@
                 success: function (data) {
                         //inicio = data.inicio++;
                         if(data==0){
-                            
+                            bootbox.alert("Cambios guardados!", function() {});
 
                         }
 {#                        console.log("pagina actual: "+data);
                         console.log("Inicio de registro: "+data.inicioRegistro);#}
-                        bootbox.alert("Cambios guardados!", function() {});
+                        
                     },
                 error: function (data) {
 
@@ -2100,13 +2785,75 @@
             });
         });
         
-        $(document).on("change","#file-input",function(){
+        
+        
+        
+        
+        $(document).on('click','#guardarPlantilla', function(){
+            var id = $('#idPaciente').val();
+            var idConsulta = $('#idConsulta').val();
+            
+{#            alert(direccion);#}
+            var valores = new Array();
+            var idParameters = new Array();
+            var idPlantilla= $('#dgplusbellebundle_consulta_plantilla').val();
+            $('.classPlantilla').each(function(index,element){
+                var valor = $(this).val();
+                var ids = $(this).attr('id');
+                valores.push(valor);
+                idParameters.push(ids);
+                
+            });
+            //alert(fechaNacimiento);
+            
+{#            url:"{{path('admin_consulta_insert_plantilla',{'id':id})}},#}
+            alert(idConsulta);
+            if(idConsulta!=''){
+                $.ajax({
+                    data:{id:id,valores:valores,idConsulta:idConsulta,idParameters:idParameters,idPlantilla:idPlantilla
+                    },
+
+                    url:"{{path('admin_consulta_insert_plantilla')}}",
+
+                    type: "post",
+                    success: function (data) {
+                            //inicio = data.inicio++;
+                            if(data==0){
+                                var iTel='<i class="fa fa-phone"></i>';
+                                var dir='<i class="fa fa-map-marker fa-fw"></i>';
+                                var ocup = '<i class="fa fa-briefcase"></i>';
+                                $('#telefono').html(iTel+" "+telefono1);
+                                $('#direccionD').html(dir+" "+direccion);
+
+
+                                $('#nombrePaciente').html(nombres+" "+apellidos);
+                                $('#ocupacionPaciente').html(ocup+" "+ocupacion);
+                                bootbox.alert("Cambios guardados!", function() {});
+                            }
+
+                            {#console.log("pagina actual: "+data);
+                            console.log("Inicio de registro: "+data.inicioRegistro);#}
+                        },
+                    error: function (data) {
+
+
+                    }
+                });
+            }
+        });
+        
+        
+        
+        
+        
+        
+        $(document).on("click","#guardarImagenes",function(){
         $("#prev").show();
         
         $("#saveImagen").hide();
         
         //obtenemos un array con los datos del archivo
-        var file = $(this)[0].files[0];
+        var file = $('#file-input')[0].files[0];
         //obtenemos el nombre del archivo
         var fileName = file.name;
         //obtenemos la extensión del archivo
@@ -2136,36 +2883,28 @@
                     
                      var pesoKb=(fileSize/1024);
                      if (pesoKb<=1024){
-
-                        
                         var frm = new FormData($("#formImagen")[0]);
-                      
                              if (flag != false) {
+                                $.ajax({
+                                    data:{id:id,frm:frm},
+                                    url:Routing.generate('ingresar_foto_persona'),
+                                    type: 'POST',
+                                    dataType: 'json',
 
-                                $.ajax({ 
-                                       data:frm,
-                                       url:Routing.generate('ingresar_foto_persona'),
-                                       type: 'POST',
-                                       dataType: 'json',
-                                      
-                                       cache: false,
-                                       contentType: false,
-                                       processData: false,
+                                    cache: false,
+                                    contentType: false,
+                                    processData: false,
 
-                                      
-                                       success: function(data){
-                                           
+                                    success: function(data){
                                         $("#prev").attr('src', "/abgsistema/web/"+data.direccion);
-                                        
-                                            
-                                             
-                                       }
-                                             
-                                             
-                                     });
-
-
-                                 }
+                                        $('#file-input').val('');
+                                        bootbox.alert('Fotos subidas con éxito!');
+                                    },
+                                    error: function(data){
+                                        bootbox.alert('Hubo un error al subir las fotos');
+                                    }
+                                });
+                            }
                         }
                         else{
                             console.log(pesoKb);
@@ -2200,8 +2939,8 @@
                 },
                 processResults: function (data, params) {
                     var select2Data = $.map(data.data, function (obj) {
-                        obj.id = obj.pacienteid;
-                        obj.text = obj.nombres + ' ' + obj.apelllidos;
+                        obj.id = obj.tratamientoid;
+                        obj.text = obj.nombre;
 
                         return obj;
                     });
@@ -2223,8 +2962,13 @@
         
         
         $('#tipo_consulta').select2();
-        $('#tratamiento_consulta').select2();
+        $('#medico_consulta').select2();
         $('#sucursal_consulta').select2();
+        
+        $('#selectPlantillas').select2();
+        
+        $('#estadoCivil').select2();
+        $('#sexo').select2();
         
         $('#dgplusbellebundle_consulta_tratamiento').select2();
         $('#dgplusbellebundle_consulta_tipoConsulta').select2();
@@ -2278,6 +3022,40 @@
 
             return false;
         });
+        
+        
+        $('#tratamiento_consulta').select2({
+                ajax: {
+                    url: "{{path('busqueda_tratamiento_select')}}",
+                    dataType: 'json',
+                    delay: 250,
+                    data: function (params) {
+                      return {
+                        q: params.term,
+                        page: params.page
+                      };
+                    },
+                    processResults: function (data, params) {
+                        var select2Data = $.map(data.data, function (obj) {
+                            obj.id = obj.tratamientoid;
+                            obj.text = obj.nombre;
+
+                            return obj;
+                        });
+
+                        return {
+                            results: select2Data
+                        };
+                    },
+                    cache: true
+                },
+                escapeMarkup: function (markup) { return markup; },
+                minimumInputLength: 1,
+                templateResult: formatRepo,
+                templateSelection: formatRepoSelection
+            });
+            
+            
         
         // Si se hace click en ver vista previa en pdf de la consulta de estetica
         $(document).on('click','#esteticaPrevPDF',function(){
@@ -2702,5 +3480,7 @@ if(editar!='editar_usuario'){
                 },
             }); 
         });
-   </script>
+    </script>
+    <script src="//cdn.tinymce.com/4/tinymce.min.js"></script>
+    <script>tinymce.init({ selector:'textarea' });</script>
 {% endblock %} 

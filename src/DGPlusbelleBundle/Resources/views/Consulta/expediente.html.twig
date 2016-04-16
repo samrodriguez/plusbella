@@ -186,6 +186,7 @@
                 <th>Transacción</th>
                 <th>Atendido por</th>
                 <th>Se realizó</th>
+                <th>Detalles</th>
                 {#<th>DUI</th>#}
                 {#<th>Teléfono</th>
                 <th>Email</th>#}
@@ -521,6 +522,7 @@
                         { "data": "transaccion" },
                         { "data": "atendido" },
                         { "data": "realizado" },
+                        { "data": "detalles" }
                         {#{ "data": "dui" },#}
                         {#{ "data": "telefono" },
                         { "data": "email" },#}
@@ -622,7 +624,7 @@
                                         $('#edad').html(edad+" N/A");
                                     }
                                     else{
-                                        $('#edad').html(edad+" "+data.data[0].fechaNacimiento);
+                                        $('#edad').html(edad+" "+data.edad);
                                     }
                                     
                                 {#<i class="fa fa-birthday-cake"></i>#}

@@ -690,7 +690,7 @@ class PacienteController extends Controller
         //var_dump($busqueda);
         //die();
         $arrayFiltro = explode(' ',$busqueda['value']);
-        
+        //var_dump($longitud);
         //echo count($arrayFiltro);
         $busqueda['value'] = str_replace(' ', '%', $busqueda['value']);
         if($busqueda['value']!=''){
@@ -723,9 +723,12 @@ class PacienteController extends Controller
             $stmt = $em->getConnection()->prepare($sql);
             $stmt->execute();
             $paciente['data'] = $stmt->fetchAll();
-            $paciente['recordsTotal'] = $paciente['data'];
+            $paciente['recordsTotal'] = count($paciente['data']);
             
             $paciente['recordsFiltered']= count($paciente['data']);
+
+            
+            
         }
         else{
 //            $sql = "SELECT * FROM listadoexpediente ORDER BY fecha DESC LIMIT ".$start.",".$longitud;
@@ -740,7 +743,7 @@ class PacienteController extends Controller
             $paciente['data'] = array();
 //            $paciente['recordsTotal'] = count($paciente['data']);
         }
-        
+        //var_dump($paciente);
         
         
         //$longitud = $request->query->get('length');
@@ -797,19 +800,44 @@ class PacienteController extends Controller
         //var_dump($longitud);
         
         $em = $this->getDoctrine()->getEntityManager();
-        $dql = "SELECT pac.ocupacion,per.direccion,per.telefono,per.nombres as nombres,per.apellidos as apellidos, DATE_FORMAT(pac.fechaNacimiento,'%d-%m-%Y'), per.direccion "
+        $dql = "SELECT pac.ocupacion,per.direccion,per.telefono,per.nombres as nombres,per.apellidos as apellidos, DATE_FORMAT(pac.fechaNacimiento,'%Y-%m-%d') as fechaNacimiento, per.direccion, "
+                        . " CONCAT('<a href=>','Ver','</a>') as detalles "
                         . "FROM DGPlusbelleBundle:Expediente exp "
                         . "JOIN exp.paciente pac "
                         . "JOIN pac.persona per "
                         . "WHERE exp.numero=:busqueda";
         
         $paciente['data'] = $em->createQuery($dql)
-                ->setParameters(array('busqueda'=>strtoupper($busqueda)))
+                ->setParameters(array('busqueda'=>strtoupper($busqueda))) 
                 ->getResult();
-            
-        //var_dump(count($paciente['data']));
+        
+        //var_dump($paciente);
+        //$paciente['edad']=$paciente['data']['fechaNacimiento'];    
+        
+        //var_dump($paciente['data']);
+        
+        if(count($paciente['data'])!=0){
+            if($paciente['data'][0]['fechaNacimiento']!=''){
+                    $fecha = $paciente['data'][0]['fechaNacimiento'];
+
+                    //Calculo de la edad
+                    list($Y,$m,$d) = explode("-",$fecha);
+                    $edad = date("md") < $m.$d ? date("Y")-$Y-1 : date("Y")-$Y;       
+                    $edad = $edad. " años";
+            }
+            else{
+                $edad = "No se ha ingresado fecha de nacimiento";
+            }
+            $paciente['edad'] = $edad;
+        }
+        else{
+            $paciente['edad'] = 0;
+        }
+        
+                //var_dump(count($paciente['data']));
         //die();
         //$data = new \stdClass();
+        
         if(count($paciente['data']==0)){
             //$data->estado = true;//vacio
 //            $data->nombre = $paciente['data']["nombres"]. ' '. $paciente['data']["apellidos"];
