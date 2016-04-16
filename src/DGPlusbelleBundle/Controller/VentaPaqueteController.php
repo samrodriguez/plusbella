@@ -404,7 +404,113 @@ class VentaPaqueteController extends Controller
         } 
    } 
     
+   /**
+    * Ajax utilizado para buscar informacion del producto
+    *  
+    * @Route("/registro/nueva_venta/set", name="admin_registro_nueva_venta_paquete")
+    */
+    public function registrarNuevaVentaPaqueteAction()
+    {
+        $isAjax = $this->get('Request')->isXMLhttpRequest();
+        if($isAjax){
+            $em = $this->getDoctrine()->getManager();
+            $usuario= $this->get('security.token_storage')->getToken()->getUser();
+            
+            $id = $this->get('request')->request->get('id');
+            $paqueteId = $this->get('request')->request->get('paquete');
+            $sucursalId = $this->get('request')->request->get('sucursal');
+            $empleadoId = $this->get('request')->request->get('empleado');
+            $costo = $this->get('request')->request->get('costo');
+            $cuotas = $this->get('request')->request->get('cuotas');
+            $tratamientos = $this->get('request')->request->get('tratamientos');
+            $sesiones = $this->get('request')->request->get('sesiones');
+            $descuentoId = $this->get('request')->request->get('descuento');
+            
+            $ventaPaquete = new VentaPaquete();
+            
+            $paciente = $em->getRepository('DGPlusbelleBundle:Paciente')->find($id);
+            $personaPaciente = $em->getRepository('DGPlusbelleBundle:Persona')->find($paciente->getPersona()->getId());
+            $ventaPaquete->setPaciente($personaPaciente);
+            
+            if(!is_null($empleadoId)){
+                $empleado = $em->getRepository('DGPlusbelleBundle:Empleado')->find($empleadoId);
+                $personaEmpleado = $em->getRepository('DGPlusbelleBundle:Persona')->find($empleado->getPersona()->getId());
+                $ventaPaquete->setEmpleado($personaEmpleado);
+            }
+            
+            $ventaPaquete->setCosto($costo);
+            $ventaPaquete->setCuotas($cuotas);
+            
+            $paquete = $em->getRepository('DGPlusbelleBundle:Paquete')->find($paqueteId);
+            $ventaPaquete->setPaquete($paquete);
+           
+            $sucursal = $em->getRepository('DGPlusbelleBundle:Sucursal')->find($sucursalId);
+            $ventaPaquete->setSucursal($sucursal);
+            
+            if(!is_null($descuentoId)){
+                $descuento = $em->getRepository('DGPlusbelleBundle:Descuento')->find($descuentoId);
+                $ventaPaquete->setDescuento($descuento);
+            }
+            
+            $ventaPaquete->setUsuario($usuario);
+            $ventaPaquete->setFechaRegistro(new \DateTime('now'));
+            $ventaPaquete->setFechaVenta(new \DateTime('now'));
+            $ventaPaquete->setEstado(1);
+            
+            $em->persist($ventaPaquete);
+            $em->flush();
+            
+            $paqueteTratamiento = $em->getRepository('DGPlusbelleBundle:PaqueteTratamiento')->findBy(array('paquete' => $ventaPaquete->getPaquete()->getId()));
+            
+            foreach($paqueteTratamiento as $pt){
+                $seguimiento = new SeguimientoPaquete;
+                $seguimiento->setVentaPaquete($ventaPaquete);
+                $seguimiento->setNumSesion(0);
+                $seguimiento->setTratamiento($pt->getTratamiento($ventaPaquete));
+                $em->persist($seguimiento);
+                $em->flush();
+            }
+            
+            $nomTratamientos = array();
+            foreach($tratamientos as $key => $value){
+                $detalleVenta = new \DGPlusbelleBundle\Entity\DetalleVentaPaquete();
+                        
+                $paqT = $em->getRepository('DGPlusbelleBundle:PaqueteTratamiento')->find($value);
 
+                $detalleVenta->setTratamiento($paqT->getTratamiento());
+                $detalleVenta->setVentaPaquete($ventaPaquete);
+                $detalleVenta->setNumSesiones($sesiones[$key]);
+
+                $em->persist($detalleVenta);
+                $em->flush();
+                
+                $nomTratamientos[$key] = $detalleVenta->getTratamiento()->getNombre();
+            }
+            
+            $ventaPaqueteTratamientos = array(
+                                        'id' => $ventaPaquete->getId(), 
+                                        'costo' => $ventaPaquete->getCosto(), 
+                                        'sesiones' => $sesiones,
+                                        'tratamientos' => $tratamientos,
+                                        'nomTratamientos' => $nomTratamientos,
+                                        'cuotas' => $ventaPaquete->getCuotas()
+                                    );
+            
+            $this->get('bitacora')->escribirbitacora("Se registro una nueva venta del paquete " . $paquete->getNombre(), $usuario->getId());
+            
+            $response = new JsonResponse();
+            $response->setData(array(
+                                'exito'       => '1',
+                                'paquete' => $paquete->getNombre(),
+                                'ventaPaquete' => $ventaPaquete->getId(),
+                                'ventaPaqueteTratamientos' => $ventaPaqueteTratamientos
+                               ));  
+            
+            return $response; 
+        } else {    
+            return new Response('0');              
+        } 
+   }
 
 
 }

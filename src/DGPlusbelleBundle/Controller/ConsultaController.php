@@ -1226,7 +1226,7 @@ class ConsultaController extends Controller
         $idPacient= $request->get('id');  
 
         $idPaciente=  substr($idPacient, 1);
-        $consultas = $em->getRepository('DGPlusbelleBundle:Consulta')->findBy(array('paciente'=>$idPaciente));
+        //$consultas = $em->getRepository('DGPlusbelleBundle:Consulta')->findBy(array('paciente'=>$idPaciente));
         $paciente = $em->getRepository('DGPlusbelleBundle:Paciente')->find($idPaciente);
         
         $edad="";
@@ -1271,88 +1271,88 @@ class ConsultaController extends Controller
 //        $paciente = $em->getRepository('DGPlusbelleBundle:Paciente')->find($idPaciente);
         $CompraPaciente = $em->getRepository('DGPlusbelleBundle:Paciente')->find($idPaciente);
         $paciente = $CompraPaciente;
-        $paquetes = $em->getRepository('DGPlusbelleBundle:VentaPaquete')->findBy(array('paciente' => $CompraPaciente->getPersona()->getId()));
+        //$paquetes = $em->getRepository('DGPlusbelleBundle:VentaPaquete')->findBy(array('paciente' => $CompraPaciente->getPersona()->getId()));
 
-        $tratamientos= $em->getRepository('DGPlusbelleBundle:PersonaTratamiento')->findBy(array('paciente' => $CompraPaciente->getPersona()->getId()));
+//        $tratamientos= $em->getRepository('DGPlusbelleBundle:PersonaTratamiento')->findBy(array('paciente' => $CompraPaciente->getPersona()->getId()));
         
-        $dql = "SELECT count(vp) FROM DGPlusbelleBundle:VentaPaquete vp"
-               . " WHERE vp.paciente=:paciente";
-        $totalPaquetes = $em->createQuery($dql)
-                ->setParameter('paciente', $CompraPaciente->getPersona())
-                ->getArrayResult();
+//        $dql = "SELECT count(vp) FROM DGPlusbelleBundle:VentaPaquete vp"
+//               . " WHERE vp.paciente=:paciente";
+//        $totalPaquetes = $em->createQuery($dql)
+//                ->setParameter('paciente', $CompraPaciente->getPersona())
+//                ->getArrayResult();
         
-        $dql = "SELECT count(c) FROM DGPlusbelleBundle:PersonaTratamiento c"
-               . " WHERE c.paciente=:paciente";
-        $totalTratamientos = $em->createQuery($dql)
-                ->setParameter('paciente', $CompraPaciente->getPersona()->getId())
-                ->getArrayResult();
+//        $dql = "SELECT count(c) FROM DGPlusbelleBundle:PersonaTratamiento c"
+//               . " WHERE c.paciente=:paciente";
+//        $totalTratamientos = $em->createQuery($dql)
+//                ->setParameter('paciente', $CompraPaciente->getPersona()->getId())
+//                ->getArrayResult();
         
-        $empleados=$this->verificarComision(null,null);
+        //$empleados=$this->verificarComision(null,null);
         
         //$seguimientopaquete = $em->getRepository('DGPlusbelleBundle:SeguimientoPaquete')->findBy(array('idVentaPaquete' => 30));
         $regnoeditpaquete = array();
-        foreach($paquetes as $row){
-            $c=0;
-            $seguimientopaquete = $em->getRepository('DGPlusbelleBundle:SeguimientoPaquete')->findBy(array('idVentaPaquete' => $row->getId()));
-            foreach($seguimientopaquete as $reg){
-                if($reg->getnumSesion()!=0){
-                    $c++;
-                }
-                
-                //array_push($regnoedit, array('idpaquete'=>$row->getId()));                
-            }
-            
-            if($c!=0){
-                    array_push($regnoeditpaquete, array('idpaquete'=>$row->getId()));
-            }
-            
-        }
-        $rsm2 = new ResultSetMapping();
-        
-        $sql2 = "SELECT vp.id paquete, cast(sum(abo.monto) as decimal(36,2)) abonos "
-                . "FROM abono abo RIGHT OUTER JOIN venta_paquete vp on abo.venta_paquete = vp.id "
-                . "WHERE vp.paciente=:paciente "
-                . "GROUP BY vp.id";
-        
-        $rsm2->addScalarResult('paquete','paquete');
-        //$rsm2->addScalarResult('abono','abono');
-        $rsm2->addScalarResult('abonos','abonos');
+//        foreach($paquetes as $row){
+//            $c=0;
+//            $seguimientopaquete = $em->getRepository('DGPlusbelleBundle:SeguimientoPaquete')->findBy(array('idVentaPaquete' => $row->getId()));
+//            foreach($seguimientopaquete as $reg){
+//                if($reg->getnumSesion()!=0){
+//                    $c++;
+//                }
+//                
+//                array_push($regnoedit, array('idpaquete'=>$row->getId()));                
+//            }
+//            
+//            if($c!=0){
+//                    array_push($regnoeditpaquete, array('idpaquete'=>$row->getId()));
+//            }
+//            
+//        }
+//        $rsm2 = new ResultSetMapping();
+//        
+//        $sql2 = "SELECT vp.id paquete, cast(sum(abo.monto) as decimal(36,2)) abonos "
+//                . "FROM abono abo RIGHT OUTER JOIN venta_paquete vp on abo.venta_paquete = vp.id "
+//                . "WHERE vp.paciente=:paciente "
+//                . "GROUP BY vp.id";
+//        
+//        $rsm2->addScalarResult('paquete','paquete');
+//        $rsm2->addScalarResult('abono','abono');
+//        $rsm2->addScalarResult('abonos','abonos');
+//
+//        $abonosPaq = $em->createNativeQuery($sql2, $rsm2)
+//                ->setParameter('paciente', $CompraPaciente->getPersona()->getId())
+//                ->getResult();
 
-        $abonosPaq = $em->createNativeQuery($sql2, $rsm2)
-                ->setParameter('paciente', $CompraPaciente->getPersona()->getId())
-                ->getResult();
-
-        $rsm3 = new ResultSetMapping();
-        
-        $sql3 = "select p.id tratamiento, cast(sum(abo.monto) as decimal(36,2)) abonos "
-                . "FROM abono abo RIGHT OUTER JOIN persona_tratamiento p on abo.persona_tratamiento = p.id "
-                . "WHERE p.paciente=:paciente "
-                . "GROUP BY p.id";
-
-        $rsm3->addScalarResult('tratamiento','tratamiento');
-        $rsm3->addScalarResult('abonos','abonos');
-
-        $abonosTrata = $em->createNativeQuery($sql3, $rsm3)
-                ->setParameter('paciente', $CompraPaciente->getPersona()->getId())
-                ->getResult();
+//        $rsm3 = new ResultSetMapping();
+//        
+//        $sql3 = "select p.id tratamiento, cast(sum(abo.monto) as decimal(36,2)) abonos "
+//                . "FROM abono abo RIGHT OUTER JOIN persona_tratamiento p on abo.persona_tratamiento = p.id "
+//                . "WHERE p.paciente=:paciente "
+//                . "GROUP BY p.id";
+//
+//        $rsm3->addScalarResult('tratamiento','tratamiento');
+//        $rsm3->addScalarResult('abonos','abonos');
+//
+//        $abonosTrata = $em->createNativeQuery($sql3, $rsm3)
+//                ->setParameter('paciente', $CompraPaciente->getPersona()->getId())
+//                ->getResult();
         //$seguimientotratamiento= $em->getRepository('DGPlusbelleBundle:PersonaTratamiento')->findBy(array('idVentaPaquete' => 30));
 
         $regnoedittratamiento = array();
-        foreach($tratamientos as $row){
-            $c=0;
-            $seguimientopaquete = $em->getRepository('DGPlusbelleBundle:SeguimientoTratamiento')->findBy(array('idPersonaTratamiento' => $row->getId()));
-            foreach($seguimientopaquete as $reg){
-                if($reg->getnumSesion()!=0){
-                    $c++;
-                }
-                
-                //array_push($regnoedit, array('idpaquete'=>$row->getId()));
-            }
-            
-            if($c!=0){
-                    array_push($regnoedittratamiento, array('idpersonatrat'=>$row->getId()));
-            }            
-        }
+//        foreach($tratamientos as $row){
+//            $c=0;
+//            $seguimientopaquete = $em->getRepository('DGPlusbelleBundle:SeguimientoTratamiento')->findBy(array('idPersonaTratamiento' => $row->getId()));
+//            foreach($seguimientopaquete as $reg){
+//                if($reg->getnumSesion()!=0){
+//                    $c++;
+//                }
+//                
+//                array_push($regnoedit, array('idpaquete'=>$row->getId()));
+//            }
+//            
+//            if($c!=0){
+//                    array_push($regnoedittratamiento, array('idpersonatrat'=>$row->getId()));
+//            }            
+//        }
         //var_dump($paciente);
         $ventaPaquetes = $em->getRepository('DGPlusbelleBundle:Paquete')->findBy(array('estado' => true));
         $ventaTratamientos = $em->getRepository('DGPlusbelleBundle:Tratamiento')->findBy(array('estado' => true));
@@ -1367,16 +1367,16 @@ class ConsultaController extends Controller
         return array(
             //'entities' => $entities,
             //'entity' => $entity,
-            'totalTratamientos'=> $totalTratamientos[0][1],//grafica de estadisticas
-            'totalPaquetes'=> $totalPaquetes[0][1],//grafica de estadisticas
-            'totalConsultas'=> count($consultas),//grafica de estadisticas
+            //'totalTratamientos'=> $totalTratamientos[0][1],//grafica de estadisticas
+            //'totalPaquetes'=> $totalPaquetes[0][1],//grafica de estadisticas
+            //'totalConsultas'=> count($consultas),//grafica de estadisticas
             'edad' => $edad,
-            'consultas' => $consultas,
-            'paquetes' => $paquetes,
-            'abonosPaq' => $abonosPaq,
-            'empleados' => $empleados,
-            'tratamientos' => $tratamientos,
-            'abonosTrata' => $abonosTrata,
+            //'consultas' => $consultas,
+            //'paquetes' => $paquetes,
+            //'abonosPaq' => $abonosPaq,
+            //'empleados' => $empleados,
+            //'tratamientos' => $tratamientos,
+            //'abonosTrata' => $abonosTrata,
             'paciente' => $paciente,
             'expediente'=>$expnum,
             'paquetesnoedit'=>$regnoeditpaquete,

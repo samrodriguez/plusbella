@@ -307,6 +307,89 @@ class PersonaTratamientoController extends Controller
         } else {    
             return new Response('0');              
         } 
-   }  
+   }
+   
+   /**
+    * Ajax utilizado para buscar informacion del producto
+    *  
+    * @Route("/registro/neva_venta/set", name="admin_registro_nueva_venta_tratamiento")
+    */
+    public function registrarNuevaVentaTratamientoAction()
+    {
+        $isAjax = $this->get('Request')->isXMLhttpRequest();
+        if($isAjax){
+            $em = $this->getDoctrine()->getManager();
+            $usuario= $this->get('security.token_storage')->getToken()->getUser();
+            
+            $id = $this->get('request')->request->get('id');
+            $tratamientoId = $this->get('request')->request->get('tratamiento');
+            $sucursalId = $this->get('request')->request->get('sucursal');
+            $empleadoId = $this->get('request')->request->get('empleado');
+            $costo = $this->get('request')->request->get('costo');
+            $cuotas = $this->get('request')->request->get('cuotas');
+            $sesiones = $this->get('request')->request->get('sesiones');
+            $descuentoId = $this->get('request')->request->get('descuento');
+            
+            
+            $personaTratamiento = new PersonaTratamiento();
+            
+            $paciente = $em->getRepository('DGPlusbelleBundle:Paciente')->find($id);
+            $personaPaciente = $em->getRepository('DGPlusbelleBundle:Persona')->find($paciente->getPersona()->getId());
+            $personaTratamiento->setPaciente($personaPaciente);
+            
+            if(!is_null($empleadoId)){
+                $empleado = $em->getRepository('DGPlusbelleBundle:Empleado')->find($empleadoId);
+                $personaEmpleado = $em->getRepository('DGPlusbelleBundle:Persona')->find($empleado->getPersona()->getId());
+                $personaTratamiento->setEmpleado($personaEmpleado);
+            }
+            
+            $personaTratamiento->setCostoConsulta($costo);
+            $personaTratamiento->setCuotas($cuotas);
+            $personaTratamiento->setNumSesiones($sesiones);
+            
+            $tratamiento = $em->getRepository('DGPlusbelleBundle:Tratamiento')->find($tratamientoId);
+            $personaTratamiento->setTratamiento($tratamiento);
+           
+            $sucursal = $em->getRepository('DGPlusbelleBundle:Sucursal')->find($sucursalId);
+            $personaTratamiento->setSucursal($sucursal);
+            
+            if(!is_null($descuentoId)){
+                $descuento = $em->getRepository('DGPlusbelleBundle:Descuento')->find($descuentoId);
+                $personaTratamiento->setDescuento($descuento);
+            }
+            
+            $personaTratamiento->setFechaRegistro(new \DateTime('now'));
+            $personaTratamiento->setFechaVenta(new \DateTime('now'));
+            
+            $em->persist($personaTratamiento);
+            $em->flush();
+            
+            $seguimiento = new SeguimientoTratamiento;
+            $seguimiento->setPersonaTratamiento($personaTratamiento);
+            $seguimiento->setNumSesion(0);
+            $em->persist($seguimiento);
+            $em->flush();
+            
+            $ventaTratamiento = array(
+                                        'id' => $personaTratamiento->getId(), 
+                                        'costo' => $personaTratamiento->getCostoConsulta(), 
+                                        'sesiones' => $personaTratamiento->getNumSesiones(), 
+                                        'cuotas' => $personaTratamiento->getCuotas()
+                                    );
+            
+            $this->get('bitacora')->escribirbitacora("Se registro una nueva venta del tratamiento " . $tratamiento->getNombre(), $usuario->getId());
+            
+            $response = new JsonResponse();
+            $response->setData(array(
+                                'exito'       => '1',
+                                'personaTratamiento' => $ventaTratamiento,
+                                'tratamiento' => $tratamiento->getNombre()
+                            )); 
+            
+            return $response; 
+        } else {    
+            return new Response('0');              
+        } 
+   }
     
 }
