@@ -1808,7 +1808,8 @@ class ReporteController extends Controller
         //var_dump($valores);
         
         $paciente = $em->getRepository('DGPlusbelleBundle:Paciente')->find($nombre);
-        //var_dump($paciente->getPersona());
+        //var_dump($paciente);
+        //die();
         //var_dump($id);
         $plantilla = $em->getRepository('DGPlusbelleBundle:DetallePlantilla')->findBy(array('plantilla'=>$id));
         //var_dump($plantilla);
@@ -1819,7 +1820,7 @@ class ReporteController extends Controller
         $titulo = $plantilla[0]->getPlantilla()->getNombre();
         $consulta="prueba";
         $this->get('fpdf_printer')->generarplantillaTempPdf($titulo, $paciente, $plantilla, $consulta, $fecha, $logo, $valores);
-        die();
+        
         
 
 //        foreach($parametros as $p){
@@ -1929,6 +1930,7 @@ class ReporteController extends Controller
         
         $pacienteId = $request->get('paciente');
         $sucursalId = $request->get('sucursal');
+//        var_dump($sucursalId);
         $valores = $request->get('valores');
         $esteticaId = $request->get('estetica');
         
