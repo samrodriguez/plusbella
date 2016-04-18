@@ -10,6 +10,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use DGPlusbelleBundle\Entity\Consulta;
+use DGPlusbelleBundle\Entity\Signos;
 use DGPlusbelleBundle\Entity\Expediente;
 use DGPlusbelleBundle\Entity\HistorialClinico;
 use DGPlusbelleBundle\Entity\HistorialConsulta;
@@ -641,8 +642,6 @@ class ConsultaController extends Controller
                     'choices'  => array('1' => 'Sí', '0' => 'No'),
                     'multiple' => false,
                     'expanded'=>'true'
-                   
-                 
                 ));
             
             $form->add('estetica', 'entity', array('required'=>false,
@@ -768,6 +767,9 @@ class ConsultaController extends Controller
             
             $plantillas = $em->getRepository('DGPlusbelleBundle:Plantilla')->findAll();
 
+            $signos = $em->getRepository('DGPlusbelleBundle:Signos')->findBy(array('paciente'=>$paciente->getId()),array('id'=>'DESC'));
+            
+            
             //Seteo del paciente en la entidad
             $entity->setPaciente($paciente);
             //var_dump($paciente);
@@ -790,6 +792,14 @@ class ConsultaController extends Controller
         else{
             $edad = "No se ha ingresado fecha de nacimiento";
         }
+        
+        if(count($signos)==0){
+            $signos=new Signos();
+        }
+        else{
+            $signos=$signos[0];
+        }
+        
         $sucursales = $em->getRepository('DGPlusbelleBundle:Sucursal')->findBy(array('estado'=>1));
         $empleados = $em->getRepository('DGPlusbelleBundle:Empleado')->findBy(array('id'=>array(3,5),'estado'=>1));
         $tipoConsulta= $em->getRepository('DGPlusbelleBundle:TipoConsulta')->findBy(array('estado'=>1));
@@ -805,6 +815,94 @@ class ConsultaController extends Controller
             'paciente' => $paciente,
             'form'   => $form->createView(),
             'flag'   => $flag,
+            'signos' => $signos,
+        );
+            
+    }
+    
+    
+    
+    
+    
+    /**
+     * Displays a form to create a new Consulta entity.
+     *
+     * @Route("/newconpacienteLPB", name="admin_consulta_nueva_paciente_LPB")
+     * @Method("GET")
+     * @Template()
+     */
+    public function newconpacienteLPBAction()
+    {
+        //Metodo para consulta nueva con id de paciente
+        $entity = new Consulta();
+        
+        $em = $this->getDoctrine()->getManager();
+        
+        //Recuperación del paciente
+        $request = $this->getRequest();
+        $cadena= $request->get('id');
+        $flag = 0;
+        
+        if($cadena != NULL) {
+            //Obtener el id del parametro
+            $idEntidad = substr($cadena, 1);
+            //var_dump($idEntidad);
+            //$identidad= $request->get('identidad');
+            //Busqueda del paciente
+            $paciente = $em->getRepository('DGPlusbelleBundle:Paciente')->find($idEntidad);
+            
+            $plantillas = $em->getRepository('DGPlusbelleBundle:Estetica')->findAll();
+            
+            $signos = $em->getRepository('DGPlusbelleBundle:Signos')->findBy(array('paciente'=>$paciente->getId()),array('id'=>'DESC'));
+            //var_dump($signos[0]);
+            
+            //Seteo del paciente en la entidad
+            $entity->setPaciente($paciente);
+            //var_dump($paciente);
+            $form   = $this->createCreateForm($entity,2,$cadena, $paciente);
+            $entity->setPaciente($paciente);
+        } else {
+//            $paciente = new \DGPlusbelleBundle\Entity\Paciente();
+            $paciente = $em->getRepository('DGPlusbelleBundle:Paciente')->find($idEntidad);
+            $form   = $this->createCreateForm($entity, 3, $cadena, $paciente);
+            $flag = 1;
+        }
+        
+        if($paciente->getFechaNacimiento()!=null){
+            $fecha = $paciente->getFechaNacimiento()->format("Y-m-d");
+
+            //Calculo de la edad
+            list($Y,$m,$d) = explode("-",$fecha);
+            $edad = date("md") < $m.$d ? date("Y")-$Y-1 : date("Y")-$Y;       
+            $edad = $edad. " años";
+        }
+        else{
+            $edad = "No se ha ingresado fecha de nacimiento";
+        }
+        $sucursales = $em->getRepository('DGPlusbelleBundle:Sucursal')->findBy(array('estado'=>1));
+        $empleados = $em->getRepository('DGPlusbelleBundle:Empleado')->findBy(array('id'=>array(3,5),'estado'=>1));
+        $tipoConsulta= $em->getRepository('DGPlusbelleBundle:TipoConsulta')->findBy(array('estado'=>1));
+        //var_dump($signos);
+        if(count($signos)==0){
+            $signos=new Signos();
+            
+        }
+        else{
+            $signos=$signos[0];
+        }
+        
+            
+        return array(
+            'plantillas'=>$plantillas,
+            'entity' => $entity,
+            'sucursales' => $sucursales,
+            'tipoConsulta' => $tipoConsulta,
+            'empleados' => $empleados,
+            'edad' => $edad,
+            'paciente' => $paciente,
+            'form'   => $form->createView(),
+            'flag'   => $flag,
+            'signos' => $signos,
         );
             
     }
@@ -1780,19 +1878,23 @@ class ConsultaController extends Controller
             $idConsulta = $request->get('id');
             $dataForm = $request->get('frm');
             
-            $personaId = $_POST["empresaId"];
+            $idConsulta = $_POST["idConsulta"];
             
-           
+            //var_dump($idConsulta);
+            //die();
+            //var_dump($_FILES);
+            //die();
             //toca hacer un for para iterar los elementos del file para los diferentes archivos
             
             
             
 //            var_dump(count($_FILES['file']['name']));
-            
+            $em = $this->getDoctrine()->getManager();
+            $consulta = $em->getRepository('DGPlusbelleBundle:Consulta')->find($idConsulta);
             for($i=0;$i<count($_FILES['file']['name']);$i++){
                 $nombreimagen=$_FILES['file']['name'][$i];    
 
-
+                
 
 
                 $tipo = $_FILES['file']['type'][$i];
@@ -1800,12 +1902,13 @@ class ConsultaController extends Controller
                 $nombreimagen2.=".".$extension[1];
             
                 if ($nombreimagen != null){
-                    $em = $this->getDoctrine()->getManager();
+                    
                     $imagen = new ImagenConsulta();
                     
                     
-                    die();
-                    $imagen->setConsulta();
+//                    die();
+                    $imagen->setConsulta($consulta);
+                    
                     
                     //Direccion fisica del la imagen  
                     $path1 = $this->container->getParameter('photo.tmp');
@@ -1818,9 +1921,10 @@ class ConsultaController extends Controller
                     $nombreBASE=$path.$nombreArchivo;
                     $nombreBASE=str_replace(" ","", $nombreBASE);
                     $nombreSERVER =str_replace(" ","", $nombreArchivo);
-
+                    $imagen->setFoto($nombreSERVER);
                     $resultado = move_uploaded_file($_FILES["file"]["tmp_name"][$i], $path1.$nombreSERVER);
-
+                    $em->persist($imagen);
+                    $em->flush();
 
                     //Codigo para poder redimensionar la  imagenes que se suben
     //                    \Tinify\setKey("TGdnhEaY1ZrJB1J_NSAYYLeqno6FdIYF");
@@ -1989,6 +2093,65 @@ class ConsultaController extends Controller
             $em->flush();
             
             return new Response(json_encode($consulta->getId()));
+        }
+        else{
+            return new Response(json_encode(1));
+        }
+        
+        
+        
+    }
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    /**
+     * 
+     *
+     * @Route("/pacienteconsulta/data/consultacosto", name="admin_consulta_guardar_costo_ajax")
+     */
+    public function dataCostoConsultaAction(Request $request)
+    {
+        
+        //$id = $request->get('id');
+        
+        $idConsulta = $request->get('idConsulta');
+        $costo = $request->get('costo');
+        //var_dump($costo);
+        //var_dump($idConsulta);
+//        $patologicos = $request->get('patologicos');
+//        $familiares = $request->get('familiares');
+//        $alergias = $request->get('alergias');
+//        
+//        $patologicos = $request->get('patologicos');
+//        $familiares = $request->get('familiares');
+//        $alergias = $request->get('alergias');
+        
+        //$consulta = new Consulta();
+                
+        
+        $em = $this->getDoctrine()->getEntityManager();
+        
+        $consulta = $em->getRepository('DGPlusbelleBundle:Consulta')->find($idConsulta);
+        
+        
+        
+        
+        if(count($consulta)!=0){
+            //$persona = $em->getRepository('DGPlusbelleBundle:Persona')->find($paciente->getPersona()->getId());
+            $consulta->setCostoConsulta($costo);
+            $em->merge($consulta);
+            $em->flush();
+            
+            return new Response(json_encode(0));
         }
         else{
             return new Response(json_encode(1));

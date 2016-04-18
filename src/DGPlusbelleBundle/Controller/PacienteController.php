@@ -717,11 +717,11 @@ class PacienteController extends Controller
             
             
                     
-            $sql = "SELECT fecha,transaccion,atendido,realizado, 
+            $sql = "SELECT fecha as fecha,transaccion,atendido,realizado, 
                 CASE
-                WHEN idtransaccion = 'Consulta' THEN CONCAT('<a href=\"{{path(\"admin_consulta_nueva_paciente_SD\")}}\">', 'Ver detalles')
-                WHEN idtransaccion = 'Venta paquete' THEN CONCAT('<a href=\"{{path(\"admin_consulta_nueva_paciente_SD\")}}\">','Ver detalles')
-                ELSE CONCAT('<a href=\"newconpacienteSD?id=P',id,'\">Ver detalles')
+                WHEN transaccion = 'Consulta' THEN CONCAT('<a href=\"newconpaciente?id=P',id,'\">', 'Ver detalles</a>')
+                WHEN transaccion = 'Venta paquete' THEN CONCAT('<a href=\"historialconsulta?id=P',id,'\">', 'Ver detalles</a>')
+                ELSE CONCAT('<a href=\"historialconsulta?id=P',id,'\">', 'Ver detalles</a>')
                 
                 END AS detalles FROM listadoexpediente WHERE expediente='".strtoupper($busqueda['value'])."' ORDER BY fecha DESC LIMIT ".$start.",".$longitud;
         
@@ -736,7 +736,7 @@ class PacienteController extends Controller
             
             
         }
-        else{
+        else{ 
 //            $sql = "SELECT * FROM listadoexpediente ORDER BY fecha DESC LIMIT ".$start.",".$longitud;
 //        
 //            $em = $this->getDoctrine()->getManager();

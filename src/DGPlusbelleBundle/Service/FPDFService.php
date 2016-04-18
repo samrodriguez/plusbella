@@ -912,9 +912,10 @@ class FPDFService {
         
         $logo = $urlLogo.'sonodigest.jpg';
         //var_dump($logo);
+        
         $this->pdf->FPDF('P','mm','Letter');
-	$this->pdf->SetTopMargin(0);
-	$this->pdf->SetLeftMargin(20);
+        $this->pdf->SetTopMargin(0);
+        $this->pdf->SetLeftMargin(20);
         $this->pdf->SetAutoPageBreak(true, 6);
         $this->pdf->AddPage();
         $this->pdf->SetFillColor(255);
@@ -928,6 +929,7 @@ class FPDFService {
         
         $this->pdf->SetFont('Arial','B',13);
         $break=0;
+        $this->pdf->Cell(180,32,$titulo, 0, 0);
         $this->pdf->Ln(26);
         $break=$break+26;
         $this->pdf->Cell(32,27,'Informacion general del paciente');

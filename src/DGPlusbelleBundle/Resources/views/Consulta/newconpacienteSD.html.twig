@@ -2,6 +2,7 @@
 {% extends 'DGPlusbelleBundle:Layout:layout.html.twig' %}
 {% block css %}
     {{parent()}}
+    <link rel="stylesheet" href="{{ asset('Resources/alertifyjs/css/alertify.css') }}">
     <style>
         //Posicion del boton agregar
         .placas>div:last-child {
@@ -250,7 +251,7 @@
                                 </div>
                                 <div class="col-md-4">
                                     <input type="hidden" id="idPaciente" value="{{paciente.id}}" name="idPaciente" class="form-control input-sm"/>
-                                    <input type="hidden" id="idConsulta" value="" name="idConsulta" class="form-control input-sm"/>
+                                    
                                 </div>
                             </div>
                         
@@ -541,13 +542,13 @@
                                         
                                         <div class="clearfix"></div>
                                         <div class="col-md-4">
-                                            <input id="pesoPaciente" name="peso_paciente" class="form-control input-sm form-control"/>
+                                            <input id="pesoPaciente" value="{{signos.peso}}" name="peso_paciente" class="form-control input-sm form-control"/>
                                         </div>
                                         <div class="col-md-4">
-                                            <input id="tallaPaciente" name="peso_paciente" class="form-control input-sm form-control"/>
+                                            <input id="tallaPaciente" value="{{signos.talla}}" name="peso_paciente" class="form-control input-sm form-control"/>
                                         </div>
                                         <div class="col-md-4">
-                                            <input id="frecRespiratoria" name="peso_paciente" class="form-control input-sm form-control"/>
+                                            <input id="frecRespiratoria" value="{{signos.frecRespiratoria}}" name="peso_paciente" class="form-control input-sm form-control"/>
                                         </div>
                                     </div>
                                     
@@ -571,18 +572,18 @@
                                         <div class="clearfix"></div>
                                         <div class="col-md-4">
                                             <div class="col-md-4">
-                                                <input id="presionSistolica" name="presionSistolica" class="form-control input-sm form-control"/>
+                                                <input id="presionSistolica" value="{{signos.presionSistolica}}" name="presionSistolica" class="form-control input-sm form-control"/>
                                             </div>
                                             <div class="col-md-1"><label style="font-size:1.3em;">/</label></div>
                                             <div class="col-md-4">
-                                                <input id="presionDiastolica" name="presionDiastolica" class="form-control input-sm form-control"/>
+                                                <input id="presionDiastolica" value="{{signos.presionDiastolica}}" name="presionDiastolica" class="form-control input-sm form-control"/>
                                             </div>
                                         </div>
                                         <div class="col-md-4">
-                                            <input id="temperaturaPaciente" name="temperaturaPaciente" class="form-control input-sm form-control"/>
+                                            <input id="temperaturaPaciente" value="{{signos.temperatura}}" name="temperaturaPaciente" class="form-control input-sm form-control"/>
                                         </div>
                                         <div class="col-md-4">
-                                            <input id="frecCardiaca" name="frecCardiaca" class="form-control input-sm form-control"/>
+                                            <input id="frecCardiaca" value="{{signos.frecCardiaca}}" name="frecCardiaca" class="form-control input-sm form-control"/>
                                         </div>
                                     </div>
                                     
@@ -655,8 +656,8 @@
                             </div>
                             <div class="row" style="margin-top:20px;">
                                 <div class="col-md-4">
-                                    <input type="text" id="costoConsultaAlergias" class="form-control" placeholder="$"/>
-                                    <input id="costoConsultaAlergias" class="form-control"/>
+                                    <input type="text" id="costoConsulta" class="form-control" placeholder="$"/>
+                                    {#<input id="costoConsultaAlergias" class="form-control"/>#}
                                 </div>
                             </div>
                                 <div class="row" style="margin-top:10px;">
@@ -680,9 +681,9 @@
                             <strong>Subir imagen</strong>
                             <div class="row" style="margin-top:20px;">
                                 <div class="col-md-12">
-                                    <form id="formImagen" enctype="multipart/form-data" method="post">
-                                        <input id="file-input" type="file" name="file[]" multiple>
-                                        <input type="hidden" id="empresaId"  value="5" name="empresaId">
+                                    <form id="formImagen" role="form" enctype="multipart/form-data" method="post">
+                                        <input id="file-input" required type="file" name="file[]" multiple>
+                                        <input type="hidden" id="idConsulta" value="" name="idConsulta" class="form-control input-sm"/>
                                     </form>
                                     {#<form action="#" id="formImagen" enctype="multipart/form-data"  method="post">
                                         <div class="form-group">
@@ -747,7 +748,7 @@
                                     </select>
                                 </div>
                                 <div class="clearfix"></div>
-                                <div class="col-md-12" style="margin-top:20px;">
+                                <div class="col-md-12" style="margin-top:20px; display:none;" id="idPlantilla">
                                     <i class="fa fa-file-pdf-o" style="margin-right:10px;"></i><a id="historialPrevPDF" style="cursor:pointer;">Generar PDF</a>
                                     <hr>
                                 </div>
@@ -790,6 +791,9 @@
 
 
 {% block javascripts_step %}
+    
+
+     <script src="{{ asset('Resources/alertifyjs/alertify.js') }}"></script>
      <script src="{{ asset('Resources/js/ConsultaPaciente.js') }}"></script>
      <script src="{{ asset('Resources/js/ConsultaEstetica.js') }}"></script>
     
@@ -866,7 +870,7 @@
             $( "#dgplusbellebundle_consulta_plantilla" ).on( "change", function() {
                 // Se obtiene el id de la plantilla
                 var id = $( this ).val();
-                
+                $('#idPlantilla').show();
                 // Se obtiene todos elementos que contengan la clase parametro
                 var elements = document.getElementsByClassName('parametro');
                 
@@ -2758,15 +2762,7 @@
             
             
             
-            {#console.log("peso: "+peso);
-            console.log("talla: "+talla);
-            console.log("frecres: "+frecRespiratoria);
             
-            console.log("presion: "+presionSistolica);
-            console.log("presion: "+presionDiastolica);
-            
-            console.log("temperatura: "+temperatura);
-            console.log("frecCar: "+frecCardiaca);#}
             
             $.ajax({
                 data:{id:id,peso:peso,talla:talla,frecRespiratoria:frecRespiratoria,presionDiastolica:presionDiastolica,presionSistolica:presionSistolica,temperatura:temperatura,frecCardiaca:frecCardiaca},
@@ -2787,6 +2783,40 @@
 
                 }
             });
+        });
+        
+        
+        
+        
+        
+        $(document).on('click','#guardarCostoConsulta', function(){
+            var idConsulta = $('#idConsulta').val();
+            var costoConsulta = $('#costoConsulta').val();
+            if(idConsulta!=''){
+                $.ajax({
+                    data:{idConsulta:idConsulta,costo:costoConsulta},
+                    url:"{{path('admin_consulta_guardar_costo_ajax')}}",
+                    type: "post",
+                    success: function (data) {
+                            //inicio = data.inicio++;
+                            if(data==0){
+                                alertify.success("Se ha resgistrado con éxito el costo de la consulta");
+                            }
+                            else{
+                                alertify.error("Hubo un error, intente de nuevo!");
+                            }
+    {#                        console.log("pagina actual: "+data);
+                            console.log("Inicio de registro: "+data.inicioRegistro);#}
+
+                        },
+                    error: function (data) {
+                        alertify.error("Hubo un error, intente de nuevo!");
+                    }
+                });
+            }
+            else{
+                alertify.error("Debe ingresar una consulta primero!");
+            }
         });
         
         
@@ -2859,6 +2889,7 @@
         //obtenemos un array con los datos del archivo
         var file = $('#file-input')[0].files[0];
         //obtenemos el nombre del archivo
+        var idconsulta =$('#idConsulta').val();
         var fileName = file.name;
         //obtenemos la extensión del archivo
         fileExtension = fileName.substring(fileName.lastIndexOf('.') + 1);
@@ -2875,7 +2906,7 @@
         }else{
             flag = false;
         }
-        
+            if(idconsulta=''){
                 if (flag==false){
                     alert("Archivo invalido, seleccione una imagen ");
                     $("#file-input").val("");
@@ -2886,11 +2917,12 @@
                 }else{  
                     
                      var pesoKb=(fileSize/1024);
-                     if (pesoKb<=1024){
+                     if (pesoKb<=2048){
                         var frm = new FormData($("#formImagen")[0]);
-                             if (flag != false) {
+                        console.log(frm);
+                            if (flag != false) {
                                 $.ajax({
-                                    data:{id:id,frm:frm},
+                                    data:frm,
                                     url:Routing.generate('ingresar_foto_persona'),
                                     type: 'POST',
                                     dataType: 'json',
@@ -2915,6 +2947,10 @@
                             alert("Imagen demasiado grande, intente con una mas pequeña");
                         }
                 }
+            }
+            else{
+                bootbox.alert('Debe guardar una consulta primero!');
+            }
 
         });
         
@@ -3003,9 +3039,11 @@
         
         $(document).on('click','#historialPrevPDF',function(){
             valores = [];
-            nombre=$('#dgplusbellebundle_consulta_paciente').val();
+{#            nombre=$('#dgplusbellebundle_consulta_paciente').val();#}
+            nombre=$('#idPaciente').val();
             id=$('#dgplusbellebundle_consulta_plantilla').val();
             console.log(id);
+            console.log("nombre: "+nombre);
             var valor = 0;
             $('.classPlantilla').each(function(index,element){
                 valor = $(this).val();
@@ -3077,7 +3115,8 @@
             var paciente = $('#dgplusbellebundle_consulta_paciente').val();
             //console.log(paciente);
             // Se obtiene el id de la sucursal seleccionada
-            var sucursal = $('#dgplusbellebundle_consulta_sucursal').val();
+{#            var sucursal = $('#dgplusbellebundle_consulta_sucursal').val();#}
+            var sucursal = $('#sucursal_consulta').val();
             
             // Se obtiene el id de la consulta de estetica seleccionada
             var estetica = $('#dgplusbellebundle_consulta_estetica').val();

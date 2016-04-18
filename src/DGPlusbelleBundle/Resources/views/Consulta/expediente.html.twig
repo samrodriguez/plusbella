@@ -497,12 +497,12 @@
                     return false;
                 });
                 */
-                $('#filterDatatables1').on('keyup', function(event) {
+                {#$('#filterDatatables1').on('keyup', function(event) {
                     var filtro = $(this).val(); 
                     //alert(filtro);
                     $('#datatables1_filter>label>input').val($(this).val());
                     $('#datatables1_filter>label>input').keyup();
-                });
+                });#}
                 
                                 
                 //var long = $('datatables1_length').children().children().val();
@@ -581,88 +581,107 @@
         $('#datatables1_filter').hide();
         $('#filterDatatables1').val('');
         
-        $('#filterDatatables1').on('input',function(){
-            $('#venta').hide();
-            $('#consulta').hide();
-            var expediente = $(this).val();
-            $('#infoExpediente').hide();
-            console.log(expediente);
-            $.ajax({
-                        data:{expediente:expediente},
-                        url:"{{path('busqueda_expediente_data')}}",
-                        type: "post",
-                        success: function (data) {
-                                if(data.data.length!=0){
-                                    
-                                    var href = $('#consulta').children().attr('href');
-                                    href = href+"?id=P"+data.data[0].id;
-                                    console.log(data);
-                                    console.log(href);
-                                    $('#consulta').children().attr('href',href);
-                                    
-                                    var href = $('#venta').children().attr('href');
-                                    href = href+"?id=P"+data.data[0].id;
-                                    console.log(data);
-                                    console.log(href);
-                                    $('#venta').children().attr('href',href);
-                                    
-                                    
-                                    
-                                    $('#infoExpediente').show();
-                                    $('#venta').show();
-                                    $('#consulta').show();
-                                    var exp = ""; 
-                                    //exp = $('#expedientePaciente').html();
-                                    
-                                    var nombres = ""; 
-                                    nombres = data.data[0].nombres+" "+ data.data[0].apellidos;
-                                    $('#nombrePaciente').html(nombres);
-                                    
-                                    var telefono= '<i class="fa fa-phone"></i>';
-                                    if(data.data[0].telefono==null){
-                                        $('#telefono').html(telefono+"N/A");
-                                    }
-                                    else{
-                                        $('#telefono').html(telefono+ " "+data.data[0].telefono);
-                                    }
-                                    
-                                    var direccion = '<i class="fa fa-map-marker fa-fw"></i>';
-                                    if(data.data[0].direccion==null){
-                                        $('#direccion').html(direccion+" N/A");
-                                    }
-                                    else{
-                                        $('#direccion').html(direccion+" "+data.data[0].direccion);
-                                    }
-                                    
-                                    var expediente ='<i class="fa fa-clipboard"></i>';
-                                    $('#expediente').html(expediente +" "+$('#filterDatatables1').val().toString().toUpperCase());
-                                    
-                                    var edad='<i class="fa fa-birthday-cake"></i>';
-                                    if(data.data[0].direccion==null){
-                                        $('#edad').html(edad+" N/A");
-                                    }
-                                    else{
-                                        $('#edad').html(edad+" "+data.edad);
-                                    }
-                                    
-                                {#<i class="fa fa-birthday-cake"></i>#}
-                                    
-                                    //$('#expedientePaciente').html(exp);
-                                    //$('#nombrePaciente').html(data.nombres + " "+data.apellidos);
+        $('#filterDatatables1').on('keyup',function(e){
+            var filtro = $(this).val(); 
+            //alert(filtro);
+            
+            if(e.keyCode == 13) {
+                $('#datatables1_filter>label>input').val($(this).val());
+                $('#datatables1_filter>label>input').keyup();
+                {#var tb = document.getElementById("scriptBox");
+                eval(tb.value);
+                return false;#}
+                console.log('enter');
+                $('#venta').hide();
+                $('#consulta').hide();
+                var expediente = $(this).val();
+                var hrefOriginal="";
+                $('#infoExpediente').hide();
+                console.log(expediente);
+                $.ajax({
+                    data:{expediente:expediente},
+                    url:"{{path('busqueda_expediente_data')}}",
+                    type: "post",
+                    success: function (data) {
+                            if(data.data.length!=0){
+                                var href="";
+
+                                href = $('#consulta').children().attr('href');
+                                var res = href.split("?");
+                                href = res[0]+"?id=P"+data.data[0].id;
+                                //console.log(data);
+                                //console.log(href);
+                                $('#consulta').children().attr('href',href);
+
+                                href = $('#venta').children().attr('href');
+                                href = href+"?id=P"+data.data[0].id;
+                                //console.log(data);
+                                //console.log(href);
+                                res = href.split("?");
+                                href = res[0]+"?id=P"+data.data[0].id;
+                                //console.log(data);
+                                //console.log(href);
+                                $('#venta').children().attr('href',href);
+
+
+
+                                $('#infoExpediente').show();
+                                $('#venta').show();
+                                $('#consulta').show();
+                                var exp = ""; 
+                                //exp = $('#expedientePaciente').html();
+
+                                var nombres = ""; 
+                                nombres = data.data[0].nombres+" "+ data.data[0].apellidos;
+                                $('#nombrePaciente').html(nombres);
+
+                                var telefono= '<i class="fa fa-phone"></i>';
+                                if(data.data[0].telefono==null){
+                                    $('#telefono').html(telefono+"N/A");
                                 }
                                 else{
-                                    
+                                    $('#telefono').html(telefono+ " "+data.data[0].telefono);
                                 }
-                               
-                                //inicio = data.inicio++;
-{#                                console.log(data.data.length);#}
-                                console.log(data.data.length);
-                            },
-                        error: function (data) {
-                                
+
+                                var direccion = '<i class="fa fa-map-marker fa-fw"></i>';
+                                if(data.data[0].direccion==null){
+                                    $('#direccion').html(direccion+" N/A");
+                                }
+                                else{
+                                    $('#direccion').html(direccion+" "+data.data[0].direccion);
+                                }
+
+                                var expediente ='<i class="fa fa-clipboard"></i>';
+                                $('#expediente').html(expediente +" "+$('#filterDatatables1').val().toString().toUpperCase());
+
+                                var edad='<i class="fa fa-birthday-cake"></i>';
+                                if(data.data[0].direccion==null){
+                                    $('#edad').html(edad+" N/A");
+                                }
+                                else{
+                                    $('#edad').html(edad+" "+data.edad);
+                                }
+
+                            {#<i class="fa fa-birthday-cake"></i>#}
+
+                                //$('#expedientePaciente').html(exp);
+                                //$('#nombrePaciente').html(data.nombres + " "+data.apellidos);
                             }
-                        });
+                            else{
+
+                            }
+                            //inicio = data.inicio++;
+{#                                console.log(data.data.length);#}
+                            console.log(data.data.length);
+                        },
+                    error: function (data) {
+
+                        }
+                });
+            }
+            else{
             
+            }
             
         });
            validarPaciente();  
