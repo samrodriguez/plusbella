@@ -485,6 +485,7 @@ class VentaPaqueteController extends Controller
                 $em->flush();
                 
                 $nomTratamientos[$key] = $detalleVenta->getTratamiento()->getNombre();
+                $idTratamientos[$key] = $detalleVenta->getTratamiento()->getId();
             }
             
             $ventaPaqueteTratamientos = array(
@@ -493,6 +494,7 @@ class VentaPaqueteController extends Controller
                                         'sesiones' => $sesiones,
                                         'tratamientos' => $tratamientos,
                                         'nomTratamientos' => $nomTratamientos,
+                                        'idTratamientos' => $idTratamientos,
                                         'cuotas' => $ventaPaquete->getCuotas()
                                     );
             
