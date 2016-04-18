@@ -2663,7 +2663,7 @@
             var tipoConsulta = $('#tipo_consulta').val();
             var sucursal = $('#sucursal_consulta').val();
             var observaciones = $('#observacionConsulta').val();
-            
+            var idconsulta=$('#idConsulta').val();
             //alert(medico+","+tratamiento+","+tipoConsulta+","+observaciones+","+sucursal);
             
             
@@ -2680,6 +2680,7 @@
                     bootbox.alert("Debe seleccionar un tipo de consulta!", function() {});
                 }
                 else{
+                    if(idconsulta==''){
                         bootbox.confirm("Desea registrar esta consulta para el paciente?", function(result) {
                             {#Example.show("Confirm result: "+result);#}
                             if(result){
@@ -2706,7 +2707,10 @@
                                 //console.log(result);
                             }
                         }); 
-
+                    }
+                    else{
+                        
+                    }
                 }
             }
             
@@ -3010,7 +3014,7 @@
             });
             var historial = $('#dgplusbellebundle_consulta_plantilla').val();
             
-            if(historial!=0 && $('#dgplusbellebundle_consulta_reportePlantilla_0').is(':checked')){
+            if(historial!=0{# && $('#dgplusbellebundle_consulta_reportePlantilla_0').is(':checked')#}){
            
             
                 console.log(valores);

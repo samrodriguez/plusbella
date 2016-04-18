@@ -162,11 +162,11 @@
                 <div class="btn-group pull-left">
                   <input id="filterDatatables1" class="form-control input-sm" placeholder="Buscar...">
                 </div>
-                <div class="btn-group pull-right">
-                    <button class="btn btn-success btn-sm btn">Venta</button>
+                <div class="btn-group pull-right" id="venta" style="display:none;">
+                    <button href="{{path('admin_consulta_nueva_paciente_SD')}}" class="btn btn-success btn-sm btn">Venta</button>
                 </div>
-                <div class="btn-group pull-right">
-                    <button class="btn btn-success btn-sm btn">Nueva consulta</button>
+                <div class="btn-group pull-right" id="consulta" style="display:none;">
+                    <a href="{{path('admin_consulta_nueva_paciente_SD')}}" class="btn btn-success btn-sm btn">Nueva consulta</a>
                 </div>
               </div><!-- /btn-toolbar -->
             </div><!-- /.panel-body -->
@@ -582,6 +582,8 @@
         $('#filterDatatables1').val('');
         
         $('#filterDatatables1').on('input',function(){
+            $('#venta').hide();
+            $('#consulta').hide();
             var expediente = $(this).val();
             $('#infoExpediente').hide();
             console.log(expediente);
@@ -592,7 +594,23 @@
                         success: function (data) {
                                 if(data.data.length!=0){
                                     
+                                    var href = $('#consulta').children().attr('href');
+                                    href = href+"?id=P"+data.data[0].id;
+                                    console.log(data);
+                                    console.log(href);
+                                    $('#consulta').children().attr('href',href);
+                                    
+                                    var href = $('#venta').children().attr('href');
+                                    href = href+"?id=P"+data.data[0].id;
+                                    console.log(data);
+                                    console.log(href);
+                                    $('#venta').children().attr('href',href);
+                                    
+                                    
+                                    
                                     $('#infoExpediente').show();
+                                    $('#venta').show();
+                                    $('#consulta').show();
                                     var exp = ""; 
                                     //exp = $('#expedientePaciente').html();
                                     

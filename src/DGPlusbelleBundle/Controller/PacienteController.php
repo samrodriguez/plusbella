@@ -717,7 +717,13 @@ class PacienteController extends Controller
             
             
                     
-            $sql = "SELECT * FROM listadoexpediente WHERE expediente='".strtoupper($busqueda['value'])."' ORDER BY fecha DESC LIMIT ".$start.",".$longitud;
+            $sql = "SELECT fecha,transaccion,atendido,realizado, 
+                CASE
+                WHEN idtransaccion = 'Consulta' THEN CONCAT('<a href=\"{{path(\"admin_consulta_nueva_paciente_SD\")}}\">', 'Ver detalles')
+                WHEN idtransaccion = 'Venta paquete' THEN CONCAT('<a href=\"{{path(\"admin_consulta_nueva_paciente_SD\")}}\">','Ver detalles')
+                ELSE CONCAT('<a href=\"newconpacienteSD?id=P',id,'\">Ver detalles')
+                
+                END AS detalles FROM listadoexpediente WHERE expediente='".strtoupper($busqueda['value'])."' ORDER BY fecha DESC LIMIT ".$start.",".$longitud;
         
             $em = $this->getDoctrine()->getManager();
             $stmt = $em->getConnection()->prepare($sql);
@@ -800,7 +806,7 @@ class PacienteController extends Controller
         //var_dump($longitud);
         
         $em = $this->getDoctrine()->getEntityManager();
-        $dql = "SELECT pac.ocupacion,per.direccion,per.telefono,per.nombres as nombres,per.apellidos as apellidos, DATE_FORMAT(pac.fechaNacimiento,'%Y-%m-%d') as fechaNacimiento, per.direccion, "
+        $dql = "SELECT pac.id,pac.ocupacion,per.direccion,per.telefono,per.nombres as nombres,per.apellidos as apellidos, DATE_FORMAT(pac.fechaNacimiento,'%Y-%m-%d') as fechaNacimiento, per.direccion, "
                         . " CONCAT('<a href=>','Ver','</a>') as detalles "
                         . "FROM DGPlusbelleBundle:Expediente exp "
                         . "JOIN exp.paciente pac "
