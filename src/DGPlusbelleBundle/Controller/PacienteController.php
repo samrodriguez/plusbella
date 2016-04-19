@@ -719,7 +719,8 @@ class PacienteController extends Controller
                     
             $sql = "SELECT fecha as fecha,transaccion,atendido,realizado, 
                 CASE
-                WHEN transaccion = 'Consulta' THEN CONCAT('<a href=\"newconpaciente?id=P',id,'\">', 'Ver detalles</a>')
+                WHEN atendido = 'JUAN CARLOS PACHECO CARDONA' THEN CONCAT('<a href=\"newconpacienteSD?id=P',id,'&idtransaccion=',idtransaccion,'\">', 'Ver detalles</a>')
+                WHEN atendido = 'MILDRED LARA DE PACHECO' THEN CONCAT('<a href=\"newconpacienteLPB?id=P',id,'&idtransaccion=',idtransaccion,'\">', 'Ver detalles</a>')
                 WHEN transaccion = 'Venta paquete' THEN CONCAT('<a href=\"historialconsulta?id=P',id,'\">', 'Ver detalles</a>')
                 ELSE CONCAT('<a href=\"historialconsulta?id=P',id,'\">', 'Ver detalles</a>')
                 
@@ -807,7 +808,7 @@ class PacienteController extends Controller
         
         $em = $this->getDoctrine()->getEntityManager();
         $dql = "SELECT pac.id,pac.ocupacion,per.direccion,per.telefono,per.nombres as nombres,per.apellidos as apellidos, DATE_FORMAT(pac.fechaNacimiento,'%Y-%m-%d') as fechaNacimiento, per.direccion, "
-                        . " CONCAT('<a href=>','Ver','</a>') as detalles "
+                        . " CONCAT('<a href=\"\">','Ver','</a>') as detalles "
                         . "FROM DGPlusbelleBundle:Expediente exp "
                         . "JOIN exp.paciente pac "
                         . "JOIN pac.persona per "

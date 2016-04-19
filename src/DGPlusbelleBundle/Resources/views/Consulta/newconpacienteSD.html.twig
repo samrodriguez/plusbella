@@ -419,7 +419,7 @@
                                             <select id="medico_consulta" name="tratamiento" class="form-control input-sm">
 {#                                                <option value="0" selected>Seleccione un médico...</option>#}
                                                 {% for empleado in empleados %}
-                                                    <option value="{{empleado.id}}" selected>{{empleado.persona.nombres}} {{empleado.persona.apellidos}}</option>
+                                                    <option value="{{empleado.id}}" {% if empleado.id==consulta.empleado.id %} selected {% endif %}>{{empleado.persona.nombres}} {{empleado.persona.apellidos}}</option>
                                                 {% endfor %}
                                             </select>  
                                         </div>
@@ -433,7 +433,7 @@
                                             <select id="tipo_consulta" class="form-control input-sm">
                                                 <option value="0" selected>Seleccione un tipo de consulta...</option>
                                                 {%for tipo in tipoConsulta %}
-                                                    <option value="{{tipo.id}}">{{tipo.nombre}}</option>
+                                                    <option value="{{tipo.id}}" {% if tipo.id==consulta.tipoConsulta.id %} selected {% endif %}>{{tipo.nombre}}</option>
                                                 {% endfor %}
                                             </select>
                                         </div>
@@ -457,14 +457,14 @@
                                     <div class="row">
                                                                                
                                         <div class="col-md-6">
-                                            <textarea class="col-md-12" id="observacionConsulta"></textarea>
+                                            <textarea class="col-md-12" id="observacionConsulta">{{consulta.observacion}}</textarea>
                                         </div>
                                         
                                         <div class="col-md-6">
                                             <select id="sucursal_consulta" class="form-control input-sm">
 {#                                                <option value="0" selected>Seleccione una sucursal...</option>#}
                                                 {% for sucursal in sucursales %}
-                                                    <option value="{{sucursal.id}}" selected>{{sucursal.nombre}}</option>
+                                                    <option value="{{sucursal.id}}" {% if sucursal.id==consulta.sucursal.id %} selected {% endif %}>{{sucursal.nombre}}</option>
                                                 {% endfor %}
                                             </select>
                                         </div>
@@ -656,7 +656,7 @@
                             </div>
                             <div class="row" style="margin-top:20px;">
                                 <div class="col-md-4">
-                                    <input type="text" id="costoConsulta" class="form-control" placeholder="$"/>
+                                    <input type="text" id="costoConsulta" value="{{consulta.costoConsulta}}" class="form-control" placeholder="$"/>
                                     {#<input id="costoConsultaAlergias" class="form-control"/>#}
                                 </div>
                             </div>
@@ -683,7 +683,7 @@
                                 <div class="col-md-12">
                                     <form id="formImagen" role="form" enctype="multipart/form-data" method="post">
                                         <input id="file-input" required type="file" name="file[]" multiple>
-                                        <input type="hidden" id="idConsulta" value="" name="idConsulta" class="form-control input-sm"/>
+                                        <input type="text" id="idConsulta" value="{% if consulta.id is null %}{%else%}{{consulta.id}}{%endif%}" name="idConsulta" class="form-control input-sm"/>
                                     </form>
                                     {#<form action="#" id="formImagen" enctype="multipart/form-data"  method="post">
                                         <div class="form-group">
@@ -703,12 +703,9 @@
                             <div class="row" style="margin-top:20px;">
                                 <strong style="margin-top:80px;">Archivos adjuntos</strong>
                                 <div class="col-md-12">
-                                    {#{% for imagen in imagenes %}
-                                    
-                                        
-                                        
-                                    {% endfor %}#}
-                                    
+                                    {% for imagen in archivos %}
+                                        <a href="{{ asset('Photos/Tmp/')}}{{imagen.foto}}">{{imagen.foto}}</a>
+                                    {% endfor %}
                                 </div>
                             </div>
                             
@@ -732,50 +729,54 @@
                     <div class="tab-pane fade in" id="botabs7">
                         <p>
                             <strong></strong>
-                            
-                            <div class="row" style="margin-top:10px;">
-                                <div class="col-md-2">
-                                    Seleccione historial clínico:
-                                </div>
-                                
-                                <div class="col-md-10">
-                                    <select id="dgplusbellebundle_consulta_plantilla" class="col-md-8 form-control input-sm" style="width:50%" >
-                                        {% for plantilla in plantillas %}
-                                            <option value="{{plantilla.id}}">
-                                                {{plantilla.nombre|upper}}
-                                            </option>
-                                        {% endfor %}
-                                    </select>
-                                </div>
-                                <div class="clearfix"></div>
-                                <div class="col-md-12" style="margin-top:20px; display:none;" id="idPlantilla">
-                                    <i class="fa fa-file-pdf-o" style="margin-right:10px;"></i><a id="historialPrevPDF" style="cursor:pointer;">Generar PDF</a>
-                                    <hr>
-                                </div>
-                                
-                            <div id="camposPlantilla" class="camposPlantilla" style="margin-top: 30px">
-                                <div class="row">
-                                    <div class="col-md-12"></div>
-                                    <div id="campos" class="col-md-12 campos"></div>
-                                </div>
-                            </div> 
-                        
-                            <div class="row" style="margin-top:10px;">
-                            <div class="col-md-12">
-                                <hr>
-                            </div>
-                        </div>
+                            {%if existePlantilla == false %}
+                                <div class="row" style="margin-top:10px;">
+                                    <div class="col-md-2">
+                                        Seleccione historial clínico:
+                                    </div>
 
-                        <div class="row  pull-right" style="margin-top:10px;">
-                            <div class="col-md-12">
-                                <div class="form-grouphide col-sm-12">
-                                    {#<a class="btn btn-default btn-xs" id="cancelarNuevoConsulta">Cancelar</a>#}
-                                    <button type="submit" id="guardarPlantilla" name="dgplusbellebundle_antecedentes[submit]" class="btn btn-success btn-xs btn btn">Guardar</button>
+                                    <div class="col-md-10">
+                                        <select id="dgplusbellebundle_consulta_plantilla" class="col-md-8 form-control input-sm" style="width:50%" >
+                                            {% for plantilla in plantillas %}
+                                                <option value="{{plantilla.id}}">
+                                                    {{plantilla.nombre|upper}}
+                                                </option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                    <div class="clearfix"></div>
+                                    <div class="col-md-12" style="margin-top:20px; display:none;" id="idPlantilla">
+                                        <i class="fa fa-file-pdf-o" style="margin-right:10px;"></i><a id="historialPrevPDF" style="cursor:pointer;">Generar PDF</a>
+                                        <hr>
+                                    </div>
+
+                                    <div id="camposPlantilla" class="camposPlantilla" style="margin-top: 30px">
+                                        <div class="row">
+                                            <div class="col-md-12"></div>
+                                            <div id="campos" class="col-md-12 campos"></div>
+                                        </div>
+                                    </div> 
+
+                                    <div class="row" style="margin-top:10px;">
+                                        <div class="col-md-12">
+                                            <hr>
+                                        </div>
+                                    </div>
+
+                                    <div class="row  pull-right" style="margin-top:10px;">
+                                        <div class="col-md-12">
+                                            <div class="form-grouphide col-sm-12">
+                                                {#<a class="btn btn-default btn-xs" id="cancelarNuevoConsulta">Cancelar</a>#}
+                                                <button type="submit" id="guardarPlantilla" name="dgplusbellebundle_antecedentes[submit]" class="btn btn-success btn-xs btn btn">Guardar</button>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
-                            </div>
-                        </div>
+                            {% else %}
+                                <i class="fa fa-file-pdf-o"></i><a class="generarPDF" href="{{path(ruta,{id:consulta.id})}}"> Ver plantilla</a>
+                            {% endif %}
                         </p>
-                    </div>
+                    
                 </div><!-- /tab-content -->
             </div><!-- /panel-body -->
         </div>
@@ -2596,7 +2597,17 @@
             return false;            
         });#}
             
-            
+        /**********************************************
+         * Metodos de guardar con ajax
+        */
+        
+        $(document).on('click','.generarPDF', function(){
+            var href = $(this).attr('href');
+            window.open(href,'_blank');
+            //alert();
+            return false;
+        });
+        
             
             
         /**********************************************
@@ -2890,6 +2901,7 @@
         var file = $('#file-input')[0].files[0];
         //obtenemos el nombre del archivo
         var idconsulta =$('#idConsulta').val();
+        alert(idconsulta);
         var fileName = file.name;
         //obtenemos la extensión del archivo
         fileExtension = fileName.substring(fileName.lastIndexOf('.') + 1);
@@ -2906,7 +2918,7 @@
         }else{
             flag = false;
         }
-            if(idconsulta=''){
+            if(idconsulta!=''){
                 if (flag==false){
                     alert("Archivo invalido, seleccione una imagen ");
                     $("#file-input").val("");

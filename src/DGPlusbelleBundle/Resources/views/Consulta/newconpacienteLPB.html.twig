@@ -688,7 +688,7 @@
                                 <div class="col-md-12">
                                     <form id="formImagen" role="form" enctype="multipart/form-data" method="post">
                                         <input id="file-input" required type="file" name="file[]" multiple>
-                                        <input type="hidden" id="idConsulta" value="" name="idConsulta" class="form-control input-sm"/>
+                                        <input type="text" id="idConsulta" value="{% if consulta.id is null %}{%else%}{{consulta.id}}{%endif%}" name="idConsulta" class="form-control input-sm"/>
                                     </form>
                                     {#<form action="#" id="formImagen" enctype="multipart/form-data"  method="post">
                                         <div class="form-group">
@@ -708,11 +708,9 @@
                             <div class="row" style="margin-top:20px;">
                                 <strong style="margin-top:80px;">Archivos adjuntos</strong>
                                 <div class="col-md-12">
-                                    {#{% for imagen in imagenes %}
-                                    
-                                        
-                                        
-                                    {% endfor %}#}
+                                    {% for imagen in archivos %}
+                                        <a href="{{ asset('Photos/Tmp/')}}{{imagen.foto}}">{{imagen.foto}}</a>
+                                    {% endfor %}
                                     
                                 </div>
                             </div>
@@ -737,50 +735,58 @@
                     <div class="tab-pane fade in" id="botabs7">
                         <p>
                             <strong></strong>
-                            
-                            <div class="row" style="margin-top:10px;">
-                                <div class="col-md-2">
-                                    Seleccione historial clínico:
-                                </div>
-                                
-                                <div class="col-md-10">
-                                    <select id="dgplusbellebundle_consulta_estetica" class="col-md-8 form-control input-sm" style="width:50%" >
-                                        {% for plantilla in plantillas %}
-                                            <option value="{{plantilla.id}}">
-                                                {{plantilla.tipoEstetica|upper}}
-                                            </option>
-                                        {% endfor %}
-                                    </select>
-                                </div>
-                                <div class="clearfix"></div>
-                                <div class="col-md-12" style="margin-top:20px; display:none;" id="idPlantilla">
-                                    <i class="fa fa-file-pdf-o" style="margin-right:10px;"></i><a id="esteticaPrevPDF" style="cursor:pointer;">Generar PDF</a>
-                                    <hr>
-                                </div>
-                                
-                            <div id="camposPlantilla" class="camposPlantilla" style="margin-top: 30px">
-                                <div class="row">
-                                    <div class="col-md-12"></div>
-                                    <div id="campos" class="col-md-12 campos"></div>
-                                </div>
-                            </div> 
-                        
-                            <div class="row" style="margin-top:10px;">
-                            <div class="col-md-12">
-                                <hr>
-                            </div>
-                        </div>
+                            {%if existePlantilla == false %}
+                                <div class="row" style="margin-top:10px;">
+                                    <div class="col-md-2 opcionHistorial">
+                                        Seleccione historial clínico:
+                                    </div>
 
-                        <div class="row  pull-right" style="margin-top:10px;">
-                            <div class="col-md-12">
-                                <div class="form-grouphide col-sm-12">
-                                    {#<a class="btn btn-default btn-xs" id="cancelarNuevoConsulta">Cancelar</a>#}
-                                    <button type="submit" id="guardarPlantilla" name="dgplusbellebundle_antecedentes[submit]" class="btn btn-success btn-xs btn btn">Guardar</button>
+                                    <div class="col-md-10 opcionHistorial">
+                                        <select id="dgplusbellebundle_consulta_estetica" class="col-md-8 form-control input-sm" style="width:50%" >
+                                            {% for plantilla in plantillas %}
+                                                <option value="{{plantilla.id}}">
+                                                    {{plantilla.tipoEstetica|upper}}
+                                                </option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                    <div class="clearfix"></div>
+                                    <div class="col-md-12" style="margin-top:20px; display:none;" id="idPlantilla">
+                                        <i class="fa fa-file-pdf-o" style="margin-right:10px;"></i><a id="esteticaPrevPDF" style="cursor:pointer;">Generar PDF</a>
+                                        <hr>
+                                    </div>
+
+                                    <div id="camposPlantilla" class="camposPlantilla" style="margin-top: 30px">
+                                        <div class="row">
+                                            <div class="col-md-12"></div>
+                                            <div id="campos" class="col-md-12 campos"></div>
+                                        </div>
+                                    </div> 
+
+                                    <div class="row" style="margin-top:10px;">
+                                        <div class="col-md-12">
+                                            <hr>
+                                        </div>
+                                    </div>
+
+                                    <div class="row  pull-right" style="margin-top:10px;">
+                                        <div class="col-md-12">
+                                            <div class="form-grouphide col-sm-12">
+                                                {#<a class="btn btn-default btn-xs" id="cancelarNuevoConsulta">Cancelar</a>#}
+                                                <button type="submit" id="guardarPlantilla" name="dgplusbellebundle_antecedentes[submit]" class="btn btn-success btn-xs btn btn">Guardar</button>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
-                            </div>
-                        </div>
+                            {% else %}
+                            
+        
+{#        $esteticaId = $request->get('estetica');#}
+            
+        
+                                <i class="fa fa-file-pdf-o"></i><a class="generarPDF" href="{{path(ruta,{valores:valores,id:consulta.id,paciente:paciente.id,sucursal:consulta.sucursal.id,estetica:estetica,corporal:corporal})}}"> Ver plantilla</a>
+                            {% endif %}
                         </p>
-                    </div>
                 </div><!-- /tab-content -->
             </div><!-- /panel-body -->
         </div>
@@ -2650,7 +2656,8 @@
                             
                             $('#nombrePaciente').html(nombres+" "+apellidos);
                             $('#ocupacionPaciente').html(ocup+" "+ocupacion);
-                            bootbox.alert("Cambios guardados!", function() {});
+{#                            bootbox.alert("Cambios guardados!", function() {});#}
+                            alertify.success("Cambios guardados!");
                         }
                         
                         {#console.log("pagina actual: "+data);
@@ -2704,7 +2711,8 @@
                                             if(data!=0){
                                                 $('#idConsulta').val(data);
                                                 console.log(data);
-                                                bootbox.alert("Consulta registrada!", function() {});
+{#                                                bootbox.alert("Consulta registrada!", function() {});#}
+                                                alertify.success("Consulta registrada!");
                                                 console.log($('#idConsulta').val());
                                             }
                                         },
@@ -2742,7 +2750,8 @@
                 success: function (data) {
                         //inicio = data.inicio++;
                         if(data==0){
-                            bootbox.alert("Cambios guardados!", function() {});
+{#                            bootbox.alert("Cambios guardados!", function() {});#}
+                            alertify.success("Antecedentes guardados!");
                         }
                         
                         {#console.log("pagina actual: "+data);
@@ -2777,7 +2786,8 @@
                 success: function (data) {
                         //inicio = data.inicio++;
                         if(data==0){
-                            bootbox.alert("Cambios guardados!", function() {});
+{#                            bootbox.alert("Cambios guardados!", function() {});#}
+                            alertify.success("Signos vitales guardados!");
 
                         }
 {#                        console.log("pagina actual: "+data);
@@ -2806,7 +2816,7 @@
                     success: function (data) {
                             //inicio = data.inicio++;
                             if(data==0){
-                                alertify.success("Se ha resgistrado con éxito el costo de la consulta");
+                                alertify.success("Costo de consulta guardado!");
                             }
                             else{
                                 alertify.error("Hubo un error, intente de nuevo!");
@@ -2816,12 +2826,14 @@
 
                         },
                     error: function (data) {
-                        alertify.error("Hubo un error, intente de nuevo!");
+                        alertify.error("{#Hubo un error, intente de nuevo!#}");
+                        bootbox.alert("Hubo un error, intente de nuevo!", function() {});
                     }
                 });
             }
             else{
-                alertify.error("Debe ingresar una consulta primero!");
+{#                alertify.error("Debe ingresar una consulta primero!");#}
+                bootbox.alert("Debe ingresar una consulta primero!", function() {});
             }
         });
         
@@ -2862,7 +2874,7 @@
                 case 2:
                     
                     $('.classCorporal').each(function(index,element){
-                        var valor = $(this).val();
+                        var valor = $(this).prop("checked");
                         var ids = $(this).attr('id');
                         valores.push(valor);
                         idParameters.push(ids);
@@ -2896,8 +2908,8 @@
                     type: "post",
                     success: function (data) {
                             //inicio = data.inicio++;
-                            if(data==0){
-                                var iTel='<i class="fa fa-phone"></i>';
+                            if(data.query==0){
+                                {#var iTel='<i class="fa fa-phone"></i>';
                                 var dir='<i class="fa fa-map-marker fa-fw"></i>';
                                 var ocup = '<i class="fa fa-briefcase"></i>';
                                 $('#telefono').html(iTel+" "+telefono1);
@@ -2905,8 +2917,14 @@
 
 
                                 $('#nombrePaciente').html(nombres+" "+apellidos);
-                                $('#ocupacionPaciente').html(ocup+" "+ocupacion);
-                                bootbox.alert("Cambios guardados!", function() {});
+                                $('#ocupacionPaciente').html(ocup+" "+ocupacion);#}
+                                //$('#idPlantilla').hide();
+                                $('#camposPlantilla').hide();
+                                $('.opcionHistorial').hide();
+                                $('#guardarPlantilla').hide();
+                                
+                                alertify.success("Plantilla guardada!");
+                                
                             }
 
                             {#console.log("pagina actual: "+data);
@@ -2978,7 +2996,7 @@
                                     success: function(data){
                                         $("#prev").attr('src', "/abgsistema/web/"+data.direccion);
                                         $('#file-input').val('');
-                                        bootbox.alert('Fotos subidas con éxito!');
+                                        alertify.success("Imagenes guardadas!");
                                     },
                                     error: function(data){
                                         bootbox.alert('Hubo un error al subir las fotos');
@@ -2988,7 +3006,8 @@
                         }
                         else{
                             console.log(pesoKb);
-                            alert("Imagen demasiado grande, intente con una mas pequeña");
+                            bootbox.alert('Imagen demasiado grande, intente con una mas pequeña');
+                            //alert("Imagen demasiado grande, intente con una mas pequeña");
                         }
                 }
 
