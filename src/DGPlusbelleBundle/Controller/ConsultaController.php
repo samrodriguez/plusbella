@@ -1322,7 +1322,7 @@ class ConsultaController extends Controller
     /**
      * Lista todas las consultas de un paciente
      *
-     * @Route("/historialconsulta/", name="admin_historial_consulta", options={"expose"=true})
+     * @Route("/historialconsulta/", name="admin_historial_consulta_exp", options={"expose"=true})
      * @Method("GET")
      * @Template()
      */

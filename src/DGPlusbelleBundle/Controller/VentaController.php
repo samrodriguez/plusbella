@@ -91,6 +91,146 @@ class VentaController  extends Controller
     }
     
     /**
+     * Editar venta de paquete 
+     *
+     * @Route("/paquete/", name="admin_editarventa_paquete", options={"expose"=true})
+     * @Method("GET")
+     * @Template()
+     */
+    public function editarVentaPaqueteAction(){
+        $em = $this->getDoctrine()->getManager();
+        
+        //Recuperación del id
+        $request = $this->getRequest();
+        
+        $idPacient= $request->get('id');  
+        $idPaciente=  substr($idPacient, 1);
+        $paciente = $em->getRepository('DGPlusbelleBundle:Paciente')->find($idPaciente);
+        
+        $edad="";
+        if(count($paciente)!=0){
+            $fecha = $paciente->getFechaNacimiento();
+            if($fecha!=null){
+                $fecha = $paciente->getFechaNacimiento()->format("Y-m-d");
+                
+                //Calculo de la edad
+                list($Y,$m,$d) = explode("-",$fecha);
+                $edad = date("md") < $m.$d ? date("Y")-$Y-1 : date("Y")-$Y;       
+                $edad = $edad. " años";
+            }
+            else{
+                $edad = "No se ha ingresado fecha de nacimiento";
+            }
+        }
+        else{
+            $consultas=null;
+        }
+        $expnum="";
+        if(is_null($paciente->getExpediente()[0])){
+            $expnum = $this->generarExpediente($paciente);
+        }
+        else{
+            $expnum = $paciente->getExpediente()[0]->getNumero();
+        }
+        
+        $CompraPaciente = $em->getRepository('DGPlusbelleBundle:Paciente')->find($idPaciente);
+        $paciente = $CompraPaciente;
+        
+        $regnoeditpaquete = array();
+        $regnoedittratamiento = array();
+
+        $ventaPaquetes = $em->getRepository('DGPlusbelleBundle:Paquete')->findBy(array('estado' => true));
+        $ventaTratamientos = $em->getRepository('DGPlusbelleBundle:Tratamiento')->findBy(array('estado' => true));
+        $sucursales = $em->getRepository('DGPlusbelleBundle:Sucursal')->findBy(array('estado' => true));
+        $empleadosVenta = $em->getRepository('DGPlusbelleBundle:Empleado')->findBy(array('estado' => true));
+        $descuentos = $em->getRepository('DGPlusbelleBundle:Descuento')->findBy(array('estado' => true));
+        
+        return array(
+            'edad' => $edad,
+            'paciente' => $paciente,
+            'expediente'=>$expnum,
+            'paquetesnoedit'=>$regnoeditpaquete,
+            'tratamientosnoedit'=>$regnoedittratamiento,
+            'ventaPaquetes' => $ventaPaquetes,
+            'ventaTratamientos' => $ventaTratamientos,
+            'sucursales' => $sucursales,
+            'empleadosVenta' => $empleadosVenta,
+            'descuentos' => $descuentos,
+            'idPaciente'=>$idPacient
+            );
+    }
+    
+    /**
+     * Editar venta de tratamiento
+     *
+     * @Route("/tratamiento/", name="admin_editarventa_tratamiento", options={"expose"=true})
+     * @Method("GET")
+     * @Template()
+     */
+    public function editarVentaTratamientoAction(){
+        $em = $this->getDoctrine()->getManager();
+        
+        //Recuperación del id
+        $request = $this->getRequest();
+        
+        $idPacient= $request->get('id');  
+        $idPaciente=  substr($idPacient, 1);
+        $paciente = $em->getRepository('DGPlusbelleBundle:Paciente')->find($idPaciente);
+        
+        $edad="";
+        if(count($paciente)!=0){
+            $fecha = $paciente->getFechaNacimiento();
+            if($fecha!=null){
+                $fecha = $paciente->getFechaNacimiento()->format("Y-m-d");
+                
+                //Calculo de la edad
+                list($Y,$m,$d) = explode("-",$fecha);
+                $edad = date("md") < $m.$d ? date("Y")-$Y-1 : date("Y")-$Y;       
+                $edad = $edad. " años";
+            }
+            else{
+                $edad = "No se ha ingresado fecha de nacimiento";
+            }
+        }
+        else{
+            $consultas=null;
+        }
+        $expnum="";
+        if(is_null($paciente->getExpediente()[0])){
+            $expnum = $this->generarExpediente($paciente);
+        }
+        else{
+            $expnum = $paciente->getExpediente()[0]->getNumero();
+        }
+        
+        $CompraPaciente = $em->getRepository('DGPlusbelleBundle:Paciente')->find($idPaciente);
+        $paciente = $CompraPaciente;
+        
+        $regnoeditpaquete = array();
+        $regnoedittratamiento = array();
+
+        $ventaPaquetes = $em->getRepository('DGPlusbelleBundle:Paquete')->findBy(array('estado' => true));
+        $ventaTratamientos = $em->getRepository('DGPlusbelleBundle:Tratamiento')->findBy(array('estado' => true));
+        $sucursales = $em->getRepository('DGPlusbelleBundle:Sucursal')->findBy(array('estado' => true));
+        $empleadosVenta = $em->getRepository('DGPlusbelleBundle:Empleado')->findBy(array('estado' => true));
+        $descuentos = $em->getRepository('DGPlusbelleBundle:Descuento')->findBy(array('estado' => true));
+        
+        return array(
+            'edad' => $edad,
+            'paciente' => $paciente,
+            'expediente'=>$expnum,
+            'paquetesnoedit'=>$regnoeditpaquete,
+            'tratamientosnoedit'=>$regnoedittratamiento,
+            'ventaPaquetes' => $ventaPaquetes,
+            'ventaTratamientos' => $ventaTratamientos,
+            'sucursales' => $sucursales,
+            'empleadosVenta' => $empleadosVenta,
+            'descuentos' => $descuentos,
+            'idPaciente'=>$idPacient
+            );
+    }
+    
+    /**
     * Ajax utilizado para registrar una nueva sesion de tratamiento
     *  
     * @Route("/registro-sesion-tratamiento/set", name="admin_sesiontratamiento_nuevo")
