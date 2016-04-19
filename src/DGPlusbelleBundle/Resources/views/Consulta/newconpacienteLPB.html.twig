@@ -2836,21 +2836,59 @@
 {#            alert(direccion);#}
             var valores = new Array();
             var idParameters = new Array();
-            var idPlantilla= $('#dgplusbellebundle_consulta_plantilla').val();
-            $('.classPlantilla').each(function(index,element){
-                var valor = $(this).val();
-                var ids = $(this).attr('id');
-                valores.push(valor);
-                idParameters.push(ids);
-                
-            });
+            var idEstetica= $('#dgplusbellebundle_consulta_estetica').val();
+            console.log(idEstetica);
+            switch(parseInt(idEstetica)){
+                case 1:
+                    
+                    $('.corporall').each(function(index,element){
+                        var valor = $(this).val();
+                        var ids = $(this).attr('id');
+                        valores.push(valor);
+                        idParameters.push(ids);
+                    });
+                    
+                    $('.classCorporal').each(function(index,element){
+                        var valor = $(this).prop("checked");
+                        var ids = $(this).attr('id');
+                        valores.push(valor);
+                        idParameters.push(ids);
+                    });
+                    
+                    console.log(valores);
+                    
+                    
+                    break;
+                case 2:
+                    
+                    $('.classCorporal').each(function(index,element){
+                        var valor = $(this).val();
+                        var ids = $(this).attr('id');
+                        valores.push(valor);
+                        idParameters.push(ids);
+                    });
+                    
+                    break;
+                case 3:
+                    
+                    $('.cbotox').each(function(index,element){
+                        var valor = $(this).val();
+                        var ids = $(this).attr('id');
+                        valores.push(valor);
+                        idParameters.push(ids);
+                    });
+                    console.log(valores);
+                    break;
+            }
+            
+            
             //alert(fechaNacimiento);
             
 {#            url:"{{path('admin_consulta_insert_plantilla',{'id':id})}},#}
-            alert(idConsulta);
-            if(idConsulta!=''){
+           // alert(idPlantilla);
+{#            if(idConsulta!=''){#}
                 $.ajax({
-                    data:{id:id,valores:valores,idConsulta:idConsulta,idParameters:idParameters,idPlantilla:idPlantilla
+                    data:{id:id,valores:valores,idConsulta:idConsulta,idParameters:idParameters,idEstetica:idEstetica
                     },
 
                     url:"{{path('admin_consulta_insert_plantilla')}}",
@@ -2879,7 +2917,7 @@
 
                     }
                 });
-            }
+{#            }#}
         });
         
         
