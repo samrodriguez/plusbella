@@ -755,7 +755,16 @@ class ConsultaController extends Controller
         //Recuperación del paciente
         $request = $this->getRequest();
         $cadena= $request->get('id');
+        $idconsulta = $request->get('idtransaccion');
+        //var_dump($consulta);
+        $idconsulta = substr($idconsulta, 2);
+        //var_dump($idconsulta);
         $flag = 0;
+        
+        $ruta="";
+        
+        $mostrarplantilla=true;
+        
         
         if($cadena != NULL) {
             //Obtener el id del parametro
@@ -769,12 +778,32 @@ class ConsultaController extends Controller
 
             $signos = $em->getRepository('DGPlusbelleBundle:Signos')->findBy(array('paciente'=>$paciente->getId()),array('id'=>'DESC'));
             
-            
+            if($idconsulta!=null){
+                $consulta = $em->getRepository('DGPlusbelleBundle:Consulta')->find($idconsulta);
+            }
             //Seteo del paciente en la entidad
             $entity->setPaciente($paciente);
             //var_dump($paciente);
             $form   = $this->createCreateForm($entity,2,$cadena, $paciente);
             $entity->setPaciente($paciente);
+            //var_dump($consulta->getEmpleado()->getPersona()->getNombres());
+            
+            
+            $existePlantilla = false;
+            if($idconsulta!=null){
+                $tienePlantilla = $em->getRepository('DGPlusbelleBundle:HistorialConsulta')->findBy(array('consulta'=>$idconsulta));
+            }
+            if(count($tienePlantilla)!=0){
+                //var_dump($tienePlantilla);
+                $existePlantilla = true;
+                $ruta = "admin_reporteplantilla_pdf";
+            }
+            
+//            
+//            
+//            var_dump($existePlantilla);
+            $archivos = $em->getRepository('DGPlusbelleBundle:ImagenConsulta')->findBy(array('consulta'=>$idconsulta));
+            //var_dump($archivos);
         } else {
             $paciente = new \DGPlusbelleBundle\Entity\Paciente();
             $form   = $this->createCreateForm($entity, 3, $cadena, $paciente);
@@ -806,6 +835,10 @@ class ConsultaController extends Controller
         
             
         return array(
+            'ruta'=>$ruta,
+            'existePlantilla'=>$existePlantilla,
+            'archivos'=>$archivos,
+            'consulta'=>$consulta,
             'plantillas'=>$plantillas,
             'entity' => $entity,
             'sucursales' => $sucursales,
@@ -841,6 +874,9 @@ class ConsultaController extends Controller
         //Recuperación del paciente
         $request = $this->getRequest();
         $cadena= $request->get('id');
+        $idconsulta = $request->get('idtransaccion');
+        //var_dump($consulta);
+        $idconsulta = substr($idconsulta, 2);
         $flag = 0;
         
         if($cadena != NULL) {
@@ -855,12 +891,69 @@ class ConsultaController extends Controller
             
             $signos = $em->getRepository('DGPlusbelleBundle:Signos')->findBy(array('paciente'=>$paciente->getId()),array('id'=>'DESC'));
             //var_dump($signos[0]);
-            
+            if($idconsulta!=null){
+                $consulta = $em->getRepository('DGPlusbelleBundle:Consulta')->find($idconsulta);
+            }
+            else{
+                $consulta = $entity;
+                
+                
+            }
             //Seteo del paciente en la entidad
             $entity->setPaciente($paciente);
             //var_dump($paciente);
             $form   = $this->createCreateForm($entity,2,$cadena, $paciente);
             $entity->setPaciente($paciente);
+            $ruta = "";
+            $existePlantilla = false;
+            $corporal = Array();
+            $valores = Array();
+            $estetica = 0;
+            $tienePlantilla = $em->getRepository('DGPlusbelleBundle:ConsultaBotox')->findBy(array('consulta'=>$idconsulta));
+            //var_dump($tienePlantilla);
+            if(count($tienePlantilla)==0){
+                $tienePlantilla = $em->getRepository('DGPlusbelleBundle:ComposicionCorporal')->findBy(array('consulta'=>$idconsulta));
+                //var_dump($tienePlantilla);
+                if(count($tienePlantilla)==0){
+                    $tienePlantilla = $em->getRepository('DGPlusbelleBundle:HistorialEstetica')->findBy(array('consulta'=>$idconsulta));
+                    if(count($tienePlantilla)!=0){
+                        $ruta="admin_prevpdf_facial_por_pdf";
+                        $existePlantilla = true;
+                    }
+                }
+                else{
+                    //esta lleva comparativo
+                    $ruta="admin_prevpdfcorporal_por_pdf";
+                    $existePlantilla = true;
+                    
+                    array_push($corporal,$tienePlantilla[0]->getPeso());
+                    array_push($corporal,$tienePlantilla[0]->getGrasaCorporal());
+                    array_push($corporal,$tienePlantilla[0]->getAguaCorporal());
+                    array_push($corporal,$tienePlantilla[0]->getMasaMusculo());
+                    array_push($corporal,$tienePlantilla[0]->getValoracionFisica());
+                    array_push($corporal,$tienePlantilla[0]->getDciBmr());
+                    
+                    array_push($corporal,$tienePlantilla[0]->getEdadMetabolica());
+                    array_push($corporal,$tienePlantilla[0]->getMasaOsea());
+                    array_push($corporal,$tienePlantilla[0]->getGrasaVisceral());
+                    $estetica = 1;
+                    $checkboxes = $em->getRepository('DGPlusbelleBundle:HistorialEstetica')->findBy(array('consulta'=>$idconsulta));
+                    //var_dump($checkboxes);
+                    
+                    foreach($checkboxes as $row){
+                        array_push($valores,$row->getDetalleEstetica()->getId());
+                    }
+                    
+                    
+                }
+            }
+            else{
+                $ruta="admin_pdf_botox_por_pdf";
+                $existePlantilla=true;
+            }
+            var_dump($ruta);
+            var_dump($existePlantilla);
+            $archivos = $em->getRepository('DGPlusbelleBundle:ImagenConsulta')->findBy(array('consulta'=>$idconsulta));
         } else {
 //            $paciente = new \DGPlusbelleBundle\Entity\Paciente();
             $paciente = $em->getRepository('DGPlusbelleBundle:Paciente')->find($idEntidad);
@@ -893,6 +986,13 @@ class ConsultaController extends Controller
         
             
         return array(
+            'estetica'=>$estetica,
+            'valores'=>$valores,
+            'corporal'=>$corporal,
+            'ruta'=>$ruta,
+            'existePlantilla'=>$existePlantilla,
+            'archivos'=>$archivos,
+            'consulta'=>$consulta,
             'plantillas'=>$plantillas,
             'entity' => $entity,
             'sucursales' => $sucursales,
@@ -2000,9 +2100,7 @@ class ConsultaController extends Controller
 
                     
                     }else{
-                             $data['servidor'] = "No se pudo mover la imagen al servidor";
-
-
+                        $data['servidor'] = "No se pudo mover la imagen al servidor";
                     }
 
 
@@ -2200,7 +2298,7 @@ class ConsultaController extends Controller
         $cadena= $request->get('identidad');
         
         $parameters = $request->request->all();
-        var_dump($parameters);
+        //var_dump($parameters);
         //die();
         //Obtener del parametro el valor que se debe usar para programar la consulta
         $accion = $cadena[0];
@@ -2443,8 +2541,8 @@ class ConsultaController extends Controller
             else {
                 
                 $esteticaid = $parameters['idEstetica'];
-                echo "estetica";
-
+                //echo "estetica";
+                //var_dump($parameters);
                 $dql = "SELECT det.id, det.nombre, opc.id opcid, opc.nombre opcnom "
                         . "FROM DGPlusbelleBundle:OpcionesDetalleEstetica opc "
                         . "JOIN opc.detalleEstetica det "
@@ -2455,24 +2553,28 @@ class ConsultaController extends Controller
                             ->setParameter('esteticaid', $esteticaid)
                             ->getResult();
 
-
+                    //var_dump($parametros);
                 //$valores = array(); 
                 //var_dump($parameters); 
                 //die();
                 foreach($parametros as $p){
                     $dataReporte = new \DGPlusbelleBundle\Entity\HistorialEstetica;
                     
+                    $idOpcion = $p['opcid'];
                     $detalle = $em->getRepository('DGPlusbelleBundle:OpcionesDetalleEstetica')->find($p['opcid']);
-                    
+                    //var_dump($p);
                     
                     
                     $dataReporte->setdetalleEstetica($detalle);       
                     $dataReporte->setConsulta($entity);
+                    //var_dump($dataReporte);
                     //$dataReporte->setConsultaReceta(null);
                     //var_dump($p['opcnom']);
                     $nparam = explode(" ", $p['opcnom']);
+                    //var_dump($parametros);
                     //var_dump(count($nparam)); 
                     $lon = count($nparam);
+                    //var_dump($lon);
                     if($lon > 1){
                         $pnombre = $nparam[0];
                         foreach($nparam as $key => $par){
@@ -2485,18 +2587,33 @@ class ConsultaController extends Controller
                         
                         if(isset($parameters[$pnombre])){
                             $dataReporte->setValor($pnombre);
-                            
+                            //var_dump("persiste");
                             $em->persist($dataReporte);
                             $em->flush();
                         }    
                     } else {
-                        if(isset($parameters[$p['opcnom']])){
-                            $dataReporte->setValor($p['opcnom']);
-                             //var_dump($parameters[$p['opcnom']]); 
-                             
-                            $em->persist($dataReporte);
-                            $em->flush();
+                        //var_dump($parameters);
+                        $claves = array();
+                        foreach ($parameters['valores'] as $key => $reg){
+                            if($reg == 'true')
+                                array_push($claves, $parameters['idParameters'][$key]);
                         }
+                        
+                        //Son las claves con true
+                        //var_dump($claves);
+                        foreach($claves as $key => $idrow){
+                            if($idrow==$idOpcion){
+                                $dataReporte->setValor('-');
+                                //var_dump($parameters[$p['opcnom']]); 
+                                //var_dump("persiste");
+                                $em->persist($dataReporte);
+                                $em->flush();
+                                unset($claves[$key]);
+                            }
+                        }
+                        //Se busca que el id de la opc exista en las claves
+                        
+                        
                     }
                 
 //                    $em->persist($dataReporte);
