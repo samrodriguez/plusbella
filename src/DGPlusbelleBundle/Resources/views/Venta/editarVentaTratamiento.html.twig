@@ -103,32 +103,36 @@
                         </div><!-- /.row -->
                     </div><!-- /.content-hero-bar -->
                 </div><!-- /.content-hero-bar --><!-- /.content-hero-bar --><!-- /.content-hero-bar --><!-- /.content-hero-bar --><!-- /.content-hero-bar -->
-                <div class="row" style="display:none;" id="detalle-venta-info">
-                    <div class="col-md-3" style="margin-left: 30px;">
+                <div class="row" id="detalle-venta-info">
+                    <div class="col-md-8" style="margin-left: 30px;">
                         <div class="row">
-                            <div class="col-md-6" style="margin-bottom: 10px;">
+                            <div class="col-md-2" style="margin-bottom: 10px;">
                                 <strong>Costo:</strong>
                             </div>
-                            <div class="col-md-6" style="margin-bottom: 10px;">
-                                <span id="detalle-venta-costo"></span>
+                            <div class="col-md-2" style="margin-bottom: 10px;">
+                                <span id="detalle-venta-costo">$ {{ personaTratamiento.costoConsulta|number_format(2, '.', ',') }}</span>
                             </div>
-                        </div>  
-                        <div class="row">
-                            <div class="col-md-6" style="margin-bottom: 10px;">
-                                <strong>Cuotas:</strong><span></span>
+                        {#</div>  
+                        <div class="row">#}
+                            <div class="col-md-2" style="margin-bottom: 10px;">
+                                <strong>Cuotas:</strong>
                             </div>
-                            <div class="col-md-6" style="margin-bottom: 10px;">
-                                <span id="detalle-venta-cuotas"></span>
+                            <div class="col-md-2" style="margin-bottom: 10px;">
+                                <span id="detalle-venta-cuotas">{{ personaTratamiento.cuotas }}</span>
                             </div>
-                        </div>  
-                        <div class="row">
-                            <div class="col-md-6" style="margin-bottom: 10px;">
+                        {#</div>  
+                        <div class="row">#}
+                            <div class="col-md-2" style="margin-bottom: 10px;">
                                 <strong>Deuda:</strong><span></span>
                             </div>
-                            <div class="col-md-6" style="margin-bottom: 10px;">
-                                <span id="detalle-venta-deuda"></span>
+                            <div class="col-md-2" style="margin-bottom: 10px;">
+                                <span id="detalle-venta-deuda">$ {{ personaTratamiento.costoConsulta|number_format(2, '.', ',') }}</span>
                             </div>
                         </div>  
+                    </div>
+                    <div class="clearfix"></div>
+                    <div class="col-md-12" style="margin-bottom: 25px;">
+                        <hr>
                     </div>
                     <div class="col-md-7" style="margin-left: 30px;">
                         <div class="row">
@@ -136,7 +140,7 @@
                                 <strong># de sesiones:</strong><span></span>
                             </div>
                             <div class="col-md-3" style="margin-bottom: 20px;">
-                                <span id="detalle-venta-sesiones"></span>
+                                <span id="detalle-venta-sesiones">{{ personaTratamiento.numSesiones }}</span>
                             </div>
                             <div class="col-md-1" style="margin-bottom: 20px;">
                                 <img class='' style='height: 25px;'  src='{{ asset('Photos/Estados/sesion_realizada.png')}}' title='Sesion pendiente'>
@@ -158,7 +162,19 @@
                                 <hr>
                             </div>
                         </div> 
-                        <div id="detalle-venta-tratamientos"></div>    
+                        <div id="detalle-venta-tratamientos">
+                            <div class="row">
+                                <div class="col-md-5" style="margin-bottom: 10px;">
+                                    <span>{{ personaTratamiento.tratamiento.nombre }}</span>
+                                </div>
+                                <div class="col-md-7" style="margin-bottom: 10px;">
+                                    <div class="row">
+
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>    
                         <div class="row">
                             <div class="col-md-12" style="margin-bottom: 10px;">
                                 <hr>
@@ -170,9 +186,9 @@
                 <ul class="nav nav-tabs" style="margin-top: 30px;">
                     <li class="active"><a data-toggle="tab" href="#datos-generales">Datos generales</a></li>
                     <li><a data-toggle="tab" href="#registros-venta">Registro de venta</a></li>
-                    <li><a data-toggle="tab" href="#registro-sesiones" style="display:none;" id="tabs-sesiones">Registro de sesiones</a></li>
-                    <li><a data-toggle="tab" href="#imagenes" style="display:none;" id="tabs-imagenes">Imagenes</a></li>
-                    <li><a data-toggle="tab" href="#abonos-devoluciones" style="display:none;" id="tabs-abdev">Abonos{# / Devoluciones#}</a></li>
+                    <li><a data-toggle="tab" href="#registro-sesiones" id="tabs-sesiones">Registro de sesiones</a></li>
+                    <li><a data-toggle="tab" href="#imagenes" id="tabs-imagenes">Imagenes</a></li>
+                    <li><a data-toggle="tab" href="#abonos-devoluciones" id="tabs-abdev">Abonos{# / Devoluciones#}</a></li>
                 </ul>
                 
                 {# Aquí se encuentran las secciones de las tabs #}    

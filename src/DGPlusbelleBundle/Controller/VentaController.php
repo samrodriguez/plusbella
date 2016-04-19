@@ -103,9 +103,14 @@ class VentaController  extends Controller
         //Recuperación del id
         $request = $this->getRequest();
         
-        $idPacient= $request->get('id');  
-        $idPaciente=  substr($idPacient, 1);
-        $paciente = $em->getRepository('DGPlusbelleBundle:Paciente')->find($idPaciente);
+        $idVpaquete= $request->get('id');  
+        $idVentaPaquete=  substr($idVpaquete, 1);
+        $ventaPaquete = $em->getRepository('DGPlusbelleBundle:VentaPaquete')->find($idVentaPaquete);
+        
+        $persona = $em->getRepository('DGPlusbelleBundle:Persona')->find($ventaPaquete->getPaciente()->getId());
+        $paciente= $em->getRepository('DGPlusbelleBundle:Paciente')->findOneBy(array('persona' => $persona));
+        
+        $idPaciente = $paciente->getId();
         
         $edad="";
         if(count($paciente)!=0){
@@ -136,9 +141,58 @@ class VentaController  extends Controller
         $CompraPaciente = $em->getRepository('DGPlusbelleBundle:Paciente')->find($idPaciente);
         $paciente = $CompraPaciente;
         
+        $ventaPaqueteId = $ventaPaquete->getId();
         $regnoeditpaquete = array();
         $regnoedittratamiento = array();
+        $idtratamientos = array();    
+        
+        $tratamientos = $em->getRepository('DGPlusbelleBundle:DetalleVentaPaquete')->findBy(array('ventaPaquete' => $ventaPaqueteId));
+        
+        foreach ($tratamientos as $trat){
+            $idtrat = $trat->getTratamiento()->getId();
+            $seguimiento = $em->getRepository('DGPlusbelleBundle:SeguimientoPaquete')->findOneBy(array('tratamiento' => $idtrat,
+                                                                                                    'idVentaPaquete' => $ventaPaqueteId
+                                                                                                ));
+            if($seguimiento->getNumSesion() < $trat->getNumSesiones()){
+                array_push($idtratamientos, $idtrat); 
+            }            
+        }
+        
+        $dql = "SELECT t.id, t.nombre FROM DGPlusbelleBundle:Tratamiento t "
+                    . "WHERE t.id IN (:ids) ";
+            $tratVenta = $em->createQuery($dql)
+                       ->setParameter('ids', $idtratamientos)
+                       ->getResult();
+        
+        $rsm = new ResultSetMapping();
+        
+        $sql = "select ven.id as id,"
+                . "paq.nombre as nomPaquete, "
+                . "tra.nombre as ntrata, "
+                . "pt.num_sesiones as sesiones, "
+                . "seg.num_sesion as numSesion "
+                . "from venta_paquete ven "
+                . "inner join paquete paq on ven.paquete = paq.id "
+                . "inner join seguimiento_paquete seg on ven.id = seg.id_venta_paquete "
+                . "inner join persona emp on ven.empleado = emp.id "
+                . "inner join persona pac on ven.paciente = pac.id "
+                . "inner join paciente p on pac.id = p.persona "
+                . "inner join expediente exp on p.id = exp.paciente "
+                . "inner join sucursal suc on ven.sucursal = suc.id "
+                . "inner join detalle_venta_paquete pt on ven.id = pt.venta_paquete "
+                . "inner join tratamiento tra on pt.tratamiento = tra.id "
+                . "left outer join descuento des on ven.descuento = des.id "
+                . "where ven.id = '$ventaPaqueteId' and seg.tratamiento = pt.tratamiento";
 
+        $rsm->addScalarResult('id','id');
+        $rsm->addScalarResult('nomPaquete','nomPaquete');
+        $rsm->addScalarResult('ntrata','ntrata');
+        $rsm->addScalarResult('sesiones','sesiones');
+        $rsm->addScalarResult('numSesion','numSesion');
+
+        $sesionesVenta = $em->createNativeQuery($sql, $rsm)
+                ->getResult();
+        
         $ventaPaquetes = $em->getRepository('DGPlusbelleBundle:Paquete')->findBy(array('estado' => true));
         $ventaTratamientos = $em->getRepository('DGPlusbelleBundle:Tratamiento')->findBy(array('estado' => true));
         $sucursales = $em->getRepository('DGPlusbelleBundle:Sucursal')->findBy(array('estado' => true));
@@ -152,11 +206,14 @@ class VentaController  extends Controller
             'paquetesnoedit'=>$regnoeditpaquete,
             'tratamientosnoedit'=>$regnoedittratamiento,
             'ventaPaquetes' => $ventaPaquetes,
-            'ventaTratamientos' => $ventaTratamientos,
+            'ventaPaquete' => $ventaPaquete,
+            //'ventaTratamientos' => $ventaTratamientos,
+            'tratVenta' => $tratVenta,
             'sucursales' => $sucursales,
             'empleadosVenta' => $empleadosVenta,
             'descuentos' => $descuentos,
-            'idPaciente'=>$idPacient
+            'sesionesVenta' => $sesionesVenta,
+            'idPaciente'=>$idPaciente
             );
     }
     
@@ -173,9 +230,16 @@ class VentaController  extends Controller
         //Recuperación del id
         $request = $this->getRequest();
         
-        $idPacient= $request->get('id');  
-        $idPaciente=  substr($idPacient, 1);
-        $paciente = $em->getRepository('DGPlusbelleBundle:Paciente')->find($idPaciente);
+        $idVtrata= $request->get('id');  
+        $idVentaTratamiento=  substr($idVtrata, 1);
+        $personaTratamiento = $em->getRepository('DGPlusbelleBundle:PersonaTratamiento')->find($idVentaTratamiento);
+        
+        $persona = $em->getRepository('DGPlusbelleBundle:Persona')->find($personaTratamiento->getPaciente()->getId());
+        $paciente= $em->getRepository('DGPlusbelleBundle:Paciente')->findOneBy(array('persona' => $persona));
+        
+//        $idPacient= $request->get('id');  
+//        $idPaciente=  substr($idPacient, 1);
+//        $paciente = $em->getRepository('DGPlusbelleBundle:Paciente')->find($idPaciente);
         
         $edad="";
         if(count($paciente)!=0){
@@ -203,7 +267,7 @@ class VentaController  extends Controller
             $expnum = $paciente->getExpediente()[0]->getNumero();
         }
         
-        $CompraPaciente = $em->getRepository('DGPlusbelleBundle:Paciente')->find($idPaciente);
+        $CompraPaciente = $em->getRepository('DGPlusbelleBundle:Paciente')->find($paciente->getId());
         $paciente = $CompraPaciente;
         
         $regnoeditpaquete = array();
@@ -226,7 +290,8 @@ class VentaController  extends Controller
             'sucursales' => $sucursales,
             'empleadosVenta' => $empleadosVenta,
             'descuentos' => $descuentos,
-            'idPaciente'=>$idPacient
+            'personaTratamiento' => $personaTratamiento,
+            'idPaciente'=>$paciente->getId()
             );
     }
     
@@ -292,26 +357,48 @@ class VentaController  extends Controller
             $em->merge($seguimiento);
             $em->flush();
             
+            $idtratamientos = array();    
+        
+            $dvtratamientos = $em->getRepository('DGPlusbelleBundle:DetalleVentaPaquete')->findBy(array('ventaPaquete' => $ventaPaquete->getId()));
+
+            foreach ($dvtratamientos as $trat){
+                $idtrat = $trat->getTratamiento()->getId();
+                $seguimiento = $em->getRepository('DGPlusbelleBundle:SeguimientoPaquete')->findOneBy(array('tratamiento' => $idtrat,
+                                                                                                        'idVentaPaquete' => $ventaPaquete->getId()
+                                                                                                    ));
+
+                if($seguimiento->getNumSesion() < $trat->getNumSesiones()){
+                    array_push($idtratamientos, $idtrat); 
+                }            
+            }
+
+            $dql = "SELECT t.id, t.nombre FROM DGPlusbelleBundle:Tratamiento t "
+                        . "WHERE t.id IN (:ids) ";
+                $tratVenta = $em->createQuery($dql)
+                           ->setParameter('ids', $idtratamientos)
+                           ->getResult();
+            
+            
             $rsm = new ResultSetMapping();
             $em = $this->getDoctrine()->getManager();            
                 
             $sql = "select ven.id as id,"
-                    . "paq.nombre as nomPaquete, "
-                    . "tra.nombre as ntrata, "
-                    . "pt.num_sesiones as sesiones, "
-                    . "seg.num_sesion as numSesion "
-                    . "from venta_paquete ven "
-                    . "inner join paquete paq on ven.paquete = paq.id "
-                    . "inner join seguimiento_paquete seg on ven.id = seg.id_venta_paquete "
-                    . "inner join persona emp on ven.empleado = emp.id "
-                    . "inner join persona pac on ven.paciente = pac.id "
-                    . "inner join paciente p on pac.id = p.persona "
-                    . "inner join expediente exp on p.id = exp.paciente "
-                    . "inner join sucursal suc on ven.sucursal = suc.id "
-                    . "inner join paquete_tratamiento pt on paq.id = pt.paquete "
-                    . "inner join tratamiento tra on pt.tratamiento = tra.id "
-                    . "left outer join descuento des on ven.descuento = des.id "
-                    . "where ven.id = '$id' and seg.tratamiento = pt.tratamiento";
+                . "paq.nombre as nomPaquete, "
+                . "tra.nombre as ntrata, "
+                . "pt.num_sesiones as sesiones, "
+                . "seg.num_sesion as numSesion "
+                . "from venta_paquete ven "
+                . "inner join paquete paq on ven.paquete = paq.id "
+                . "inner join seguimiento_paquete seg on ven.id = seg.id_venta_paquete "
+                . "inner join persona emp on ven.empleado = emp.id "
+                . "inner join persona pac on ven.paciente = pac.id "
+                . "inner join paciente p on pac.id = p.persona "
+                . "inner join expediente exp on p.id = exp.paciente "
+                . "inner join sucursal suc on ven.sucursal = suc.id "
+                . "inner join detalle_venta_paquete pt on ven.id = pt.venta_paquete "
+                . "inner join tratamiento tra on pt.tratamiento = tra.id "
+                . "left outer join descuento des on ven.descuento = des.id "
+                . "where ven.id = '$id' and seg.tratamiento = pt.tratamiento";
             
             $rsm->addScalarResult('id','id');
             $rsm->addScalarResult('nomPaquete','nomPaquete');
@@ -328,6 +415,7 @@ class VentaController  extends Controller
             $response->setData(array(
                                 'exito'       => '1',
                                 'ventaPaquete' => $mensaje,
+                                'tratVenta' => $tratVenta,
                                ));  
             
             return $response; 

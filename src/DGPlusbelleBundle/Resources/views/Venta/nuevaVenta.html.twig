@@ -1174,10 +1174,13 @@
                                                     var detalleVentaInfo = document.getElementById('detalle-venta-info');
                                                     id_ventapaquete = response.ventaPaquete;
                                                     
-                                                    $('#detalle-venta-costo').html();
+                                                    // Se guarda el select que será utilizado para el llenado de tratamientos
+                                                    var vtratamientos = $("#dgplusbellebundle_sesiones_tratamiento");
+                                                    
+                                                    {#$('#detalle-venta-costo').html();
                                                     $('#detalle-venta-cuotas').html();
                                                     $('#detalle-venta-deuda').html();
-                                                    $('#detalle-venta-sesiones').html();
+                                                    $('#detalle-venta-sesiones').html();#}
                                                     
                                                     $('#detalle-venta-costo').html('$ ' + response.ventaPaqueteTratamientos.costo);
                                                     $('#detalle-venta-cuotas').html(response.ventaPaqueteTratamientos.cuotas);
@@ -1204,9 +1207,12 @@
                                                     
                                                     $('#detalle-venta-tratamientos').html(draw);
                                                     
-                                                    $(response.nomTratamientos).each(function(i, v){ // indice, valor
-                                                        cursos.append('<option value="' + v.id + '">' + v.Nombre + '</option>');
-                                                    })
+                                                    // LLenado del combobox de tratamientos de la sección de registro de sesiones
+                                                    // con los tratamientos que pertenecen al paquete que se le ha realizado la
+                                                    // la venta
+                                                    $(response.ventaPaqueteTratamientos.tratVenta).each(function(i, v){ 
+                                                        vtratamientos.append('<option value="' + v.id + '">' + v.nombre + '</option>');
+                                                    });
                                                     
                                                     tabsSesiones.style.display = 'block';
                                                     tabsImagenes.style.display = 'block';
@@ -1366,6 +1372,8 @@
                             success:  function (response) {
                                 alertify.success('Se ha resgistrado con exito la sesion del tratamiento');
                                 
+                                var vtratamientos = $("#dgplusbellebundle_sesiones_tratamiento");
+                                
                                 $.each( response.ventaPaquete, function( key, value ) {
                                     console.log(value);
                                     mensaje+= '<div class="row">';
@@ -1403,6 +1411,15 @@
                                 console.log(mensaje);
                                 //$('#seguimiento-tratamientos-realizados').html(mensaje);
                                 $('#detalle-venta-tratamientos').html(mensaje);
+                                
+                                // Se vacía el select
+                                vtratamientos.find('option').remove();
+                                vtratamientos.append('<option value="" disabled selected>Seleccione un tratamiento ...</option>');
+                                
+                                $(response.tratVenta).each(function(i, v){ 
+                                    vtratamientos.append('<option value="' + v.id + '">' + v.nombre + '</option>');
+                                });
+                                //$('#dgplusbellebundle_sesiones_tratamiento option[value=""]').attr("selected",true);
                             }
                         });
                         

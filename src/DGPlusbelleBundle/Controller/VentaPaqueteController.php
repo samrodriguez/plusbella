@@ -488,11 +488,32 @@ class VentaPaqueteController extends Controller
                 $idTratamientos[$key] = $detalleVenta->getTratamiento()->getId();
             }
             
+            $idtratamientos = array();    
+        
+            $vTratamientos = $em->getRepository('DGPlusbelleBundle:DetalleVentaPaquete')->findBy(array('ventaPaquete' => $ventaPaquete->getId()));
+
+            foreach ($vTratamientos as $trat){
+                $idtrat = $trat->getTratamiento()->getId();
+                $seguimiento = $em->getRepository('DGPlusbelleBundle:SeguimientoPaquete')->findOneBy(array('tratamiento' => $idtrat,
+                                                                                                        'idVentaPaquete' => $ventaPaquete->getId()
+                                                                                                    ));
+                if($seguimiento->getNumSesion() < $trat->getNumSesiones()){
+                    array_push($idtratamientos, $idtrat); 
+                }            
+            }
+
+            $dql = "SELECT t.id, t.nombre FROM DGPlusbelleBundle:Tratamiento t "
+                        . "WHERE t.id IN (:ids) ";
+                $tratVenta = $em->createQuery($dql)
+                           ->setParameter('ids', $idtratamientos)
+                           ->getResult();
+            
             $ventaPaqueteTratamientos = array(
                                         'id' => $ventaPaquete->getId(), 
                                         'costo' => $ventaPaquete->getCosto(), 
                                         'sesiones' => $sesiones,
                                         'tratamientos' => $tratamientos,
+                                        'tratVenta' => $tratVenta,
                                         'nomTratamientos' => $nomTratamientos,
                                         'idTratamientos' => $idTratamientos,
                                         'cuotas' => $ventaPaquete->getCuotas()
@@ -514,5 +535,119 @@ class VentaPaqueteController extends Controller
         } 
    }
 
+   /**
+    * Ajax utilizado para buscar informacion del producto
+    *  
+    * @Route("/registro/venta/edit", name="admin_registro_editar_venta_paquete")
+    */
+    public function registrarEditarVentaPaqueteAction()
+    {
+        $isAjax = $this->get('Request')->isXMLhttpRequest();
+        if($isAjax){
+            $em = $this->getDoctrine()->getManager();
+            $usuario= $this->get('security.token_storage')->getToken()->getUser();
+            
+            $id = $this->get('request')->request->get('id');
+            //$paqueteId = $this->get('request')->request->get('paquete');
+            $sucursalId = $this->get('request')->request->get('sucursal');
+            $empleadoId = $this->get('request')->request->get('empleado');
+            $costo = $this->get('request')->request->get('costo');
+            $cuotas = $this->get('request')->request->get('cuotas');
+            $tratamientos = $this->get('request')->request->get('tratamientos');
+            $sesiones = $this->get('request')->request->get('sesiones');
+            $descuentoId = $this->get('request')->request->get('descuento');
+            $id_ventapaquete = $this->get('request')->request->get('id_ventapaquete');
+            
+            $ventaPaquete = $em->getRepository('DGPlusbelleBundle:VentaPaquete')->find($id_ventapaquete);
+            
+            $paciente = $em->getRepository('DGPlusbelleBundle:Paciente')->find($id);
+            $personaPaciente = $em->getRepository('DGPlusbelleBundle:Persona')->find($paciente->getPersona()->getId());
+            $ventaPaquete->setPaciente($personaPaciente);
+            
+            if(!is_null($empleadoId)){
+                $empleado = $em->getRepository('DGPlusbelleBundle:Empleado')->find($empleadoId);
+                $personaEmpleado = $em->getRepository('DGPlusbelleBundle:Persona')->find($empleado->getPersona()->getId());
+                $ventaPaquete->setEmpleado($personaEmpleado);
+            }
+            
+            $ventaPaquete->setCosto($costo);
+            $ventaPaquete->setCuotas($cuotas);
+            
+//            $paquete = $em->getRepository('DGPlusbelleBundle:Paquete')->find($paqueteId);
+//            $ventaPaquete->setPaquete($paquete);
+           
+            $sucursal = $em->getRepository('DGPlusbelleBundle:Sucursal')->find($sucursalId);
+            $ventaPaquete->setSucursal($sucursal);
+            
+            if(!is_null($descuentoId)){
+                $descuento = $em->getRepository('DGPlusbelleBundle:Descuento')->find($descuentoId);
+                $ventaPaquete->setDescuento($descuento);
+            }
+            
+            $em->merge($ventaPaquete);
+            $em->flush();
+            
+//            $nomTratamientos = array();
+//            foreach($tratamientos as $key => $value){
+//                $detalleVenta = new \DGPlusbelleBundle\Entity\DetalleVentaPaquete();
+//                        
+//                $paqT = $em->getRepository('DGPlusbelleBundle:PaqueteTratamiento')->find($value);
+//
+//                $detalleVenta->setTratamiento($paqT->getTratamiento());
+//                $detalleVenta->setVentaPaquete($ventaPaquete);
+//                $detalleVenta->setNumSesiones($sesiones[$key]);
+//
+//                $em->persist($detalleVenta);
+//                $em->flush();
+//                
+//                $nomTratamientos[$key] = $detalleVenta->getTratamiento()->getNombre();
+//                $idTratamientos[$key] = $detalleVenta->getTratamiento()->getId();
+//            }
+            
+            $idtratamientos = array();    
+        
+            $vTratamientos = $em->getRepository('DGPlusbelleBundle:DetalleVentaPaquete')->findBy(array('ventaPaquete' => $ventaPaquete->getId()));
 
+            foreach ($vTratamientos as $trat){
+                $idtrat = $trat->getTratamiento()->getId();
+                $seguimiento = $em->getRepository('DGPlusbelleBundle:SeguimientoPaquete')->findOneBy(array('tratamiento' => $idtrat,
+                                                                                                        'idVentaPaquete' => $ventaPaquete->getId()
+                                                                                                    ));
+                if($seguimiento->getNumSesion() < $trat->getNumSesiones()){
+                    array_push($idtratamientos, $idtrat); 
+                }            
+            }
+
+            $dql = "SELECT t.id, t.nombre FROM DGPlusbelleBundle:Tratamiento t "
+                        . "WHERE t.id IN (:ids) ";
+                $tratVenta = $em->createQuery($dql)
+                           ->setParameter('ids', $idtratamientos)
+                           ->getResult();
+            
+            $ventaPaqueteTratamientos = array(
+                                        'id' => $ventaPaquete->getId(), 
+                                        'costo' => $ventaPaquete->getCosto(), 
+                                        'sesiones' => $sesiones,
+                                        'tratamientos' => $tratamientos,
+                                        'tratVenta' => $tratVenta,
+                                        //'nomTratamientos' => $nomTratamientos,
+                                        //'idTratamientos' => $idTratamientos,
+                                        'cuotas' => $ventaPaquete->getCuotas()
+                                    );
+            
+            $this->get('bitacora')->escribirbitacora("Se edito la venta del paquete " . $ventaPaquete->getPaquete()->getNombre(), $usuario->getId());
+            
+            $response = new JsonResponse();
+            $response->setData(array(
+                                'exito'       => '1',
+                                'paquete' => $ventaPaquete->getPaquete()->getNombre(),
+                                'ventaPaquete' => $ventaPaquete->getId(),
+                                'ventaPaqueteTratamientos' => $ventaPaqueteTratamientos
+                               ));  
+            
+            return $response; 
+        } else {    
+            return new Response('0');              
+        } 
+   }
 }
