@@ -119,8 +119,8 @@ class ComparativoEsteticaBotoxFPDFService {
             
             $fechaCad = explode('-', $value[2]);
 //            var_dump($fechaCad);
-//            $this->pdf->Cell(25, 27, $fechaCad[2].'/'.$fechaCad[1].'/'.$fechaCad[0],0,0,'C');
-            $this->pdf->Cell(25, 27, $value[2],0,0,'C');
+            $this->pdf->Cell(25, 27, $fechaCad[2].'-'.$fechaCad[1].'-'.$fechaCad[0],0,0,'C');
+            //$this->pdf->Cell(25, 27, $value[2],0,0,'C');
             $this->pdf->Cell(19, 27, $value[3],0,0,'C');
             $this->pdf->Cell(28, 27, $value[4],0,0,'C');
             $this->pdf->Cell(25, 27, $value[5],0,0,'C');

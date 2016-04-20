@@ -197,6 +197,7 @@
               <li class=""><a href="#botabs5" data-toggle="tab">Costo</a></li>
               <li class=""><a href="#botabs6" data-toggle="tab">Imágenes</a></li>
               <li class=""><a href="#botabs7" data-toggle="tab">Plantilla</a></li>
+              <li class=""><a href="#botabs8" data-toggle="tab">Receta médica</a></li>
               
             </ul>
             <div class="panel-body">
@@ -488,7 +489,7 @@
                                             <input id="dgplusbellebundle_consulta_registraReceta_1" name="dgplusbellebundle_consulta[registraReceta]" required="required" value="0" type="radio"> No
                                         </div>
                                         <div class="col-md-10">
-                                            <textarea id="textareaReceta" class="form-control input-sm col-md-8" placeholder="Receta médica"></textarea>
+                                            <textarea id="textareaReceta" class="form-control input-sm col-md-8 editorArea" placeholder="Receta médica"></textarea>
                                         </div>
                                     </div>
                                     
@@ -621,13 +622,13 @@
                         </div>
                         <div class="row" style="margin-top:20px;">
                             <div class="col-md-4">
-                                <textarea maxlength="400" style="height:100px;" id="antecedentesPatologicos" value="{{paciente.patologicos}}" class="form-control">{{paciente.patologicos}}</textarea>
+                                <textarea maxlength="400" style="height:100px;" id="antecedentesPatologicos" value="{{paciente.patologicos}}" class="form-control editorArea">{{paciente.patologicos}}</textarea>
                             </div>
                             <div class="col-md-4">
-                                <textarea maxlength="400" style="height:100px;" id="antecedentesFamiliares" value="{{paciente.familiares}}" class="form-control">{{paciente.familiares}}</textarea>
+                                <textarea maxlength="400" style="height:100px;" id="antecedentesFamiliares" value="{{paciente.familiares}}" class="form-control editorArea">{{paciente.familiares}}</textarea>
                             </div>
                             <div class="col-md-4">
-                                <textarea maxlength="400" style="height:100px;" id="antecedentesAlergias" value="{{paciente.alergias}}" class="form-control">{{paciente.alergias}}</textarea>
+                                <textarea maxlength="400" style="height:100px;" id="antecedentesAlergias" value="{{paciente.alergias}}" class="form-control editorArea">{{paciente.alergias}}</textarea>
                             </div>
                         </div>
                             
@@ -683,7 +684,7 @@
                                 <div class="col-md-12">
                                     <form id="formImagen" role="form" enctype="multipart/form-data" method="post">
                                         <input id="file-input" required type="file" name="file[]" multiple>
-                                        <input type="text" id="idConsulta" value="{% if consulta.id is null %}{%else%}{{consulta.id}}{%endif%}" name="idConsulta" class="form-control input-sm"/>
+                                        <input type="hidden" id="idConsulta" value="{% if consulta.id is null %}{%else%}{{consulta.id}}{%endif%}" name="idConsulta" class="form-control input-sm"/>
                                     </form>
                                     {#<form action="#" id="formImagen" enctype="multipart/form-data"  method="post">
                                         <div class="form-group">
@@ -777,7 +778,47 @@
                             {% endif %}
                         </p>
                     
-                </div><!-- /tab-content -->
+                    </div><!-- /tab-content -->
+                    
+                    <div class="tab-pane fade in" id="botabs8">
+                        <p>
+                            <strong></strong>
+                            
+                            {%if existeReceta == false %}
+                                <div class="col-md-12" style="margin-top:20px;{# display:none;#}" id="idReceta">
+                                    <i class="fa fa-file-pdf-o" style="margin-right:10px;"></i>
+                                    <a id="recetaPrevPDF" style="cursor:pointer;">Generar PDF</a>
+                                    <hr>
+                                </div>
+                                <div class="row" style="margin-top:10px;">
+                                    
+                                    <div class="col-md-12">
+                                        <textarea class="col-md-12 editorArea" id="receta" placeholder=""></textarea>
+                                    </div>
+                                    
+                                    <div class="clearfix"></div>
+                                    
+                                    <div class="row" style="margin-top:10px;">
+                                        <div class="col-md-12">
+                                            <hr>
+                                        </div>
+                                    </div>
+
+                                    <div class="row pull-right" style="margin-top:10px;">
+                                        <div class="col-md-12">
+                                            <div class="form-grouphide col-sm-12">
+                                                {#<a class="btn btn-default btn-xs" id="cancelarNuevoConsulta">Cancelar</a>#}
+                                                <button type="submit" id="guardarReceta" name="dgplusbellebundle_antecedentes[submit]" class="btn btn-success btn-xs btn btn">Guardar</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            {% else %}
+                                <i class="fa fa-file-pdf-o"></i><a class="generarPDF" href="{{path(ruta,{id:consulta.id})}}"> Ver receta</a>
+                            {% endif %}
+                        </p>
+                    
+                    </div><!-- /tab-content -->
             </div><!-- /panel-body -->
         </div>
     {% else %}
@@ -2655,7 +2696,9 @@
                             
                             $('#nombrePaciente').html(nombres+" "+apellidos);
                             $('#ocupacionPaciente').html(ocup+" "+ocupacion);
-                            bootbox.alert("Cambios guardados!", function() {});
+{#                            bootbox.alert("Cambios guardados!", function() {});#}
+                            alertify.success("Cambios guardados!");
+                            
                         }
                         
                         {#console.log("pagina actual: "+data);
@@ -2709,12 +2752,13 @@
                                             if(data!=0){
                                                 $('#idConsulta').val(data);
                                                 console.log(data);
-                                                bootbox.alert("Consulta registrada!", function() {});
+{#                                                bootbox.alert("Consulta registrada!", function() {});#}
+                                                alertify.success("Consulta registrada!");
                                                 console.log($('#idConsulta').val());
                                             }
                                         },
                                     error: function (data) {
-
+                                        alertify.error("Hubo un error, intente de nuevo!");
                                     }
                                 });
                             }
@@ -2747,14 +2791,15 @@
                 success: function (data) {
                         //inicio = data.inicio++;
                         if(data==0){
-                            bootbox.alert("Cambios guardados!", function() {});
+{#                            bootbox.alert("Cambios guardados!", function() {});#}
+                            alertify.success("Cambios guardados!");
                         }
                         
                         {#console.log("pagina actual: "+data);
                         console.log("Inicio de registro: "+data.inicioRegistro);#}
                     },
                 error: function (data) {
-
+                    alertify.error("Hubo un error, intente de nuevo!");
                 }
             });
         });
@@ -2782,16 +2827,15 @@
                 success: function (data) {
                         //inicio = data.inicio++;
                         if(data==0){
-                            bootbox.alert("Cambios guardados!", function() {});
-
+{#                            bootbox.alert("Cambios guardados!", function() {});#}
+                            alertify.success("Cambios guardados!");
                         }
 {#                        console.log("pagina actual: "+data);
                         console.log("Inicio de registro: "+data.inicioRegistro);#}
                         
                     },
                 error: function (data) {
-
-
+                    alertify.error("Hubo un error, intente de nuevo!");
                 }
             });
         });
@@ -2873,20 +2917,77 @@
 
                                 $('#nombrePaciente').html(nombres+" "+apellidos);
                                 $('#ocupacionPaciente').html(ocup+" "+ocupacion);
-                                bootbox.alert("Cambios guardados!", function() {});
+{#                                bootbox.alert("Cambios guardados!", function() {});#}
+                                alertify.success("Cambios guardados!");
                             }
 
                             {#console.log("pagina actual: "+data);
                             console.log("Inicio de registro: "+data.inicioRegistro);#}
                         },
                     error: function (data) {
-
+                        alertify.error("Hubo un error, intente de nuevo!");
 
                     }
                 });
             }
         });
         
+        
+        
+        $(document).on('click','#guardarReceta', function(){
+            var id = $('#idPaciente').val();
+            var idConsulta = $('#idConsulta').val();
+            var valores = new Array();
+{#            alert(direccion);#}
+            var nombre=$('#idPaciente').val();
+            var id=12;
+            console.log(id);
+            console.log("nombre: "+nombre);
+            
+            var valor = 0;
+            valor = $('#receta').val();
+            valores.push(valor);
+            console.log(valores);
+                
+                        //alert(fechaNacimiento);
+            
+{#            url:"{{path('admin_consulta_insert_plantilla',{'id':id})}},#}
+            //alert(idConsulta);
+            if(idConsulta!=''){
+                $.ajax({
+                    data:{id:id,valores:valores,idConsulta:idConsulta
+                    },
+
+                    url:"{{path('admin_receta_guardar_ajax')}}",
+
+                    type: "post",
+                    success: function (data) {
+                            //inicio = data.inicio++;
+                            if(data==0){
+                                var iTel='<i class="fa fa-phone"></i>';
+                                var dir='<i class="fa fa-map-marker fa-fw"></i>';
+                                var ocup = '<i class="fa fa-briefcase"></i>';
+                                $('#telefono').html(iTel+" "+telefono1);
+                                $('#direccionD').html(dir+" "+direccion);
+
+
+                                $('#nombrePaciente').html(nombres+" "+apellidos);
+                                $('#ocupacionPaciente').html(ocup+" "+ocupacion);
+{#                                bootbox.alert("Cambios guardados!", function() {});#}
+                                alertify.success("Cambios guardados!");
+                            }
+
+                            {#console.log("pagina actual: "+data);
+                            console.log("Inicio de registro: "+data.inicioRegistro);#}
+                                    },
+                    error: function (data) {
+                        alertify.error("Hubo un error, intente de nuevo!");
+
+                    }
+                });
+            }
+            return false;
+        });
         
         
         
@@ -2946,10 +3047,12 @@
                                     success: function(data){
                                         $("#prev").attr('src', "/abgsistema/web/"+data.direccion);
                                         $('#file-input').val('');
-                                        bootbox.alert('Fotos subidas con éxito!');
+{#                                        bootbox.alert('Fotos subidas con éxito!');#}
+                                        alertify.success("Fotos subidas con éxito!");
                                     },
                                     error: function(data){
-                                        bootbox.alert('Hubo un error al subir las fotos');
+{#                                        bootbox.alert('Hubo un error al subir las fotos');#}
+                                        alertify.error("Hubo un error al subir las fotos!");
                                     }
                                 });
                             }
@@ -2961,9 +3064,10 @@
                 }
             }
             else{
-                bootbox.alert('Debe guardar una consulta primero!');
+                {#bootbox.alert('Debe guardar una consulta primero!');            #}
+                alertify.error("Debe guardar una consulta primero!");
             }
-
+                
         });
         
         
@@ -3044,16 +3148,16 @@
                     });
 
         $('select[id$=dgplusbellebundle_consulta_placas_]').selectBoxIt();      
-        var valores = new Array();
+        {#var valores = new Array();
         var valores2 = new Array();
         var id=0;
-        var nombre = 0;
+        var nombre = 0;#}
         
         $(document).on('click','#historialPrevPDF',function(){
-            valores = [];
+            var valores = [];
 {#            nombre=$('#dgplusbellebundle_consulta_paciente').val();#}
-            nombre=$('#idPaciente').val();
-            id=$('#dgplusbellebundle_consulta_plantilla').val();
+            var nombre=$('#idPaciente').val();
+            var id=$('#dgplusbellebundle_consulta_plantilla').val();
             console.log(id);
             console.log("nombre: "+nombre);
             var valor = 0;
@@ -3073,6 +3177,30 @@
 
                 window.open(url);
             }
+
+            return false;
+        });
+        
+        
+        $(document).on('click','#recetaPrevPDF',function(){
+            var valores = [];
+            //alert('sd');
+            
+            {#nombre=$('#dgplusbellebundle_consulta_paciente').val();#}
+            var nombre=$('#idPaciente').val();
+            var id=12;
+            console.log(id);
+            console.log("nombre: "+nombre);
+            var valor = 0;
+            valor = $('#receta').val();
+            valores.push(valor);
+            
+            console.log(valores);
+            var url = Routing.generate('admin_prevpdfreceta_por_pdf', { nombre:nombre, id: id,valores:valores});
+            console.log(url);
+
+            window.open(url,'_blank');
+{#            }#}
 
             return false;
         });
@@ -3192,30 +3320,7 @@
             return false;
         });
         
-        $(document).on('click','#recetaPrevPDF',function(){
-            valores2 = [];
-            nombre=$('#dgplusbellebundle_consulta_paciente').val();
-            id=$('#dgplusbellebundle_consulta_sesiontratamiento').val();
-            console.log(id);
-            var valor = 0;
-            $('.classReceta').each(function(index,element){
-                valor = $(this).val();
-                valores2.push(valor);
-
-            });
-            var historial = $('#dgplusbellebundle_consulta_sesiontratamiento').val();
-            if(historial!=0){
-           
-            
-                console.log(valores);
-                var url = Routing.generate('admin_prevpdfreceta_por_pdf', { nombre:nombre, id: id,valores:valores2});
-                console.log(url);
-
-                window.open(url);
-            }
-
-            return false;
-        });
+      
         
         
         // Si se hace click en ver vista previa en pdf del comparativo de lectura 
@@ -3537,5 +3642,11 @@ if(editar!='editar_usuario'){
         });
     </script>
     <script src="//cdn.tinymce.com/4/tinymce.min.js"></script>
-    <script>tinymce.init({ selector:'textarea' });</script>
+    <script>
+        tinymce.init({ 
+            selector:'.editorArea',
+            menubar: false,
+            toolbar: 'undo redo | bold italic'
+        });
+    </script>
 {% endblock %} 

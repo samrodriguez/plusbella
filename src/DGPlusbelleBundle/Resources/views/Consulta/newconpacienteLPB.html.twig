@@ -457,7 +457,7 @@
                                     <div class="row">
                                                                                
                                         <div class="col-md-6">
-                                            <textarea class="col-md-12" id="observacionConsulta"></textarea>
+                                            <textarea class="col-md-12 editorArea" id="observacionConsulta"></textarea>
                                         </div>
                                         
                                         <div class="col-md-6">
@@ -493,7 +493,7 @@
                                             <input id="dgplusbellebundle_consulta_registraReceta_1" name="dgplusbellebundle_consulta[registraReceta]" required="required" value="0" type="radio"> No
                                         </div>
                                         <div class="col-md-10">
-                                            <textarea id="textareaReceta" class="form-control input-sm col-md-8" placeholder="Receta médica"></textarea>
+                                            <textarea id="textareaReceta" class="form-control input-sm col-md-8 editorArea" placeholder="Receta médica"></textarea>
                                         </div>
                                     </div>
                                     
@@ -626,13 +626,13 @@
                         </div>
                         <div class="row" style="margin-top:20px;">
                             <div class="col-md-4">
-                                <textarea maxlength="400" style="height:100px;" id="antecedentesPatologicos" value="{{paciente.patologicos}}" class="form-control">{{paciente.patologicos}}</textarea>
+                                <textarea maxlength="400" style="height:100px;" id="antecedentesPatologicos editorArea" value="{{paciente.patologicos}}" class="form-control">{{paciente.patologicos}}</textarea>
                             </div>
                             <div class="col-md-4">
-                                <textarea maxlength="400" style="height:100px;" id="antecedentesFamiliares" value="{{paciente.familiares}}" class="form-control">{{paciente.familiares}}</textarea>
+                                <textarea maxlength="400" style="height:100px;" id="antecedentesFamiliares editorArea" value="{{paciente.familiares}}" class="form-control">{{paciente.familiares}}</textarea>
                             </div>
                             <div class="col-md-4">
-                                <textarea maxlength="400" style="height:100px;" id="antecedentesAlergias" value="{{paciente.alergias}}" class="form-control">{{paciente.alergias}}</textarea>
+                                <textarea maxlength="400" style="height:100px;" id="antecedentesAlergias editorArea" value="{{paciente.alergias}}" class="form-control">{{paciente.alergias}}</textarea>
                             </div>
                         </div>
                             
@@ -688,7 +688,7 @@
                                 <div class="col-md-12">
                                     <form id="formImagen" role="form" enctype="multipart/form-data" method="post">
                                         <input id="file-input" required type="file" name="file[]" multiple>
-                                        <input type="text" id="idConsulta" value="{% if consulta.id is null %}{%else%}{{consulta.id}}{%endif%}" name="idConsulta" class="form-control input-sm"/>
+                                        <input type="hidden" id="idConsulta" value="{% if consulta.id is null %}{%else%}{{consulta.id}}{%endif%}" name="idConsulta" class="form-control input-sm"/>
                                     </form>
                                     {#<form action="#" id="formImagen" enctype="multipart/form-data"  method="post">
                                         <div class="form-group">
@@ -2691,7 +2691,7 @@
             
             
             
-            alert(medico);
+            //alert(medico);
             
             //return false;
             
@@ -3590,5 +3590,11 @@ if(editar!='editar_usuario'){
         });
     </script>
     <script src="//cdn.tinymce.com/4/tinymce.min.js"></script>
-    <script>tinymce.init({ selector:'textarea' });</script>
+    <script>
+        tinymce.init({ 
+            selector:'.editorArea',
+            menubar: false,
+            toolbar: 'undo redo | bold italic'
+        });
+    </script>
 {% endblock %} 

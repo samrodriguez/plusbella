@@ -684,8 +684,8 @@ class PacienteController extends Controller
         $expedientesTotal = 0;/*$em->getRepository('DGPlusbelleBundle:Expediente')->findAll();*/
         
         $paciente['draw']=$draw++;  
-        $paciente['recordsTotal'] = count($expedientesTotal);
-        $paciente['recordsFiltered']= count($expedientesTotal);
+        //$paciente['recordsTotal'] = count($expedientesTotal);
+        //$paciente['recordsFiltered']= count($expedientesTotal);
         $paciente['data']= array();
         //var_dump($busqueda);
         //die();
@@ -693,6 +693,7 @@ class PacienteController extends Controller
         //var_dump($longitud);
         //echo count($arrayFiltro);
         $busqueda['value'] = str_replace(' ', '%', $busqueda['value']);
+        //var_dump($busqueda['value']);
         if($busqueda['value']!=''){
                                 
 //                    $dql = "SELECT exp.numero as expediente, per.nombres,per.apellidos,DATE_FORMAT(pac.fechaNacimiento,'%d-%m-%Y') as fechaNacimiento, CONCAT('<a id=\"',pac.id,'\"><i style=\"cursor:pointer;\" data-toggle=\"tooltip\" data-original-title=\"Atrás\" class=\"infoPaciente fa fa-info-circle\"></i></a>') as link FROM DGPlusbelleBundle:Paciente pac "
@@ -706,23 +707,32 @@ class PacienteController extends Controller
                     
 //            $dql = "SELECT exp.numero as expediente, per.nombres,per.apellidos,DATE_FORMAT(pac.fechaNacimiento,'%d-%m-%Y') as fechaNacimiento, CONCAT('<a id=\"',pac.id,'\"><i style=\"cursor:pointer;\" data-toggle=\"tooltip\" data-original-title=\"Atrás\" class=\"infoPaciente fa fa-info-circle\"></i></a>') as link FROM DGPlusbelleBundle:Paciente pac "
 //                . "JOIN pac.persona per JOIN pac.expediente exp ORDER BY per.nombres ASC ";
-            $sql = "SELECT count(*) FROM listadoexpediente WHERE expediente ORDER BY fecha DESC LIMIT ".$start.",".$longitud;
+            $sql = "SELECT count(*) as total FROM listadoexpediente WHERE expediente='".strtoupper($busqueda['value'])."' ORDER BY fecha DESC";
         
             $em = $this->getDoctrine()->getManager();
             $stmt = $em->getConnection()->prepare($sql);
             $stmt->execute();
             $paciente['data'] = $stmt->fetchAll();
-            $paciente['recordsTotal'] = $paciente['data'];
-                    
+//            var_dump($paciente['data'][0]['total']);
+            $paciente['recordsTotal'] = $paciente['data'][0]['total'];
+            $paciente['recordsFiltered']= $paciente['data'][0]['total'];
             
-            
                     
+//            $sql = "SELECT fecha as fecha,transaccion,atendido,realizado, 
+//                CASE
+//                WHEN atendido = 'JUAN CARLOS PACHECO CARDONA' THEN CONCAT('<a href=\"newconpacienteSD?id=P',id,'&idtransaccion=',idtransaccion,'\">', 'Ver detalles</a>')
+//                WHEN atendido = 'MILDRED LARA DE PACHECO' THEN CONCAT('<a href=\"newconpacienteLPB?id=P',id,'&idtransaccion=',idtransaccion,'\">', 'Ver detalles</a>')
+//                WHEN transaccion = 'Venta paquete' THEN CONCAT('<a href=\"historialconsulta?id=P',id,'\">', 'Ver detalles</a>')
+//                ELSE CONCAT('<a href=\"historialconsulta?id=P',id,'\">', 'Ver detalles</a>')
+//                
+//                END AS detalles FROM listadoexpediente WHERE expediente='".strtoupper($busqueda['value'])."' ORDER BY fecha DESC LIMIT ".$start.",".$longitud;
+            
             $sql = "SELECT fecha as fecha,transaccion,atendido,realizado, 
                 CASE
-                WHEN atendido = 'JUAN CARLOS PACHECO CARDONA' THEN CONCAT('<a href=\"newconpacienteSD?id=P',id,'&idtransaccion=',idtransaccion,'\">', 'Ver detalles</a>')
-                WHEN atendido = 'MILDRED LARA DE PACHECO' THEN CONCAT('<a href=\"newconpacienteLPB?id=P',id,'&idtransaccion=',idtransaccion,'\">', 'Ver detalles</a>')
-                WHEN transaccion = 'Venta paquete' THEN CONCAT('<a href=\"historialconsulta?id=P',id,'\">', 'Ver detalles</a>')
-                ELSE CONCAT('<a href=\"historialconsulta?id=P',id,'\">', 'Ver detalles</a>')
+                WHEN atendido = 'JUAN CARLOS PACHECO CARDONA' THEN CONCAT('<a id=\"',idtransaccion,'\" class=\"link_ SD\">', 'Ver detalles</a>')
+                WHEN atendido = 'MILDRED LARA DE PACHECO' THEN CONCAT('<a id=\"',idtransaccion,'\" class=\"link_ LPB\">', 'Ver detalles</a>')
+                WHEN transaccion = 'Venta paquete' THEN CONCAT('<a id=\"',idtransaccion,'\" class=\"link_ paquete\">', 'Ver detalles</a>')
+                ELSE CONCAT('<a id=\"',idtransaccion,'\" class=\"link_ tratamiento\">', 'Ver detalles</a>')
                 
                 END AS detalles FROM listadoexpediente WHERE expediente='".strtoupper($busqueda['value'])."' ORDER BY fecha DESC LIMIT ".$start.",".$longitud;
         
@@ -730,9 +740,9 @@ class PacienteController extends Controller
             $stmt = $em->getConnection()->prepare($sql);
             $stmt->execute();
             $paciente['data'] = $stmt->fetchAll();
-            $paciente['recordsTotal'] = count($paciente['data']);
+            //$paciente['recordsTotal'] = count($paciente['data']);
             
-            $paciente['recordsFiltered']= count($paciente['data']);
+            
 
             
             

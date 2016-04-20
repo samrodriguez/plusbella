@@ -6,6 +6,9 @@
             cursor: pointer;
             color: #48CFAD;
         }
+        .link_{
+            cursor: pointer;
+        }
     </style>
         <link rel="stylesheet" href="{{asset('Resources/datatables/serversideprocessing.css')}}" />
 {% endblock %}
@@ -163,7 +166,7 @@
                   <input id="filterDatatables1" class="form-control input-sm" placeholder="Buscar...">
                 </div>
                 <div class="btn-group pull-right" id="venta" style="display:none;">
-                    <button href="{{path('admin_consulta_nueva_paciente_SD')}}" class="btn btn-success btn-xs btn">Nueva venta</button>
+                    <a href="{{path('admin_historial_consulta')}}" class="btn btn-success btn-xs btn">Nueva venta</a>
                 </div>
                 <div class="btn-group pull-right" id="consulta" style="display:none;">
                     <a href="{{path('admin_consulta_nueva_paciente_LPB')}}" class="btn btn-success btn-xs btn">Nueva consulta</a>
@@ -265,7 +268,36 @@
         <script>
            
             $(document).ready(function(){
-                var idPaciente = 0;
+                
+                
+                $(document).on('click','.link_',function(){
+                    var id = $(this).attr('id');
+                    var url="";
+                    //alert(""+id[0]);
+                    var idPac = $('#consulta').children().attr('href');
+{#                    var idPacArray2 = id.split('-');#}
+                    
+                    var idPacArray = idPac.split('=');
+                    //console.log(idPacArray);
+                    switch(id[0]){
+                        case "c":
+                            if($(this).hasClass('SD')){
+                                url = Routing.generate('admin_consulta_nueva_paciente_SD', { id: idPacArray[1],idtransaccion:id}); 
+                            }
+                            else{
+                                url = Routing.generate('admin_consulta_nueva_paciente_LPB', { id: idPacArray[1],idtransaccion:id}); 
+                            }
+                            break;
+                        case "t":
+                            url = Routing.generate('admin_editarventa_tratamiento', { id: id}); 
+                            break;
+                        case "p":
+                            url = Routing.generate('admin_editarventa_paquete', { id: id}); 
+                            break;
+                    }
+                    console.log(url);
+                    window.location = url;
+                });
                 
                $('#filterDatatables1').focus(); 
                 
