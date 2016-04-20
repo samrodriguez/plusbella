@@ -772,7 +772,7 @@ class ConsultaController extends Controller
     /**
      * Displays a form to create a new Consulta entity.
      *
-     * @Route("/newconpacienteSD", name="admin_consulta_nueva_paciente_SD")
+     * @Route("/newconpacienteSD", name="admin_consulta_nueva_paciente_SD", options={"expose"=true})
      * @Method("GET")
      * @Template()
      */
@@ -825,6 +825,7 @@ class ConsultaController extends Controller
             
             
             $existePlantilla = false;
+            $existeReceta = false;
 //            if($idconsulta!=null){
                 $tienePlantilla = $em->getRepository('DGPlusbelleBundle:HistorialConsulta')->findBy(array('consulta'=>$idconsulta));
 //            }
@@ -838,7 +839,15 @@ class ConsultaController extends Controller
 //            
 //            var_dump($existePlantilla);
             $archivos = $em->getRepository('DGPlusbelleBundle:ImagenConsulta')->findBy(array('consulta'=>$idconsulta));
+            //$recetas = $em->getRepository('DGPlusbelleBundle:ImagenConsulta')->findBy(array('consulta'=>$idconsulta));
             //var_dump($archivos);
+            $recetas = $em->getRepository('DGPlusbelleBundle:HistorialConsulta')->findBy(array('consultareceta'=>$idconsulta));
+            if(count($recetas)!=0){
+                //var_dump($tienePlantilla);
+                $existeReceta = true;
+                $ruta = "admin_reporteconsultarecetaplantilla_pdf";
+            }
+            //var_dump($recetas);
         } else {
             $paciente = new \DGPlusbelleBundle\Entity\Paciente();
             $form   = $this->createCreateForm($entity, 3, $cadena, $paciente);
@@ -864,6 +873,8 @@ class ConsultaController extends Controller
             $signos=$signos[0];
         }
         
+        
+        
         $sucursales = $em->getRepository('DGPlusbelleBundle:Sucursal')->findBy(array('estado'=>1));
         $empleados = $em->getRepository('DGPlusbelleBundle:Empleado')->findBy(array('id'=>array(3,5),'estado'=>1));
         $tipoConsulta= $em->getRepository('DGPlusbelleBundle:TipoConsulta')->findBy(array('estado'=>1));
@@ -872,6 +883,8 @@ class ConsultaController extends Controller
         return array(
             'ruta'=>$ruta,
             'existePlantilla'=>$existePlantilla,
+            'existeReceta'=>$existeReceta,
+            'recetas'=>$recetas,
             'archivos'=>$archivos,
             'consulta'=>$consulta,
             'plantillas'=>$plantillas,
@@ -895,7 +908,7 @@ class ConsultaController extends Controller
     /**
      * Displays a form to create a new Consulta entity.
      *
-     * @Route("/newconpacienteLPB", name="admin_consulta_nueva_paciente_LPB")
+     * @Route("/newconpacienteLPB", name="admin_consulta_nueva_paciente_LPB", options={"expose"=true})
      * @Method("GET")
      * @Template()
      */
@@ -988,8 +1001,6 @@ class ConsultaController extends Controller
             else{
                 //var_dump($tienePlantilla);
                 foreach($tienePlantilla as $key=>$row){
-                    
-                       
                     array_push($botox,$row->getAreaInyectar());        
                     array_push($botox,$row->getUnidades());        
                     array_push($botox,$row->getfechaCaducidad()->format('Y-m-d'));        
@@ -997,16 +1008,9 @@ class ConsultaController extends Controller
                     array_push($botox,$row->getMarcaProducto());        
                     array_push($botox,$row->getNumAplicacion());        
                     array_push($botox,$row->getValor());   
-                    if($tienePlantilla[0]->getRecomendaciones()!=null)
-                        array_push($botox,$tienePlantilla[0]->getRecomendaciones());                
-                    
-                    
+                    if($row->getRecomendaciones()!=null)
+                        array_push($botox,$row->getRecomendaciones());
                 }
-                
-                
-                
-                
-                
 //                $ruta="admin_pdf_botox_por_pdf";
                 $ruta="admin_botox_por_pdf_previa";
 //                $ruta="admin_comparativo_botox_por_pdf";
@@ -2261,6 +2265,59 @@ class ConsultaController extends Controller
         
         
         
+    }
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    /**
+     * 
+     *
+     * @Route("/recetaconsulta/guardar/receta", name="admin_receta_guardar_ajax")
+     */
+    public function dataRecetaAction(Request $request)
+    {
+        
+        /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+	 * Easy set variables
+	 */
+	
+	/* Array of database columns which should be read and sent back to DataTables. Use a space where
+	 * you want to insert a non-database field (for example a counter or static image)
+	 */
+        
+        $id = $request->get('id');//id plantilla
+        
+        $valores = $request->get('valores'); //valores
+        $idConsulta = $request->get('idConsulta'); //id consulta
+        
+        $receta = new HistorialConsulta();
+        
+        $em = $this->getDoctrine()->getEntityManager();
+        
+        $parametro = $em->getRepository('DGPlusbelleBundle:DetallePlantilla')->findBy(array('plantilla'=>$id));
+        
+        
+        $consultaObj = $em->getRepository('DGPlusbelleBundle:Consulta')->find($idConsulta);
+        //var_dump($consultaObj);
+        
+        if(count($consultaObj)!=0){
+            //$persona = $em->getRepository('DGPlusbelleBundle:Persona')->find($paciente->getPersona()->getId());
+            $receta->setConsultaReceta($consultaObj);
+            $receta->setDetallePlantilla($parametro[0]);
+            $receta->setValorDetalle($valores[0]);
+            $em->persist($receta);
+            $em->flush();   
+            return new Response(json_encode($consultaObj->getId()));
+        }
+        else{
+            return new Response(json_encode(1));
+        }
     }
     
     
