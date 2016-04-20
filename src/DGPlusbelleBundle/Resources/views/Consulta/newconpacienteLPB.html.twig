@@ -4,7 +4,7 @@
     {{parent()}}
     <link rel="stylesheet" href="{{ asset('Resources/alertifyjs/css/alertify.css') }}">
     <style>
-        //Posicion del boton agregar
+{#        //Posicion del boton agregar#}
         .placas>div:last-child {
             position:absolute;
         }
@@ -13,7 +13,7 @@
             display: none;
         }
         
-        //Posicion del boton agregar
+{#        //Posicion del boton agregar#}
         .placas2>div:last-child {
             position:absolute;
         }
@@ -419,7 +419,7 @@
                                             <select id="medico_consulta" name="tratamiento" class="form-control input-sm">
 {#                                                <option value="0" selected>Seleccione un médico...</option>#}
                                                 {% for empleado in empleados %}
-                                                    <option value="{{empleado.id}}" selected>{{empleado.persona.nombres}} {{empleado.persona.apellidos}}</option>
+                                                    <option value="{{empleado.id}}" {% if consulta.id!=null and empleado.id==consulta.empleado.id %} selected {% endif %}>{{empleado.persona.nombres}} {{empleado.persona.apellidos}}</option>
                                                 {% endfor %}
                                             </select>  
                                         </div>
@@ -433,7 +433,7 @@
                                             <select id="tipo_consulta" class="form-control input-sm">
                                                 <option value="0" selected>Seleccione un tipo de consulta...</option>
                                                 {%for tipo in tipoConsulta %}
-                                                    <option value="{{tipo.id}}">{{tipo.nombre}}</option>
+                                                    <option value="{{tipo.id}}" {% if consulta.id!=null and tipo.id==consulta.tipoConsulta.id %} selected {% endif %}>{{tipo.nombre}}</option>
                                                 {% endfor %}
                                             </select>
                                         </div>
@@ -465,7 +465,7 @@
 {#                                                <option value="0" selected>Seleccione una sucursal...</option>#}
                                                 {% for sucursal in sucursales %}
                                                     {% if loop.index == 0 %}
-                                                        <option value="{{sucursal.id}}" selected="selected">{{sucursal.nombre}}</option>
+                                                        <option value="{{sucursal.id}}" {% if consulta.id!=null and sucursal.id==consulta.sucursal.id %} selected {% endif %}>{{sucursal.nombre}}</option>
                                                     {% else %}
                                                         <option value="{{sucursal.id}}" >{{sucursal.nombre}}</option>
                                                     {% endif %}
@@ -784,7 +784,7 @@
 {#        $esteticaId = $request->get('estetica');#}
             
         
-                                <i class="fa fa-file-pdf-o"></i><a class="generarPDF" href="{{path(ruta,{valores:valores,id:consulta.id,paciente:paciente.id,sucursal:consulta.sucursal.id,estetica:estetica,corporal:corporal})}}"> Ver plantilla</a>
+                                <i class="fa fa-file-pdf-o"></i><a class="generarPDF" href="{{path(ruta,{botox:botox,valores:valores,id:consulta.id,paciente:paciente.id,sucursal:consulta.sucursal.id,estetica:estetica,corporal:corporal})}}"> Ver plantilla</a>
                             {% endif %}
                         </p>
                 </div><!-- /tab-content -->
@@ -2602,7 +2602,12 @@
         });
             
             
-            
+        $(document).on('click','.generarPDF', function(){
+            var href = $(this).attr('href');
+            window.open(href,'_blank');
+            //alert();
+            return false;
+        });    
         {#$(document).on('click','#historialPrevPDF', function(){
             
             return false;            
@@ -2676,6 +2681,7 @@
         $(document).on('click','#guardarNuevoConsulta', function(){
             var id = $('#idPaciente').val();
             var medico = $('#medico_consulta').val();
+            
             var tratamiento = $('#tratamiento_consulta').val();
             var tipoConsulta = $('#tipo_consulta').val();
             var sucursal = $('#sucursal_consulta').val();
@@ -2685,7 +2691,7 @@
             
             
             
-            
+            alert(medico);
             
             //return false;
             
@@ -2894,11 +2900,8 @@
             }
             
             
-            //alert(fechaNacimiento);
-            
-{#            url:"{{path('admin_consulta_insert_plantilla',{'id':id})}},#}
-           // alert(idPlantilla);
-{#            if(idConsulta!=''){#}
+
+            if(idConsulta!=''){
                 $.ajax({
                     data:{id:id,valores:valores,idConsulta:idConsulta,idParameters:idParameters,idEstetica:idEstetica
                     },
@@ -2935,7 +2938,10 @@
 
                     }
                 });
-{#            }#}
+            }
+            else{
+                bootbox.alert("Debe ingresar una consulta primero!", function() {});
+            }
         });
         
         

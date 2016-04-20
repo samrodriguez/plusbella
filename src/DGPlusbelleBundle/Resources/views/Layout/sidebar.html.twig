@@ -133,7 +133,7 @@
     
     {% if is_granted('ROLE_ADMIN') or is_granted('ROLE_USER')%}
         <li class="nav-item" role="presentation">
-            <a href="{{path('admin_consulta_expediente')}}">
+            <a href="{{path('admin_consulta_expediente_lpb')}}">
                 <span class="nav-icon"><i class="fa fa-book"></i></span>
                 <span class="nav-text">Expediente</span>
             </a>
@@ -144,7 +144,7 @@
     <li class="nav-header" role="presentation">SONODIGEST</li>
     {% if is_granted('ROLE_ADMIN') or is_granted('ROLE_USER')%}
         <li class="nav-item" role="presentation">
-            <a href="{{path('admin_consulta_expediente')}}">
+            <a href="{{path('admin_consulta_expediente_sd')}}">
                 <span class="nav-icon"><i class="fa fa-book"></i></span>
                 <span class="nav-text">Expediente</span>
             </a>

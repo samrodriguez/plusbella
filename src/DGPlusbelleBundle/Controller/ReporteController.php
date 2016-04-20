@@ -2027,7 +2027,7 @@ class ReporteController extends Controller
             }
             
         }
-        
+        //var_dump($botox);
         $dql = $dql = "SELECT btx"
                 . " FROM DGPlusbelleBundle:ConsultaBotox btx"
                 . " INNER JOIN btx.consulta con"
@@ -2068,25 +2068,37 @@ class ReporteController extends Controller
         $botox = array(); 
         $aux = array();
         foreach ($valores as $key => $value) {
-            array_push($aux, $value['area_inyectar']);
-            array_push($aux, $value['unidades']);
             
-            $fechaCaducidad = explode(' ', $value['fecha_caducidad']);
             
-            array_push($aux, $fechaCaducidad[0]);
-            array_push($aux, $value['lote']);
-            array_push($aux, $value['marca_producto']);
-            array_push($aux, $value['num_aplicacion']);
-            array_push($aux, $value['valor']);
             
-            if(isset($value['recomendaciones'])){
-                array_push($aux, $value['recomendaciones']);
-            }   
+            if($key==2)
+                $fechaCaducidad = explode(' ', $value);
+            
+                        
+            if(isset($value)){
+                array_push($aux, $value);
+            }
+//            array_push($aux, $value['area_inyectar']);
+//            array_push($aux, $value['unidades']);
+//            
+//            $fechaCaducidad = explode(' ', $value['fecha_caducidad']);
+//            
+//            array_push($aux, $fechaCaducidad[0]);
+//            array_push($aux, $value['lote']);
+//            array_push($aux, $value['marca_producto']);
+//            array_push($aux, $value['num_aplicacion']);
+//            array_push($aux, $value['valor']);
+//            
+//            if(isset($value['recomendaciones'])){
+//                array_push($aux, $value['recomendaciones']);
+//            }   
             
             array_push($botox, $aux);
+            
             unset($aux);
             $aux = array();
         }
+        //var_dump($botox)
         
         $this->get('fpdf_comparativo_botox_printer')->generarCorporalTempPdf($titulo, $paciente, $sucursal, $estetica, $consulta, $fecha, $path, $corporal, $botox);
         
