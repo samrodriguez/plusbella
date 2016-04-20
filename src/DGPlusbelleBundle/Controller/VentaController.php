@@ -279,6 +279,8 @@ class VentaController  extends Controller
         $empleadosVenta = $em->getRepository('DGPlusbelleBundle:Empleado')->findBy(array('estado' => true));
         $descuentos = $em->getRepository('DGPlusbelleBundle:Descuento')->findBy(array('estado' => true));
         
+        $seguimiento = $em->getRepository('DGPlusbelleBundle:SeguimientoTratamiento')->findOneBy(array('idPersonaTratamiento' => $personaTratamiento));
+        
         return array(
             'edad' => $edad,
             'paciente' => $paciente,
@@ -291,6 +293,7 @@ class VentaController  extends Controller
             'empleadosVenta' => $empleadosVenta,
             'descuentos' => $descuentos,
             'personaTratamiento' => $personaTratamiento,
+            'seguimiento' => $seguimiento,
             'idPaciente'=>$paciente->getId()
             );
     }

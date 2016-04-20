@@ -169,7 +169,22 @@
                                 </div>
                                 <div class="col-md-7" style="margin-bottom: 10px;">
                                     <div class="row">
-
+                                        {% set numSesion = seguimiento.numSesion %}
+                                        {% set pendientes = personaTratamiento.numSesiones - seguimiento.numSesion %}
+                                        {% if numSesion > 0 %}
+                                            {% for i in 1..numSesion %}
+                                                <div class="col-md-1" style="margin-bottom: 10px;">
+                                                    <img class="" style="height: 25px;"  src="{{ asset('Photos/Estados/sesion_realizada.png')}}" title="Sesion realizada">
+                                                </div>
+                                            {% endfor %}    
+                                        {% endif %}
+                                        {% if pendientes > 0 %}
+                                            {% for i in 1..pendientes %}
+                                                <div class="col-md-1" style="margin-bottom: 10px;">
+                                                    <img class="" style="height: 25px;"  src="{{ asset('Photos/Estados/sesion_pendiente.png')}}" title="Sesion pendiente">
+                                                </div>
+                                            {% endfor %}    
+                                        {% endif %}
                                     </div>
 
                                 </div>
@@ -185,7 +200,7 @@
                 {# Aquí se colocan los nombres de cada sección (tabs) #}    
                 <ul class="nav nav-tabs" style="margin-top: 30px;">
                     <li class="active"><a data-toggle="tab" href="#datos-generales">Datos generales</a></li>
-                    <li><a data-toggle="tab" href="#registros-venta">Registro de venta</a></li>
+                    <li><a data-toggle="tab" href="#registros-venta">Datos de la venta</a></li>
                     <li><a data-toggle="tab" href="#registro-sesiones" id="tabs-sesiones">Registro de sesiones</a></li>
                     <li><a data-toggle="tab" href="#imagenes" id="tabs-imagenes">Imagenes</a></li>
                     <li><a data-toggle="tab" href="#abonos-devoluciones" id="tabs-abdev">Abonos{# / Devoluciones#}</a></li>
@@ -323,7 +338,7 @@
                             <div class="row">
                                 <div class="col-md-12 col-sm-12 text-center" style="margin-top: 30px; margin-bottom: 10px;" id="registrar-datos-gnales">
                                     <hr>
-                                    <input type="submit" value="Registrar informacion del paciente" style="margin-bottom: 10px; background-color: #39a58a; color: #FFF;" class="btn" id="editar-paciente"/>
+                                    <input type="submit" value="Editar informacion del paciente" style="margin-bottom: 10px; background-color: #39a58a; color: #FFF;" class="btn" id="editar-paciente"/>
                                 </div>    
                             </div>         
                         </form>
@@ -339,63 +354,40 @@
                                     <label class="pull-right">Tipo de venta:</label>      
                                 </div>
                                 <div class="col-md-2">
-                                    <p>
-                                        <input type = "radio" name = "tipo-venta" id = "tipo-venta-paquete" value = "1" checked = "checked" />
-                                        <label for = "tipo-venta-paquete">Paquete</label>
-                                    </p>
-                                    <p>
-                                        <input type = "radio" name = "tipo-venta" id = "tipo-venta-tratamiento" value = "0" />
-                                        <label for = "tipo-venta-tratamiento">Tratamiento</label>
-                                    </p> 
+                                    <p>Tratamiento</p> 
                                 </div>
 
                                 {# Area en donde se selecciona un paquete o tratamiento dependiendo el tipo de venta seleccionado#}    
                                 <div class="col-md-3 col-md-offset-1">
-                                    <div id="venta-paquete" style="display:none;">
-                                        <label>Paquete</label>
-                                        <select id="dgplusbellebundle_venta_paquete" name="dgplusbellebundle_venta[paquete]" class="venta-paquete" style="width: 100%">
-                                            <option value="" disabled selected>Seleccione un paquete...</option>
-
-                                            {% for vpaquete in ventaPaquetes %}
-                                                <option value="{{vpaquete.id}}"> {{vpaquete.nombre}}</option>
-                                            {% endfor %}
-                                        </select>   
-                                    </div>
-                                    <div id="venta-tratamiento" style="display:none;">
+                                    <div id="venta-tratamiento">
                                         <label>Tratamiento</label>
-                                        <select id="dgplusbellebundle_venta_tratamiento" name="dgplusbellebundle_venta[tratamiento]" class="venta_tratamiento" style="width: 100%">
-                                            <option value="" disabled selected>Seleccione un tratamiento...</option>
-
-                                            {% for vtratamiento in ventaTratamientos %}
-                                                <option value="{{vtratamiento.id}}"> {{vtratamiento.nombre}}</option>
-                                            {% endfor %}
-                                        </select>    
+                                        <p>{{ personaTratamiento.tratamiento.nombre }}</p>   
                                     </div>    
                                 </div>
                             </div>   
                             <div class="row" style="margin-top: 35px;">
                                 <div class="col-md-3"  style="margin-left: 30px;">
                                     {# Area en donde se selecciona la sucursal en donde se realiza la venta #}    
-                                    <div id="sucursal-venta" style="display:none;">
+                                    <div id="sucursal-venta">
                                         <label>Sucursal</label>
                                         <select id="dgplusbellebundle_venta_sucursal" name="dgplusbellebundle_venta[sucursal]" class="venta-sucursal" style="width: 100%">
                                             <option value="" disabled selected>Seleccione una sucursal ...</option>
 
                                             {% for sucursal in sucursales %}
-                                                <option value="{{sucursal.id}}"> {{sucursal.nombre}}</option>
+                                                <option value="{{sucursal.id}}"  {% if sucursal.id == personaTratamiento.sucursal.id %} selected {% endif %}>{{sucursal.nombre}}</option>
                                             {% endfor %}
                                         </select>   
                                     </div>
                                 </div>
                                 <div class="col-md-4">
                                     {# Area en donde se selecciona  el empleado que ha realizado la venta #}  
-                                    <div id="empleados-venta" style="display:none;">
+                                    <div id="empleados-venta">
                                         <label>Vendido por</label>
                                         <select id="dgplusbellebundle_venta_empleado" name="dgplusbellebundle_venta[empleado]" class="venta-empleado" style="width: 100%">
                                             <option value="" disabled selected>Seleccione un empleado ...</option>
 
                                             {% for empleado in empleadosVenta %}
-                                                <option value="{{empleado.id}}"> {{empleado.persona}}</option>
+                                                <option value="{{empleado.id}}"  {% if empleado.persona.id == personaTratamiento.empleado.id %} selected {% endif %}>{{empleado.persona}}</option>
                                             {% endfor %}
                                         </select>   
                                     </div>
@@ -403,37 +395,37 @@
                                 <div class="col-md-2">
                                     {# Area en donde se ingresa  el número de sesiones de un tratamiento en el caso 
                                        de haber seleccionado el tipo de venta tratamiento                           #}  
-                                    <div id="sesiones-tratamiento" style="display:none;">
+                                    <div id="sesiones-tratamiento">
                                         <label># de sesiones</label>
-                                        <input type="text" name="dgplusbellebundle_venta[num_sesiones]" id="dgplusbellebundle_venta_sesiones" class="form-control" style="width: 100%">   
+                                        <input type="text" name="dgplusbellebundle_venta[num_sesiones]" id="dgplusbellebundle_venta_sesiones" class="form-control" style="width: 100%" value="{{ personaTratamiento.numSesiones }}">   
                                     </div>
                                 </div>        
                             </div>     
                             <div class="row" style="margin-top: 35px;">
                                 <div class="col-md-3" style="margin-left: 30px;">
                                     {# Area en donde se ingresa  el cossto($) del paquete o tratamiento que se ha vendido #}
-                                    <div id="costo-venta" style="display:none;">
+                                    <div id="costo-venta">
                                         <label>Costo ($)</label>
-                                        <input type="text" name="dgplusbellebundle_venta[costo]" id="dgplusbellebundle_venta_costo" class="form-control" style="width: 100%">     
+                                        <input type="text" name="dgplusbellebundle_venta[costo]" id="dgplusbellebundle_venta_costo" class="form-control" style="width: 100%" value="{{ personaTratamiento.costoConsulta }}">     
                                     </div>
                                 </div>
                                 <div class="col-md-4">
                                     {# Area en donde se seleciona  el descuento que se le va a aplicar a la venta en el caso de ser necesario #} 
-                                    <div id="descuento-venta" style="display:none;">
+                                    <div id="descuento-venta">
                                         <label>Descuento</label>
                                         <select id="dgplusbellebundle_venta_descuento" name="dgplusbellebundle_venta[descuento]" class="venta-descuento" style="width: 100%">
                                             <option value="" selected>Seleccione un tipo de descuento ...</option>
 
                                             {% for descuento in descuentos %}
-                                                <option value="{{descuento.id}}"> {{descuento.nombre}} - {{descuento.porcentaje}}%</option>
+                                                <option value="{{descuento.id}}"  {% if descuento.id == personaTratamiento.descuento.id %} selected {% endif %}> {{descuento.nombre}} - {{descuento.porcentaje}}%</option>
                                             {% endfor %}
                                         </select>   
                                     </div>
                                 </div>        
                                 <div class="col-md-2">
-                                    <div id="cuotas-venta" style="display:none;">
+                                    <div id="cuotas-venta">
                                         <label>Cuotas</label>
-                                        <input type="text" name="dgplusbellebundle_venta[cuotas]" id="dgplusbellebundle_venta_cuotas" class="form-control" style="width: 100%">   
+                                        <input type="text" name="dgplusbellebundle_venta[cuotas]" id="dgplusbellebundle_venta_cuotas" class="form-control" style="width: 100%" value="{{ personaTratamiento.cuotas }}">   
                                     </div>
                                 </div>        
                             </div>
@@ -444,9 +436,9 @@
                                 </div>    
                             </div>            
                             <div class="row">
-                                <div class="col-md-12 col-sm-12 text-center" style="margin-top: 30px; margin-bottom: 10px; display:none;" id="registrar-venta">
+                                <div class="col-md-12 col-sm-12 text-center" style="margin-top: 30px; margin-bottom: 10px;" id="registrar-venta">
                                     <hr>
-                                    <input type="submit" value="Registrar venta" style="margin-bottom: 10px; background-color: #39a58a; color: #FFF;" class="btn" id="registro-venta"/>
+                                    <input type="submit" value="Editar venta" style="margin-bottom: 10px; background-color: #39a58a; color: #FFF;" class="btn" id="registro-venta"/>
                                 </div>    
                             </div> 
                         </form>                
