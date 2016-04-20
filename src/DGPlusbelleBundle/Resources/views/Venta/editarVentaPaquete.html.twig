@@ -521,31 +521,54 @@
                     
                     {# Sección en donde se encuentran las imagenes de un determinado tratamiento #}
                     <div id="imagenes" class="tab-pane fade" style="margin-top: 20px;">
-                        <div class="row" style="margin-top: 35px;" style="display:none;">
-                                <div class="col-md-3"  style="margin-left: 30px;">
-                                    {# Area en donde se selecciona la foto relacionada con la sesion de tratamiento #}    
-                                    <div id="sesiones-imagenes">
-                                        <p>
-                                        <strong>Subir imagen</strong>
-                                        <div class="row" style="margin-top:20px;">
-                                            <div class="col-md-12">
-                                                <form id="formImagen" enctype="multipart/form-data"  method="post">
-                                                    <input id="file-input" type="file" name="file">
-                                                    <input type="hidden" id="empresaId"  value="5" name="empresaId">
-                                                </form>
+                        <div class="row" style="margin-top: 35px; padding: 30px;">
+                                <strong>Subir imagen</strong>
+                            <div class="row" style="margin-top:20px;">
+                                <div class="col-md-12">
+                                    <form id="formImagen" role="form" enctype="multipart/form-data" method="post">
+                                        <input id="file-input" required type="file" name="file[]" multiple>
+                                        <input type="hidden" id="idSesion" value="{% if ventaPaquete.id is null %}{%else%}{{ventaPaquete.id}}{%endif%}" name="idSesion" class="form-control input-sm"/>
+                                    </form>
+                                    {#<form action="#" id="formImagen" enctype="multipart/form-data"  method="post">
+                                        <div class="form-group">
+                                          <div class="fileinput fileinput-new input-group" data-provides="fileinput">
+                                            <div class="form-control" data-trigger="fileinput"><i class="glyphicon glyphicon-file fileinput-exists"></i> <span class="fileinput-filename"></span></div>
+                                            <div class="input-group-btn">
+                                              <span class="btn btn-default btn-file"><span class="fileinput-new">Select file</span><span class="fileinput-exists">Change</span><input name="..." type="file"></span>
+                                              <a href="#" class="btn btn-danger fileinput-exists" data-dismiss="fileinput">Remove</a>
                                             </div>
-                                        </div>
-                                        <div class="row" style="margin-top:10px;">
-                                            <div class="col-md-12">
-                                                <hr>
-                                            </div>
-                                        </div>
-                                        <div class="row">
-                                        
-                                        </p>
-                                    </div>
+                                          </div><!-- /.fileinput -->
+                                        </div><!-- /.form-group -->
+                                    </form>#}
+                                    
                                 </div>
                             </div>
+                            
+                            <div class="row" style="margin-top:20px;">
+                                <div class="col-md-12">
+                                    <strong style="margin-top:80px;">Archivos adjuntos</strong>
+                                </div>    
+                                <div class="col-md-12">
+                                    {% for imagen in archivos %}
+                                        <a href="{{ asset('Photos/Tmp/')}}{{imagen.foto}}">{{imagen.foto}}</a>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                            
+                            {#<div class="row" style="margin-top:10px;">
+                            <div class="col-md-12">
+                                <hr>
+                            </div>
+                        </div>#}
+
+                        {#<div class="row  pull-right" style="margin-top:10px;">
+                            <div class="col-md-12">
+                                <div class="form-grouphide col-sm-12">
+                                    <a class="btn btn-default btn-xs" id="cancelarNuevoConsulta">Cancelar</a>
+                                    <button type="submit" id="guardarImagenes" name="dgplusbellebundle_antecedentes[submit]" class="btn btn-success btn-xs btn btn">Guardar</button>
+                                </div>
+                            </div>
+                        </div>#}
                         </div>
                         <div class="row">
                             <div class="col-md-12 col-sm-12 text-center" style="margin-top: 30px; margin-bottom: 10px;" id="registrar-sesiones-imagenes">

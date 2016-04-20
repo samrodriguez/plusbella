@@ -144,7 +144,7 @@ class VentaController  extends Controller
         $ventaPaqueteId = $ventaPaquete->getId();
         $regnoeditpaquete = array();
         $regnoedittratamiento = array();
-        $idtratamientos = array();    
+        $idtratamientos = array();      
         
         $tratamientos = $em->getRepository('DGPlusbelleBundle:DetalleVentaPaquete')->findBy(array('ventaPaquete' => $ventaPaqueteId));
         
@@ -212,21 +212,22 @@ class VentaController  extends Controller
                 ->getSingleResult();
         
         return array(
-            'edad' => $edad,
-            'paciente' => $paciente,
-            'expediente'=>$expnum,
-            'paquetesnoedit'=>$regnoeditpaquete,
-            'tratamientosnoedit'=>$regnoedittratamiento,
-            'ventaPaquetes' => $ventaPaquetes,
-            'ventaPaquete' => $ventaPaquete,
-            //'ventaTratamientos' => $ventaTratamientos,
-            'tratVenta' => $tratVenta,
-            'sucursales'         => $sucursales,
-            'empleadosVenta'     => $empleadosVenta,
-            'descuentos'         => $descuentos,
-            'sesionesVenta'      => $sesionesVenta,
-            'abonos'             => $abonos,
-            'idPaciente'         => $idPaciente
+            'edad'                => $edad,
+            'paciente'            => $paciente,
+            'expediente'          => $expnum,
+            'paquetesnoedit'      => $regnoeditpaquete,
+            'tratamientosnoedit'  => $regnoedittratamiento,
+            'ventaPaquetes'       => $ventaPaquetes,
+            'ventaPaquete'        => $ventaPaquete,
+            //'ventaTratamientos'  => $ventaTratamientos,
+            'tratVenta'           => $tratVenta,
+            'sucursales'          => $sucursales,
+            'empleadosVenta'      => $empleadosVenta,
+            'descuentos'          => $descuentos,
+            'sesionesVenta'       => $sesionesVenta,
+            'abonos'              => $abonos,
+            'idPaciente'          => $idPaciente,
+            'archivos'            => ""
             );
     }
     
@@ -250,6 +251,8 @@ class VentaController  extends Controller
         $persona = $em->getRepository('DGPlusbelleBundle:Persona')->find($personaTratamiento->getPaciente()->getId());
         $paciente= $em->getRepository('DGPlusbelleBundle:Paciente')->findOneBy(array('persona' => $persona));
         
+        
+        //$archivos = $em->getRepository('DGPlusbelleBundle:ImagenTratammiento')->findBy(array('consulta'=>$idconsulta));
 //        $idPacient= $request->get('id');  
 //        $idPaciente=  substr($idPacient, 1);
 //        $paciente = $em->getRepository('DGPlusbelleBundle:Paciente')->find($idPaciente);
@@ -319,7 +322,8 @@ class VentaController  extends Controller
             'personaTratamiento' => $personaTratamiento,
             'seguimiento'        => $seguimiento,
             'abonos'             => $abonos,
-            'idPaciente'         =>$paciente->getId()
+            'idPaciente'         =>$paciente->getId(),
+            'archivos'           => ""
             );
     }
     
@@ -517,19 +521,31 @@ class VentaController  extends Controller
     }
     
     /**
-     * @Route("/ingresar_imagenes_sesiones/get", name="ingresar_foto_venta", options={"expose"=true})
+     * @Route("/tratamiento/ingresar_imagenes_sesiones/get", name="ingresar_foto_venta", options={"expose"=true})
      * @Method("POST")
      */
-    public function RegistrarFotoSesionAction(Request $request) {
+    public function RegistrarFotoSesionTratamientoAction(Request $request) {
             //data es el valor de retorno de ajax donde puedo ver los valores que trae dependiendo de las instrucciones que hace dentro del controlador
             $nombreimagen2=" ";
-            $idConsulta = $request->get('id');
+            $idsesion = $request->get('id');
             $dataForm = $request->get('frm');
             
-            $idConsulta = $_POST["idConsulta"];
+            $idsesion = $_POST["idSesion"];
             
             $em = $this->getDoctrine()->getManager();
-            $consulta = $em->getRepository('DGPlusbelleBundle:Consulta')->find($idConsulta);
+            
+            $personaTratamiento = $em->getRepository('DGPlusbelleBundle:PersonaTratamiento')->find($idsesion);
+            
+            $sesiontratamiento = $em->getRepository('DGPlusbelleBundle:SesionVentaTratamiento')->findBy(array('personaTratamiento' => $personaTratamiento));
+            
+            $sesiontratamientoId = array();
+            foreach ($sesiontratamiento as $key => $value) {
+                array_push($sesiontratamientoId, $value->getId());
+            }
+            
+            $sesiontrataId = max($sesiontratamientoId);
+            $sesion = $em->getRepository('DGPlusbelleBundle:SesionVentaTratamiento')->find($sesiontrataId);
+            
             for($i=0;$i<count($_FILES['file']['name']);$i++){
                 $nombreimagen=$_FILES['file']['name'][$i];    
 
@@ -539,8 +555,8 @@ class VentaController  extends Controller
             
                 if ($nombreimagen != null){
                     
-                    $imagen = new ImagenConsulta();
-                    $imagen->setConsulta($consulta);
+                    $imagen = new \DGPlusbelleBundle\Entity\ImagenTratamiento();
+                    $imagen->setSesionVentaTratamiento($sesion);
                     
                     //Direccion fisica del la imagen  
                     $path1 = $this->container->getParameter('photo.tmp');
@@ -553,7 +569,79 @@ class VentaController  extends Controller
                     $nombreBASE=$path.$nombreArchivo;
                     $nombreBASE=str_replace(" ","", $nombreBASE);
                     $nombreSERVER =str_replace(" ","", $nombreArchivo);
-                    $imagen->setFoto($nombreSERVER);
+                    $imagen->setFotoAntes($nombreSERVER);
+                    $resultado = move_uploaded_file($_FILES["file"]["tmp_name"][$i], $path1.$nombreSERVER);
+                    $em->persist($imagen);
+                    $em->flush();
+
+                    if ($resultado){
+                    
+                    }else{
+                        $data['servidor'] = "No se pudo mover la imagen al servidor";
+                    }
+
+
+                }
+                else{
+
+                }
+            }
+         
+            
+            //return new Response(json_encode($data));
+            return new Response(json_encode(0));
+    }
+    
+    /**
+     * @Route("/paquete/ingresar_imagenes_sesiones/get", name="ingresar_foto_venta_paquete", options={"expose"=true})
+     * @Method("POST")
+     */
+    public function RegistrarFotoSesionPaqueteAction(Request $request) {
+            //data es el valor de retorno de ajax donde puedo ver los valores que trae dependiendo de las instrucciones que hace dentro del controlador
+            $nombreimagen2=" ";
+            $idsesion = $request->get('id');
+            $dataForm = $request->get('frm');
+            
+            $idsesion = $_POST["idSesion"];
+            
+            $em = $this->getDoctrine()->getManager();
+            
+            $ventaPaquete = $em->getRepository('DGPlusbelleBundle:VentaPaquete')->find($idsesion);
+            
+            $sesiontratamiento = $em->getRepository('DGPlusbelleBundle:SesionTratamiento')->findBy(array('ventaPaquete' => $ventaPaquete));
+            
+            $sesiontratamientoId = array();
+            foreach ($sesiontratamiento as $key => $value) {
+                array_push($sesiontratamientoId, $value->getId());
+            }
+            
+            $sesiontrataId = max($sesiontratamientoId);
+            $sesion = $em->getRepository('DGPlusbelleBundle:SesionTratamiento')->find($sesiontrataId);
+            
+            for($i=0;$i<count($_FILES['file']['name']);$i++){
+                $nombreimagen=$_FILES['file']['name'][$i];    
+
+                $tipo = $_FILES['file']['type'][$i];
+                $extension= explode('/',$tipo);
+                $nombreimagen2.=".".$extension[1];
+            
+                if ($nombreimagen != null){
+                    
+                    $imagen = new \DGPlusbelleBundle\Entity\ImagenTratamiento();
+                    $imagen->setSesionVentaTratamiento($sesion);
+                    
+                    //Direccion fisica del la imagen  
+                    $path1 = $this->container->getParameter('photo.tmp');
+
+                    $path = "Photos/perfil/E";
+                    $fecha = date('Y-m-d His');
+
+                    $nombreArchivo = $nombreimagen."-".$fecha.$nombreimagen2;
+
+                    $nombreBASE=$path.$nombreArchivo;
+                    $nombreBASE=str_replace(" ","", $nombreBASE);
+                    $nombreSERVER =str_replace(" ","", $nombreArchivo);
+                    $imagen->setFotoAntes($nombreSERVER);
                     $resultado = move_uploaded_file($_FILES["file"]["tmp_name"][$i], $path1.$nombreSERVER);
                     $em->persist($imagen);
                     $em->flush();
