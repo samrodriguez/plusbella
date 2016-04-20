@@ -332,6 +332,7 @@ class PacienteController extends Controller
         //Generacion del numero de expediente
 //        $numeroExp = $nombre[0].$apellido[0].date("Y");
         $numeroExp = substr($nombre, 0,1).substr($apellido, 0,1).date("Y");
+        $numeroExp = "EX";
 
         $dql = "SELECT COUNT(exp)+1 FROM DGPlusbelleBundle:Expediente exp WHERE exp.numero LIKE :numero";
 
@@ -344,12 +345,18 @@ class PacienteController extends Controller
 
         switch(strlen($numString)){
             case 1:
-                    $numeroExp .= "00".$numString;
+                    $numeroExp .= "0000".$numString;
                 break;
             case 2:
-                    $numeroExp .= "0".$numString;
+                    $numeroExp .= "000".$numString;
                 break;
             case 3:
+                    $numeroExp .= "00".$numString;
+                break;
+            case 4:
+                    $numeroExp .= "0".$numString;
+                break;
+            case 5:
                     $numeroExp .= $numString;
                 break;
         }
