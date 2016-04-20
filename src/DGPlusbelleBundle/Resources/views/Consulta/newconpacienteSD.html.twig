@@ -4,7 +4,7 @@
     {{parent()}}
     <link rel="stylesheet" href="{{ asset('Resources/alertifyjs/css/alertify.css') }}">
     <style>
-        //Posicion del boton agregar
+        /*Posicion del boton agregar*/
         .placas>div:last-child {
             position:absolute;
         }
@@ -13,7 +13,7 @@
             display: none;
         }
         
-        //Posicion del boton agregar
+        /*/Posicion del boton agregar*/
         .placas2>div:last-child {
             position:absolute;
         }
@@ -419,7 +419,7 @@
                                             <select id="medico_consulta" name="tratamiento" class="form-control input-sm">
 {#                                                <option value="0" selected>Seleccione un médico...</option>#}
                                                 {% for empleado in empleados %}
-                                                    <option value="{{empleado.id}}" {% if empleado.id==consulta.empleado.id %} selected {% endif %}>{{empleado.persona.nombres}} {{empleado.persona.apellidos}}</option>
+                                                    <option value="{{empleado.id}}" {% if consulta.id!=null and empleado.id==consulta.empleado.id %} selected {% endif %}>{{empleado.persona.nombres}} {{empleado.persona.apellidos}}</option>
                                                 {% endfor %}
                                             </select>  
                                         </div>
@@ -433,7 +433,7 @@
                                             <select id="tipo_consulta" class="form-control input-sm">
                                                 <option value="0" selected>Seleccione un tipo de consulta...</option>
                                                 {%for tipo in tipoConsulta %}
-                                                    <option value="{{tipo.id}}" {% if tipo.id==consulta.tipoConsulta.id %} selected {% endif %}>{{tipo.nombre}}</option>
+                                                    <option value="{{tipo.id}}" {% if consulta.id!=null and tipo.id==consulta.tipoConsulta.id %} selected {% endif %}>{{tipo.nombre}}</option>
                                                 {% endfor %}
                                             </select>
                                         </div>
@@ -464,7 +464,7 @@
                                             <select id="sucursal_consulta" class="form-control input-sm">
 {#                                                <option value="0" selected>Seleccione una sucursal...</option>#}
                                                 {% for sucursal in sucursales %}
-                                                    <option value="{{sucursal.id}}" {% if sucursal.id==consulta.sucursal.id %} selected {% endif %}>{{sucursal.nombre}}</option>
+                                                    <option value="{{sucursal.id}}" {% if consulta.id!=null and sucursal.id==consulta.sucursal.id %} selected {% endif %}>{{sucursal.nombre}}</option>
                                                 {% endfor %}
                                             </select>
                                         </div>

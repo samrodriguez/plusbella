@@ -57,11 +57,42 @@ class ConsultaController extends Controller
     /**
      * Lista todos los expediente de los paciente.
      *
-     * @Route("/expediente", name="admin_consulta_expediente")
+     * @Route("/expedienteSD", name="admin_consulta_expediente_sd")
      * @Method("GET")
-     * @Template("DGPlusbelleBundle:Consulta:expediente.html.twig")
+     * @Template("DGPlusbelleBundle:Consulta:expedienteSD.html.twig")
      */
-    public function expedienteAction()
+    public function expedienteSDAction()
+    {
+        $em = $this->getDoctrine()->getManager();
+        
+        
+        
+        //$entities = $em->getRepository('DGPlusbelleBundle:Paciente')->findAll();
+        $dql = $dql = "SELECT p.id, exp.numero, per.nombres, per.apellidos  FROM DGPlusbelleBundle:Paciente p"
+                . " INNER JOIN p.persona per"
+                . " JOIN p.expediente exp";
+        $entities = $em->createQuery($dql)
+                       //->setParameter('tipo',1)
+                       ->getResult();
+        //var_dump($entities);
+        //var_dump($entities[0]->getExpediente()[0]->getNumero());
+        //die();
+        return array(
+            //'pacientes' => $entities,
+            'tipo'  => 1,
+        );
+    }
+    
+    
+    
+    /**
+     * Lista todos los expediente de los paciente.
+     *
+     * @Route("/expedienteLPB", name="admin_consulta_expediente_lpb")
+     * @Method("GET")
+     * @Template("DGPlusbelleBundle:Consulta:expedienteLPB.html.twig")
+     */
+    public function expedienteLPBAction()
     {
         $em = $this->getDoctrine()->getManager();
         
@@ -778,8 +809,12 @@ class ConsultaController extends Controller
 
             $signos = $em->getRepository('DGPlusbelleBundle:Signos')->findBy(array('paciente'=>$paciente->getId()),array('id'=>'DESC'));
             
+                
             if($idconsulta!=null){
                 $consulta = $em->getRepository('DGPlusbelleBundle:Consulta')->find($idconsulta);
+            }
+            else{
+                $consulta = $entity;
             }
             //Seteo del paciente en la entidad
             $entity->setPaciente($paciente);
@@ -790,9 +825,9 @@ class ConsultaController extends Controller
             
             
             $existePlantilla = false;
-            if($idconsulta!=null){
+//            if($idconsulta!=null){
                 $tienePlantilla = $em->getRepository('DGPlusbelleBundle:HistorialConsulta')->findBy(array('consulta'=>$idconsulta));
-            }
+//            }
             if(count($tienePlantilla)!=0){
                 //var_dump($tienePlantilla);
                 $existePlantilla = true;
@@ -896,8 +931,6 @@ class ConsultaController extends Controller
             }
             else{
                 $consulta = $entity;
-                
-                
             }
             //Seteo del paciente en la entidad
             $entity->setPaciente($paciente);
@@ -907,6 +940,7 @@ class ConsultaController extends Controller
             $ruta = "";
             $existePlantilla = false;
             $corporal = Array();
+            $botox = Array();
             $valores = Array();
             $estetica = 0;
             $tienePlantilla = $em->getRepository('DGPlusbelleBundle:ConsultaBotox')->findBy(array('consulta'=>$idconsulta));
@@ -917,8 +951,12 @@ class ConsultaController extends Controller
                 if(count($tienePlantilla)==0){
                     $tienePlantilla = $em->getRepository('DGPlusbelleBundle:HistorialEstetica')->findBy(array('consulta'=>$idconsulta));
                     if(count($tienePlantilla)!=0){
+                        foreach($tienePlantilla as $row){
+                            array_push($valores,$row->getDetalleEstetica()->getId());
+                        }
                         $ruta="admin_prevpdf_facial_por_pdf";
                         $existePlantilla = true;
+                        $estetica = 2;//facial
                     }
                 }
                 else{
@@ -936,7 +974,7 @@ class ConsultaController extends Controller
                     array_push($corporal,$tienePlantilla[0]->getEdadMetabolica());
                     array_push($corporal,$tienePlantilla[0]->getMasaOsea());
                     array_push($corporal,$tienePlantilla[0]->getGrasaVisceral());
-                    $estetica = 1;
+                    $estetica = 1;//corporal
                     $checkboxes = $em->getRepository('DGPlusbelleBundle:HistorialEstetica')->findBy(array('consulta'=>$idconsulta));
                     //var_dump($checkboxes);
                     
@@ -948,11 +986,35 @@ class ConsultaController extends Controller
                 }
             }
             else{
-                $ruta="admin_pdf_botox_por_pdf";
+                //var_dump($tienePlantilla);
+                foreach($tienePlantilla as $key=>$row){
+                    
+                       
+                    array_push($botox,$row->getAreaInyectar());        
+                    array_push($botox,$row->getUnidades());        
+                    array_push($botox,$row->getfechaCaducidad()->format('Y-m-d'));        
+                    array_push($botox,$row->getLote());        
+                    array_push($botox,$row->getMarcaProducto());        
+                    array_push($botox,$row->getNumAplicacion());        
+                    array_push($botox,$row->getValor());   
+                    if($tienePlantilla[0]->getRecomendaciones()!=null)
+                        array_push($botox,$tienePlantilla[0]->getRecomendaciones());                
+                    
+                    
+                }
+                
+                
+                
+                
+                
+//                $ruta="admin_pdf_botox_por_pdf";
+                $ruta="admin_botox_por_pdf_previa";
+//                $ruta="admin_comparativo_botox_por_pdf";
                 $existePlantilla=true;
+                $estetica = 3;//botox
             }
-            var_dump($ruta);
-            var_dump($existePlantilla);
+            //var_dump($ruta);
+            //var_dump($existePlantilla);
             $archivos = $em->getRepository('DGPlusbelleBundle:ImagenConsulta')->findBy(array('consulta'=>$idconsulta));
         } else {
 //            $paciente = new \DGPlusbelleBundle\Entity\Paciente();
@@ -986,6 +1048,7 @@ class ConsultaController extends Controller
         
             
         return array(
+            'botox'=>$botox,
             'estetica'=>$estetica,
             'valores'=>$valores,
             'corporal'=>$corporal,
@@ -2446,7 +2509,7 @@ class ConsultaController extends Controller
             if($idConsulta!=-1){
                 $usuario= $this->get('security.token_storage')->getToken()->getUser();
                 $empleado = $em->getRepository('DGPlusbelleBundle:Empleado')->findBy(array('persona'=>$usuario->getPersona()->getId()));
-                $entity->setEmpleado($empleado[0]);
+                //$entity->setEmpleado($empleado[0]);
             }
 
             //$historial->setConsulta($consulta);
@@ -2676,39 +2739,42 @@ class ConsultaController extends Controller
                         //die();
                         //var_dump($value);
                             echo $key;
-                            
+                        if($key<8){    
                             $index = intval($key)%8;
-                        echo "-".$index;
-                        
-                        echo "index: ".$index."d";
-                        switch($index){
-                            case 0:
-                                $botox->setAreaInyectar($value);
-                                break;
-                            case 1:
-                                $botox->setUnidades($value);
-                                break;
-                            case 2:
-                                $botox->setFechaCaducidad(new \DateTime($value));
-                                break;
-                            case 3:
-                                $botox->setLote($value);
-                                break;
-                            case 4:
-                                $botox->setMarcaProducto($value);
-                                break;
-                            case 5:
-                                $botox->setNumAplicacion($value);
-                                break;
-                            case 6:
-                                $botox->setValor($value);
-                                break;
-                            case 7:
-                                if(isset($value)){
-                                    $botox->setRecomendaciones($value);
-                                }
-                                break;
+                            echo "-".$index;
+}                       else{
+                            $index = (intval($key)-1)%7;
                         }
+                            echo "index: ".$index."d";
+                            switch($index){
+                                case 0:
+                                    $botox->setAreaInyectar($value);
+                                    break;
+                                case 1:
+                                    $botox->setUnidades($value);
+                                    break;
+                                case 2:
+                                    $botox->setFechaCaducidad(new \DateTime($value));
+                                    break;
+                                case 3:
+                                    $botox->setLote($value);
+                                    break;
+                                case 4:
+                                    $botox->setMarcaProducto($value);
+                                    break;
+                                case 5:
+                                    $botox->setNumAplicacion($value);
+                                    break;
+                                case 6:
+                                    $botox->setValor($value);
+                                    break;
+                                case 7:
+                                    if(isset($value)){
+                                        $botox->setRecomendaciones($value);
+                                    }
+                                    break;
+                            }
+                        
                         //echo "fecha: ". $value;
                         
                         if(($key % 7 == 0 && $key !=0)||$key==7 ){
