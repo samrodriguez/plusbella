@@ -873,16 +873,22 @@
                                 </div>        
                             </div>
                             <div class="row">
-                                <div class="col-md-12 col-sm-12 text-center" style="margin-top: 30px; margin-bottom: 10px;" id="abono">
-                                    {# Aqui va la descripcion del abono 'text-area' #}
+                                <div class="col-md-7 col-sm-7" style="margin-top: 30px; margin-bottom: 10px;" id="abono">
+                                    <div id="abono-descripcion-label" style="margin-left: 30px;">
+                                        <label>Descripcion</label>
+                                    </div> 
+                                    <div class="clearfix"></div>
+                                    <div id="abono-descripcion" style="margin-left: 30px;">
+                                        <textarea rows="4" cols="100" name="dgplusbellebundle_abono[descripcion]" id="dgplusbellebundle_abono_descripcion" class="form-control"></textarea> 
+                                    </div>     
                                 </div>    
                             </div>               
                             <div class="row">
-                                <div class="col-md-12 col-sm-12 text-center" style="margin-top: 30px; margin-bottom: 10px;" id="registrar-sesiones-tratamiento">
+                                <div class="col-md-12 col-sm-12 text-center" style="margin-top: 30px; margin-bottom: 10px;" id="registrar-abonos-sesiones">
                                     <hr>
-                                    <input type="submit" value="Registrar abono" style="margin-bottom: 10px; background-color: #39a58a; color: #FFF;" class="btn" id="registro-sesiones-tratamiento"/>
+                                    <input type="submit" value="Registrar abono" style="margin-bottom: 10px; background-color: #39a58a; color: #FFF;" class="btn" id="registro-abono"/>
                                 </div>    
-                            </div>             
+                            </div>              
                         </form>
                         <div class="row" style="margin-top: 50px;"></div>          
                     </div>
@@ -1530,6 +1536,68 @@
                             bootbox.alert("Imagen demasiado grande, intente con una mas pequeña");
                         }
                     }
+                });
+                
+                // Al momento de hacer click en resgistra abono
+                $(document).on("click", "#registro-abono", function(){
+                    var idpac = '{{paciente.id}}';
+                    var sucursal = $('#dgplusbellebundle_abono_sucursal').val();
+                    var empleado = $('#dgplusbellebundle_abono_empleado').val();
+                    var monto = $('#dgplusbellebundle_abono_monto').val();
+                    var descripcion = $('#dgplusbellebundle_abono_descripcion').val();
+                    var draw = '';
+                
+                    // Si se ha chequeado en el tipo de venta Paquete
+                    if($("#tipo-venta-paquete").is(':checked')) {
+                        var data = {
+                            id : idpac,
+                            sucursal : sucursal,
+                            empleado: empleado,
+                            monto: monto,
+                            descripcion: descripcion,
+                            id_ventapaquete : id_ventapaquete
+                        };
+                        
+                        // Se procede a registrar la sesion del tratamiento mediante ajax
+                        $.ajax({
+                            data:  data,
+                            url:   '{{path('admin_abonopaquete_nuevo')}}',
+                            type:  'post',
+                            success:  function (response) {
+                                alertify.success('Se ha resgistrado con exito un abono del paquete');
+
+                                return false;
+                            }
+                        });
+                        
+                        return false;
+                    // Si se ha chequeado en el tipo de venta Tratamiento    
+                    } else {
+                       var data = {
+                            id : idpac,
+                            sucursal : sucursal,
+                            empleado: empleado,
+                            monto: monto,
+                            descripcion: descripcion,
+                            id_personatratamiento : id_ventatratamiento
+                        };
+                        
+                        // Se procede a registrar la sesion del tratamiento mediante ajax
+                        $.ajax({
+                            data:  data,
+                            url:   '{{path('admin_abonotratamiento_nuevo')}}',
+                            type:  'post',
+                            success:  function (response) {
+                                alertify.success('Se ha resgistrado con exito un abono del tratamiento');
+
+                                return false;
+                            }
+                        });
+                        return false;
+                    }
+                    
+                    
+                    return false;
                 });
                 
                 $('#dgplusbellebundle_consulta_fechaConsulta').daterangepicker({

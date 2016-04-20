@@ -391,5 +391,79 @@ class PersonaTratamientoController extends Controller
             return new Response('0');              
         } 
    }
+   /**
+    * Ajax utilizado para buscar informacion del producto
+    *  
+    * @Route("/registro/venta/edit", name="admin_registro_editar_venta_tratamiento")
+    */
+    public function registrarEditarVentaTratamientoAction()
+    {
+        $isAjax = $this->get('Request')->isXMLhttpRequest();
+        if($isAjax){
+            $em = $this->getDoctrine()->getManager();
+            $usuario= $this->get('security.token_storage')->getToken()->getUser();
+            
+            $id = $this->get('request')->request->get('id');
+            //$paqueteId = $this->get('request')->request->get('paquete');
+            $sucursalId = $this->get('request')->request->get('sucursal');
+            $empleadoId = $this->get('request')->request->get('empleado');
+            $costo = $this->get('request')->request->get('costo');
+            $cuotas = $this->get('request')->request->get('cuotas');
+            $tratamientos = $this->get('request')->request->get('tratamientos');
+            $sesiones = $this->get('request')->request->get('sesiones');
+            $descuentoId = $this->get('request')->request->get('descuento');
+            $id_personatratamiento = $this->get('request')->request->get('id_personatratamiento');
+            
+            $personatratamiento = $em->getRepository('DGPlusbelleBundle:PersonaTratamiento')->find($id_personatratamiento);
+            
+//            $paciente = $em->getRepository('DGPlusbelleBundle:Paciente')->find($id);
+//            $personaPaciente = $em->getRepository('DGPlusbelleBundle:Persona')->find($paciente->getPersona()->getId());
+//            $personatratamiento->setPaciente($personaPaciente);
+            
+            if(!is_null($empleadoId)){
+                $empleado = $em->getRepository('DGPlusbelleBundle:Empleado')->find($empleadoId);
+                $personaEmpleado = $em->getRepository('DGPlusbelleBundle:Persona')->find($empleado->getPersona()->getId());
+                $personatratamiento->setEmpleado($personaEmpleado);
+            }
+            
+            $personatratamiento->setCostoConsulta($costo);
+            $personatratamiento->setCuotas($cuotas);
+            
+            $personatratamiento->setNumSesiones($sesiones);
+           
+            $sucursal = $em->getRepository('DGPlusbelleBundle:Sucursal')->find($sucursalId);
+            $personatratamiento->setSucursal($sucursal);
+            
+            $personatratamiento->setSucursal($sucursal);
+            
+            if(!is_null($descuentoId)){
+                $descuento = $em->getRepository('DGPlusbelleBundle:Descuento')->find($descuentoId);
+                $personatratamiento->setDescuento($descuento);
+            }
+            
+            $em->merge($personatratamiento);
+            $em->flush();
+            
+            $ventaTratamiento = array(
+                                        'id' => $personatratamiento->getId(), 
+                                        'costo' => $personatratamiento->getCostoConsulta(), 
+                                        'sesiones' => $personatratamiento->getNumSesiones(), 
+                                        'cuotas' => $personatratamiento->getCuotas()
+                                    );
+            
+            $this->get('bitacora')->escribirbitacora("Se registro una nueva venta del tratamiento " . $personatratamiento->getTratamiento()->getNombre(), $usuario->getId());
+            
+            $response = new JsonResponse();
+            $response->setData(array(
+                                'exito'       => '1',
+                                'personaTratamiento' => $ventaTratamiento,
+                                'tratamiento' => $personatratamiento->getTratamiento()->getNombre()
+                            )); 
+            
+            return $response; 
+        } else {    
+            return new Response('0');              
+        } 
+   }
     
 }
