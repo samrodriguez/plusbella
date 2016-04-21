@@ -458,7 +458,7 @@
                                     <div class="row">
                                                                                
                                         <div class="col-md-6">
-                                            <textarea class="col-md-12" id="observacionConsulta">{{consulta.observacion}}</textarea>
+                                            <textarea class="col-md-12 editorArea" id="observacionConsulta">{{consulta.observacion}}</textarea>
                                         </div>
                                         
                                         <div class="col-md-6">
@@ -679,7 +679,7 @@
                     </div>
                     <div class="tab-pane fade in" id="botabs6">
                         <p>
-                            <strong>Subir imagen</strong>
+                            <strong>Subir imagen</strong> (Puede subir varias imágenes al mismo tiempo)
                             <div class="row" style="margin-top:20px;">
                                 <div class="col-md-12">
                                     <form id="formImagen" role="form" enctype="multipart/form-data" method="post">
@@ -705,7 +705,7 @@
                                 <strong style="margin-top:80px;">Archivos adjuntos</strong>
                                 <div class="col-md-12">
                                     {% for imagen in archivos %}
-                                        <a href="{{ asset('Photos/Tmp/')}}{{imagen.foto}}">{{imagen.foto}}</a>
+                                        <a id="linkImagen" href="{{ asset('Photos/Tmp/')}}{{imagen.foto}}">Imagen {{loop.index}}</a><br>
                                     {% endfor %}
                                 </div>
                             </div>
@@ -2896,7 +2896,7 @@
             //alert(fechaNacimiento);
             
 {#            url:"{{path('admin_consulta_insert_plantilla',{'id':id})}},#}
-            alert(idConsulta);
+{#            alert(idConsulta);#}
             if(idConsulta!=''){
                 $.ajax({
                     data:{id:id,valores:valores,idConsulta:idConsulta,idParameters:idParameters,idPlantilla:idPlantilla
@@ -3002,7 +3002,7 @@
         var file = $('#file-input')[0].files[0];
         //obtenemos el nombre del archivo
         var idconsulta =$('#idConsulta').val();
-        alert(idconsulta);
+        {#alert(idconsulta)#};
         var fileName = file.name;
         //obtenemos la extensión del archivo
         fileExtension = fileName.substring(fileName.lastIndexOf('.') + 1);
