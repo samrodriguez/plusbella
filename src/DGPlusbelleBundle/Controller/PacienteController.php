@@ -498,7 +498,7 @@ class PacienteController extends Controller
         $paciente['regs'] = $em->createQuery($dql)
                    ->setParameter('id',$id)
                    ->getResult();
-        
+           //var_dump($paciente);
         //$paciente['regs'] = $em->getRepository('DGPlusbelleBundle:Paciente')->find($id);
         $fecha = $paciente['regs'][0]['fechaNacimiento'];
         if($fecha!=null){

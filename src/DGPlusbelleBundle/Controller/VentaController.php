@@ -207,9 +207,19 @@ class VentaController  extends Controller
                 . "where vp.id = '$idVentaPaquete'";
 
         $rsm2->addScalarResult('abonos','abonos');
-
+        
         $abonos = $em->createNativeQuery($sql2, $rsm2)
                 ->getSingleResult();
+        
+        $dql = "SELECT img "
+                . "FROM DGPlusbelleBundle:ImagenTratamiento img "
+                . "JOIN img.sesionTratamiento ses "
+                . "JOIN ses.ventaPaquete ven "
+                . "WHERE ven.id = :idVentaTratamiento";
+
+        $archivos = $em->createQuery($dql)
+                    ->setParameter('idVentaTratamiento', $idVentaPaquete)
+                    ->getResult();    
         
         return array(
             'edad'                => $edad,
@@ -227,7 +237,7 @@ class VentaController  extends Controller
             'sesionesVenta'       => $sesionesVenta,
             'abonos'              => $abonos,
             'idPaciente'          => $idPaciente,
-            'archivos'            => ""
+           'archivos'            => $archivos
             );
     }
     
@@ -308,6 +318,17 @@ class VentaController  extends Controller
             $abonos = $em->createNativeQuery($sql2, $rsm2)
                     ->getSingleResult();
         
+        $dql = "SELECT img "
+                . "FROM DGPlusbelleBundle:ImagenTratamiento img "
+                . "JOIN img.sesionVentaTratamiento ses "
+                . "JOIN ses.personaTratamiento tra "
+                . "WHERE tra.id =  :idVentaTratamiento";
+
+        $archivos = $em->createQuery($dql)
+                    ->setParameter('idVentaTratamiento', $idVentaTratamiento)
+                    ->getResult();    
+            
+            
         return array(
             'edad'               => $edad,
             'paciente'           => $paciente,
@@ -323,7 +344,7 @@ class VentaController  extends Controller
             'seguimiento'        => $seguimiento,
             'abonos'             => $abonos,
             'idPaciente'         =>$paciente->getId(),
-            'archivos'           => ""
+            'archivos'           => $archivos
             );
     }
     

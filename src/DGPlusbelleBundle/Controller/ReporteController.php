@@ -118,7 +118,7 @@ class ReporteController extends Controller
         $ingresos = array();
         //var_dump($mes);
             //echo $i."\n";
-            $dql = "SELECT p.nombre as paquete, sum(p.costo*(1-(d.porcentaje/100))) as total FROM DGPlusbelleBundle:VentaPaquete vp "
+            $dql = "SELECT p.nombre as paquete, sum(vp.costo*(1-(d.porcentaje/100))) as total FROM DGPlusbelleBundle:VentaPaquete vp "
                 . "JOIN vp.paquete p "
                 . "JOIN vp.descuento d "
                 . "WHERE vp.fechaVenta BETWEEN :fechainicio AND :fechafin AND vp.sucursal=:sucursal group by 'paquete' order by total DESC";
@@ -1106,7 +1106,7 @@ class ReporteController extends Controller
         
         
         
-        $dqlpac="SELECT pac.id, per.nombres, per.apellidos, emp.nombres nemp, emp.apellidos napel, paq.costo*(1-(d.porcentaje/100)) as costo,vp.fechaVenta,s.nombre FROM DGPlusbelleBundle:VentaPaquete vp "
+        $dqlpac="SELECT pac.id, per.nombres, per.apellidos, emp.nombres nemp, emp.apellidos napel, vp.costo*(1-(d.porcentaje/100)) as costo,vp.fechaVenta,s.nombre FROM DGPlusbelleBundle:VentaPaquete vp "
                 . "JOIN vp.paciente per "
                 . "JOIN vp.empleado emp "
                 . "JOIN per.paciente pac "
@@ -1219,7 +1219,7 @@ class ReporteController extends Controller
                 array_push($ingresos, 0);
             }
             
-            $dql = "SELECT sum(p.costo*(1-(d.porcentaje/100))) as total FROM DGPlusbelleBundle:VentaPaquete vp "
+            $dql = "SELECT sum(vp.costo*(1-(d.porcentaje/100))) as total FROM DGPlusbelleBundle:VentaPaquete vp "
                     . "INNER JOIN vp.paquete p "
                     . "JOIN vp.descuento d "
                     . "WHERE vp.cuotas=1 AND vp.fechaVenta BETWEEN :fechainicio AND :fechafin AND vp.sucursal=:sucursal ";
