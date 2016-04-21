@@ -11,6 +11,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use DGPlusbelleBundle\Entity\Paciente;
 use DGPlusbelleBundle\Entity\Signos;
+use DGPlusbelleBundle\Entity\Consulta;
 use DGPlusbelleBundle\Entity\Expediente;
 use DGPlusbelleBundle\Form\PacienteType;
 use Doctrine\ORM\EntityRepository;
@@ -1071,6 +1072,7 @@ class PacienteController extends Controller
         $paciente = $em->getRepository('DGPlusbelleBundle:Paciente')->find($id);
         
         $signos = new Signos();
+        $consulta = new Consulta();
         
         if(count($paciente)!=0){
             //$persona = $em->getRepository('DGPlusbelleBundle:Persona')->find($paciente->getPersona()->getId());
@@ -1082,16 +1084,23 @@ class PacienteController extends Controller
             $signos->setFrecRespiratotira($frecRespiratoria);
             $signos->setFrecCardiaca($frecCardiaca);
             $signos->setTemperatura($temperatura);
-            $signos->setPaciente($paciente);
+            $signos->setConsulta($consulta);
+            $consulta->setHoraInicio(new \DateTime('now'));
+            $consulta->setHoraFin(new \DateTime('now'));
+            $consulta->setFechaConsulta(new \DateTime('now'));
+            $consulta->setPaciente($paciente);
+            $consulta->setReportePlantilla(1);
+            $consulta->setCostoConsulta(0);
             
-            
+            $em->persist($consulta);
+            $em->flush();
             $em->persist($signos);
             $em->flush();
             
-            return new Response(json_encode(0));
+            return new Response(json_encode($consulta->getId()));
         }
         else{
-            return new Response(json_encode(1));
+            return new Response(json_encode(0));
         }
         
         

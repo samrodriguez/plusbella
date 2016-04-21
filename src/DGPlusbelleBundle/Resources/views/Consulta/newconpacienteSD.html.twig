@@ -194,7 +194,7 @@
               <li class="active"><a href="#botabs2" data-toggle="tab">Consulta</a></li>
               <li class=""><a href="#botabs3" data-toggle="tab">Signos</a></li>
               <li class=""><a href="#botabs4" data-toggle="tab">Antecedentes y alergias</a></li>
-              <li class=""><a href="#botabs5" data-toggle="tab">Costo</a></li>
+              {#<li class=""><a href="#botabs5" data-toggle="tab">Costo</a></li>#}
               <li class=""><a href="#botabs6" data-toggle="tab">Imágenes</a></li>
               <li class=""><a href="#botabs7" data-toggle="tab">Plantilla</a></li>
               <li class=""><a href="#botabs8" data-toggle="tab">Receta médica</a></li>
@@ -2828,7 +2828,8 @@
                         //inicio = data.inicio++;
                         if(data==0){
 {#                            bootbox.alert("Cambios guardados!", function() {});#}
-                            alertify.success("Cambios guardados!");
+                            alertify.success("Signos vitales guardados!");
+                            $('#idConsulta').val(data);
                         }
 {#                        console.log("pagina actual: "+data);
                         console.log("Inicio de registro: "+data.inicioRegistro);#}

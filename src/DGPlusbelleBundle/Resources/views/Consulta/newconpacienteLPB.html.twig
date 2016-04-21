@@ -194,7 +194,7 @@
               <li class="active"><a href="#botabs2" data-toggle="tab">Consulta</a></li>
               <li class=""><a href="#botabs3" data-toggle="tab">Signos</a></li>
               <li class=""><a href="#botabs4" data-toggle="tab">Antecedentes y alergias</a></li>
-              <li class=""><a href="#botabs5" data-toggle="tab">Costo</a></li>
+              {#<li class=""><a href="#botabs5" data-toggle="tab">Costo</a></li>#}
               <li class=""><a href="#botabs6" data-toggle="tab">Imágenes</a></li>
               <li class=""><a href="#botabs7" data-toggle="tab">Plantilla</a></li>
               
@@ -404,9 +404,14 @@
                                         </div>
                                         <div class="col-md-3">
                                             <label>
-                                                Tratamiento
+                                                Costo de consulta
                                             </label>
                                         </div>
+                                        {#<div class="col-md-3">
+                                            <label>
+                                                Tratamiento
+                                            </label>
+                                        </div>#}
                                         
                                         <div class="col-md-6">
                                             <label>
@@ -419,21 +424,24 @@
                                             <select id="medico_consulta" name="tratamiento" class="form-control input-sm">
 {#                                                <option value="0" selected>Seleccione un médico...</option>#}
                                                 {% for empleado in empleados %}
-                                                    <option value="{{empleado.id}}" {% if consulta.id!=null and empleado.id==consulta.empleado.id %} selected {% endif %}>{{empleado.persona.nombres}} {{empleado.persona.apellidos}}</option>
+                                                    <option value="{{empleado.id}}" {% if consulta.tipoConsulta!=null and consulta.id!=null and empleado.id==consulta.empleado.id %} selected {% endif %}>{{empleado.persona.nombres}} {{empleado.persona.apellidos}}</option>
                                                 {% endfor %}
                                             </select>  
                                         </div>
                                         <div class="col-md-3">
+                                            <input type="text" id="costoConsulta" class="form-control" placeholder="$"/>
+                                        </div>
+                                        {#<div class="col-md-3">
                                             <select id="tratamiento_consulta" name="tratamiento" class="form-control input-sm">
                                                 <option value="0" selected>Seleccione un tratamiento...</option>
                                             </select>  
-                                        </div>
+                                        </div>#}
                                         
                                         <div class="col-md-6">
                                             <select id="tipo_consulta" class="form-control input-sm">
                                                 <option value="0" selected>Seleccione un tipo de consulta...</option>
                                                 {%for tipo in tipoConsulta %}
-                                                    <option value="{{tipo.id}}" {% if consulta.id!=null and tipo.id==consulta.tipoConsulta.id %} selected {% endif %}>{{tipo.nombre}}</option>
+                                                    <option value="{{tipo.id}}" {% if consulta.tipoConsulta!=null and consulta.id!=null and tipo.id==consulta.tipoConsulta.id %} selected {% endif %}>{{tipo.nombre}}</option>
                                                 {% endfor %}
                                             </select>
                                         </div>
@@ -688,7 +696,7 @@
                                 <div class="col-md-12">
                                     <form id="formImagen" role="form" enctype="multipart/form-data" method="post">
                                         <input id="file-input" required type="file" name="file[]" multiple>
-                                        <input type="hidden" id="idConsulta" value="{% if consulta.id is null %}{%else%}{{consulta.id}}{%endif%}" name="idConsulta" class="form-control input-sm"/>
+                                        <input type="text" id="idConsulta" value="{% if consulta.id is null %}{%else%}{{consulta.id}}{%endif%}" name="idConsulta" class="form-control input-sm"/>
                                     </form>
                                     {#<form action="#" id="formImagen" enctype="multipart/form-data"  method="post">
                                         <div class="form-group">
@@ -2773,6 +2781,7 @@
         
         $(document).on('click','#guardarSignosConsulta', function(){
             var id = $('#idPaciente').val();
+            var idConsulta = $('#idConsulta').val();
             var peso = $('#pesoPaciente').val();
             var talla = $('#tallaPaciente').val();
             var frecRespiratoria = $('#frecRespiratoria').val();
@@ -2784,27 +2793,32 @@
             
             
             
-            
-            $.ajax({
-                data:{id:id,peso:peso,talla:talla,frecRespiratoria:frecRespiratoria,presionDiastolica:presionDiastolica,presionSistolica:presionSistolica,temperatura:temperatura,frecCardiaca:frecCardiaca},
-                url:"{{path('admin_paciente_guardar_signos_ajax')}}",
-                type: "post",
-                success: function (data) {
-                        //inicio = data.inicio++;
-                        if(data==0){
-{#                            bootbox.alert("Cambios guardados!", function() {});#}
-                            alertify.success("Signos vitales guardados!");
+            if(idConsulta==''){
+                $.ajax({
+                    data:{id:id,peso:peso,talla:talla,frecRespiratoria:frecRespiratoria,presionDiastolica:presionDiastolica,presionSistolica:presionSistolica,temperatura:temperatura,frecCardiaca:frecCardiaca},
+                    url:"{{path('admin_paciente_guardar_signos_ajax')}}",
+                    type: "post",
+                    success: function (data) {
+                            //inicio = data.inicio++;
+                            if(data!=0){
+    {#                            bootbox.alert("Cambios guardados!", function() {});#}
+                                alertify.success("Signos vitales guardados!");
+                                $('#idConsulta').val(data);
 
-                        }
-{#                        console.log("pagina actual: "+data);
-                        console.log("Inicio de registro: "+data.inicioRegistro);#}
-                        
-                    },
-                error: function (data) {
+                            }
+    {#                        console.log("pagina actual: "+data);
+                            console.log("Inicio de registro: "+data.inicioRegistro);#}
+
+                        },
+                    error: function (data) {
 
 
-                }
-            });
+                    }
+                });
+            }
+            else{
+                alertify.error("Ya se ingreso una consulta!");
+            }
         });
         
         
