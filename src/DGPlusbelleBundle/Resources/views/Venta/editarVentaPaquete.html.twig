@@ -115,10 +115,10 @@
                         {#</div>  
                         <div class="row">#}
                             <div class="col-md-2" style="margin-bottom: 10px;">
-                                <strong>Cuotas:</strong>
+                                <strong>Descuento:</strong>
                             </div>
                             <div class="col-md-2" style="margin-bottom: 10px;">
-                                <span id="detalle-venta-cuotas">{{ ventaPaquete.cuotas }}</span>
+                                <span id="detalle-venta-cuotas">{{ ventaPaquete.descuento.porcentaje }}%</span>
                             </div>
                         {#</div>  
                         <div class="row">#}
@@ -126,7 +126,8 @@
                                 <strong>Deuda:</strong><span></span>
                             </div>
                             <div class="col-md-2" style="margin-bottom: 10px;">
-                                <span id="detalle-venta-deuda">$ {{ ventaPaquete.costo|number_format(2, '.', ',') }}</span>
+                                <span id="detalle-venta-deuda">$ {{ (( ventaPaquete.costo - (( ventaPaquete.descuento.porcentaje * ventaPaquete.costo ) / 100)) - abonos.abonos )|number_format(2, '.', ',') }}</span>
+                                {#<span id="detalle-venta-deuda">$ {{ ventaPaquete.costo|number_format(2, '.', ',') }}</span>#}
                             </div>
                         </div>  
                     </div>
@@ -520,31 +521,54 @@
                     
                     {# Sección en donde se encuentran las imagenes de un determinado tratamiento #}
                     <div id="imagenes" class="tab-pane fade" style="margin-top: 20px;">
-                        <div class="row" style="margin-top: 35px;" style="display:none;">
-                                <div class="col-md-3"  style="margin-left: 30px;">
-                                    {# Area en donde se selecciona la foto relacionada con la sesion de tratamiento #}    
-                                    <div id="sesiones-imagenes">
-                                        <p>
-                                        <strong>Subir imagen</strong>
-                                        <div class="row" style="margin-top:20px;">
-                                            <div class="col-md-12">
-                                                <form id="formImagen" enctype="multipart/form-data"  method="post">
-                                                    <input id="file-input" type="file" name="file">
-                                                    <input type="hidden" id="empresaId"  value="5" name="empresaId">
-                                                </form>
+                        <div class="row" style="margin-top: 35px; padding: 30px;">
+                                <strong>Subir imagen</strong>
+                            <div class="row" style="margin-top:20px;">
+                                <div class="col-md-12">
+                                    <form id="formImagen" role="form" enctype="multipart/form-data" method="post">
+                                        <input id="file-input" required type="file" name="file[]" multiple>
+                                        <input type="hidden" id="idSesion" value="{% if ventaPaquete.id is null %}{%else%}{{ventaPaquete.id}}{%endif%}" name="idSesion" class="form-control input-sm"/>
+                                    </form>
+                                    {#<form action="#" id="formImagen" enctype="multipart/form-data"  method="post">
+                                        <div class="form-group">
+                                          <div class="fileinput fileinput-new input-group" data-provides="fileinput">
+                                            <div class="form-control" data-trigger="fileinput"><i class="glyphicon glyphicon-file fileinput-exists"></i> <span class="fileinput-filename"></span></div>
+                                            <div class="input-group-btn">
+                                              <span class="btn btn-default btn-file"><span class="fileinput-new">Select file</span><span class="fileinput-exists">Change</span><input name="..." type="file"></span>
+                                              <a href="#" class="btn btn-danger fileinput-exists" data-dismiss="fileinput">Remove</a>
                                             </div>
-                                        </div>
-                                        <div class="row" style="margin-top:10px;">
-                                            <div class="col-md-12">
-                                                <hr>
-                                            </div>
-                                        </div>
-                                        <div class="row">
-                                        
-                                        </p>
-                                    </div>
+                                          </div><!-- /.fileinput -->
+                                        </div><!-- /.form-group -->
+                                    </form>#}
+                                    
                                 </div>
                             </div>
+                            
+                            <div class="row" style="margin-top:20px;">
+                                <div class="col-md-12">
+                                    <strong style="margin-top:80px;">Archivos adjuntos</strong>
+                                </div>    
+                                <div class="col-md-12">
+                                    {% for imagen in archivos %}
+                                        <a href="{{ asset('Photos/Tmp/')}}{{imagen.foto}}">{{imagen.foto}}</a>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                            
+                            {#<div class="row" style="margin-top:10px;">
+                            <div class="col-md-12">
+                                <hr>
+                            </div>
+                        </div>#}
+
+                        {#<div class="row  pull-right" style="margin-top:10px;">
+                            <div class="col-md-12">
+                                <div class="form-grouphide col-sm-12">
+                                    <a class="btn btn-default btn-xs" id="cancelarNuevoConsulta">Cancelar</a>
+                                    <button type="submit" id="guardarImagenes" name="dgplusbellebundle_antecedentes[submit]" class="btn btn-success btn-xs btn btn">Guardar</button>
+                                </div>
+                            </div>
+                        </div>#}
                         </div>
                         <div class="row">
                             <div class="col-md-12 col-sm-12 text-center" style="margin-top: 30px; margin-bottom: 10px;" id="registrar-sesiones-imagenes">
@@ -592,16 +616,22 @@
                                 </div>        
                             </div>
                             <div class="row">
-                                <div class="col-md-12 col-sm-12 text-center" style="margin-top: 30px; margin-bottom: 10px;" id="abono">
-                                    {# Aqui va la descripcion del abono 'text-area' #}
+                                <div class="col-md-7 col-sm-7" style="margin-top: 30px; margin-bottom: 10px;" id="abono">
+                                    <div id="abono-descripcion-label" style="margin-left: 30px;">
+                                        <label>Descripcion</label>
+                                    </div> 
+                                    <div class="clearfix"></div>
+                                    <div id="abono-descripcion" style="margin-left: 30px;">
+                                        <textarea rows="4" cols="100" name="dgplusbellebundle_abono[descripcion]" id="dgplusbellebundle_abono_descripcion" class="form-control"></textarea> 
+                                    </div>     
                                 </div>    
                             </div>               
                             <div class="row">
-                                <div class="col-md-12 col-sm-12 text-center" style="margin-top: 30px; margin-bottom: 10px;" id="registrar-sesiones-tratamiento">
+                                <div class="col-md-12 col-sm-12 text-center" style="margin-top: 30px; margin-bottom: 10px;" id="registrar-abonos-sesiones">
                                     <hr>
-                                    <input type="submit" value="Registrar abono" style="margin-bottom: 10px; background-color: #39a58a; color: #FFF;" class="btn" id="registro-sesiones-tratamiento"/>
+                                    <input type="submit" value="Registrar abono" style="margin-bottom: 10px; background-color: #39a58a; color: #FFF;" class="btn" id="registro-abono"/>
                                 </div>    
-                            </div>             
+                            </div>              
                         </form>
                         <div class="row" style="margin-top: 50px;"></div>          
                     </div>
@@ -1101,6 +1131,38 @@
                         }
                     }
                 });
+                
+                // Al momento de hacer click en resgistra abono
+                $(document).on("click", "#registro-abono", function(){
+                    var idpac = '{{paciente.id}}';
+                    var sucursal = $('#dgplusbellebundle_abono_sucursal').val();
+                    var empleado = $('#dgplusbellebundle_abono_empleado').val();
+                    var monto = $('#dgplusbellebundle_abono_monto').val();
+                    var descripcion = $('#dgplusbellebundle_abono_descripcion').val();
+                    var draw = '';
+                
+                    var data = {
+                            id : idpac,
+                            sucursal : sucursal,
+                            empleado: empleado,
+                            monto: monto,
+                            descripcion: descripcion,
+                            id_ventapaquete : id_ventapaquete
+                        };
+                        
+                    // Se procede a registrar la sesion del tratamiento mediante ajax
+                    $.ajax({
+                        data:  data,
+                        url:   '{{path('admin_abonopaquete_nuevo')}}',
+                        type:  'post',
+                        success:  function (response) {
+                            alertify.success('Se ha resgistrado con exito un abono del paquete');
+
+                            return false;
+                        }
+                    });
+                    return false;
+                }); 
                 
                 $('#dgplusbellebundle_consulta_fechaConsulta').daterangepicker({
                     singleDatePicker: true,
