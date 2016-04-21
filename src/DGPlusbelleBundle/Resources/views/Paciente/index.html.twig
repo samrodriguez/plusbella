@@ -229,12 +229,14 @@
               #}
                 //Seleccionar un registro
                 $(document).on('click','#datatables1>tbody>tr,.infoPaciente', function(event) {
-                    idPaciente=$(this).children().html();
+                    idPaciente=$(this).children().last().children().children().attr("id");
                     
-                    //alert($(this).prop("tagName"));
+{#                    alert($(this).prop("tagName"));#}
+{#                    alert($(this).children().last().children().children().attr("id"));#}
                     if($(this).prop("tagName")=="I"){
-                        idPaciente=$(this).parent().parent().parent().children().html();
-                        //alert(idPaciente);
+{#                        idPaciente=$(this).parent().parent().parent().children().html();#}
+                        idPaciente=$(this).children().last().children().children().attr("id");
+                        alert(idPaciente);
                         $.getJSON(Routing.generate('get_infopaciente', { id: "P"+ idPaciente}), 
                         function(data) {
                             var mensaje = "";
@@ -408,7 +410,7 @@
                 $('#datatables1').DataTable({ 
                     {#searching:true,
                     order:[[1,"asc"]],#}
-                    "processing": true,
+                    "processing": false,
                     "serverSide": true,
                     "ajax": {
                         "url": '{{path('admin_paciente_data')}}',
