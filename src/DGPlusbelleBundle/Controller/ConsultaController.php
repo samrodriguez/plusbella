@@ -807,11 +807,12 @@ class ConsultaController extends Controller
             
             $plantillas = $em->getRepository('DGPlusbelleBundle:Plantilla')->findAll();
 
-            $signos = $em->getRepository('DGPlusbelleBundle:Signos')->findBy(array('paciente'=>$paciente->getId()),array('id'=>'DESC'));
             
-                
+            
+            $signos = $em->getRepository('DGPlusbelleBundle:Signos')->findBy(array('consulta'=>$paciente->getId()),array('id'=>'DESC'));
             if($idconsulta!=null){
                 $consulta = $em->getRepository('DGPlusbelleBundle:Consulta')->find($idconsulta);
+                
             }
             else{
                 $consulta = $entity;
@@ -819,7 +820,7 @@ class ConsultaController extends Controller
             //Seteo del paciente en la entidad
             $entity->setPaciente($paciente);
             //var_dump($paciente);
-            $form   = $this->createCreateForm($entity,2,$cadena, $paciente);
+            //$form   = $this->createCreateForm($entity,2,$cadena, $paciente);
             $entity->setPaciente($paciente);
             //var_dump($consulta->getEmpleado()->getPersona()->getNombres());
             
@@ -894,7 +895,7 @@ class ConsultaController extends Controller
             'empleados' => $empleados,
             'edad' => $edad,
             'paciente' => $paciente,
-            'form'   => $form->createView(),
+            //'form'   => $form->createView(),
             'flag'   => $flag,
             'signos' => $signos,
         );
@@ -924,20 +925,22 @@ class ConsultaController extends Controller
         $cadena= $request->get('id');
         $idconsulta = $request->get('idtransaccion');
         //var_dump($consulta);
+//        var_dump($idconsulta);
+//        var_dump($cadena);
         $idconsulta = substr($idconsulta, 2);
         $flag = 0;
         
         if($cadena != NULL) {
             //Obtener el id del parametro
             $idEntidad = substr($cadena, 1);
-            //var_dump($idEntidad);
+//            var_dump($idEntidad);
             //$identidad= $request->get('identidad');
             //Busqueda del paciente
             $paciente = $em->getRepository('DGPlusbelleBundle:Paciente')->find($idEntidad);
             
             $plantillas = $em->getRepository('DGPlusbelleBundle:Estetica')->findAll();
             
-            $signos = $em->getRepository('DGPlusbelleBundle:Signos')->findBy(array('paciente'=>$paciente->getId()),array('id'=>'DESC'));
+            $signos = $em->getRepository('DGPlusbelleBundle:Signos')->findBy(array('consulta'=>$paciente->getId()),array('id'=>'DESC'));
             //var_dump($signos[0]);
             if($idconsulta!=null){
                 $consulta = $em->getRepository('DGPlusbelleBundle:Consulta')->find($idconsulta);
@@ -1039,7 +1042,9 @@ class ConsultaController extends Controller
             $edad = "No se ha ingresado fecha de nacimiento";
         }
         $sucursales = $em->getRepository('DGPlusbelleBundle:Sucursal')->findBy(array('estado'=>1));
+//        $empleados = $em->getRepository('DGPlusbelleBundle:Empleado')->findBy(array('id'=>array(3,5),'estado'=>1));
         $empleados = $em->getRepository('DGPlusbelleBundle:Empleado')->findBy(array('id'=>array(3,5),'estado'=>1));
+//        var_dump($empleados);
         $tipoConsulta= $em->getRepository('DGPlusbelleBundle:TipoConsulta')->findBy(array('estado'=>1));
         //var_dump($signos);
         if(count($signos)==0){
@@ -1992,7 +1997,8 @@ class ConsultaController extends Controller
         
         //Generacion del numero de expediente
 //        $numeroExp = $nombre[0].$apellido[0].date("Y");
-        $numeroExp = substr(strtoupper($nombre), 0,1).substr(strtoupper($apellido), 0,1).date("Y");
+        //$numeroExp = substr(strtoupper($nombre), 0,1).substr(strtoupper($apellido), 0,1).date("Y");
+        $numeroExp = "EX";
 //        $numeroExp = strtoupper ($numeroExp);
 //        echo $numeroExp;
                 

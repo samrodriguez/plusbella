@@ -76,12 +76,12 @@ class Signos
     /**
      * @var \Paciente
      *
-     * @ORM\ManyToOne(targetEntity="Paciente", inversedBy="consulta")
+     * @ORM\ManyToOne(targetEntity="Consulta", inversedBy="consulta")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="id_paciente", referencedColumnName="id")
      * })
      */
-    private $paciente;
+    private $consulta;
     
    
     /**
@@ -270,27 +270,27 @@ class Signos
     
     
     /**
-     * Set paciente
+     * Set consulta
      *
      * @param \DGPlusbelleBundle\Entity\Paciente $paciente
      *
      * @return Consulta
      */
-    public function setPaciente(\DGPlusbelleBundle\Entity\Paciente $paciente = null)
+    public function setConsulta(\DGPlusbelleBundle\Entity\Consulta $consulta= null)
     {
-        $this->paciente = $paciente;
+        $this->consulta= $consulta;
 
         return $this;
     }
 
     /**
-     * Get paciente
+     * Get consulta
      *
-     * @return \DGPlusbelleBundle\Entity\Paciente
+     * @return \DGPlusbelleBundle\Entity\Consulta
      */
-    public function getPaciente()
+    public function getConsulta()
     {
-        return $this->paciente;
+        return $this->consulta;
     }
    
 }
