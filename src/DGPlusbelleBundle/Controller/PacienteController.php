@@ -822,7 +822,7 @@ class PacienteController extends Controller
         //var_dump($longitud);
         
         $em = $this->getDoctrine()->getEntityManager();
-        $dql = "SELECT pac.id,pac.ocupacion,per.direccion,per.telefono,per.nombres as nombres,per.apellidos as apellidos, DATE_FORMAT(pac.fechaNacimiento,'%Y-%m-%d') as fechaNacimiento, per.direccion, "
+        $dql = "SELECT pac.id as id, pac.ocupacion, per.direccion,per.telefono,per.nombres as nombres,per.apellidos as apellidos, DATE_FORMAT(pac.fechaNacimiento,'%Y-%m-%d') as fechaNacimiento, per.direccion, "
                         . " CONCAT('<a href=\"\">','Ver','</a>') as detalles "
                         . "FROM DGPlusbelleBundle:Expediente exp "
                         . "JOIN exp.paciente pac "
@@ -859,6 +859,100 @@ class PacienteController extends Controller
         //var_dump(count($paciente['data']));
         //die();
         //$data = new \stdClass();
+        
+        $dql = "SELECT per.id FROM DGPlusbelleBundle:Paciente p"
+                . " INNER JOIN p.persona per"
+                . " JOIN p.expediente exp"
+                . " WHERE p.id = :pacienteid";
+        
+        $personaId = $em->createQuery($dql)
+                       ->setParameter('pacienteid', $paciente['data'][0]['id'])
+                       ->getSingleResult();
+        
+        $persona = $em->getRepository('DGPlusbelleBundle:Persona')->find($personaId['id']);
+        $ventaPaquete = $em->getRepository('DGPlusbelleBundle:VentaPaquete')->findBy(array('paciente' => $persona));
+        $personaTratamiento = $em->getRepository('DGPlusbelleBundle:PersonaTratamiento')->findBy(array('paciente' => $persona));
+        $deudaTotal = 0;
+        $sesionesTotal = 0;
+        $sesionesPendientes = 0;
+        
+        foreach ($ventaPaquete as $value) {
+            $ventaId = $value->getId();
+            $rsm2 = new ResultSetMapping();
+
+            $sql2 = "select cast(IFNULL(sum(abo.monto),0) as decimal(36,2)) abonos "
+                    . "from abono abo inner join venta_paquete vp on abo.venta_paquete = vp.id "
+                    . "where vp.id = '$ventaId'";
+
+            $rsm2->addScalarResult('abonos','abonos');
+
+            $abonos = $em->createNativeQuery($sql2, $rsm2)
+                    ->getSingleResult();
+            
+            $deudaTotal+= ($value->getCosto() - (($value->getDescuento()->getPorcentaje() * $value->getCosto())/100)) - $abonos['abonos'] ;
+            
+            $dql = "SELECT seg.numSesion FROM DGPlusbelleBundle:SeguimientoPaquete seg"
+                    . " INNER JOIN seg.idVentaPaquete ven"
+                    . " INNER JOIN seg.tratamiento tra"
+                    . " WHERE ven.id = :venta";
+
+            $seguimiento = $em->createQuery($dql)
+                           ->setParameter('venta', $ventaId)
+                           ->getResult();
+            
+            foreach ($seguimiento as $value) {
+                $sesionesPendientes+=$value['numSesion'];
+            }
+            
+            $dql = "SELECT det.numSesiones FROM DGPlusbelleBundle:DetalleVentaPaquete det"
+                    . " INNER JOIN det.ventaPaquete ven"
+                    . " INNER JOIN det.tratamiento tra"
+                    . " WHERE ven.id = :venta";
+
+            $sesionesVenta = $em->createQuery($dql)
+                           ->setParameter('venta', $ventaId)
+                           ->getResult();
+            
+            foreach ($sesionesVenta as $value) {
+                $sesionesTotal+=$value['numSesiones'];
+            }                        
+        }
+        
+        foreach ($personaTratamiento as $value) {
+            $ventaId = $value->getId();
+            $rsm = new ResultSetMapping();
+
+            $sql = "select cast(IFNULL(sum(abo.monto),0) as decimal(36,2)) abonos "
+                    . "from abono abo inner join persona_tratamiento pt on abo.persona_tratamiento = pt.id "
+                    . "where pt.id = '$ventaId'";
+
+            $rsm->addScalarResult('abonos','abonos');
+
+            $abonos = $em->createNativeQuery($sql, $rsm)
+                           ->getSingleResult();
+            
+            $deudaTotal+= ($value->getCostoConsulta() - (($value->getDescuento()->getPorcentaje() * $value->getCostoConsulta())/100)) - $abonos['abonos'] ;
+            
+            $dql = "SELECT pt.numSesiones, seg.numSesion FROM DGPlusbelleBundle:SeguimientoTratamiento seg"
+                    . " INNER JOIN seg.idPersonaTratamiento pt"
+                    . " WHERE pt.id = :venta";
+
+            $seguimientoT = $em->createQuery($dql)
+                           ->setParameter('venta', $ventaId)
+                           ->getResult();
+
+           foreach ($seguimientoT as $value) {
+               $sesionesPendientes+=$value['numSesion'];
+               $sesionesTotal+=$value['numSesiones'];
+               //var_dump($value['numSesion'].'/'.$value['numSesiones']);  
+           }            
+        }
+        
+        //var_dump($sesionesPendientes.'/'.$sesionesTotal);  
+        //die();
+        $paciente['deuda'] = $deudaTotal;
+        $paciente['sesionesPendientes'] = $sesionesPendientes;
+        $paciente['sesionesTotal'] = $sesionesTotal;
         
         if(count($paciente['data']==0)){
 //            $data->estado = true;//vacio
@@ -1153,14 +1247,9 @@ class PacienteController extends Controller
 //        $familiares = $request->get('familiares');
 //        $alergias = $request->get('alergias');
         
-        
-        
-        $em = $this->getDoctrine()->getEntityManager();
-        
-        $paciente = $em->getRepository('DGPlusbelleBundle:Paciente')->find($id);
-        
-        $signos = $paciente = $em->getRepository('DGPlusbelleBundle:Signos')->findBy(array('consulta'=>$idConsulta));
-        
+        $em = $this->getDoctrine()->getEntityManager();        
+        $paciente = $em->getRepository('DGPlusbelleBundle:Paciente')->find($id);        
+        $signos = $paciente = $em->getRepository('DGPlusbelleBundle:Signos')->findBy(array('consulta'=>$idConsulta));        
         $consulta = $paciente = $em->getRepository('DGPlusbelleBundle:Consulta')->find($idConsulta);
         
         if(count($paciente)!=0){
