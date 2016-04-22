@@ -902,11 +902,20 @@ class PacienteController extends Controller
             
             foreach ($seguimiento as $value) {
                 $sesionesPendientes+=$value['numSesion'];
-                //var_dump($value);
             }
             
-                   
-            //die();
+            $dql = "SELECT det.numSesiones FROM DGPlusbelleBundle:DetalleVentaPaquete det"
+                    . " INNER JOIN det.ventaPaquete ven"
+                    . " INNER JOIN det.tratamiento tra"
+                    . " WHERE ven.id = :venta";
+
+            $sesionesVenta = $em->createQuery($dql)
+                           ->setParameter('venta', $ventaId)
+                           ->getResult();
+            
+            foreach ($sesionesVenta as $value) {
+                $sesionesTotal+=$value['numSesiones'];
+            }                        
         }
         
         foreach ($personaTratamiento as $value) {
@@ -923,9 +932,27 @@ class PacienteController extends Controller
                            ->getSingleResult();
             
             $deudaTotal+= ($value->getCostoConsulta() - (($value->getDescuento()->getPorcentaje() * $value->getCostoConsulta())/100)) - $abonos['abonos'] ;
+            
+            $dql = "SELECT pt.numSesiones, seg.numSesion FROM DGPlusbelleBundle:SeguimientoTratamiento seg"
+                    . " INNER JOIN seg.idPersonaTratamiento pt"
+                    . " WHERE pt.id = :venta";
+
+            $seguimientoT = $em->createQuery($dql)
+                           ->setParameter('venta', $ventaId)
+                           ->getResult();
+
+           foreach ($seguimientoT as $value) {
+               $sesionesPendientes+=$value['numSesion'];
+               $sesionesTotal+=$value['numSesiones'];
+               //var_dump($value['numSesion'].'/'.$value['numSesiones']);  
+           }            
         }
         
+        //var_dump($sesionesPendientes.'/'.$sesionesTotal);  
+        //die();
         $paciente['deuda'] = $deudaTotal;
+        $paciente['sesionesPendientes'] = $sesionesPendientes;
+        $paciente['sesionesTotal'] = $sesionesTotal;
         
         if(count($paciente['data']==0)){
 //            $data->estado = true;//vacio
@@ -1214,14 +1241,9 @@ class PacienteController extends Controller
 //        $familiares = $request->get('familiares');
 //        $alergias = $request->get('alergias');
         
-        
-        
-        $em = $this->getDoctrine()->getEntityManager();
-        
-        $paciente = $em->getRepository('DGPlusbelleBundle:Paciente')->find($id);
-        
-        $signos = $paciente = $em->getRepository('DGPlusbelleBundle:Signos')->findBy(array('consulta'=>$idConsulta));
-        
+        $em = $this->getDoctrine()->getEntityManager();        
+        $paciente = $em->getRepository('DGPlusbelleBundle:Paciente')->find($id);        
+        $signos = $paciente = $em->getRepository('DGPlusbelleBundle:Signos')->findBy(array('consulta'=>$idConsulta));        
         $consulta = $paciente = $em->getRepository('DGPlusbelleBundle:Consulta')->find($idConsulta);
         
         if(count($paciente)!=0){
