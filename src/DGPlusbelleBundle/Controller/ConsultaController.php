@@ -811,7 +811,7 @@ class ConsultaController extends Controller
 
             $plantillasEstetica = $em->getRepository('DGPlusbelleBundle:Estetica')->findAll();
             
-            $signos = $em->getRepository('DGPlusbelleBundle:Signos')->findBy(array('consulta'=>$paciente->getId()),array('id'=>'DESC'));
+            
             if($idconsulta!=null){
                 $consulta = $em->getRepository('DGPlusbelleBundle:Consulta')->find($idconsulta);
                 
@@ -819,6 +819,7 @@ class ConsultaController extends Controller
             else{
                 $consulta = $entity;
             }
+            $signos = $em->getRepository('DGPlusbelleBundle:Signos')->findBy(array('consulta'=>$consulta->getId()),array('id'=>'DESC'));
             //Seteo del paciente en la entidad
             $entity->setPaciente($paciente);
             //var_dump($paciente);
@@ -943,7 +944,7 @@ class ConsultaController extends Controller
             
             $plantillas = $em->getRepository('DGPlusbelleBundle:Estetica')->findAll();
             
-            $signos = $em->getRepository('DGPlusbelleBundle:Signos')->findBy(array('consulta'=>$paciente->getId()),array('id'=>'DESC'));
+//            $signos = $em->getRepository('DGPlusbelleBundle:Signos')->findBy(array('consulta'=>$paciente->getId()),array('id'=>'DESC'));
             //var_dump($signos[0]);
             if($idconsulta!=null){
                 $consulta = $em->getRepository('DGPlusbelleBundle:Consulta')->find($idconsulta);
@@ -954,6 +955,7 @@ class ConsultaController extends Controller
                 $signos = null;
                 $consulta = $entity;
             }
+            $signos = $em->getRepository('DGPlusbelleBundle:Signos')->findBy(array('consulta'=>$consulta->getId()),array('id'=>'DESC'));
             //Seteo del paciente en la entidad
             $entity->setPaciente($paciente);
             //var_dump($paciente);

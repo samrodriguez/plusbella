@@ -1055,6 +1055,8 @@ class PacienteController extends Controller
         $presionSistolica = $request->get('presionSistolica');
         $temperatura = $request->get('temperatura');
         $frecCardiaca = $request->get('frecCardiaca');
+        $medico= $request->get('medico');
+        $sucursal= $request->get('sucursal');
         
 //        $patologicos = $request->get('patologicos');
 //        $familiares = $request->get('familiares');
@@ -1069,9 +1071,12 @@ class PacienteController extends Controller
         $em = $this->getDoctrine()->getEntityManager();
         
         $paciente = $em->getRepository('DGPlusbelleBundle:Paciente')->find($id);
+        $medico = $em->getRepository('DGPlusbelleBundle:Empleado')->find($medico);
+        $sucursal = $em->getRepository('DGPlusbelleBundle:Empleado')->find($sucursal);
         
         $signos = new Signos();
         $consulta = new Consulta();
+        
         
         if(count($paciente)!=0){
             //$persona = $em->getRepository('DGPlusbelleBundle:Persona')->find($paciente->getPersona()->getId());
@@ -1090,6 +1095,7 @@ class PacienteController extends Controller
             $consulta->setPaciente($paciente);
             $consulta->setReportePlantilla(1);
             $consulta->setCostoConsulta(0);
+            $consulta->setEmpleado($medico);
             
             $em->persist($consulta);
             $em->flush();

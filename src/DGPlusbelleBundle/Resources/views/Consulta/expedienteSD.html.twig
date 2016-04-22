@@ -172,10 +172,13 @@
                   <input id="filterDatatables1" class="form-control input-sm" placeholder="Buscar...">
                 </div>
                 <div class="btn-group pull-right" id="venta" style="display:none;">
-                    <a href="{{path('admin_historial_consulta')}}" class="btn btn-success btn-xs btn">Nueva venta</a>
+                    <a href="{{path('admin_historial_consulta')}}" style="color:#FFF;" class="btn btn-success btn-xs btn">Nueva venta</a>
                 </div>
                 <div class="btn-group pull-right" id="consulta" style="display:none;">
-                    <a href="{{path('admin_consulta_nueva_paciente_SD')}}" class="btn btn-success btn-xs btn">Nueva consulta</a>
+                    <a href="{{path('admin_consulta_nueva_paciente_SD')}}" style="color:#FFF;" class="btn btn-success btn-xs btn">Nueva consulta</a>
+                </div>
+                <div class="btn-group pull-right" id="consultaEst" style="display:none;">
+                    <a  href="{{path('admin_consulta_nueva_paciente_LPB')}}" style="color:#FFF;" class="btn btn-success btn-xs btn">Nueva consulta estética</a>
                 </div>
               </div><!-- /btn-toolbar -->
             </div><!-- /.panel-body -->
@@ -648,6 +651,7 @@
                     success: function (data) {
                             if(data.data.length!=0){
                                 var hrefconsulta="";
+                                var hrefconsultaEst="";
 
                                 hrefconsulta = $('#consulta').children().attr('href');
                                 var res = hrefconsulta.split("?");
@@ -655,6 +659,12 @@
                                 //console.log(data);
                                 //console.log(href);
                                 $('#consulta').children().attr('href',hrefconsulta);
+                                hrefconsultaEst = $('#consultaEst').children().attr('href');
+                                var res = hrefconsultaEst.split("?");
+                                hrefconsultaEst = res[0]+"?id=P"+data.data[0].id;
+                                //console.log(data);
+                                //console.log(href);
+                                $('#consultaEst').children().attr('href',hrefconsultaEst);
 
                                 var hrefventa=""
                                 hrefventa = $('#venta').children().attr('href');
@@ -672,6 +682,7 @@
                                 $('#infoExpediente').show();
                                 $('#venta').show();
                                 $('#consulta').show();
+                                $('#consultaEst').show();
                                 var exp = ""; 
                                 //exp = $('#expedientePaciente').html();
 

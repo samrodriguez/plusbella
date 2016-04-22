@@ -424,7 +424,8 @@
                                             <select id="medico_consulta" name="tratamiento" class="form-control input-sm">
 {#                                                <option value="0" selected>Seleccione un médico...</option>#}
                                                 {% for empleado in empleados %}
-                                                    <option value="{{empleado.id}}" {% if consulta.empleado!=null and consulta.tipoConsulta!=null and consulta.id!=null and empleado.id==consulta.empleado.id %} selected {% endif %}>{{empleado.persona.nombres}} {{empleado.persona.apellidos}}</option>
+{#                                                    <option value="{{empleado.id}}" {% if consulta.empleado!=null and consulta.tipoConsulta!=null and consulta.id!=null and empleado.id==consulta.empleado.id %} selected {% endif %}>{{empleado.persona.nombres}} {{empleado.persona.apellidos}}</option>#}
+                                                    <option value="{{empleado.id}}" {% if empleado.id==3 %} selected {% endif %}>{{empleado.persona.nombres}} {{empleado.persona.apellidos}}</option>
                                                 {% endfor %}
                                             </select>  
                                         </div>
@@ -696,7 +697,7 @@
                                 <div class="col-md-12">
                                     <form id="formImagen" role="form" enctype="multipart/form-data" method="post">
                                         <input id="file-input" required type="file" name="file[]" multiple>
-                                        <input type="text" id="idConsulta" value="{% if consulta.id is null %}{%else%}{{consulta.id}}{%endif%}" name="idConsulta" class="form-control input-sm"/>
+                                        <input type="hidden" id="idConsulta" value="{% if consulta.id is null %}{%else%}{{consulta.id}}{%endif%}" name="idConsulta" class="form-control input-sm"/>
                                     </form>
                                     {#<form action="#" id="formImagen" enctype="multipart/form-data"  method="post">
                                         <div class="form-group">
@@ -2820,13 +2821,14 @@
             var presionSistolica= $('#presionSistolica').val();
             var temperatura = $('#temperaturaPaciente').val();
             var frecCardiaca = $('#frecCardiaca').val();
-            
+            var medico = $('#medico_consulta').val();
+            var sucursal = $('#sucursal_consulta').val();
             
             
             
             if(idConsulta==''){
                 $.ajax({
-                    data:{id:id,peso:peso,talla:talla,frecRespiratoria:frecRespiratoria,presionDiastolica:presionDiastolica,presionSistolica:presionSistolica,temperatura:temperatura,frecCardiaca:frecCardiaca},
+                    data:{sucursal:sucursal,medico:medico,id:id,peso:peso,talla:talla,frecRespiratoria:frecRespiratoria,presionDiastolica:presionDiastolica,presionSistolica:presionSistolica,temperatura:temperatura,frecCardiaca:frecCardiaca},
                     url:"{{path('admin_paciente_guardar_signos_ajax')}}",
                     type: "post",
                     success: function (data) {
