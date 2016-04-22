@@ -248,4 +248,33 @@ class CierreAdministrativoController extends Controller
             ->getForm()
         ;
     }
+    
+    
+    
+    
+    
+    /**
+     * @Route("/borrar/cierre/administrativo/get/", name="borrar_cierre", options={"expose"=true})
+     * @Method("POST")
+     */
+    public function borrarCierreAction(Request $request) {
+        
+        $idCierre = $request->get('id');
+        
+        $em = $this->getDoctrine()->getEntityManager();
+        
+        $cierre = $em->getRepository("DGPlusbelleBundle:CierreAdministrativo")->find($idCierre);
+        //var_dump($cierre);
+        if(count($cierre)!=0){
+            $em->remove($cierre);
+            $em->flush();
+            return new Response(json_encode(0));
+        }
+        else{
+            return new Response(json_encode(1));
+        }
+        
+        
+        
+    }
 }

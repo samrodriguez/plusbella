@@ -1,6 +1,8 @@
 {% extends 'DGPlusbelleBundle:Layout:layout.html.twig' %}
-
-
+{%block css %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ asset('Resources/alertifyjs/css/alertify.css') }}">
+{% endblock css %}
 
 
 {% block contenido -%}
@@ -28,9 +30,9 @@
                   <button id="edit-datatables1" data-toggle="tooltip" data-container="body" title="Modificar cierre" class="btn btn-default datatables1-actions disabled" role="button">
                     <i class="fa fa-edit"></i>
                   </button>
-                  {#<button id="delete-datatables1" data-toggle="tooltip" data-container="body" title="Cambiar estado" class="btn btn-default datatables1-actions disabled" role="button">
+                  <button id="delete-datatables1" data-toggle="tooltip" data-container="body" title="Cambiar estado" class="btn btn-default datatables1-actions disabled" role="button">
                     <i class="fa fa-toggle-off"></i>
-                  </button>#}
+                  </button>
                 </div>
                 <div class="btn-group pull-left">
                   <input id="filterDatatables1" class="form-control input-sm" placeholder="Buscar...">
@@ -105,6 +107,7 @@
 
 {% block javascripts_step %}
        <script src="{{ asset('Resources/js/CAdministrativo.js') }}"></script>
+       <script src="{{ asset('Resources/alertifyjs/alertify.js') }}"></script>
 {#       <script type="text/javascript" src="{{ asset('Resources/zebra/inicializacioncalendarios.js')}}" ></script>#}
        <script>
             $(document).ready(function(){
@@ -221,6 +224,41 @@
                     }
 
                 });
+                
+                
+                
+                
+                $("#delete-datatables1").click(function(){
+                    console.log(link);
+                    $.ajax({
+                        data:{id:link},
+                        url:"{{path('borrar_cierre')}}",
+                        type: "post",
+                        success: function (data) {
+                                //inicio = data.inicio++;
+                                if(data==0){
+                                    alertify.success("Cierre eliminado!");
+                                    $('#'+link).remove();
+                                    $('#delete-datatables1').addClass('disabled');
+                                }
+                                else{
+                                    alertify.error("No se pudo eliminar el cierre!");
+                                }
+
+                                {#console.log("pagina actual: "+data);
+                                console.log("Inicio de registro: "+data.inicioRegistro);#}
+                            },
+                        error: function (data) {
+
+
+                        }
+                    });
+
+                });
+                
+                
+                
+                
                 /*
                 $("#dgplusbellebundle_sucursal_submit").click(function(){
                     $(".icon-refresh").click();
