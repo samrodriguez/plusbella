@@ -809,9 +809,6 @@ class PacienteController extends Controller
      */
     public function databusquedaAction(Request $request)
     {
-        
-        
-        
         $busqueda = $request->get('expediente');
 //        $inicioRegistro = ($paginaActual*10)-10;
         //var_dump($busqueda);
@@ -859,12 +856,12 @@ class PacienteController extends Controller
             $paciente['edad'] = 0;
         }
         
-                //var_dump(count($paciente['data']));
+        //var_dump(count($paciente['data']));
         //die();
         //$data = new \stdClass();
         
         if(count($paciente['data']==0)){
-            //$data->estado = true;//vacio
+//            $data->estado = true;//vacio
 //            $data->nombre = $paciente['data']["nombres"]. ' '. $paciente['data']["apellidos"];
 //            $data->fecha = $paciente['data']["fechaNacimiento"];
 //            $data->direccion = $paciente['data']["direccion"];
