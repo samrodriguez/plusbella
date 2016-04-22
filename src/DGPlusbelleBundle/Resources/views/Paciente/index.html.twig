@@ -239,11 +239,11 @@
                     idPaciente=$(this).children().last().children().children().attr("id");
                     
 {#                    alert($(this).prop("tagName"));#}
-{#                    alert($(this).children().last().children().children().attr("id"));#}
+                    //alert($(this).children().last().children().children().attr("id"));
                     if($(this).prop("tagName")=="I"){
-{#                        idPaciente=$(this).parent().parent().parent().children().html();#}
-                        idPaciente=$(this).children().last().children().children().attr("id");
-                        alert(idPaciente);
+                        idPaciente=$(this).attr('id');
+                        //idPaciente=$(this).children().last().children().children().attr("id");
+                        //alert(idPaciente);
                         $.getJSON(Routing.generate('get_infopaciente', { id: "P"+ idPaciente}), 
                         function(data) {
                             var mensaje = "";

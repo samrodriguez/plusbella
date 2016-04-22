@@ -809,7 +809,7 @@ class ConsultaController extends Controller
             
             $plantillas = $em->getRepository('DGPlusbelleBundle:Plantilla')->findAll();
 
-            
+            $plantillasEstetica = $em->getRepository('DGPlusbelleBundle:Estetica')->findAll();
             
             $signos = $em->getRepository('DGPlusbelleBundle:Signos')->findBy(array('consulta'=>$paciente->getId()),array('id'=>'DESC'));
             if($idconsulta!=null){
@@ -884,6 +884,7 @@ class ConsultaController extends Controller
         
             
         return array(
+            'plantillasEstetica'=>$plantillasEstetica,
             'ruta'=>$ruta,
             'existePlantilla'=>$existePlantilla,
             'existeReceta'=>$existeReceta,

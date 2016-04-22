@@ -4,7 +4,7 @@
     {{parent()}}
     <link rel="stylesheet" href="{{ asset('Resources/alertifyjs/css/alertify.css') }}">
     <style>
-        /*Posicion del boton agregar*/
+{#        //Posicion del boton agregar#}
         .placas>div:last-child {
             position:absolute;
         }
@@ -13,7 +13,7 @@
             display: none;
         }
         
-        /*/Posicion del boton agregar*/
+{#        //Posicion del boton agregar#}
         .placas2>div:last-child {
             position:absolute;
         }
@@ -196,8 +196,7 @@
               <li class=""><a href="#botabs4" data-toggle="tab">Antecedentes y alergias</a></li>
               {#<li class=""><a href="#botabs5" data-toggle="tab">Costo</a></li>#}
               <li class=""><a href="#botabs6" data-toggle="tab">Imágenes</a></li>
-              <li class=""><a href="#botabs7" data-toggle="tab">Plantilla</a></li>
-              <li class=""><a href="#botabs8" data-toggle="tab">Receta médica</a></li>
+              <li class=""><a href="#botabs7" data-toggle="tab">Hitoria clínica</a></li>
               
             </ul>
             <div class="panel-body">
@@ -405,9 +404,14 @@
                                         </div>
                                         <div class="col-md-3">
                                             <label>
-                                                Tratamiento
+                                                Costo de consulta
                                             </label>
                                         </div>
+                                        {#<div class="col-md-3">
+                                            <label>
+                                                Tratamiento
+                                            </label>
+                                        </div>#}
                                         
                                         <div class="col-md-6">
                                             <label>
@@ -420,21 +424,24 @@
                                             <select id="medico_consulta" name="tratamiento" class="form-control input-sm">
 {#                                                <option value="0" selected>Seleccione un médico...</option>#}
                                                 {% for empleado in empleados %}
-                                                    <option value="{{empleado.id}}" {% if consulta.id!=null and empleado.id==consulta.empleado.id %} selected {% endif %}>{{empleado.persona.nombres}} {{empleado.persona.apellidos}}</option>
+                                                    <option value="{{empleado.id}}" {% if consulta.empleado!=null and consulta.tipoConsulta!=null and consulta.id!=null and empleado.id==consulta.empleado.id %} selected {% endif %}>{{empleado.persona.nombres}} {{empleado.persona.apellidos}}</option>
                                                 {% endfor %}
                                             </select>  
                                         </div>
                                         <div class="col-md-3">
+                                            <input type="text" id="costoConsulta" class="form-control" placeholder="$"/>
+                                        </div>
+                                        {#<div class="col-md-3">
                                             <select id="tratamiento_consulta" name="tratamiento" class="form-control input-sm">
                                                 <option value="0" selected>Seleccione un tratamiento...</option>
                                             </select>  
-                                        </div>
+                                        </div>#}
                                         
                                         <div class="col-md-6">
                                             <select id="tipo_consulta" class="form-control input-sm">
                                                 <option value="0" selected>Seleccione un tipo de consulta...</option>
                                                 {%for tipo in tipoConsulta %}
-                                                    <option value="{{tipo.id}}" {% if consulta.id!=null and tipo.id==consulta.tipoConsulta.id %} selected {% endif %}>{{tipo.nombre}}</option>
+                                                    <option value="{{tipo.id}}" {% if consulta.tipoConsulta!=null and consulta.id!=null and tipo.id==consulta.tipoConsulta.id %} selected {% endif %}>{{tipo.nombre}}</option>
                                                 {% endfor %}
                                             </select>
                                         </div>
@@ -465,7 +472,12 @@
                                             <select id="sucursal_consulta" class="form-control input-sm">
 {#                                                <option value="0" selected>Seleccione una sucursal...</option>#}
                                                 {% for sucursal in sucursales %}
-                                                    <option value="{{sucursal.id}}" {% if consulta.id!=null and sucursal.id==consulta.sucursal.id %} selected {% endif %}>{{sucursal.nombre}}</option>
+                                                    {% if loop.index == 0 %}
+                                                        <option value="{{sucursal.id}}" {% if consulta.id!=null and sucursal.id==consulta.sucursal.id %} selected {% endif %}>{{sucursal.nombre}}</option>
+                                                    {% else %}
+                                                        <option value="{{sucursal.id}}" >{{sucursal.nombre}}</option>
+                                                    {% endif %}
+                                                    
                                                 {% endfor %}
                                             </select>
                                         </div>
@@ -622,13 +634,13 @@
                         </div>
                         <div class="row" style="margin-top:20px;">
                             <div class="col-md-4">
-                                <textarea maxlength="400" style="height:100px;" id="antecedentesPatologicos" value="{{paciente.patologicos}}" class="form-control editorArea">{{paciente.patologicos}}</textarea>
+                                <textarea maxlength="400" style="height:100px;" id="antecedentesPatologicos" class="form-control">{{paciente.patologicos}}</textarea>
                             </div>
                             <div class="col-md-4">
-                                <textarea maxlength="400" style="height:100px;" id="antecedentesFamiliares" value="{{paciente.familiares}}" class="form-control editorArea">{{paciente.familiares}}</textarea>
+                                <textarea maxlength="400" style="height:100px;" id="antecedentesFamiliares" class="form-control">{{paciente.familiares}}</textarea>
                             </div>
                             <div class="col-md-4">
-                                <textarea maxlength="400" style="height:100px;" id="antecedentesAlergias" value="{{paciente.alergias}}" class="form-control editorArea">{{paciente.alergias}}</textarea>
+                                <textarea maxlength="400" style="height:100px;" id="antecedentesAlergias" class="form-control">{{paciente.alergias}}</textarea>
                             </div>
                         </div>
                             
@@ -679,12 +691,12 @@
                     </div>
                     <div class="tab-pane fade in" id="botabs6">
                         <p>
-                            <strong>Subir imagen</strong> (Puede subir varias imágenes al mismo tiempo)
+                            <strong>Subir imagen</strong>
                             <div class="row" style="margin-top:20px;">
                                 <div class="col-md-12">
                                     <form id="formImagen" role="form" enctype="multipart/form-data" method="post">
                                         <input id="file-input" required type="file" name="file[]" multiple>
-                                        <input type="hidden" id="idConsulta" value="{% if consulta.id is null %}{%else%}{{consulta.id}}{%endif%}" name="idConsulta" class="form-control input-sm"/>
+                                        <input type="text" id="idConsulta" value="{% if consulta.id is null %}{%else%}{{consulta.id}}{%endif%}" name="idConsulta" class="form-control input-sm"/>
                                     </form>
                                     {#<form action="#" id="formImagen" enctype="multipart/form-data"  method="post">
                                         <div class="form-group">
@@ -705,8 +717,9 @@
                                 <strong style="margin-top:80px;">Archivos adjuntos</strong>
                                 <div class="col-md-12">
                                     {% for imagen in archivos %}
-                                        <a id="linkImagen" href="{{ asset('Photos/Tmp/')}}{{imagen.foto}}">Imagen {{loop.index}}</a><br>
+                                        <a href="{{ asset('Photos/Tmp/')}}{{imagen.foto}}">{{imagen.foto}}</a>
                                     {% endfor %}
+                                    
                                 </div>
                             </div>
                             
@@ -730,8 +743,66 @@
                     <div class="tab-pane fade in" id="botabs7">
                         <p>
                             <strong></strong>
+                            
+                            <input class="selectPlantilla" type="radio" name="plant" value="0"> Sonodigest<br>
+                            <input class="selectPlantilla" type="radio" name="plant" value="1"> La plus belle<br>
+                            
+                            
                             {%if existePlantilla == false %}
-                                <div class="row" style="margin-top:10px;">
+                                <div class="row LPB"  style="margin-top:10px; display:none;">
+                                    <div class="col-md-2 opcionHistorial">
+                                        Seleccione historial clínico:
+                                    </div>
+
+                                    <div class="col-md-10 opcionHistorial">
+                                        <select id="dgplusbellebundle_consulta_estetica" class="col-md-8 form-control input-sm" style="width:50%" >
+                                            {% for plantilla in plantillasEstetica %}
+                                                <option value="{{plantilla.id}}">
+                                                    {{plantilla.tipoEstetica|upper}}
+                                                </option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                    <div class="clearfix"></div>
+                                    <div class="col-md-12" style="margin-top:20px; display:none;" id="idPlantilla">
+                                        <i class="fa fa-file-pdf-o" style="margin-right:10px;"></i><a id="esteticaPrevPDF" style="cursor:pointer;">Generar PDF</a>
+                                        <hr>
+                                    </div>
+
+                                    <div id="camposPlantilla" class="camposPlantilla" style="margin-top: 30px">
+                                        <div class="row">
+                                            <div class="col-md-12"></div>
+                                            <div id="campos" class="col-md-12 campos"></div>
+                                        </div>
+                                    </div> 
+
+                                    <div class="row" style="margin-top:10px;">
+                                        <div class="col-md-12">
+                                            <hr>
+                                        </div>
+                                    </div>
+
+                                    <div class="row  pull-right" style="margin-top:10px;">
+                                        <div class="col-md-12">
+                                            <div class="form-grouphide col-sm-12">
+                                                {#<a class="btn btn-default btn-xs" id="cancelarNuevoConsulta">Cancelar</a>#}
+                                                <button type="submit" id="guardarPlantilla" name="dgplusbellebundle_antecedentes[submit]" class="btn btn-success btn-xs btn btn">Guardar</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            {% else %}
+                            
+        
+{#        $esteticaId = $request->get('estetica');#}
+            
+        
+                                <i class="fa fa-file-pdf-o LPB" style="diplay:none;"></i><a style="display:none;" class="generarPDF LPB" href="{{path(ruta,{botox:botox,valores:valores,id:consulta.id,paciente:paciente.id,sucursal:consulta.sucursal.id,estetica:estetica,corporal:corporal})}}"> Ver plantilla</a>
+                            {% endif %}
+                        
+                        
+                            {%if existePlantilla == false %}
+                                <div class="row SD" style="margin-top:10px; display:none;">
                                     <div class="col-md-2">
                                         Seleccione historial clínico:
                                     </div>
@@ -774,51 +845,10 @@
                                     </div>
                                 </div>
                             {% else %}
-                                <i class="fa fa-file-pdf-o"></i><a class="generarPDF" href="{{path(ruta,{id:consulta.id})}}"> Ver plantilla</a>
+                                <i class="fa fa-file-pdf-o SD" style="display:none;"></i><a style="display:none;" class="generarPDF SD" href="{{path(ruta,{id:consulta.id})}}"> Ver plantilla</a>
                             {% endif %}
                         </p>
-                    
-                    </div><!-- /tab-content -->
-                    
-                    <div class="tab-pane fade in" id="botabs8">
-                        <p>
-                            <strong></strong>
-                            
-                            {%if existeReceta == false %}
-                                <div class="col-md-12" style="margin-top:20px;{# display:none;#}" id="idReceta">
-                                    <i class="fa fa-file-pdf-o" style="margin-right:10px;"></i>
-                                    <a id="recetaPrevPDF" style="cursor:pointer;">Generar PDF</a>
-                                    <hr>
-                                </div>
-                                <div class="row" style="margin-top:10px;">
-                                    
-                                    <div class="col-md-12">
-                                        <textarea class="col-md-12 editorArea" id="receta" placeholder=""></textarea>
-                                    </div>
-                                    
-                                    <div class="clearfix"></div>
-                                    
-                                    <div class="row" style="margin-top:10px;">
-                                        <div class="col-md-12">
-                                            <hr>
-                                        </div>
-                                    </div>
-
-                                    <div class="row pull-right" style="margin-top:10px;">
-                                        <div class="col-md-12">
-                                            <div class="form-grouphide col-sm-12">
-                                                {#<a class="btn btn-default btn-xs" id="cancelarNuevoConsulta">Cancelar</a>#}
-                                                <button type="submit" id="guardarReceta" name="dgplusbellebundle_antecedentes[submit]" class="btn btn-success btn-xs btn btn">Guardar</button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            {% else %}
-                                <i class="fa fa-file-pdf-o"></i><a class="generarPDF" href="{{path(ruta,{id:consulta.id})}}"> Ver receta</a>
-                            {% endif %}
-                        </p>
-                    
-                    </div><!-- /tab-content -->
+                </div><!-- /tab-content -->
             </div><!-- /panel-body -->
         </div>
     {% else %}
@@ -912,6 +942,7 @@
             $( "#dgplusbellebundle_consulta_plantilla" ).on( "change", function() {
                 // Se obtiene el id de la plantilla
                 var id = $( this ).val();
+                //alert('prueba');
                 $('#idPlantilla').show();
                 // Se obtiene todos elementos que contengan la clase parametro
                 var elements = document.getElementsByClassName('parametro');
@@ -1532,7 +1563,7 @@
                 campos[key] = document.createElement('div');
                 //campos[key].setAttribute('class', 'parametro col-md-11');
                 
-                campos[key].setAttribute('class', 'parametro col-md-6');
+                campos[key].setAttribute('class', 'parametro col-md-4');
 
                 var formgroup = document.createElement('div');
                 formgroup.setAttribute('class', 'form-group');
@@ -2007,7 +2038,7 @@
             $( "#dgplusbellebundle_consulta_estetica" ).on( "change", function() {
                 // Se obtiene el id de la plantilla
                 var id = $( this ).val();
-                
+                $('#idPlantilla').show();
                 // Se obtiene todos elementos que contengan la clase parametro
                 var elements = document.getElementsByClassName('parametro');
                 
@@ -2631,23 +2662,32 @@
             show_select_today: "Hoy",
         });
             
-        
-        {#$(document).on('click','#historialPrevPDF', function(){
+        $(document).on('click','.selectPlantilla', function(){
+            var valorPlantilla=$(this).val();
+            console.log(valorPlantilla);
+            if(valorPlantilla==0){
+                $('.SD').show();
+                $('.LPB').hide();
+            }
+            else{
+                $('.LPB').show();
+                $('.SD').hide();
+            }
+        });
             
-            return false;            
-        });#}
-            
-        /**********************************************
-         * Metodos de guardar con ajax
-        */
-        
+        $('#costoConsulta').val('{{consulta.costoConsulta}}');
         $(document).on('click','.generarPDF', function(){
             var href = $(this).attr('href');
             window.open(href,'_blank');
             //alert();
             return false;
-        });
-        
+        });    
+        {#$(document).on('click','#historialPrevPDF', function(){
+            
+            return false;            
+        });#}
+            
+            
             
             
         /**********************************************
@@ -2697,7 +2737,6 @@
                             $('#ocupacionPaciente').html(ocup+" "+ocupacion);
 {#                            bootbox.alert("Cambios guardados!", function() {});#}
                             alertify.success("Cambios guardados!");
-                            
                         }
                         
                         {#console.log("pagina actual: "+data);
@@ -2716,34 +2755,66 @@
         $(document).on('click','#guardarNuevoConsulta', function(){
             var id = $('#idPaciente').val();
             var medico = $('#medico_consulta').val();
+            
             var tratamiento = $('#tratamiento_consulta').val();
             var tipoConsulta = $('#tipo_consulta').val();
             var sucursal = $('#sucursal_consulta').val();
             var observaciones = $('#observacionConsulta').val();
             var idconsulta=$('#idConsulta').val();
+            var costoconsulta=$('#costoConsulta').val();
             //alert(medico+","+tratamiento+","+tipoConsulta+","+observaciones+","+sucursal);
             
             
             
-            
+{#            alert(medico);#}
             
             //return false;
             
-            if(tratamiento==0){
+            {#if(tratamiento==0){
                 bootbox.alert("Debe seleccionar un tratamiento!", function() {});
             }
-            else{
+            else{#}
                 if(tipoConsulta==0){
                     bootbox.alert("Debe seleccionar un tipo de consulta!", function() {});
                 }
                 else{
-                    if(idconsulta==''){
+                    if(idconsulta!=''){
+                        {#bootbox.confirm("Desea registrar esta consulta para el paciente?", function(result) {#}
+                            {#Example.show("Confirm result: "+result);#}
+{#                            if(result){#}
+                                //console.log(result);
+                                $.ajax({
+                                    data:{id:id,medico:medico,tipoConsulta:tipoConsulta,sucursal:sucursal,observaciones:observaciones,idconsulta:idconsulta,costoconsulta:costoconsulta},
+                                    url:"{{path('admin_consulta_actualizar_ajax')}}",
+                                    type: "post",
+                                    success: function (data) {
+                                            //inicio = data.inicio++;
+                                            if(data!=0){
+                                                $('#idConsulta').val(data);
+                                                console.log(data);
+{#                                                bootbox.alert("Consulta registrada!", function() {});#}
+                                                alertify.success("Consulta actualizada!");
+                                                console.log($('#idConsulta').val());
+                                            }
+                                        },
+                                    error: function (data) {
+
+                                    }
+                                });
+{#                            }#}
+                            {#else{
+                                //console.log(result);
+                            }#}
+{#                        }); #}
+                    }
+                    else{
+{#                        bootbox.alert("!", function() {});#}
                         bootbox.confirm("Desea registrar esta consulta para el paciente?", function(result) {
                             {#Example.show("Confirm result: "+result);#}
                             if(result){
                                 //console.log(result);
                                 $.ajax({
-                                    data:{id:id,medico:medico,tratamiento:tratamiento,tipoConsulta:tipoConsulta,sucursal:sucursal,observaciones:observaciones},
+                                    data:{id:id,medico:medico,tratamiento:tratamiento,tipoConsulta:tipoConsulta,sucursal:sucursal,observaciones:observaciones,costoconsulta:costoconsulta},
                                     url:"{{path('admin_consulta_guardar_ajax')}}",
                                     type: "post",
                                     success: function (data) {
@@ -2757,7 +2828,7 @@
                                             }
                                         },
                                     error: function (data) {
-                                        alertify.error("Hubo un error, intente de nuevo!");
+
                                     }
                                 });
                             }
@@ -2766,11 +2837,8 @@
                             }
                         }); 
                     }
-                    else{
-                        
-                    }
                 }
-            }
+{#            }#}
             
         });
         
@@ -2780,7 +2848,9 @@
             var patologicos = $('#antecedentesPatologicos').val();
             var familiares = $('#antecedentesFamiliares').val();
             var alergias = $('#antecedentesAlergias').val();
-            
+            console.log(patologicos);
+            console.log(familiares);
+            console.log(alergias);
             //alert(fechaNacimiento);
             
             $.ajax({
@@ -2791,14 +2861,14 @@
                         //inicio = data.inicio++;
                         if(data==0){
 {#                            bootbox.alert("Cambios guardados!", function() {});#}
-                            alertify.success("Cambios guardados!");
+                            alertify.success("Antecedentes guardados!");
                         }
                         
                         {#console.log("pagina actual: "+data);
                         console.log("Inicio de registro: "+data.inicioRegistro);#}
                     },
                 error: function (data) {
-                    alertify.error("Hubo un error, intente de nuevo!");
+
                 }
             });
         });
@@ -2807,6 +2877,7 @@
         
         $(document).on('click','#guardarSignosConsulta', function(){
             var id = $('#idPaciente').val();
+            var idConsulta = $('#idConsulta').val();
             var peso = $('#pesoPaciente').val();
             var talla = $('#tallaPaciente').val();
             var frecRespiratoria = $('#frecRespiratoria').val();
@@ -2818,26 +2889,52 @@
             
             
             
-            
-            $.ajax({
-                data:{id:id,peso:peso,talla:talla,frecRespiratoria:frecRespiratoria,presionDiastolica:presionDiastolica,presionSistolica:presionSistolica,temperatura:temperatura,frecCardiaca:frecCardiaca},
-                url:"{{path('admin_paciente_guardar_signos_ajax')}}",
-                type: "post",
-                success: function (data) {
-                        //inicio = data.inicio++;
-                        if(data==0){
-{#                            bootbox.alert("Cambios guardados!", function() {});#}
-                            alertify.success("Signos vitales guardados!");
-                            $('#idConsulta').val(data);
-                        }
-{#                        console.log("pagina actual: "+data);
-                        console.log("Inicio de registro: "+data.inicioRegistro);#}
-                        
-                    },
-                error: function (data) {
-                    alertify.error("Hubo un error, intente de nuevo!");
-                }
-            });
+            if(idConsulta==''){
+                $.ajax({
+                    data:{id:id,peso:peso,talla:talla,frecRespiratoria:frecRespiratoria,presionDiastolica:presionDiastolica,presionSistolica:presionSistolica,temperatura:temperatura,frecCardiaca:frecCardiaca},
+                    url:"{{path('admin_paciente_guardar_signos_ajax')}}",
+                    type: "post",
+                    success: function (data) {
+                            //inicio = data.inicio++;
+                            if(data!=0){
+    {#                            bootbox.alert("Cambios guardados!", function() {});#}
+                                alertify.success("Signos vitales guardados!");
+                                $('#idConsulta').val(data);
+
+                            }
+    {#                        console.log("pagina actual: "+data);
+                            console.log("Inicio de registro: "+data.inicioRegistro);#}
+
+                        },
+                    error: function (data) {
+
+
+                    }
+                });
+            }
+            else{
+                $.ajax({
+                    data:{idConsulta:idConsulta,id:id,peso:peso,talla:talla,frecRespiratoria:frecRespiratoria,presionDiastolica:presionDiastolica,presionSistolica:presionSistolica,temperatura:temperatura,frecCardiaca:frecCardiaca},
+                    url:"{{path('admin_paciente_actualizar_signos_ajax')}}",
+                    type: "post",
+                    success: function (data) {
+                            //inicio = data.inicio++;
+                            if(data!=0){
+    {#                            bootbox.alert("Cambios guardados!", function() {});#}
+                                alertify.success("Signos vitales actualizados!");
+                                $('#idConsulta').val(data);
+
+                            }
+    {#                        console.log("pagina actual: "+data);
+                            console.log("Inicio de registro: "+data.inicioRegistro);#}
+
+                        },
+                    error: function (data) {
+
+
+                    }
+                });
+            }
         });
         
         
@@ -2855,7 +2952,7 @@
                     success: function (data) {
                             //inicio = data.inicio++;
                             if(data==0){
-                                alertify.success("Se ha resgistrado con éxito el costo de la consulta");
+                                alertify.success("Costo de consulta guardado!");
                             }
                             else{
                                 alertify.error("Hubo un error, intente de nuevo!");
@@ -2865,12 +2962,14 @@
 
                         },
                     error: function (data) {
-                        alertify.error("Hubo un error, intente de nuevo!");
+                        alertify.error("{#Hubo un error, intente de nuevo!#}");
+                        bootbox.alert("Hubo un error, intente de nuevo!", function() {});
                     }
                 });
             }
             else{
-                alertify.error("Debe ingresar una consulta primero!");
+{#                alertify.error("Debe ingresar una consulta primero!");#}
+                bootbox.alert("Debe ingresar una consulta primero!", function() {});
             }
         });
         
@@ -2885,21 +2984,56 @@
 {#            alert(direccion);#}
             var valores = new Array();
             var idParameters = new Array();
-            var idPlantilla= $('#dgplusbellebundle_consulta_plantilla').val();
-            $('.classPlantilla').each(function(index,element){
-                var valor = $(this).val();
-                var ids = $(this).attr('id');
-                valores.push(valor);
-                idParameters.push(ids);
-                
-            });
-            //alert(fechaNacimiento);
+            var idEstetica= $('#dgplusbellebundle_consulta_estetica').val();
+            console.log(idEstetica);
+            switch(parseInt(idEstetica)){
+                case 1:
+                    
+                    $('.corporall').each(function(index,element){
+                        var valor = $(this).val();
+                        var ids = $(this).attr('id');
+                        valores.push(valor);
+                        idParameters.push(ids);
+                    });
+                    
+                    $('.classCorporal').each(function(index,element){
+                        var valor = $(this).prop("checked");
+                        var ids = $(this).attr('id');
+                        valores.push(valor);
+                        idParameters.push(ids);
+                    });
+                    
+                    console.log(valores);
+                    
+                    
+                    break;
+                case 2:
+                    
+                    $('.classCorporal').each(function(index,element){
+                        var valor = $(this).prop("checked");
+                        var ids = $(this).attr('id');
+                        valores.push(valor);
+                        idParameters.push(ids);
+                    });
+                    
+                    break;
+                case 3:
+                    
+                    $('.cbotox').each(function(index,element){
+                        var valor = $(this).val();
+                        var ids = $(this).attr('id');
+                        valores.push(valor);
+                        idParameters.push(ids);
+                    });
+                    console.log(valores);
+                    break;
+            }
             
-{#            url:"{{path('admin_consulta_insert_plantilla',{'id':id})}},#}
-{#            alert(idConsulta);#}
+            
+
             if(idConsulta!=''){
                 $.ajax({
-                    data:{id:id,valores:valores,idConsulta:idConsulta,idParameters:idParameters,idPlantilla:idPlantilla
+                    data:{id:id,valores:valores,idConsulta:idConsulta,idParameters:idParameters,idEstetica:idEstetica
                     },
 
                     url:"{{path('admin_consulta_insert_plantilla')}}",
@@ -2907,8 +3041,8 @@
                     type: "post",
                     success: function (data) {
                             //inicio = data.inicio++;
-                            if(data==0){
-                                var iTel='<i class="fa fa-phone"></i>';
+                            if(data.query==0){
+                                {#var iTel='<i class="fa fa-phone"></i>';
                                 var dir='<i class="fa fa-map-marker fa-fw"></i>';
                                 var ocup = '<i class="fa fa-briefcase"></i>';
                                 $('#telefono').html(iTel+" "+telefono1);
@@ -2916,78 +3050,30 @@
 
 
                                 $('#nombrePaciente').html(nombres+" "+apellidos);
-                                $('#ocupacionPaciente').html(ocup+" "+ocupacion);
-{#                                bootbox.alert("Cambios guardados!", function() {});#}
-                                alertify.success("Cambios guardados!");
+                                $('#ocupacionPaciente').html(ocup+" "+ocupacion);#}
+                                //$('#idPlantilla').hide();
+                                $('#camposPlantilla').hide();
+                                $('.opcionHistorial').hide();
+                                $('#guardarPlantilla').hide();
+                                
+                                alertify.success("Plantilla guardada!");
+                                
                             }
 
                             {#console.log("pagina actual: "+data);
                             console.log("Inicio de registro: "+data.inicioRegistro);#}
                         },
                     error: function (data) {
-                        alertify.error("Hubo un error, intente de nuevo!");
+
 
                     }
                 });
             }
-        });
-        
-        
-        
-        $(document).on('click','#guardarReceta', function(){
-            var id = $('#idPaciente').val();
-            var idConsulta = $('#idConsulta').val();
-            var valores = new Array();
-{#            alert(direccion);#}
-            var nombre=$('#idPaciente').val();
-            var id=12;
-            console.log(id);
-            console.log("nombre: "+nombre);
-            
-            var valor = 0;
-            valor = $('#receta').val();
-            valores.push(valor);
-            console.log(valores);
-                
-                        //alert(fechaNacimiento);
-            
-{#            url:"{{path('admin_consulta_insert_plantilla',{'id':id})}},#}
-            //alert(idConsulta);
-            if(idConsulta!=''){
-                $.ajax({
-                    data:{id:id,valores:valores,idConsulta:idConsulta
-                    },
-
-                    url:"{{path('admin_receta_guardar_ajax')}}",
-
-                    type: "post",
-                    success: function (data) {
-                            //inicio = data.inicio++;
-                            if(data==0){
-                                var iTel='<i class="fa fa-phone"></i>';
-                                var dir='<i class="fa fa-map-marker fa-fw"></i>';
-                                var ocup = '<i class="fa fa-briefcase"></i>';
-                                $('#telefono').html(iTel+" "+telefono1);
-                                $('#direccionD').html(dir+" "+direccion);
-
-
-                                $('#nombrePaciente').html(nombres+" "+apellidos);
-                                $('#ocupacionPaciente').html(ocup+" "+ocupacion);
-{#                                bootbox.alert("Cambios guardados!", function() {});#}
-                                alertify.success("Cambios guardados!");
-                            }
-
-                            {#console.log("pagina actual: "+data);
-                            console.log("Inicio de registro: "+data.inicioRegistro);#}
-                                    },
-                    error: function (data) {
-                        alertify.error("Hubo un error, intente de nuevo!");
-
-                    }
-                });
+            else{
+                bootbox.alert("Debe ingresar una consulta primero!", function() {});
             }
-            return false;
         });
+        
         
         
         
@@ -3002,7 +3088,6 @@
         var file = $('#file-input')[0].files[0];
         //obtenemos el nombre del archivo
         var idconsulta =$('#idConsulta').val();
-        {#alert(idconsulta)#};
         var fileName = file.name;
         //obtenemos la extensión del archivo
         fileExtension = fileName.substring(fileName.lastIndexOf('.') + 1);
@@ -3013,61 +3098,60 @@
         var fileType = file.type;
         console.log(fileType);
         console.log(fileExtension);
-        if (fileExtension == 'PNG' || fileExtension == 'png' ||fileExtension == 'JPG'|| fileExtension == 'jpg' && fileType =='imagen' || fileType =='image' || fileType =='image/jpeg' )
-        {
-            flag = true;
-        }else{
-            flag = false;
-        }
-            if(idconsulta!=''){
-                if (flag==false){
-                    alert("Archivo invalido, seleccione una imagen ");
-                    $("#file-input").val("");
-                    $("#prev").hide();
-                    $("#saveImagen").hide();
-                     
+        if(idconsulta!=''){
+            if (fileExtension == 'PNG' || fileExtension == 'png' ||fileExtension == 'JPG'|| fileExtension == 'jpg' && fileType =='imagen' || fileType =='image' || fileType =='image/jpeg' )
+            {
+                flag = true;
+            }else{
+                flag = false;
+            }
 
-                }else{  
-                    
-                     var pesoKb=(fileSize/1024);
-                     if (pesoKb<=2048){
-                        var frm = new FormData($("#formImagen")[0]);
-                        console.log(frm);
-                            if (flag != false) {
-                                $.ajax({
-                                    data:frm,
-                                    url:Routing.generate('ingresar_foto_persona'),
-                                    type: 'POST',
-                                    dataType: 'json',
+                    if (flag==false){
+                        alert("Archivo invalido, seleccione una imagen ");
+                        $("#file-input").val("");
+                        $("#prev").hide();
+                        $("#saveImagen").hide();
 
-                                    cache: false,
-                                    contentType: false,
-                                    processData: false,
 
-                                    success: function(data){
-                                        $("#prev").attr('src', "/abgsistema/web/"+data.direccion);
-                                        $('#file-input').val('');
-{#                                        bootbox.alert('Fotos subidas con éxito!');#}
-                                        alertify.success("Fotos subidas con éxito!");
-                                    },
-                                    error: function(data){
-{#                                        bootbox.alert('Hubo un error al subir las fotos');#}
-                                        alertify.error("Hubo un error al subir las fotos!");
-                                    }
-                                });
+                    }else{  
+
+                         var pesoKb=(fileSize/1024);
+                         if (pesoKb<=1024){
+                            var frm = new FormData($("#formImagen")[0]);
+                            console.log(frm);
+                                 if (flag != false) {
+                                    $.ajax({
+                                        data:frm,
+                                        url:Routing.generate('ingresar_foto_persona'),
+                                        type: 'POST',
+                                        dataType: 'json',
+
+                                        cache: false,
+                                        contentType: false,
+                                        processData: false,
+
+                                        success: function(data){
+                                            $("#prev").attr('src', "/abgsistema/web/"+data.direccion);
+                                            $('#file-input').val('');
+                                            alertify.success("Imagenes guardadas!");
+                                        },
+                                        error: function(data){
+                                            bootbox.alert('Hubo un error al subir las fotos');
+                                        }
+                                    });
+                                }
                             }
-                        }
-                        else{
-                            console.log(pesoKb);
-                            alert("Imagen demasiado grande, intente con una mas pequeña");
-                        }
-                }
-            }
-            else{
-                {#bootbox.alert('Debe guardar una consulta primero!');            #}
-                alertify.error("Debe guardar una consulta primero!");
-            }
-                
+                            else{
+                                console.log(pesoKb);
+                                bootbox.alert('Imagen demasiado grande, intente con una mas pequeña');
+                                //alert("Imagen demasiado grande, intente con una mas pequeña");
+                            }
+                    }
+
+        }
+        else{
+            bootbox.alert('Debe ingresar una consulta antes de subir fotos!');
+        }
         });
         
         
@@ -3148,16 +3232,16 @@
                     });
 
         $('select[id$=dgplusbellebundle_consulta_placas_]').selectBoxIt();      
-        {#var valores = new Array();
+        var valores = new Array();
         var valores2 = new Array();
         var id=0;
-        var nombre = 0;#}
+        var nombre = 0;
         
         $(document).on('click','#historialPrevPDF',function(){
-            var valores = [];
+            valores = [];
 {#            nombre=$('#dgplusbellebundle_consulta_paciente').val();#}
-            var nombre=$('#idPaciente').val();
-            var id=$('#dgplusbellebundle_consulta_plantilla').val();
+            nombre=$('#idPaciente').val();
+            id=$('#dgplusbellebundle_consulta_estetica').val();
             console.log(id);
             console.log("nombre: "+nombre);
             var valor = 0;
@@ -3166,7 +3250,7 @@
                 valores.push(valor);
 
             });
-            var historial = $('#dgplusbellebundle_consulta_plantilla').val();
+            var historial = $('#dgplusbellebundle_consulta_estetica').val();
             
             if(historial!=0{# && $('#dgplusbellebundle_consulta_reportePlantilla_0').is(':checked')#}){
            
@@ -3177,30 +3261,6 @@
 
                 window.open(url);
             }
-
-            return false;
-        });
-        
-        
-        $(document).on('click','#recetaPrevPDF',function(){
-            var valores = [];
-            //alert('sd');
-            
-            {#nombre=$('#dgplusbellebundle_consulta_paciente').val();#}
-            var nombre=$('#idPaciente').val();
-            var id=12;
-            console.log(id);
-            console.log("nombre: "+nombre);
-            var valor = 0;
-            valor = $('#receta').val();
-            valores.push(valor);
-            
-            console.log(valores);
-            var url = Routing.generate('admin_prevpdfreceta_por_pdf', { nombre:nombre, id: id,valores:valores});
-            console.log(url);
-
-            window.open(url,'_blank');
-{#            }#}
 
             return false;
         });
@@ -3252,12 +3312,12 @@
             var valor = 0;
            
             // Se obtiene el id del paciente
-            var paciente = $('#dgplusbellebundle_consulta_paciente').val();
+            var paciente = $('#idPaciente').val();
+            
             //console.log(paciente);
             // Se obtiene el id de la sucursal seleccionada
-{#            var sucursal = $('#dgplusbellebundle_consulta_sucursal').val();#}
             var sucursal = $('#sucursal_consulta').val();
-            
+            //alert(sucursal);
             // Se obtiene el id de la consulta de estetica seleccionada
             var estetica = $('#dgplusbellebundle_consulta_estetica').val();
             
@@ -3320,7 +3380,30 @@
             return false;
         });
         
-      
+        $(document).on('click','#recetaPrevPDF',function(){
+            valores2 = [];
+            nombre=$('#dgplusbellebundle_consulta_paciente').val();
+            id=$('#dgplusbellebundle_consulta_sesiontratamiento').val();
+            console.log(id);
+            var valor = 0;
+            $('.classReceta').each(function(index,element){
+                valor = $(this).val();
+                valores2.push(valor);
+
+            });
+            var historial = $('#dgplusbellebundle_consulta_sesiontratamiento').val();
+            if(historial!=0){
+           
+            
+                console.log(valores);
+                var url = Routing.generate('admin_prevpdfreceta_por_pdf', { nombre:nombre, id: id,valores:valores2});
+                console.log(url);
+
+                window.open(url);
+            }
+
+            return false;
+        });
         
         
         // Si se hace click en ver vista previa en pdf del comparativo de lectura 
@@ -3330,10 +3413,10 @@
             var valor = 0;
            
             // Se obtiene el id del paciente
-            var paciente = $('#dgplusbellebundle_consulta_paciente').val();
+            var paciente = $('#idPaciente').val();
             //console.log(paciente);
             // Se obtiene el id de la sucursal seleccionada
-            var sucursal = $('#dgplusbellebundle_consulta_sucursal').val();
+            var sucursal = $('#sucursal_consulta').val();
             
             // Se obtiene el id de la consulta de estetica seleccionada
             var estetica = $('#dgplusbellebundle_consulta_estetica').val();
@@ -3641,12 +3724,12 @@ if(editar!='editar_usuario'){
             }); 
         });
     </script>
-    <script src="//cdn.tinymce.com/4/tinymce.min.js"></script>
+    {#<script src="//cdn.tinymce.com/4/tinymce.min.js"></script>
     <script>
         tinymce.init({ 
             selector:'.editorArea',
             menubar: false,
             toolbar: 'undo redo | bold italic'
         });
-    </script>
+    </script>#}
 {% endblock %} 

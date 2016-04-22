@@ -1001,7 +1001,9 @@ class PacienteController extends Controller
         $patologicos = $request->get('patologicos');
         $familiares = $request->get('familiares');
         $alergias = $request->get('alergias');
-        
+//        var_dump($alergias);
+//        var_dump($patologicos);
+//        var_dump($familiares);
         
         
         $em = $this->getDoctrine()->getEntityManager();
@@ -1016,7 +1018,7 @@ class PacienteController extends Controller
             $paciente->setPatologicos($patologicos);
             $paciente->setFamiliares($familiares);
             $paciente->setAlergias($alergias);
-            
+//            var_dump($paciente);
             $em->merge($paciente);
             $em->flush();
             return new Response(json_encode(0));
