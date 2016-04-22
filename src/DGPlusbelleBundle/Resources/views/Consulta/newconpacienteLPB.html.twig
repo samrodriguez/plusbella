@@ -424,7 +424,7 @@
                                             <select id="medico_consulta" name="tratamiento" class="form-control input-sm">
 {#                                                <option value="0" selected>Seleccione un médico...</option>#}
                                                 {% for empleado in empleados %}
-                                                    <option value="{{empleado.id}}" {% if consulta.tipoConsulta!=null and consulta.id!=null and empleado.id==consulta.empleado.id %} selected {% endif %}>{{empleado.persona.nombres}} {{empleado.persona.apellidos}}</option>
+                                                    <option value="{{empleado.id}}" {% if consulta.empleado!=null and consulta.tipoConsulta!=null and consulta.id!=null and empleado.id==consulta.empleado.id %} selected {% endif %}>{{empleado.persona.nombres}} {{empleado.persona.apellidos}}</option>
                                                 {% endfor %}
                                             </select>  
                                         </div>
@@ -669,7 +669,7 @@
                             </div>
                             <div class="row" style="margin-top:20px;">
                                 <div class="col-md-4">
-                                    <input type="text" id="costoConsulta" class="form-control" placeholder="$"/>
+                                    <input type="text" id="costoConsulta" value="{{consulta.costoConsulta}}" class="form-control" placeholder="$"/>
                                     {#<input id="costoConsultaAlergias" class="form-control"/>#}
                                 </div>
                             </div>
@@ -2610,6 +2610,7 @@
         });
             
             
+        $('#costoConsulta').val('{{consulta.costoConsulta}}');
         $(document).on('click','.generarPDF', function(){
             var href = $(this).attr('href');
             window.open(href,'_blank');
@@ -2695,29 +2696,60 @@
             var sucursal = $('#sucursal_consulta').val();
             var observaciones = $('#observacionConsulta').val();
             var idconsulta=$('#idConsulta').val();
+            var costoconsulta=$('#costoConsulta').val();
             //alert(medico+","+tratamiento+","+tipoConsulta+","+observaciones+","+sucursal);
             
             
             
-            //alert(medico);
+{#            alert(medico);#}
             
             //return false;
             
-            if(tratamiento==0){
+            {#if(tratamiento==0){
                 bootbox.alert("Debe seleccionar un tratamiento!", function() {});
             }
-            else{
+            else{#}
                 if(tipoConsulta==0){
                     bootbox.alert("Debe seleccionar un tipo de consulta!", function() {});
                 }
                 else{
-                    if(idconsulta==''){
+                    if(idconsulta!=''){
+                        {#bootbox.confirm("Desea registrar esta consulta para el paciente?", function(result) {#}
+                            {#Example.show("Confirm result: "+result);#}
+{#                            if(result){#}
+                                //console.log(result);
+                                $.ajax({
+                                    data:{id:id,medico:medico,tipoConsulta:tipoConsulta,sucursal:sucursal,observaciones:observaciones,idconsulta:idconsulta,costoconsulta:costoconsulta},
+                                    url:"{{path('admin_consulta_actualizar_ajax')}}",
+                                    type: "post",
+                                    success: function (data) {
+                                            //inicio = data.inicio++;
+                                            if(data!=0){
+                                                $('#idConsulta').val(data);
+                                                console.log(data);
+{#                                                bootbox.alert("Consulta registrada!", function() {});#}
+                                                alertify.success("Consulta actualizada!");
+                                                console.log($('#idConsulta').val());
+                                            }
+                                        },
+                                    error: function (data) {
+
+                                    }
+                                });
+{#                            }#}
+                            {#else{
+                                //console.log(result);
+                            }#}
+{#                        }); #}
+                    }
+                    else{
+{#                        bootbox.alert("!", function() {});#}
                         bootbox.confirm("Desea registrar esta consulta para el paciente?", function(result) {
                             {#Example.show("Confirm result: "+result);#}
                             if(result){
                                 //console.log(result);
                                 $.ajax({
-                                    data:{id:id,medico:medico,tratamiento:tratamiento,tipoConsulta:tipoConsulta,sucursal:sucursal,observaciones:observaciones},
+                                    data:{id:id,medico:medico,tratamiento:tratamiento,tipoConsulta:tipoConsulta,sucursal:sucursal,observaciones:observaciones,costoconsulta:costoconsulta},
                                     url:"{{path('admin_consulta_guardar_ajax')}}",
                                     type: "post",
                                     success: function (data) {
@@ -2740,11 +2772,8 @@
                             }
                         }); 
                     }
-                    else{
-                        
-                    }
                 }
-            }
+{#            }#}
             
         });
         
@@ -2817,7 +2846,27 @@
                 });
             }
             else{
-                alertify.error("Ya se ingreso una consulta!");
+                $.ajax({
+                    data:{idConsulta:idConsulta,id:id,peso:peso,talla:talla,frecRespiratoria:frecRespiratoria,presionDiastolica:presionDiastolica,presionSistolica:presionSistolica,temperatura:temperatura,frecCardiaca:frecCardiaca},
+                    url:"{{path('admin_paciente_actualizar_signos_ajax')}}",
+                    type: "post",
+                    success: function (data) {
+                            //inicio = data.inicio++;
+                            if(data!=0){
+    {#                            bootbox.alert("Cambios guardados!", function() {});#}
+                                alertify.success("Signos vitales actualizados!");
+                                $('#idConsulta').val(data);
+
+                            }
+    {#                        console.log("pagina actual: "+data);
+                            console.log("Inicio de registro: "+data.inicioRegistro);#}
+
+                        },
+                    error: function (data) {
+
+
+                    }
+                });
             }
         });
         

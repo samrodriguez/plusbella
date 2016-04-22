@@ -544,11 +544,12 @@
                                 
                 //var long = $('datatables1_length').children().children().val();
                 $('#datatables1').DataTable({
+                    "dom": "ftp",
                     {#searching:true,
                     order:[[1,"asc"]],#}
 {#                    "processing": true,#}
                     
-{#                    "deferLoading":0,#}
+                    "deferLoading":0,
                     "serverSide": true,
                     "ajax": {
                         "url": '{{path('admin_paciente_expediente')}}',

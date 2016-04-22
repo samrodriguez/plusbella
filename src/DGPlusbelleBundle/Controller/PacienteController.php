@@ -1106,4 +1106,104 @@ class PacienteController extends Controller
         
         
     }
+    
+    
+    
+    
+    
+    
+    /**
+     * 
+     *
+     * @Route("/pacientesignos/data/signosactualizar", name="admin_paciente_actualizar_signos_ajax")
+     */
+    public function dataPacienteSignosActualizarAction(Request $request)
+    {
+        
+        /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+	 * Easy set variables
+	 */
+	
+	/* Array of database columns which should be read and sent back to DataTables. Use a space where
+	 * you want to insert a non-database field (for example a counter or static image)
+	 */
+        
+
+        $id = $request->get('id');
+        
+        $peso = $request->get('peso');
+        $talla = $request->get('talla');
+        $frecRespiratoria = $request->get('frecRespiratoria');
+        $presionDiastolica = $request->get('presionDiastolica');
+        $presionSistolica = $request->get('presionSistolica');
+        $temperatura = $request->get('temperatura');
+        $frecCardiaca = $request->get('frecCardiaca');
+        $idConsulta = $request->get('idConsulta');
+        
+//        $patologicos = $request->get('patologicos');
+//        $familiares = $request->get('familiares');
+//        $alergias = $request->get('alergias');
+//        
+//        $patologicos = $request->get('patologicos');
+//        $familiares = $request->get('familiares');
+//        $alergias = $request->get('alergias');
+        
+        
+        
+        $em = $this->getDoctrine()->getEntityManager();
+        
+        $paciente = $em->getRepository('DGPlusbelleBundle:Paciente')->find($id);
+        
+        $signos = $paciente = $em->getRepository('DGPlusbelleBundle:Signos')->findBy(array('consulta'=>$idConsulta));
+        
+        $consulta = $paciente = $em->getRepository('DGPlusbelleBundle:Consulta')->find($idConsulta);
+        
+        if(count($paciente)!=0){
+            //$persona = $em->getRepository('DGPlusbelleBundle:Persona')->find($paciente->getPersona()->getId());
+            if(count($signos)==0){
+                $signos = new Signos();
+                $signos->setPeso($peso);
+                $signos->setTalla($talla);
+                $signos->setPresionSistolica($presionSistolica);
+                $signos->setPresionDiastolica($presionDiastolica);
+                $signos->setFrecRespiratotira($frecRespiratoria);
+                $signos->setFrecCardiaca($frecCardiaca);
+                $signos->setTemperatura($temperatura);
+                $signos->setConsulta($consulta);
+                $em->persist($signos);
+                $em->flush();
+            }
+            else{
+                $signos[0]->setPeso($peso);
+                $signos[0]->setTalla($talla);
+                $signos[0]->setPresionSistolica($presionSistolica);
+                $signos[0]->setPresionDiastolica($presionDiastolica);
+                $signos[0]->setFrecRespiratotira($frecRespiratoria);
+                $signos[0]->setFrecCardiaca($frecCardiaca);
+                $signos[0]->setTemperatura($temperatura);
+                $signos[0]->setConsulta($consulta);
+                $em->merge($signos[0]);
+                $em->flush();
+            }
+            
+//            $consulta->setHoraInicio(new \DateTime('now'));
+//            $consulta->setHoraFin(new \DateTime('now'));
+//            $consulta->setFechaConsulta(new \DateTime('now'));
+//            $consulta->setPaciente($paciente);
+//            $consulta->setReportePlantilla(1);
+//            $consulta->setCostoConsulta(0);
+            
+            $em->merge($consulta);
+            $em->flush();
+            
+            
+            return new Response(json_encode($consulta->getId()));
+        }
+        else{
+            return new Response(json_encode(0));
+        }
+        
+        
+        
+    }
 }

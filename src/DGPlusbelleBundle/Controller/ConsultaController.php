@@ -946,8 +946,11 @@ class ConsultaController extends Controller
             //var_dump($signos[0]);
             if($idconsulta!=null){
                 $consulta = $em->getRepository('DGPlusbelleBundle:Consulta')->find($idconsulta);
+                $signos = $em->getRepository('DGPlusbelleBundle:Signos')->findBy(array('consulta'=>$idconsulta));
+                //var_dump($signos);
             }
             else{
+                $signos = null;
                 $consulta = $entity;
             }
             //Seteo del paciente en la entidad
@@ -999,8 +1002,6 @@ class ConsultaController extends Controller
                     foreach($checkboxes as $row){
                         array_push($valores,$row->getDetalleEstetica()->getId());
                     }
-                    
-                    
                 }
             }
             else{
@@ -1015,7 +1016,7 @@ class ConsultaController extends Controller
                     array_push($botox,$row->getValor());   
                     if($row->getRecomendaciones()!=null)
                         array_push($botox,$row->getRecomendaciones());
-                }
+                    }
 //                $ruta="admin_pdf_botox_por_pdf";
                 $ruta="admin_botox_por_pdf_previa";
 //                $ruta="admin_comparativo_botox_por_pdf";
@@ -1056,9 +1057,9 @@ class ConsultaController extends Controller
         else{
             $signos=$signos[0];
         }
-        
             
         return array(
+            
             'botox'=>$botox,
             'estetica'=>$estetica,
             'valores'=>$valores,
@@ -2216,10 +2217,11 @@ class ConsultaController extends Controller
         $id = $request->get('id');
         
         $medico = $request->get('medico');
-        $tratamiento = $request->get('tratamiento');
+//        $tratamiento = $request->get('tratamiento');
         $tipoConsulta = $request->get('tipoConsulta');
         $sucursal = $request->get('sucursal');
         $observaciones = $request->get('observaciones');
+        $costo = $request->get('costoconsulta');
         
 //        $patologicos = $request->get('patologicos');
 //        $familiares = $request->get('familiares');
@@ -2236,7 +2238,7 @@ class ConsultaController extends Controller
         
         $paciente = $em->getRepository('DGPlusbelleBundle:Paciente')->find($id);
         $empleado= $em->getRepository('DGPlusbelleBundle:Empleado')->find($medico);
-        $tratamientoObj = $em->getRepository('DGPlusbelleBundle:Tratamiento')->find($tratamiento);
+//        $tratamientoObj = $em->getRepository('DGPlusbelleBundle:Tratamiento')->find($tratamiento);
         $tipoConsultaObj = $em->getRepository('DGPlusbelleBundle:TipoConsulta')->find($tipoConsulta);
         $sucursalObj = $em->getRepository('DGPlusbelleBundle:Sucursal')->find($sucursal);
         
@@ -2256,11 +2258,99 @@ class ConsultaController extends Controller
             //hora fin
             $consulta->setHoraFin(new \DateTime('now'));
             $consulta->setObservacion($observaciones);
-            $consulta->setTratamiento($tratamientoObj);
+//            $consulta->setTratamiento($tratamientoObj);
             $consulta->setSucursal($sucursalObj);
             
             $consulta->setReportePlantilla(1);
-            $consulta->setCostoConsulta(0);
+            $consulta->setCostoConsulta($costo);
+            
+            $em->persist($consulta);
+            $em->flush();
+            
+            return new Response(json_encode($consulta->getId()));
+        }
+        else{
+            return new Response(json_encode(1));
+        }
+        
+        
+        
+    }
+    
+    
+    
+    
+    
+    /**
+     * 
+     *
+     * @Route("/pacienteconsulta/data/consultaactualizar", name="admin_consulta_actualizar_ajax")
+     */
+    public function dataActualizarAction(Request $request)
+    {
+        
+        /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+	 * Easy set variables
+	 */
+	
+	/* Array of database columns which should be read and sent back to DataTables. Use a space where
+	 * you want to insert a non-database field (for example a counter or static image)
+	 */
+        
+
+        $id = $request->get('id');
+        
+        $medico = $request->get('medico');
+//        $tratamiento = $request->get('tratamiento');
+        $tipoConsulta = $request->get('tipoConsulta');
+        $sucursal = $request->get('sucursal');
+        $observaciones = $request->get('observaciones');
+        $idConsulta = $request->get('idconsulta');
+        $costo = $request->get('costoconsulta');
+//        var_dump($medico);
+//        $patologicos = $request->get('patologicos');
+//        $familiares = $request->get('familiares');
+//        $alergias = $request->get('alergias');
+//        
+//        $patologicos = $request->get('patologicos');
+//        $familiares = $request->get('familiares');
+//        $alergias = $request->get('alergias');
+        
+//        $consulta = new Consulta();
+        $em = $this->getDoctrine()->getEntityManager();
+        $consulta = $em->getRepository('DGPlusbelleBundle:Consulta')->find(intval($idConsulta));
+                
+        
+        
+        
+        $paciente = $em->getRepository('DGPlusbelleBundle:Paciente')->find($id);
+        $empleado= $em->getRepository('DGPlusbelleBundle:Empleado')->find($medico);
+        //var_dump($empleado);
+//        $tratamientoObj = $em->getRepository('DGPlusbelleBundle:Tratamiento')->find($tratamiento);
+        $tipoConsultaObj = $em->getRepository('DGPlusbelleBundle:TipoConsulta')->find($tipoConsulta);
+        $sucursalObj = $em->getRepository('DGPlusbelleBundle:Sucursal')->find($sucursal);
+        
+        
+        
+        if(count($paciente)!=0){
+            //$persona = $em->getRepository('DGPlusbelleBundle:Persona')->find($paciente->getPersona()->getId());
+//            $consulta->setPaciente($paciente);
+            $consulta->setEmpleado($empleado);
+            $consulta->setTipoConsulta($tipoConsultaObj);
+            
+//            $consulta->setFechaConsulta(new \DateTime('now'));
+            
+
+            //hora inicio 
+//            $consulta->setHoraInicio(new \DateTime('now'));
+            //hora fin
+//            $consulta->setHoraFin(new \DateTime('now'));
+            $consulta->setObservacion($observaciones);
+//            $consulta->setTratamiento($tratamientoObj);
+            $consulta->setSucursal($sucursalObj);
+            
+            $consulta->setReportePlantilla(1);
+            $consulta->setCostoConsulta($costo);
             
             $em->persist($consulta);
             $em->flush();
