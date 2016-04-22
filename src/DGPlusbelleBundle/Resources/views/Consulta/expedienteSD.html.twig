@@ -91,8 +91,8 @@
               <div class="col-lg-6" >
                   <div class="float-bar clearfix" >
                       <div class="col-sm-11">
-                          <p id="total-sesiones" class="mb-4x text-light text-right"></p>
-                          <p id="deuda-total" class="mb-4x text-light text-right"></p>
+                          <p id="total-sesiones" class="mb-4x text-light text-right" style="font-size: 20px;"></p>
+                          <p id="deuda-total" class="mb-4x text-light text-right" style="margin-top: -15px; font-size: 20px;"></p>
                       </div>
                   </div>
               </div>
@@ -705,6 +705,9 @@
                                 else{
                                     $('#edad').html(edad+" "+data.edad);
                                 }
+                                
+                                $('#total-sesiones').html('<strrong>Sesiones:</strong>16/30');
+                                $('#deuda-total').html('<strrong>Deuda:</strong> $ ' + data.deuda.toFixed(2));
 
                             {#<i class="fa fa-birthday-cake"></i>#}
 
