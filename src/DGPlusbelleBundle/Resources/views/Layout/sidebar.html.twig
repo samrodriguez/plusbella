@@ -71,23 +71,23 @@
         <li class="nav-item" role="presentation">
             <a href="{{path('admin_cita',{id:8})}}">
                 <span class="nav-icon"><i class="fa fa-calendar-check-o"></i></span>
-                <span class="nav-text">Citas Escalon</span>
+                <span class="nav-text">Calendario de citas</span>
             </a>
         </li>
     {% endif %}
-    {% if is_granted('ROLE_ADMIN') or is_granted('ROLE_USER')%}
+    {#{% if is_granted('ROLE_ADMIN') or is_granted('ROLE_USER')%}
         <li class="nav-item" role="presentation">
             <a href="{{path('admin_cita',{id:3})}}">
                 <span class="nav-icon"><i class="fa fa-calendar-check-o"></i></span>
                 <span class="nav-text">Citas Santa Elena</span>
             </a>
         </li>
-    {% endif %}
+    {% endif %}#}
     {% if is_granted('ROLE_ADMIN') or is_granted('ROLE_USER') %}
         <li class="nav-item" role="presentation">
             <a href="{{path('admin_paciente')}}">
               <span class="nav-icon"><i class="fa fa-hospital-o"></i></span>
-              <span  class="nav-text">Gestión de pacientes</span>
+              <span  class="nav-text">Listado de pacientes</span>
             </a>
         </li>
     {% endif %}
@@ -95,13 +95,13 @@
         <li class="nav-item" role="presentation">
             <a href="{{path('admin_cierreadministrativo')}}">
                 <span class="nav-icon"><i class="fa fa-clock-o"></i></span>
-                <span class="nav-text">Reservar tiempo</span>
+                <span class="nav-text">Cierre administrativo</span>
             </a>
         </li>
     {% endif %}
-    <li class="nav-header" role="presentation">LA PLUS BELLE</li>
-    {% if is_granted('ROLE_ADMIN') %}
-        <li class="nav-item" role="presentation">
+    {#<li class="nav-header" role="presentation">LA PLUS BELLE</li>#}
+    {#{% if is_granted('ROLE_ADMIN') %}#}
+        {#<li class="nav-item" role="presentation">
           <a href="#" data-toggle="nav-child">
               <span class="nav-icon"><i class="fa fa-calendar-plus-o"></i></span>
             <span class="nav-text">Consulta de Estetica</span>
@@ -111,7 +111,7 @@
             <li role="presentation"><a role="menuitem" tabindex="-1" href="{{ path('admin_consultas_paciente') }}"><span class="nav-text">Consultas de paciente</span></a></li>
             
           </ul>
-        </li>
+        </li>#}
         
         
         {#<li class="nav-item" role="presentation">
@@ -120,7 +120,7 @@
                 <span class="nav-text">Consulta de Estetica</span>
             </a>
         </li>#}
-    {% endif %}
+    {#{% endif %}#}
     {% if is_granted('ROLE_ADMIN') %}
         {#<li class="nav-item" role="presentation">
         
@@ -131,17 +131,17 @@
         </li>#}
     {% endif %} 
     
-    {% if is_granted('ROLE_ADMIN') or is_granted('ROLE_USER')%}
+    {#{% if is_granted('ROLE_ADMIN') or is_granted('ROLE_USER')%}
         <li class="nav-item" role="presentation">
             <a href="{{path('admin_consulta_expediente_lpb')}}">
                 <span class="nav-icon"><i class="fa fa-book"></i></span>
                 <span class="nav-text">Expediente</span>
             </a>
         </li>
-    {% endif %}
+    {% endif %}#}
      
-    <li class="divider"></li>
-    <li class="nav-header" role="presentation">SONODIGEST</li>
+    {#<li class="divider"></li>
+    <li class="nav-header" role="presentation">SONODIGEST</li>#}
     {% if is_granted('ROLE_ADMIN') or is_granted('ROLE_USER')%}
         <li class="nav-item" role="presentation">
             <a href="{{path('admin_consulta_expediente_sd')}}">
@@ -150,7 +150,7 @@
             </a>
         </li>
     {% endif %}
-    <li class="nav-header" role="presentation">MENU</li>
+    {#<li class="nav-header" role="presentation">MENU</li>#}
     
    {# {% if is_granted('ROLE_ADMIN') or is_granted('ROLE_USER')%}
         <li class="nav-item" role="presentation">
@@ -248,7 +248,7 @@
         <li class="nav-item" role="presentation">
           <a href="{{ path('admin_plantilla') }}">
             <span class="nav-icon"><i class="fa fa-list-ul"></i></span>
-            <span class="nav-text">Gestionar Historial clínico</span>
+            <span class="nav-text">{#Gestionar#} Historial clínico</span>
           </a>
         </li>
     
