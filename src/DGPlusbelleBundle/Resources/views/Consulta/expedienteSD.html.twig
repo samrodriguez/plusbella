@@ -270,6 +270,9 @@
             $(document).ready(function(){
                 var idPaciente = 0;
                
+                
+                
+                
                
                 $(document).on('click','.link_',function(){
                     var id = $(this).attr('id');
@@ -545,7 +548,7 @@
                     order:[[1,"asc"]],#}
 {#                    "processing": true,#}
                     
-                    "deferLoading":0,
+{#                    "deferLoading":0,#}
                     "serverSide": true,
                     "ajax": {
                         "url": '{{path('admin_paciente_expediente')}}',
@@ -586,6 +589,7 @@
                 },
         });
     
+            
     
              {#   
                 $('#datatables1').DataTable({ 
@@ -614,15 +618,18 @@
         
         //Oculta el filtro de la tabla
         $('#datatables1_filter').hide();
-        $('#filterDatatables1').val('');
-        
+        //$('#filterDatatables1').val('');
+        var expe = '{{expediente}}';
+        $('#filterDatatables1').val('{{expediente}}');
+        $('#datatables1_filter>label>input').val('{{expediente}}');
         $('#filterDatatables1').on('keyup',function(e){
             var filtro = $(this).val(); 
             //alert(filtro);
+            console.log(expe);
             var expediente = $(this).val();
             expediente = expediente.toUpperCase();
             $(this).val(expediente);
-            if(e.keyCode == 13) {
+            if(e.keyCode == 13 || expe!='') {
                 $('#datatables1_filter>label>input').val(expediente);
                 $('#datatables1_filter>label>input').keyup();
                 {#var tb = document.getElementById("scriptBox");
@@ -706,7 +713,7 @@
                                 //$('#nombrePaciente').html(data.nombres + " "+data.apellidos);
                             }
                             else{
-
+                                console.log(5);
                             }
                             //inicio = data.inicio++;
 {#                                console.log(data.data.length);#}
@@ -718,10 +725,21 @@
                 });
             }
             else{
-            
+                console.log('log: '+expe);
             }
             
         });
+        
+        
+{#                console.log(expe);#}
+{#                alert('{{expediente}}');#}
+                if(expe!=''){
+                    
+                    
+                    
+                    $('#filterDatatables1').keyup();
+{#                    $('#datatables1_filter>label>input').keyup();#}
+                }
            validarPaciente();  
         
     });//Fin document ready

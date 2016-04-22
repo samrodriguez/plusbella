@@ -61,12 +61,13 @@ class ConsultaController extends Controller
      * @Method("GET")
      * @Template("DGPlusbelleBundle:Consulta:expedienteSD.html.twig")
      */
-    public function expedienteSDAction()
+    public function expedienteSDAction(Request $request)
     {
         $em = $this->getDoctrine()->getManager();
         
         
-        
+        $expediente = $request->get('id');
+        //echo $expediente;
         //$entities = $em->getRepository('DGPlusbelleBundle:Paciente')->findAll();
         $dql = $dql = "SELECT p.id, exp.numero, per.nombres, per.apellidos  FROM DGPlusbelleBundle:Paciente p"
                 . " INNER JOIN p.persona per"
@@ -80,6 +81,7 @@ class ConsultaController extends Controller
         return array(
             //'pacientes' => $entities,
             'tipo'  => 1,
+            'expediente'=>$expediente,
         );
     }
     

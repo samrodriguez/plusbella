@@ -689,7 +689,42 @@ $(document).ready(function() {
                                             var tituloEvento = "";
                                             var eventoId = 0;
                                             console.log(evento);
+                                            var evento = calendario.fullCalendar('clientEvents',startDate.id);
+                                            var tituloEvento = "";
+                                            var eventoId = 0;
+                                            Object.keys(evento).forEach(function (key) {
+                                                tituloEvento = evento[key].title;
+                                        
+                                                console.log(evento[key].id);
+                                                var subTituloEvento = tituloEvento.split(" | ");
+                                                var iconoX = '<div class="fa fa-calendar-check-o" style="width: 17px; height: 100%; float: left; background: #69BD45;  position: absolute; margin-left: -3px; padding-left:2px "></div> <div style="width: 91%; height: 100%; float: right; position: relative; ">  | ';
+                                                //console.log(subTituloEvento);
+                                                var nuevoTitulo = iconoX+' | '+subTituloEvento[1]+' | '+subTituloEvento[2];
+                                                evento[key].title = nuevoTitulo;
+                                                {#$.getJSON(Routing.generate('get_asistidaCita', { id: evento[key].id}), 
+                                                function(data) {
+                                                    var mensaje = "";
+                                                    if(data.regs==0){
+                                                        mensaje += "<div class='row'><div class='col-md-12'><b><p class='text-left'>Actualización exitosa...</p></b></div></div>";
+                                                            mensaje += "<hr>";
+                                                            mensaje += "<div class='row'><div class='col-md-12'>¡Cita registrada como asistida satisfactoriamente!</div></div>"
+                                                        calendario.fullCalendar('updateEvent', evento);
+                                                        bootbox.alert(mensaje, function() {
+
+                                                        });
+                                                    }
+                                                    else{
+                                                        mensaje += "<div class='row'><div class='col-md-12'><b><p class='text-left'>Error...</p></b></div></div>";
+                                                            mensaje += "<hr>";
+                                                            mensaje += "<div class='row'><div class='col-md-12'>¡La cita no pudo modificarse, intente de nuevo!</div></div>"
+                                                        bootbox.alert(mensaje, function() {
+
+                                                        });
+                                                    }
+                                                });#}
+                                            });
 {#                                            window.location = {{path('')}};#}
+                                            
                                         }
                                     }
                                 }
