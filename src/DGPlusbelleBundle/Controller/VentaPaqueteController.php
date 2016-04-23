@@ -431,8 +431,8 @@ class VentaPaqueteController extends Controller
             $paciente = $em->getRepository('DGPlusbelleBundle:Paciente')->find($id);
             $personaPaciente = $em->getRepository('DGPlusbelleBundle:Persona')->find($paciente->getPersona()->getId());
             $ventaPaquete->setPaciente($personaPaciente);
-            
-            if(!is_null($empleadoId)){
+            //var_dump($empleadoId);
+            if(!is_null($empleadoId) && $empleadoId != ''){
                 $empleado = $em->getRepository('DGPlusbelleBundle:Empleado')->find($empleadoId);
                 $personaEmpleado = $em->getRepository('DGPlusbelleBundle:Persona')->find($empleado->getPersona()->getId());
                 $ventaPaquete->setEmpleado($personaEmpleado);

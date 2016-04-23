@@ -637,13 +637,13 @@
                 {#var tb = document.getElementById("scriptBox");
                 eval(tb.value);
                 return false;#}
-                console.log('enter');
+                //console.log('enter');
                 $('#venta').hide();
                 $('#consulta').hide();
                 var expediente = $(this).val();
                 var hrefOriginal="";
                 $('#infoExpediente').hide();
-                console.log(expediente);
+                //console.log(expediente);
                 $.ajax({
                     data:{expediente:expediente},
                     url:"{{path('busqueda_expediente_data')}}",
@@ -669,15 +669,11 @@
                                 var hrefventa=""
                                 hrefventa = $('#venta').children().attr('href');
                                 hrefventa = hrefventa+"?id=P"+data.data[0].id;
-                                //console.log(data);
-                                //console.log(href);
+
                                 res = hrefventa.split("?");
                                 hrefventa = res[0]+"?id=P"+data.data[0].id;
-                                //console.log(data);
-                                console.log(hrefventa);
+
                                 $('#venta').children().attr('href',hrefventa);
-
-
 
                                 $('#infoExpediente').show();
                                 $('#venta').show();
@@ -729,8 +725,7 @@
                                 console.log(5);
                             }
                             //inicio = data.inicio++;
-{#                                console.log(data.data.length);#}
-                            console.log(data.data.length);
+                            {#console.log(data.data.length);#}
                         },
                     error: function (data) {
 
