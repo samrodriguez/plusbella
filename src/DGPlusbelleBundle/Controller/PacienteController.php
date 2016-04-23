@@ -559,11 +559,11 @@ class PacienteController extends Controller
         $busqueda = $request->query->get('search');
         
         $em = $this->getDoctrine()->getEntityManager();
-        $expedientesTotal = $em->getRepository('DGPlusbelleBundle:Paciente')->findAll();
+        $pacientesTotal = $em->getRepository('DGPlusbelleBundle:Paciente')->findAll();
         
         $paciente['draw']=$draw++;  
-        $paciente['recordsTotal'] = 0;
-        $paciente['recordsFiltered']= 0;
+        $paciente['recordsTotal'] = count($pacientesTotal);
+        $paciente['recordsFiltered']= count($pacientesTotal);
         $paciente['data']= array();
         //var_dump($busqueda);
         //die();
@@ -576,9 +576,8 @@ class PacienteController extends Controller
                 //var_dump($row);
               //  if($row!=''){
                     
-                    $dql = "SELECT CONCAT('<a class=\"link_expediente\" id=\"',exp.numero,'\">',exp.numero,'</a>') as expediente, pac.id as id,per.nombres,per.apellidos,DATE_FORMAT(pac.fechaNacimiento,'%d-%m-%Y') as fechaNacimiento, CONCAT('<a ><i id=\"',pac.id,'\" style=\"cursor:pointer;\"  class=\"infoPaciente fa fa-info-circle\"></i></a>') as link FROM DGPlusbelleBundle:Paciente pac "
-                        . "JOIN pac.persona per "
-                        . "JOIN pac.expediente exp "
+                    $dql = "SELECT CONCAT('<a class=\"link_expediente\" id=\"',exp.numero,'\">',exp.numero,'</a>') as expediente, pac.id as id,per.nombres,per.apellidos,pac.dui,per.telefono,per.email,pac.lugarTrabajo,DATE_FORMAT(pac.fechaNacimiento,'%d-%m-%Y') as fechaNacimiento, '<a ><i style=\"cursor:pointer;\"  class=\"infoPaciente fa fa-info-circle\"></i></a>' as link FROM DGPlusbelleBundle:Paciente pac "
+                        . "JOIN pac.persona per JOIN pac.expediente exp ORDER BY per.nombres ASC "
                         . "WHERE CONCAT(upper(per.nombres),upper(per.apellidos)) LIKE upper(:busqueda) "
                         . "ORDER BY per.nombres ASC ";
                     $paciente['data'] = $em->createQuery($dql)
@@ -586,10 +585,9 @@ class PacienteController extends Controller
                             ->getResult();
                     
                     $paciente['recordsFiltered']= count($paciente['data']);
-                    $paciente['recordsTotal'] = count($paciente['data']);
-                    $dql = "SELECT CONCAT('<a class=\"link_expediente\" id=\"',exp.numero,'\">',exp.numero,'</a>') as expediente, pac.id as id,per.nombres,per.apellidos,DATE_FORMAT(pac.fechaNacimiento,'%d-%m-%Y') as fechaNacimiento, CONCAT('<a ><i id=\"',pac.id,'\" style=\"cursor:pointer;\"  class=\"infoPaciente fa fa-info-circle\"></i></a>') as link FROM DGPlusbelleBundle:Paciente pac "
-                        . "JOIN pac.persona per "
-                        . "JOIN pac.expediente exp "
+                    
+                    $dql = "SELECT CONCAT('<a class=\"link_expediente\" id=\"',exp.numero,'\">',exp.numero,'</a>') as expediente, pac.id as id,per.nombres,per.apellidos,pac.dui,per.telefono,per.email,pac.lugarTrabajo,DATE_FORMAT(pac.fechaNacimiento,'%d-%m-%Y') as fechaNacimiento, '<a ><i style=\"cursor:pointer;\"  class=\"infoPaciente fa fa-info-circle\"></i></a>' as link FROM DGPlusbelleBundle:Paciente pac "
+                        . "JOIN pac.persona per JOIN pac.expediente exp ORDER BY per.nombres ASC "
                         . "WHERE CONCAT(upper(per.nombres),upper(per.apellidos)) LIKE upper(:busqueda) "
                         . "ORDER BY per.nombres ASC ";
                     $paciente['data'] = $em->createQuery($dql)
@@ -612,14 +610,12 @@ class PacienteController extends Controller
             //var_dump($paciente['data']);
         }
         else{
-            $dql = "SELECT CONCAT('<a class=\"link_expediente\" id=\"',exp.numero,'\">',exp.numero,'</a>') as expediente, per.nombres, per.apellidos, DATE_FORMAT(pac.fechaNacimiento,'%d-%m-%Y') as fechaNacimiento, CONCAT('<a ><i id=\"',pac.id,'\" style=\"cursor:pointer;\"  class=\"infoPaciente fa fa-info-circle\"></i></a>') as link FROM DGPlusbelleBundle:Paciente pac "
+            $dql = "SELECT CONCAT('<a class=\"link_expediente\" id=\"',exp.numero,'\">',exp.numero,'</a>') as expediente,pac.id as id,per.nombres,per.apellidos,pac.dui,per.telefono,per.email,pac.lugarTrabajo,DATE_FORMAT(pac.fechaNacimiento,'%d-%m-%Y') as fechaNacimiento, '<a ><i style=\"cursor:pointer;\"  class=\"infoPaciente fa fa-info-circle\"></i></a>' as link FROM DGPlusbelleBundle:Paciente pac "
                 . "JOIN pac.persona per JOIN pac.expediente exp ORDER BY per.nombres ASC ";
             $paciente['data'] = $em->createQuery($dql)
                     ->setFirstResult($start)
                     ->setMaxResults($longitud)
                     ->getResult();
-            $paciente['recordsFiltered']= count($paciente['data']);
-            $paciente['recordsTotal'] = count($paciente['data']);
         }
         //$longitud = $request->query->get('length');
         //var_dump($start);
@@ -1300,4 +1296,66 @@ class PacienteController extends Controller
         
         
     }
+    
+    
+    
+    
+    /**
+     * Lists all Paciente entities.
+     *
+     * @Route("/actualizar/expediente", name="admin_paciente_actualizar_exp")
+     * @Method("GET")
+     * @Template()
+     */
+    public function actualizarexpAction()
+    {
+        
+        
+        $em = $this->getDoctrine()->getManager();
+        
+        $sql = "select TRIM(per.nombres) as pnombre, TRIM(per.apellidos) as papellido,  "
+                . "per.direccion as direccion, per.telefono as tel, per.email as email, pac.id as idpac, pac.dui as dui, pac.estado_civil as ecivil, pac.sexo as sexo, pac.ocupacion as ocupacion, "
+                . "pac.lugar_trabajo as lugarTrabajo, pac.fecha_nacimiento as fechaNacimiento, pac.referido_por as referidoPor "
+                . "from paciente pac inner join persona per on pac.persona = per.id order by per.nombres ASC, per.apellidos ASC";
+        $pacientes = $em->getRepository("DGPlusbelleBundle:Paciente")->findAll();
+        
+        
+        set_time_limit ( 600 );
+        foreach($pacientes as $key=>$row){
+            
+            if($row->getExpediente()[0]==null){
+                $this->generarExpediente($row);
+//                
+//                echo $key." Expediente: ".$row->getExpediente()[0]->getNumero()."<br>";
+            }
+//            else{
+//                echo $key." Expediente: -<br>";
+//            }
+            
+        }
+        
+        $pacientes = $em->getRepository("DGPlusbelleBundle:Paciente")->findAll();
+        
+        
+        
+        foreach($pacientes as $key=>$row){
+            if($row->getExpediente()[0]!=null){
+                
+                echo $key." Expediente: ".$row->getExpediente()[0]->getNumero()."<br>";
+            }
+            else{
+                echo $key." Expediente: -<br>";
+            }
+            
+        }
+                
+        
+        
+        
+        return array(
+            //'entities' => $entities,
+            'pacientes' => $pacientes,
+        );
+    }
+    
 }

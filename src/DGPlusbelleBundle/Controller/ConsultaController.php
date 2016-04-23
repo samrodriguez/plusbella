@@ -2059,17 +2059,16 @@ class ConsultaController extends Controller
             
             $idConsulta = $_POST["idConsulta"];
             
-            //var_dump($idConsulta);
-            //die();
-            //var_dump($_FILES);
-            //die();
-            //toca hacer un for para iterar los elementos del file para los diferentes archivos
+            
             
             
             
 //            var_dump(count($_FILES['file']['name']));
             $em = $this->getDoctrine()->getManager();
             $consulta = $em->getRepository('DGPlusbelleBundle:Consulta')->find($idConsulta);
+            $totalImagen = $em->getRepository('DGPlusbelleBundle:ImagenConsulta')->findBy(array('consulta'=>$idConsulta));
+//            var_dump($totalImagen);
+            $arr = Array();
             for($i=0;$i<count($_FILES['file']['name']);$i++){
                 $nombreimagen=$_FILES['file']['name'][$i];    
 
@@ -2104,85 +2103,17 @@ class ConsultaController extends Controller
                     $resultado = move_uploaded_file($_FILES["file"]["tmp_name"][$i], $path1.$nombreSERVER);
                     $em->persist($imagen);
                     $em->flush();
-
-                    //Codigo para poder redimensionar la  imagenes que se suben
-    //                    \Tinify\setKey("TGdnhEaY1ZrJB1J_NSAYYLeqno6FdIYF");
-    //
-    //                     $source = \Tinify\fromFile($path1.$nombreSERVER);
-    //                     $resized = $source->resize(array(
-    //                         "method" => "cover",
-    //                         "width" => 300,
-    //                         "height" => 300
-    //                     ));
-
-
-
-    //                $resized->toFile($path1."E".$nombreSERVER);
-    //                $numero =unlink($path1.$nombreSERVER);
-
-
-
-
-    //                if ($numero){
-    //               
-    //                    
-    //                    
-    //                }
-
+                    $arregloim=Array();
 
                     if ($resultado){
-//                                $imagenConsulta = new ImagenConsulta();
-//                                $foto = new AbgFoto();
-//                                $em = $this->getDoctrine()->getManager();
-//                                //Ojo que posteriormente tengo que sacar los valores con el id de la variable de sesion que este presente
-//                                 //Este numero 6 es el id de la empresa, posteriormente hay que trabajarlo con la variable de sesion
-//                                $idPersona = $this->getDoctrine()->getRepository('DGAbgSistemaBundle:AbgPersona')->find($personaId);
-//                                $src = $this->getDoctrine()->getRepository('DGAbgSistemaBundle:AbgFoto')->findBy(array("abgPersona" =>$idPersona,"tipoFoto"=>1));
-//                                $direccion = $src[0]->getSrc();
-//                                
-//                                $direccion = str_replace("\\","" , $direccion);
-//                                $direccion = str_replace("Photos/perfil/","", $direccion);
-//
-//                                if($direccion!=''){
-//                                    $eliminacionRegistroExixtente =unlink($path1.$direccion);
-//                                    if($eliminacionRegistroExixtente){
-//                                        $entity = $em->getRepository('DGAbgSistemaBundle:AbgFoto')->findBy(array("abgPersona" =>$idPersona,"tipoFoto"=>1));
-//                                        $entity[0]->setSrc($nombreBASE);
-//                                        $entity[0]->setFechaRegistro(new \DateTime("now"));
-//                                        $entity[0]->setFechaExpiracion(null);
-//                                        $entity[0]->setEstado(1);
-//                                        $em->merge($entity[0]);
-//                                        $em->flush();
-//                                        $src = $this->getDoctrine()->getRepository('DGAbgSistemaBundle:AbgFoto')->findBy(array("abgPersona" =>$idPersona,"tipoFoto"=>1));
-//                                        $direccion = $src[0]->getSrc();
-//                                        $direccionParaAjax = str_replace("\\","" , $direccion);
-//                                        $data['direccion']=$direccionParaAjax;
-//                                    }
-//                                }
-//                            else{
-//                                                $entity = $em->getRepository('DGAbgSistemaBundle:AbgFoto')->findBy(array("abgPersona" =>$idPersona,"tipoFoto"=>1));
-//                                                $entity[0]->setSrc($nombreBASE);
-//                                                $entity[0]->setFechaRegistro(new \DateTime("now"));
-//                                                $entity[0]->setFechaExpiracion(null);
-//                                                $entity[0]->setEstado(1);
-//                                                $em->merge($entity[0]);
-//                                                $em->flush();
-//                                                
-//                                                $enti = $em->getRepository('DGAbgSistemaBundle:AbgFoto')->findBy(array("abgPersona" =>$idPersona,"tipoFoto"=>1));
-//                                                
-//                                                $direccion = $enti[0]->getSrc();
-//                                                $direccionParaAjax = str_replace("\\","" , $direccion);
-//                                                $data['direccion']=$direccionParaAjax;
-//                                                
-//                            }
-                    //$data['direccion']=$direccionParaAjax;
-
-                    
+                        array_push($arregloim, count($totalImagen));
+                        array_push($arregloim, $imagen->getFoto());
+                        array_push($arr, $arregloim);
                     }else{
-                        $data['servidor'] = "No se pudo mover la imagen al servidor";
+                        array_push($arr, 0);
+//                        $data['servidor'] = "No se pudo mover la imagen al servidor";
+//                        $data['servidor'] = "No se pudo mover la imagen al servidor";
                     }
-
-
                 }
                 else{
                     //$data['imagen'] = "Imagen invalida";
@@ -2192,8 +2123,8 @@ class ConsultaController extends Controller
             }
          
             
-            //return new Response(json_encode($data));
-            return new Response(json_encode(0));
+            return new Response(json_encode($arr));
+            
 
       
             
