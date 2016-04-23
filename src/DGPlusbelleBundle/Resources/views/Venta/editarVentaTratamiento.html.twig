@@ -525,9 +525,13 @@
                                     <strong style="margin-top:80px;">Archivos adjuntos</strong>
                                 </div>    
                                 <div class="col-md-12">
-                                    {% for imagen in archivos %}
-                                        <p><a href="{{ asset('Photos/Tmp/')}}{{imagen.fotoAntes}}">{{imagen.fotoAntes}}</a></p>
-                                    {% endfor %}
+                                    <div id="listadoImagenes">
+                                        {% for imagen in archivos %}
+                                            <div class="col-md-2">
+                                                <a class="verImagen" href="{{ asset('Photos/Tmp/')}}{{imagen.fotoAntes}}">Imagen {{loop.index}}</a>
+                                            </div>
+                                        {% endfor %}
+                                    </div>
                                 </div>
                             </div>
                             
@@ -1079,13 +1083,37 @@
                                                 processData: false,
 
                                                 success: function(data){
+                                                    console.log(data);
+                                                    //$("#prev").attr('src', "/abgsistema/web/"+data.direccion);
+                                                    $('#file-input').val('');
+                                                    alertify.success("Imagenes subidas con éxito!");
+                                                    $('#listadoImagenes').html('');
+                                                    var key = 1;
+                                                    for(i=0;i<data.length;i++){
+                                                        $('#listadoImagenes').append('<div class=\"col-md-2\"><a class=\"verImagen\" href=\"{{ asset('Photos/Tmp/')}}'+data[i]+'\">Imagen '+ key +' </a></div>');
+                                                        key++;
+                                                    }
+                                                },
+                                                error: function(data){
+                                                    bootbox.alert('Hubo un error al subir las fotos');
+                                                }
+                                                {#data:frm,
+                                                url:Routing.generate('ingresar_foto_venta'),
+                                                type: 'POST',
+                                                dataType: 'json',
+
+                                                cache: false,
+                                                contentType: false,
+                                                processData: false,
+
+                                                success: function(data){
                                                     //$("#prev").attr('src', "/abgsistema/web/"+data.direccion);
                                                     $('#file-input').val('');
                                                     bootbox.alert('Fotos subidas con éxito!');
                                                 },
                                                 error: function(data){
                                                     bootbox.alert('Hubo un error al subir las fotos');
-                                                }
+                                                }#}
                                             });
                                         }
                                     }

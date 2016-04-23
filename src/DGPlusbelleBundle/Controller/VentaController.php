@@ -608,9 +608,22 @@ class VentaController  extends Controller
                 }
             }
          
+            $dql = "SELECT img "
+                    . "FROM DGPlusbelleBundle:ImagenTratamiento img "
+                    . "JOIN img.sesionVentaTratamiento ses "
+                    . "JOIN ses.personaTratamiento tra "
+                    . "WHERE tra.id =  :idVentaTratamiento";
+
+            $archivos = $em->createQuery($dql)
+                        ->setParameter('idVentaTratamiento', $idsesion)
+                        ->getResult();    
             
-            //return new Response(json_encode($data));
-            return new Response(json_encode(0));
+            $imagenes = array();
+            foreach ($archivos as $value) {
+                array_push($imagenes, $value->getFotoAntes());
+            }
+            
+            return new Response(json_encode($imagenes));
     }
     
     /**

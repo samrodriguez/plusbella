@@ -1474,68 +1474,88 @@
                 
                 // Al hacer click en guardar imagenes
                 $(document).on("click","#registro-sesiones-imagenes",function(){
-                    $("#prev").show();
-                    $("#saveImagen").hide();
-
-                    //obtenemos un array con los datos del archivo
-                    var file = $('#file-input')[0].files[0];
-                    //obtenemos el nombre del archivo
-                    var fileName = file.name;
-                    //obtenemos la extensión del archivo
-                    fileExtension = fileName.substring(fileName.lastIndexOf('.') + 1);
-                    //obtenemos el tamaño del archivo
-                    var fileSize = file.size;
-
-                    //obtenemos el tipo de archivo image/png ejemplo
-                    var fileType = file.type;
-                    console.log(fileType);
-                    console.log(fileExtension);
-                    if (fileExtension == 'PNG' || fileExtension == 'png' ||fileExtension == 'JPG'|| fileExtension == 'jpg' && fileType =='imagen' || fileType =='image' || fileType =='image/jpeg' )
-                    {
-                        flag = true;
-                    }else{
-                        flag = false;
-                    }
-
-                    if (flag==false){
-                        bootbox.alert("Archivo invalido, seleccione una imagen ");
-                        
-                        $("#file-input").val("");
-                        $("#prev").hide();
+                    // Si se ha chequeado en el tipo de venta Paquete
+                    if($("#tipo-venta-paquete").is(':checked')) {
+                    
+                    // Si se ha chequeado en el tipo de venta Tratamiento    
+                    } else {
+                        $("#prev").show();
                         $("#saveImagen").hide();
-                    }else {  
-                        var pesoKb=(fileSize/1024);
 
-                        if (pesoKb<=1024){
-                            var frm = new FormData($("#formImagen")[0]);
-                            
-                            if (flag != false) {
-                                $.ajax({
-                                    data:{id:id, frm:frm},
-                                    url:Routing.generate('ingresar_foto_venta'),
-                                    type: 'POST',
-                                    dataType: 'json',
+                        //obtenemos un array con los datos del archivo
+                        var file = $('#file-input')[0].files[0];
+                        //obtenemos el nombre del archivo
+                        var idSesion =$('#idSesion').val();
+                        //alert(idconsulta);
+                        var fileName = file.name;
+                        //obtenemos la extensión del archivo
+                        fileExtension = fileName.substring(fileName.lastIndexOf('.') + 1);
+                        //obtenemos el tamaño del archivo
+                        var fileSize = file.size;
 
-                                    cache: false,
-                                    contentType: false,
-                                    processData: false,
+                        //obtenemos el tipo de archivo image/png ejemplo
+                        var fileType = file.type;
+                        console.log(fileType);
+                        console.log(fileExtension);
+                        if (fileExtension == 'PNG' || fileExtension == 'png' ||fileExtension == 'JPG'|| fileExtension == 'jpg' && fileType =='imagen' || fileType =='image' || fileType =='image/jpeg' )
+                        {
+                            flag = true;
+                        }else{
+                            flag = false;
+                        }
+                            if(idSesion!=''){
+                                if (flag==false){
+                                    alert("Archivo invalido, seleccione una imagen ");
+                                    $("#file-input").val("");
+                                    $("#prev").hide();
+                                    $("#saveImagen").hide();
 
-                                    success: function(data){
-                                        $("#prev").attr('src', "/abgsistema/web/"+data.direccion);
-                                        $('#file-input').val('');
-                                        alertify.success('Imagenes subidas con éxito!');
-                                    },
-                                    error: function(data){
-                                        bootbox.alert('Hubo un error al subir las fotos');
-                                    }
-                                });
+
+                                }else{  
+
+                                     var pesoKb=(fileSize/1024);
+                                     if (pesoKb<=2048){
+                                        var frm = new FormData($("#formImagen")[0]);
+                                        console.log(frm);
+                                            if (flag != false) {
+                                                $.ajax({
+                                                    data:frm,
+                                                    url:Routing.generate('ingresar_foto_venta'),
+                                                    type: 'POST',
+                                                    dataType: 'json',
+
+                                                    cache: false,
+                                                    contentType: false,
+                                                    processData: false,
+
+                                                    success: function(data){
+                                                        console.log(data);
+                                                        //$("#prev").attr('src', "/abgsistema/web/"+data.direccion);
+                                                        $('#file-input').val('');
+                                                        alertify.success("Imagenes subidas con éxito!");
+                                                        $('#listadoImagenes').html('');
+                                                        var key = 1;
+                                                        for(i=0;i<data.length;i++){
+                                                            $('#listadoImagenes').append('<div class=\"col-md-2\"><a class=\"verImagen\" href=\"{{ asset('Photos/Tmp/')}}'+data[i]+'\">Imagen '+ key +' </a></div>');
+                                                            key++;
+                                                        }
+                                                    },
+                                                    error: function(data){
+                                                        bootbox.alert('Hubo un error al subir las fotos');
+                                                    }
+                                                });
+                                            }
+                                        }
+                                        else{
+                                            console.log(pesoKb);
+                                            alert("Imagen demasiado grande, intente con una mas pequeña");
+                                        }
+                                }
                             }
-                        }
-                        else {
-                            console.log(pesoKb);
-                            bootbox.alert("Imagen demasiado grande, intente con una mas pequeña");
-                        }
-                    }
+                            else{
+                                bootbox.alert('Debe guardar una venta primero!');
+                            }
+                    }    
                 });
                 
                 // Al momento de hacer click en resgistra abono
