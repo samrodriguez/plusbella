@@ -577,7 +577,7 @@ class PacienteController extends Controller
               //  if($row!=''){
                     
                     $dql = "SELECT CONCAT('<a class=\"link_expediente\" id=\"',exp.numero,'\">',exp.numero,'</a>') as expediente, pac.id as id,per.nombres,per.apellidos,pac.dui,per.telefono,per.email,pac.lugarTrabajo,DATE_FORMAT(pac.fechaNacimiento,'%d-%m-%Y') as fechaNacimiento, '<a ><i style=\"cursor:pointer;\"  class=\"infoPaciente fa fa-info-circle\"></i></a>' as link FROM DGPlusbelleBundle:Paciente pac "
-                        . "JOIN pac.persona per JOIN pac.expediente exp ORDER BY per.nombres ASC "
+                        . "JOIN pac.persona per JOIN pac.expediente exp "
                         . "WHERE CONCAT(upper(per.nombres),upper(per.apellidos)) LIKE upper(:busqueda) "
                         . "ORDER BY per.nombres ASC ";
                     $paciente['data'] = $em->createQuery($dql)
@@ -587,7 +587,7 @@ class PacienteController extends Controller
                     $paciente['recordsFiltered']= count($paciente['data']);
                     
                     $dql = "SELECT CONCAT('<a class=\"link_expediente\" id=\"',exp.numero,'\">',exp.numero,'</a>') as expediente, pac.id as id,per.nombres,per.apellidos,pac.dui,per.telefono,per.email,pac.lugarTrabajo,DATE_FORMAT(pac.fechaNacimiento,'%d-%m-%Y') as fechaNacimiento, '<a ><i style=\"cursor:pointer;\"  class=\"infoPaciente fa fa-info-circle\"></i></a>' as link FROM DGPlusbelleBundle:Paciente pac "
-                        . "JOIN pac.persona per JOIN pac.expediente exp ORDER BY per.nombres ASC "
+                        . "JOIN pac.persona per JOIN pac.expediente exp "
                         . "WHERE CONCAT(upper(per.nombres),upper(per.apellidos)) LIKE upper(:busqueda) "
                         . "ORDER BY per.nombres ASC ";
                     $paciente['data'] = $em->createQuery($dql)
