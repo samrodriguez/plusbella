@@ -68,19 +68,8 @@
                 <div id="contenedorGrafico">
                 </div>
             </div><!-- /.panel-body -->
-
-            
-            
-    
-
-
-    </div><!-- /.panel -->    
-       
-</div>
-   
-
-     
-  
+    </div><!-- /.panel -->           
+</div>   
    {% endblock %}
    
     
@@ -99,16 +88,14 @@
                 if(anioFinUser!=""){
                     url+="?anioInicioUser="+anioInicioUser+"&anioFinUser="+anioFinUser+"&sucursal="+sucursal;
                     $('#contenedorGrafico').load(url);
-                    console.log(url);
+                    //console.log(url);
                 }
             }       
         
         $(document).on('click','#tabla-listado', function(){
-        
             $('#listadostransaccion').toggle();
             $('canvas').toggle();
             $('#grafico').toggle();
-            
         });
         
         var datepickerInicio = $('#fecha-inicio').data('Zebra_DatePicker');

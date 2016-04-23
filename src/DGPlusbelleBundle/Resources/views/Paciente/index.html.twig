@@ -45,7 +45,7 @@
                     </button> 
                 </div>
                 <div class="btn-group btn-group-sm pull-left">
-                    <button id="nueva-cita" data-toggle="tooltip" data-container="body" title="Nueva cita" class="btn btn-default datatables1-actions {#disabled#} opciones" role="button">
+                    <button id="nueva-cita" data-toggle="tooltip" data-container="body" title="Nueva cita" class="btn btn-default datatables1-actions disabled opciones" role="button">
                         <i class="fa fa-calendar-plus-o"></i><a href="{{ path('admin_cita_new') }}"> </a>
                     </button>
                     {#<button id="nueva-consulta" data-toggle="tooltip" data-container="body" title="Nueva consulta" class="btn btn-default datatables1-actions disabled opciones" role="button">
@@ -86,16 +86,11 @@
               {% include 'DGPlusbelleBundle:Paciente:new.html.twig' %}
             </div><!-- /.panel-body -->
             
-            <div class="panel-body hide" id="editFormContainer">
-            
-            </div>
-            
-            <div class="panel-body hide" id="opcionesFormContainer">
-            
-            </div>
+            <div class="panel-body hide" id="editFormContainer"></div>
+            <div class="panel-body hide" id="opcionesFormContainer"></div>
 
        
- <!--    <a href="{{ path('admin_paciente_new') }}" class="btn btn-success"> Crear nuevo paciente</a>  -->
+     {#<a href="{{ path('admin_paciente_new') }}" class="btn btn-success"> Crear nuevo paciente</a>  #}
 
     <table id = "datatables1" class="table table-bordered table-hover display dt-responsive" style="margin-top: 30px">
         <thead>
@@ -466,9 +461,7 @@
         //Oculta el filtro de la tabla
         $('#datatables1_filter').hide();
         $('#filterDatatables1').val('');
-        
-        
-           validarPaciente();  
+        validarPaciente();  
         
     });//Fin document ready
         
@@ -485,9 +478,7 @@
             }
             else{
                 $(this).removeAttr("selected");
-            }
-            
-         
+            }                     
 	});             
     };
     
