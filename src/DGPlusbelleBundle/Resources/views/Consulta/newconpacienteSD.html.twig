@@ -719,7 +719,9 @@
                                 <strong style="margin-top:80px;">Archivos adjuntos</strong>
                                 <div class="col-md-12">
                                     {% for imagen in archivos %}
-                                        <a href="{{ asset('Photos/Tmp/')}}{{imagen.foto}}">{{imagen.foto}}</a>
+                                        <div class="col-md-2">
+                                            <a class="verImagen" href="{{ asset('Photos/Tmp/')}}{{imagen.foto}}">Imagen {{loop.index}}</a>
+                                        </div>
                                     {% endfor %}
                                     
                                 </div>
@@ -3062,24 +3064,29 @@
                             console.log(frm);
                                  if (flag != false) {
                                     $.ajax({
-                                        data:frm,
-                                        url:Routing.generate('ingresar_foto_persona'),
-                                        type: 'POST',
-                                        dataType: 'json',
+                                    data:frm,
+                                    url:Routing.generate('ingresar_foto_persona'),
+                                    type: 'POST',
+                                    dataType: 'json',
 
-                                        cache: false,
-                                        contentType: false,
-                                        processData: false,
+                                    cache: false,
+                                    contentType: false,
+                                    processData: false,
 
-                                        success: function(data){
-                                            $("#prev").attr('src', "/abgsistema/web/"+data.direccion);
-                                            $('#file-input').val('');
-                                            alertify.success("Imagenes guardadas!");
-                                        },
-                                        error: function(data){
-                                            bootbox.alert('Hubo un error al subir las fotos');
+                                    success: function(data){
+                                        $("#prev").attr('src', "/abgsistema/web/"+data.direccion);
+                                        $('#file-input').val('');
+                                        alertify.success("Imagenes guardadas!");
+                                        console.log(data);
+                                        console.log(data.length);
+                                        for(i=0;i<data.length;i++){
+                                            $('#listadoImagenes').append('<div class=\"col-md-2\"><a class=\"verImagen\" href=\"{{ asset('Photos/Tmp/')}}'+data[i][1]+'\">Imagen '+(data[i][0]+(i+1))+' </a></div>');
                                         }
-                                    });
+                                    },
+                                    error: function(data){
+                                        bootbox.alert('Hubo un error al subir las fotos');
+                                    }
+                                });
                                 }
                             }
                             else{
