@@ -401,10 +401,14 @@
                 });
                 */
                 $('#filterDatatables1').on('keyup', function(event) {
+                    
+                     
                     var filtro = $(this).val(); 
                     //alert(filtro);
-                    $('#datatables1_filter>label>input').val($(this).val());
-                    $('#datatables1_filter>label>input').keyup();
+                    if(event.keyCode == 13) {
+                        $('#datatables1_filter>label>input').val($(this).val());
+                        $('#datatables1_filter>label>input').keyup();
+                    }
 
                 });
                 

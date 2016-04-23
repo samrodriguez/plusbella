@@ -93,6 +93,14 @@
     {% endif %}
     {% if is_granted('ROLE_ADMIN') or is_granted('ROLE_USER')%}
         <li class="nav-item" role="presentation">
+            <a href="{{path('admin_consulta_expediente_sd')}}">
+                <span class="nav-icon"><i class="fa fa-book"></i></span>
+                <span class="nav-text">Expediente</span>
+            </a>
+        </li>
+    {% endif %}
+    {% if is_granted('ROLE_ADMIN') or is_granted('ROLE_USER')%}
+        <li class="nav-item" role="presentation">
             <a href="{{path('admin_cierreadministrativo')}}">
                 <span class="nav-icon"><i class="fa fa-clock-o"></i></span>
                 <span class="nav-text">Cierre administrativo</span>
@@ -142,14 +150,7 @@
      
     {#<li class="divider"></li>
     <li class="nav-header" role="presentation">SONODIGEST</li>#}
-    {% if is_granted('ROLE_ADMIN') or is_granted('ROLE_USER')%}
-        <li class="nav-item" role="presentation">
-            <a href="{{path('admin_consulta_expediente_sd')}}">
-                <span class="nav-icon"><i class="fa fa-book"></i></span>
-                <span class="nav-text">Expediente</span>
-            </a>
-        </li>
-    {% endif %}
+    
     {#<li class="nav-header" role="presentation">MENU</li>#}
     
    {# {% if is_granted('ROLE_ADMIN') or is_granted('ROLE_USER')%}
