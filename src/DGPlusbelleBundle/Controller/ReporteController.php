@@ -549,7 +549,7 @@ class ReporteController extends Controller
         $consulta = $em->createQuery($dql)
                     ->setParameter('idconsulta', $id)
                     ->getResult();
-        
+//            var_dump($consulta[0]->getDetallePlantilla());
         if($consulta[0]->getDetallePlantilla()->getPlantilla()->getClinica()==0){
 //            $medico = array(
 //                    "nombre" => "Dr. Juan Carlos Pacheco",
