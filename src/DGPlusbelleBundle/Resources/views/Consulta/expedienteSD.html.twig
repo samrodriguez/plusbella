@@ -6,11 +6,12 @@
             cursor: pointer;
             color: #48CFAD;
         }
-        .link_{
+        .link_, .link{
             cursor:pointer;
         }
     </style>
-        <link rel="stylesheet" href="{{asset('Resources/datatables/serversideprocessing.css')}}" />
+{#        <link rel="stylesheet" href="{{asset('Resources/datatables/serversideprocessing.css')}}" />#}
+        <link rel="stylesheet" href="{{ asset('Resources/alertifyjs/css/alertify.css') }}">
 {% endblock %}
 
 
@@ -171,6 +172,9 @@
                 <div class="btn-group pull-left">
                   <input id="filterDatatables1" class="form-control input-sm" placeholder="Buscar...">
                 </div>
+                <div class="btn-group pull-left">
+                    <button id="reloadTabla" class="btn btn-default btn-xs"> Recargar tabla</button>
+                </div>
                 <div class="btn-group pull-right" id="venta" style="display:none;">
                     <a href="{{path('admin_historial_consulta')}}" style="color:#FFF;" class="btn btn-success btn-xs btn">Nueva venta</a>
                 </div>
@@ -272,6 +276,7 @@
     
        
   {% block javascripts_step %}
+        <script src="{{ asset('Resources/alertifyjs/alertify.js') }}"></script>
         <script src="{{ asset('Resources/js/Paciente.js') }}"></script>
         <script>
             $(document).ready(function(){
@@ -304,6 +309,8 @@
                     console.log(url);
                     window.location = url;
                 });
+                
+                
                
                 $('#filterDatatables1').focus();
                 
@@ -544,7 +551,7 @@
                 
                                 
                 //var long = $('datatables1_length').children().children().val();
-                $('#datatables1').DataTable({
+                var tabla = $('#datatables1').DataTable({
                     "dom": "ftp",
                     {#searching:true,
                     order:[[1,"asc"]],#}
@@ -591,8 +598,40 @@
                 },
         });
     
-            
+            $(document).on('click','#reloadTabla', function(){
+                tabla.ajax.reload();
+            });
     
+    
+    
+    
+            $(document).on('click','.link',function(){
+                    var id = $(this).attr('id');
+                    $.ajax({
+                    data:{id:id},
+                    url:"{{path('admin_consulta_eliminar_data')}}",
+                    type: "post",
+                    success: function (data) {
+                            //inicio = data.inicio++;
+                            if(data==0){
+    {#                            bootbox.alert("Cambios guardados!", function() {});#}
+                                alertify.success("Consulta eliminada!");
+                                tabla.ajax.reload();
+
+                            }
+                            else{
+                                alertify.error("La consulta no pudo eliminarse, intente de nuevo!");
+                            }
+    {#                        console.log("pagina actual: "+data);
+                            console.log("Inicio de registro: "+data.inicioRegistro);#}
+
+                        },
+                    error: function (data) {
+                        alertify.error("La consulta no pudo eliminarse, intente de nuevo!");
+
+                    }
+                });
+                });
              {#   
                 $('#datatables1').DataTable({ 
                     searching:true,

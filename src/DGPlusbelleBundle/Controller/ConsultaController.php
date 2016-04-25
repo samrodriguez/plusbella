@@ -2996,4 +2996,35 @@ class ConsultaController extends Controller
     }
     
     
+    
+    
+    
+    
+    
+    
+    /**
+     * 
+     *
+     * @Route("/consulta/data/eliminarreg", name="admin_consulta_eliminar_data")
+     */
+    public function dataConsultaEliminarAction(Request $request)
+    {
+
+        $id = $request->get('id');
+        $idConsulta = substr($id, 2);
+        $em = $this->getDoctrine()->getEntityManager();
+        
+        $consulta = $em->getRepository('DGPlusbelleBundle:Consulta')->find($idConsulta);
+        
+        if(count($consulta)!=0){
+            $em->remove($consulta);
+            $em->flush();   
+            return new Response(json_encode(0)); //no error
+        }
+        else{
+            return new Response(json_encode(1));//error
+        }
+    }
+    
+    
 }

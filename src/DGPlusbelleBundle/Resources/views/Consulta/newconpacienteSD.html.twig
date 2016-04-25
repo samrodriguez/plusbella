@@ -2875,12 +2875,12 @@
             var temperatura = $('#temperaturaPaciente').val();
             var frecCardiaca = $('#frecCardiaca').val();
             var medico = $('#medico_consulta').val();
-            
+            var sucursal = $('#sucursal_consulta').val();
             
             
             if(idConsulta==''){
                 $.ajax({
-                    data:{medico:medico,id:id,peso:peso,talla:talla,frecRespiratoria:frecRespiratoria,presionDiastolica:presionDiastolica,presionSistolica:presionSistolica,temperatura:temperatura,frecCardiaca:frecCardiaca},
+                    data:{sucursal:sucursal,medico:medico,id:id,peso:peso,talla:talla,frecRespiratoria:frecRespiratoria,presionDiastolica:presionDiastolica,presionSistolica:presionSistolica,temperatura:temperatura,frecCardiaca:frecCardiaca},
                     url:"{{path('admin_paciente_guardar_signos_ajax')}}",
                     type: "post",
                     success: function (data) {
