@@ -795,10 +795,12 @@ class ConsultaController extends Controller
         $flag = 0;
         
         $ruta="";
+        $rutaReceta="";
         
         $mostrarplantilla=true;
-        
-        
+        $botox = Array();
+        $valores = Array();
+        $corporal = Array();
         if($cadena != NULL) {
             //Obtener el id del parametro
             $idEntidad = substr($cadena, 1);
@@ -830,18 +832,85 @@ class ConsultaController extends Controller
             
             $existePlantilla = false;
             $existeReceta = false;
+            $estetica = 0;
 //            if($idconsulta!=null){
                 $tienePlantilla = $em->getRepository('DGPlusbelleBundle:HistorialConsulta')->findBy(array('consulta'=>$idconsulta));
 //            }
             if(count($tienePlantilla)!=0){
-                //var_dump($tienePlantilla);
+//                var_dump($tienePlantilla);
                 $existePlantilla = true;
                 $ruta = "admin_reporteplantilla_pdf";
+//                var_dump($ruta);
+            }
+            else{
+                $tienePlantilla = $em->getRepository('DGPlusbelleBundle:ConsultaBotox')->findBy(array('consulta'=>$idconsulta));
+                //var_dump($tienePlantilla);
+                if(count($tienePlantilla)==0){
+                    $tienePlantilla = $em->getRepository('DGPlusbelleBundle:ComposicionCorporal')->findBy(array('consulta'=>$idconsulta));
+                    //var_dump($tienePlantilla);
+                    if(count($tienePlantilla)==0){
+                        $tienePlantilla = $em->getRepository('DGPlusbelleBundle:HistorialEstetica')->findBy(array('consulta'=>$idconsulta));
+                        if(count($tienePlantilla)!=0){
+                            foreach($tienePlantilla as $row){
+                                array_push($valores,$row->getDetalleEstetica()->getId());
+                            }
+                            $ruta="admin_prevpdf_facial_por_pdf";
+                            $existePlantilla = true;
+                            $estetica = 2;//facial
+                        }
+                    }
+                    else{
+                        //esta lleva comparativo
+                        $ruta="admin_prevpdfcorporal_por_pdf";
+                        $existePlantilla = true;
+
+                        array_push($corporal,$tienePlantilla[0]->getPeso());
+                        array_push($corporal,$tienePlantilla[0]->getGrasaCorporal());
+                        array_push($corporal,$tienePlantilla[0]->getAguaCorporal());
+                        array_push($corporal,$tienePlantilla[0]->getMasaMusculo());
+                        array_push($corporal,$tienePlantilla[0]->getValoracionFisica());
+                        array_push($corporal,$tienePlantilla[0]->getDciBmr());
+
+                        array_push($corporal,$tienePlantilla[0]->getEdadMetabolica());
+                        array_push($corporal,$tienePlantilla[0]->getMasaOsea());
+                        array_push($corporal,$tienePlantilla[0]->getGrasaVisceral());
+                        $estetica = 1;//corporal
+                        $checkboxes = $em->getRepository('DGPlusbelleBundle:HistorialEstetica')->findBy(array('consulta'=>$idconsulta));
+                        //var_dump($checkboxes);
+
+                        foreach($checkboxes as $row){
+                            array_push($valores,$row->getDetalleEstetica()->getId());
+                        }
+                    }
+                }
+                else{
+                    //var_dump($tienePlantilla);
+                    foreach($tienePlantilla as $key=>$row){
+                        array_push($botox,$row->getAreaInyectar());        
+                        array_push($botox,$row->getUnidades());        
+                        array_push($botox,$row->getfechaCaducidad()->format('Y-m-d'));        
+                        array_push($botox,$row->getLote());        
+                        array_push($botox,$row->getMarcaProducto());        
+                        array_push($botox,$row->getNumAplicacion());        
+                        array_push($botox,$row->getValor());   
+                        if($row->getRecomendaciones()!=null)
+                            array_push($botox,$row->getRecomendaciones());
+                        }
+    //                $ruta="admin_pdf_botox_por_pdf";
+                    $ruta="admin_botox_por_pdf_previa";
+    //                $ruta="admin_comparativo_botox_por_pdf";
+                    $existePlantilla=true;
+                    $estetica = 3;//botox
+                }
             }
             
+            
+//            var_dump($existePlantilla);
+//            var_dump($tienePlantilla);
 //            
 //            
 //            var_dump($existePlantilla);
+            $idrec = 0;
             $archivos = $em->getRepository('DGPlusbelleBundle:ImagenConsulta')->findBy(array('consulta'=>$idconsulta));
             //$recetas = $em->getRepository('DGPlusbelleBundle:ImagenConsulta')->findBy(array('consulta'=>$idconsulta));
             //var_dump($archivos);
@@ -849,7 +918,9 @@ class ConsultaController extends Controller
             if(count($recetas)!=0){
                 //var_dump($tienePlantilla);
                 $existeReceta = true;
-                $ruta = "admin_reporteconsultarecetaplantilla_pdf";
+                $idrec=$recetas[0]->getDetallePlantilla()->getPlantilla()->getId();
+                //var_dump($idrec);
+                $rutaReceta = "admin_reporteconsultarecetaplantilla_pdf";
             }
             //var_dump($recetas);
         } else {
@@ -883,10 +954,22 @@ class ConsultaController extends Controller
         $empleados = $em->getRepository('DGPlusbelleBundle:Empleado')->findBy(array('id'=>array(3,5),'estado'=>1));
         $tipoConsulta= $em->getRepository('DGPlusbelleBundle:TipoConsulta')->findBy(array('estado'=>1));
         
-            
+//           var_dump($existePlantilla); 
+//           var_dump($botox); 
+//           var_dump($estetica); 
+//           var_dump($valores); 
+//           var_dump($tienePlantilla); 
+           
+           
         return array(
+            'idrec'=>$idrec,
+            'corporal'=>$corporal,
+            'botox'=>$botox,
+            'estetica'=>$estetica,
+            'valores'=>$valores,
             'plantillasEstetica'=>$plantillasEstetica,
             'ruta'=>$ruta,
+            'rutaReceta'=>$rutaReceta,
             'existePlantilla'=>$existePlantilla,
             'existeReceta'=>$existeReceta,
             'recetas'=>$recetas,
@@ -2446,6 +2529,7 @@ class ConsultaController extends Controller
         if($idConsulta!=-1){
             $entity= $em->getRepository('DGPlusbelleBundle:Consulta')->find($idConsulta);
         }
+        var_dump($entity);
         $flag = 0;
         $cadena= $request->get('identidad');
         

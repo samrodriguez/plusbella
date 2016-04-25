@@ -181,9 +181,9 @@
                 <div class="btn-group pull-right" id="consulta" style="display:none;">
                     <a href="{{path('admin_consulta_nueva_paciente_SD')}}" style="color:#FFF;" class="btn btn-success btn-xs btn">Nueva consulta</a>
                 </div>
-                <div class="btn-group pull-right" id="consultaEst" style="display:none;">
+                {#<div class="btn-group pull-right" id="consultaEst" style="display:none;">
                     <a  href="{{path('admin_consulta_nueva_paciente_LPB')}}" style="color:#FFF;" class="btn btn-success btn-xs btn">Nueva consulta estética</a>
-                </div>
+                </div>#}
               </div><!-- /btn-toolbar -->
             </div><!-- /.panel-body -->
 
@@ -698,12 +698,12 @@
                                 //console.log(data);
                                 //console.log(href);
                                 $('#consulta').children().attr('href',hrefconsulta);
-                                hrefconsultaEst = $('#consultaEst').children().attr('href');
+                                {#hrefconsultaEst = $('#consultaEst').children().attr('href');
                                 var res = hrefconsultaEst.split("?");
                                 hrefconsultaEst = res[0]+"?id=P"+data.data[0].id;
                                 //console.log(data);
                                 //console.log(href);
-                                $('#consultaEst').children().attr('href',hrefconsultaEst);
+                                $('#consultaEst').children().attr('href',hrefconsultaEst);#}
 
                                 var hrefventa=""
                                 hrefventa = $('#venta').children().attr('href');
