@@ -2529,7 +2529,7 @@ class ConsultaController extends Controller
         if($idConsulta!=-1){
             $entity= $em->getRepository('DGPlusbelleBundle:Consulta')->find($idConsulta);
         }
-        var_dump($entity);
+//        var_dump($entity);
         $flag = 0;
         $cadena= $request->get('identidad');
         
