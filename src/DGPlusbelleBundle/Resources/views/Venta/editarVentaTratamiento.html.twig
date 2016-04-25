@@ -103,7 +103,7 @@
                         </div><!-- /.row -->
                     </div><!-- /.content-hero-bar -->
                 </div><!-- /.content-hero-bar --><!-- /.content-hero-bar --><!-- /.content-hero-bar --><!-- /.content-hero-bar --><!-- /.content-hero-bar -->
-                <div class="row" id="detalle-venta-info">
+                <div class="row" style="display: none;" {#id="detalle-venta-info"#}>
                     <div class="col-md-8" style="margin-left: 30px;">
                         <div class="row">
                             <div class="col-md-2" style="margin-bottom: 10px;">
@@ -200,17 +200,18 @@
                 </div>
                 {# Aquí se colocan los nombres de cada sección (tabs) #}    
                 <ul class="nav nav-tabs" style="margin-top: 30px;">
-                    <li class="active"><a data-toggle="tab" href="#datos-generales">Datos generales</a></li>
-                    <li><a data-toggle="tab" href="#registros-venta">Datos de la venta</a></li>
+                    <li><a data-toggle="tab" href="#datos-generales">Datos generales</a></li>
+                    <li class="active"><a data-toggle="tab" href="#registros-venta">Datos de la venta</a></li>
                     <li><a data-toggle="tab" href="#registro-sesiones" id="tabs-sesiones">Registro de sesiones</a></li>
-                    <li><a data-toggle="tab" href="#imagenes" id="tabs-imagenes">Imagenes</a></li>
+                    <li><a data-toggle="tab" href="#seguimiento-venta" id="tabs-seguimiento">Seguimiento de la venta</a></li>
                     <li><a data-toggle="tab" href="#abonos-devoluciones" id="tabs-abdev">Abonos{# / Devoluciones#}</a></li>
+                    <li><a data-toggle="tab" href="#imagenes" id="tabs-imagenes">Imagenes</a></li>
                 </ul>
                 
                 {# Aquí se encuentran las secciones de las tabs #}    
                 <div class="tab-content">
                     {# Sección en donde se registra la información general del paciente a quien se le va a efectuar la venta #}
-                    <div id="datos-generales" class="tab-pane fade in active" style="margin-top: 20px;">
+                    <div id="datos-generales" class="tab-pane fade" style="margin-top: 20px;">
                         <form id="formulario-datos-gnales" method="POST" enctype="multipart/form-data">
                             <div class="row" style="margin-top: 30px;">
                                 <div class="col-md-3" style="margin-left: 30px;">
@@ -347,7 +348,7 @@
                     </div>
                                    
                     {# Sección en donde se registran ventas de paqutes/tratamientos #}                
-                    <div id="registros-venta" class="tab-pane fade" style="margin-top: 20px;">
+                    <div id="registros-venta" class="tab-pane fade in active" style="margin-top: 20px;">
                         <form id="formulario-venta" method="POST" enctype="multipart/form-data">
                             <div class="row" style="margin-top: 30px;">
                                 {# Selección de qué tipo de venta se va a realizar #}    
@@ -495,6 +496,104 @@
                         <div class="row" style="margin-top: 50px;"></div>                
                     </div>
                     
+                    {# Sección en donde se muestra el seguimiento de la venta #}
+                    <div id="seguimiento-venta" class="tab-pane fade" style="margin-top: 20px;">
+                        <div class="row" style="margin-top: 30px;" id="detalle-venta-info">
+                            <div class="col-md-8" style="margin-left: 30px;">
+                                <div class="row">
+                                    <div class="col-md-2" style="margin-bottom: 10px;">
+                                        <strong>Costo:</strong>
+                                    </div>
+                                    <div class="col-md-2" style="margin-bottom: 10px;">
+                                        <span id="detalle-venta-costo">$ {{ personaTratamiento.costoConsulta|number_format(2, '.', ',') }}</span>
+                                    </div>
+                                {#</div>  
+                                <div class="row">#}
+                                    <div class="col-md-2" style="margin-bottom: 10px;">
+                                        <strong>Descuento:</strong>
+                                    </div>
+                                    <div class="col-md-2" style="margin-bottom: 10px;">
+                                        <span id="detalle-venta-cuotas">{{ personaTratamiento.descuento.porcentaje }}%</span>
+                                    </div>
+                                {#</div>  
+                                <div class="row">#}
+                                    <div class="col-md-2" style="margin-bottom: 10px;">
+                                        <strong>Deuda:</strong><span></span>
+                                    </div>
+                                    <div class="col-md-2" style="margin-bottom: 10px;">
+                                        {#data.query[0].costoTratamiento - ((data.query[0].porcentaje * data.query[0].costoTratamiento)/100)) - data.abonos.abonos).toFixed(2)#}
+                                        <span id="detalle-venta-deuda">$ {{ (( personaTratamiento.costoConsulta - (( personaTratamiento.descuento.porcentaje * personaTratamiento.costoConsulta ) / 100)) - abonos.abonos )|number_format(2, '.', ',') }}</span>
+                                    </div>
+                                </div>  
+                            </div>
+                            <div class="clearfix"></div>
+                            <div class="col-md-12" style="margin-bottom: 25px;">
+                                <hr>
+                            </div>
+                            <div class="col-md-7" style="margin-left: 30px;">
+                                <div class="row">
+                                    <div class="col-md-3" style="margin-bottom: 20px;">
+                                        <strong># de sesiones:</strong><span></span>
+                                    </div>
+                                    <div class="col-md-3" style="margin-bottom: 20px;">
+                                        <span id="detalle-venta-sesiones">{{ personaTratamiento.numSesiones }}</span>
+                                    </div>
+                                    <div class="col-md-1" style="margin-bottom: 20px;">
+                                        <img class='' style='height: 25px;'  src='{{ asset('Photos/Estados/sesion_realizada.png')}}' title='Sesion pendiente'>
+                                    </div>
+                                    <div class="col-md-2" style="margin-bottom: 20px;">
+                                        <span>Sesion realizada</span>
+                                    </div>
+                                    <div class="col-md-1" style="margin-bottom: 20px;">
+                                        <img class='' style='height: 25px;'  src='{{ asset('Photos/Estados/sesion_pendiente.png')}}' title='Sesion pendiente'>
+                                    </div>
+                                    <div class="col-md-2" style="margin-bottom: 20px;">
+                                        <span>Sesion pendiente</span>
+                                    </div>
+                                </div> 
+                                <div class="row">
+                                    <div class="col-md-12" style="margin-bottom: 10px;">
+                                        <hr>
+                                        <p class="text-center"><strong>Sesiones</strong></p>
+                                        <hr>
+                                    </div>
+                                </div> 
+                                <div id="detalle-venta-tratamientos">
+                                    <div class="row">
+                                        <div class="col-md-5" style="margin-bottom: 10px;">
+                                            <span>{{ personaTratamiento.tratamiento.nombre }}</span>
+                                        </div>
+                                        <div class="col-md-7" style="margin-bottom: 10px;">
+                                            <div class="row" id="seguimiento-detalle-sesiones">
+                                                {% set numSesion = seguimiento.numSesion %}
+                                                {% set pendientes = personaTratamiento.numSesiones - seguimiento.numSesion %}
+                                                {% if numSesion > 0 %}
+                                                    {% for i in 1..numSesion %}
+                                                        <div class="col-md-1" style="margin-bottom: 10px;">
+                                                            <img class="" style="height: 25px;"  src="{{ asset('Photos/Estados/sesion_realizada.png')}}" title="Sesion realizada">
+                                                        </div>
+                                                    {% endfor %}    
+                                                {% endif %}
+                                                {% if pendientes > 0 %}
+                                                    {% for i in 1..pendientes %}
+                                                        <div class="col-md-1" style="margin-bottom: 10px;">
+                                                            <img class="" style="height: 25px;"  src="{{ asset('Photos/Estados/sesion_pendiente.png')}}" title="Sesion pendiente">
+                                                        </div>
+                                                    {% endfor %}    
+                                                {% endif %}
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>    
+                                <div class="row">
+                                    <div class="col-md-12" style="margin-bottom: 10px;">
+                                        <hr>
+                                    </div>
+                                </div>             
+                            </div>
+                        </div>                            
+                    </div>                    
                     {# Sección en donde se encuentran las imagenes de un determinado tratamiento #}
                     <div id="imagenes" class="tab-pane fade" style="margin-top: 20px;">
                         <div class="row" style="margin-top: 35px; padding: 30px;">
@@ -626,8 +725,9 @@
         <script>
             var sesion_tratamiento = 0;
             var id_ventapaquete = 0;
+            var pendientes = {{ personaTratamiento.numSesiones - seguimiento.numSesion }};
             var id_ventatratamiento = {{ personaTratamiento.id}};
-            
+                        
             $(document).ready(function(){
                 {#var totalTratamientos = {{totalTratamientos}};
                 var totalPaquetes = {{totalPaquetes}};
@@ -989,39 +1089,44 @@
                         
                         return false;
                     } else if(id_ventatratamiento > 0){
-                        console.log(id_ventatratamiento);
-                        
-                        // Se obtiene la informacion necesaria para registrar la sesion
-                        var data = {
-                            id : id_ventatratamiento,
-                            sucursal : sucursal,
-                            empleado: empleado
-                        };
-                        
-                        // Se procede a registrar la sesion del tratamiento mediante ajax
-                        $.ajax({
-                            data:  data,
-                            url:   '{{path('admin_sesionventatratamiento_nuevo')}}',
-                            type:  'post',
-                            success:  function (response) {
-                                alertify.success('Se ha resgistrado con exito la sesion del tratamiento');
-                                
-                                for (var i = 0; i < response.seguimiento; i++) {
-                                    mensaje += '<div class="col-md-1" style="margin-bottom: 10px;">';
-                                    mensaje += '<img class="" style="height: 25px;"  src="{{ asset('Photos/Estados/sesion_realizada.png')}}" title="Sesion realizada">';
-                                    mensaje += '</div>';
+                        console.log(pendientes);
+                        if(pendientes >  0) {
+                            // Se obtiene la informacion necesaria para registrar la sesion
+                            var data = {
+                                id : id_ventatratamiento,
+                                sucursal : sucursal,
+                                empleado: empleado
+                            };
+
+                            // Se procede a registrar la sesion del tratamiento mediante ajax
+                            $.ajax({
+                                data:  data,
+                                url:   '{{path('admin_sesionventatratamiento_nuevo')}}',
+                                type:  'post',
+                                success:  function (response) {
+                                    alertify.success('Se ha resgistrado con exito la sesion del tratamiento');
+                                    
+                                    pendientes--;
+                                    for (var i = 0; i < response.seguimiento; i++) {
+                                        mensaje += '<div class="col-md-1" style="margin-bottom: 10px;">';
+                                        mensaje += '<img class="" style="height: 25px;"  src="{{ asset('Photos/Estados/sesion_realizada.png')}}" title="Sesion realizada">';
+                                        mensaje += '</div>';
+                                    }
+                                    for (var i = 0; i < response.personaTratamiento.sesiones - response.seguimiento; i++) {
+                                        mensaje += '<div class="col-md-1" style="margin-bottom: 10px;">';
+                                        mensaje += '<img class="" style="height: 25px;"  src="{{ asset('Photos/Estados/sesion_pendiente.png')}}" title="Sesion pendiente">';
+                                        mensaje += '</div>';
+                                    }
+
+                                    $('#seguimiento-detalle-sesiones').html(mensaje);
                                 }
-                                for (var i = 0; i < response.personaTratamiento.sesiones - response.seguimiento; i++) {
-                                    mensaje += '<div class="col-md-1" style="margin-bottom: 10px;">';
-                                    mensaje += '<img class="" style="height: 25px;"  src="{{ asset('Photos/Estados/sesion_pendiente.png')}}" title="Sesion pendiente">';
-                                    mensaje += '</div>';
-                                }
-                                
-                                $('#seguimiento-tratamientos-realizados').html(mensaje);
-                            }
-                        });
-                        
-                        return false;
+                            });
+
+                            return false;
+                        } else {
+                            bootbox.alert('No se puede realizar esta operacion. Se han realizado todas las sesiones de este tratamiento');
+                            return false;
+                        }                                
                     } else {
                         bootbox.alert('No se puede realizar esta operacion. No existe ninguna venta relacionada');
                         return false;
@@ -1031,7 +1136,7 @@
                 });
                 
                 // Al hacer click en guardar imagenes
-                $(document).on("click","#registro-sesiones-imagenes",function(){
+                $(document).on("click", "#registro-sesiones-imagenes", function(){
                     $("#prev").show();
         
                     $("#saveImagen").hide();

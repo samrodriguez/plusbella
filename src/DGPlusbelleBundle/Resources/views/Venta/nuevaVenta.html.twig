@@ -416,76 +416,16 @@
                 </div>
             </div>            
             <div class="row" id="tabla4"></div>#}
-                <div class="row" style="display:none;" id="detalle-venta-info">
-                    <div class="col-md-3" style="margin-left: 30px;">
-                        <div class="row">
-                            <div class="col-md-6" style="margin-bottom: 10px;">
-                                <strong>Costo:</strong>
-                            </div>
-                            <div class="col-md-6" style="margin-bottom: 10px;">
-                                <span id="detalle-venta-costo"></span>
-                            </div>
-                        </div>  
-                        <div class="row">
-                            <div class="col-md-6" style="margin-bottom: 10px;">
-                                <strong>Cuotas:</strong><span></span>
-                            </div>
-                            <div class="col-md-6" style="margin-bottom: 10px;">
-                                <span id="detalle-venta-cuotas"></span>
-                            </div>
-                        </div>  
-                        <div class="row">
-                            <div class="col-md-6" style="margin-bottom: 10px;">
-                                <strong>Deuda:</strong><span></span>
-                            </div>
-                            <div class="col-md-6" style="margin-bottom: 10px;">
-                                <span id="detalle-venta-deuda"></span>
-                            </div>
-                        </div>  
-                    </div>
-                    <div class="col-md-7" style="margin-left: 30px;">
-                        <div class="row">
-                            <div class="col-md-3" style="margin-bottom: 20px;">
-                                <strong># de sesiones:</strong><span></span>
-                            </div>
-                            <div class="col-md-3" style="margin-bottom: 20px;">
-                                <span id="detalle-venta-sesiones"></span>
-                            </div>
-                            <div class="col-md-1" style="margin-bottom: 20px;">
-                                <img class='' style='height: 25px;'  src='{{ asset('Photos/Estados/sesion_realizada.png')}}' title='Sesion pendiente'>
-                            </div>
-                            <div class="col-md-2" style="margin-bottom: 20px;">
-                                <span>Sesion realizada</span>
-                            </div>
-                            <div class="col-md-1" style="margin-bottom: 20px;">
-                                <img class='' style='height: 25px;'  src='{{ asset('Photos/Estados/sesion_pendiente.png')}}' title='Sesion pendiente'>
-                            </div>
-                            <div class="col-md-2" style="margin-bottom: 20px;">
-                                <span>Sesion pendiente</span>
-                            </div>
-                        </div> 
-                        <div class="row">
-                            <div class="col-md-12" style="margin-bottom: 10px;">
-                                <hr>
-                                <p class="text-center"><strong>Sesiones</strong></p>
-                                <hr>
-                            </div>
-                        </div> 
-                        <div id="detalle-venta-tratamientos"></div>    
-                        <div class="row">
-                            <div class="col-md-12" style="margin-bottom: 10px;">
-                                <hr>
-                            </div>
-                        </div>             
-                    </div>
-                </div>
+                <div class="row" style="display:none;" {#id="detalle-venta-info"#}></div>
+                
                 {# Aquí se colocan los nombres de cada sección (tabs) #}    
                 <ul class="nav nav-tabs" style="margin-top: 30px;">
                     <li class="active"><a data-toggle="tab" href="#datos-generales">Datos generales</a></li>
                     <li><a data-toggle="tab" href="#registros-venta">Registro de venta</a></li>
                     <li><a data-toggle="tab" href="#registro-sesiones" style="display:none;" id="tabs-sesiones">Registro de sesiones</a></li>
-                    <li><a data-toggle="tab" href="#imagenes" style="display:none;" id="tabs-imagenes">Imagenes</a></li>
+                    <li><a data-toggle="tab" href="#seguimiento-venta" style="display:none;" id="tabs-seguimiento">Seguimiento de la venta</a></li>
                     <li><a data-toggle="tab" href="#abonos-devoluciones" style="display:none;" id="tabs-abdev">Abonos{# / Devoluciones#}</a></li>
+                    <li><a data-toggle="tab" href="#imagenes" style="display:none;" id="tabs-imagenes">Imagenes</a></li>
                 </ul>
                 
                 {# Aquí se encuentran las secciones de las tabs #}    
@@ -801,31 +741,32 @@
                     
                     {# Sección en donde se encuentran las imagenes de un determinado tratamiento #}
                     <div id="imagenes" class="tab-pane fade" style="margin-top: 20px;">
-                        <div class="row" style="margin-top: 35px;" style="display:none;">
-                                <div class="col-md-3"  style="margin-left: 30px;">
-                                    {# Area en donde se selecciona la foto relacionada con la sesion de tratamiento #}    
-                                    <div id="sesiones-imagenes">
-                                        <p>
-                                        <strong>Subir imagen</strong>
-                                        <div class="row" style="margin-top:20px;">
-                                            <div class="col-md-12">
-                                                <form id="formImagen" enctype="multipart/form-data"  method="post">
-                                                    <input id="file-input" type="file" name="file">
-                                                    <input type="hidden" id="empresaId"  value="5" name="empresaId">
-                                                </form>
+                        <div class="row" style="margin-top: 35px; padding: 30px;" style="display:none;">
+                            <strong>Subir imagen</strong>
+                            <div class="row" style="margin-top:20px;">
+                                <div class="col-md-12">
+                                    <form id="formImagen" role="form" enctype="multipart/form-data" method="post">
+                                        <input id="file-input" required type="file" name="file[]" multiple>
+                                        <input type="hidden" id="idSesion" name="idSesion" class="form-control input-sm"/>
+                                    </form>
+                                </div>
+                            </div>
+                            
+                            <div class="row" style="margin-top:20px;">
+                                <div class="col-md-12">
+                                    <strong style="margin-top:80px;">Archivos adjuntos</strong>
+                                </div>    
+                                <div class="col-md-12">
+                                    <div id="listadoImagenes">
+                                        {#{% for imagen in archivos %}
+                                            <div class="col-md-2">
+                                                <a class="verImagen" href="{{ asset('Photos/Tmp/')}}{{imagen.fotoAntes}}">Imagen {{loop.index}}</a>
                                             </div>
-                                        </div>
-                                        <div class="row" style="margin-top:10px;">
-                                            <div class="col-md-12">
-                                                <hr>
-                                            </div>
-                                        </div>
-                                        <div class="row">
-                                        
-                                        </p>
+                                        {% endfor %}#}
                                     </div>
                                 </div>
                             </div>
+                        
                         </div>
                         <div class="row">
                             <div class="col-md-12 col-sm-12 text-center" style="margin-top: 30px; margin-bottom: 10px;" id="registrar-sesiones-imagenes">
@@ -835,6 +776,74 @@
                         </div>                
                     </div>
                     
+                    {# Sección en donde se muestra el seguimiento de la venta #}
+                    <div id="seguimiento-venta" class="tab-pane fade" style="margin-top: 20px;">
+                        <div class="row" style="margin-top: 30px;" id="detalle-venta-info">
+                            <div class="col-md-3" style="margin-left: 30px;">
+                                <div class="row">
+                                    <div class="col-md-6" style="margin-bottom: 10px;">
+                                        <strong>Costo:</strong>
+                                    </div>
+                                    <div class="col-md-6" style="margin-bottom: 10px;">
+                                        <span id="detalle-venta-costo"></span>
+                                    </div>
+                                </div>  
+                                <div class="row">
+                                    <div class="col-md-6" style="margin-bottom: 10px;">
+                                        <strong>Cuotas:</strong><span></span>
+                                    </div>
+                                    <div class="col-md-6" style="margin-bottom: 10px;">
+                                        <span id="detalle-venta-cuotas"></span>
+                                    </div>
+                                </div>  
+                                <div class="row">
+                                    <div class="col-md-6" style="margin-bottom: 10px;">
+                                        <strong>Deuda:</strong><span></span>
+                                    </div>
+                                    <div class="col-md-6" style="margin-bottom: 10px;">
+                                        <span id="detalle-venta-deuda"></span>
+                                    </div>
+                                </div>  
+                            </div>
+                            <div class="col-md-7" style="margin-left: 30px;">
+                                <div class="row">
+                                    <div class="col-md-3" style="margin-bottom: 20px;">
+                                        <strong># de sesiones:</strong><span></span>
+                                    </div>
+                                    <div class="col-md-3" style="margin-bottom: 20px;">
+                                        <span id="detalle-venta-sesiones"></span>
+                                    </div>
+                                    <div class="col-md-1" style="margin-bottom: 20px;">
+                                        <img class='' style='height: 25px;'  src='{{ asset('Photos/Estados/sesion_realizada.png')}}' title='Sesion pendiente'>
+                                    </div>
+                                    <div class="col-md-2" style="margin-bottom: 20px;">
+                                        <span>Sesion realizada</span>
+                                    </div>
+                                    <div class="col-md-1" style="margin-bottom: 20px;">
+                                        <img class='' style='height: 25px;'  src='{{ asset('Photos/Estados/sesion_pendiente.png')}}' title='Sesion pendiente'>
+                                    </div>
+                                    <div class="col-md-2" style="margin-bottom: 20px;">
+                                        <span>Sesion pendiente</span>
+                                    </div>
+                                </div> 
+                                <div class="row">
+                                    <div class="col-md-12" style="margin-bottom: 10px;">
+                                        <hr>
+                                        <p class="text-center"><strong>Sesiones</strong></p>
+                                        <hr>
+                                    </div>
+                                </div> 
+                                <div id="detalle-venta-tratamientos"></div>    
+                                <div class="row">
+                                    <div class="col-md-12" style="margin-bottom: 10px;">
+                                        <hr>
+                                    </div>
+                                </div>             
+                            </div>
+                        </div>
+                        <div class="row" style="margin-top: 50px;"></div>                
+                    </div>                
+                                    
                     {# Sección en donde se registran los abonos y devoluciones de un paquete o tratamiento #}
                     <div id="abonos-devoluciones" class="tab-pane fade" style="margin-top: 20px;">
                         <form id="formulario-sesiones-tratamiento" method="POST" enctype="multipart/form-data">
@@ -903,6 +912,7 @@
         <script>
             var id_ventapaquete = 0;
             var id_ventatratamiento = 0;
+            var pendientes = 0;
             
             $(document).ready(function(){
                 {#var totalTratamientos = {{totalTratamientos}};
@@ -1174,19 +1184,16 @@
                                                     alertify.success('Se ha resgistrado con exito la venta del paquete');
                                                     
                                                     var tabsSesiones = document.getElementById('tabs-sesiones');
-                                                    var tabsImagenes = document.getElementById('tabs-imagenes');
+                                                    //var tabsImagenes = document.getElementById('tabs-imagenes');
                                                     var tabsAbdev = document.getElementById('tabs-abdev');
                                                     var seguimientoSesionesTratamiento = document.getElementById('seguimiento-sesiones-tratamiento');
                                                     var detalleVentaInfo = document.getElementById('detalle-venta-info');
+                                                    var tabsSeguimiento = document.getElementById('tabs-seguimiento');
+                                                    tabsSeguimiento.style.display = 'block';
                                                     id_ventapaquete = response.ventaPaquete;
                                                     
                                                     // Se guarda el select que será utilizado para el llenado de tratamientos
                                                     var vtratamientos = $("#dgplusbellebundle_sesiones_tratamiento");
-                                                    
-                                                    {#$('#detalle-venta-costo').html();
-                                                    $('#detalle-venta-cuotas').html();
-                                                    $('#detalle-venta-deuda').html();
-                                                    $('#detalle-venta-sesiones').html();#}
                                                     
                                                     $('#detalle-venta-costo').html('$ ' + response.ventaPaqueteTratamientos.costo);
                                                     $('#detalle-venta-cuotas').html(response.ventaPaqueteTratamientos.cuotas);
@@ -1221,7 +1228,7 @@
                                                     });
                                                     
                                                     tabsSesiones.style.display = 'block';
-                                                    tabsImagenes.style.display = 'block';
+                                                    //tabsImagenes.style.display = 'block';
                                                     tabsAbdev.style.display = 'block';
                                                     seguimientoSesionesTratamiento.style.display = 'block';
                                                     detalleVentaInfo.style.display = 'block';
@@ -1280,10 +1287,12 @@
                                                     alertify.success('Se ha resgistrado con exito la venta del tratamiento');
                                                     
                                                     var tabsSesiones = document.getElementById('tabs-sesiones');
-                                                    var tabsImagenes = document.getElementById('tabs-imagenes');
+                                                    //var tabsImagenes = document.getElementById('tabs-imagenes');
                                                     var tabsAbdev = document.getElementById('tabs-abdev');
                                                     var detalleVentaInfo = document.getElementById('detalle-venta-info');
                                                     var costoTratamiento = response.personaTratamiento.costo;
+                                                    var tabsSeguimiento = document.getElementById('tabs-seguimiento');
+                                                    tabsSeguimiento.style.display = 'block';
                                                     id_ventatratamiento = response.personaTratamiento.id;
                                                     
                                                     $('#detalle-venta-costo').html('$ ' + costoTratamiento);
@@ -1298,6 +1307,8 @@
                                                     draw+= '<div class="col-md-7" style="margin-bottom: 10px;">';
                                                     draw+= '<div class="row" id ="seguimiento-tratamientos-realizados">';
                                                     
+                                                    pendientes = response.personaTratamiento.sesiones;
+                                                    
                                                     for (i = 0; i < response.personaTratamiento.sesiones; i++) {
                                                         draw+= '<div class="col-md-1" style="margin-bottom: 10px;">';
                                                         draw+= '<img class="" style="height: 25px;"  src="{{ asset('Photos/Estados/sesion_pendiente.png')}}" title="Sesion pendiente">';
@@ -1311,7 +1322,7 @@
                                                     $('#detalle-venta-tratamientos').html(draw);
                                                     
                                                     tabsSesiones.style.display = 'block';
-                                                    tabsImagenes.style.display = 'block';
+//                                                    tabsImagenes.style.display = 'block';
                                                     tabsAbdev.style.display = 'block';
                                                     detalleVentaInfo.style.display = 'block';
                                                     
@@ -1358,112 +1369,120 @@
                     var sesionesPaqueteTrata = new Array();
                     var tratamientos = new Array();
                     var flag = 0;
-                    var mensaje = '';
                     
                     if(id_ventapaquete > 0) {
-                        var tratamiento = $('#dgplusbellebundle_sesiones_tratamiento').val();
-                        
-                        var data = {
-                            id : id_ventapaquete,
-                            sucursal : sucursal,
-                            empleado: empleado,
-                            tratamiento: tratamiento
-                        };
-                        
-                        // Se procede a registrar la sesion del tratamiento mediante ajax
-                        $.ajax({
-                            data:  data,
-                            url:   '{{path('admin_sesiontratamiento_nuevo')}}',
-                            type:  'post',
-                            success:  function (response) {
-                                alertify.success('Se ha resgistrado con exito la sesion del tratamiento');
-                                
-                                var vtratamientos = $("#dgplusbellebundle_sesiones_tratamiento");
-                                
-                                $.each( response.ventaPaquete, function( key, value ) {
-                                    console.log(value);
-                                    mensaje+= '<div class="row">';
-                                    mensaje+= '<div class="col-md-5" style="margin-bottom: 10px;">';
-                                    mensaje+= '<span>' + value.ntrata + '</span>';
-                                    mensaje+= '</div>';
-                                    mensaje+= '<div class="col-md-7" style="margin-bottom: 10px;">';
-                                    mensaje+= '<div class="row">';
+                        $.post( "{{path('admin_evaluar_sesiones_paquete')}}", { id: id_ventapaquete }, function( data ) {
+                            var aux = 0;
+                            var total = data.query.length;
+
+                            // Calculando la deuda pendiente que tiene el paciente en el paquete seleccionado
+                            var deuda = ( (data.query[0].costoPaquete - ((data.query[0].porcentaje * data.query[0].costoPaquete)/100)) - data.abonos.abonos).toFixed(2);
+
+                            $.each( data.query, function( key, value ) {
+                               if(value.numSesion >= value.sesiones){
+                                    aux = aux + 1;
+                                }
+                            });   
+                            
+                            // Si exiten sesiones pendientes
+                            if(aux < total){
+                                // Si el paciente no tiene deuda pendiente en el paquete seleccionado
+                                if(deuda <= 0){
+                            
+                                    var tratamiento = $('#dgplusbellebundle_sesiones_tratamiento').val();
+
+                                    var datos = {
+                                        id : id_ventapaquete,
+                                        sucursal : sucursal,
+                                        empleado: empleado,
+                                        tratamiento: tratamiento
+                                    };
                                     
-                                    if(value.numSesion == 0){
-                                        console.log(value.numSesion);
-                                        for (var i = 0; i < value.sesiones; i++) {
-                                            mensaje += '<div class="col-md-1" style="margin-bottom: 10px;">';
-                                            mensaje += '<img class="" style="height: 25px;"  src="{{ asset('Photos/Estados/sesion_pendiente.png')}}" title="Sesion pendiente">';
-                                            mensaje += '</div>';
-                                        }    
-                                    } else {
-                                        console.log(value.numSesion);
-                                        for (var i = 0; i < value.numSesion; i++) {
-                                            mensaje += '<div class="col-md-1" style="margin-bottom: 10px;">';
-                                            mensaje += '<img class="" style="height: 25px;"  src="{{ asset('Photos/Estados/sesion_realizada.png')}}" title="Sesion realizada">';
-                                            mensaje += '</div>';
-                                        }
-                                        for (var i = 0; i < value.sesiones - value.numSesion; i++) {
-                                            mensaje += '<div class="col-md-1" style="margin-bottom: 10px;">';
-                                            mensaje += '<img class="" style="height: 25px;"  src="{{ asset('Photos/Estados/sesion_pendiente.png')}}" title="Sesion pendiente">';
-                                            mensaje += '</div>';
-                                        }
-                                    }
+                                    console.log(datos);
                                     
-                                    mensaje+= '</div>';
-                                    mensaje+= '</div>';
-                                    mensaje+= '</div>';
-                                });
-                                console.log(mensaje);
-                                //$('#seguimiento-tratamientos-realizados').html(mensaje);
-                                $('#detalle-venta-tratamientos').html(mensaje);
-                                
-                                // Se vacía el select
-                                vtratamientos.find('option').remove();
-                                vtratamientos.append('<option value="" disabled selected>Seleccione un tratamiento ...</option>');
-                                
-                                $(response.tratVenta).each(function(i, v){ 
-                                    vtratamientos.append('<option value="' + v.id + '">' + v.nombre + '</option>');
-                                });
-                                //$('#dgplusbellebundle_sesiones_tratamiento option[value=""]').attr("selected",true);
+                                    nuevaSesionPaqueteTratamiento(datos);
+                                    return false;
+                                    
+                                // Si el paciente tiene deuda pendiente en el paquete seleccionado        
+                                } else {
+                                    bootbox.confirm({ title: 'Confirmación de registro de nueva sesión',
+                                        message: 'El paciente tiene  una deuda de $' + deuda + ', en éste paquete ¿Desea continuar?',
+                                        buttons: {
+                                            'cancel': {
+                                                label: 'Cancelar',
+                                                className: 'btn-default pull-left'
+                                            },
+                                            'confirm': {
+                                                label: 'Aceptar',
+                                                className: 'btn-primary pull-right'
+                                            }
+                                        },
+                                        callback: function(result) {
+                                            // Si acepta continuar con el registro de una nueva sesion de tratamiento
+                                            if(result == true){
+                                                var tratamiento = $('#dgplusbellebundle_sesiones_tratamiento').val();
+
+                                                var datos = {
+                                                    id : id_ventapaquete,
+                                                    sucursal : $('#dgplusbellebundle_venta_sucursal').val(),
+                                                    empleado: $('#dgplusbellebundle_venta_empleado').val(),
+                                                    tratamiento: tratamiento
+                                                };
+                                                
+                                                nuevaSesionPaqueteTratamiento(datos);
+                                                return false;                                                
+                                            }
+                                        }
+                                    });
+                                }
+                            } else {
+                                bootbox.alert('Se han completado las sesiones, no se puede registrar una nueva sesion en el paquete');
                             }
-                        });
-                        
-                        return false;
+                            
+                        }, "json"); // Fin de post        
                     } else if(id_ventatratamiento > 0){
-                        console.log(id_ventatratamiento);
-                        
-                        // Se obtiene la informacion necesaria para registrar la sesion
-                        var data = {
-                            id : id_ventatratamiento,
-                            sucursal : sucursal,
-                            empleado: empleado
-                        };
-                        
-                        // Se procede a registrar la sesion del tratamiento mediante ajax
-                        $.ajax({
-                            data:  data,
-                            url:   '{{path('admin_sesionventatratamiento_nuevo')}}',
-                            type:  'post',
-                            success:  function (response) {
-                                alertify.success('Se ha resgistrado con exito la sesion del tratamiento');
-                                
-                                for (var i = 0; i < response.seguimiento; i++) {
-                                    mensaje += '<div class="col-md-1" style="margin-bottom: 10px;">';
-                                    mensaje += '<img class="" style="height: 25px;"  src="{{ asset('Photos/Estados/sesion_realizada.png')}}" title="Sesion realizada">';
-                                    mensaje += '</div>';
+                        //console.log(id_ventatratamiento);
+                        if(pendientes > 0){
+                            // Se obtiene la informacion necesaria para registrar la sesion
+                            var data = {
+                                id : id_ventatratamiento,
+                                sucursal : sucursal,
+                                empleado: empleado
+                            };
+
+                            // Se procede a registrar la sesion del tratamiento mediante ajax
+                            $.ajax({
+                                data:  data,
+                                url:   '{{path('admin_sesionventatratamiento_nuevo')}}',
+                                type:  'post',
+                                success:  function (response) {
+                                    alertify.success('Se ha resgistrado con exito la sesion del tratamiento');
+
+                                    var tabsImagenes = document.getElementById('tabs-imagenes');
+                                    tabsImagenes.style.display = 'block';
+                                    //var tabsSeguimiento = document.getElementById('tabs-seguimiento');
+
+                                    pendientes--;
+                                    for (var i = 0; i < response.seguimiento; i++) {
+                                        mensaje += '<div class="col-md-1" style="margin-bottom: 10px;">';
+                                        mensaje += '<img class="" style="height: 25px;"  src="{{ asset('Photos/Estados/sesion_realizada.png')}}" title="Sesion realizada">';
+                                        mensaje += '</div>';
+                                    }
+                                    for (var i = 0; i < response.personaTratamiento.sesiones - response.seguimiento; i++) {
+                                        mensaje += '<div class="col-md-1" style="margin-bottom: 10px;">';
+                                        mensaje += '<img class="" style="height: 25px;"  src="{{ asset('Photos/Estados/sesion_pendiente.png')}}" title="Sesion pendiente">';
+                                        mensaje += '</div>';
+                                    }
+
+                                    $('#seguimiento-tratamientos-realizados').html(mensaje);
                                 }
-                                for (var i = 0; i < response.personaTratamiento.sesiones - response.seguimiento; i++) {
-                                    mensaje += '<div class="col-md-1" style="margin-bottom: 10px;">';
-                                    mensaje += '<img class="" style="height: 25px;"  src="{{ asset('Photos/Estados/sesion_pendiente.png')}}" title="Sesion pendiente">';
-                                    mensaje += '</div>';
-                                }
-                                
-                                $('#seguimiento-tratamientos-realizados').html(mensaje);
-                            }
-                        });
-                        
-                        return false;
+                            });
+
+                            return false;
+                        } else {
+                            bootbox.alert('No se puede realizar esta operacion. Se han realizado todas las sesiones de este tratamiento');
+                            return false;
+                        }    
                     } else {
                         bootbox.alert('No se puede realizar esta operacion. No existe ninguna venta relacionada');
                         return false;
@@ -1484,10 +1503,12 @@
 
                         //obtenemos un array con los datos del archivo
                         var file = $('#file-input')[0].files[0];
+                        
                         //obtenemos el nombre del archivo
                         var idSesion =$('#idSesion').val();
-                        //alert(idconsulta);
+                        
                         var fileName = file.name;
+                        
                         //obtenemos la extensión del archivo
                         fileExtension = fileName.substring(fileName.lastIndexOf('.') + 1);
                         //obtenemos el tamaño del archivo
@@ -1863,6 +1884,77 @@
 	});             
     };
     </script>
+    
+    <script>
+        // Se procede a registrar la sesion del tratamiento mediante ajax
+        function nuevaSesionPaqueteTratamiento(data){
+            var mensaje = '';
+            //console.log(data);
+            
+            $.ajax({
+                data:  data,
+                url:   '{{path('admin_sesiontratamiento_nuevo')}}',
+                type:  'post',
+                success:  function (response) {
+                    alertify.success('Se ha resgistrado con exito la sesion del tratamiento');
+                    $('.close').click();
+                    var tabsImagenes = document.getElementById('tabs-imagenes');
+                    tabsImagenes.style.display = 'block';
+
+                    var vtratamientos = $("#dgplusbellebundle_sesiones_tratamiento");
+                    $('#idSesion').val(id_ventatratamiento);
+
+                    $.each( response.ventaPaquete, function( key, value ) {
+                        //console.log(value);
+                        mensaje+= '<div class="row">';
+                        mensaje+= '<div class="col-md-5" style="margin-bottom: 10px;">';
+                        mensaje+= '<span>' + value.ntrata + '</span>';
+                        mensaje+= '</div>';
+                        mensaje+= '<div class="col-md-7" style="margin-bottom: 10px;">';
+                        mensaje+= '<div class="row">';
+
+                        if(value.numSesion == 0){
+                            //console.log(value.numSesion);
+                            for (var i = 0; i < value.sesiones; i++) {
+                                mensaje += '<div class="col-md-1" style="margin-bottom: 10px;">';
+                                mensaje += '<img class="" style="height: 25px;"  src="{{ asset('Photos/Estados/sesion_pendiente.png')}}" title="Sesion pendiente">';
+                                mensaje += '</div>';
+                            }    
+                        } else {
+                            console.log(value.numSesion);
+                            for (var i = 0; i < value.numSesion; i++) {
+                                mensaje += '<div class="col-md-1" style="margin-bottom: 10px;">';
+                                mensaje += '<img class="" style="height: 25px;"  src="{{ asset('Photos/Estados/sesion_realizada.png')}}" title="Sesion realizada">';
+                                mensaje += '</div>';
+                            }
+                            for (var i = 0; i < value.sesiones - value.numSesion; i++) {
+                                mensaje += '<div class="col-md-1" style="margin-bottom: 10px;">';
+                                mensaje += '<img class="" style="height: 25px;"  src="{{ asset('Photos/Estados/sesion_pendiente.png')}}" title="Sesion pendiente">';
+                                mensaje += '</div>';
+                            }
+                        }
+
+                        mensaje+= '</div>';
+                        mensaje+= '</div>';
+                        mensaje+= '</div>';
+                    });
+                    console.log(mensaje);
+                    //$('#seguimiento-tratamientos-realizados').html(mensaje);
+                    $('#detalle-venta-tratamientos').html(mensaje);
+
+                    // Se vacía el select
+                    vtratamientos.find('option').remove();
+                    vtratamientos.append('<option value="" disabled selected>Seleccione un tratamiento ...</option>');
+
+                    $(response.tratVenta).each(function(i, v){ 
+                        vtratamientos.append('<option value="' + v.id + '">' + v.nombre + '</option>');
+                    });
+                    //$('#dgplusbellebundle_sesiones_tratamiento option[value=""]').attr("selected",true);
+                }
+            });
+        }
+    </script> 
+    
     <script>  
         function nuevaSesionTratamiento(id){
             $.post( "{{path('admin_evaluar_sesiones_paquete')}}", { id: id }, function( data ) {
