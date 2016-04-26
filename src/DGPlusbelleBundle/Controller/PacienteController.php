@@ -731,14 +731,14 @@ class PacienteController extends Controller
 //                
 //                END AS detalles FROM listadoexpediente WHERE expediente='".strtoupper($busqueda['value'])."' ORDER BY fecha DESC LIMIT ".$start.",".$longitud;
             
-            $sql = "SELECT fecha as fecha,transaccion,atendido,realizado, 
+            $sql = "SELECT id as id, fecha as fecha,transaccion,atendido,realizado, 
                 CASE
                 WHEN transaccion='Consulta' AND atendido = 'JUAN CARLOS PACHECO CARDONA' THEN CONCAT('<a id=\"',idtransaccion,'\" class=\"link_ SD\">', 'Ver detalles</a>',' <a class=\"pull-right link\" id=\"',idtransaccion,'\">Eliminar consulta</a>')
                 WHEN transaccion='Consulta' AND atendido = 'MILDRED LARA DE PACHECO' THEN CONCAT('<a id=\"',idtransaccion,'\" class=\"link_ SD\">', 'Ver detalles</a>',' <a class=\"pull-right link\" id=\"',idtransaccion,'\">Eliminar consulta</a>')
                 WHEN transaccion = 'Venta paquete' THEN CONCAT('<a id=\"',idtransaccion,'\" class=\"link_ paquete\">', 'Ver detalles</a>')
                 ELSE CONCAT('<a id=\"',idtransaccion,'\" class=\"link_ tratamiento\">', 'Ver detalles</a>')
                 
-                END AS detalles FROM listadoexpediente WHERE expediente='".strtoupper($busqueda['value'])."' ORDER BY fecha DESC LIMIT ".$start.",".$longitud;
+                END AS detalles FROM listadoexpediente WHERE expediente='".strtoupper($busqueda['value'])."' ORDER BY fecha DESC, idtransaccion DESC LIMIT ".$start.",".$longitud;
         
             $em = $this->getDoctrine()->getManager();
             $stmt = $em->getConnection()->prepare($sql);

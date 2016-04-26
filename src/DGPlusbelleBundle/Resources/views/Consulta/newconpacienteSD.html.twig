@@ -114,7 +114,7 @@
                         <p class="mb-4x text-light">
                             <span class="mr-1x" id="expediente">
                                 <i class="fa fa-clipboard"></i> {#{{ expediente }}#}
-                                {{paciente.expediente[0].numero}}
+                                <a style="color:#FFF;text-decoration: underline;" href="{{path('admin_consulta_expediente_sd',{id:paciente.expediente[0].numero})}}">{{paciente.expediente[0].numero}}</a>
                             </span>
                             <span class="mr-2x" id="ocupacionPaciente">
                                 <i class="fa fa-briefcase"></i>
@@ -717,13 +717,13 @@
                             
                             <div class="row" style="margin-top:20px;">
                                 <strong style="margin-top:80px;">Archivos adjuntos</strong>
-                                <div class="col-md-12">
+                                <div class="col-md-12" id="listadoImagenes">
                                     {% for imagen in archivos %}
-                                        <div class="col-md-2">
-                                            <a class="verImagen" href="{{ asset('Photos/Tmp/')}}{{imagen.foto}}">Imagen {{loop.index}}</a>
+                                        <div class="col-md-2" style="margin-top:10px;">
+                                            <a class="verImagen" href="{{ asset('Photos/Tmp/')}}{{imagen.foto}}">
+                                            <img src="{{ asset('Photos/Tmp/')}}{{imagen.foto}}"></a>
                                         </div>
                                     {% endfor %}
-                                    
                                 </div>
                             </div>
                             
@@ -2708,6 +2708,10 @@
             show_select_today: "Hoy",
         });
             
+        $('#dui').mask('00000000-0');  
+        $('#telefono1').mask('0000-0000'); 
+        $('#telefono2').mask('0000-0000'); 
+        $('#telefonoEmergencia').mask('0000-0000'); 
         $(document).on('click','.selectPlantilla', function(){
             var valorPlantilla=$(this).val();
             console.log(valorPlantilla);
@@ -3302,7 +3306,8 @@
                                         console.log(data);
                                         console.log(data.length);
                                         for(i=0;i<data.length;i++){
-                                            $('#listadoImagenes').append('<div class=\"col-md-2\"><a class=\"verImagen\" href=\"{{ asset('Photos/Tmp/')}}'+data[i][1]+'\">Imagen '+(data[i][0]+(i+1))+' </a></div>');
+{#                                            $('#listadoImagenes').append('<div class=\"col-md-2\"><a class=\"verImagen\" href=\"{{ asset('Photos/Tmp/')}}'+data[i][1]+'\">Imagen '+(data[i][0]+(i+1))+' </a></div>');#}
+                                            $('#listadoImagenes').append('<div style=\"margin-top:10px;\"  class=\"col-md-2\"><a class=\"verImagen\" href=\"{{ asset('Photos/Tmp/')}}'+data[i][1]+'\"><img src=\"{{ asset('Photos/Tmp/')}}'+data[i][1]+'\"></a></div>');
                                         }
                                     },
                                     error: function(data){
@@ -3322,6 +3327,12 @@
         else{
             bootbox.alert('Debe ingresar una consulta antes de subir fotos!');
         }
+        });
+        
+        $(document).on('click', '.verImagen', function(){
+            var url = $(this).attr('href');
+            window.open(url, "_blank");
+            return false;
         });
         
         $(document).on('click','#guardarReceta', function(){
