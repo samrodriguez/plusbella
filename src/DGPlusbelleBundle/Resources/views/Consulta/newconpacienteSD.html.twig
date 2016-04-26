@@ -721,7 +721,7 @@
                                     {% for imagen in archivos %}
                                         <div class="col-md-2" style="margin-top:10px;">
                                             <a class="verImagen" href="{{ asset('Photos/Tmp/')}}{{imagen.foto}}">
-                                            <img src="{{ asset('Photos/Tmp/')}}{{imagen.foto}}"></a>
+                                            <img style="width:100%;" src="{{ asset('Photos/Tmp/')}}{{imagen.foto}}"></a>
                                         </div>
                                     {% endfor %}
                                 </div>
@@ -3307,7 +3307,7 @@
                                         console.log(data.length);
                                         for(i=0;i<data.length;i++){
 {#                                            $('#listadoImagenes').append('<div class=\"col-md-2\"><a class=\"verImagen\" href=\"{{ asset('Photos/Tmp/')}}'+data[i][1]+'\">Imagen '+(data[i][0]+(i+1))+' </a></div>');#}
-                                            $('#listadoImagenes').append('<div style=\"margin-top:10px;\"  class=\"col-md-2\"><a class=\"verImagen\" href=\"{{ asset('Photos/Tmp/')}}'+data[i][1]+'\"><img src=\"{{ asset('Photos/Tmp/')}}'+data[i][1]+'\"></a></div>');
+                                            $('#listadoImagenes').append('<div style=\"margin-top:10px;\"  class=\"col-md-2\"><a class=\"verImagen\" href=\"{{ asset('Photos/Tmp/')}}'+data[i][1]+'\"><img style=\"width:100%;\" src=\"{{ asset('Photos/Tmp/')}}'+data[i][1]+'\"></a></div>');
                                         }
                                     },
                                     error: function(data){

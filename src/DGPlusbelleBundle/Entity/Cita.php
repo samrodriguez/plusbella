@@ -107,6 +107,19 @@ class Cita
      */
     private $horaFin;
 
+    
+    
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="descripcion", type="string", nullable=false)
+     */
+    private $descripcion;
+    
+    
+    
+    
+    
     /**
      * Get id
      *
@@ -235,6 +248,32 @@ class Cita
     public function getEstado()
     {
         return $this->estado;
+    }
+    
+    
+    
+    /**
+     * Set descripcion
+     *
+     * @param boolean $descripcion
+     *
+     * @return Cita
+     */
+    public function setDescripcion($descripcion)
+    {
+        $this->descripcion= $descripcion;
+
+        return $this;
+    }
+
+    /**
+     * Get descripcion
+     *
+     * @return boolean
+     */
+    public function getDescripcion()
+    {
+        return $this->descripcion;
     }
 
     /**
