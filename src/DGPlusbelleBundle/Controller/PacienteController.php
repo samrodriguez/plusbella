@@ -10,6 +10,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use DGPlusbelleBundle\Entity\Paciente;
+use DGPlusbelleBundle\Entity\Persona;
 use DGPlusbelleBundle\Entity\Signos;
 use DGPlusbelleBundle\Entity\Consulta;
 use DGPlusbelleBundle\Entity\Expediente;
@@ -332,7 +333,7 @@ class PacienteController extends Controller
         
         //Generacion del numero de expediente
 //        $numeroExp = $nombre[0].$apellido[0].date("Y");
-        $numeroExp = substr($nombre, 0,1).substr($apellido, 0,1).date("Y");
+        //$numeroExp = substr($nombre, 0,1).substr($apellido, 0,1).date("Y");
         $numeroExp = "EX";
 
         $dql = "SELECT COUNT(exp)+1 FROM DGPlusbelleBundle:Expediente exp WHERE exp.numero LIKE :numero";
@@ -1357,6 +1358,142 @@ class PacienteController extends Controller
             //'entities' => $entities,
             'pacientes' => $pacientes,
         );
+    }
+    
+    
+    
+    
+    
+    /**
+     * @Route("/crearpaciente/ajax/cita", name="crear_paciente_cita_ajax", options={"expose"=true})
+     * @Method("POST")
+     */
+    public function crearPacienteAction(Request $request) {
+        
+        $paciente = new Paciente();
+        $persona = new Persona();
+        $expediente = new Expediente();
+        
+        $nombre = $request->get('nombre');
+        $apellidos = $request->get('apellidos');
+        $telefono = $request->get('telefono');
+        $telefono2 = $request->get('telefono2');
+        $direccion = $request->get('direccion');
+        $email = $request->get('email');
+        $dui = $request->get('dui');
+        $estadoCivil= $request->get('estadoCivil');
+        $sexo = $request->get('sexo');
+        $ocupacion = $request->get('ocupacion');
+        $lugarTrabajo = $request->get('lugarTrabajo');
+        $fechaNacimiento = $request->get('fechaNacimiento');
+        $referidoPor = $request->get('referidoPor');
+        $personaEmergencia = $request->get('personaEmergencia');
+        $telefonoEmergencia = $request->get('telefonoEmergencia');
+        
+        
+        $persona->setNombres($nombre);
+        $persona->setApellidos($apellidos);
+        $persona->setTelefono($telefono);
+        $persona->setTelefono2($telefono2);
+        $persona->setDireccion($direccion);
+        $persona->setEmail($email);
+        $paciente->setDui($dui);
+        $paciente->setEstadoCivil($estadoCivil);
+        $paciente->setSexo($sexo);
+        $paciente->setOcupacion($ocupacion);
+        $paciente->setLugarTrabajo($lugarTrabajo);
+        $paciente->setFechaNacimiento($fechaNacimiento);
+        $paciente->setReferidoPor($referidoPor);
+        $paciente->setPersonaEmergencia($personaEmergencia);
+        $paciente->setTelefonoEmergencia($telefonoEmergencia);
+        
+        $em = $this->getDoctrine()->getEntityManager();
+        
+        
+        $em->persist($persona);
+        $em->flush();
+        $paciente->setPersona($persona);
+        $paciente->setFechaRegistro(new \DateTime('now'));
+        $paciente->setFechaNacimiento(null);
+        $paciente->setEstado(1);
+        
+        $em->persist($paciente);
+        $em->flush();
+        $this->generarExpediente($paciente);
+        $num = $paciente->getId();
+        
+        return new Response(json_encode($num));
+    }
+    
+    
+    
+    
+    
+    
+    
+    
+    /**
+     * @Route("/crearpaciente/ajax/verExpediente", name="crear_paciente_expediente_ajax", options={"expose"=true})
+     * @Method("POST")
+     */
+    public function crearPacienteExpedienteAction(Request $request) {
+        
+        $paciente = new Paciente();
+        $persona = new Persona();
+        $expediente = new Expediente();
+        
+        $nombre = $request->get('nombre');
+        $apellidos = $request->get('apellidos');
+        $telefono = $request->get('telefono');
+        $telefono2 = $request->get('telefono2');
+        $direccion = $request->get('direccion');
+        $email = $request->get('email');
+        $dui = $request->get('dui');
+        $estadoCivil= $request->get('estadoCivil');
+        $sexo = $request->get('sexo');
+        $ocupacion = $request->get('ocupacion');
+        $lugarTrabajo = $request->get('lugarTrabajo');
+        $fechaNacimiento = $request->get('fechaNacimiento');
+        $referidoPor = $request->get('referidoPor');
+        $personaEmergencia = $request->get('personaEmergencia');
+        $telefonoEmergencia = $request->get('telefonoEmergencia');
+        
+        
+        $persona->setNombres($nombre);
+        $persona->setApellidos($apellidos);
+        $persona->setTelefono($telefono);
+        $persona->setTelefono2($telefono2);
+        $persona->setDireccion($direccion);
+        $persona->setEmail($email);
+        $paciente->setDui($dui);
+        $paciente->setEstadoCivil($estadoCivil);
+        $paciente->setSexo($sexo);
+        $paciente->setOcupacion($ocupacion);
+        $paciente->setLugarTrabajo($lugarTrabajo);
+        $paciente->setFechaNacimiento($fechaNacimiento);
+        $paciente->setReferidoPor($referidoPor);
+        $paciente->setPersonaEmergencia($personaEmergencia);
+        $paciente->setTelefonoEmergencia($telefonoEmergencia);
+        
+        $em = $this->getDoctrine()->getEntityManager();
+        
+        
+        $em->persist($persona);
+        $em->flush();
+        $paciente->setPersona($persona);
+        $paciente->setFechaRegistro(new \DateTime('now'));
+        $paciente->setFechaNacimiento(null);
+        $paciente->setEstado(1);
+        
+        $em->persist($paciente);
+        $em->flush();
+        $this->generarExpediente($paciente);
+        $id = $paciente->getId();
+        $expedienteNum = $em->getRepository('DGPlusbelleBundle:Expediente')->findBy(array('paciente'=>$id));
+        
+        $num = $expedienteNum[0]->getNumero();
+        
+        return new Response(json_encode($num));
     }
     
 }

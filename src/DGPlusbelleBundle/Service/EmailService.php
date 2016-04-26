@@ -53,5 +53,26 @@ class EmailService
         $email->setBody($body); 
         $this->mail->send($email);
     }
+    
+    public function sendEmailReminder($subject,$to, $cc, $bcc,$replay, $body){
+        $email = \Swift_Message::newInstance();
+        $email->setContentType('text/html');                    
+        $email->setFrom($this->from);
+        $email->setTo($to);
+        if($cc != null ){
+        $email->setCc($cc);
+        }
+        if($replay != null ){
+        $email->setReplyTo($replay);
+        }else{
+        $email->setReplyTo('system@digitalitygarage.com');            
+        }
+        if($bcc != null ){
+        $email->setBcc($bcc);
+        }
+        $email->setSubject($subject);  
+        $email->setBody($body); 
+        $this->mail->send($email);
+    }
 
 }
