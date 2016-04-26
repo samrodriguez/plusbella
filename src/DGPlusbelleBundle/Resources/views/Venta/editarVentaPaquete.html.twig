@@ -357,7 +357,7 @@
                         <div class="row" style="margin-top: 50px;"></div>            
                     </div>
                                    
-                    {# Sección en donde se edita la informacion de la venta del paquetes #}                
+                    {# Sección en donde se registran ventas de paqutes/tratamientos #}                
                     <div id="registros-venta" class="tab-pane fade in active" style="margin-top: 20px;">
                         <form id="formulario-venta" method="POST" enctype="multipart/form-data">
                             <div class="row" style="margin-top: 30px;">
@@ -545,14 +545,13 @@
                                     </div>
                                     <div class="col-md-2" style="margin-bottom: 10px;">
                                         <span id="detalle-venta-deuda">$ {{ (( ventaPaquete.costo - (( ventaPaquete.descuento.porcentaje * ventaPaquete.costo ) / 100)) - abonos.abonos )|number_format(2, '.', ',') }}</span>
-                                        {#<span id="detalle-venta-deuda">$ {{ ventaPaquete.costo|number_format(2, '.', ',') }}</span>#}
                                     </div>
                                 </div>  
                             </div>
-                            <div class="clearfix"></div>  
+                            <div class="clearfix"></div>
                             <div class="col-md-12" style="margin-bottom: 25px;">
                                 <hr>
-                            </div>    
+                            </div>
                             <div class="col-md-7" style="margin-left: 30px;">
                                 <div class="row">
                                     <div class="col-md-6" style="margin-bottom: 20px;">
@@ -585,51 +584,63 @@
                                         <hr>
                                     </div>
                                 </div> 
-                                    <div id="detalle-venta-tratamientos">
-                                        {% for vpaquete in sesionesVenta %}
-                                            <div class="row">
-                                                <div class="col-md-5" style="margin-bottom: 10px;">
-                                                    <span>{{ vpaquete.ntrata }}</span>
-                                                </div>
-                                                <div class="col-md-7" style="margin-bottom: 10px;">
-                                                    <div class="row">
-                                                        {% set pendientes = vpaquete.sesiones - vpaquete.numSesion %}
-                                                        {% if vpaquete.numSesion == 0 %}
-                                                            {% for i in 1..vpaquete.sesiones %}
+                                <div id="detalle-venta-tratamientos">
+                                    {% for vpaquete in sesionesVenta %}
+                                        <div class="row">
+                                            <div class="col-md-5" style="margin-bottom: 10px;">
+                                                <span>{{ vpaquete.ntrata }}</span>
+                                            </div>
+                                            <div class="col-md-7" style="margin-bottom: 10px;">
+                                                <div class="row">
+                                                    {% set pendientes = vpaquete.sesiones - vpaquete.numSesion %}
+                                                    {% if vpaquete.numSesion == 0 %}
+                                                        {% for i in 1..vpaquete.sesiones %}
+                                                            <div class="col-md-1" style="margin-bottom: 10px;">
+                                                                <img class="" style="height: 25px;"  src="{{ asset('Photos/Estados/sesion_pendiente.png')}}" title="Sesion pendiente">
+                                                            </div>
+                                                        {% endfor %}
+                                                    {% else %} 
+                                                        {% for i in 1..vpaquete.numSesion %}
+                                                            <div class="col-md-1" style="margin-bottom: 10px;">
+                                                                <img class="" style="height: 25px;"  src="{{ asset('Photos/Estados/sesion_realizada.png')}}" title="Sesion realizada">
+                                                            </div>
+                                                        {% endfor %}
+                                                        {% if pendientes > 0 %}
+                                                            {% for i in 1..pendientes %}
                                                                 <div class="col-md-1" style="margin-bottom: 10px;">
                                                                     <img class="" style="height: 25px;"  src="{{ asset('Photos/Estados/sesion_pendiente.png')}}" title="Sesion pendiente">
                                                                 </div>
                                                             {% endfor %}
-                                                        {% else %} 
-                                                            {% for i in 1..vpaquete.numSesion %}
-                                                                <div class="col-md-1" style="margin-bottom: 10px;">
-                                                                    <img class="" style="height: 25px;"  src="{{ asset('Photos/Estados/sesion_realizada.png')}}" title="Sesion realizada">
-                                                                </div>
-                                                            {% endfor %}
-                                                            {% if pendientes > 0 %}
-                                                                {% for i in 1..pendientes %}
-                                                                    <div class="col-md-1" style="margin-bottom: 10px;">
-                                                                        <img class="" style="height: 25px;"  src="{{ asset('Photos/Estados/sesion_pendiente.png')}}" title="Sesion pendiente">
-                                                                    </div>
-                                                                {% endfor %}
-                                                            {% endif %}     
-                                                        {% endif %}    
-                                                    </div>
+                                                        {% endif %}     
+                                                    {% endif %}    
                                                 </div>
                                             </div>
-                                        {% endfor %}
-                                    </div>    
+                                        </div>
+                                    {% endfor %}
+                                </div>    
                                 <div class="row">
                                     <div class="col-md-12" style="margin-bottom: 10px;">
                                         <hr>
                                     </div>
                                 </div>             
                             </div>
-                        </div>
-                        </div>
-                    </div>
+                        </div>                            
+                    </div>                    
                     {# Sección en donde se encuentran las imagenes de un determinado tratamiento #}
                     <div id="imagenes" class="tab-pane fade" style="margin-top: 20px;">
+                        {#<div class="row" style="margin-top: 35px; padding: 30px;">
+                            <div class="col-md-3 pull-center" id="imagenes-sesiones-tratamiento">
+                                <div id="sesiones-tratamiento">
+                                    <label>Tratamiento</label>
+                                    <select id="dgplusbellebundle_imagenes_tratamiento" name="dgplusbellebundle_venta_imagenes[tratamiento]" class="sesion_tratamiento" style="width: 100%">
+                                        <option value="" disabled selected>Seleccione un tratamiento...</option>
+                                        {% for tratamiento in tratVenta %}
+                                            <option value="{{tratamiento.id}}"> {{tratamiento.nombre}}</option>
+                                        {% endfor %}
+                                    </select>    
+                                </div>    
+                            </div>
+                        </div>#}
                         <div class="row" style="margin-top: 35px; padding: 30px;">
                                 <strong>Subir imagen</strong>
                             <div class="row" style="margin-top:20px;">
@@ -666,14 +677,14 @@
                                         {% endfor %}
                                     </div>
                                 </div>
-                            </div>
+                            </div>                       
                         </div>
                         <div class="row">
                             <div class="col-md-12 col-sm-12 text-center" style="margin-top: 30px; margin-bottom: 10px;" id="registrar-sesiones-imagenes">
                                 <hr>
                                 <input type="submit" value="Guardar imagenes" style="margin-bottom: 10px; background-color: #39a58a; color: #FFF;" class="btn" id="registro-sesiones-imagenes"/>
                             </div>    
-                        </div>              
+                        </div>                
                     </div>
                     
                     {# Sección en donde se registran los abonos y devoluciones de un paquete o tratamiento #}
@@ -729,7 +740,7 @@
                                     <hr>
                                     <input type="submit" value="Registrar abono" style="margin-bottom: 10px; background-color: #39a58a; color: #FFF;" class="btn" id="registro-abono"/>
                                 </div>    
-                            </div>              
+                            </div>             
                         </form>
                         <div class="row" style="margin-top: 50px;"></div>          
                     </div>
@@ -1170,6 +1181,18 @@
                 
                 // Al hacer click en guardar imagenes
                 $(document).on("click","#registro-sesiones-imagenes",function(){
+                    {#var datosgenerales = document.getElementById('datos-generales');
+                    var sesiones = document.getElementById('registro-sesiones');
+                    var registroventa = document.getElementById('registro-venta');
+                    var abonosdevoluciones = document.getElementById('abonos-devoluciones');
+                    var seguimiento = document.getElementById('seguimiento-venta');
+                    
+                    datosgenerales.style.display = 'none';
+                    sesiones.style.display = 'none';
+                    registroventa.style.display = 'none';
+                    abonosdevoluciones.style.display = 'none';
+                    seguimiento.style.display = 'none';#}
+                
                     $("#prev").show();
                     $("#saveImagen").hide();
 
@@ -1269,7 +1292,9 @@
                         success:  function (response) {
                             alertify.success('Se ha resgistrado con exito un abono del paquete');
                             var deuda_pte = (response.costo - ((response.descuento * response.costo)/100) - response.abonos).toFixed(2);
-                            
+                            {#console.log(deuda_pte);
+                            console.log(response.costo - ((response.descuento * response.costo)/100));
+                            console.log(response.abonos);#}
                             $('#detalle-venta-deuda').html('$ ' + deuda_pte);
                             return false;
                         }

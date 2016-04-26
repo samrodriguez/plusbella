@@ -1516,8 +1516,8 @@
 
                         //obtenemos el tipo de archivo image/png ejemplo
                         var fileType = file.type;
-                        console.log(fileType);
-                        console.log(fileExtension);
+                        //console.log(fileType);
+                        //console.log(fileExtension);
                         if (fileExtension == 'PNG' || fileExtension == 'png' ||fileExtension == 'JPG'|| fileExtension == 'jpg' && fileType =='imagen' || fileType =='image' || fileType =='image/jpeg' )
                         {
                             flag = true;
@@ -1606,7 +1606,9 @@
                             type:  'post',
                             success:  function (response) {
                                 alertify.success('Se ha resgistrado con exito un abono del paquete');
-
+                                var deuda_pte = (response.costo - ((response.descuento * response.costo)/100) - response.abonos).toFixed(2);
+                                
+                                $('#detalle-venta-deuda').html('$ ' + deuda_pte);
                                 return false;
                             }
                         });
@@ -1630,7 +1632,9 @@
                             type:  'post',
                             success:  function (response) {
                                 alertify.success('Se ha resgistrado con exito un abono del tratamiento');
-
+                                var deuda_pte = (response.costo - ((response.descuento * response.costo)/100) - response.abonos).toFixed(2);
+                            
+                                $('#detalle-venta-deuda').html('$ ' + deuda_pte);
                                 return false;
                             }
                         });
