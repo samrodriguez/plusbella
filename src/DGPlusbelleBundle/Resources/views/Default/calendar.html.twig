@@ -529,12 +529,17 @@ $(document).ready(function() {
                                         callback: function() {
                                             var evento = calendario.fullCalendar('clientEvents',startDate.id);
                                             var tituloEvento = "";
+                                            var id=0;
                                             console.log(evento);
                                             console.log(evento.id);
                                             Object.keys(evento).forEach(function (key) {
                                                     tituloEvento = evento[key].title;
-                                                    console.log(evento[key].id);
-                                                    $.getJSON(Routing.generate('admin_cita_reminder', { id: evento[key].id}), 
+                                                    console.log();
+                                                    id=evento[key].id;
+                                                    
+                                                });
+                                            console.log(id);
+                                            $.getJSON(Routing.generate('admin_cita_reminder', { id: id}), 
                                                         function(data) {
                                                             var mensaje = "";
                                                             console.log(data);
@@ -558,7 +563,6 @@ $(document).ready(function() {
                                                                 });
                                                             }
                                                         });
-                                                });
                                         }
                                     },
                                     danger: {

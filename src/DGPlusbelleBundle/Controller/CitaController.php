@@ -1010,13 +1010,13 @@ class CitaController extends Controller
      */
     public function reminderAction(Request $request)
     {
-        $entity = new Cita();
-        
+//        $entity = new Cita();
+//        
         $em = $this->getDoctrine()->getManager();
-        
-        //Recuperación del paciente
-        $request = $this->getRequest();
-        
+//        
+//        //Recuperación del paciente
+//        $request = $this->getRequest();
+//        
         $id = $request->get('id');
         
 //        var_dump($id);
@@ -1030,12 +1030,11 @@ class CitaController extends Controller
         $persona = $paciente->getPersona();
         $email = $persona->getEmail();
         $EmailFrom = "escalon@laplusbelle.com.sv";
-        $EmailTo = "mario@digitalitygarage.com";
+        //$EmailTo = "mario@digitalitygarage.com";
 
-        $Subject = "Alguien quiere contactarte";
-        $Nombre = "Name"; 
-        $Email = "dsc"; 
-        $Mensaje = "asdcadsc"; 
+        $Subject = "Recordatorio cita";
+        
+        
 
         // validation
         $validationOK=true;
@@ -1045,55 +1044,47 @@ class CitaController extends Controller
         }
 
         // prepare email body text
-        $Body = "";
-        $Body .= "Nombre: ";
-        $Body .= $Nombre;
-        $Body .= "\n";
-        $Body .= "Email: ";
-        $Body .= $Email;
-        $Body .= "\n";
-        $Body .= "Mensaje: ";
-        $Body .= $Mensaje;
-        $Body .= "\n";
+//        $Body = "prueba";
+        $Body = "Saludos, ".$persona->getNombres()." ".$persona->getApellidos().". Este correo es un recordatorio de tu cita el día ".$citaObj->getFechaCita()->format('d-m-Y')." a las ".$citaObj->getHoraCita()->format('H:i')."";
+        
+        
+//        $Body = "<table style=\"width: 540px; margin: 0 auto;\">
+//                                            <tr>
+//                                                <td>
+//                                                    <div class=\"pull-left\">
+//                                                      <img style=\"width:80%;\" src=\"http://www.laplusbelle.com.sv/recursos/img/logo.jpg\">
+//                                                    </div>
+//                                                </td>
+//                                                <td>  
+//                                                    <div class=\"pull-right\">
+//                                                      <img style=\"width:80%;float:right;\" src=\"http://www.laplusbelle.com.sv/recursos/img/logo.jpg\">
+//                                                    </div>
+//                                                </td>
+//                                            </tr>
+//                                            <tr>
+//                                                <td colspan=\"2\">
+//                                                    <p>Saludos, ".$persona->getNombres()." ".$persona->getApellidos()."</p>
+//                                                    <p>Este correo es un recordatorio de tu cita el día <strong>".$citaObj->getFechaCita()->format('d-m-Y')."</strong> a las <strong>".$citaObj->getHoraCita()->format('H:i')."</strong>. Para mayor información de contacto visita el siguiente link. <a href=\"http://www.laplusbelle.com.sv/contactanos.php\">Más información</a> </p>
+//                                                </td>
+//                                            </tr>
+//                                        </table>";
 
         // send email 
-        $success = mail($EmailTo, $Subject, $Body, "From: <$EmailFrom>");
+        
 
         // redirect to success page 
-        if ($success){
-          
-        }
-        else{
-          
-        }
+//        if ($success){
+//          $flag=0;
+//        }
+//        else{
+//          $flag=1;
+//        }
 //        var_dump($email);
 //        die();
         // 0 para indicar correo no enviado
         if($email !=''){
             //enviar correo
-            $this->get('envio_correo')->sendEmailReminder("Recordatorio de cita",$email,"","","",
-                                    "
-                                        <table style=\"width: 540px; margin: 0 auto;\">
-                                            <tr>
-                                                <td>
-                                                    <div class=\"pull-left\">
-                                                      <img style=\"width:80%;\" src=\"http://www.laplusbelle.com.sv/recursos/img/logo.jpg\">
-                                                    </div>
-                                                </td>
-                                                <td>  
-                                                    <div class=\"pull-right\">
-                                                      <img style=\"width:80%;float:right;\" src=\"http://www.laplusbelle.com.sv/recursos/img/logo.jpg\">
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td colspan=\"2\">
-                                                    <p>Saludos, ".$persona->getNombres()." ".$persona->getApellidos()."</p>
-                                                    <p>Este correo es un recordatorio de tu cita el día <strong>".$citaObj->getFechaCita()->format('d-m-Y')."</strong> a las <strong>".$citaObj->getHoraCita()->format('H:i')."</strong>. Para mayor información de contacto visita el siguiente link. <a href=\"http://www.laplusbelle.com.sv/contactanos.php\">Más información</a> </p>
-                                                </td>
-                                            </tr>
-                                        </table>
-                                    ");
+            $success = mail($email, $Subject, $Body, "From: <$EmailFrom>");
             $flag=0; //correo enviado
         }
         else{
