@@ -1001,7 +1001,110 @@ class CitaController extends Controller
     }
     
     
-    
+    /**
+     * Displays a form to create a new Cita entity.
+     *
+     * @Route("/recordatorio/cita", name="admin_cita_reminder", options={"expose"=true})
+     * @Method("GET")
+     * @Template()
+     */
+    public function reminderAction(Request $request)
+    {
+        $entity = new Cita();
+        
+        $em = $this->getDoctrine()->getManager();
+        
+        //Recuperación del paciente
+        $request = $this->getRequest();
+        
+        $id = $request->get('id');
+        
+//        var_dump($id);
+        //die();  
+        //var_dump($hora);
+        
+        //$id = substr($cadena, 1);
+        
+        $citaObj = $em->getRepository('DGPlusbelleBundle:Cita')->find($id);
+        $paciente = $citaObj->getPaciente();
+        $persona = $paciente->getPersona();
+        $email = $persona->getEmail();
+        $EmailFrom = "escalon@laplusbelle.com.sv";
+        $EmailTo = "mario@digitalitygarage.com";
+
+        $Subject = "Alguien quiere contactarte";
+        $Nombre = "Name"; 
+        $Email = "dsc"; 
+        $Mensaje = "asdcadsc"; 
+
+        // validation
+        $validationOK=true;
+        if (!$validationOK) {
+          print "<meta http-equiv=\"refresh\" content=\"0;URL=error.htm\">";
+          exit;
+        }
+
+        // prepare email body text
+        $Body = "";
+        $Body .= "Nombre: ";
+        $Body .= $Nombre;
+        $Body .= "\n";
+        $Body .= "Email: ";
+        $Body .= $Email;
+        $Body .= "\n";
+        $Body .= "Mensaje: ";
+        $Body .= $Mensaje;
+        $Body .= "\n";
+
+        // send email 
+        $success = mail($EmailTo, $Subject, $Body, "From: <$EmailFrom>");
+
+        // redirect to success page 
+        if ($success){
+          
+        }
+        else{
+          
+        }
+//        var_dump($email);
+//        die();
+        // 0 para indicar correo no enviado
+        if($email !=''){
+            //enviar correo
+            $this->get('envio_correo')->sendEmailReminder("Recordatorio de cita",$email,"","","",
+                                    "
+                                        <table style=\"width: 540px; margin: 0 auto;\">
+                                            <tr>
+                                                <td>
+                                                    <div class=\"pull-left\">
+                                                      <img style=\"width:80%;\" src=\"http://www.laplusbelle.com.sv/recursos/img/logo.jpg\">
+                                                    </div>
+                                                </td>
+                                                <td>  
+                                                    <div class=\"pull-right\">
+                                                      <img style=\"width:80%;float:right;\" src=\"http://www.laplusbelle.com.sv/recursos/img/logo.jpg\">
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td colspan=\"2\">
+                                                    <p>Saludos, ".$persona->getNombres()." ".$persona->getApellidos()."</p>
+                                                    <p>Este correo es un recordatorio de tu cita el día <strong>".$citaObj->getFechaCita()->format('d-m-Y')."</strong> a las <strong>".$citaObj->getHoraCita()->format('H:i')."</strong>. Para mayor información de contacto visita el siguiente link. <a href=\"http://www.laplusbelle.com.sv/contactanos.php\">Más información</a> </p>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    ");
+            $flag=0; //correo enviado
+        }
+        else{
+            //No tiene correo en el sistema
+            $flag=1;
+        }
+        
+        
+        
+        return new Response(json_encode($flag));
+    }
     
     
     
