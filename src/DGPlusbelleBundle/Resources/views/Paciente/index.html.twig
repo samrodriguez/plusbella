@@ -278,7 +278,11 @@
                         success: function (data) {
                             if(data!=0){
                                 bootbox.alert("Paciente guardado, en unos momentos se cargara el expediente del paciente!", function() {});
-                                var url = "{{path('admin_consulta_expediente_sd')}}"+"?id="+data;
+                                console.log(data);
+                                var cadena = data.replace('"','');
+                                cadena = cadena.replace('"','');
+                                console.log(cadena);
+                                var url = "{{path('admin_consulta_expediente_sd',{id:''})}}"+cadena;
                                 window.location = url;
                             }
                             else{
