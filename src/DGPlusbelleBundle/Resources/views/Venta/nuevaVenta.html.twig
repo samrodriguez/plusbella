@@ -675,6 +675,17 @@
                                     </div>
                                 </div>        
                             </div>
+                            <div class="row">
+                                <div id="vventa-observaciones" class="col-md-7 col-sm-7" style="margin-top: 30px; margin-bottom: 10px; display:none;">
+                                    <div id="venta-observaciones-label" style="margin-left: 30px;">
+                                        <label>Observaciones</label>
+                                    </div> 
+                                    <div class="clearfix"></div>
+                                    <div id="observaciones" style="margin-left: 30px;">
+                                        <textarea rows="4" cols="100" name="dgplusbellebundle_abono[observaciones]" id="dgplusbellebundle_venta_observaciones" class="form-control"></textarea> 
+                                    </div>     
+                                </div>    
+                            </div>             
                             <div class="row" style="margin-top: 50px;">
                                 <hr id="hr-tratamientos-paquete" class="hide">
                                 <div class="col-md-6 col-md-offset-2">
@@ -969,6 +980,7 @@
                     var descuentoVenta = document.getElementById('descuento-venta');
                     var cuotasVenta = document.getElementById('cuotas-venta');
                     var registrarVenta = document.getElementById('registrar-venta');
+                    //var observaciones = document.getElementById('vventa-observaciones');
                     
                     ventaPaquete.style.display = 'block';
                     ventaTratamiento.style.display = 'none';
@@ -979,11 +991,13 @@
                     descuentoVenta.style.display = 'block';
                     cuotasVenta.style.display = 'block';
                     registrarVenta.style.display = 'block';
+                    //observaciones.style.display = 'block';
                     
                     $('#dgplusbellebundle_venta_costo').val('');
                     $('#dgplusbellebundle_venta_cuotas').val('');
                     $('#dgplusbellebundle_venta_descuento').val('');
                     $('#dgplusbellebundle_venta_paquete').val('');
+                    $('#vventa-observaciones').show();
                 });
                 
                 // Al hacer click en la opcion de tipo de venta de tratamiento
@@ -998,6 +1012,7 @@
                     var cuotasVenta = document.getElementById('cuotas-venta');
                     var registrarVenta = document.getElementById('registrar-venta');
                     var tratamientosPaquete = document.getElementById('tratamientos-paquete');
+                    var observaciones = document.getElementById('vventa_observaciones');
                     
                     ventaPaquete.style.display = 'none';
                     ventaTratamiento.style.display = 'block';
@@ -1009,6 +1024,7 @@
                     cuotasVenta.style.display = 'block';
                     registrarVenta.style.display = 'block';
                     tratamientosPaquete.style.display = 'none';
+                    observaciones.style.display = 'block';
                     
                     $('#dgplusbellebundle_venta_costo').val('');
                     $('#dgplusbellebundle_venta_cuotas').val('');
@@ -1195,6 +1211,7 @@
                                                     //bootbox.alert('Se ha resgistrado con exito la venta del paquete ' + response.paquete);
                                                     alertify.success('Se ha resgistrado con exito la venta del paquete');
                                                     $('#num-label-ses').hide();
+                                                    
                                                     var tabsSesiones = document.getElementById('tabs-sesiones');
                                                     //var tabsImagenes = document.getElementById('tabs-imagenes');
                                                     var tabsAbdev = document.getElementById('tabs-abdev');

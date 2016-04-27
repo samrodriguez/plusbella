@@ -111,7 +111,7 @@
                                 <strong>Costo:</strong>
                             </div>
                             <div class="col-md-2" style="margin-bottom: 10px;">
-                                <span id="detalle-venta-costo">$ {{ personaTratamiento.costoConsulta|number_format(2, '.', ',') }}</span>
+                                <span id="detalles-venta-costo">$ {{ personaTratamiento.costoConsulta|number_format(2, '.', ',') }}</span>
                             </div>
                         {#</div>  
                         <div class="row">#}
@@ -142,7 +142,7 @@
                                 <strong># de sesiones:</strong><span></span>
                             </div>
                             <div class="col-md-3" style="margin-bottom: 20px;">
-                                <span id="detalle-venta-sesiones">{{ personaTratamiento.numSesiones }}</span>
+                                <span id="detalles-venta-sesiones">{{ personaTratamiento.numSesiones }}</span>
                             </div>
                             <div class="col-md-1" style="margin-bottom: 20px;">
                                 <img class='' style='height: 25px;'  src='{{ asset('Photos/Estados/sesion_realizada.png')}}' title='Sesion pendiente'>
@@ -992,6 +992,24 @@
                                             var detalleVentaInfo = document.getElementById('detalle-venta-info');
                                             var costoTratamiento = response.personaTratamiento.costo;
                                             id_ventatratamiento = response.personaTratamiento.id;
+                                            var mensaje = '';
+                                            console.log(costoTratamiento);
+                                            $('#detalle-venta-costo').html('$ ' + costoTratamiento);
+                                            $('#detalle-venta-costo').html('$ ' + costoTratamiento);
+                                            $('#detalle-venta-sesiones').html(response.personaTratamiento.sesiones);
+                                            
+                                            for (var i = 0; i < response.seguimiento; i++) {
+                                                mensaje += '<div class="col-md-1" style="margin-bottom: 10px;">';
+                                                mensaje += '<img class="" style="height: 25px;"  src="{{ asset('Photos/Estados/sesion_realizada.png')}}" title="Sesion realizada">';
+                                                mensaje += '</div>';
+                                            }
+                                            for (var i = 0; i < response.personaTratamiento.sesiones - response.seguimiento; i++) {
+                                                mensaje += '<div class="col-md-1" style="margin-bottom: 10px;">';
+                                                mensaje += '<img class="" style="height: 25px;"  src="{{ asset('Photos/Estados/sesion_pendiente.png')}}" title="Sesion pendiente">';
+                                                mensaje += '</div>';
+                                            }
+
+                                            $('#seguimiento-detalle-sesiones').html(mensaje);
                                             
                                         }
                                     });
