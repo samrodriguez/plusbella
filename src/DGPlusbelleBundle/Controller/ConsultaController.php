@@ -2911,14 +2911,14 @@ class ConsultaController extends Controller
                         //var_dump($value['area_inyectar']);
                         //die();
                         //var_dump($value);
-                            echo $key;
+//                            echo $key;
                         if($key<8){    
                             $index = intval($key)%8;
-                            echo "-".$index;
+//                            echo "-".$index;
 }                       else{
                             $index = (intval($key)-1)%7;
                         }
-                            echo "index: ".$index."d";
+//                            echo "index: ".$index."d";
                             switch($index){
                                 case 0:
                                     $botox->setAreaInyectar($value);
