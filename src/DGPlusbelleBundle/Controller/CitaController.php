@@ -689,7 +689,7 @@ class CitaController extends Controller
         
         $dql = "SELECT c.id,exp.numero, pac.nombres, pac.apellidos, t.nombre as nombreTratamiento,
                 per.nombres as primerNombreEmp, per.apellidos as primerApellidoEmp, 
-                c.fechaCita, c.horaCita,c.horaFin, c.estado
+                c.fechaCita, c.horaCita,c.horaFin, c.estado, c.descripcion
                     FROM DGPlusbelleBundle:Cita c
                     JOIN c.empleado emp
                     JOIN c.tratamiento t

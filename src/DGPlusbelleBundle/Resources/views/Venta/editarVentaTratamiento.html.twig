@@ -74,7 +74,8 @@
                                             <h2 class="media-heading text-light">{{ paciente.persona.nombres}} {{ paciente.persona.apellidos}}</h2>
                                             <p class="mb-4x text-light">
                                                 <span class="mr-1x" id="expediente">
-                                                    <i class="fa fa-clipboard"></i> {{ expediente }}
+                                                    <i class="fa fa-clipboard"></i> {#{{ expediente }}#}
+                                                    <a style="color:#FFF;text-decoration: underline;" href="{{path('admin_consulta_expediente_sd',{id:paciente.expediente[0].numero})}}">{{paciente.expediente[0].numero}}</a>
                                                 </span>
 
                                                 <span class="mr-1x" id="telefono">

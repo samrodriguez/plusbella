@@ -695,6 +695,7 @@ class PacienteController extends Controller
         //var_dump($busqueda);
         //die();
         $arrayFiltro = explode(' ',$busqueda['value']);
+        
         //var_dump($longitud);
         //echo count($arrayFiltro);
         $busqueda['value'] = str_replace(' ', '%', $busqueda['value']);
@@ -752,7 +753,7 @@ class PacienteController extends Controller
             
             
         }
-        else{ 
+        else{
 //            $sql = "SELECT * FROM listadoexpediente ORDER BY fecha DESC LIMIT ".$start.",".$longitud;
 //        
 //            $em = $this->getDoctrine()->getManager();

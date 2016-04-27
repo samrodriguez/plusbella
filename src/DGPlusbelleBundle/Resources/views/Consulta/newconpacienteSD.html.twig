@@ -3183,59 +3183,77 @@
 
 
                     if(idConsulta!=''){
-                        $.ajax({
-                            data:{id:id,valores:valores,idConsulta:idConsulta,idParameters:idParameters,idEstetica:idEstetica
-                            },
-
-                            url:"{{path('admin_consulta_insert_plantilla')}}",
-
-                            type: "post",
-                            success: function (data) {
-                                    //inicio = data.inicio++;
-                                    if(data==0){
-                                        {#var iTel='<i class="fa fa-phone"></i>';
-                                        var dir='<i class="fa fa-map-marker fa-fw"></i>';
-                                        var ocup = '<i class="fa fa-briefcase"></i>';
-                                        $('#telefono').html(iTel+" "+telefono1);
-                                        $('#direccionD').html(dir+" "+direccion);
-
-
-                                        $('#nombrePaciente').html(nombres+" "+apellidos);
-                                        $('#ocupacionPaciente').html(ocup+" "+ocupacion);#}
-                                        //$('#idPlantilla').hide();
-                                        $('#camposPlantilla').hide();
-                                        $('.opcionHistorial').hide();
-                                        $('#guardarPlantilla').hide();
-
-                                        alertify.success("Plantilla guardada!");
-
-                                    }
-                                    else{
-                                        $('.camposPlantilla').hide();
-                                        $('.opcionHistorial').hide();
-                                        $('.selectPlantilla').hide();
-                                        $('.labelPlantilla').hide();
-
-                                        $('#planOpciones').hide();
-                                        $('#historialPrevPDF').hide();
-                                        $('#historialPrevPDF').prev().hide();
-
-                                        $('#dgplusbellebundle_consulta_plantilla').hide();
-                                        $('#dgplusbellebundle_consulta_plantilla').next().hide();
-
-                                        $('#guardarPlantilla').hide();
-                                        alertify.success("Cambios guardados!");
-                                        console.log("otro mensaje");
-                                    }
-
-                                    {#console.log("pagina actual: "+data);
-                                    console.log("Inicio de registro: "+data.inicioRegistro);#}
-                                },
-                            error: function (data) {
-
-
+                        
+                        var i=0;
+                        $('.cbotox').each(function(index,element){
+                            var valorbotox = $(this).val();
+                            
+                            if(valorbotox == "") {
+                                i++;
                             }
+                            
                         });
+                        
+                        
+                        if(i==0){
+                            $.ajax({
+                                data:{id:id,valores:valores,idConsulta:idConsulta,idParameters:idParameters,idEstetica:idEstetica
+                                },
+
+                                url:"{{path('admin_consulta_insert_plantilla')}}",
+
+                                type: "post",
+                                success: function (data) {
+                                        //inicio = data.inicio++;
+                                        if(data==0){
+                                            {#var iTel='<i class="fa fa-phone"></i>';
+                                            var dir='<i class="fa fa-map-marker fa-fw"></i>';
+                                            var ocup = '<i class="fa fa-briefcase"></i>';
+                                            $('#telefono').html(iTel+" "+telefono1);
+                                            $('#direccionD').html(dir+" "+direccion);
+
+
+                                            $('#nombrePaciente').html(nombres+" "+apellidos);
+                                            $('#ocupacionPaciente').html(ocup+" "+ocupacion);#}
+                                            //$('#idPlantilla').hide();
+                                            $('#camposPlantilla').hide();
+                                            $('.opcionHistorial').hide();
+                                            $('#guardarPlantilla').hide();
+
+                                            alertify.success("Plantilla guardada!");
+
+                                        }
+                                        else{
+                                            $('.camposPlantilla').hide();
+                                            $('.opcionHistorial').hide();
+                                            $('.selectPlantilla').hide();
+                                            $('.labelPlantilla').hide();
+
+                                            $('#planOpciones').hide();
+                                            $('#historialPrevPDF').hide();
+                                            $('#historialPrevPDF').prev().hide();
+
+                                            $('#dgplusbellebundle_consulta_plantilla').hide();
+                                            $('#dgplusbellebundle_consulta_plantilla').next().hide();
+
+                                            $('#guardarPlantilla').hide();
+                                            alertify.success("Cambios guardados!");
+                                            console.log("otro mensaje");
+                                        }
+
+                                        {#console.log("pagina actual: "+data);
+                                        console.log("Inicio de registro: "+data.inicioRegistro);#}
+                                    },
+                                error: function (data) {
+
+
+                                }
+                            });
+                        }
+                        else{
+                            bootbox.alert('No debe de dejar en blanco ningun detalle de consulta de botox');
+                        }
+                            
                     }
                     else{
                         bootbox.alert("Debe ingresar una consulta primero!", function() {});
