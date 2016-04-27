@@ -740,9 +740,9 @@ class PacienteController extends Controller
                 WHEN transaccion = 'Venta paquete' THEN CONCAT('<a id=\"',idtransaccion,'\" class=\"link_ paquete\">', 'Ver detalles</a>')
                 ELSE CONCAT('<a id=\"',idtransaccion,'\" class=\"link_ tratamiento\">', 'Ver detalles</a>')
                 
-                END AS detalles FROM listadoexpediente WHERE expediente='".strtoupper($busqueda['value'])."' ORDER BY fecha DESC, idtransaccion DESC LIMIT ".$start.",".$longitud;
+                END AS detalles FROM listadoexpediente WHERE expediente='".strtoupper($busqueda['value'])."' ORDER BY fecha DESC LIMIT ".$start.",".$longitud;
         
-            $em = $this->getDoctrine()->getManager();
+//            $em = $this->getDoctrine()->getManager();
             $stmt = $em->getConnection()->prepare($sql);
             $stmt->execute();
             $paciente['data'] = $stmt->fetchAll();
