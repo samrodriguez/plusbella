@@ -88,6 +88,11 @@ class CitaType extends AbstractType
                     'attr'=>array(
                     'class'=>'form-control input-sm sucursalEmpleado'
                     )))
+                               
+            ->add('descripcion','textarea',array('label' => 'Descripcion','required'=>false,
+                    'attr'=>array(
+                    'class'=>'form-control input-sm descripcionCita'
+                    )))
         ;
     }
     
