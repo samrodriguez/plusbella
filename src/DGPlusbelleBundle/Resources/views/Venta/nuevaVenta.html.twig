@@ -796,14 +796,14 @@
                                         <span id="detalle-venta-cuotas"></span>
                                     </div>
                                 </div>  
-                                <div class="row">
+                                {#<div class="row">
                                     <div class="col-md-6" style="margin-bottom: 10px;">
                                         <strong>Total a cancelar:</strong><span></span>
                                     </div>
                                     <div class="col-md-6" style="margin-bottom: 10px;">
                                         <span id="detalle-venta-total-can"></span>
                                     </div>
-                                </div> 
+                                </div> #}
                                 <div class="row">
                                     <div class="col-md-6" style="margin-bottom: 10px;">
                                         <strong>Deuda:</strong><span></span>
@@ -816,7 +816,7 @@
                             <div class="col-md-7" style="margin-left: 30px;">
                                 <div class="row">
                                     <div class="col-md-3" style="margin-bottom: 20px;">
-                                        <strong># de sesiones:</strong><span></span>
+                                            <strong id="num-label-ses"># de sesiones:</strong><span></span>
                                     </div>
                                     <div class="col-md-3" style="margin-bottom: 20px;">
                                         <span id="detalle-venta-sesiones"></span>
@@ -1193,7 +1193,7 @@
                                                 success:  function (response) {
                                                     //bootbox.alert('Se ha resgistrado con exito la venta del paquete ' + response.paquete);
                                                     alertify.success('Se ha resgistrado con exito la venta del paquete');
-                                                    
+                                                    $('#num-label-ses').hide();
                                                     var tabsSesiones = document.getElementById('tabs-sesiones');
                                                     //var tabsImagenes = document.getElementById('tabs-imagenes');
                                                     var tabsAbdev = document.getElementById('tabs-abdev');
@@ -1211,8 +1211,8 @@
                                                     console.log(totalpagar);
                                                     $('#detalle-venta-costo').html('$ ' + response.ventaPaqueteTratamientos.costo);
                                                     $('#detalle-venta-cuotas').html(response.ventaPaqueteTratamientos.cuotas);
-                                                    $('#detalle-venta-deuda').html('$ ' + response.ventaPaqueteTratamientos.totalpagar);
-                                                    $('#detalle-venta-total-can').html('$ ' + totalpagar);
+                                                    $('#detalle-venta-deuda').html('$ ' + response.ventaPaqueteTratamientos.costo);
+                                                    //$('#detalle-venta-total-can').html('$ ' + totalpagar);
                                                     $.each( response.ventaPaqueteTratamientos.nomTratamientos, function( key, value ) {
                                                         draw+= '<div class="row">';
                                                         draw+= '<div class="col-md-5" style="margin-bottom: 10px;">';
