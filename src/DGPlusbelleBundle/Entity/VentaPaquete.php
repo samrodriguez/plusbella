@@ -43,6 +43,13 @@ class VentaPaquete
     private $costo;
     
     /**
+     * @var string
+     *
+     * @ORM\Column(name="observaciones", type="string", length=1000, nullable=true)
+     */
+    private $observaciones; 
+    
+    /**
      * @var integer
      *
      * @ORM\Column(name="estado", type="integer", nullable=false)
@@ -201,6 +208,30 @@ class VentaPaquete
     public function getCosto()
     {
         return $this->costo;
+    }
+    
+    /**
+     * Set observaciones
+     *
+     * @param string $observaciones
+     *
+     * @return VentaPaquete
+     */
+    public function setObservaciones($observaciones)
+    {
+        $this->observaciones = $observaciones;
+
+        return $this;
+    }
+
+    /**
+     * Get observaciones
+     *
+     * @return string
+     */
+    public function getObservaciones()
+    {
+        return $this->observaciones;
     }
     
     /**

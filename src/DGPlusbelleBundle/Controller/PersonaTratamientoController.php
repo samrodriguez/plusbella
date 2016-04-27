@@ -444,6 +444,14 @@ class PersonaTratamientoController extends Controller
             $em->merge($personatratamiento);
             $em->flush();
             
+            $seguimiento = $em->getRepository('DGPlusbelleBundle:SeguimientoTratamiento')->findOneBy(array('idPersonaTratamiento' => $personatratamiento->getId()));
+            
+            $sesionTratamiento = array(
+                                        'id' => $personatratamiento->getId(), 
+                                        'sesiones' => $personatratamiento->getNumSesiones(), 
+                                        'nomTrata' => $personatratamiento->getTratamiento()->getNombre()
+                                    );
+            
             $ventaTratamiento = array(
                                         'id' => $personatratamiento->getId(), 
                                         'costo' => $personatratamiento->getCostoConsulta(), 
@@ -457,6 +465,8 @@ class PersonaTratamientoController extends Controller
             $response->setData(array(
                                 'exito'       => '1',
                                 'personaTratamiento' => $ventaTratamiento,
+                                'personaTratamientos' => $sesionTratamiento,
+                                'seguimiento' =>  $seguimiento->getNumSesion(),
                                 'tratamiento' => $personatratamiento->getTratamiento()->getNombre()
                             )); 
             

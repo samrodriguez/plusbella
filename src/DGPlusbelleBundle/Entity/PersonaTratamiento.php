@@ -96,6 +96,13 @@ class PersonaTratamiento
     private $cuotas;
     
     /**
+     * @var string
+     *
+     * @ORM\Column(name="observaciones", type="string", length=1000, nullable=true)
+     */
+    private $observaciones; 
+    
+    /**
      * @var \Descuento
      *
      * @ORM\ManyToOne(targetEntity="Descuento")
@@ -199,6 +206,30 @@ class PersonaTratamiento
         return $this->fechaVenta;
     }
 
+    /**
+     * Set observaciones
+     *
+     * @param string $observaciones
+     *
+     * @return VentaPaquete
+     */
+    public function setObservaciones($observaciones)
+    {
+        $this->observaciones = $observaciones;
+
+        return $this;
+    }
+
+    /**
+     * Get observaciones
+     *
+     * @return string
+     */
+    public function getObservaciones()
+    {
+        return $this->observaciones;
+    }
+    
     /**
      * Set empleado
      *
