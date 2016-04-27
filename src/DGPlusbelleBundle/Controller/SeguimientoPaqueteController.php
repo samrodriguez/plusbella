@@ -164,7 +164,7 @@ class SeguimientoPaqueteController extends Controller
                     . "inner join paciente p on pac.id = p.persona "
                     . "inner join expediente exp on p.id = exp.paciente "
                     . "inner join sucursal suc on ven.sucursal = suc.id "
-                    . "inner join paquete_tratamiento pt on paq.id = pt.paquete "
+                    . "inner join detalle_venta_paquete pt on ven.id = pt.venta_paquete "
                     . "inner join tratamiento tra on pt.tratamiento = tra.id "
                     . "left outer join descuento des on ven.descuento = des.id "
                     . "where ven.id = '$ventaPaqueteId' and seg.tratamiento = pt.tratamiento";

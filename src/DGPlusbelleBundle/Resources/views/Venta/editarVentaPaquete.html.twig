@@ -430,6 +430,17 @@
                                     </div>
                                 </div>        
                             </div>
+                            <div class="row">
+                                <div id="vventa-observaciones" class="col-md-7 col-sm-7" style="margin-top: 30px; margin-bottom: 10px;">
+                                    <div id="venta-observaciones-label" style="margin-left: 30px;">
+                                        <label>Observaciones</label>
+                                    </div> 
+                                    <div class="clearfix"></div>
+                                    <div id="observaciones" style="margin-left: 30px;">
+                                        <textarea rows="4" cols="100" name="dgplusbellebundle_abono[observaciones]" id="dgplusbellebundle_venta_observaciones" class="form-control">{{ ventaPaquete.observaciones }}</textarea> 
+                                    </div>     
+                                </div>    
+                            </div>        
                             <div class="row" style="margin-top: 50px;">
                                 <div class="col-md-12">
                                     <hr id="hr-tratamientos-paquete">
@@ -983,6 +994,7 @@
                     var empleado = $('#dgplusbellebundle_venta_empleado').val();
                     var costo = $('#dgplusbellebundle_venta_costo').val();
                     var cuotas = $('#dgplusbellebundle_venta_cuotas').val();
+                    var observaciones = $('#dgplusbellebundle_venta_observaciones').val();
                     var sesiones = '';
                     var sesionesPaqueteTrata = new Array();
                     var tratamientos = new Array();
@@ -1012,6 +1024,7 @@
                                         costo : costo,
                                         descuento : descuento,
                                         cuotas : cuotas,
+                                        observaciones : observaciones,
                                         tratamientos : tratamientos,
                                         sesiones : sesionesPaqueteTrata,
                                         id_ventapaquete : id_ventapaquete

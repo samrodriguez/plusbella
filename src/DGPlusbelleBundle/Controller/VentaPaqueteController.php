@@ -425,6 +425,7 @@ class VentaPaqueteController extends Controller
             $tratamientos = $this->get('request')->request->get('tratamientos');
             $sesiones = $this->get('request')->request->get('sesiones');
             $descuentoId = $this->get('request')->request->get('descuento');
+            $observaciones = $this->get('request')->request->get('observaciones');
             
             $ventaPaquete = new VentaPaquete();
             
@@ -450,6 +451,10 @@ class VentaPaqueteController extends Controller
             if(!is_null($descuentoId)){
                 $descuento = $em->getRepository('DGPlusbelleBundle:Descuento')->find($descuentoId);
                 $ventaPaquete->setDescuento($descuento);
+            }
+            
+            if(!is_null($observaciones)){
+                $ventaPaquete->setObservaciones($observaciones);
             }
             
             $ventaPaquete->setUsuario($usuario);
@@ -560,6 +565,7 @@ class VentaPaqueteController extends Controller
             $empleadoId = $this->get('request')->request->get('empleado');
             $costo = $this->get('request')->request->get('costo');
             $cuotas = $this->get('request')->request->get('cuotas');
+            $observaciones = $this->get('request')->request->get('observaciones');
             $tratamientos = $this->get('request')->request->get('tratamientos');
             $sesiones = $this->get('request')->request->get('sesiones');
             $descuentoId = $this->get('request')->request->get('descuento');
@@ -575,6 +581,10 @@ class VentaPaqueteController extends Controller
                 $empleado = $em->getRepository('DGPlusbelleBundle:Empleado')->find($empleadoId);
                 $personaEmpleado = $em->getRepository('DGPlusbelleBundle:Persona')->find($empleado->getPersona()->getId());
                 $ventaPaquete->setEmpleado($personaEmpleado);
+            }
+            
+            if(!is_null($observaciones)){
+                $ventaPaquete->setObservaciones($observaciones);
             }
             
             $ventaPaquete->setCosto($costo);

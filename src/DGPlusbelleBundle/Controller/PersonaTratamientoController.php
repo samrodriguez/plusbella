@@ -329,7 +329,7 @@ class PersonaTratamientoController extends Controller
             $cuotas = $this->get('request')->request->get('cuotas');
             $sesiones = $this->get('request')->request->get('sesiones');
             $descuentoId = $this->get('request')->request->get('descuento');
-            
+            $observaciones = $this->get('request')->request->get('observaciones');
             
             $personaTratamiento = new PersonaTratamiento();
             
@@ -356,6 +356,10 @@ class PersonaTratamientoController extends Controller
             if(!is_null($descuentoId)){
                 $descuento = $em->getRepository('DGPlusbelleBundle:Descuento')->find($descuentoId);
                 $personaTratamiento->setDescuento($descuento);
+            }
+            
+            if(!is_null($observaciones)){
+                $personaTratamiento->setObservaciones($observaciones);
             }
             
             $personaTratamiento->setFechaRegistro(new \DateTime('now'));
@@ -409,6 +413,7 @@ class PersonaTratamientoController extends Controller
             $empleadoId = $this->get('request')->request->get('empleado');
             $costo = $this->get('request')->request->get('costo');
             $cuotas = $this->get('request')->request->get('cuotas');
+            $observaciones = $this->get('request')->request->get('observaciones');
             $tratamientos = $this->get('request')->request->get('tratamientos');
             $sesiones = $this->get('request')->request->get('sesiones');
             $descuentoId = $this->get('request')->request->get('descuento');
@@ -439,6 +444,10 @@ class PersonaTratamientoController extends Controller
             if(!is_null($descuentoId)){
                 $descuento = $em->getRepository('DGPlusbelleBundle:Descuento')->find($descuentoId);
                 $personatratamiento->setDescuento($descuento);
+            }
+            
+            if(!is_null($observaciones)){
+                $personatratamiento->setObservaciones($observaciones);
             }
             
             $em->merge($personatratamiento);
