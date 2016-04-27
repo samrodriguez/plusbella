@@ -508,9 +508,12 @@ class VentaPaqueteController extends Controller
                            ->setParameter('ids', $idtratamientos)
                            ->getResult();
             
+            $totaldesc = ($ventaPaquete->getCosto() * $ventaPaquete->getDescuento()->getPorcentaje()) / 100;
+                
             $ventaPaqueteTratamientos = array(
                                         'id' => $ventaPaquete->getId(), 
                                         'costo' => $ventaPaquete->getCosto(), 
+                                        'descuento' => $totaldesc, 
                                         'sesiones' => $sesiones,
                                         'tratamientos' => $tratamientos,
                                         'tratVenta' => $tratVenta,

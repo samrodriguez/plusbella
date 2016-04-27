@@ -725,6 +725,7 @@
         <script>
             var sesion_tratamiento = 0;
             var id_ventapaquete = 0;
+            var deuda_total = {{ (( personaTratamiento.costoConsulta - (( personaTratamiento.descuento.porcentaje * personaTratamiento.costoConsulta ) / 100)) - abonos.abonos )|number_format(2, '.', ',') }};
             var pendientes = {{ personaTratamiento.numSesiones - seguimiento.numSesion }};
             var id_ventatratamiento = {{ personaTratamiento.id}};
                         
@@ -1250,20 +1251,27 @@
                             descripcion: descripcion,
                             id_personatratamiento : id_ventatratamiento
                         };
-                        
-                    // Se procede a registrar la sesion del tratamiento mediante ajax
-                    $.ajax({
-                        data:  data,
-                        url:   '{{path('admin_abonotratamiento_nuevo')}}',
-                        type:  'post',
-                        success:  function (response) {
-                            alertify.success('Se ha resgistrado con exito un abono del tratamiento');
-                            var deuda_pte = (response.costo - ((response.descuento * response.costo)/100) - response.abonos).toFixed(2);
-                            
-                            $('#detalle-venta-deuda').html('$ ' + deuda_pte);
-                            return false;
-                        }
-                    });
+                    
+                    
+                    if(monto <= deuda_total){
+                        // Se procede a registrar el abono del tratamiento mediante ajax
+                        $.ajax({
+                            data:  data,
+                            url:   '{{path('admin_abonotratamiento_nuevo')}}',
+                            type:  'post',
+                            success:  function (response) {
+                                alertify.success('Se ha resgistrado con exito un abono del tratamiento');
+                                deuda_total = (response.costo - ((response.descuento * response.costo)/100) - response.abonos).toFixed(2);
+
+                                $('#detalle-venta-deuda').html('$ ' + deuda_total);
+                                return false;
+                            }
+                        });
+                    }  else {
+                        bootbox.alert('No se puede realizar esta operacion. El monto ingresado es mayor a la deuda de este tratamiento');
+                        return false;
+                    }  
+                    
                     return false;
                 }); 
                 
