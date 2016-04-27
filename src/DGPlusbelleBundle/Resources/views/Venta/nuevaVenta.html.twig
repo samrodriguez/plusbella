@@ -577,14 +577,16 @@
                                     <label class="pull-right">Tipo de venta:</label>      
                                 </div>
                                 <div class="col-md-2">
-                                    <p>
-                                        <input type = "radio" name = "tipo-venta" id = "tipo-venta-paquete" value = "1" />
-                                        <label for = "tipo-venta-paquete">Paquete</label>
-                                    </p>
-                                    <p>
-                                        <input type = "radio" name = "tipo-venta" id = "tipo-venta-tratamiento" value = "0" />
-                                        <label for = "tipo-venta-tratamiento">Tratamiento</label>
-                                    </p> 
+                                    <div id="label-tipo-venta">
+                                        <p>
+                                            <input type = "radio" name = "tipo-venta" id = "tipo-venta-paquete" value = "1" />
+                                            <label for = "tipo-venta-paquete">Paquete</label>
+                                        </p>
+                                        <p>
+                                            <input type = "radio" name = "tipo-venta" id = "tipo-venta-tratamiento" value = "0" />
+                                            <label for = "tipo-venta-tratamiento">Tratamiento</label>
+                                        </p> 
+                                    </div>
                                 </div>
 
                                 {# Area en donde se selecciona un paquete o tratamiento dependiendo el tipo de venta seleccionado#}    
@@ -1238,6 +1240,9 @@
                                                     $('#detalle-venta-costo').html('$ ' + response.ventaPaqueteTratamientos.costo);
                                                     $('#detalle-venta-cuotas').html(response.ventaPaqueteTratamientos.cuotas);
                                                     $('#detalle-venta-deuda').html('$ ' + response.ventaPaqueteTratamientos.costo);
+                                                    
+                                                    $('#label-tipo-venta').html('<p> Paquete</p>');
+                                                    $('#venta-paquete').html('<label>Paquete</label><p>' + response.paquete + '</p>');
                                                     //$('#detalle-venta-total-can').html('$ ' + totalpagar);
                                                     $.each( response.ventaPaqueteTratamientos.nomTratamientos, function( key, value ) {
                                                         draw+= '<div class="row">';
@@ -1349,6 +1354,9 @@
                                                     $('#detalle-venta-cuotas').html(response.personaTratamiento.cuotas);
                                                     $('#detalle-venta-deuda').html('$ ' + costoTratamiento);
                                                     $('#detalle-venta-sesiones').html(response.personaTratamiento.sesiones);
+                                                    
+                                                    $('#label-tipo-venta').html('<p>Tratamiento</p>');
+                                                    $('#venta-tratamiento').html('<label>Tratamiento</label><p>' + response.tratamiento + '</p>');
                                                     
                                                     draw+= '<div class="row">';
                                                     draw+= '<div class="col-md-5" style="margin-bottom: 10px;">';
@@ -1481,8 +1489,30 @@
                                                 var detalleVentaInfo = document.getElementById('detalle-venta-info');
                                                 id_ventapaquete = response.ventaPaquete;
 
+                                                $('#detalle-venta-costo').html('$ ' + response.ventaPaqueteTratamientos.costo);
+                                                //$('#detalle-venta-costo').html('$ ' + costoTratamiento);
+                                                $('#detalle-venta-sesiones').html(response.ventaPaqueteTratamientos.sesiones);
+                                                
+                                                $.each( response.ventaPaqueteTratamientos.nomTratamientos, function( key, value ) {
+                                                    draw+= '<div class="row">';
+                                                    draw+= '<div class="col-md-5" style="margin-bottom: 10px;">';
+                                                    draw+= '<span>' + value + '</span>';
+                                                    draw+= '</div>';
+                                                    draw+= '<div class="col-md-7" style="margin-bottom: 10px;">';
+                                                    draw+= '<div class="row">';
 
+                                                    for (i = 0; i < response.ventaPaqueteTratamientos.sesiones[key]; i++) {
+                                                        draw+= '<div class="col-md-1" style="margin-bottom: 10px;">';
+                                                        draw+= '<img class="" style="height: 25px;"  src="{{ asset('Photos/Estados/sesion_pendiente.png')}}" title="Sesion pendiente">';
+                                                        draw+= '</div>';
+                                                    }
 
+                                                    draw+= '</div>';
+                                                    draw+= '</div>';
+                                                    draw+= '</div>';
+                                                });
+
+                                                $('#detalle-venta-tratamientos').html(draw);
                                             }
                                         });
 

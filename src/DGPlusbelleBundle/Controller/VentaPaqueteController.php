@@ -604,7 +604,7 @@ class VentaPaqueteController extends Controller
             $em->merge($ventaPaquete);
             $em->flush();
             
-//            $nomTratamientos = array();
+            $nomTratamientos = array();
 //            foreach($tratamientos as $key => $value){
 //                $detalleVenta = new \DGPlusbelleBundle\Entity\DetalleVentaPaquete();
 //                        
@@ -633,6 +633,9 @@ class VentaPaqueteController extends Controller
                 if($seguimiento->getNumSesion() < $trat->getNumSesiones()){
                     array_push($idtratamientos, $idtrat); 
                 }            
+
+                $nomTratamientos[$key] = $detalleVenta->getTratamiento()->getNombre();
+                $idTratamientos[$key] = $detalleVenta->getTratamiento()->getId();                
             }
 
             $dql = "SELECT t.id, t.nombre FROM DGPlusbelleBundle:Tratamiento t "
