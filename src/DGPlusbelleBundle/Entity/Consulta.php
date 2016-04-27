@@ -25,7 +25,7 @@ class Consulta
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="fecha_consulta", type="date", nullable=false)
+     * @ORM\Column(name="fecha_consulta", type="datetime", nullable=false)
      */
     private $fechaConsulta;
 

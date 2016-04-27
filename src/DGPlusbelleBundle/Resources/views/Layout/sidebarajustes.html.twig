@@ -93,13 +93,13 @@
           </ul>
         </li>#}
     {% endif %}
-    {% if is_granted('ROLE_ADMIN') %}
+    {#{% if is_granted('ROLE_ADMIN') %}
         <li class="nav-item" role="presentation">
           <a href="{{ path('admin_producto') }}">
             <span class="nav-icon"><i class="fa fa-database"></i></span>
             <span class="nav-text">Gestionar productos</span>
           </a>
-        </li>
+        </li>#}
         
        {# <li class="nav-item" role="presentation">
           <a href="#" data-toggle="nav-child">
@@ -110,7 +110,7 @@
             <li role="presentation"><a role="menuitem" tabindex="-1" href="{{ path('admin_producto') }}"><span class="nav-text">Gestionar productos</span></a></li>
           </ul>
         </li>#}
-    {% endif %}
+{#    {% endif %}#}
     {% if is_granted('ROLE_ADMIN') %}
        {# <li class="nav-item" role="presentation">
           <a href="#" data-toggle="nav-child">
@@ -202,13 +202,13 @@
         </li>#}
     {% endif %}
     
-    {% if is_granted('ROLE_ADMIN') %}  
+    {#{% if is_granted('ROLE_ADMIN') %}  
         <li class="nav-item" role="presentation">
           <a href="{{ path('admin_rol') }}">
             <span class="nav-icon"><i class="fa fa-exchange"></i></span>
             <span class="nav-text">Gestionar roles</span>
           </a>
-        </li> 
+        </li> #}
         
        {# <li class="nav-item" role="presentation">
           <a href="#" data-toggle="nav-child">
@@ -219,7 +219,7 @@
             <li role="presentation"><a role="menuitem" tabindex="-1" href="{{ path('admin_rol') }}"><span class="nav-text">Gestionar roles</span></a></li>
           </ul>
         </li>#}
-    {% endif %}
+{#    {% endif %}#}
     
     {% if is_granted('ROLE_ADMIN') %}  
         <li class="nav-item" role="presentation">
