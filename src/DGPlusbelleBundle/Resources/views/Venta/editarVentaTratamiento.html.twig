@@ -127,7 +127,7 @@
                             </div>
                             <div class="col-md-2" style="margin-bottom: 10px;">
                                 {#data.query[0].costoTratamiento - ((data.query[0].porcentaje * data.query[0].costoTratamiento)/100)) - data.abonos.abonos).toFixed(2)#}
-                                <span id="detalle-venta-deuda">$ {{ (( personaTratamiento.costoConsulta - (( personaTratamiento.descuento.porcentaje * personaTratamiento.costoConsulta ) / 100)) - abonos.abonos )|number_format(2, '.', ',') }}</span>
+                                {#<span id="detalle-venta-deuda">$ {{ (( personaTratamiento.costoConsulta - (( personaTratamiento.descuento.porcentaje * personaTratamiento.costoConsulta ) / 100)) - abonos.abonos )|number_format(2, '.', ',') }}</span>#}
                             </div>
                         </div>  
                     </div>
@@ -1258,8 +1258,9 @@
                         type:  'post',
                         success:  function (response) {
                             alertify.success('Se ha resgistrado con exito un abono del tratamiento');
+                            var deuda_pte = (response.costo - ((response.descuento * response.costo)/100) - response.abonos).toFixed(2);
                             
-                            {#data.query[0].costoTratamiento - ((data.query[0].porcentaje * data.query[0].costoTratamiento)/100)) - data.abonos.abonos).toFixed(2)#}
+                            $('#detalle-venta-deuda').html('$ ' + deuda_pte);
                             return false;
                         }
                     });

@@ -126,7 +126,7 @@
                                 <strong>Deuda:</strong><span></span>
                             </div>
                             <div class="col-md-2" style="margin-bottom: 10px;">
-                                <span id="detalle-venta-deuda">$ {{ (( ventaPaquete.costo - (( ventaPaquete.descuento.porcentaje * ventaPaquete.costo ) / 100)) - abonos.abonos )|number_format(2, '.', ',') }}</span>
+                                {#<span id="detalle-venta-deuda">$ {{ (( ventaPaquete.costo - (( ventaPaquete.descuento.porcentaje * ventaPaquete.costo ) / 100)) - abonos.abonos )|number_format(2, '.', ',') }}</span>#}
                                 {#<span id="detalle-venta-deuda">$ {{ ventaPaquete.costo|number_format(2, '.', ',') }}</span>#}
                             </div>
                         </div>  
@@ -1268,7 +1268,9 @@
                         type:  'post',
                         success:  function (response) {
                             alertify.success('Se ha resgistrado con exito un abono del paquete');
-
+                            var deuda_pte = (response.costo - ((response.descuento * response.costo)/100) - response.abonos).toFixed(2);
+                            
+                            $('#detalle-venta-deuda').html('$ ' + deuda_pte);
                             return false;
                         }
                     });

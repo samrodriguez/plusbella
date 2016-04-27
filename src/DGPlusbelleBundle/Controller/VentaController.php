@@ -736,25 +736,29 @@ class VentaController  extends Controller
             $em->persist($entity);
             $em->flush();
 
+            $ptid = $personaTratamiento->getId();
             $rsm = new ResultSetMapping();
             $rsm2 = new ResultSetMapping();
             $sql2 = "select cast(sum(abo.monto) as decimal(36,2)) abonos, count(abo.monto) cuotas "
                     . "from abono abo inner join persona_tratamiento p on abo.persona_tratamiento = p.id "
-                    . "where p.id = '$id'";
+                    . "where p.id = '$ptid'";
             
             $rsm2->addScalarResult('abonos','abonos');
             $rsm2->addScalarResult('cuotas','cuotas');
             
             $abonos = $em->createNativeQuery($sql2, $rsm2)
-                    ->getResult();
-            
+                    ->getSingleResult();
+            //var_dump($abonos);
             $this->get('bitacora')->escribirbitacora("Se registro un nuevo abono de un tratamiento", $usuario->getId());
             
             $response = new JsonResponse();
             $response->setData(array(
-                                'exito'    => '1',
-                                'abonos'   => $abonos,
-                                'abono'    => $entity->getId()
+                                'exito'     => '1',
+                                'abonos'    => $abonos['abonos'],
+                                'cuotas'    => $abonos['cuotas'],
+                                'costo'     => $personaTratamiento->getCostoConsulta(),
+                                'descuento' => $personaTratamiento->getDescuento()->getPorcentaje(),
+                                'abono'     => $entity->getId()
                                 ));  
             
             return $response; 
@@ -801,11 +805,28 @@ class VentaController  extends Controller
             $em->persist($entity);
             $em->flush();
 
+            $ptid = $ventaPaquete->getId();
+            
+            $rsm2 = new ResultSetMapping();
+            $sql2 = "select cast(sum(abo.monto) as decimal(36,2)) abonos, count(abo.monto) cuotas "
+                    . "from abono abo inner join persona_tratamiento p on abo.persona_tratamiento = p.id "
+                    . "where p.id = '$ptid'";
+            
+            $rsm2->addScalarResult('abonos','abonos');
+            $rsm2->addScalarResult('cuotas','cuotas');
+            
+            $abonos = $em->createNativeQuery($sql2, $rsm2)
+                    ->getSingleResult();
+            
             $this->get('bitacora')->escribirbitacora("Se registro un nuevo abono de un paquete", $usuario->getId());
             
             $response = new JsonResponse();
             $response->setData(array(
                                 'exito'   => '1',
+                                'abonos'    => $abonos['abonos'],
+                                'cuotas'    => $abonos['cuotas'],
+                                'costo'     => $ventaPaquete->getCosto(),
+                                'descuento' => $ventaPaquete->getDescuento()->getPorcentaje(),
                                 ));  
             
             return $response; 
