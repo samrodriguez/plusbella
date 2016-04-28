@@ -379,8 +379,21 @@ class PersonaTratamientoController extends Controller
                                         'id' => $personaTratamiento->getId(), 
                                         'costo' => $personaTratamiento->getCostoConsulta(), 
                                         'sesiones' => $personaTratamiento->getNumSesiones(), 
+                                        'descuento' => $personaTratamiento->getDescuento()->getPorcentaje(),
                                         'cuotas' => $personaTratamiento->getCuotas()
                                     );
+            
+            $ptid = $personaTratamiento->getId();
+            $rsm2 = new ResultSetMapping();
+            $sql2 = "select cast(sum(abo.monto) as decimal(36,2)) abonos, count(abo.monto) cuotas "
+                    . "from abono abo inner join persona_tratamiento p on abo.persona_tratamiento = p.id "
+                    . "where p.id = '$ptid'";
+            
+            $rsm2->addScalarResult('abonos','abonos');
+            $rsm2->addScalarResult('cuotas','cuotas');
+            
+            $abonos = $em->createNativeQuery($sql2, $rsm2)
+                    ->getSingleResult();
             
             $this->get('bitacora')->escribirbitacora("Se registro una nueva venta del tratamiento " . $tratamiento->getNombre(), $usuario->getId());
             
@@ -388,7 +401,8 @@ class PersonaTratamientoController extends Controller
             $response->setData(array(
                                 'exito'       => '1',
                                 'personaTratamiento' => $ventaTratamiento,
-                                'tratamiento' => $tratamiento->getNombre()
+                                'tratamiento' => $tratamiento->getNombre(),
+                                'abonos' => $abonos
                             )); 
             
             return $response; 

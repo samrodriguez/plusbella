@@ -170,6 +170,7 @@ class VentaController  extends Controller
                 . "paq.nombre as nomPaquete, "
                 . "tra.nombre as ntrata, "
                 . "pt.num_sesiones as sesiones, "
+                . "seg.id as idnumSesion, "
                 . "seg.num_sesion as numSesion "
                 . "from venta_paquete ven "
                 . "inner join paquete paq on ven.paquete = paq.id "
@@ -189,6 +190,7 @@ class VentaController  extends Controller
         $rsm->addScalarResult('ntrata','ntrata');
         $rsm->addScalarResult('sesiones','sesiones');
         $rsm->addScalarResult('numSesion','numSesion');
+        $rsm->addScalarResult('idNumSesion','idNumSesion');
 
         $sesionesVenta = $em->createNativeQuery($sql, $rsm)
                 ->getResult();
@@ -637,65 +639,92 @@ class VentaController  extends Controller
             $dataForm = $request->get('frm');
             
             $idsesion = $_POST["idSesion"];
+            $idtratamiento = $_POST["venta_imagenes_tratamiento"];
             
             $em = $this->getDoctrine()->getManager();
-            
             $ventaPaquete = $em->getRepository('DGPlusbelleBundle:VentaPaquete')->find($idsesion);
             
-            $sesiontratamiento = $em->getRepository('DGPlusbelleBundle:SesionTratamiento')->findBy(array('ventaPaquete' => $ventaPaquete));
+            $tratamiento = $em->getRepository('DGPlusbelleBundle:Tratamiento')->find($idtratamiento);
+            $sesiontratamiento = $em->getRepository('DGPlusbelleBundle:SesionTratamiento')->findBy(array('ventaPaquete' => $ventaPaquete, 'tratamiento' => $tratamiento ));
             
-            $sesiontratamientoId = array();
-            foreach ($sesiontratamiento as $key => $value) {
-                array_push($sesiontratamientoId, $value->getId());
-            }
-            
-            $sesiontrataId = max($sesiontratamientoId);
-            $sesion = $em->getRepository('DGPlusbelleBundle:SesionTratamiento')->find($sesiontrataId);
-            
-            for($i=0;$i<count($_FILES['file']['name']);$i++){
-                $nombreimagen=$_FILES['file']['name'][$i];    
+            $ban = 0;
+            if(!is_null($sesiontratamiento) && !empty($sesiontratamiento)){
+                $sesiontratamientoId = array();
+                foreach ($sesiontratamiento as $key => $value) {
+                    array_push($sesiontratamientoId, $value->getId());
+                }
 
-                $tipo = $_FILES['file']['type'][$i];
-                $extension= explode('/',$tipo);
-                $nombreimagen2.=".".$extension[1];
-            
-                if ($nombreimagen != null){
-                    
-                    $imagen = new \DGPlusbelleBundle\Entity\ImagenTratamiento();
-                    $imagen->setSesionVentaTratamiento($sesion);
-                    
-                    //Direccion fisica del la imagen  
-                    $path1 = $this->container->getParameter('photo.tmp');
+                $sesiontrataId = max($sesiontratamientoId);
+                $sesion = $em->getRepository('DGPlusbelleBundle:SesionTratamiento')->find($sesiontrataId);
 
-                    $path = "Photos/perfil/E";
-                    $fecha = date('Y-m-d His');
+                for($i=0;$i<count($_FILES['file']['name']);$i++){
+                    $nombreimagen=$_FILES['file']['name'][$i];    
 
-                    $nombreArchivo = $nombreimagen."-".$fecha.$nombreimagen2;
+                    $tipo = $_FILES['file']['type'][$i];
+                    $extension= explode('/',$tipo);
+                    $nombreimagen2.=".".$extension[1];
 
-                    $nombreBASE=$path.$nombreArchivo;
-                    $nombreBASE=str_replace(" ","", $nombreBASE);
-                    $nombreSERVER =str_replace(" ","", $nombreArchivo);
-                    $imagen->setFotoAntes($nombreSERVER);
-                    $resultado = move_uploaded_file($_FILES["file"]["tmp_name"][$i], $path1.$nombreSERVER);
-                    $em->persist($imagen);
-                    $em->flush();
+                    if ($nombreimagen != null){
 
-                    if ($resultado){
-                    
-                    }else{
-                        $data['servidor'] = "No se pudo mover la imagen al servidor";
+                        $imagen = new \DGPlusbelleBundle\Entity\ImagenTratamiento();
+                        $imagen->setSesionTratamiento($sesion);
+
+                        //Direccion fisica del la imagen  
+                        $path1 = $this->container->getParameter('photo.tmp');
+
+                        $path = "Photos/perfil/E";
+                        $fecha = date('Y-m-d His');
+
+                        $nombreArchivo = $nombreimagen."-".$fecha.$nombreimagen2;
+
+                        $nombreBASE=$path.$nombreArchivo;
+                        $nombreBASE=str_replace(" ","", $nombreBASE);
+                        $nombreSERVER =str_replace(" ","", $nombreArchivo);
+                        $imagen->setFotoAntes($nombreSERVER);
+                        $resultado = move_uploaded_file($_FILES["file"]["tmp_name"][$i], $path1.$nombreSERVER);
+                        $em->persist($imagen);
+                        $em->flush();
+
+                        if ($resultado){
+
+                        }else{
+                            $data['servidor'] = "No se pudo mover la imagen al servidor";
+                        }
+
+
                     }
+                    else{
 
-
+                    }
                 }
-                else{
-
-                }
+            } else {
+                $ban = 1;
             }
-         
             
+            $dql = "SELECT img "
+                    . "FROM DGPlusbelleBundle:ImagenTratamiento img "
+                    . "JOIN img.sesionTratamiento ses "
+                    . "JOIN ses.ventaPaquete tra "
+                    . "WHERE tra.id =  :idVentaTratamiento";
+
+            $archivos = $em->createQuery($dql)
+                        ->setParameter('idVentaTratamiento', $idsesion)
+                        ->getResult();    
+            
+            $imagenes = array();
+            foreach ($archivos as $value) {
+                array_push($imagenes, $value->getFotoAntes());
+            }
+            
+            $response = new JsonResponse();
+            $response->setData(array(
+                                'exito'     => $ban,
+                                'imagenes'  => $imagenes 
+                            )); 
+            
+            return $response; 
             //return new Response(json_encode($data));
-            return new Response(json_encode(0));
+            //return new Response(json_encode(0));
     }
     
     /**

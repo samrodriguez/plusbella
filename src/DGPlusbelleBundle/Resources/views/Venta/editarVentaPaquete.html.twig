@@ -640,56 +640,63 @@
                     </div>                    
                     {# Sección en donde se encuentran las imagenes de un determinado tratamiento #}
                     <div id="imagenes" class="tab-pane fade" style="margin-top: 20px;">
-                        {#<div class="row" style="margin-top: 35px; padding: 30px;">
-                            <div class="col-md-3 pull-center" id="imagenes-sesiones-tratamiento">
-                                <div id="sesiones-tratamiento">
-                                    <label>Tratamiento</label>
-                                    <select id="dgplusbellebundle_imagenes_tratamiento" name="dgplusbellebundle_venta_imagenes[tratamiento]" class="sesion_tratamiento" style="width: 100%">
-                                        <option value="" disabled selected>Seleccione un tratamiento...</option>
-                                        {% for tratamiento in tratVenta %}
-                                            <option value="{{tratamiento.id}}"> {{tratamiento.nombre}}</option>
-                                        {% endfor %}
-                                    </select>    
-                                </div>    
-                            </div>
-                        </div>#}
                         <div class="row" style="margin-top: 35px; padding: 30px;">
-                                <strong>Subir imagen</strong>
-                            <div class="row" style="margin-top:20px;">
-                                <div class="col-md-12">
-                                    <form id="formImagen" role="form" enctype="multipart/form-data" method="post">
-                                        <input id="file-input" required type="file" name="file[]" multiple>
-                                        <input type="hidden" id="idSesion" value="{% if ventaPaquete.id is null %}{%else%}{{ventaPaquete.id}}{%endif%}" name="idSesion" class="form-control input-sm"/>
-                                    </form>
-                                    {#<form action="#" id="formImagen" enctype="multipart/form-data"  method="post">
-                                        <div class="form-group">
-                                          <div class="fileinput fileinput-new input-group" data-provides="fileinput">
-                                            <div class="form-control" data-trigger="fileinput"><i class="glyphicon glyphicon-file fileinput-exists"></i> <span class="fileinput-filename"></span></div>
-                                            <div class="input-group-btn">
-                                              <span class="btn btn-default btn-file"><span class="fileinput-new">Select file</span><span class="fileinput-exists">Change</span><input name="..." type="file"></span>
-                                              <a href="#" class="btn btn-danger fileinput-exists" data-dismiss="fileinput">Remove</a>
-                                            </div>
-                                          </div><!-- /.fileinput -->
-                                        </div><!-- /.form-group -->
-                                    </form>#}
-                                    
+                            <form id="formImagen" role="form" enctype="multipart/form-data" method="post">
+                                <div class="col-md-3 pull-center" id="imagenes-sesiones-tratamiento">
+                                    <div id="sesiones-tratamiento">
+                                        <label>Tratamiento</label>
+                                        <select id="dgplusbellebundle_imagenes_tratamiento" name="venta_imagenes_tratamiento" class="sesion_tratamiento" style="width: 100%">
+                                            <option value="" disabled selected>Seleccione un tratamiento...</option>
+                                            {% for tratamiento in tratVenta %}
+                                                <option value="{{tratamiento.id}}"> {{tratamiento.nombre}}</option>
+                                            {% endfor %}
+                                        </select>    
+                                    </div>    
                                 </div>
-                            </div>
-                            
-                            <div class="row" style="margin-top:20px;">
-                                <div class="col-md-12">
-                                    <strong style="margin-top:80px;">Archivos adjuntos</strong>
-                                </div>    
-                                <div class="col-md-12">
-                                    <div id="listadoImagenes">
-                                        {% for imagen in archivos %}
-                                            <div class="col-md-2">
-                                                <a class="verImagen" href="{{ asset('Photos/Tmp/')}}{{imagen.fotoAntes}}">Imagen {{loop.index}}</a>
+                                <div class="col-md-3 col-md-offset-1 pull-center" id="imagenes-sesiones-sesiones">
+                                    <div class="row" {#style="margin-top: 35px; padding: 30px;"#}>
+                                        <strong>Subir imagen</strong>
+                                        <div class="row" style="margin-top:20px;">
+                                            <div class="col-md-12">
+
+                                                    <input id="file-input" required type="file" name="file[]" multiple>
+                                                    <input type="hidden" id="idSesion" value="{% if ventaPaquete.id is null %}{%else%}{{ventaPaquete.id}}{%endif%}" name="idSesion" class="form-control input-sm"/>
+
+                                                {#<form action="#" id="formImagen" enctype="multipart/form-data"  method="post">
+                                                    <div class="form-group">
+                                                      <div class="fileinput fileinput-new input-group" data-provides="fileinput">
+                                                        <div class="form-control" data-trigger="fileinput"><i class="glyphicon glyphicon-file fileinput-exists"></i> <span class="fileinput-filename"></span></div>
+                                                        <div class="input-group-btn">
+                                                          <span class="btn btn-default btn-file"><span class="fileinput-new">Select file</span><span class="fileinput-exists">Change</span><input name="..." type="file"></span>
+                                                          <a href="#" class="btn btn-danger fileinput-exists" data-dismiss="fileinput">Remove</a>
+                                                        </div>
+                                                      </div><!-- /.fileinput -->
+                                                    </div><!-- /.form-group -->
+                                                </form>#}
+
                                             </div>
-                                        {% endfor %}
+                                        </div>
+
+                                        <div class="row" style="margin-top:20px;">
+
+                                        </div>                       
                                     </div>
                                 </div>
-                            </div>                       
+                            </form>                
+                        </div>
+                        <div class="row" style="margin-top: 35px; padding: 30px;">
+                            <div class="col-md-12">
+                                <strong style="margin-top:80px;">Archivos adjuntos</strong>
+                            </div>    
+                            <div class="col-md-12">
+                                <div id="listadoImagenes">
+                                    {% for imagen in archivos %}
+                                        <div class="col-md-2">
+                                            <a class="verImagen" href="{{ asset('Photos/Tmp/')}}{{imagen.fotoAntes}}"><img style="width:100%;" src="{{ asset('Photos/Tmp/')}}{{imagen.fotoAntes}}"></a>
+                                        </div>
+                                    {% endfor %}
+                                </div>
+                            </div>
                         </div>
                         <div class="row">
                             <div class="col-md-12 col-sm-12 text-center" style="margin-top: 30px; margin-bottom: 10px;" id="registrar-sesiones-imagenes">
@@ -786,6 +793,7 @@
                 $('#dgplusbellebundle_abono_sucursal').select2();
                 $('#dgplusbellebundle_abono_empleado').select2();
                 $('#dgplusbellebundle_venta_tratamiento').val('');
+                $('#dgplusbellebundle_imagenes_tratamiento').select2();
                 
                 // Estableciendo la máscara a los campos que lo requieren
                 $('#dgplusbellebundle_venta_dui').mask('00000000-0');  
@@ -1237,7 +1245,7 @@
                     var file = $('#file-input')[0].files[0];
                     //obtenemos el nombre del archivo
                     var idSesion =$('#idSesion').val();
-                    
+                    var tratamiento = $('#dgplusbellebundle_imagenes_tratamiento').val();
                     var fileName = file.name;
                     //obtenemos la extensión del archivo
                     fileExtension = fileName.substring(fileName.lastIndexOf('.') + 1);
@@ -1268,22 +1276,25 @@
                                     if (flag != false) {
                                         $.ajax({
                                             data:frm,
-                                            url:Routing.generate('ingresar_foto_venta'),
+                                            url:Routing.generate('ingresar_foto_venta_paquete'),
                                             type: 'POST',
                                             dataType: 'json',
                                             cache: false,
                                             contentType: false,
                                             processData: false,
                                             success: function(data){
-//                                                    console.log(data);
-//                                                    $("#prev").attr('src', "/abgsistema/web/"+data.direccion);
-                                                $('#file-input').val('');
-                                                alertify.success("Imagenes subidas con éxito!");
-                                                $('#listadoImagenes').html('');
-                                                var key = 1;
-                                                for(i=0;i<data.length;i++){
-                                                    $('#listadoImagenes').append('<div class=\"col-md-2\"><a class=\"verImagen\" href=\"{{ asset('Photos/Tmp/')}}'+data[i]+'\">Imagen '+ key +' </a></div>');
-                                                    key++;
+                                                if(data.exito == 0){
+                                                    $('#file-input').val('');
+                                                    alertify.success("Imagenes subidas con éxito!");
+                                                    $('#listadoImagenes').html('');
+                                                    var key = 1;
+                                                    for(i=0;i<data.imagenes.length;i++){
+                                                        $('#listadoImagenes').append('<div class=\"col-md-2\"><a class=\"verImagen\" href=\"{{ asset('Photos/Tmp/')}}'+data.imagenes[i]+'\"><img style=\"width:100%;\" src=\"{{ asset('Photos/Tmp/')}}' + data.imagenes[i] + '\"></a></div>');
+                                                        key++;
+                                                    }
+                                                } else {
+                                                    bootbox.alert('Debe guardar una sesion de tratamiento del paquete, primero!');
+                                                    return false;
                                                 }
                                             },
                                             error: function(data){

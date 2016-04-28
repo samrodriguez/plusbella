@@ -639,7 +639,7 @@
                                     <div id="listadoImagenes">
                                         {% for imagen in archivos %}
                                             <div class="col-md-2">
-                                                <a class="verImagen" href="{{ asset('Photos/Tmp/')}}{{imagen.fotoAntes}}">Imagen {{loop.index}}</a>
+                                                <a class="verImagen" href="{{ asset('Photos/Tmp/')}}{{imagen.fotoAntes}}"><img style="width:100%;" src="{{ asset('Photos/Tmp/')}}{{imagen.fotoAntes}}"></a>
                                             </div>
                                         {% endfor %}
                                     </div>
@@ -1231,7 +1231,7 @@
                                                     $('#listadoImagenes').html('');
                                                     var key = 1;
                                                     for(i=0;i<data.length;i++){
-                                                        $('#listadoImagenes').append('<div class=\"col-md-2\"><a class=\"verImagen\" href=\"{{ asset('Photos/Tmp/')}}'+data[i]+'\">Imagen '+ key +' </a></div>');
+                                                        $('#listadoImagenes').append('<div class=\"col-md-2\"><a class=\"verImagen\" href=\"{{ asset('Photos/Tmp/')}}'+data[i]+'\"><img style=\"width:100%;\" src=\"{{ asset('Photos/Tmp/')}}' + data[i] + '\"></a></div>');
                                                         key++;
                                                     }
                                                 },
