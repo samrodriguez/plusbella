@@ -798,12 +798,20 @@
                                 </div>  
                                 <div class="row">
                                     <div class="col-md-6" style="margin-bottom: 10px;">
+                                        <strong>Total a cancelar:</strong><span></span>
+                                    </div>
+                                    <div class="col-md-6" style="margin-bottom: 10px;">
+                                        <span id="detalle-venta-total-can"></span>
+                                    </div>
+                                </div> 
+                                <div class="row">
+                                    <div class="col-md-6" style="margin-bottom: 10px;">
                                         <strong>Deuda:</strong><span></span>
                                     </div>
                                     <div class="col-md-6" style="margin-bottom: 10px;">
                                         <span id="detalle-venta-deuda"></span>
                                     </div>
-                                </div>  
+                                </div>
                             </div>
                             <div class="col-md-7" style="margin-left: 30px;">
                                 <div class="row">
@@ -913,6 +921,7 @@
             var id_ventapaquete = 0;
             var id_ventatratamiento = 0;
             var pendientes = 0;
+            var deuda_total = 0;
             
             $(document).ready(function(){
                 {#var totalTratamientos = {{totalTratamientos}};
@@ -936,6 +945,8 @@
                 $('#dgplusbellebundle_venta_telefono1').mask('0000-0000'); 
                 $('#dgplusbellebundle_venta_telefono2').mask('0000-0000'); 
                 $('#dgplusbellebundle_venta_telefonoEmergencia').mask('0000-0000');
+                
+                $('#registro-venta').attr("disabled", false);
                 
                 //
                 $('.calZebra').Zebra_DatePicker({
@@ -1190,15 +1201,18 @@
                                                     var detalleVentaInfo = document.getElementById('detalle-venta-info');
                                                     var tabsSeguimiento = document.getElementById('tabs-seguimiento');
                                                     tabsSeguimiento.style.display = 'block';
+                                                    var totalpagar = response.ventaPaqueteTratamientos.costo - response.ventaPaqueteTratamientos.descuento;
+                                                    
                                                     id_ventapaquete = response.ventaPaquete;
+                                                    deuda_total = totalpagar;
                                                     
                                                     // Se guarda el select que será utilizado para el llenado de tratamientos
                                                     var vtratamientos = $("#dgplusbellebundle_sesiones_tratamiento");
-                                                    
+                                                    console.log(totalpagar);
                                                     $('#detalle-venta-costo').html('$ ' + response.ventaPaqueteTratamientos.costo);
                                                     $('#detalle-venta-cuotas').html(response.ventaPaqueteTratamientos.cuotas);
-                                                    $('#detalle-venta-deuda').html('$ ' + response.ventaPaqueteTratamientos.costo);
-                                                    
+                                                    $('#detalle-venta-deuda').html('$ ' + response.ventaPaqueteTratamientos.totalpagar);
+                                                    $('#detalle-venta-total-can').html('$ ' + totalpagar);
                                                     $.each( response.ventaPaqueteTratamientos.nomTratamientos, function( key, value ) {
                                                         draw+= '<div class="row">';
                                                         draw+= '<div class="col-md-5" style="margin-bottom: 10px;">';
@@ -1232,6 +1246,8 @@
                                                     tabsAbdev.style.display = 'block';
                                                     seguimientoSesionesTratamiento.style.display = 'block';
                                                     detalleVentaInfo.style.display = 'block';
+                                                    
+                                                    $('#registro-venta').attr("disabled", true);
                                                 }
                                             });
                                             
@@ -1294,6 +1310,7 @@
                                                     var tabsSeguimiento = document.getElementById('tabs-seguimiento');
                                                     tabsSeguimiento.style.display = 'block';
                                                     id_ventatratamiento = response.personaTratamiento.id;
+                                                    deuda_total = costoTratamiento;
                                                     
                                                     $('#detalle-venta-costo').html('$ ' + costoTratamiento);
                                                     $('#detalle-venta-cuotas').html(response.personaTratamiento.cuotas);
@@ -1325,6 +1342,8 @@
 //                                                    tabsImagenes.style.display = 'block';
                                                     tabsAbdev.style.display = 'block';
                                                     detalleVentaInfo.style.display = 'block';
+                                                    
+                                                    $('#registro-venta').attr("disabled", true);
                                                     
                                                     {#var id = 'P' + {{paciente.id}};
                                                     var path = Routing.generate('admin_historial_consulta', {'id': id});
@@ -1599,20 +1618,24 @@
                             id_ventapaquete : id_ventapaquete
                         };
                         
-                        // Se procede a registrar la sesion del tratamiento mediante ajax
-                        $.ajax({
-                            data:  data,
-                            url:   '{{path('admin_abonopaquete_nuevo')}}',
-                            type:  'post',
-                            success:  function (response) {
-                                alertify.success('Se ha resgistrado con exito un abono del paquete');
-                                var deuda_pte = (response.costo - ((response.descuento * response.costo)/100) - response.abonos).toFixed(2);
-                                
-                                $('#detalle-venta-deuda').html('$ ' + deuda_pte);
-                                return false;
-                            }
-                        });
-                        
+                        if(monto <= deuda_total){
+                            // Se procede a registrar la sesion del tratamiento mediante ajax
+                            $.ajax({
+                                data:  data,
+                                url:   '{{path('admin_abonopaquete_nuevo')}}',
+                                type:  'post',
+                                success:  function (response) {
+                                    alertify.success('Se ha resgistrado con exito un abono del paquete');
+                                    deuda_total = (response.costo - ((response.descuento * response.costo)/100) - response.abonos).toFixed(2);
+
+                                    $('#detalle-venta-deuda').html('$ ' + deuda_total);
+                                    return false;
+                                }
+                            });
+                        }  else {
+                            bootbox.alert('No se puede realizar esta operacion. El monto ingresado es mayor a la deuda de este paquete');
+                            return false;
+                        }
                         return false;
                     // Si se ha chequeado en el tipo de venta Tratamiento    
                     } else {
@@ -1624,20 +1647,24 @@
                             descripcion: descripcion,
                             id_personatratamiento : id_ventatratamiento
                         };
-                        
-                        // Se procede a registrar la sesion del tratamiento mediante ajax
-                        $.ajax({
-                            data:  data,
-                            url:   '{{path('admin_abonotratamiento_nuevo')}}',
-                            type:  'post',
-                            success:  function (response) {
-                                alertify.success('Se ha resgistrado con exito un abono del tratamiento');
-                                var deuda_pte = (response.costo - ((response.descuento * response.costo)/100) - response.abonos).toFixed(2);
-                            
-                                $('#detalle-venta-deuda').html('$ ' + deuda_pte);
-                                return false;
-                            }
-                        });
+                        if(monto <= deuda_total){
+                            // Se procede a registrar la sesion del tratamiento mediante ajax
+                            $.ajax({
+                                data:  data,
+                                url:   '{{path('admin_abonotratamiento_nuevo')}}',
+                                type:  'post',
+                                success:  function (response) {
+                                    alertify.success('Se ha resgistrado con exito un abono del tratamiento');
+                                    deuda_total = (response.costo - ((response.descuento * response.costo)/100) - response.abonos).toFixed(2);
+
+                                    $('#detalle-venta-deuda').html('$ ' + deuda_total);
+                                    return false;
+                                }
+                            });
+                        }  else {
+                            bootbox.alert('No se puede realizar esta operacion. El monto ingresado es mayor a la deuda de este tratamiento');
+                            return false;
+                        }  
                         return false;
                     }
                     

@@ -756,7 +756,7 @@
             //var id_ventapaquete = 0;
             var id_ventapaquete = {{ventaPaquete.id}};
             var id_ventatratamiento = 0;
-            
+            var deuda_total = {{ (( ventaPaquete.costo - (( ventaPaquete.descuento.porcentaje * ventaPaquete.costo ) / 100)) - abonos.abonos )|number_format(2, '.', ',') }};
             
             $(document).ready(function(){
                 {#var totalTratamientos = {{totalTratamientos}};
@@ -1283,22 +1283,27 @@
                             descripcion: descripcion,
                             id_ventapaquete : id_ventapaquete
                         };
-                        
-                    // Se procede a registrar la sesion del tratamiento mediante ajax
-                    $.ajax({
-                        data:  data,
-                        url:   '{{path('admin_abonopaquete_nuevo')}}',
-                        type:  'post',
-                        success:  function (response) {
-                            alertify.success('Se ha resgistrado con exito un abono del paquete');
-                            var deuda_pte = (response.costo - ((response.descuento * response.costo)/100) - response.abonos).toFixed(2);
-                            {#console.log(deuda_pte);
-                            console.log(response.costo - ((response.descuento * response.costo)/100));
-                            console.log(response.abonos);#}
-                            $('#detalle-venta-deuda').html('$ ' + deuda_pte);
-                            return false;
-                        }
-                    });
+                    
+                    if(monto <= deuda_total){
+                        // Se procede a registrar la sesion del tratamiento mediante ajax
+                        $.ajax({
+                            data:  data,
+                            url:   '{{path('admin_abonopaquete_nuevo')}}',
+                            type:  'post',
+                            success:  function (response) {
+                                alertify.success('Se ha resgistrado con exito un abono del paquete');
+                                deuda_total = (response.costo - ((response.descuento * response.costo)/100) - response.abonos).toFixed(2);
+                                {#console.log(deuda_pte);
+                                console.log(response.costo - ((response.descuento * response.costo)/100));
+                                console.log(response.abonos);#}
+                                $('#detalle-venta-deuda').html('$ ' + deuda_total);
+                                return false;
+                            }
+                        });
+                    }  else {
+                        bootbox.alert('No se puede realizar esta operacion. El monto ingresado es mayor a la deuda de este paquete');
+                        return false;
+                    }
                     return false;
                 }); 
                 
