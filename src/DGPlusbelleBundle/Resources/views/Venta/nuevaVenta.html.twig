@@ -1231,15 +1231,18 @@
                                                     tabsSeguimiento.style.display = 'block';
                                                     var totalpagar = response.ventaPaqueteTratamientos.costo - response.ventaPaqueteTratamientos.descuento;
                                                     
+                                                    console.log(response.ventaPaqueteTratamientos.descuento);
                                                     id_ventapaquete = response.ventaPaquete;
                                                     deuda_total = totalpagar;
+                                                    console.log(deuda_total);
+                                                    //$('#detalle-venta-deuda').html('$ ' + deuda_total);
                                                     
                                                     // Se guarda el select que será utilizado para el llenado de tratamientos
                                                     var vtratamientos = $("#dgplusbellebundle_sesiones_tratamiento");
-                                                    console.log(totalpagar);
+                                                    //console.log(totalpagar);
                                                     $('#detalle-venta-costo').html('$ ' + response.ventaPaqueteTratamientos.costo);
                                                     $('#detalle-venta-cuotas').html(response.ventaPaqueteTratamientos.cuotas);
-                                                    $('#detalle-venta-deuda').html('$ ' + response.ventaPaqueteTratamientos.costo);
+                                                    $('#detalle-venta-deuda').html('$ ' + deuda_total);
                                                     
                                                     $('#label-tipo-venta').html('<p> Paquete</p>');
                                                     $('#venta-paquete').html('<label>Paquete</label><p>' + response.paquete + '</p>');
@@ -1781,83 +1784,99 @@
                     // Si se ha chequeado en el tipo de venta Tratamiento    
                     } else {
                         $("#prev").show();
-                        $("#saveImagen").hide();
+        
+                    $("#saveImagen").hide();
 
-                        //obtenemos un array con los datos del archivo
-                        var file = $('#file-input')[0].files[0];
-                        
-                        //obtenemos el nombre del archivo
-                        var idSesion =$('#idSesion').val();
-                        
-                        var fileName = file.name;
-                        
-                        //obtenemos la extensión del archivo
-                        fileExtension = fileName.substring(fileName.lastIndexOf('.') + 1);
-                        //obtenemos el tamaño del archivo
-                        var fileSize = file.size;
+                    //obtenemos un array con los datos del archivo
+                    var file = $('#file-input')[0].files[0];
+                    //obtenemos el nombre del archivo
+                    var idSesion =$('#idSesion').val();
+                    //alert(idconsulta);
+                    var fileName = file.name;
+                    //obtenemos la extensión del archivo
+                    fileExtension = fileName.substring(fileName.lastIndexOf('.') + 1);
+                    //obtenemos el tamaño del archivo
+                    var fileSize = file.size;
 
-                        //obtenemos el tipo de archivo image/png ejemplo
-                        var fileType = file.type;
-                        //console.log(fileType);
-                        //console.log(fileExtension);
-                        if (fileExtension == 'PNG' || fileExtension == 'png' ||fileExtension == 'JPG'|| fileExtension == 'jpg' && fileType =='imagen' || fileType =='image' || fileType =='image/jpeg' )
-                        {
-                            flag = true;
-                        }else{
-                            flag = false;
-                        }
-                            if(idSesion!=''){
-                                if (flag==false){
-                                    alert("Archivo invalido, seleccione una imagen ");
-                                    $("#file-input").val("");
-                                    $("#prev").hide();
-                                    $("#saveImagen").hide();
+                    //obtenemos el tipo de archivo image/png ejemplo
+                    var fileType = file.type;
+                    console.log(fileType);
+                    console.log(fileExtension);
+                    if (fileExtension == 'PNG' || fileExtension == 'png' ||fileExtension == 'JPG'|| fileExtension == 'jpg' && fileType =='imagen' || fileType =='image' || fileType =='image/jpeg' )
+                    {
+                        flag = true;
+                    }else{
+                        flag = false;
+                    }
+                        if(idSesion!=''){
+                            if (flag==false){
+                                alert("Archivo invalido, seleccione una imagen ");
+                                $("#file-input").val("");
+                                $("#prev").hide();
+                                $("#saveImagen").hide();
 
 
-                                }else{  
+                            }else{  
 
-                                     var pesoKb=(fileSize/1024);
-                                     if (pesoKb<=2048){
-                                        var frm = new FormData($("#formImagen")[0]);
-                                        console.log(frm);
-                                            if (flag != false) {
-                                                $.ajax({
-                                                    data:frm,
-                                                    url:Routing.generate('ingresar_foto_venta'),
-                                                    type: 'POST',
-                                                    dataType: 'json',
+                                 var pesoKb=(fileSize/1024);
+                                 if (pesoKb<=2048){
+                                    var frm = new FormData($("#formImagen")[0]);
+                                    console.log(frm);
+                                        if (flag != false) {
+                                            $.ajax({
+                                                data:frm,
+                                                url:Routing.generate('ingresar_foto_venta'),
+                                                type: 'POST',
+                                                dataType: 'json',
 
-                                                    cache: false,
-                                                    contentType: false,
-                                                    processData: false,
+                                                cache: false,
+                                                contentType: false,
+                                                processData: false,
 
-                                                    success: function(data){
-                                                        console.log(data);
-                                                        //$("#prev").attr('src', "/abgsistema/web/"+data.direccion);
-                                                        $('#file-input').val('');
-                                                        alertify.success("Imagenes subidas con éxito!");
-                                                        $('#listadoImagenes').html('');
-                                                        var key = 1;
-                                                        for(i=0;i<data.length;i++){
-                                                            $('#listadoImagenes').append('<div class=\"col-md-2\"><a class=\"verImagen\" href=\"{{ asset('Photos/Tmp/')}}'+data[i]+'\">Imagen '+ key +' </a></div>');
-                                                            key++;
-                                                        }
-                                                    },
-                                                    error: function(data){
-                                                        bootbox.alert('Hubo un error al subir las fotos');
+                                                success: function(data){
+                                                    console.log(data);
+                                                    //$("#prev").attr('src', "/abgsistema/web/"+data.direccion);
+                                                    $('#file-input').val('');
+                                                    alertify.success("Imagenes subidas con éxito!");
+                                                    $('#listadoImagenes').html('');
+                                                    var key = 1;
+                                                    for(i=0;i<data.length;i++){
+                                                        $('#listadoImagenes').append('<div class=\"col-md-2\"><a class=\"verImagen\" href=\"{{ asset('Photos/Tmp/')}}'+data[i]+'\">Imagen '+ key +' </a></div>');
+                                                        key++;
                                                     }
-                                                });
-                                            }
+                                                },
+                                                error: function(data){
+                                                    bootbox.alert('Hubo un error al subir las fotos');
+                                                }
+                                                {#data:frm,
+                                                url:Routing.generate('ingresar_foto_venta'),
+                                                type: 'POST',
+                                                dataType: 'json',
+
+                                                cache: false,
+                                                contentType: false,
+                                                processData: false,
+
+                                                success: function(data){
+                                                    //$("#prev").attr('src', "/abgsistema/web/"+data.direccion);
+                                                    $('#file-input').val('');
+                                                    bootbox.alert('Fotos subidas con éxito!');
+                                                },
+                                                error: function(data){
+                                                    bootbox.alert('Hubo un error al subir las fotos');
+                                                }#}
+                                            });
                                         }
-                                        else{
-                                            console.log(pesoKb);
-                                            alert("Imagen demasiado grande, intente con una mas pequeña");
-                                        }
-                                }
+                                    }
+                                    else{
+                                        console.log(pesoKb);
+                                        alert("Imagen demasiado grande, intente con una mas pequeña");
+                                    }
                             }
-                            else{
-                                bootbox.alert('Debe guardar una sesion de tratamiento primero!');
-                            }
+                        }
+                        else{
+                            bootbox.alert('Debe guardar una venta primero!');
+                        }
                     }    
                 });
                 

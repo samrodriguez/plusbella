@@ -516,6 +516,7 @@ class VentaPaqueteController extends Controller
             
             if(!is_null($descuentoId)){    
                 $totaldesc = ($ventaPaquete->getCosto() * $ventaPaquete->getDescuento()->getPorcentaje()) / 100;
+                //$totaldesc = $ventaPaquete->getDescuento()->getPorcentaje();
             } else {
                 $totaldesc = 0;
             }
