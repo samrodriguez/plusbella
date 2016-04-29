@@ -119,7 +119,7 @@
                                 <strong>Descuento:</strong>
                             </div>
                             <div class="col-md-2" style="margin-bottom: 10px;">
-                                <span id="detalle-venta-cuotas">{{ personaTratamiento.descuento.porcentaje }}%</span>
+                                <span {#id="detalle-venta-cuotas"#}>{{ personaTratamiento.descuento.porcentaje }}%</span>
                             </div>
                         {#</div>  
                         <div class="row">#}
@@ -1007,9 +1007,12 @@
                                             id_ventatratamiento = response.personaTratamiento.id;
                                             var mensaje = '';
                                             console.log(costoTratamiento);
+                                            deuda_total = (response.personaTratamiento.costo - ((response.personaTratamiento.descuento * response.personaTratamiento.costo)/100) - response.abonos.abonos).toFixed(2);
+                                            
                                             $('#detalle-venta-costo').html('$ ' + costoTratamiento);
-                                            $('#detalle-venta-costo').html('$ ' + costoTratamiento);
+                                            $('#detalle-venta-cuotas').html(response.personaTratamiento.descuento + '%');
                                             $('#detalle-venta-sesiones').html(response.personaTratamiento.sesiones);
+                                            $('#detalle-venta-deuda').html('$ ' + deuda_total);
                                             
                                             for (var i = 0; i < response.seguimiento; i++) {
                                                 mensaje += '<div class="col-md-1" style="margin-bottom: 10px;">';

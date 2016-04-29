@@ -12,6 +12,7 @@ use DGPlusbelleBundle\Entity\SeguimientoPaquete;
 use DGPlusbelleBundle\Entity\VentaPaquete;
 use DGPlusbelleBundle\Entity\Paciente;
 use DGPlusbelleBundle\Form\VentaPaqueteType;
+use Doctrine\ORM\Query\ResultSetMapping;
 
 /**
  * VentaPaquete controller.
@@ -632,10 +633,11 @@ class VentaPaqueteController extends Controller
                                                                                                     ));
                 if($seguimiento->getNumSesion() < $trat->getNumSesiones()){
                     array_push($idtratamientos, $idtrat); 
+                    array_push($nomTratamientos, $trat->getTratamiento()->getNombre()); 
                 }            
 
-                $nomTratamientos[$key] = $detalleVenta->getTratamiento()->getNombre();
-                $idTratamientos[$key] = $detalleVenta->getTratamiento()->getId();                
+                //$nomTratamientos[$key] = $detalleVenta->getTratamiento()->getNombre();
+                //$idTratamientos[$key] = $detalleVenta->getTratamiento()->getId();                
             }
 
             $dql = "SELECT t.id, t.nombre FROM DGPlusbelleBundle:Tratamiento t "
@@ -650,10 +652,22 @@ class VentaPaqueteController extends Controller
                                         'sesiones' => $sesiones,
                                         'tratamientos' => $tratamientos,
                                         'tratVenta' => $tratVenta,
-                                        //'nomTratamientos' => $nomTratamientos,
-                                        //'idTratamientos' => $idTratamientos,
+                                        'nomTratamientos' => $nomTratamientos,
+                                        'descuento' => $ventaPaquete->getDescuento()->getPorcentaje(),
                                         'cuotas' => $ventaPaquete->getCuotas()
                                     );
+            
+            $rsm2 = new ResultSetMapping();
+            $ptid = $ventaPaquete->getId();
+            $sql2 = "select cast(sum(abo.monto) as decimal(36,2)) abonos, count(abo.monto) cuotas "
+                    . "from abono abo inner join venta_paquete p on abo.venta_paquete = p.id "
+                    . "where p.id = '$ptid'";
+            
+            $rsm2->addScalarResult('abonos','abonos');
+            $rsm2->addScalarResult('cuotas','cuotas');
+            
+            $abonos = $em->createNativeQuery($sql2, $rsm2)
+                    ->getSingleResult();
             
             $this->get('bitacora')->escribirbitacora("Se edito la venta del paquete " . $ventaPaquete->getPaquete()->getNombre(), $usuario->getId());
             
@@ -662,7 +676,8 @@ class VentaPaqueteController extends Controller
                                 'exito'       => '1',
                                 'paquete' => $ventaPaquete->getPaquete()->getNombre(),
                                 'ventaPaquete' => $ventaPaquete->getId(),
-                                'ventaPaqueteTratamientos' => $ventaPaqueteTratamientos
+                                'ventaPaqueteTratamientos' => $ventaPaqueteTratamientos,
+                                'abonos' => $abonos
                                ));  
             
             return $response; 

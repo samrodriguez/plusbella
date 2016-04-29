@@ -12,6 +12,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use DGPlusbelleBundle\Entity\PersonaTratamiento;
 use DGPlusbelleBundle\Form\PersonaTratamientoType;
 use DGPlusbelleBundle\Entity\SeguimientoTratamiento;
+use Doctrine\ORM\Query\ResultSetMapping;
 
 /**
  * PersonaTratamiento controller.
@@ -465,8 +466,21 @@ class PersonaTratamientoController extends Controller
                                         'id' => $personatratamiento->getId(), 
                                         'costo' => $personatratamiento->getCostoConsulta(), 
                                         'sesiones' => $personatratamiento->getNumSesiones(), 
+                                        'descuento' => $personatratamiento->getDescuento()->getPorcentaje(),
                                         'cuotas' => $personatratamiento->getCuotas()
                                     );
+            
+            $ptid = $personatratamiento->getId();
+            $rsm2 = new ResultSetMapping();
+            $sql2 = "select cast(sum(abo.monto) as decimal(36,2)) abonos, count(abo.monto) cuotas "
+                    . "from abono abo inner join persona_tratamiento p on abo.persona_tratamiento = p.id "
+                    . "where p.id = '$ptid'";
+            
+            $rsm2->addScalarResult('abonos','abonos');
+            $rsm2->addScalarResult('cuotas','cuotas');
+            
+            $abonos = $em->createNativeQuery($sql2, $rsm2)
+                    ->getSingleResult();
             
             $this->get('bitacora')->escribirbitacora("Se registro una nueva venta del tratamiento " . $personatratamiento->getTratamiento()->getNombre(), $usuario->getId());
             
@@ -476,7 +490,8 @@ class PersonaTratamientoController extends Controller
                                 'personaTratamiento' => $ventaTratamiento,
                                 'personaTratamientos' => $sesionTratamiento,
                                 'seguimiento' =>  $seguimiento->getNumSesion(),
-                                'tratamiento' => $personatratamiento->getTratamiento()->getNombre()
+                                'tratamiento' => $personatratamiento->getTratamiento()->getNombre(),
+                                'abonos' => $abonos
                             )); 
             
             return $response; 

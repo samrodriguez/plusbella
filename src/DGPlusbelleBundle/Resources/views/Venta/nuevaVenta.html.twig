@@ -1432,7 +1432,7 @@
                 // Al momento de hacer click en Editar venta 
                 $(document).on("click", "#edit-venta", function(){
                     // Si se ha chequeado en el tipo de venta Paquete
-                    if($("#tipo-venta-paquete").is(':checked')) {
+                    if(id_ventapaquete > 0) {
                         var idpac = '{{paciente.id}}';
                         var paquete = $('#dgplusbellebundle_venta_paquete').val();
                         var tratamiento = $('#dgplusbellebundle_venta_tratamiento').val();
@@ -1488,10 +1488,14 @@
                                                 var seguimientoSesionesTratamiento = document.getElementById('seguimiento-sesiones-tratamiento');
                                                 var detalleVentaInfo = document.getElementById('detalle-venta-info');
                                                 id_ventapaquete = response.ventaPaquete;
-
+                                                deuda_total = (response.ventaPaqueteTratamientos.costo - ((response.ventaPaqueteTratamientos.descuento * response.ventaPaqueteTratamientos.costo)/100) - response.abonos.abonos).toFixed(2);
+                                                //console.log(response.ventaPaqueteTratamientos.costo);
+                                                //console.log(response.ventaPaqueteTratamientos.descuento);
+                                                //console.log(response.abonos.abonos);
+                                                //console.log(deuda_total);
                                                 $('#detalle-venta-costo').html('$ ' + response.ventaPaqueteTratamientos.costo);
-                                                //$('#detalle-venta-costo').html('$ ' + costoTratamiento);
-                                                $('#detalle-venta-sesiones').html(response.ventaPaqueteTratamientos.sesiones);
+                                                $('#detalle-venta-cuotas').html(response.ventaPaqueteTratamientos.cuotas);
+                                                $('#detalle-venta-deuda').html('$ ' + deuda_total);
                                                 
                                                 $.each( response.ventaPaqueteTratamientos.nomTratamientos, function( key, value ) {
                                                     draw+= '<div class="row">';
@@ -1589,9 +1593,12 @@
                                                 var costoTratamiento = response.personaTratamiento.costo;
                                                 id_ventatratamiento = response.personaTratamiento.id;
                                                 var mensaje = '';
-                                                console.log(costoTratamiento);
+                                                console.log(response.personaTratamiento.descuento);
+                                                deuda_total = (response.personaTratamiento.costo - ((response.personaTratamiento.descuento * response.personaTratamiento.costo)/100) - response.abonos.abonos).toFixed(2);
+                                                
                                                 $('#detalle-venta-costo').html('$ ' + costoTratamiento);
-                                                $('#detalle-venta-costo').html('$ ' + costoTratamiento);
+                                                $('#detalle-venta-deuda').html('$ ' + deuda_total);
+                                                $('#detalle-venta-cuotas').html(response.personaTratamiento.cuotas);
                                                 $('#detalle-venta-sesiones').html(response.personaTratamiento.sesiones);
 
                                                 for (var i = 0; i < response.seguimiento; i++) {
@@ -1605,7 +1612,7 @@
                                                     mensaje += '</div>';
                                                 }
 
-                                                $('#seguimiento-detalle-sesiones').html(mensaje);
+                                                $('#seguimiento-tratamientos-realizados').html(mensaje);
 
                                             }
                                         });
@@ -1732,7 +1739,7 @@
                                 type:  'post',
                                 success:  function (response) {
                                     alertify.success('Se ha resgistrado con exito la sesion del tratamiento');
-
+                                    var mensaje = '';
                                     var tabsImagenes = document.getElementById('tabs-imagenes');
                                     tabsImagenes.style.display = 'block';
                                     //var tabsSeguimiento = document.getElementById('tabs-seguimiento');
@@ -1769,7 +1776,7 @@
                 // Al hacer click en guardar imagenes
                 $(document).on("click","#registro-sesiones-imagenes",function(){
                     // Si se ha chequeado en el tipo de venta Paquete
-                    if($("#tipo-venta-paquete").is(':checked')) {
+                    if(id_ventapaquete > 0) {
                     
                     // Si se ha chequeado en el tipo de venta Tratamiento    
                     } else {
@@ -1849,7 +1856,7 @@
                                 }
                             }
                             else{
-                                bootbox.alert('Debe guardar una venta primero!');
+                                bootbox.alert('Debe guardar una sesion de tratamiento primero!');
                             }
                     }    
                 });
@@ -1864,7 +1871,7 @@
                     var draw = '';
                 
                     // Si se ha chequeado en el tipo de venta Paquete
-                    if($("#tipo-venta-paquete").is(':checked')) {
+                    if(id_ventapaquete > 0) {
                         var data = {
                             id : idpac,
                             sucursal : sucursal,
@@ -1873,7 +1880,7 @@
                             descripcion: descripcion,
                             id_ventapaquete : id_ventapaquete
                         };
-                        
+                        console.log(deuda_total);
                         if(monto <= deuda_total){
                             // Se procede a registrar la sesion del tratamiento mediante ajax
                             $.ajax({
