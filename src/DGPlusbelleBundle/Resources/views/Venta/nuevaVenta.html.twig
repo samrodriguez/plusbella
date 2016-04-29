@@ -761,31 +761,43 @@
                     {# Sección en donde se encuentran las imagenes de un determinado tratamiento #}
                     <div id="imagenes" class="tab-pane fade" style="margin-top: 20px;">
                         <div class="row" style="margin-top: 35px; padding: 30px;" style="display:none;">
-                            <strong>Subir imagen</strong>
-                            <div class="row" style="margin-top:20px;">
-                                <div class="col-md-12">
-                                    <form id="formImagen" role="form" enctype="multipart/form-data" method="post">
-                                        <input id="file-input" required type="file" name="file[]" multiple>
-                                        <input type="hidden" id="idSesion" name="idSesion" class="form-control input-sm"/>
-                                    </form>
-                                </div>
-                            </div>
-                            
-                            <div class="row" style="margin-top:20px;">
-                                <div class="col-md-12">
-                                    <strong style="margin-top:80px;">Archivos adjuntos</strong>
+                            <form id="formImagen" role="form" enctype="multipart/form-data" method="post">
+                            <div class="col-md-3 pull-center" id="imagenes-sesiones-tratamiento">
+                                <div id="sesiones-tratamiento">
+                                    <label>Tratamiento</label>
+                                    <select id="dgplusbellebundle_imagenes_tratamiento" name="venta_imagenes_tratamiento" class="sesion_tratamiento" style="width: 100%">
+                                        <option value="" disabled selected>Seleccione un tratamiento...</option>
+                                    </select>    
                                 </div>    
-                                <div class="col-md-12">
-                                    <div id="listadoImagenes">
-                                        {#{% for imagen in archivos %}
-                                            <div class="col-md-2">
-                                                <a class="verImagen" href="{{ asset('Photos/Tmp/')}}{{imagen.fotoAntes}}">Imagen {{loop.index}}</a>
-                                            </div>
-                                        {% endfor %}#}
+                            </div>
+                            <div class="col-md-3 col-md-offset-1 pull-center" id="imagenes-sesiones-sesiones">
+                                <div class="row" {#style="margin-top: 35px; padding: 30px;"#}>        
+                                    <strong>Subir imagen</strong>
+                                    <div class="row" style="margin-top:20px;">
+                                        <div class="col-md-12">
+                                            
+                                                <input id="file-input" required type="file" name="file[]" multiple>
+                                                <input type="hidden" id="idSesion" name="idSesion" class="form-control input-sm"/>
+                                            
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                        
+                            </form>        
+                        </div>
+                        <div class="row" style="margin-top:20px; padding: 30px;">
+                            <div class="col-md-12">
+                                <strong style="margin-top:80px;">Archivos adjuntos</strong>
+                            </div>    
+                            <div class="col-md-12">
+                                <div id="listadoImagenes">
+                                    {#{% for imagen in archivos %}
+                                        <div class="col-md-2">
+                                            <a class="verImagen" href="{{ asset('Photos/Tmp/')}}{{imagen.fotoAntes}}">Imagen {{loop.index}}</a>
+                                        </div>
+                                    {% endfor %}#}
+                                </div>
+                            </div>
                         </div>
                         <div class="row">
                             <div class="col-md-12 col-sm-12 text-center" style="margin-top: 30px; margin-bottom: 10px;" id="registrar-sesiones-imagenes">
@@ -957,6 +969,7 @@
                 $('#dgplusbellebundle_sesiones_tratamiento').select2();
                 $('#dgplusbellebundle_abono_sucursal').select2();
                 $('#dgplusbellebundle_abono_empleado').select2();
+                $('#dgplusbellebundle_imagenes_tratamiento').select2();
                 $('#dgplusbellebundle_venta_tratamiento').val('');
                 
                 // Estableciendo la máscara a los campos que lo requieren
@@ -1275,6 +1288,12 @@
                                                         vtratamientos.append('<option value="' + v.id + '">' + v.nombre + '</option>');
                                                     });
                                                     
+                                                    var imgtratamientos = $("#dgplusbellebundle_imagenes_tratamiento");
+                                                    $(response.ventaPaqueteTratamientos.tratVenta).each(function(i, v){ 
+                                                        imgtratamientos.append('<option value="' + v.id + '">' + v.nombre + '</option>');
+                                                    });
+                                                    
+                                                    $("#dgplusbellebundle_imagenes_tratamiento").show();
                                                     tabsSesiones.style.display = 'block';
                                                     //tabsImagenes.style.display = 'block';
                                                     tabsAbdev.style.display = 'block';
@@ -1351,11 +1370,15 @@
                                                     var tabsSeguimiento = document.getElementById('tabs-seguimiento');
                                                     tabsSeguimiento.style.display = 'block';
                                                     id_ventatratamiento = response.personaTratamiento.id;
-                                                    deuda_total = costoTratamiento;
+                                                    deuda_total = (response.personaTratamiento.costo - ((response.personaTratamiento.descuento * response.personaTratamiento.costo)/100) - response.abonos.abonos).toFixed(2);;
                                                     
-                                                    $('#detalle-venta-costo').html('$ ' + costoTratamiento);
+                                                    $('#detalle-venta-costo').html('$ ' + response.personaTratamiento.costo);
                                                     $('#detalle-venta-cuotas').html(response.personaTratamiento.cuotas);
-                                                    $('#detalle-venta-deuda').html('$ ' + costoTratamiento);
+                                                    $('#detalle-venta-deuda').html('$ ' + deuda_total);
+                                                    
+                                                    {#$('#detalle-venta-costo').html('$ ' + costoTratamiento);
+                                                    $('#detalle-venta-cuotas').html(response.personaTratamiento.cuotas);
+                                                    $('#detalle-venta-deuda').html('$ ' + costoTratamiento);#}
                                                     $('#detalle-venta-sesiones').html(response.personaTratamiento.sesiones);
                                                     
                                                     $('#label-tipo-venta').html('<p>Tratamiento</p>');
@@ -1394,7 +1417,7 @@
                                                     editarVenta.style.display = 'block';
                                                     
                                                     $('#registro-venta').attr("disabled", true);
-                                                    
+                                                    $("#imagenes-sesiones-tratamiento").hide();
                                                     {#var id = 'P' + {{paciente.id}};
                                                     var path = Routing.generate('admin_historial_consulta', {'id': id});
 
@@ -1746,7 +1769,8 @@
                                     var tabsImagenes = document.getElementById('tabs-imagenes');
                                     tabsImagenes.style.display = 'block';
                                     //var tabsSeguimiento = document.getElementById('tabs-seguimiento');
-
+                                    $('#idSesion').val(id_ventatratamiento);
+                                    
                                     pendientes--;
                                     for (var i = 0; i < response.seguimiento; i++) {
                                         mensaje += '<div class="col-md-1" style="margin-bottom: 10px;">';
@@ -1780,34 +1804,108 @@
                 $(document).on("click","#registro-sesiones-imagenes",function(){
                     // Si se ha chequeado en el tipo de venta Paquete
                     if(id_ventapaquete > 0) {
-                    
+                        $("#prev").show();
+                        $("#saveImagen").hide();
+
+                        //obtenemos un array con los datos del archivo
+                        var file = $('#file-input')[0].files[0];
+                        //obtenemos el nombre del archivo
+                        var idSesion =$('#idSesion').val();
+                        var tratamiento = $('#dgplusbellebundle_imagenes_tratamiento').val();
+                        var fileName = file.name;
+                        //obtenemos la extensión del archivo
+                        fileExtension = fileName.substring(fileName.lastIndexOf('.') + 1);
+                        //obtenemos el tamaño del archivo
+                        var fileSize = file.size;
+
+                        //obtenemos el tipo de archivo image/png ejemplo
+                        var fileType = file.type;
+                        // console.log(fileType);
+                        // console.log(fileExtension);
+                        if (fileExtension == 'PNG' || fileExtension == 'png' ||fileExtension == 'JPG'|| fileExtension == 'jpg' && fileType =='imagen' || fileType =='image' || fileType =='image/jpeg' )
+                        {
+                            flag = true;
+                        }else{
+                            flag = false;
+                        }
+                        if(idSesion!=''){
+                            if (flag==false){
+                                alert("Archivo invalido, seleccione una imagen.");
+                                $("#file-input").val("");
+                                $("#prev").hide();
+                                $("#saveImagen").hide();
+                            }else{  
+                               var pesoKb=(fileSize/1024);
+                               if (pesoKb<=2048){
+                                var frm = new FormData($("#formImagen")[0]);
+                                console.log(frm);
+                                    if (flag != false) {
+                                        $.ajax({
+                                            data:frm,
+                                            url:Routing.generate('ingresar_foto_venta_paquete'),
+                                            type: 'POST',
+                                            dataType: 'json',
+                                            cache: false,
+                                            contentType: false,
+                                            processData: false,
+                                            success: function(data){
+                                                if(data.exito == 0){
+                                                    $('#file-input').val('');
+                                                    alertify.success("Imagenes subidas con éxito!");
+                                                    $('#listadoImagenes').html('');
+                                                    var key = 1;
+                                                    for(i=0;i<data.imagenes.length;i++){
+                                                        $('#listadoImagenes').append('<div class=\"col-md-2\"><a class=\"verImagen\" href=\"{{ asset('Photos/Tmp/')}}'+data.imagenes[i]+'\"><img style=\"width:100%;\" src=\"{{ asset('Photos/Tmp/')}}' + data.imagenes[i] + '\"></a></div>');
+                                                        key++;
+                                                    }
+                                                } else {
+                                                    bootbox.alert('Debe guardar una sesion de tratamiento del paquete, primero!');
+                                                    return false;
+                                                }
+                                            },
+                                            error: function(data){
+                                                bootbox.alert('Hubo un error al subir las fotos');
+                                            }
+                                        });
+                                    }
+                                }
+                                else{
+                                    console.log(pesoKb);
+                                    alert("Imagen demasiado grande, intente con una mas pequeña");
+                                }
+                            }
+                        }
+                        else{
+                            bootbox.alert('Debe guardar una sesion de tratamiento del paquete, primero!');
+                        }
                     // Si se ha chequeado en el tipo de venta Tratamiento    
                     } else {
                         $("#prev").show();
         
-                    $("#saveImagen").hide();
+                        $("#saveImagen").hide();
 
-                    //obtenemos un array con los datos del archivo
-                    var file = $('#file-input')[0].files[0];
-                    //obtenemos el nombre del archivo
-                    var idSesion =$('#idSesion').val();
-                    //alert(idconsulta);
-                    var fileName = file.name;
-                    //obtenemos la extensión del archivo
-                    fileExtension = fileName.substring(fileName.lastIndexOf('.') + 1);
-                    //obtenemos el tamaño del archivo
-                    var fileSize = file.size;
+                        //obtenemos un array con los datos del archivo
+                        var file = $('#file-input')[0].files[0];
+                        //obtenemos el nombre del archivo
+                        var idSesion =$('#idSesion').val();
+                        //alert(idconsulta);
+                        var fileName = file.name;
+                        //obtenemos la extensión del archivo
+                        fileExtension = fileName.substring(fileName.lastIndexOf('.') + 1);
+                        //obtenemos el tamaño del archivo
+                        var fileSize = file.size;
 
-                    //obtenemos el tipo de archivo image/png ejemplo
-                    var fileType = file.type;
-                    console.log(fileType);
-                    console.log(fileExtension);
-                    if (fileExtension == 'PNG' || fileExtension == 'png' ||fileExtension == 'JPG'|| fileExtension == 'jpg' && fileType =='imagen' || fileType =='image' || fileType =='image/jpeg' )
-                    {
-                        flag = true;
-                    }else{
-                        flag = false;
-                    }
+                        //obtenemos el tipo de archivo image/png ejemplo
+                        var fileType = file.type;
+                        console.log(fileType);
+                        console.log(fileExtension);
+                        if (fileExtension == 'PNG' || fileExtension == 'png' ||fileExtension == 'JPG'|| fileExtension == 'jpg' && fileType =='imagen' || fileType =='image' || fileType =='image/jpeg' )
+                        {
+                            flag = true;
+                        }else{
+                            flag = false;
+                        }
+                        
                         if(idSesion!=''){
                             if (flag==false){
                                 alert("Archivo invalido, seleccione una imagen ");
@@ -1841,7 +1939,7 @@
                                                     $('#listadoImagenes').html('');
                                                     var key = 1;
                                                     for(i=0;i<data.length;i++){
-                                                        $('#listadoImagenes').append('<div class=\"col-md-2\"><a class=\"verImagen\" href=\"{{ asset('Photos/Tmp/')}}'+data[i]+'\">Imagen '+ key +' </a></div>');
+                                                        $('#listadoImagenes').append('<div class=\"col-md-2\"><a class=\"verImagen\" href=\"{{ asset('Photos/Tmp/')}}'+data[i]+'\"><img style=\"width:100%;\" src=\"{{ asset('Photos/Tmp/')}}' + data[i] + '\"></a></div>');
                                                         key++;
                                                     }
                                                 },
@@ -1875,7 +1973,7 @@
                             }
                         }
                         else{
-                            bootbox.alert('Debe guardar una venta primero!');
+                            bootbox.alert('Debe guardar una sesion de tratamiento primero!');
                         }
                     }    
                 });
@@ -2215,7 +2313,7 @@
                     tabsImagenes.style.display = 'block';
 
                     var vtratamientos = $("#dgplusbellebundle_sesiones_tratamiento");
-                    $('#idSesion').val(id_ventatratamiento);
+                    $('#idSesion').val(id_ventapaquete);
 
                     $.each( response.ventaPaquete, function( key, value ) {
                         //console.log(value);
