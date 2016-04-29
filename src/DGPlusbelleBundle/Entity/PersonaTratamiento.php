@@ -77,7 +77,7 @@ class PersonaTratamiento
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="fecha_venta", type="date", nullable=false)
+     * @ORM\Column(name="fecha_venta", type="datetime", nullable=false)
      */
     private $fechaVenta;
     
