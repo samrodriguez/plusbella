@@ -147,7 +147,7 @@ class VentaPaqueteController extends Controller
         $entity = new VentaPaquete();
         $em = $this->getDoctrine()->getManager();
         
-        //Recuperación del paciente
+        //Recuperaci贸n del paciente
         $request = $this->getRequest();
         //$id= $request->get('id');
         //$id = substr($id, 1);
@@ -514,7 +514,7 @@ class VentaPaqueteController extends Controller
                            ->setParameter('ids', $idtratamientos)
                            ->getResult();
             
-            if(!is_null($descuentoId)){    
+            if($ventaPaquete->getDescuento()){    
                 $totaldesc = ($ventaPaquete->getCosto() * $ventaPaquete->getDescuento()->getPorcentaje()) / 100;
                 //$totaldesc = $ventaPaquete->getDescuento()->getPorcentaje();
             } else {

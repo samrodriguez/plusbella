@@ -119,7 +119,7 @@
                                 <strong>Descuento:</strong>
                             </div>
                             <div class="col-md-2" style="margin-bottom: 10px;">
-                                <span {#id="detalle-venta-cuotas"#}>{{ personaTratamiento.descuento.porcentaje }}%</span>
+                                <span {#id="detalle-venta-cuotas"#}>{#{{ personaTratamiento.descuento.porcentaje }}%#}</span>
                             </div>
                         {#</div>  
                         <div class="row">#}
@@ -420,7 +420,7 @@
                                             <option value="" selected>Seleccione un tipo de descuento ...</option>
 
                                             {% for descuento in descuentos %}
-                                                <option value="{{descuento.id}}"  {% if descuento.id == personaTratamiento.descuento.id %} selected {% endif %}> {{descuento.nombre}} - {{descuento.porcentaje}}%</option>
+                                                <option value="{{descuento.id}}"  {% if personaTratamiento.descuento %}{% if descuento.id == personaTratamiento.descuento.id %} selected {% endif %}{% endif %}> {{descuento.nombre}} - {{descuento.porcentaje}}%</option>
                                             {% endfor %}
                                         </select>   
                                     </div>
@@ -525,7 +525,11 @@
                                         <strong>Descuento:</strong>
                                     </div>
                                     <div class="col-md-2" style="margin-bottom: 10px;">
+                                        {% if personaTratamiento.descuento %}
                                         <span id="detalle-venta-cuotas">{{ personaTratamiento.descuento.porcentaje }}%</span>
+                                        {% else %}
+                                        <span id="detalle-venta-cuotas">0.00%</span>
+                                        {% endif %}
                                     </div>
                                 {#</div>  
                                 <div class="row">#}
@@ -534,7 +538,11 @@
                                     </div>
                                     <div class="col-md-2" style="margin-bottom: 10px;">
                                         {#data.query[0].costoTratamiento - ((data.query[0].porcentaje * data.query[0].costoTratamiento)/100)) - data.abonos.abonos).toFixed(2)#}
-                                        <span id="detalle-venta-deuda">$ {{ (( personaTratamiento.costoConsulta - (( personaTratamiento.descuento.porcentaje * personaTratamiento.costoConsulta ) / 100)) - abonos.abonos )|number_format(2, '.', ',') }}</span>
+                                        {% if personaTratamiento.descuento %}
+                                            <span id="detalle-venta-deuda">$ {{ (( personaTratamiento.costoConsulta - (( personaTratamiento.descuento.porcentaje * personaTratamiento.costoConsulta ) / 100)) - abonos.abonos )|number_format(2, '.', ',') }}</span>
+                                         {% else %}
+                                             <span id="detalle-venta-deuda">$ {{ (( personaTratamiento.costoConsulta - (( 0 * personaTratamiento.costoConsulta ) / 100)) - abonos.abonos )|number_format(2, '.', ',') }}</span>
+                                         {% endif %}  
                                     </div>
                                 </div>  
                             </div>
@@ -737,7 +745,15 @@
         <script>
             var sesion_tratamiento = 0;
             var id_ventapaquete = 0;
-            var deuda_total = {{ (( personaTratamiento.costoConsulta - (( personaTratamiento.descuento.porcentaje * personaTratamiento.costoConsulta ) / 100)) - abonos.abonos )|number_format(2, '.', ',') }};
+            {#var deuda_total = {{ (( personaTratamiento.costoConsulta - (( personaTratamiento.descuento.porcentaje * personaTratamiento.costoConsulta ) / 100)) - abonos.abonos )|number_format(2, '.', ',') }};#}
+            var deuda_total = 0;
+            
+            {% if personaTratamiento.descuento %}
+                 deuda_total = {{ (( personaTratamiento.costoConsulta - (( personaTratamiento.descuento.porcentaje * personaTratamiento.costoConsulta ) / 100)) - abonos.abonos )|number_format(2, '.', ',') }};
+            {% else %}
+                 deuda_total = {{ (( personaTratamiento.costoConsulta - (( 0 * personaTratamiento.costoConsulta ) / 100)) - abonos.abonos )|number_format(2, '.', ',') }};
+            {% endif %} 
+            
             var pendientes = {{ personaTratamiento.numSesiones - seguimiento.numSesion }};
             var id_ventatratamiento = {{ personaTratamiento.id}};
                         
