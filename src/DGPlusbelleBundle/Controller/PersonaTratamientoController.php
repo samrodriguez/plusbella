@@ -375,11 +375,18 @@ class PersonaTratamientoController extends Controller
             $em->persist($seguimiento);
             $em->flush();
             
+            if($personaTratamiento->getDescuento()){
+              $des_trat = $personaTratamiento->getDescuento()->getPorcentaje();
+            } else {
+              $des_trat = 0;
+            }
+            
+            
             $ventaTratamiento = array(
                                         'id' => $personaTratamiento->getId(), 
                                         'costo' => $personaTratamiento->getCostoConsulta(), 
                                         'sesiones' => $personaTratamiento->getNumSesiones(), 
-                                        'descuento' => $personaTratamiento->getDescuento()->getPorcentaje(),
+                                        'descuento' => $des_trat,
                                         'cuotas' => $personaTratamiento->getCuotas()
                                     );
             

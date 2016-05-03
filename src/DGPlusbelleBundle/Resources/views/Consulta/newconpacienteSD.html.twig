@@ -251,8 +251,7 @@
                                     <input id="direccion" value="{{paciente.persona.direccion}}" name="direccion" class="form-control input-sm"/>
                                 </div>
                                 <div class="col-md-4">
-                                    <input type="hidden" id="idPaciente" value="{{paciente.id}}" name="idPaciente" class="form-control input-sm"/>
-                                    
+                                    <input type="hidden" id="idPaciente" value="{{paciente.id}}" name="idPaciente" class="form-control input-sm"/>                                    
                                 </div>
                             </div>
                         
@@ -351,7 +350,6 @@
                                 </div>                        
                             </div>
                                 
-                                
                             <div class="row" style="margin-top:20px;">
                                 <div class="col-md-3">
                                     <label>
@@ -373,8 +371,6 @@
                                     <input id="telefonoEmergencia" value="{{paciente.telefonoEmergencia }}" name="telefonoEmergencia" class="form-control input-sm"/>
                                 </div>
                             </div>
-                                
-                                    
                                     
                             <div class="row" style="margin-top:10px;">
                                 <div class="col-md-12">
@@ -395,8 +391,7 @@
                     <div class="tab-pane active fade in" id="botabs2">
                       <p><strong>Registrar consultas</strong>
                             <div class="row">
-                                <div class="col-md-12">
-                                    
+                                <div class="col-md-12">                                    
                                     <div class="row" style="margin-top:20px;">
                                         <div class="col-md-3">
                                             <label>
@@ -446,8 +441,7 @@
                                                     <option value="{{tipo.id}}" {% if consulta.tipoConsulta!=null and consulta.id!=null and tipo.id==consulta.tipoConsulta.id %} selected {% endif %}>{{tipo.nombre}}</option>
                                                 {% endfor %}
                                             </select>
-                                        </div>
-                                        
+                                        </div>                                        
                                     </div>
                                     
                                     <div class="row" style="margin-top:20px;">
@@ -461,11 +455,9 @@
                                             <label>
                                                 Sucursal
                                             </label>
-                                        </div>
-                                        
+                                        </div>                                        
                                     </div>
-                                    <div class="row">
-                                                                               
+                                    <div class="row">                                                                               
                                         <div class="col-md-6">
                                             <textarea class="col-md-12 editorArea" id="observacionConsulta">{{consulta.observacion}}</textarea>
                                         </div>
@@ -483,10 +475,8 @@
                                                 {% endfor %}
                                             </select>
                                         </div>
-                                        
-                                        
+                                                                                
                                     </div>
-                                    
                                     
                                     <div class="row" style="display:none;margin-top:20px;">
                                         <div class="col-md-12">
@@ -507,7 +497,6 @@
                                         </div>
                                     </div>
                                     
-                                    
                                     <div class="row" style="margin-top:10px;">
                                         <div class="col-md-12">
                                             <hr>
@@ -521,12 +510,8 @@
                                                 <button type="submit" id="guardarNuevoConsulta" name="dgplusbellebundle_consulta[submit]" class="btn btn-success btn-xs btn btn">Guardar</button>
                                             </div>
                                         </div>
-                                    </div>
-                                                
-                                    
-                                </div>
-                                
-                                
+                                    </div>                                                                                    
+                                </div>                                                                
                             </div>
                       
                       
@@ -780,24 +765,160 @@
                                         </div>
                                     </div>
 
-                                    <div class="row  pull-right" style="margin-top:10px;">
+                                    <div class="row  pull-right">
                                         <div class="col-md-12">
                                             <div class="form-grouphide col-sm-12">
                                                 {#<a class="btn btn-default btn-xs" id="cancelarNuevoConsulta">Cancelar</a>#}
-                                                <button type="submit" id="guardarPlantilla" name="dgplusbellebundle_antecedentes[submit]" class="btn btn-success btn-xs btn btn">Guardar</button>
+                                                <button type="submit" id="guardarPlantilla" name="dgplusbellebundle_antecedentes[submit]" class="btn btn-success btn-xs btn btn" style="color: #FFF">Guardar</button>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                                 
                             </div>
-                            {% else %}       
-                                {% if consulta.sucursal is not null%}
-                                    <i class="fa fa-file-pdf-o"></i><a class="generarPDF" href="{{path(ruta,{botox:botox,valores:valores,id:consulta.id,paciente:paciente.id,sucursal:consulta.sucursal.id,estetica:estetica,corporal:corporal})}}"> Ver plantilla</a>
+                            {% else %}  
+                                <div class="row" style="margin-bottom: 20px;">
+                                {% if tipoPlantilla == 1 %}
+                                    <div class="col-md-2">
+                                        <p>Sonodigest</p>
+                                    </div>        
                                 {% else %}
-                                    <i class="fa fa-file-pdf-o"></i><a class="generarPDF" href="{{path(ruta,{botox:botox,valores:valores,id:consulta.id,paciente:paciente.id,sucursal:8  ,estetica:estetica,corporal:corporal})}}"> Ver plantilla</a>
+                                    <div class="col-md-2">
+                                        <p>La Plus Belle</p>
+                                    </div>   
+                                
+                                    {% if tipoPlantilla == 2 %}
+                                        <div class="col-md-4">
+                                            <p>Historia clinica de consulta de botox</p>
+                                        </div>   
+                                    {% elseif tipoPlantilla == 3 %}
+                                        <div class="col-md-4">
+                                            <p>Historia clinica de corporal</p>
+                                        </div> 
+                                    {% elseif tipoPlantilla == 4 %}
+                                        <div class="col-md-4">
+                                            <p>Historia clinica de facial</p>
+                                        </div> 
+                                    {% endif %}
                                 {% endif %}
-                            
+                                </div>
+                                <div class="clearfix"></div>
+                                {% if consulta.sucursal is not null%}
+                                    <i class="fa fa-file-pdf-o"></i><a class="generarPDF" href="{{path(ruta,{botox:botox,valores:valores,id:consulta.id,paciente:paciente.id,sucursal:consulta.sucursal.id,estetica:estetica,corporal:corporal})}}"> Ver historia clinica</a>
+                                    <hr>
+                                {% else %}
+                                    <i class="fa fa-file-pdf-o"></i><a class="generarPDF" href="{{path(ruta,{botox:botox,valores:valores,id:consulta.id,paciente:paciente.id,sucursal:8  ,estetica:estetica,corporal:corporal})}}"> Ver historia clinica</a>
+                                    <hr>
+                                {% endif %}
+                                
+                                <div class="row  pull-right" style="margin-top:10px;">
+                                    <div class="col-md-12">
+                                        <div class="form-grouphide col-sm-12">
+                                            {#<a class="btn btn-default btn-xs" id="cancelarNuevoConsulta">Cancelar</a>#}
+                                            <button type="submit" id="editarPlantilla" name="dgplusbellebundle_editarPlantilla[submit]" class="btn btn-success btn-xs btn btn" style="color: #FFF">Actualizar</button>
+                                        </div>
+                                    </div>
+                                            
+                                </div>
+                                <div class="clearfix"></div>
+                                
+                                {% if tipoPlantilla == 2 %}
+                                    <div class="row  pull-right">            
+                                        <div class="col-md-12" style="margin-top:30px;">
+                                            <div class="form-grouphide col-sm-12">
+                                                <div id="comparativoBotox" class="comparativoBotox">
+                                                    <a id="nuevoUrlBotox" style="color: blue;">Nuevo registro de detalle de consulta</a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="clearfix"></div>
+                                    <hr>
+
+                                    {% for key, row in tienePlantilla %}
+                                        <div class="col-mod-12 botox-{{ key }}" style="margin-bottom: 15px;">
+                                            <div class="row">
+                                                {% if key != 0 %}
+                                                    <div id="comparativoBotox" class="text-right comparativoBotox-{{ key }}">
+                                                        <a id="borrarUrlBotox-{{ key }}" class="borrarRegistro" style="color: red;">Eliminar registro</a>
+                                                        <hr>
+                                                    </div>
+                                                {% endif %}    
+                                                <div class="form-group col-md-4" style="margin-bottom: 10px;">
+                                                    <div>
+                                                        <label>
+                                                            <p style="color: #646473; font-size: 13px;">Area a inyectar</p>
+                                                        </label>
+                                                    </div>
+                                                    <input id="area_inyectar" class="form-control cbotox" type="text" name="botox[{{ key }}]['area_inyectar']" value="{{ row.areaInyectar }}">
+
+                                                </div>
+                                                <div class="form-group col-md-4" style="margin-bottom: 10px;">
+                                                    <div>
+                                                        <label>
+                                                            <p style="color: #646473; font-size: 13px;">Unidades</p>
+                                                        </label>
+                                                    </div>
+                                                    <input id="unidades" class="form-control cbotox" type="text" name="botox[{{ key }}]['unidades']" value="{{ row.unidades }}">
+
+                                                </div>  
+                                                <div class="form-group col-md-4" style="margin-bottom: 10px;">
+                                                    <div>
+                                                        <label>
+                                                            <p style="color: #646473; font-size: 13px;">Fecha de caducidad</p>
+                                                        </label>
+                                                    </div>
+                                                    <input id="caducidad-{{ key }}" class="form-control cbotox calZebra {#caducidad#}" type="text" name="botox[{{ key }}]['caducidad']" value="{{ row.fechaCaducidad|date('d-m-Y') }}">
+
+                                                </div>    
+                                                <div class="form-group col-md-4" style="margin-bottom: 10px;">
+                                                    <div>
+                                                        <label>
+                                                            <p style="color: #646473; font-size: 13px;">lote No.</p>
+                                                        </label>
+                                                    </div>
+                                                    <input id="lote" class="form-control cbotox" type="text" name="botox[{{ key }}]['lote']" value="{{ row.lote }}">
+                                                </div>     
+                                                <div class="form-group col-md-4" style="margin-bottom: 10px;">
+                                                    <div>
+                                                        <label>
+                                                            <p style="color: #646473; font-size: 13px;">Marca del producto</p>
+                                                        </label>
+                                                    </div>
+                                                    <input id="marca_producto" class="form-control cbotox" type="text" name="botox[{{ key }}]['marca_producto']" value="{{ row.marcaProducto }}">
+                                                </div>
+                                                <div class="form-group col-md-4" style="margin-bottom: 10px;">
+                                                    <div>
+                                                        <label>
+                                                            <p style="color: #646473; font-size: 13px;">No. Aplicacion</p>
+                                                        </label>
+                                                    </div>
+                                                    <input id="num_aplicacion" class="form-control cbotox" type="text" name="botox[{{ key }}]['num_aplicacion']" value="{{ row.numAplicacion }}">
+                                                </div>
+                                                <div class="form-group col-md-4" style="margin-bottom: 10px;">
+                                                    <div>
+                                                        <label>
+                                                            <p style="color: #646473; font-size: 13px;">Valor</p>
+                                                        </label>
+                                                    </div>
+                                                    <input id="botox_valor" class="form-control cbotox" type="text" name="botox[{{ key }}]['valor']" value="{{ row.valor }}">
+                                                </div>
+                                                {% if row.recomendaciones %}
+                                                    <div class="form-group col-md-8" style="margin-bottom: 10px;">
+                                                        <div>
+                                                            <label>
+                                                                <p style="color: #646473; font-size: 13px;">Recomendaciones</p>
+                                                            </label>
+                                                        </div>
+                                                        <textarea id="botox_recomendaciones" class="form-control cbotox" type="text" name="botox[0][recomendaciones]">{{ row.recomendaciones }}</textarea>
+                                                    </div>
+                                                {% endif %}    
+                                            </div>
+
+                                        </div>
+
+                                    {% endfor %} 
+                                {% endif %}    
                             {% endif %}
                             {%if existePlantilla == false %}
                             <div class="SD" style="display:none; margin-top: 40px;">
@@ -917,6 +1038,16 @@
     
     <script>
         $(function () { 
+            $('.calZebra').Zebra_DatePicker({
+                months:['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
+                days: ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'],
+                format: 'd-m-Y',
+                show_clear_date:false,
+                show_select_today: "Hoy",
+            });
+        });
+        
+        $(function () { 
             $( "#dgplusbellebundle_consulta_reportePlantilla_0" ).on( "click", function() {
                 // Se muestra el combobox donde se selecciona la plantilla
                 $("#lista_plantilla").show();
@@ -983,7 +1114,11 @@
     </script>
     <script>
         var count = 0;
-        
+        {% if tipoPlantilla == 2 %}
+            count = {{ tienePlantilla|length }}
+        {% else %}            
+            count = 0;
+        {% endif %}
         $(function () { 
             $( "#dgplusbellebundle_consulta_plantilla" ).on( "change", function() {
                 // Se obtiene el id de la plantilla
@@ -1821,7 +1956,7 @@
             
             var inputFechaCaducidad = document.createElement('input');
             inputFechaCaducidad.setAttribute('type', 'text');
-            inputFechaCaducidad.setAttribute('class', 'form-control cbotox calZebra caducidad');
+            inputFechaCaducidad.setAttribute('class', 'form-control cbotox calZebra ');
             inputFechaCaducidad.setAttribute('name', 'botox['+ count +'][caducidad]');
             inputFechaCaducidad.setAttribute('id', 'caducidad-' + count);
             
@@ -2699,15 +2834,6 @@
     
 
     jQuery(document).ready(function() {
-        
-        $('.calZebra').Zebra_DatePicker({
-            months:['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
-            days: ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'],
-            format: 'd-m-Y',
-            show_clear_date:false,
-            show_select_today: "Hoy",
-        });
-            
         $('#dui').mask('00000000-0');  
         $('#telefono1').mask('0000-0000'); 
         $('#telefono2').mask('0000-0000'); 

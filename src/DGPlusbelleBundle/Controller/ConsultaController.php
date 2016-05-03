@@ -799,18 +799,17 @@ class ConsultaController extends Controller
         
         $mostrarplantilla=true;
         $botox = Array();
+        $botoxData = Array();
         $valores = Array();
         $corporal = Array();
         if($cadena != NULL) {
             //Obtener el id del parametro
             $idEntidad = substr($cadena, 1);
-
             //$identidad= $request->get('identidad');
+            
             //Busqueda del paciente
             $paciente = $em->getRepository('DGPlusbelleBundle:Paciente')->find($idEntidad);
-            
             $plantillas = $em->getRepository('DGPlusbelleBundle:Plantilla')->findAll();
-
             $plantillasEstetica = $em->getRepository('DGPlusbelleBundle:Estetica')->findAll();
             
             
@@ -836,8 +835,11 @@ class ConsultaController extends Controller
 //            if($idconsulta!=null){
                 $tienePlantilla = $em->getRepository('DGPlusbelleBundle:HistorialConsulta')->findBy(array('consulta'=>$idconsulta));
 //            }
+                
+            $tipoPlantilla = 0;    
             if(count($tienePlantilla)!=0){
 //                var_dump($tienePlantilla);
+                $tipoPlantilla = 1;
                 $existePlantilla = true;
                 $ruta = "admin_reporteplantilla_pdf";
 //                var_dump($ruta);
@@ -851,6 +853,8 @@ class ConsultaController extends Controller
                     if(count($tienePlantilla)==0){
                         $tienePlantilla = $em->getRepository('DGPlusbelleBundle:HistorialEstetica')->findBy(array('consulta'=>$idconsulta));
                         if(count($tienePlantilla)!=0){
+                            $tipoPlantilla = 4;
+                            
                             foreach($tienePlantilla as $row){
                                 array_push($valores,$row->getDetalleEstetica()->getId());
                             }
@@ -860,6 +864,8 @@ class ConsultaController extends Controller
                         }
                     }
                     else{
+                        $tipoPlantilla = 3;
+                        
                         //esta lleva comparativo
                         $ruta="admin_prevpdfcorporal_por_pdf";
                         $existePlantilla = true;
@@ -884,7 +890,12 @@ class ConsultaController extends Controller
                     }
                 }
                 else{
-                    //var_dump($tienePlantilla);
+                    // tipo de plantilla: Botox
+                    $tipoPlantilla = 2;
+                    
+                    //var_dump($tienePlantilla);+
+                    $i = 0;
+                    
                     foreach($tienePlantilla as $key=>$row){
                         array_push($botox,$row->getAreaInyectar());        
                         array_push($botox,$row->getUnidades());        
@@ -892,13 +903,22 @@ class ConsultaController extends Controller
                         array_push($botox,$row->getLote());        
                         array_push($botox,$row->getMarcaProducto());        
                         array_push($botox,$row->getNumAplicacion());        
-                        array_push($botox,$row->getValor());   
+                        array_push($botox,$row->getValor());
+                        
+                        //$botoxData['area_inyectar'] = $row->getAreaInyectar();
+                        //$botoxData['unidades'] = $row->getUnidades();
+                        
                         if($row->getRecomendaciones()!=null)
                             array_push($botox,$row->getRecomendaciones());
-                        }
-    //                $ruta="admin_pdf_botox_por_pdf";
+                        
+                        //array_push($botoxData, $tienePlantilla);
+                    }
+                    //var_dump($botoxData);
+                    //var_dump($tienePlantilla);
+                    
+//                    $ruta="admin_pdf_botox_por_pdf";
                     $ruta="admin_botox_por_pdf_previa";
-    //                $ruta="admin_comparativo_botox_por_pdf";
+//                    $ruta="admin_comparativo_botox_por_pdf";
                     $existePlantilla=true;
                     $estetica = 3;//botox
                 }
@@ -985,6 +1005,8 @@ class ConsultaController extends Controller
             //'form'   => $form->createView(),
             'flag'   => $flag,
             'signos' => $signos,
+            'tipoPlantilla' => $tipoPlantilla,
+            'tienePlantilla'=> $tienePlantilla
         );
             
     }

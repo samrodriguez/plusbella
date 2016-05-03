@@ -678,7 +678,7 @@ class PacienteController extends Controller
 	 */
         $entity = new Paciente();
         $form = $this->createCreateForm($entity);
-     
+     	date_default_timezone_set('America/El_Salvador');
 
         $start = $request->query->get('start');
         $draw = $request->query->get('draw');
@@ -886,8 +886,12 @@ class PacienteController extends Controller
 
             $abonos = $em->createNativeQuery($sql2, $rsm2)
                     ->getSingleResult();
-            
+            if($value->getDescuento()){
             $deudaTotal+= ($value->getCosto() - (($value->getDescuento()->getPorcentaje() * $value->getCosto())/100)) - $abonos['abonos'] ;
+            }
+            else {
+            $deudaTotal+= ($value->getCosto() - ((0 * $value->getCosto())/100)) - $abonos['abonos'] ;
+            }
             
             $dql = "SELECT seg.numSesion FROM DGPlusbelleBundle:SeguimientoPaquete seg"
                     . " INNER JOIN seg.idVentaPaquete ven"
@@ -928,8 +932,12 @@ class PacienteController extends Controller
 
             $abonos = $em->createNativeQuery($sql, $rsm)
                            ->getSingleResult();
-            
+            if($value->getDescuento()){
             $deudaTotal+= ($value->getCostoConsulta() - (($value->getDescuento()->getPorcentaje() * $value->getCostoConsulta())/100)) - $abonos['abonos'] ;
+            } else {
+            $deudaTotal+= ($value->getCostoConsulta() - ((0 * $value->getCostoConsulta())/100)) - $abonos['abonos'] ;
+            }
+            
             
             $dql = "SELECT pt.numSesiones, seg.numSesion FROM DGPlusbelleBundle:SeguimientoTratamiento seg"
                     . " INNER JOIN seg.idPersonaTratamiento pt"
