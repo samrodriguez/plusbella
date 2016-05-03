@@ -821,7 +821,7 @@
                                             
                                 </div>
                                 <div class="clearfix"></div>
-                                
+                                {# Si el tipo de plantilla a editar es de Botox #}    
                                 {% if tipoPlantilla == 2 %}
                                     <div class="row  pull-right">            
                                         <div class="col-md-12" style="margin-top:30px;">
@@ -917,7 +917,195 @@
 
                                         </div>
 
-                                    {% endfor %} 
+                                    {% endfor %}
+                                {# Si el tipo de plantilla a editar es de Composicion corporal #}    
+                                {% elseif tipoPlantilla == 3 %}
+                                    <div class="row  pull-right">            
+                                        <div class="col-md-12" style="margin-top:30px;">
+                                            <div class="form-grouphide col-sm-12">
+                                                <div id="comparativoCorp">
+                                                    <a id="urlComparativoCrp" style="color: blue;">Ver comparativo</a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="clearfix"></div>
+                                    <hr>
+                                    <div class="col-md-12 corporal" style="margin-bottom: 15px;" {#data-bvalidator="required,required"#}>
+                                        <div class="row">
+                                            <div class="form-group col-md-4" style="margin-bottom: 10px;">
+                                                <div>
+                                                    <label>
+                                                        <p style="color: #646473; font-size: 13px;">Peso</p>
+                                                    </label>
+                                                </div>
+                                                <input id="peso" class="form-control corporall" type="text" name="corporal[peso]" data-bvalidator="required,required" value="{{ tienePlantilla[0].peso }}">
+                                            </div>
+                                            <div class="form-group col-md-4" style="margin-bottom: 10px;">
+                                                <div>
+                                                    <label>
+                                                        <p style="color: #646473; font-size: 13px;">Grasa corporal</p>
+                                                    </label>
+                                                </div>
+                                                <input id="grasa_corporal" class="form-control corporall" type="text" name="corporal[grasa_corporal]" data-bvalidator="required,required" value="{{ tienePlantilla[0].grasaCorporal }}">
+                                            </div>
+                                            <div class="form-group col-md-4" style="margin-bottom: 10px;">
+                                                <div>
+                                                    <label>
+                                                        <p style="color: #646473; font-size: 13px;">Agua corporal</p>
+                                                    </label>
+                                                </div>
+                                                <input id="agua_corporal" class="form-control corporall" type="text" name="corporal[agua_corporal]" data-bvalidator="required,required" value="{{ tienePlantilla[0].aguaCorporal }}">
+                                            </div>
+                                            <div class="form-group col-md-4" style="margin-bottom: 10px;">
+                                                <div>
+                                                    <label>
+                                                        <p style="color: #646473; font-size: 13px;">Masa musculo</p>
+                                                    </label>
+                                                </div>
+                                                <input id="masa_musculo" class="form-control corporall" type="text" name="corporal[masa_musculo]" data-bvalidator="required,required" value="{{ tienePlantilla[0].masaMusculo }}">
+                                            </div>
+                                            <div class="form-group col-md-4" style="margin-bottom: 10px;">
+                                                <div>
+                                                    <label>
+                                                        <p style="color: #646473; font-size: 13px;">Valoracion Fisica</p>
+                                                    </label>
+                                                </div>
+                                                <input id="valoracion_fisica" class="form-control corporall" type="text" name="corporal[valoracion_fisica]" data-bvalidator="required,required" value="{{ tienePlantilla[0].valoracionFisica }}">
+                                            </div>
+                                            <div class="form-group col-md-4" style="margin-bottom: 10px;">
+                                                <div>
+                                                    <label>
+                                                        <p style="color: #646473; font-size: 13px;">DCI / BMR</p>
+                                                    </label>
+                                                </div>
+                                                <input id="dci_bmr" class="form-control corporall" type="text" name="corporal[dci_bmr]" data-bvalidator="required,required" value="{{ tienePlantilla[0].dciBmr }}">
+                                            </div>
+                                            <div class="form-group col-md-4" style="margin-bottom: 10px;">
+                                                <div>
+                                                    <label>
+                                                        <p style="color: #646473; font-size: 13px;">Edad metabolica</p>
+                                                    </label>
+                                                </div>
+                                                <input id="edad_metabolica" class="form-control corporall" type="text" name="corporal[edad_metabolica]" data-bvalidator="required,required" value="{{ tienePlantilla[0].edadMetabolica }}">
+                                            </div>
+                                            <div class="form-group col-md-4" style="margin-bottom: 10px;">
+                                                <div>
+                                                    <label>
+                                                        <p style="color: #646473; font-size: 13px;">Masa Osea</p>
+                                                    </label>
+                                                </div>
+                                                <input id="masa_osea" class="form-control corporall" type="text" name="corporal[masa_osea]" data-bvalidator="required,required" value="{{ tienePlantilla[0].masaOsea }}">
+                                            </div>
+                                            <div class="form-group col-md-4" style="margin-bottom: 10px;">
+                                                <div>
+                                                    <label>
+                                                        <p style="color: #646473; font-size: 13px;">Grasa visceral</p>
+                                                    </label>
+                                                </div>
+                                                <input id="grasa_visceral" class="form-control corporall" type="text" name="corporal[grasa_visceral]" data-bvalidator="required,required" value="{{ tienePlantilla[0].grasaVisceral }}">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="clearfix"></div> 
+                                    <div class="parametro col-md-6" style="margin-top: 15px;">
+                                        <div class="form-group" style="margin-bottom: 10px;">
+                                           <div>
+                                               <label>
+                                                   <p style="color: #646473; font-size: 13px;">Tratamiento</p>
+                                               </label>
+                                            </div>
+                                            {% for tratamiento in parametros if tratamiento.id == 4 %}
+                                                <div>
+                                                    <div>
+                                                        <div class="checkbox col-md-2" style="margin-top: -10px;">
+                                                            <input id="{{ tratamiento.opcid }}" class="form-control classCorporal" type="checkbox" name="{{ tratamiento.opcnom }}" value="{{ tratamiento.opcid }}" {% for valor in valores if valor == tratamiento.opcid %} checked {% endfor %}>
+                                                        </div>
+                                                        <div class="row">{{ tratamiento.opcnom }}</div>
+                                                    </div>
+                                                </div>
+                                            {% endfor %}
+                                        </div>
+                                    </div>
+                                    <div class="parametro col-md-6" style="margin-top: 15px;">
+                                        <div class="form-group" style="margin-bottom: 10px;">
+                                            <div>
+                                               <label>
+                                                   <p style="color: #646473; font-size: 13px;">Sugerencia</p>
+                                               </label>
+                                            </div>
+                                            {% for tratamiento in parametros if tratamiento.id == 5 %}
+                                                <div>
+                                                    <div>
+                                                        <div class="checkbox col-md-2" style="margin-top: -10px;">
+                                                            <input id="{{ tratamiento.opcid }}" class="form-control classCorporal" type="checkbox" name="{{ tratamiento.opcnom }}" value="{{ tratamiento.opcid }}" {% for valor in valores if valor == tratamiento.opcid %} checked {% endfor %}>
+                                                        </div>
+                                                        <div class="row">{{ tratamiento.opcnom }}</div>
+                                                    </div>
+                                                </div>
+                                            {% endfor %}
+                                        </div>
+                                    </div>
+                                {# Si el tipo de plantilla a editar es de Facial #}        
+                                {% elseif tipoPlantilla == 4 %}    
+                                    <div class="clearfix"></div> 
+                                    <div class="parametro col-md-4" style="margin-top: 15px;">
+                                        <div class="form-group" style="margin-bottom: 10px;">
+                                           <div>
+                                               <label>
+                                                   <p style="color: #646473; font-size: 13px;">Tipo de piel</p>
+                                               </label>
+                                            </div>
+                                            {% for tratamiento in parametros if tratamiento.id == 1 %}
+                                                <div>
+                                                    <div>
+                                                        <div class="checkbox col-md-2" style="margin-top: -10px;">
+                                                            <input id="{{ tratamiento.opcid }}" class="form-control classCorporal" type="checkbox" name="{{ tratamiento.opcnom }}" value="{{ tratamiento.opcid }}" {% for valor in valores if valor == tratamiento.opcid %} checked {% endfor %}>
+                                                        </div>
+                                                        <div class="row">{{ tratamiento.opcnom }}</div>
+                                                    </div>
+                                                </div>
+                                            {% endfor %}
+                                        </div>
+                                    </div>
+                                    <div class="parametro col-md-4" style="margin-top: 15px;">
+                                        <div class="form-group" style="margin-bottom: 10px;">
+                                            <div>
+                                               <label>
+                                                   <p style="color: #646473; font-size: 13px;">Necesidades observadas</p>
+                                               </label>
+                                            </div>
+                                            {% for tratamiento in parametros if tratamiento.id == 2 %}
+                                                <div>
+                                                    <div>
+                                                        <div class="checkbox col-md-2" style="margin-top: -10px;">
+                                                            <input id="{{ tratamiento.opcid }}" class="form-control classCorporal" type="checkbox" name="{{ tratamiento.opcnom }}" value="{{ tratamiento.opcid }}" {% for valor in valores if valor == tratamiento.opcid %} checked {% endfor %}>
+                                                        </div>
+                                                        <div class="row">{{ tratamiento.opcnom }}</div>
+                                                    </div>
+                                                </div>
+                                            {% endfor %}
+                                        </div>
+                                    </div>
+                                    <div class="parametro col-md-4" style="margin-top: 15px;">
+                                        <div class="form-group" style="margin-bottom: 10px;">
+                                            <div>
+                                               <label>
+                                                   <p style="color: #646473; font-size: 13px;">Recomendaciones</p>
+                                               </label>
+                                            </div>
+                                            {% for tratamiento in parametros if tratamiento.id == 3 %}
+                                                <div>
+                                                    <div>
+                                                        <div class="checkbox col-md-2" style="margin-top: -10px;">
+                                                            <input id="{{ tratamiento.opcid }}" class="form-control classCorporal" type="checkbox" name="{{ tratamiento.opcnom }}" value="{{ tratamiento.opcid }}" {% for valor in valores if valor == tratamiento.opcid %} checked {% endfor %}>
+                                                        </div>
+                                                        <div class="row">{{ tratamiento.opcnom }}</div>
+                                                    </div>
+                                                </div>
+                                            {% endfor %}
+                                        </div>
+                                    </div>    
                                 {% endif %}    
                             {% endif %}
                             {%if existePlantilla == false %}
@@ -2092,13 +2280,21 @@
             //validarConsultaBotox();
             validarConsulta();
             
-            $('.caducidad').daterangepicker({
+            $('.calZebra').Zebra_DatePicker({
+                months:['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
+                days: ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'],
+                format: 'd-m-Y',
+                show_clear_date:false,
+                show_select_today: "Hoy",
+            });
+            
+            {#$('.caducidad').daterangepicker({
                 singleDatePicker: true,
                 showDropdowns: true,
                 locale: {
                     format: 'YYYY-MM-DD'
                 },
-            });
+            });#}
             
             $('.caducidad').val('');
         } // Fin de mostrarCamposBotox 
@@ -2838,6 +3034,15 @@
         $('#telefono1').mask('0000-0000'); 
         $('#telefono2').mask('0000-0000'); 
         $('#telefonoEmergencia').mask('0000-0000'); 
+        
+        $('.calBotox').Zebra_DatePicker({
+            months:['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
+            days: ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'],
+            format: 'd-m-Y',
+            show_clear_date:false,
+            show_select_today: "Hoy",
+        });
+        
         $(document).on('click','.selectPlantilla', function(){
             var valorPlantilla=$(this).val();
             console.log(valorPlantilla);
@@ -3388,7 +3593,141 @@
         });
         
         
-        
+        $(document).on('click','#editarPlantilla', function(){
+            var id = $('#idPaciente').val();
+            var idConsulta = $('#idConsulta').val();
+            var valores = new Array();
+            var idParameters = new Array();
+            var idPlantilla= $('#dgplusbellebundle_consulta_plantilla').val();
+            
+            $('.classPlantilla').each(function(index,element){
+                var valor = $(this).val();
+                var ids = $(this).attr('id');
+                valores.push(valor);
+                idParameters.push(ids);                
+            });
+            
+            var idConsulta = $('#idConsulta').val();
+
+            var valores = new Array();
+            var idParameters = new Array();
+            //var idEstetica= $('#dgplusbellebundle_consulta_estetica').val();
+            var idEstetica= {{ tipoPlantilla }};
+            var id = $('#idPaciente').val();
+                
+            //console.log(idEstetica);
+            switch(idEstetica){
+                case 3:
+                    $('.corporall').each(function(index,element){
+                        var valor = $(this).val();
+                        var ids = $(this).attr('id');
+                        valores.push(valor);
+                        idParameters.push(ids);
+                    });
+
+                    $('.classCorporal').each(function(index,element){
+                        var valor = $(this).prop("checked");
+                        var ids = $(this).attr('id');
+                        valores.push(valor);
+                        idParameters.push(ids);
+                    });
+
+                    console.log(valores);
+                    break;
+                case 4:
+                    $('.classCorporal').each(function(index,element){
+                        var valor = $(this).prop("checked");
+                        var ids = $(this).attr('id');
+                        valores.push(valor);
+                        idParameters.push(ids);
+                    });
+
+                    break;
+                case 2:
+                    $('.cbotox').each(function(index,element){
+                        var valor = $(this).val();
+                        var ids = $(this).attr('id');
+                        valores.push(valor);
+                        idParameters.push(ids);
+                    });
+                    console.log(valores);
+                    break;
+            }
+
+                if(idConsulta!=''){
+                    var i=0;
+                    $('.cbotox').each(function(index,element){
+                        var valorbotox = $(this).val();
+
+                        if(valorbotox == "") {
+                            i++;
+                        }
+                    });
+
+                    if(i==0){
+                        $.ajax({
+                            data:{id:id,valores:valores,idConsulta:idConsulta,idParameters:idParameters,idEstetica:idEstetica
+                            },
+
+                            url:"{{path('admin_consulta_edit_plantilla')}}",
+
+                            type: "post",
+                            success: function (data) {
+                                    //inicio = data.inicio++;
+                                    if(data==0){
+                                        {#var iTel='<i class="fa fa-phone"></i>';
+                                        var dir='<i class="fa fa-map-marker fa-fw"></i>';
+                                        var ocup = '<i class="fa fa-briefcase"></i>';
+                                        $('#telefono').html(iTel+" "+telefono1);
+                                        $('#direccionD').html(dir+" "+direccion);
+
+
+                                        $('#nombrePaciente').html(nombres+" "+apellidos);
+                                        $('#ocupacionPaciente').html(ocup+" "+ocupacion);#}
+                                        //$('#idPlantilla').hide();
+                                        $('#camposPlantilla').hide();
+                                        $('.opcionHistorial').hide();
+                                        $('#guardarPlantilla').hide();
+
+                                        alertify.success("Plantilla guardada!");
+
+                                    }
+                                    else{
+                                        $('.camposPlantilla').hide();
+                                        $('.opcionHistorial').hide();
+                                        $('.selectPlantilla').hide();
+                                        $('.labelPlantilla').hide();
+
+                                        $('#planOpciones').hide();
+                                        $('#historialPrevPDF').hide();
+                                        $('#historialPrevPDF').prev().hide();
+
+                                        $('#dgplusbellebundle_consulta_plantilla').hide();
+                                        $('#dgplusbellebundle_consulta_plantilla').next().hide();
+
+                                        $('#guardarPlantilla').hide();
+                                        alertify.success("Cambios guardados!");
+                                        console.log("otro mensaje");
+                                    }
+
+                                    {#console.log("pagina actual: "+data);
+                                    console.log("Inicio de registro: "+data.inicioRegistro);#}
+                                },
+                            error: function (data) {
+
+
+                            }
+                        });
+                    }
+                    else{
+                        bootbox.alert('No debe de dejar en blanco ningun detalle de consulta de botox');
+                    }
+
+                }
+                else{
+                    bootbox.alert("Debe ingresar una consulta primero!", function() {});
+                }            
+        });
         
         
         
