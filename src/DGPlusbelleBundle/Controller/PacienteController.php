@@ -733,10 +733,10 @@ class PacienteController extends Controller
 //                
 //                END AS detalles FROM listadoexpediente WHERE expediente='".strtoupper($busqueda['value'])."' ORDER BY fecha DESC LIMIT ".$start.",".$longitud;
             
-            $sql = "SELECT id as id, fecha as fecha,transaccion,atendido,realizado, 
+            $sql = "SELECT id as id, fecha as fecha,transaccion,upper(atendido) as atendido,realizado, 
                 CASE
-                WHEN transaccion='Consulta' AND atendido = 'JUAN CARLOS PACHECO CARDONA' THEN CONCAT('<a id=\"',idtransaccion,'\" class=\"link_ SD\">', 'Ver detalles</a>',' <a class=\"pull-right link\" id=\"',idtransaccion,'\">Eliminar consulta</a>')
-                WHEN transaccion='Consulta' AND atendido = 'MILDRED LARA DE PACHECO' THEN CONCAT('<a id=\"',idtransaccion,'\" class=\"link_ SD\">', 'Ver detalles</a>',' <a class=\"pull-right link\" id=\"',idtransaccion,'\">Eliminar consulta</a>')
+                WHEN transaccion='Consulta' AND (upper(atendido) = 'JUAN CARLOS PACHECO CARDONA' OR upper(atendido) = 'JUAN CARLOS PACHECO') THEN CONCAT('<a id=\"',idtransaccion,'\" class=\"link_ SD\">', 'Ver detalles</a>',' <a class=\"pull-right link\" id=\"',idtransaccion,'\">Eliminar consulta</a>')
+                WHEN transaccion='Consulta' AND upper(atendido) = 'MILDRED LARA DE PACHECO' THEN CONCAT('<a id=\"',idtransaccion,'\" class=\"link_ SD\">', 'Ver detalles</a>',' <a class=\"pull-right link\" id=\"',idtransaccion,'\">Eliminar consulta</a>')
                 WHEN transaccion = 'Venta paquete' THEN CONCAT('<a id=\"',idtransaccion,'\" class=\"link_ paquete\">', 'Ver detalles</a>')
                 ELSE CONCAT('<a id=\"',idtransaccion,'\" class=\"link_ tratamiento\">', 'Ver detalles</a>')
                 
