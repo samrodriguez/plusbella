@@ -99,7 +99,14 @@ class PlantillaController extends Controller
 //                }
 //                var_dump($key);
             }
-            //die();
+            
+            $detallePlantilla = $em->getRepository('DGPlusbelleBundle:detallePlantilla')->findBy(array('plantilla'=>$entity->getId()));
+
+            foreach ($detallePlantilla as $value) {
+                $value->setTipoParametro('Textarea');
+                $em->merge($value);
+                $em->flush();
+            }
             
             $this->get('bitacora')->escribirbitacora("Se creo una nueva plantilla de reporte",$usuario->getId());
             
