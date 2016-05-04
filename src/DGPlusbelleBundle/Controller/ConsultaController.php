@@ -833,13 +833,10 @@ class ConsultaController extends Controller
             $existePlantilla = false;
             $existeReceta = false;
             $estetica = 0;
-//            if($idconsulta!=null){
-                $tienePlantilla = $em->getRepository('DGPlusbelleBundle:HistorialConsulta')->findBy(array('consulta'=>$idconsulta));
-//            }
-                
+            $tienePlantilla = $em->getRepository('DGPlusbelleBundle:HistorialConsulta')->findBy(array('consulta'=>$idconsulta));
+            
             $tipoPlantilla = 0;    
             if(count($tienePlantilla)!=0){
-//                var_dump($tienePlantilla);
                 $tipoPlantilla = 1;
                 $existePlantilla = true;
                 $ruta = "admin_reporteplantilla_pdf";
@@ -3135,9 +3132,8 @@ class ConsultaController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
         
-        //Obtiene el usuario
-//        $idpac= $request->get('id');
         $idConsulta = $request->get('idConsulta');
+        
         
         if($idConsulta!=-1){
             $entity= $em->getRepository('DGPlusbelleBundle:Consulta')->find($idConsulta);
@@ -3154,39 +3150,9 @@ class ConsultaController extends Controller
         //Obtener el id del parametro
 //        $idEntidad = substr($cadena, 1);
         
-        //$pac = $em->getRepository('DGPlusbelleBundle:Paciente')->find($idpac);
-        
-        //$user = $this->get('security.token_storage')->getToken()->getUser();
-        //Entidades para insertar en el proceso de la consulta de emergencia
-
-        //$expediente = new Expediente();
-
-//        if($idConsulta!=-1){
-//            $entity->setFechaConsulta(new \DateTime('now'));
-//        }
-        
-//        if($idpac == -1){
-//            $paciente_est = $em->getRepository('DGPlusbelleBundle:Paciente')->find($parameters['dgplusbellebundle_consulta']['paciente']);
-//            
-//            $entity->setPaciente($paciente_est);
-//            //var_dump($entity);
-//            $flag = 1;
-//            $accion = 'E';
-//            $pacient = new \DGPlusbelleBundle\Entity\Paciente();
-//            $form = $this->createCreateForm($entity,3,$idEntidad,$pacient);
-//        } else {
-//            $paciente_est = $em->getRepository('DGPlusbelleBundle:Paciente')->find($idpac);
-//            if($idConsulta!=-1){
-//                $form = $this->createCreateForm($entity,2,$idEntidad,$pac);
-//            }
-//        }
-//        if($idConsulta!=-1){
-//            $form->handleRequest($request);
-//        }
-        
         $tipoPlantilla = $parameters['idEstetica'];
         
-        if(isset($parameters['idPlantilla'])){
+        if($tipoPlantilla == 1){
             $plantillaid = $parameters['idPlantilla'];
 
             $dql = "SELECT det.id, det.nombre "
@@ -3198,8 +3164,16 @@ class ConsultaController extends Controller
                         ->setParameter('plantillaid', $plantillaid)
                         ->getResult();
 
-
-            foreach($parametros as $key=> $p){
+            $dataPlantilla = $em->getRepository('DGPlusbelleBundle:HistorialConsulta')->findBy(array('consulta' => $idConsulta));
+    
+            if ($dataPlantilla) {
+                foreach ($dataPlantilla as $value) {
+                    $em->remove($value);
+                    $em->flush();
+                }                                                        
+            }
+            
+            foreach($parametros as $key=> $p){                                
                 $dataReporte = new HistorialConsulta;
                 $detalle = $em->getRepository('DGPlusbelleBundle:DetallePlantilla')->find($p['id']);
 
@@ -3215,7 +3189,7 @@ class ConsultaController extends Controller
                 $em->persist($dataReporte);
                 $em->flush();
             }
-        }   else {
+        }   else {            
                 if($tipoPlantilla == 2){
                     $esteticaid = 3;
                 } else if($tipoPlantilla == 3){
@@ -3241,8 +3215,8 @@ class ConsultaController extends Controller
                             . "WHERE est.id =  :esteticaid";
 
                     $parametros = $em->createQuery($dql)
-                                ->setParameter('esteticaid', $esteticaid)
-                                ->getResult();
+                                    ->setParameter('esteticaid', $esteticaid)
+                                    ->getResult();
                     
                 
                     foreach($parametros as $p){
@@ -3284,8 +3258,7 @@ class ConsultaController extends Controller
                             foreach($claves as $key => $idrow){
                                 if($idrow==$idOpcion){
                                     $dataReporte->setValor('-');
-                                    //var_dump($parameters[$p['opcnom']]); 
-                                    //var_dump("persiste");
+                                    
                                     $em->persist($dataReporte);
                                     $em->flush();
                                     unset($claves[$key]);
@@ -3295,37 +3268,11 @@ class ConsultaController extends Controller
                         }
                     }
                 }
-//                if(isset($parameters['corporal'])){
-//                    $compCorporal = new \DGPlusbelleBundle\Entity\ComposicionCorporal;
-//                    $estetica = $em->getRepository('DGPlusbelleBundle:Estetica')->find($parameters['dgplusbellebundle_consulta']['estetica']);
-//                    
-//                    $compCorporal->setPeso($parameters['corporal']['peso']);
-//                    $compCorporal->setGrasaCorporal($parameters['corporal']['grasa_corporal']);
-//                    $compCorporal->setAguaCorporal($parameters['corporal']['agua_corporal']);
-//                    $compCorporal->setMasaMusculo($parameters['corporal']['masa_musculo']);
-//                    $compCorporal->setValoracionFisica($parameters['corporal']['valoracion_fisica']);
-//                    $compCorporal->setEdadMetabolica($parameters['corporal']['edad_metabolica']);
-//                    $compCorporal->setDciBmr($parameters['corporal']['dci_bmr']);
-//                    $compCorporal->setMasaOsea($parameters['corporal']['masa_osea']);
-//                    $compCorporal->setGrasaVisceral($parameters['corporal']['grasa_visceral']);
-//                    $compCorporal->setFecha(new \DateTime('now'));
-//                    $compCorporal->setConsulta($entity);
-//                    $compCorporal->setEstetica($estetica);
-//                    //var_dump($parameters['corporal']['masa_osea']); 
-//                    $em->persist($compCorporal);
-//                    $em->flush();
-//                    
-//                    
-////                  die();
-//                }    
+
                 if($esteticaid == 1){
-                    //var_dump($parameters['valores']);
-                    //die();
-                    //$compCorporal = new \DGPlusbelleBundle\Entity\ComposicionCorporal;
-                    $estetica = $em->getRepository('DGPlusbelleBundle:Estetica')->find($esteticaid);
-                    
+                    $estetica = $em->getRepository('DGPlusbelleBundle:Estetica')->find($esteticaid);                    
                     $compCorporal = $em->getRepository('DGPlusbelleBundle:ComposicionCorporal')->findOneBy(array('consulta'=>$entity->getId()));
-                    //var_dump($compCorporal);
+                    
                     $compCorporal->setPeso($parameters['valores'][0]);
                     $compCorporal->setGrasaCorporal($parameters['valores'][1]);
                     $compCorporal->setAguaCorporal($parameters['valores'][2]);
@@ -3337,14 +3284,11 @@ class ConsultaController extends Controller
                     $compCorporal->setGrasaVisceral($parameters['valores'][8]);
                     
                     $em->merge($compCorporal);
-                    $em->flush();
-                    
-                    
+                    $em->flush();                                        
                 }    
                 
                 if($esteticaid == 3){
-                    $estetica = $em->getRepository('DGPlusbelleBundle:Estetica')->find($esteticaid);
-                    
+                    $estetica = $em->getRepository('DGPlusbelleBundle:Estetica')->find($esteticaid);                    
                     $dataBotox = $em->getRepository('DGPlusbelleBundle:ConsultaBotox')->findBy(array('consulta' => $idConsulta));
                     
                     if ($dataBotox) {
@@ -3400,33 +3344,7 @@ class ConsultaController extends Controller
                         }                       
                     }                    
                 } 
-//                if(isset($parameters['botox'])){
-//                    $estetica = $em->getRepository('DGPlusbelleBundle:Estetica')->find($parameters['dgplusbellebundle_consulta']['estetica']);
-//                    
-//                    foreach ($parameters['botox'] as $value) {
-//                        //var_dump($value['area_inyectar']);
-//                        //die();
-//                        $botox = new \DGPlusbelleBundle\Entity\ConsultaBotox();
-//
-//                        $botox->setAreaInyectar($value['area_inyectar']);
-//                        $botox->setUnidades($value['unidades']);
-//
-//                        $botox->setFechaCaducidad(new \DateTime($value['caducidad']));
-//                        $botox->setLote($value['lote']);
-//                        $botox->setMarcaProducto($value['marca_producto']);
-//                        $botox->setNumAplicacion($value['num_aplicacion']);
-//                        $botox->setValor($value['valor']);
-//                        
-//                        if(isset($value['recomendaciones'])){
-//                            $botox->setRecomendaciones($value['recomendaciones']);
-//                        }
-//                        
-//                        $botox->setConsulta($entity);
-//                        $botox->setEstetica($estetica);
-//                        $em->persist($botox);
-//                        $em->flush();
-//                    }
-//                } 
+
             }
             
             //$f = $gg;

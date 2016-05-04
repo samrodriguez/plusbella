@@ -17,9 +17,9 @@
                           {#     <p class="text"><i class=""> Sesiones </i> </p> #}
                             {{ form_row(form.descripcion) }}
 
-                            {{ form_row(form.tipoParametro) }}
+                            {{ form_widget(form.tipoParametro, {'attr': {'class':'hide'} }) }}
                             {#   </div>  #}
-                            <div class="campos"><button style="margin-top:10px;margin-bottom:10px;" id="masOpcion">Agregar otro</button></div>
+                            <div class="campos"><button class="hide" style="margin-top:10px;margin-bottom:10px;" id="masOpcion">Agregar otro</button></div>
                             <div id="opciones"></div>
                 {#  </div>  #}
                           

@@ -781,7 +781,11 @@
                                 {% if tipoPlantilla == 1 %}
                                     <div class="col-md-2">
                                         <p>Sonodigest</p>
-                                    </div>        
+                                    </div>  
+                                    <div class="col-md-6">
+                                        <p><strong>Historia clinica: </strong>{{ tienePlantilla[0].detallePlantilla.plantilla }}</p>
+                                        </div>   
+                                    
                                 {% else %}
                                     <div class="col-md-2">
                                         <p>La Plus Belle</p>
@@ -1105,7 +1109,23 @@
                                                 </div>
                                             {% endfor %}
                                         </div>
-                                    </div>    
+                                    </div>
+                                {% elseif tipoPlantilla == 1 %}        
+                                        <div id="camposPlantilla" class="camposPlantilla" style="margin-top: 30px">
+                                            <div class="row">
+                                                <div class="col-md-12"></div>
+                                                <div id="campos" class="col-md-12 campos">
+                                                    {% for key, row in tienePlantilla %}
+                                                        <div class="parametro col-md-11">
+                                                            <label>
+                                                                <p style="color: #646473; font-size: 13px; font-weight: 700;">{{ row.detallePlantilla.nombre }}</p>
+                                                            </label>
+                                                            <textarea id="{{ row.detallePlantilla.id }}" class="form-control classPlantilla" type="text" placeholder="{{ row.detallePlantilla.nombre }}" style="margin-bottom: 5px;resize:vertical;height:150px;" name="{{ row.detallePlantilla.nombre }}" data-bvalidator="required,required">{{ row.valorDetalle }}</textarea>
+                                                        </div>
+                                                    {% endfor %}    
+                                                </div>
+                                            </div>
+                                        </div>
                                 {% endif %}    
                             {% endif %}
                             {%if existePlantilla == false %}
@@ -1151,16 +1171,17 @@
                                 
                                 
                             </div>
+                            <div id="camposPlantilla" class="camposPlantilla" style="margin-top: 30px">
+                                <div class="row">
+                                    <div class="col-md-12"></div>
+                                    <div id="campos" class="col-md-12 campos"></div>
+                                </div>
+                            </div>                         
                             {#{% else %}
                                     <i class="fa fa-file-pdf-o"></i><a class="generarPDF" href="{{path(ruta,{id:consulta.id})}}"> Ver plantilla</a>
                             #}
                             {% endif %}
-                                <div id="camposPlantilla" class="camposPlantilla" style="margin-top: 30px">
-                                    <div class="row">
-                                        <div class="col-md-12"></div>
-                                        <div id="campos" class="col-md-12 campos"></div>
-                                    </div>
-                                </div> 
+                                
                         
                         </p>
                 </div><!-- /tab-content -->
@@ -3547,7 +3568,7 @@
                                             $('#nombrePaciente').html(nombres+" "+apellidos);
                                             $('#ocupacionPaciente').html(ocup+" "+ocupacion);#}
                                             //$('#idPlantilla').hide();
-                                            $('#camposPlantilla').hide();
+                                            //$('#camposPlantilla').hide();
                                             $('.opcionHistorial').hide();
                                             $('#guardarPlantilla').hide();
 
@@ -3598,8 +3619,13 @@
             var idConsulta = $('#idConsulta').val();
             var valores = new Array();
             var idParameters = new Array();
-            var idPlantilla= $('#dgplusbellebundle_consulta_plantilla').val();
+//            var idPlantilla= $('#dgplusbellebundle_consulta_plantilla').val();
+            var idPlantilla = 0;
             
+            {% if tipoPlantilla == 1 %}
+                idPlantilla = {{ tienePlantilla[0].detallePlantilla.plantilla.id }}
+            {% endif %}
+        
             $('.classPlantilla').each(function(index,element){
                 var valor = $(this).val();
                 var ids = $(this).attr('id');
@@ -3617,6 +3643,15 @@
                 
             //console.log(idEstetica);
             switch(idEstetica){
+                case 1:
+                    $('.classPlantilla').each(function(index,element){
+                        var valor = $(this).val();
+                        var ids = $(this).attr('id');
+                        valores.push(valor);
+                        idParameters.push(ids);
+                    });
+
+                    break;
                 case 3:
                     $('.corporall').each(function(index,element){
                         var valor = $(this).val();
@@ -3666,7 +3701,7 @@
 
                     if(i==0){
                         $.ajax({
-                            data:{id:id,valores:valores,idConsulta:idConsulta,idParameters:idParameters,idEstetica:idEstetica
+                            data:{id:id,valores:valores,idConsulta:idConsulta,idParameters:idParameters,idEstetica:idEstetica, idPlantilla:idPlantilla
                             },
 
                             url:"{{path('admin_consulta_edit_plantilla')}}",
@@ -3675,16 +3710,6 @@
                             success: function (data) {
                                     //inicio = data.inicio++;
                                     if(data==0){
-                                        {#var iTel='<i class="fa fa-phone"></i>';
-                                        var dir='<i class="fa fa-map-marker fa-fw"></i>';
-                                        var ocup = '<i class="fa fa-briefcase"></i>';
-                                        $('#telefono').html(iTel+" "+telefono1);
-                                        $('#direccionD').html(dir+" "+direccion);
-
-
-                                        $('#nombrePaciente').html(nombres+" "+apellidos);
-                                        $('#ocupacionPaciente').html(ocup+" "+ocupacion);#}
-                                        //$('#idPlantilla').hide();
                                         $('#camposPlantilla').hide();
                                         $('.opcionHistorial').hide();
                                         $('#guardarPlantilla').hide();
@@ -3693,7 +3718,7 @@
 
                                     }
                                     else{
-                                        $('.camposPlantilla').hide();
+//                                        $('.camposPlantilla').hide();
                                         $('.opcionHistorial').hide();
                                         $('.selectPlantilla').hide();
                                         $('.labelPlantilla').hide();
@@ -3705,7 +3730,7 @@
                                         $('#dgplusbellebundle_consulta_plantilla').hide();
                                         $('#dgplusbellebundle_consulta_plantilla').next().hide();
 
-                                        $('#guardarPlantilla').hide();
+//                                        $('#guardarPlantilla').hide();
                                         alertify.success("Cambios guardados!");
                                         console.log("otro mensaje");
                                     }
