@@ -772,19 +772,18 @@
                         <div class="col-md-5 col-sm-5">
                             <div class="row">
                                 <div class="col-md-12 col-sm-12">
-                                    <table class="listados table table-bordered table-hover">
+                                    <table id="listadoAbono" class="listados table table-bordered table-hover">
                                         <thead>
                                             <tr>
-                                                <th class="text-center">No.</th>
                                                 <th class="text-center">Fecha de Abono</th>
                                                 <th class="text-center">Empleado</th>
+                                                <th class="text-center">Sucursal</th>
                                                 <th class="text-center">Monto ($)</th>
-                                                <th class="text-center">Acciones</th>
                                             </tr>
                                         </thead>
-                                        <tbody>
+                                        {#<tbody>
 
-                                        </tbody>
+                                        </tbody>#}
                                     </table>
                                 </div>
                             </div>
@@ -1348,6 +1347,54 @@
                         }
                 });
                 
+                var url = "{{path('admin_abonos_paciente_data')}}"+'?id='+id_ventapaquete;
+{#                console.log(id_ventapaquete);#}
+                var table = $('#listadoAbono').DataTable({
+                    dom:'tp',
+                    "processing": false,
+                    "serverSide": true,
+                    "pageLength": 3,
+                    "ajax": {
+                        "url": url,
+                        "type": 'GET'
+                    },
+                    "columns": [
+                        {#{ "data": "id" },   #}
+                        { "data": "fechaAbono" },
+                        { "data": "empleado" },
+                        { "data": "sucursal" },
+                        { "data": "monto" }
+                        {#{ "data": "dui" },#}
+{#                        { "data": "telefono" },#}
+                        {#{ "data": "email" },
+                        { "data": "lugarTrabajo" },#}
+                    ],
+                        "columnDefs": [
+                               {"width":10, "orderable": false, "targets": 0 },
+                               {"width":45, "orderable": false, "targets": 1 },
+                               {"width":30, "orderable": false, "targets": 2 },
+                               {"width":15, "orderable": false, "targets": 3 }
+                               
+                               
+                               //{ "orderData": [ 2, 3, 4 ], "targets": 2 }
+                        ],
+                        "language": {
+                        "info": "Mostrando página _PAGE_ de _PAGES_",
+                        "infoEmpty": "",
+                        "infoFiltered": "filtrando de _MAX_ registros",
+                        "emptyTable": "No se encontraron registros",
+                        "paginate": { 
+                            "next": "Siguiente",
+                            "previous": "Anterior"
+                        },
+                        "processing": "Procesando petición...",
+                        "search": "Buscar registros:",
+                        "lengthMenu": "Mostrar _MENU_ registros"
+                    }, 
+
+                    });
+                
+                
                 // Al momento de hacer click en resgistra abono
                 $(document).on("click", "#registro-abono", function(){
                     var idpac = '{{paciente.id}}';
@@ -1365,20 +1412,24 @@
                             descripcion: descripcion,
                             id_ventapaquete : id_ventapaquete
                         };
-                    
-                    if(monto <= deuda_total){
+                    console.log("deuda: "+parseFloat(deuda_total));
+                    console.log("monto: "+parseFloat(monto));
+                    if(parseFloat(monto) <= parseFloat(deuda_total)){
                         // Se procede a registrar la sesion del tratamiento mediante ajax
                         $.ajax({
                             data:  data,
                             url:   '{{path('admin_abonopaquete_nuevo')}}',
                             type:  'post',
                             success:  function (response) {
+                                
                                 alertify.success('Se ha resgistrado con exito un abono del paquete');
                                 deuda_total = (response.costo - ((response.descuento * response.costo)/100) - response.abonos).toFixed(2);
+                                console.log(deuda_total);
                                 {#console.log(deuda_pte);
                                 console.log(response.costo - ((response.descuento * response.costo)/100));
                                 console.log(response.abonos);#}
                                 $('#detalle-venta-deuda').html('$ ' + deuda_total);
+                                table.ajax.reload();
                                 return false;
                             }
                         });
@@ -1386,6 +1437,7 @@
                         bootbox.alert('No se puede realizar esta operacion. El monto ingresado es mayor a la deuda de este paquete');
                         return false;
                     }
+                    table.ajax.reload();
                     return false;
                 }); 
                 
@@ -1591,6 +1643,9 @@
 
                     });
         
+                    
+                    
+                
         //Oculta el filtro de las tablas
         
         
