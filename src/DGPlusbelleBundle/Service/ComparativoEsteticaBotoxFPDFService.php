@@ -81,12 +81,12 @@ class ComparativoEsteticaBotoxFPDFService {
         $h = 90;
         
         for ($i = 1; $i <= 15; $i++) {
-            $h+=9;
-            $this->pdf->Line(58, $h, 205, $h);            
+//            $h+=9;
+//            $this->pdf->Line(58, $h, 205, $h);            
         }
         
         $this->pdf->Line(205, 80, 205, $h+9);
-        $this->pdf->Line(191, $h+9, 205, $h+9);
+//        $this->pdf->Line(191, $h+9, 205, $h+9);
         $this->pdf->Line(58, 80, 58, $h);
         $this->pdf->Line(81, 80, 81, $h);
         $this->pdf->Line(94, 80, 94, $h);
@@ -111,20 +111,25 @@ class ComparativoEsteticaBotoxFPDFService {
         $j = 0;
         
         //var_dump($botox);
-        
+        $this->pdf->Ln(9);
         foreach ($botox as $key => $value) {
             $this->pdf->Cell(45);
-            $this->pdf->Cell(20, 27, $value[0],0,0,'C');
-            $this->pdf->Cell(15, 27, $value[1],0,0,'C');
+            $this->pdf->SetX(58); 
             
-            $fechaCad = explode('-', $value[2]);
-//            var_dump($fechaCad);
-            $this->pdf->Cell(25, 27, $fechaCad[2].'-'.$fechaCad[1].'-'.$fechaCad[0],0,0,'C');
-            //$this->pdf->Cell(25, 27, $value[2],0,0,'C');
-            $this->pdf->Cell(19, 27, $value[3],0,0,'C');
-            $this->pdf->Cell(28, 27, $value[4],0,0,'C');
-            $this->pdf->Cell(25, 27, $value[5],0,0,'C');
-            $this->pdf->Cell(12, 27, $value[6],0,0,'C');
+            $this->pdf->SetWidths(array(23,13,28,16,30,23,14));
+            $this->pdf->Row(array($value[0],$value[1],$value[2],$value[3],$value[4],$value[5],$value[6]));
+            
+//            $this->pdf->Cell(20, 27, $value[0],0,0,'C');
+//            $this->pdf->Cell(15, 27, $value[1],0,0,'C');
+//            
+//            $fechaCad = explode('-', $value[2]);
+////            var_dump($fechaCad);
+//            $this->pdf->Cell(25, 27, $fechaCad[2].'-'.$fechaCad[1].'-'.$fechaCad[0],0,0,'C');
+//            //$this->pdf->Cell(25, 27, $value[2],0,0,'C');
+//            $this->pdf->Cell(19, 27, $value[3],0,0,'C');
+//            $this->pdf->Cell(28, 27, $value[4],0,0,'C');
+//            $this->pdf->Cell(25, 27, $value[5],0,0,'C');
+//            $this->pdf->Cell(12, 27, $value[6],0,0,'C');
             $cont++;
             
             if($cont == 10){
@@ -142,71 +147,71 @@ class ComparativoEsteticaBotoxFPDFService {
 //            $this->pdf->Cell(20, 27, 'Grasa Visceral',0,0,'C');
 //            $this->pdf->Ln(10);
 
-            $this->pdf->Line(15, 30, 205, 30);
-            $h = 30;
-
-            for ($i = 1; $i <= 22; $i++) {
-                $h+=9;
-                $this->pdf->Line(15, $h, 205, $h);
-            }
-
-            $this->pdf->Line(15, 30, 15, $h);
-            $this->pdf->Line(205, 30, 205, $h);
-
-            $this->pdf->Line(28, 30, 28, $h);
-            $this->pdf->Line(40, 30, 40, $h);
-            $this->pdf->Line(65, 30, 65, $h);
-            $this->pdf->Line(88, 30, 88, $h);
-            $this->pdf->Line(107.5, 30, 107.5, $h);
-            $this->pdf->Line(131, 30, 131, $h);
-            $this->pdf->Line(146, 30, 146, $h);
-            $this->pdf->Line(169, 30, 169, $h);
-            $this->pdf->Line(185, 30, 185, $h);
+//            $this->pdf->Line(15, 30, 205, 30);
+//            $h = 30;
+//
+//            for ($i = 1; $i <= 22; $i++) {
+//                $h+=9;
+//                $this->pdf->Line(15, $h, 205, $h);
+//            }
+//
+//            $this->pdf->Line(15, 30, 15, $h);
+//            $this->pdf->Line(205, 30, 205, $h);
+//
+//            $this->pdf->Line(28, 30, 28, $h);
+//            $this->pdf->Line(40, 30, 40, $h);
+//            $this->pdf->Line(65, 30, 65, $h);
+//            $this->pdf->Line(88, 30, 88, $h);
+//            $this->pdf->Line(107.5, 30, 107.5, $h);
+//            $this->pdf->Line(131, 30, 131, $h);
+//            $this->pdf->Line(146, 30, 146, $h);
+//            $this->pdf->Line(169, 30, 169, $h);
+//            $this->pdf->Line(185, 30, 185, $h);
             
             } else {
-                $this->pdf->Ln(9);
+//                $this->pdf->Ln(9);
             }
             
             if($cont > 14){
-                $j++;
+//                $j++;
             }
             
             if($j == 21){
-            $this->pdf->Ln(40);
-            $this->pdf->Cell(13, 27, 'Fecha',0,0,'C');
-            $this->pdf->Cell(12, 27, 'Peso',0,0,'C');
-            $this->pdf->Cell(25, 27, '% Grasa Corporal',0,0,'C');
-            $this->pdf->Cell(23, 27, '% Agua Corporal',0,0,'C');
-            $this->pdf->Cell(21, 27, utf8_decode('Masa músculo'),0,0,'C');
-            $this->pdf->Cell(23, 27, utf8_decode('Valoración Física'),0,0,'C');
-            $this->pdf->Cell(14, 27, 'DCI/BMR',0,0,'C');
-            $this->pdf->Cell(24, 27, utf8_decode('Edad Metabólica'),0,0,'C');
-            $this->pdf->Cell(15, 27, utf8_decode('Masa Ósea'),0,0,'C');
-            $this->pdf->Cell(20, 27, 'Grasa Visceral',0,0,'C');
-            $this->pdf->Ln(10);
+//            $this->pdf->Ln(40);
+//            $this->pdf->Cell(13, 27, 'Fecha',0,0,'C');
+//            $this->pdf->Cell(12, 27, 'Peso',0,0,'C');
+//            $this->pdf->Cell(25, 27, '% Grasa Corporal',0,0,'C');
+//            $this->pdf->Cell(23, 27, '% Agua Corporal',0,0,'C');
+//            $this->pdf->Cell(21, 27, utf8_decode('Masa músculo'),0,0,'C');
+//            $this->pdf->Cell(23, 27, utf8_decode('Valoración Física'),0,0,'C');
+//            $this->pdf->Cell(14, 27, 'DCI/BMR',0,0,'C');
+//            $this->pdf->Cell(24, 27, utf8_decode('Edad Metabólica'),0,0,'C');
+//            $this->pdf->Cell(15, 27, utf8_decode('Masa Ósea'),0,0,'C');
+//            $this->pdf->Cell(20, 27, 'Grasa Visceral',0,0,'C');
+//            $this->pdf->Ln(10);
+//
+//            $this->pdf->Line(15, 30, 205, 30);
+//            $h = 30;
+//
+//            for ($i = 1; $i <= 22; $i++) {
+//                $h+=9;
+//                $this->pdf->Line(15, $h, 205, $h);
+//            }
+//
+//            $this->pdf->Line(15, 30, 15, $h);
+//            $this->pdf->Line(205, 30, 205, $h);
 
-            $this->pdf->Line(15, 30, 205, 30);
-            $h = 30;
-
-            for ($i = 1; $i <= 22; $i++) {
-                $h+=9;
-                $this->pdf->Line(15, $h, 205, $h);
-            }
-
-            $this->pdf->Line(15, 30, 15, $h);
-            $this->pdf->Line(205, 30, 205, $h);
-
-            $this->pdf->Line(28, 30, 28, $h);
-            $this->pdf->Line(40, 30, 40, $h);
-            $this->pdf->Line(65, 30, 65, $h);
-            $this->pdf->Line(88, 30, 88, $h);
-            $this->pdf->Line(107.5, 30, 107.5, $h);
-            $this->pdf->Line(131, 30, 131, $h);
-            $this->pdf->Line(146, 30, 146, $h);
-            $this->pdf->Line(169, 30, 169, $h);
-            $this->pdf->Line(185, 30, 185, $h);
-            $j = 0;
-            
+//            $this->pdf->Line(28, 30, 28, $h);
+//            $this->pdf->Line(40, 30, 40, $h);
+//            $this->pdf->Line(65, 30, 65, $h);
+//            $this->pdf->Line(88, 30, 88, $h);
+//            $this->pdf->Line(107.5, 30, 107.5, $h);
+//            $this->pdf->Line(131, 30, 131, $h);
+//            $this->pdf->Line(146, 30, 146, $h);
+//            $this->pdf->Line(169, 30, 169, $h);
+//            $this->pdf->Line(185, 30, 185, $h);
+//            $j = 0;
+//            
             }
         }
         

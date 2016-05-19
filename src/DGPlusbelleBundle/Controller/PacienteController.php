@@ -43,7 +43,7 @@ class PacienteController extends Controller
         $sql = "select TRIM(per.nombres) as pnombre, TRIM(per.apellidos) as papellido,  "
                 . "per.direccion as direccion, per.telefono as tel, per.email as email, pac.id as idpac, pac.dui as dui, pac.estado_civil as ecivil, pac.sexo as sexo, pac.ocupacion as ocupacion, "
                 . "pac.lugar_trabajo as lugarTrabajo, pac.fecha_nacimiento as fechaNacimiento, pac.referido_por as referidoPor "
-                . "from paciente pac inner join persona per on pac.persona = per.id order by per.nombres ASC, per.apellidos ASC";
+                . "from paciente pac inner join persona per on pac.persona = per.id WHERE estado=1 order by per.nombres ASC, per.apellidos ASC";
         
         $rsm->addScalarResult('idpac','idpac');
         $rsm->addScalarResult('pnombre','pnombre');
@@ -560,7 +560,7 @@ class PacienteController extends Controller
         $busqueda = $request->query->get('search');
         
         $em = $this->getDoctrine()->getEntityManager();
-        $pacientesTotal = $em->getRepository('DGPlusbelleBundle:Paciente')->findAll();
+        $pacientesTotal = $em->getRepository('DGPlusbelleBundle:Paciente')->findBy(array('estado'=>1));
         
         $paciente['draw']=$draw++;  
         $paciente['recordsTotal'] = count($pacientesTotal);
@@ -579,7 +579,7 @@ class PacienteController extends Controller
                     
                     $dql = "SELECT CONCAT('<a class=\"link_expediente\" id=\"',exp.numero,'\">',exp.numero,'</a>') as expediente, pac.id as id,per.nombres,per.apellidos,pac.dui,per.telefono,per.email,pac.lugarTrabajo,DATE_FORMAT(pac.fechaNacimiento,'%d-%m-%Y') as fechaNacimiento, '<a ><i style=\"cursor:pointer;\"  class=\"infoPaciente fa fa-info-circle\"></i></a>' as link FROM DGPlusbelleBundle:Paciente pac "
                         . "JOIN pac.persona per JOIN pac.expediente exp "
-                        . "WHERE CONCAT(upper(per.nombres),upper(per.apellidos)) LIKE upper(:busqueda) "
+                        . "WHERE CONCAT(upper(per.nombres),upper(per.apellidos)) LIKE upper(:busqueda) AND pac.estado=1 "
                         . "ORDER BY per.nombres ASC ";
                     $paciente['data'] = $em->createQuery($dql)
                             ->setParameters(array('busqueda'=>"%".$busqueda['value']."%"))
@@ -589,7 +589,7 @@ class PacienteController extends Controller
                     
                     $dql = "SELECT CONCAT('<a class=\"link_expediente\" id=\"',exp.numero,'\">',exp.numero,'</a>') as expediente, pac.id as id,per.nombres,per.apellidos,pac.dui,per.telefono,per.email,pac.lugarTrabajo,DATE_FORMAT(pac.fechaNacimiento,'%d-%m-%Y') as fechaNacimiento, CONCAT('<a ><i id=\"',pac.id,'\" style=\"cursor:pointer;\"  class=\"infoPaciente fa fa-info-circle\"></i></a>') as link FROM DGPlusbelleBundle:Paciente pac "
                         . "JOIN pac.persona per JOIN pac.expediente exp "
-                        . "WHERE CONCAT(upper(per.nombres),upper(per.apellidos)) LIKE upper(:busqueda) "
+                        . "WHERE CONCAT(upper(per.nombres),upper(per.apellidos)) LIKE upper(:busqueda) AND pac.estado=1 "
                         . "ORDER BY per.nombres ASC ";
                     $paciente['data'] = $em->createQuery($dql)
                             ->setParameters(array('busqueda'=>"%".$busqueda['value']."%"))
@@ -612,7 +612,8 @@ class PacienteController extends Controller
         }
         else{
             $dql = "SELECT CONCAT('<a class=\"link_expediente\" id=\"',exp.numero,'\">',exp.numero,'</a>') as expediente,pac.id as id,per.nombres,per.apellidos,pac.dui,per.telefono,per.email,pac.lugarTrabajo,DATE_FORMAT(pac.fechaNacimiento,'%d-%m-%Y') as fechaNacimiento, CONCAT('<a ><i id=\"',pac.id,'\" style=\"cursor:pointer;\"  class=\"infoPaciente fa fa-info-circle\"></i></a>') as link FROM DGPlusbelleBundle:Paciente pac "
-                . "JOIN pac.persona per JOIN pac.expediente exp ORDER BY per.nombres ASC ";
+                . "JOIN pac.persona per JOIN pac.expediente exp where pac.estado=1 "
+                . "ORDER BY per.nombres ASC ";
             $paciente['data'] = $em->createQuery($dql)
                     ->setFirstResult($start)
                     ->setMaxResults($longitud)
@@ -1119,6 +1120,43 @@ class PacienteController extends Controller
             $paciente->setFamiliares($familiares);
             $paciente->setAlergias($alergias);
 //            var_dump($paciente);
+            $em->merge($paciente);
+            $em->flush();
+            return new Response(json_encode(0));
+        }
+        else{
+            return new Response(json_encode(1));
+        }   
+    }
+    /**
+     * 
+     *
+     * @Route("/pacientedeshabilitar/data/pacienteDes", name="deshabilitar_paciente_ajax")
+     */
+    public function dataPacienteDeshabilitarAction(Request $request)
+    {
+        
+        /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+	 * Easy set variables
+	 */
+	
+	/* Array of database columns which should be read and sent back to DataTables. Use a space where
+	 * you want to insert a non-database field (for example a counter or static image)
+	 */
+        
+
+        $id = $request->get('idPaciente');
+        
+ 
+        
+        $em = $this->getDoctrine()->getEntityManager();
+        
+        $paciente = $em->getRepository('DGPlusbelleBundle:Paciente')->find($id);
+        
+        
+        if(count($paciente)!=0){
+            //$persona = $em->getRepository('DGPlusbelleBundle:Persona')->find($paciente->getPersona()->getId());
+            $paciente->setEstado(0);
             $em->merge($paciente);
             $em->flush();
             return new Response(json_encode(0));

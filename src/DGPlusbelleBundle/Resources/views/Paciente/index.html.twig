@@ -72,9 +72,9 @@
                   <button id="edit-datatables1" data-toggle="tooltip" data-container="body" title="Modificar paciente" class="btn btn-default datatables1-actions disabled" role="button">
                     <i class="fa fa-edit"></i>
                   </button>
-                  {#<button id="delete-datatables1" data-toggle="tooltip" data-container="body" title="Eliminar registro" class="btn btn-default datatables1-actions disabled" role="button">
+                  <button id="delete-datatables1" data-toggle="tooltip" data-container="body" title="Eliminar registro" class="btn btn-default datatables1-actions disabled" role="button">
                     <i class="fa fa-trash-o"></i>
-                  </button>#}
+                  </button>
                 </div>
                 <div class="btn-group pull-left">
                   <input id="filterDatatables1" class="form-control input-sm" placeholder="Buscar...">
@@ -511,6 +511,9 @@
                     }
 
                 });
+                
+                
+                
                 /*
                 $("#dgplusbellebundle_sucursal_submit").click(function(){
                     $(".icon-refresh").click();
@@ -530,7 +533,7 @@
                 });
                 
                 //var long = $('datatables1_length').children().children().val();
-                $('#datatables1').DataTable({ 
+                var tabla = $('#datatables1').DataTable({ 
                     {#searching:true,
                     order:[[1,"asc"]],#}
                     "processing": false,
@@ -579,6 +582,33 @@
         });
         
         
+        $("#delete-datatables1").click(function(){
+            console.log(idPaciente);
+            bootbox.confirm("Desea eliminar este registro de paciente?", function(result) {
+                if(result){
+                    $.ajax({
+                        data:{idPaciente:idPaciente},
+                        url:"{{path('deshabilitar_paciente_ajax')}}",
+                        type: "post",
+                        success: function (data) {
+                            if(data==0){
+                                alertify.success("Paciente eliminado!");
+                                tabla.ajax.reload();
+                            }
+
+                        },
+                        error: function (data) {
+                            alertify.error("Hubo un error, intente de nuevo!");
+                        }
+                    });
+                    }
+                else{
+                    //console.log(result);
+                }
+            }); 
+            return false;
+        });
+                
         //Oculta el filtro de la tabla
         $('#datatables1_filter').hide();
         $('#filterDatatables1').val('');
