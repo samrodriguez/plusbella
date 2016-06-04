@@ -66,14 +66,14 @@ class CitaType extends AbstractType
                          'class'=>'form-control'
                          )
                        ))*/
-            ->add('paciente', null, 
-                  array( 'label'         => 'Paciente',
-                         'empty_value'   => 'Seleccione un paciente...',
-                         'class'         => 'DGPlusbelleBundle:Paciente',
-                         'attr'=>array(
-                         'class'=>'form-control input-sm pacienteCita'
-                         )
-                       ))
+//            ->add('paciente', null, 
+//                  array( 'label'         => 'Paciente',
+//                         'empty_value'   => 'Seleccione un paciente...',
+//                         'class'         => 'DGPlusbelleBundle:Paciente',
+//                         'attr'=>array(
+//                         'class'=>'form-control input-sm pacienteCita'
+//                         )
+//                       ))
             ->add('tratamiento','entity', array( 'label' => 'Tratamiento','required'=>false,
                          'empty_value'   => 'Seleccione un tratamiento...',
                          'class'         => 'DGPlusbelleBundle:Tratamiento',

@@ -1,8 +1,7 @@
-{% extends '::base.html.twig' %}
+
 
 
 {% block css %}
-    {{parent()}}
     <style>
         #select2-dgplusbellebundle_cierreadministrativo_empleado-container{
             width: 400px;
@@ -20,7 +19,7 @@
 {% block body -%}
 <div class="panel panel-default">
   <!-- Default panel contents -->
-<div class="panel-heading"><p>Nuevo cierre administrativo</p></div>
+  <div class="panel-heading"><p><strong>Nuevo cierre administrativo</strong></p></div>
 <div class="panel-body">
 
     {{ form_start(form) }}

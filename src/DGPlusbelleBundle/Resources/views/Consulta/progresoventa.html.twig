@@ -1,50 +1,54 @@
 {#{% extends 'DGPlusbelleBundle:Layout:general.html.twig' %}#}
-{% extends 'DGPlusbelleBundle:Layout:layout.html.twig' %}
+{% extends 'DGPlusbelleBundle:Layout:layouterpajustes.html.twig' %}
+
+
+
+{% block navegacion %}
+{#        {{parent()}}#}
+    {% if is_granted('ROLE_ADMIN') %}
+        <a href="{{ path('admin_reporte_emergencia') }}" class="leftnava"><li class="leftnav left">Ingresos consulta<span class="pull-right right"><i class=""></i></span></li></a>
+    {% endif %}
+    {% if is_granted('ROLE_ADMIN') %}
+        <a href="{{ path('admin_reporte_diario') }}" class="leftnava"><li class="leftnav left">Ingresos diarios<span class="pull-right right"><i class=""></i></span></li></a>
+    {% endif %}
+    {% if is_granted('ROLE_ADMIN') %}
+        <a href="{{ path('admin_reporte_referidos') }}" class="leftnava"><li class="leftnav left ">Pacientes referidos<span class="pull-right right"><i class=""></i></span></li></a>
+    {% endif %}
+    {#{% if is_granted('ROLE_ADMIN') %}
+        <a href="{{ path('admin_tratamiento') }}" class="leftnava"><li class="leftnav left">Tratamientos<span class="pull-right right"><i class=""></i></span></li></a>
+    {% endif %}
+    {% if is_granted('ROLE_ADMIN') %}
+        <a href="{{ path('admin_categoria') }}" class="leftnava"><li class="leftnav left">Categorias<span class="pull-right right"><i class=""></i></span></li></a>
+    {% endif %}#}
+    {% if is_granted('ROLE_ADMIN') %}
+        <a href="{{ path('admin_empleado_progreso_venta') }}" class="leftnava"><li class="leftnav left active">Progreso empleado<span class="pull-right right"><i class="fa fa-arrow-right"></i></span></li></a>
+    {% endif %}
+    {% if is_granted('ROLE_ADMIN') %}
+        {#<a href="{{ path('admin_sucursal') }}" class="leftnava"><li class="leftnav left ">Sucursal<span class="pull-right right"><i class=""></i></span></li></a>#}
+    {% endif %}
+    {% if is_granted('ROLE_ADMIN') %}
+        
+    {% endif %}
+        
+            {#<li role="presentation"><a role="menuitem" tabindex="-1" href="{{ path('admin_reporte_consolidado_paquete') }}"><span class="nav-text">Consolidado de paquetes</span></a></li>
+            <li role="presentation"><a role="menuitem" tabindex="-1" href="{{ path('admin_reporte_tratamiento_frecuente') }}"><span class="nav-text">Tratamiento más vendido</span></a></li>#}
+            
+            
+            
+        
+{% endblock navegacion %}
+
+{% block descripcion %}
+    <div class="col-md-6">
+        <p class="robo" style="font-weight: 300; margin-bottom: 0px; font-size: 30px;">Reporte de progreso de empleado</p>
+        <p class="robo" style="font-weight: 300; font-size: 14px; height: 40px;">Genere reporte de los empleados con metas de venta, controle quienes cumplen dicho objetivo.</p>
+    </div>
+{% endblock %}
 
 
 {% block css %}
     {{parent()}}
-    <style>
-        
-        //Posicion del boton agregar
-        .placas>div:last-child {
-            position:absolute;
-        }
-        .addItem{
-            position: absolute;
-            height: 50px;
-            float: right;
-            margin-bottom: 50px;
-            padding-bottom: 100px;
-            top: -65px;
-            left: -2px;
-        }
-        
-            .addItem div {
-                position: absolute;
-            }
-        
-        /*.col-md-6{
-            padding-top: 40px;
-        }*/
-        
-        #dgplusbellebundle_consulta_horaInicio_hourSelectBoxItContainer, #dgplusbellebundle_consulta_horaInicio_minuteSelectBoxItContainer{
-            width:75px;
-        }
-        
-        #listadoa>div>div>div>div>label{
-            display: none;
-        }
-        
-        textarea{
-            resize: none;
-        }
-        
-            #info_paciente tr td{
-                border: 1px solid black;
-            }
-    </style>
-    
+        <link rel="stylesheet" href="{{ asset('Resources/wrapkit/styles/components.css') }}">
 {% endblock %}
 
 {% block contenido -%}
@@ -54,20 +58,9 @@
     <!-- ============================================
     MAIN CONTENT SECTION
     =============================================== -->
-    
-
-
         <div class="content-body">
           <div class="panel" data-fill-color="true">
-            <div class="panel-heading">
-              <div class="panel-control pull-right">
-                {#<a href="#" class="btn btn-icon" data-toggle="panel-refresh" rel="tooltip" data-placement="bottom" title="refresh"><i class="icon-refresh"></i></a>#}
-                <a href="#" class="btn btn-icon" data-toggle="panel-expand" rel="tooltip" data-placement="bottom" title="expand"><i class="arrow_expand"></i></a>
-                <a href="#" class="btn btn-icon" data-toggle="panel-collapse" rel="tooltip" data-placement="bottom" title="collapse"><i class="icon_minus_alt2"></i></a>
-              </div>
-              <h3 class="modal-title" id="myModalLabel">Progreso de ventas de los empleados</h3>
-        
-            </div><!-- /.panel-heading -->
+            
 
             <div class="panel-body">
               <div class="btn-toolbar clearfix" role="toolbar">
@@ -89,23 +82,34 @@
     
     {% block javascripts_step %}
         {{parent()}}
-    <script type="text/javascript" src="{{ asset('Resources/zebra/inicializacioncalendarios.js')}}" ></script>
-    <script type="text/javascript" src="{{ asset('Resources/wrapkit/scripts/jquery.easypiechart.js')}}"></script>
-    <script type="text/javascript" src="{{ asset('Resources/wrapkit/scripts/demo/chart-inline-demo.js')}}"></script>
-    <script>
-        $(document).ready(function(){
-            var fecha = $('#fecha').val();
-            var datepickerInicio = $('#fecha').data('Zebra_DatePicker');
-            datepickerInicio.update({
-                format: 'm-Y',
-                onSelect: function(){
-                    $('#contenedorEmpleados').html('');
-                    fecha = $('#fecha').val();
-                    var url = "{{ path('admin_empleado_progreso_venta_ajax') }}";
-                    url+="?fecha="+fecha;
-                    $('#contenedorEmpleados').load(url);        
-                }
-            });  
-        });//Fin document ready
-    </script>
+        
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.2/css/select2.min.css" rel="stylesheet" />
+        <script src="{{ asset('Resources/Zebra/js/zebra_datepicker.js') }}"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.2/js/select2.min.js"></script>
+        <script src="{{ asset('Resources/js/Paciente.js') }}"></script>
+        
+        <script src="{{ asset('Resources/wrapkit/scripts/bootbox.js') }}"></script>
+        <script src="{{ asset('Resources/wrapkit/scripts/chartjs.js') }}"></script>
+        <script type="text/javascript" src="{{ asset('Resources/Zebra/inicializacioncalendarios.js')}}" ></script>    
+        
+        
+        
+        <script type="text/javascript" src="{{ asset('Resources/wrapkit/scripts/jquery.easypiechart.js')}}"></script>
+        <script type="text/javascript" src="{{ asset('Resources/wrapkit/scripts/demo/chart-inline-demo.js')}}"></script>
+        <script>
+            $(document).ready(function(){
+                var fecha = $('#fecha').val();
+                var datepickerInicio = $('#fecha').data('Zebra_DatePicker');
+                datepickerInicio.update({
+                    format: 'm-Y',
+                    onSelect: function(){
+                        $('#contenedorEmpleados').html('');
+                        fecha = $('#fecha').val();
+                        var url = "{{ path('admin_empleado_progreso_venta_ajax') }}";
+                        url+="?fecha="+fecha;
+                        $('#contenedorEmpleados').load(url);        
+                    }
+                });  
+            });//Fin document ready
+        </script>
     {% endblock %}

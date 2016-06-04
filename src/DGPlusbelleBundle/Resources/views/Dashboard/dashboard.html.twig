@@ -1,114 +1,284 @@
-{% extends 'DGPlusbelleBundle:Layout:layout.html.twig' %}
-{% block sucursal %}
-    <h3 class="panel-title text" >Sistema</h3>
-    <h3 class="panel-title text" >Nombre de Sucursal</h3>
-{% endblock %}
-{% block fotoemp %}
-    <img height="70px" width="70px" class="img-circle" src="{{ asset('Resources/img/empleado/persona4.jpg') }}"  style="margin-top: 10px; display: block; margin-left: auto; margin-right: auto; border:none;"/>
-{% endblock %}
-{% block perfil %}
-    <p class="text-center">BIENVENIDO</p>
-    <P class="text-center">Nombre del empleado</P>
-    <p class="text-center">Cargo del empleado</p>
-{% endblock %}
-{% block acceso %}
-    
-      <div class="panel panel-default acceso" style="border: 1px solid #C9731C; background-color: #DDD; height: 215px;">
-        <div class="panel-body">
-            <h4 class="text-center">ACCESO RAPIDO</h4>
-            </br>
-            <a href="">VENTA DE PAQUETE A PACIENTE</a></br>
-            <a href="">EXPEDIENTES DE PACIENTES</a></br>
-            <a href="">AGREGAR NUEVA CITA A PACIENTE</a></br>
-            <a href="">CONSULTAS DE EMERGENCIA</a></br>
-            <a href="">CALENDARIO DE CONSULTAS</a></br>
-            <a href="">PACIENTES (AGREGAR, EDITAR)</a></br>
-        </div>
-      </div>
-   
-{% endblock %}
-{% block contenido -%}
-{% endblock %}   
-{% block jquery -%}
-<script type="text/javascript">     
-var calendario = null;
-var source = 
-    {
-        url: Routing.generate('fullcalendar_loader'),
-        type: 'POST',
-        data: {
-            filtro: 1
-        },
-        error: function() {
-            alert('There was an error while fetching Calendar!');
-        }
-    };
-    
-$(document).ready(function() {        
-    // page is now ready, initialize the calendar...
-    calendario = $('#calendar-holder').fullCalendar({
+<html>
+    <head>
+          
+                <meta charset="utf-8">
+                <meta http-equiv="X-UA-Compatible" content="IE=edge">
+                <meta name="viewport" content="width=device-width, initial-scale=1">
+                      {% block title -%}<title>:{% block titlename -%}::: La Plus Belle :::{% endblock %}</title>{% endblock %}
+                      {#<title>MonkeyERP | Monkey Systems Latinoamerica</title>#}
+                      <meta name="robots" content="noindex">
+                      
+                            <!-- Stylesheet de Bootstrap -->
+                            <link rel="stylesheet" href="{{ asset('Resources/src/css/bootstrap.css')}}" >
+                            <!-- Stylesheet Personales -->
+                            <link href="{{ asset('Resources/src/css/style.css')}}" rel="stylesheet">
+                            <link rel="stylesheet" href="{{ asset('Resources/fontawesome/css/font-awesome.min.css')}}" >
+                            <script type="text/javascript" src="{{ asset('Resources/jquery/jquery-1.11.3.min.js') }}"></script>
+                            <script src="{{ asset('bundles/fosjsrouting/js/router.js') }}"></script>
+                            <script src="{{ path('fos_js_routing_js', {'callback': 'fos.Router.setData'}) }}"></script>
+                            <link rel="shortcut icon" href="{{ asset('Resources/imagenes/favicon.png')}}" type="image/x-icon">
+                            <link rel="icon" href="{{ asset('Resources/imagenes/favicon.png')}}" type="image/x-icon">
+                    
+    </head>
+    <body>
+        <style>
+            .tamanhoFuente{
+                font-size: 12px !important;
+            }
+        </style>
+ 
         
-        header: {
-            left: 'prev,next, today',
-            center: 'title',
-            right: ''
-        },
-        buttonText: {
-            today:    'Today',
-            month:    'Month',
-            week:     'Week',
-            day:      'Day'
-        },
-        lazyFetching: true,
-        defaultView: 'agendaDay',
-        editable: true,
-        weekends: true,
-        weekNumbers: true,
-        firstDay: 0,
-        slotMinutes: 30,
-        axisFormat: 'hh:mm tt',
-        firstHour: 7,
-        minTime: '08:00:00',
-        maxTime: '18:00:00',
-        allDaySlot: false,
-        selectable: true,
-        selectHelper: true,
-        select: function( startDate, endDate, allDay, jsEvent, view ){
-            var stdate = $.fullCalendar.formatDate(startDate,'dd-MM-yyyy');
-            var endate = $.fullCalendar.formatDate(endDate,'dd-MM-yyyy');
-            var starttm = $.fullCalendar.formatDate(startDate,'HH:mm');
-            var endtm = $.fullCalendar.formatDate(endDate,'HH:mm');
-            var day = $.fullCalendar.formatDate(startDate,'dddd'); 
-            var element = $(jsEvent.srcElement);
-        },
-        eventDrop: function( event, dayDelta, minuteDelta, allDay, revertFunc, jsEvent, ui, view ) { 
-            var stdate = $.fullCalendar.formatDate(event.start,'dd-MM-yyyy');
-            var endate = $.fullCalendar.formatDate(event.end,'dd-MM-yyyy');
-            var starttm = $.fullCalendar.formatDate(event.start,'HH:mm');
-            var endtm = $.fullCalendar.formatDate(event.end,'HH:mm');    
-            
-        },
-        eventResize: function( event, dayDelta, minuteDelta, revertFunc, jsEvent, ui, view ) { 
-            var stdate = $.fullCalendar.formatDate(event.start,'dd-MM-yyyy');
-            var endate = $.fullCalendar.formatDate(event.end,'dd-MM-yyyy');
-            var starttm = $.fullCalendar.formatDate(event.start,'HH:mm');
-            var endtm = $.fullCalendar.formatDate(event.end,'HH:mm');    
-        },
-        eventClick: function ( event, jsEvent, view )  {
-        },
-        
-        
-        //eventSources: [ source ],
-        eventRender: function(event, element) {
-           
-        },
-        eventAfterAllRender: function( view ) {
-            
-        }
+        <!-- Barra de Navegacion con Breadcrumb -->
+        {% include 'DGPlusbelleBundle:Layout:nav2.html.twig' %}
+	<!-- Fin de Barra de Navegacion -->
+        <div class="container">
+		<p class="robo text-center" style="font-size: 35px; font-weight: 300; font-family: 'Roboto', sans-serif; margin-bottom: 0px;">Dashboard</p>
+		<p class="robo text-center" style="font-size: 17px; font-weight: 300; font-family: 'Roboto', sans-serif; margin-bottom: 30px;">Panel de control.</p>
+		<!-- Col md 10 -->
+		<div class="row">
+			<div class="col-md-1"> </div>
+			<div class="col-md-10 col-xs-12"> 
+				<div class="row">
+					<!-- Inicio de Icono de Notificaciones -->
+					<div class="col-md-2 col-xs-6 col-sm-2" style="margin-top: 20px;">
+                                            <a class="opcion" href="{{ path('admin_paciente') }}" style="text-decoration: none; color: inherit; outline: 0; margin-top: 20px;">
+                                                <span class="text-center">
+                                                    <p style="margin-botttom: 0px; padding-bottom: 0px;"><img style="width:60%" src="{{ asset('Resources/img/pacientes.png')}}"></p>
+                                                    <p style="padding-top: 5px; margin-top: 0px;" ><strong>Pacientes</strong></p>
+                                                </span>
+                                            </a>
+					</div>
+					<!-- Fin de Icono de Notificaciones -->
+					<!-- Inicio de Icono de Notificaciones -->
+					<div class="col-md-2 col-xs-6 col-sm-2" style="margin-top: 20px;">
+                                            <a class="opcion" href="{{ path('admin_cita') }}" style="text-decoration: none; color: inherit; outline: 0; margin-top: 20px;">
+                                                <span class="text-center">
+                                                    <p style="margin-botttom: 0px; padding-bottom: 0px;"><img style="width:60%" src="{{ asset('Resources/img/citas.png')}}"></p>
+                                                    <p style="padding-top: 5px; margin-top: 0px;"><strong>Citas</strong></p>
+                                                </span>
+                                            </a>
+					</div>
+					<!-- Fin de Icono de Notificaciones -->
+					<!-- Inicio de Icono de Notificaciones -->
+					<div class="col-md-2 col-xs-6 col-sm-2" style="margin-top: 20px;">
+                                            <a class="opcion" href="{{ path('admin_consulta_expediente_sd') }}" style="text-decoration: none; color: inherit; outline: 0; margin-top: 20px;">
+                                                <span class="text-center">
+                                                    <p style="margin-botttom: 0px; padding-bottom: 0px;"><img style="width:60%" src="{{ asset('Resources/img/expedientes.png')}}"></p>
+                                                    <p style="padding-top: 5px; margin-top: 0px;"><strong>Expedientes</strong></p>
+                                                </span>
+                                            </a>
+					</div>
+					
+					{#<div class="col-md-2 col-xs-6 col-sm-2" style="margin-top: 20px;">
+                                            <a class="opcion" href="{{ path('admin_incapacidad') }}" style="text-decoration: none; color: inherit; outline: 0; margin-top: 20px;">
+                                                <span class="text-center">
+                                                    <p style="margin-botttom: 0px; padding-bottom: 0px;"><img style="width:60%" src="{{ asset('Resources/img/incapacidades.png')}}"></p>
+                                                    <p style="padding-top: 5px; margin-top: 0px;"><strong>Incapacidades</strong></p>
+                                                </span>
+                                            </a>
+					</div>#}
+					
+					<div class="col-md-2 col-xs-6 col-sm-2" style="margin-top: 20px;">
+                                            <a class="opcion" href="{{ path('admin_cierreadministrativo') }}" style="text-decoration: none; color: inherit; outline: 0; margin-top: 20px;">
+                                                <span class="text-center">
+                                                    <p style="margin-botttom: 0px; padding-bottom: 0px;"><img style="width:60%" src="{{ asset('Resources/img/cierre_administrativo.png')}}"></p>
+                                                    <p style="padding-top: 5px; margin-top: 0px;"><strong>Cierre administrativo</strong></p>
+                                                </span>
+                                            </a>
+					</div>
+					<!-- Fin de Icono de Notificaciones -->
+					<!-- Inicio de Icono de Notificaciones -->
+					<div class="col-md-2 col-xs-6 col-sm-2" style="margin-top: 20px;">
+                                            <a class="opcion" href="{{ path('admin_reporte_emergencia') }}" style="text-decoration: none; color: inherit; outline: 0; margin-top: 20px;">
+                                                <span class="text-center">
+                                                    <p style="margin-botttom: 0px; padding-bottom: 0px;"><img style="width:60%" src="{{ asset('Resources/img/reportes.png')}}"></p>
+                                                    <p style="padding-top: 5px; margin-top: 0px;"><strong>Reportes</strong></p>
+						</span>
+                                            </a>
+                                        </div>
+                                        {#<div class="clearfix"></div>#}
+                                        <div class="col-md-2 col-xs-6 col-sm-2" style="margin-top: 20px;">
+                                            <a class="opcion" href="{{ path('admin_usuario') }}" style="text-decoration: none; color: inherit; outline: 0; margin-top: 20px;">
+                                                <span class="text-center">
+                                                    <p style="margin-botttom: 0px; padding-bottom: 0px;"><img style="width:60%" src="{{ asset('Resources/img/ajuste.png')}}"></p>
+                                                    <p style="padding-top: 5px; margin-top: 0px;"><strong>Ajustes</strong></p>
+						</span>
+                                            </a>
+                                        </div>
+					<!-- Fin de Icono de Notificaciones -->
+					<!-- Inicio de Icono de Notificaciones -->
+					<!-- <div class="col-md-2 col-xs-6 col-sm-2" style="margin-top: 20px;">
+						<a href="pin.php" style="text-decoration: none; color: inherit; outline: 0; margin-top: 20px;"><span class="text-center">
+							<p style="margin-botttom: 0px; padding-bottom: 0px;"><img src="src/img/icon12.png"></p>
+							<p style="padding-top: 5px; margin-top: 0px;"><strong>Clock In/Out</strong></p>
+						</span></a>
+					</div> -->
+					<!-- Fin de Icono de Notificaciones -->
+				</div> <!-- /row pequeño -->
+			</div> <!-- /colmd10 -->
+                    <div class="col-md-1"> </div>
+		</div> <!-- /row grande -->
+	</div> <!-- /container -->
+	<!-- Fin de Iconos de Navegacion de Sistema -->
 
+                <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+                
+                <!-- Include all compiled plugins (below), or include individual files as needed -->
+                
+                <script src="{{ asset('Resources/src/js/shortcut.js')}}"></script> <!-- http://www.openjs.com/scripts/events/keyboard_shortcuts/v1.php -->
+                <script type="text/javascript" src="{{ asset('Resources/jquery/jquery-1.12.3.min.js') }}"></script>
+                <script src="{{ asset('Resources/src/js/bootstrap.js')}}"></script>
+                <link href="//cdnjs.cloudflare.com/ajax/libs/select2/4.0.0/css/select2.css" rel="stylesheet"/>
+
+                <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.js"></script>
+                <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.2/js/select2.min.js"></script>
+                <script type="text/javascript">
+                        $( document ).ready(function() {
+                            $(document).on('change','#busquedaRapida',function(){
+                                var expediente = $(this).val();
+                                var url = "{{path('admin_consulta_expediente_sd')}}"+"?id="+expediente;
+                                console.log(url);
+                                window.location=url;
+                            });
+
+                            $(document).on('click','.opcion',function(){
+                                
+                                var url = $(this).attr('href');
+{#                                var url = Routing.generate('admin_paciente');#}
+                                console.log(url);
+                                window.open(url,"_self"); 
+                                return false;
+                            });
+                            
+                            $('#busquedaRapida').select2({
+                                ajax: {
+                                    url: "{{path('busqueda_paciente_select')}}",
+                                    dataType: 'json',
+                                    delay: 250,
+                                    data: function (params) {
+                                      return {
+                                        q: params.term, 
+                                        page: params.page
+                                      };
+                                    },
+                                    processResults: function (data, params) {
+                                        var select2Data = $.map(data.data, function (obj) {
+                                            obj.id = obj.numero;
+                                            obj.text = obj.numero+" "+obj.nombres+" "+obj.apellidos;
+
+                                            return obj;
+                                        });
+
+                                        return {
+                                            results: select2Data
+                                            {#pagination: {
+                                                more: (params.page * 30) < data.total_count
+                                            }#}
+                                                    };
+                                    },
+                                    cache: true
+                                },
+                                escapeMarkup: function (markup) { return markup; }, 
+                                minimumInputLength: 1,
+                                templateResult: formatRepo, 
+                                templateSelection: formatRepoSelection 
+                            });
+                            shortcut.add("Ctrl+g",function() {
+                                {#busqueda.click();
+                                console.log('click');#}
+                                $("#busquedaRapida").select2('destroy');
+                                var busqueda = $('#busquedaRapida').select2({
+                                    
+                                    ajax: {
+                                        url: "{{path('busqueda_paciente_select_exp')}}",
+                                        dataType: 'json',
+                                        delay: 250,
+                                        data: function (params) {
+                                          return {
+                                            q: params.term, 
+                                            page: params.page
+                                          };
+                                        },
+                                        processResults: function (data, params) {
+                                            var select2Data = $.map(data.data, function (obj) {
+                                                obj.id = obj.numero;
+                                                obj.text = obj.numero+" "+obj.nombres+" "+obj.apellidos;
+
+                                                return obj;
+                                            });
+
+                                            return {
+                                                results: select2Data
+                                                {#pagination: {
+                                                    more: (params.page * 30) < data.total_count
+                                                }#}
+                                            };
+                                        },
+                                        cache: true
+                                    },
+                                    escapeMarkup: function (markup) { return markup; }, 
+                                    minimumInputLength: 1,
+                                    templateResult: formatRepo, 
+                                    templateSelection: formatRepoSelection 
+                                });
+                                $("#busquedaRapida").select2('open');
+                            });
+                            
+                            {#$(document).on('click','.dropdown-toggle', function(event){
+                                $('.dropdown-menu').toggle();
+                                console.log("Prueba");
+                            });#}
+                            
+                            function formatRepo (data) {
+                                if(data.numero){
+                                    var markup = "<div class='select2-result-repository clearfix'>" +
+                                                 "<div class='select2-result-repository__meta'>" +
+                                                 "<div class='select2-result-repository__title'>" + data.numero+" | "+data.nombres+" "+data.apellidos+"</div>" +
+                                                 "</div></div>";
+                                } else {
+                                    var markup = "Realice una búsqueda (Ctrl+g)"; 
+                                }
+
+
+                                {#if (repo.description) {
+                                  markup += "<div class='select2-result-repository__description'>" + repo.description + "</div>";
+                                }
+
+                                markup += "<div class='select2-result-repository__statistics'>" +
+                                        "<div class='select2-result-repository__forks'><i class='fa fa-flash'></i> " + repo.forks_count + " Forks</div>" +
+                                        "<div class='select2-result-repository__stargazers'><i class='fa fa-star'></i> " + repo.stargazers_count + " Stars</div>" +
+                                        "<div class='select2-result-repository__watchers'><i class='fa fa-eye'></i> " + repo.watchers_count + " Watchers</div>" +
+                                    "</div>" +
+                                    "</div></div>";#}
+
+                                return markup;
+                            }
+
+                            function formatRepoSelection (data) {
+                                if(data.numero){
+                                    return data.numero+" | "+data.nombres+" "+data.apellidos;
+                                } else {
+                                    return "Realice una búsqueda (Ctrl+g)"; 
+                                }    
+                            }
+                        });
+                </script>
+                {#<script type="text/javascript">
+                        $( document ).ready(function() {
+                    shortcut.add("Ctrl+Shift+X",function() {
+
+                    });
+                  });
+                </script>
+                <script type="text/javascript">
+                $(function () {
+                    var options = {
+                    };
+                    $('.grid-stack').gridstack(options);
+                });
+                
+                </script>#}
         
-    });//FIN DE LA CONFIGURACION DEL CALENDARIO
-    calendario.fullCalendar('addEventSource', source);    
-});//FIN
-</script> 
-{% endblock %}
+
+    </body>
+</html>

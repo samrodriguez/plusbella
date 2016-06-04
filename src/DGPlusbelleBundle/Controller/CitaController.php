@@ -98,11 +98,17 @@ class CitaController extends Controller
      */
     public function createAction(Request $request)
     {
+        $em = $this->getDoctrine()->getManager();
         $entity = new Cita();
         $entity->setFechaRegistro(new \DateTime('now'));
         $entity->setEstado('P');
         $form = $this->createCreateForm($entity);
         $form->handleRequest($request);
+        
+        $data = $request->request->all();
+        $idPac = $data['dgplusbellebundle_cita']['paciente'];
+        
+        $pacienteObj = $em->getRepository('DGPlusbelleBundle:Paciente')->find($idPac);
         
         
         $idEmpleado = $entity->getEmpleado()->getId();
@@ -125,14 +131,14 @@ class CitaController extends Controller
         
         //$horaCita = strtotime($horaCita);
         //var_dump($horaCita);
-        $em = $this->getDoctrine()->getManager();
+        
 //        $cita = $em->getRepository('DGPlusbelleBundle:Cita')->findBy(array('empleado'=>$idEmpleado,'horaCita'=>$horaCita,'fechaCita'=>$fechaCita));
         //$cita = $em->getRepository('DGPlusbelleBundle:Cita')->findBy(array('empleado'=>$idEmpleado,'horaCita'=>$horaCita,'fechaCita'=>$fechaCita,'estado'=>'P'));
 //        var_dump($idEmpleado);
 //        var_dump($horaCita);
 //        var_dump($horaFin);
 //        var_dump($fechaCita);
-        
+        $entity->setPaciente($pacienteObj);
         $dql = "SELECT c from DGPlusbelleBundle:Cita c "
                 . "WHERE c.empleado=:empleado "
                 . "AND c.horaCita<=:horaCita "
@@ -156,6 +162,7 @@ class CitaController extends Controller
         //die();
         
         if($horaFin<$horaCita){
+            var_dump('s');
             return array(
                 'entity' => $entity,
                 'form'   => $form->createView(),
@@ -167,7 +174,7 @@ class CitaController extends Controller
         
         if(count($cita)==0){
             if(count($cierres)==0){
-                if ($form->isValid()) {
+//                if ($form->isValid()) {
                     $paciente = $entity->getPaciente();
     //                var_dump($paciente);
                     if($paciente!=null){
@@ -191,10 +198,12 @@ class CitaController extends Controller
                     $em->persist($entity);
                     $em->flush();
                     $this->get('bitacora')->escribirbitacora("Se creo una nueva cita",$usuario->getId());
+                    var_dump('s');
                     return $this->redirect($this->generateUrl('admin_cita'));
-                }
+//                }
             }
             else{
+                var_dump('s');
                 return array(
                     
                     'entity' => $entity,

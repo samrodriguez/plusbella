@@ -80,7 +80,7 @@ class CierreAdministrativoController extends Controller
             'method' => 'POST',
         ));
 
-        $form->add('submit', 'submit', array('label' => 'Guardar','attr'=>array('class'=> 'btn btn-success btn-sm btn')));
+        $form->add('submit', 'submit', array('label' => 'Guardar','attr'=>array('class'=> 'btn btn-primary btn-sm btn')));
 
         return $form;
     }
@@ -169,7 +169,7 @@ class CierreAdministrativoController extends Controller
             'method' => 'PUT',
         ));
 
-        $form->add('submit', 'submit', array('label' => 'Editar','attr'=>array('class'=> 'btn btn-success btn-sm btn')));
+        $form->add('submit', 'submit', array('label' => 'Editar','attr'=>array('class'=> 'btn btn-primary btn-sm btn')));
 
         return $form;
     }
