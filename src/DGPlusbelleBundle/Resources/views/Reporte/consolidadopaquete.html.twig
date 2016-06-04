@@ -1,15 +1,41 @@
-{% extends 'DGPlusbelleBundle:Layout:layout.html.twig' %}
+{% extends 'DGPlusbelleBundle:Layout:layouterpajustes.html.twig' %}
+
+
+{% block navegacion %}
+
+    {% if is_granted('ROLE_ADMIN') %}
+        <a href="{{ path('admin_reporte_emergencia') }}" class="leftnava"><li class="leftnav left">Ingresos consulta<span class="pull-right right"><i class=""></i></span></li></a>
+    {% endif %}
+    {% if is_granted('ROLE_ADMIN') %}
+        <a href="{{ path('admin_reporte_paquete') }}" class="leftnava"><li class="leftnav left">Ingresos por paquete<span class="pull-right right"><i class=""></i></span></li></a>
+    {% endif %}
+    {% if is_granted('ROLE_ADMIN') %}
+        <a href="{{ path('admin_reporte_consolidado_paquete') }}" class="leftnava"><li class="leftnav left active">Consolidado paquete<span class="pull-right right"><i class="fa fa-arrow-right"></i></span></li></a>
+    {% endif %}
+    {% if is_granted('ROLE_ADMIN') %}
+        <a href="{{ path('admin_reporte_tratamiento_frecuente') }}" class="leftnava"><li class="leftnav left ">Tratamiento frecuente<span class="pull-right right"><i class=""></i></span></li></a>
+    {% endif %}
+    {% if is_granted('ROLE_ADMIN') %}
+        <a href="{{ path('admin_reporte_referidos') }}" class="leftnava"><li class="leftnav left ">Pacientes referidos<span class="pull-right right"><i class=""></i></span></li></a>
+    {% endif %}
+    {% if is_granted('ROLE_ADMIN') %}
+        <a href="{{ path('admin_empleado_progreso_venta') }}" class="leftnava"><li class="leftnav left ">Progreso de empleado<span class="pull-right right"><i class=""></i></span></li></a>
+    {% endif %}
+        
+{% endblock navegacion %}
+
+{% block descripcion %}
+    <div class="col-md-6">
+        <p class="robo" style="font-weight: 300; margin-bottom: 0px; font-size: 30px;">Reporte de consolidado de paquetes</p>
+        <p class="robo" style="font-weight: 300; font-size: 14px; height: 40px;">Genere reporte consolidado de los paquetes vendidos.</p>
+    </div>
+{% endblock %}
 
 {% block contenido -%}
 
 
         <div class="content-body">
           <div class="panel" data-fill-color="true">
-            <div class="panel-heading">
-              
-                <h3 class="panel-title">Consolidado de paquetes</h3>
-              
-            </div><!-- /.panel-heading -->
             
             <div class="panel-body">
                 <div class="btn-toolbar clearfix" role="toolbar">
@@ -17,7 +43,7 @@
                 
                 <div class="btn-group btn-group-sm pull-left">
                     
-                    <button id="exportar-pdf" data-toggle="tooltip" data-container="body" title="Exportar a PDF" class="btn btn-default datatables1-actions opciones" role="button">
+                    <button style="height: 30px;" id="exportar-pdf" data-toggle="tooltip" data-container="body" title="Exportar a PDF" class="btn btn-default datatables1-actions opciones" role="button">
                         <i class="fa fa-file-pdf-o"></i><a href=""> </a>
                     </button>
                 </div>
@@ -75,10 +101,15 @@
     
        
   {% block javascripts_step %}
-        <script type="text/javascript" src="{{ asset('Resources/zebra/inicializacioncalendarios.js')}}" ></script>
+        <script src="{{ asset('Resources/Zebra/js/zebra_datepicker.js') }}"></script> 
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.2/css/select2.min.css" rel="stylesheet" />
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.2/js/select2.min.js"></script>
+        <script type="text/javascript" src="{{ asset('Resources/Zebra/inicializacioncalendarios.js')}}" ></script>
+        <script src="{{ asset('Resources/wrapkit/scripts/bootbox.js') }}"></script>
+        <script src="{{ asset('Resources/wrapkit/scripts/chartjs.js') }}"></script>
         <script>
         $(document).ready(function(){
-                   
+        $('#sucursalesIngresos').select2();
         var anioInicioUser = $('#fecha-inicio').val();
         var anioFinUser = $('#fecha-fin').val();
         var sucursal = $('#sucursalesIngresos').val();

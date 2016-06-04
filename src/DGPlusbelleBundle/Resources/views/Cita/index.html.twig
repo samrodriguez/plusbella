@@ -1,4 +1,4 @@
-{% extends 'DGPlusbelleBundle:Layout:layout.html.twig' %}  
+{% extends 'DGPlusbelleBundle:Layout:layouterp.html.twig' %}  
 
 {% block css -%}
     {{parent()}}
@@ -52,6 +52,8 @@
             cursor:pointer;
         }
     </style>
+    <link rel="stylesheet" href="{{ asset('bundles/adesignscalendar/css/fullcalendar/fullcalendar.css') }}" />
+    <link rel="stylesheet" href="{{ asset('Resources/fullcalendar/css/fullcalendar.print.css') }}" media="print"/>
 {% endblock %}
 
 {% block contenido -%}
@@ -185,10 +187,18 @@
         
 {% endblock %}
 
-{% block javascripts_step -%}
+{% block javascripts_step %}
     <!-- Aspectos generales de la plantilla -->
     {{parent()}}
     
+    <script type="text/javascript" src="{{ asset('bundles/adesignscalendar/js/fullcalendar/jquery.fullcalendar.min.js') }}"></script>
+    <script src="{{ asset('Resources/jquery-ui/ui/jquery-ui.js') }}"></script>
+    <script src="{{ asset('Resources/wrapkit/scripts/bootbox.js') }}"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.2/js/select2.min.js"></script>
+    <script type="text/javascript" src="{{ asset('Resources/bValidator-0.73/jquery.bvalidator.js')}}"></script>
+    <script type="text/javascript" src="{{ asset('Resources/bValidator-0.73/bvalidator.lang.es.js')}}" ></script>
+    <script src="{{ asset('Resources/wrapkit/scripts/bootbox.js') }}"></script>
+    <script src="{{ asset('Resources/src/js/bootstrap.js')}}"></script>
     <script type="text/javascript">
         $(function () {
           $('[data-toggle="tooltip"]').tooltip();

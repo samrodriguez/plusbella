@@ -13,7 +13,11 @@
     
     <div class="row">
         <div class="col-md-3">
-         {{ form_row(form.paciente ) }}   
+         {#{{ form_label(form.paciente ) }}#}
+            <label class="form-group">Paciente</label>
+            <select id="dgplusbellebundle_cita_paciente" name="dgplusbellebundle_cita[paciente]" class="form-control input-sm pacienteCita">
+                <option value="">Seleccione un paciente...</option>
+            </select>
         </div>
     </div>
     
@@ -105,7 +109,74 @@
     </style>
     <script type="text/javascript" src="{{ asset('Resources/zebra/inicializacioncalendarios.js')}}" ></script>
         <script>
+            function formatRepo (data) {
+                if(data.nombres){
+                    var markup = "<div class='select2-result-repository clearfix'>" +
+                                 "<div class='select2-result-repository__meta'>" +
+                                 "<div class='select2-result-repository__title'>" + data.nombres + " " + data.apellidos + "</div>" +
+                                 "</div></div>";
+                } else {
+                    var markup = "Seleccione un paciente"; 
+                }
+
+
+                {#if (repo.description) {
+                  markup += "<div class='select2-result-repository__description'>" + repo.description + "</div>";
+                }
+
+                markup += "<div class='select2-result-repository__statistics'>" +
+                        "<div class='select2-result-repository__forks'><i class='fa fa-flash'></i> " + repo.forks_count + " Forks</div>" +
+                        "<div class='select2-result-repository__stargazers'><i class='fa fa-star'></i> " + repo.stargazers_count + " Stars</div>" +
+                        "<div class='select2-result-repository__watchers'><i class='fa fa-eye'></i> " + repo.watchers_count + " Watchers</div>" +
+                    "</div>" +
+                    "</div></div>";#}
+
+                return markup;
+            }
+
+            function formatRepoSelection (data) {
+                if(data.nombres){
+                    return data.nombres + " " + data.apellidos;
+                } else {
+                    return "Seleccione un paciente"; 
+                }    
+            }
+
             $(document).ready(function(){
+                
+                $('#dgplusbellebundle_cita_paciente').select2({
+                    ajax: {
+                        url: "{{path('busqueda_paciente_select')}}",
+                        dataType: 'json',
+                        delay: 250,
+                        data: function (params) {
+                          return {
+                            q: params.term, 
+                            page: params.page
+                          };
+                        },
+                        processResults: function (data, params) {
+                            var select2Data = $.map(data.data, function (obj) {
+                                obj.id = obj.pacienteid;
+                                obj.text = obj.nombres + ' ' + obj.apelllidos;
+
+                                return obj;
+                            });
+
+                            return {
+                                results: select2Data
+                                {#pagination: {
+                                    more: (params.page * 30) < data.total_count
+                                }#}
+                            };
+                        },
+                        cache: true
+                    },
+                    escapeMarkup: function (markup) { return markup; }, 
+                    minimumInputLength: 1,
+                    templateResult: formatRepo, 
+                    templateSelection: formatRepoSelection 
+                });
                 //Llamada ajax para validar la fecha y hora de una cita
                 //$('body').data('error',1);
                 //Llamada ajax para validar la fecha y hora de una cita
@@ -182,7 +253,7 @@
                 var seleccionado="";
                 //Eliminar options del select de pacientes
                //Eliminar options del select de pacientes
-               {#$('#dgplusbellebundle_cita_paciente').select2();#}
+               
                {# $('#dgplusbellebundle_cita_paciente option').each(function(index, val) {
                     
                     seleccionado = $(this).attr('selected');
