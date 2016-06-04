@@ -1347,7 +1347,7 @@
                         }
                 });
                 
-                var url = "{{path('admin_abonos_paciente_data')}}"+'?id='+id_ventapaquete;
+                var url = "{{path('admin_abonos_paciente_data_paquete')}}"+'?id='+id_ventapaquete;
 {#                console.log(id_ventapaquete);#}
                 var table = $('#listadoAbono').DataTable({
                     dom:'tp',
@@ -1437,7 +1437,7 @@
                         bootbox.alert('No se puede realizar esta operacion. El monto ingresado es mayor a la deuda de este paquete');
                         return false;
                     }
-                    table.ajax.reload();
+                    //table.ajax.reload();
                     return false;
                 }); 
                 

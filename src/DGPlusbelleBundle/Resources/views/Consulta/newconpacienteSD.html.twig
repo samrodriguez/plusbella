@@ -300,9 +300,9 @@
                             
                                 <div class="col-md-3">
                                     <select id="sexo" name="sexo" class="form-control input-sm" style="width:100%;">
-                                        <option {% if paciente.sexo== ''%} selected {% endif %} value="">Seleccione estado civil...</option>            
+                                        <option {% if paciente.sexo== ''%} selected {% endif %} value="">Seleccione sexo...</option>            
                                         <option {% if paciente.sexo== 'm' or paciente.sexo=='M' %} selected {% endif %} value="M">Masculino</option>            
-                                        <option {% if paciente.sexo== 'f' or paciente.sexo=='F' %} selected {% endif %} value="M">Femenino</option>            
+                                        <option {% if paciente.sexo== 'f' or paciente.sexo=='F' %} selected {% endif %} value="F">Femenino</option>            
                                     </select>
                                 </div>                                
                             </div>
@@ -466,10 +466,14 @@
                                             <select id="sucursal_consulta" class="form-control input-sm">
 {#                                                <option value="0" selected>Seleccione una sucursal...</option>#}
                                                 {% for sucursal in sucursales %}
-                                                    {% if loop.index == 0 %}
+                                                    {% if consulta.sucursal is not null %}
                                                         <option value="{{sucursal.id}}" {% if consulta.id!=null and sucursal.id==consulta.sucursal.id %} selected {% endif %}>{{sucursal.nombre}}</option>
                                                     {% else %}
-                                                        <option value="{{sucursal.id}}" >{{sucursal.nombre}}</option>
+                                                        {% if loop.index == 0 %}
+                                                            <option selected value="{{sucursal.id}}" >{{sucursal.nombre}}</option>
+                                                        {% else %}
+                                                            <option value="{{sucursal.id}}" >{{sucursal.nombre}}</option>
+                                                        {%endif %}
                                                     {% endif %}
                                                     
                                                 {% endfor %}
@@ -3139,7 +3143,7 @@
             var llamarA= $('#llamarA').val();
             var telefonoEmergencia = $('#telefonoEmergencia').val();
             
-            
+           
 {#            alert(direccion);#}
             
             //alert(fechaNacimiento);
@@ -3456,8 +3460,8 @@
                                         $('.labelPlantilla').hide();
 
                                         $('#planOpciones').hide();
-                                        $('#historialPrevPDF').hide();
-                                        $('#historialPrevPDF').prev().hide();
+                                        {#$('#historialPrevPDF').hide();
+                                        $('#historialPrevPDF').prev().hide();#}
 
                                         $('#dgplusbellebundle_consulta_plantilla').hide();
                                         $('#dgplusbellebundle_consulta_plantilla').next().hide();
@@ -3582,8 +3586,8 @@
                                             $('.labelPlantilla').hide();
 
                                             $('#planOpciones').hide();
-                                            $('#historialPrevPDF').hide();
-                                            $('#historialPrevPDF').prev().hide();
+                                            {#$('#historialPrevPDF').hide();
+                                            $('#historialPrevPDF').prev().hide();#}
 
                                             $('#dgplusbellebundle_consulta_plantilla').hide();
                                             $('#dgplusbellebundle_consulta_plantilla').next().hide();

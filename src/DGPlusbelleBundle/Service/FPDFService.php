@@ -97,6 +97,9 @@ class FPDFService {
         
         $this->pdf->Ln(15);
         $this->mostrarCelda($this->pdf, 32, 'Fecha: ', $consulta[0]->getConsulta()->getFechaConsulta()->format("d/m/Y"));
+        //var_dump($consulta[0]->getConsulta()->getPaciente()->getEstadoCivil());
+    
+        $this->mostrarCelda($this->pdf, 22, 'Estado civil: ', $consulta[0]->getConsulta()->getPaciente()->getEstadoCivil());
         $this->pdf->Ln(7);
         $this->mostrarCelda($this->pdf, 32, 'Nombre: ', $consulta[0]->getConsulta()->getPaciente()->getPersona()->getNombres().' '.$consulta[0]->getConsulta()->getPaciente()->getPersona()->getApellidos());
         
@@ -938,6 +941,7 @@ class FPDFService {
         $this->pdf->Ln(15);
         $break=$break+15;
         $this->mostrarCelda($this->pdf, 32, 'Fecha: ', $fecha);
+        $this->mostrarCelda($this->pdf, 22, 'Estado civil:', $paciente->getEstadoCivil());
         $this->pdf->Ln(7);
         $break=$break+7;
         $this->mostrarCelda($this->pdf, 32, 'Nombre: ', $paciente->getPersona()->getNombres().' '.$paciente->getPersona()->getApellidos());

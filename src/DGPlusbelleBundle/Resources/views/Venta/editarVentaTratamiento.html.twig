@@ -679,61 +679,81 @@
                     
                     {# Sección en donde se registran los abonos y devoluciones de un paquete o tratamiento #}
                     <div id="abonos-devoluciones" class="tab-pane fade" style="margin-top: 20px;">
-                        <form id="formulario-sesiones-tratamiento" method="POST" enctype="multipart/form-data">
-                            <div class="row" style="margin-top: 35px;">
-                                <div class="col-md-3"  style="margin-left: 30px;">
-                                    {# Area en donde se selecciona la sucursal en donde se realiza la venta #}    
-                                    <div id="sucursal-sesion">
-                                        <label>Sucursal</label>
-                                        <select id="dgplusbellebundle_abono_sucursal" name="dgplusbellebundle_abono[sucursal]" class="sesion-sucursal" style="width: 100%">
-                                            <option value="" disabled selected>Seleccione una sucursal ...</option>
+                        <div class="col-md-7 col-sm-7">
+                            <form id="formulario-sesiones-tratamiento" method="POST" enctype="multipart/form-data">
+                                <div class="row" style="margin-top: 35px;">
+                                    <div class="col-md-3"  style="margin-left: 30px;">
+                                        {# Area en donde se selecciona la sucursal en donde se realiza la venta #}    
+                                        <div id="sucursal-sesion">
+                                            <label>Sucursal</label>
+                                            <select id="dgplusbellebundle_abono_sucursal" name="dgplusbellebundle_abono[sucursal]" class="sesion-sucursal" style="width: 100%">
+                                                <option value="" disabled selected>Seleccione una sucursal ...</option>
 
-                                            {% for sucursal in sucursales %}
-                                                <option value="{{sucursal.id}}"> {{sucursal.nombre}}</option>
-                                            {% endfor %}
-                                        </select>   
+                                                {% for sucursal in sucursales %}
+                                                    <option value="{{sucursal.id}}"> {{sucursal.nombre}}</option>
+                                                {% endfor %}
+                                            </select>   
+                                        </div>
                                     </div>
-                                </div>
-                                <div class="col-md-4">
-                                    {# Area en donde se selecciona  el empleado que ha realizado la venta #}  
-                                    <div id="empleado-sesion">
-                                        <label>Empleado</label>
-                                        <select id="dgplusbellebundle_abono_empleado" name="dgplusbellebundle_abono[empleado]" class="sesion-empleado" style="width: 100%">
-                                            <option value="" disabled selected>Seleccione un empleado ...</option>
+                                    <div class="col-md-4">
+                                        {# Area en donde se selecciona  el empleado que ha realizado la venta #}  
+                                        <div id="empleado-sesion">
+                                            <label>Empleado</label>
+                                            <select id="dgplusbellebundle_abono_empleado" name="dgplusbellebundle_abono[empleado]" class="sesion-empleado" style="width: 100%">
+                                                <option value="" disabled selected>Seleccione un empleado ...</option>
 
-                                            {% for empleado in empleadosVenta %}
-                                                <option value="{{empleado.id}}"> {{empleado.persona}}</option>
-                                            {% endfor %}
-                                        </select>   
-                                    </div>
-                                </div> 
-                                <div class="col-md-3">
-                                    <div id="abono-monto">
-                                        <label>Monto ($)</label>
-                                        <input type="text" name="dgplusbellebundle_abono[monto]" id="dgplusbellebundle_abono_monto" class="form-control" style="width: 100%">        
-                                    </div>    
-                                </div>        
-                            </div>
-                            <div class="row">
-                                <div class="col-md-7 col-sm-7" style="margin-top: 30px; margin-bottom: 10px;" id="abono">
-                                    <div id="abono-descripcion-label" style="margin-left: 30px;">
-                                        <label>Descripcion</label>
+                                                {% for empleado in empleadosVenta %}
+                                                    <option value="{{empleado.id}}"> {{empleado.persona}}</option>
+                                                {% endfor %}
+                                            </select>   
+                                        </div>
                                     </div> 
-                                    <div class="clearfix"></div>
-                                    <div id="abono-descripcion" style="margin-left: 30px;">
-                                        <textarea rows="4" cols="100" name="dgplusbellebundle_abono[descripcion]" id="dgplusbellebundle_abono_descripcion" class="form-control"></textarea> 
-                                    </div>     
-                                </div>    
-                            </div>               
+                                    <div class="col-md-3">
+                                        <div id="abono-monto">
+                                            <label>Monto ($)</label>
+                                            <input type="text" name="dgplusbellebundle_abono[monto]" id="dgplusbellebundle_abono_monto" class="form-control" style="width: 100%">        
+                                        </div>    
+                                    </div>        
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-7 col-sm-7" style="margin-top: 30px; margin-bottom: 10px;" id="abono">
+                                        <div id="abono-descripcion-label" style="margin-left: 30px;">
+                                            <label>Descripcion</label>
+                                        </div> 
+                                        <div class="clearfix"></div>
+                                        <div id="abono-descripcion" style="margin-left: 30px;">
+                                            <textarea rows="4" cols="100" name="dgplusbellebundle_abono[descripcion]" id="dgplusbellebundle_abono_descripcion" class="form-control"></textarea> 
+                                        </div>     
+                                    </div>    
+                                </div>               
+                                <div class="row">
+                                    <div class="col-md-12 col-sm-12 text-center" style="margin-top: 30px; margin-bottom: 10px;" id="registrar-abonos-sesiones">
+                                        <hr>
+                                        <input type="submit" value="Registrar abono" style="margin-bottom: 10px; background-color: #39a58a; color: #FFF;" class="btn" id="registro-abono"/>
+                                    </div>    
+                                </div>             
+                            </form>
+                        </div>
+                        <div class="col-md-5">
                             <div class="row">
-                                <div class="col-md-12 col-sm-12 text-center" style="margin-top: 30px; margin-bottom: 10px;" id="registrar-abonos-sesiones">
-                                    <hr>
-                                    <input type="submit" value="Registrar abono" style="margin-bottom: 10px; background-color: #39a58a; color: #FFF;" class="btn" id="registro-abono"/>
-                                </div>    
-                            </div>             
-                        </form>
-                        <div class="row" style="margin-top: 50px;"></div>          
-                    </div>
+                                <div class="col-md-12 col-sm-12">
+                                    <table id="listadoAbono" class="listados table table-bordered table-hover">
+                                        <thead>
+                                            <tr>
+                                                <th class="text-center">Fecha de Abono</th>
+                                                <th class="text-center">Empleado</th>
+                                                <th class="text-center">Sucursal</th>
+                                                <th class="text-center">Monto ($)</th>
+                                            </tr>
+                                        </thead>
+                                        {#<tbody>
+
+                                        </tbody>#}
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    <div class="row" style="margin-top: 50px;"></div>          
                 </div> 
             </div><!-- /.panel -->
         </div>
@@ -1304,7 +1324,7 @@
                         };
                     
                     
-                    if(monto <= deuda_total){
+                    if(parseFloat(monto) <= parseFloat(deuda_total)){
                         // Se procede a registrar el abono del tratamiento mediante ajax
                         $.ajax({
                             data:  data,
@@ -1315,6 +1335,7 @@
                                 deuda_total = (response.costo - ((response.descuento * response.costo)/100) - response.abonos).toFixed(2);
 
                                 $('#detalle-venta-deuda').html('$ ' + deuda_total);
+                                table.ajax.reload();
                                 return false;
                             }
                         });
@@ -1527,6 +1548,55 @@
                     }, 
 
                     });
+        
+                    
+                var url = "{{path('admin_abonos_paciente_data_tratamiento')}}"+'?id='+id_ventatratamiento;
+        
+                var table = $('#listadoAbono').DataTable({
+                    dom:'tp',
+                    "processing": false,
+                    "serverSide": true,
+                    "pageLength": 3,
+                    "ajax": {
+                        "url": url,
+                        "type": 'GET'
+                    },
+                    "columns": [
+                        {#{ "data": "id" },   #}
+                        { "data": "fechaAbono" },
+                        { "data": "empleado" },
+                        { "data": "sucursal" },
+                        { "data": "monto" }
+                        {#{ "data": "dui" },#}
+{#                        { "data": "telefono" },#}
+                        {#{ "data": "email" },
+                        { "data": "lugarTrabajo" },#}
+                    ],
+                        "columnDefs": [
+                               {"width":10, "orderable": false, "targets": 0 },
+                               {"width":45, "orderable": false, "targets": 1 },
+                               {"width":30, "orderable": false, "targets": 2 },
+                               {"width":15, "orderable": false, "targets": 3 }
+                               
+                               
+                               //{ "orderData": [ 2, 3, 4 ], "targets": 2 }
+                        ],
+                        "language": {
+                        "info": "Mostrando página _PAGE_ de _PAGES_",
+                        "infoEmpty": "",
+                        "infoFiltered": "filtrando de _MAX_ registros",
+                        "emptyTable": "No se encontraron registros",
+                        "paginate": { 
+                            "next": "Siguiente",
+                            "previous": "Anterior"
+                        },
+                        "processing": "Procesando petición...",
+                        "search": "Buscar registros:",
+                        "lengthMenu": "Mostrar _MENU_ registros"
+                    }, 
+
+                    });
+        
         
         //Oculta el filtro de las tablas
         
