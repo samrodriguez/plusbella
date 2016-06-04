@@ -384,4 +384,46 @@ class SesionVentaTratamientoController extends Controller
             ->getForm()
         ;
     }
+    
+    /**
+     * 
+     *
+     * @Route("/sesiones/data/listado/tratamiento", name="admin_sesiones_paciente_data_tratamiento")
+     */
+    public function dataSesionesTratamientoAction(Request $request)
+    {
+        $start = $request->query->get('start');
+        $draw = $request->query->get('draw');
+        $longitud = $request->query->get('length');
+        $busqueda = $request->query->get('search');
+        $id = $request->query->get('id');
+        
+        $em = $this->getDoctrine()->getEntityManager();
+        $expedientesTotal = $em->getRepository('DGPlusbelleBundle:SesionVentaTratamiento')->findBy(array('personaTratamiento'=>$id));
+        
+        $paciente['draw']=$draw++;  
+        $paciente['recordsTotal'] = count($expedientesTotal);
+        $paciente['recordsFiltered']= count($expedientesTotal);
+        $paciente['data']= array();
+        
+        $arrayFiltro = explode(' ',$busqueda['value']);
+        
+        $busqueda['value'] = str_replace(' ', '%', $busqueda['value']);
+        
+        $dql = "SELECT suc.nombre as sucursal, DATE_FORMAT(ab.fechaSesion,'%d-%m-%Y') as fechaSesion, CONCAT(per.nombres,' ', per.apellidos) as empleado FROM DGPlusbelleBundle:SesionVentaTratamiento ab "
+                . "JOIN ab.empleado emp "
+                . "JOIN emp.persona per "
+                . "JOIN ab.sucursal suc "
+                . "WHERE ab.personaTratamiento=:id "
+                . "ORDER BY ab.fechaSesion DESC ";
+        $paciente['data'] = $em->createQuery($dql)
+                ->setParameter('id',$id)
+                ->setFirstResult($start)
+                ->setMaxResults($longitud)
+                ->getResult();
+        
+        var_dump($id);
+        
+        return new Response(json_encode($paciente));
+    }
 }

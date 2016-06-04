@@ -570,7 +570,7 @@
                             <div class="col-md-12" style="margin-bottom: 25px;">
                                 <hr>
                             </div>
-                            <div class="col-md-7" style="margin-left: 30px;">
+                            <div class="col-md-6" style="margin-left: 30px;">
                                 <div class="row">
                                     <div class="col-md-6" style="margin-bottom: 20px;">
                                         <div class="row">
@@ -641,6 +641,22 @@
                                         <hr>
                                     </div>
                                 </div>             
+                            </div>
+                            <div class="col-md-5 col-sm-5" style="margin-left: 20px; margin-top: -10px;">
+                                <div class="row">
+                                    <div class="col-md-12 col-sm-12">
+                                        <table id="listadoSesiones" class="listados table table-bordered table-hover">
+                                            <thead>
+                                                <tr>
+                                                    <th class="text-center">Fecha de sesión</th>
+                                                    <th class="text-center">Tratamiento</th>
+                                                    <th class="text-center">Empleado</th>
+                                                    <th class="text-center">Sucursal</th>
+                                                </tr>
+                                            </thead>
+                                        </table>
+                                    </div>
+                                </div>
                             </div>
                         </div>                            
                     </div>                    
@@ -1136,8 +1152,8 @@
                 
                 // Al momento de hacer click en Registrar nueva sesion de tratamiento 
                 $(document).on("click", "#registrar-sesiones-tratamiento", function(){
-                    var sucursal = $('#dgplusbellebundle_venta_sucursal').val();
-                    var empleado = $('#dgplusbellebundle_venta_empleado').val();
+                    var sucursal = $('#dgplusbellebundle_sesiones_sucursal').val();
+                    var empleado = $('#dgplusbellebundle_sesiones_empleado').val();
                     var sesionesPaqueteTrata = new Array();
                     var tratamientos = new Array();
                     var flag = 0;
@@ -1197,11 +1213,11 @@
 
                                                 var datos = {
                                                     id : id_ventapaquete,
-                                                    sucursal : $('#dgplusbellebundle_venta_sucursal').val(),
-                                                    empleado: $('#dgplusbellebundle_venta_empleado').val(),
+                                                    sucursal : sucursal,
+                                                    empleado: empleado,
                                                     tratamiento: tratamiento
                                                 };
-                                                
+                                                console.log(sucursal + ' ' + empleado);
                                                 nuevaSesionPaqueteTratamiento(datos);
                                                 return false;                                                
                                             }
@@ -1391,6 +1407,45 @@
                         "search": "Buscar registros:",
                         "lengthMenu": "Mostrar _MENU_ registros"
                     }, 
+
+                    });
+                    
+                    var url = "{{path('admin_sesiones_paciente_data_paquete')}}"+'?id='+id_ventapaquete;
+
+                    var table1 = $('#listadoSesiones').DataTable({
+                        dom:'tp',
+                        "processing": false,
+                        "serverSide": true,
+                        "pageLength": 3,
+                        "ajax": {
+                            "url": url,
+                            "type": 'GET'
+                        },
+                        "columns": [
+                            { "data": "fechaSesion" },
+                            { "data": "tratamiento" },
+                            { "data": "empleado" },
+                            { "data": "sucursal" }
+                        ],
+                            "columnDefs": [
+                                   {"width":10, "orderable": false, "targets": 0 },
+                                   {"width":45, "orderable": false, "targets": 1 },
+                                   {"width":30, "orderable": false, "targets": 2 },
+                                   {"width":15, "orderable": false, "targets": 3 }
+                            ],
+                            "language": {
+                            "info": "Mostrando página _PAGE_ de _PAGES_",
+                            "infoEmpty": "",
+                            "infoFiltered": "filtrando de _MAX_ registros",
+                            "emptyTable": "No se encontraron registros",
+                            "paginate": { 
+                                "next": "Siguiente",
+                                "previous": "Anterior"
+                            },
+                            "processing": "Procesando petición...",
+                            "search": "Buscar registros:",
+                            "lengthMenu": "Mostrar _MENU_ registros"
+                        }, 
 
                     });
                 
@@ -1753,6 +1808,8 @@
                         vtratamientos.append('<option value="' + v.id + '">' + v.nombre + '</option>');
                     });
                     //$('#dgplusbellebundle_sesiones_tratamiento option[value=""]').attr("selected",true);
+                    
+                    table1.ajax.reload();
                 }
             });
         }

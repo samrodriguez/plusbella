@@ -612,6 +612,21 @@
                                     </div>
                                 </div>             
                             </div>
+                            <div class="col-md- col-sm-4" style="margin-left: 20px; margin-top: -10px;">
+                                <div class="row">
+                                    <div class="col-md-12 col-sm-12">
+                                        <table id="listadoSesiones" class="listados table table-bordered table-hover">
+                                            <thead>
+                                                <tr>
+                                                    <th class="text-center">Fecha de sesión</th>
+                                                    <th class="text-center">Empleado</th>
+                                                    <th class="text-center">Sucursal</th>
+                                                </tr>
+                                            </thead>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
                         </div>                            
                     </div>                    
                     {# Sección en donde se encuentran las imagenes de un determinado tratamiento #}
@@ -1594,6 +1609,43 @@
                         "search": "Buscar registros:",
                         "lengthMenu": "Mostrar _MENU_ registros"
                     }, 
+
+                    });
+                    
+                    var url = "{{path('admin_sesiones_paciente_data_paquete')}}"+'?id='+id_ventatratamiento;
+
+                    var table1 = $('#listadoSesiones').DataTable({
+                        dom:'tp',
+                        "processing": false,
+                        "serverSide": true,
+                        "pageLength": 3,
+                        "ajax": {
+                            "url": url,
+                            "type": 'GET'
+                        },
+                        "columns": [
+                            { "data": "fechaSesion" },
+                            { "data": "empleado" },
+                            { "data": "sucursal" }
+                        ],
+                            "columnDefs": [
+                                   {"width":10, "orderable": false, "targets": 0 },
+                                   {"width":45, "orderable": false, "targets": 1 },
+                                   {"width":30, "orderable": false, "targets": 2 }
+                            ],
+                            "language": {
+                            "info": "Mostrando página _PAGE_ de _PAGES_",
+                            "infoEmpty": "",
+                            "infoFiltered": "filtrando de _MAX_ registros",
+                            "emptyTable": "No se encontraron registros",
+                            "paginate": { 
+                                "next": "Siguiente",
+                                "previous": "Anterior"
+                            },
+                            "processing": "Procesando petición...",
+                            "search": "Buscar registros:",
+                            "lengthMenu": "Mostrar _MENU_ registros"
+                        }, 
 
                     });
         

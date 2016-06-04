@@ -3,6 +3,7 @@
 namespace DGPlusbelleBundle\Controller;
 
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -401,5 +402,48 @@ class SesionTratamientoController extends Controller
             ->add('submit', 'submit', array('label' => 'Delete'))
             ->getForm()
         ;
+    }
+    
+    /**
+     * 
+     *
+     * @Route("/sesiones/data/listado/paquete", name="admin_sesiones_paciente_data_paquete")
+     */
+    public function dataSesionesPaqueteAction(Request $request)
+    {
+        $start = $request->query->get('start');
+        $draw = $request->query->get('draw');
+        $longitud = $request->query->get('length');
+        $busqueda = $request->query->get('search');
+        $id = $request->query->get('id');
+        
+        $em = $this->getDoctrine()->getEntityManager();
+        $expedientesTotal = $em->getRepository('DGPlusbelleBundle:SesionTratamiento')->findBy(array('ventaPaquete'=>$id));
+        
+        $paciente['draw']=$draw++;  
+        $paciente['recordsTotal'] = count($expedientesTotal);
+        $paciente['recordsFiltered']= count($expedientesTotal);
+        $paciente['data']= array();
+        
+        $arrayFiltro = explode(' ',$busqueda['value']);
+        
+        $busqueda['value'] = str_replace(' ', '%', $busqueda['value']);
+        
+        $dql = "SELECT suc.nombre as sucursal, tra.nombre as tratamiento, DATE_FORMAT(ab.fechaSesion,'%d-%m-%Y') as fechaSesion, CONCAT(per.nombres,' ', per.apellidos) as empleado FROM DGPlusbelleBundle:SesionTratamiento ab "
+                . "JOIN ab.empleado emp "
+                . "JOIN emp.persona per "
+                . "JOIN ab.sucursal suc "
+                . "JOIN ab.tratamiento tra "
+                . "WHERE ab.ventaPaquete=:id "
+                . "ORDER BY ab.fechaSesion DESC ";
+        $paciente['data'] = $em->createQuery($dql)
+                ->setParameter('id',$id)
+                ->setFirstResult($start)
+                ->setMaxResults($longitud)
+                ->getResult();
+        
+//        var_dump($paciente);
+        
+        return new Response(json_encode($paciente));
     }
 }
