@@ -131,7 +131,7 @@ class PacienteController extends Controller
 
         $form->add('submit', 'submit', array('label' => 'Guardar',
                                                'attr'=>
-                                                        array('class'=>'btn btn-success btn-sm')
+                                                        array('class'=>'btn btn-primary btn-sm')
                                                  
          ));
 
@@ -224,7 +224,7 @@ class PacienteController extends Controller
 
         $form->add('submit', 'submit', array('label' => 'Modificar',
                                                'attr'=>
-                                                        array('class'=>'btn btn-success btn-sm')));
+                                                        array('class'=>'btn btn-primary btn-sm')));
 
         return $form;
     }
@@ -1541,6 +1541,38 @@ class PacienteController extends Controller
         $num = $expedienteNum[0]->getNumero();
         
         return new Response(json_encode($num));
+    }
+    
+    
+    
+    
+    
+    /**
+    * Ajax utilizado para buscar informacion de una consulta de estetica
+    *  
+    * @Route("/busqueda-paciente-select/data/exp", name="busqueda_paciente_select_exp")
+    */
+    public function busquedaExpPacienteAction(Request $request)
+    {
+        $busqueda = $request->query->get('q');
+        $page = $request->query->get('page');
+        
+        //var_dump($page);
+        
+        $em = $this->getDoctrine()->getEntityManager();
+        $dql = "SELECT exp.numero, pac.id pacienteid, per.nombres, per.apellidos "
+                        . "FROM DGPlusbelleBundle:Paciente pac "
+                        . "JOIN pac.persona per "
+                        . "JOIN pac.expediente exp "
+                        . "WHERE CONCAT(upper(per.nombres), ' ', upper(per.apellidos), ' ',exp.numero) LIKE upper(:busqueda) "
+                        . "ORDER BY per.nombres ASC ";
+        
+        $paciente['data'] = $em->createQuery($dql)
+                ->setParameters(array('busqueda'=>"%".$busqueda."%"))
+                ->setMaxResults( 10 )
+                ->getResult();
+//        var_dump($paciente['data']);
+        return new Response(json_encode($paciente));
     }
     
 }

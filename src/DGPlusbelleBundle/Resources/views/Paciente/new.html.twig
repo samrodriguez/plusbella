@@ -18,44 +18,35 @@
             {{ form_row(form.estadoCivil) }}
         </div>
         <div class="col-md-3">
-        {{ form_row(form.sexo) }}
+            {{ form_row(form.sexo) }}
+        </div>
+        <div class="col-md-3">
+            {{ form_row(form.ocupacion) }}
          </div>
-    </div>
-    <div class="row">
         <div class="col-md-3">
-        {{ form_row(form.ocupacion) }}
+            {{ form_row(form.lugarTrabajo) }}
+        </div>
+        <div class="clearfix"></div>
+        <div class="col-md-3">
+            {{ form_row(form.fechaNacimiento) }}
+        </div>
+        <div class="col-md-3">
+            {{ form_row(form.referidoPor) }}
          </div>
-
         <div class="col-md-3">
-        {{ form_row(form.lugarTrabajo) }}
+            {{ form_row(form.personaEmergencia) }}
         </div>
         <div class="col-md-3">
-        {{ form_row(form.fechaNacimiento) }}
+            {{ form_row(form.telefonoEmergencia) }}
         </div>
-        <div class="col-md-3">
-        {{ form_row(form.referidoPor) }}
-         </div>
-    </div>
-    <div class="row">
-        <div class="col-md-6">
-        {{ form_row(form.personaEmergencia) }}
-        </div>
-        <div class="col-md-3">
-        {{ form_row(form.telefonoEmergencia) }}
-        {# {{ form_row(form.estado) }}#}
-        </div>
-       {# <div class="col-md-2">
-        {{ form_row(form.enteradoPor) }}
-        
-        </div>#}
     </div>
   
    
             <div class="form-grouphide col-sm-9">
                 <a href="{{ path('admin_paciente') }}" class="btn btn-default btn-sm" id="cancelarNuevo">Cancelar</a>
                 {{ form_widget(form.submit) }}    
-                <a id="guardarCrearCita" href="{{path('admin_historial_consulta')}}" class="btn btn-success btn-sm">Guardar y crear cita</a>
-                <a id="guardarVerExpediente" href="{{path('admin_historial_consulta')}}" class="btn btn-success btn-sm">Guardar y ver expediente</a>
+                <a id="guardarCrearCita" href="{{path('admin_historial_consulta')}}" class="btn btn-primary btn-sm" style="color:#FFF !important;">Guardar y crear cita</a>
+                <a id="guardarVerExpediente" href="{{path('admin_historial_consulta')}}" class="btn btn-primary btn-sm" style="color:#FFF !important;">Guardar y ver expediente</a>
             </div>
             
             

@@ -1,4 +1,4 @@
-{% extends 'DGPlusbelleBundle:Layout:layout.html.twig' %} 
+{% extends 'DGPlusbelleBundle:Layout:layouterp.html.twig' %} 
 
 
 
@@ -20,12 +20,12 @@
     <div class="row">
         <div class="col-md-3">
          
-         <label class="control-label" for="dgplusbellebundle_cita_paciente">Médico/Esteticista</label>
-         {{ form_widget(form.empleado) }}
+        <label class="control-label" for="dgplusbellebundle_cita_paciente">Médico/Esteticista</label>
+            {{ form_widget(form.empleado) }}
         </div>
         
         <div class="col-md-3">
-         {{ form_row(form.fechaCita) }} 
+            {{ form_row(form.fechaCita) }} 
         </div>
         
         {#<div class="col-md-3">
@@ -33,10 +33,10 @@
         </div>
         #}
         <div class="col-md-3">
-         {{ form_row(form.horaCita) }} 
+            {{ form_row(form.horaCita) }} 
         </div>
         <div class="col-md-3">
-         {{ form_row(form.horaFin) }}
+            {{ form_row(form.horaFin) }}
         </div>
          {#{{ form_row(form.estado) }} #}
         {#
@@ -46,25 +46,15 @@
         #}
     </div>
     <div class="row">
-        
-        
-         {#{{ form_row(form.estado) }} #}
-                
-        {#
         <div class="col-md-3">
-         {{ form_row(form.descuento) }} 
-        </div>
-        #}
-        <div class="col-md-3">
-         {{ form_row(form.tratamiento ) }}   
+            {{ form_row(form.tratamiento ) }}   
         </div>
         <div class="col-md-3">
-         {{ form_row(form.sucursal ) }}   
+            {{ form_row(form.sucursal ) }}   
         </div>
         <div class="col-md-3">
-         {{ form_row(form.descripcion ) }}   
+            {{ form_row(form.descripcion ) }}   
         </div>
-        
     </div>
     <div class="row">
         
@@ -88,7 +78,15 @@
 
 
 {% block javascripts_step %}
-    
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.2/css/select2.min.css" rel="stylesheet" />
+        
+        <script src="{{ asset('Resources/wrapkit/scripts/dataTables.bootstrap.js') }}"></script>
+        <script src="{{ asset('Resources/wrapkit/scripts/dataTables.tableTools.js') }}"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.2/js/select2.min.js"></script>
+        <script src="{{ asset('Resources/Zebra/js/zebra_datepicker.js') }}"></script>
+        <script src="{{ asset('Resources/Zebra/inicializacioncalendarios.js') }}"></script>
+        <script type="text/javascript" src="{{ asset('Resources/bValidator-0.73/jquery.bvalidator.js')}}"></script>
+        <script type="text/javascript" src="{{ asset('Resources/bValidator-0.73/bvalidator.lang.es.js')}}" ></script>
    <script src="{{ asset('Resources/js/Cita.js') }}"></script>  
    
     <style>
@@ -184,7 +182,7 @@
                 var seleccionado="";
                 //Eliminar options del select de pacientes
                //Eliminar options del select de pacientes
-               $('#dgplusbellebundle_cita_paciente').select2();
+               {#$('#dgplusbellebundle_cita_paciente').select2();#}
                {# $('#dgplusbellebundle_cita_paciente option').each(function(index, val) {
                     
                     seleccionado = $(this).attr('selected');

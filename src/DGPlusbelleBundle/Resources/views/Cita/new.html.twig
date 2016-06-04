@@ -1,4 +1,4 @@
-{% extends 'DGPlusbelleBundle:Layout:layout.html.twig' %} 
+{% extends 'DGPlusbelleBundle:Layout:layouterp.html.twig' %} 
 
 
 
@@ -89,7 +89,16 @@
 
 {% block javascripts_step %}
     
-   <script src="{{ asset('Resources/js/Cita.js') }}"></script>  
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.2/css/select2.min.css" rel="stylesheet" />
+        
+    <script src="{{ asset('Resources/wrapkit/scripts/dataTables.bootstrap.js') }}"></script>
+    <script src="{{ asset('Resources/wrapkit/scripts/dataTables.tableTools.js') }}"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.2/js/select2.min.js"></script>
+    <script src="{{ asset('Resources/Zebra/js/zebra_datepicker.js') }}"></script>
+    <script src="{{ asset('Resources/Zebra/inicializacioncalendarios.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('Resources/bValidator-0.73/jquery.bvalidator.js')}}"></script>
+    <script type="text/javascript" src="{{ asset('Resources/bValidator-0.73/bvalidator.lang.es.js')}}" ></script>
+    <script src="{{ asset('Resources/js/Cita.js') }}"></script>  
    
     <style>
         #dgplusbellebundle_cita_horaInicio{
