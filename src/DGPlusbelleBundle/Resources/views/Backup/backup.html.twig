@@ -1,9 +1,51 @@
-{% extends 'DGPlusbelleBundle:Layout:layout3.html.twig' %}
+{% extends 'DGPlusbelleBundle:Layout:layouterpajustes.html.twig' %}
+
+
+{% block navegacion %}
+    
+    {% if is_granted('ROLE_ADMIN') %}
+        <a href="{{ path('admin_tipoconsulta') }}" class="leftnava"><li class="leftnav left">Tipo de consulta<span class="pull-right right"><i class=""></i></span></li></a>
+    {% endif %}
+    {% if is_granted('ROLE_ADMIN') %}
+        <a href="{{ path('admin_tratamiento') }}" class="leftnava"><li class="leftnav left">Gestionar trat.<span class="pull-right right"><i class=""></i></span></li></a>
+    {% endif %}
+    {% if is_granted('ROLE_ADMIN') %}
+        <a href="{{ path('admin_categoria') }}" class="leftnava"><li class="leftnav left ">Gestionar categoria<span class="pull-right right"><i class=""></i></span></li></a>
+    {% endif %}
+    {% if is_granted('ROLE_ADMIN') %}
+        <a href="{{ path('admin_paquete') }}" class="leftnava"><li class="leftnav left ">Gestionar paquete<span class="pull-right right"><i class=""></i></span></li></a>
+    {% endif %}
+    {% if is_granted('ROLE_ADMIN') %}
+        <a href="{{ path('admin_empleado') }}" class="leftnava"><li class="leftnav left ">Gestionar empleado<span class="pull-right right"><i class=""></i></span></li></a>
+    {% endif %}
+    {% if is_granted('ROLE_ADMIN') %}
+        <a href="{{ path('admin_sucursal') }}" class="leftnava"><li class="leftnav left ">Gestionar sucursal<span class="pull-right right"><i class=""></i></span></li></a>
+    {% endif %}
+    {% if is_granted('ROLE_ADMIN') %}
+        <a href="{{ path('admin_descuento') }}" class="leftnava"><li class="leftnav left ">Gestionar desc.<span class="pull-right right"><i class=""></i></span></li></a>
+    {% endif %}
+    {% if is_granted('ROLE_ADMIN') %}
+        <a href="{{ path('admin_usuario') }}" class="leftnava"><li class="leftnav left">Gestionar usuario<span class="pull-right right"><i class=""></i></span></li></a>
+    {% endif %}
+    {% if is_granted('ROLE_ADMIN') %}
+        <a href="{{ path('admin_backup') }}" class="leftnava"><li class="leftnav left active">Respaldo de datos<span class="pull-right right"><i class="fa fa-arrow-right"></i></span></li></a>
+    {% endif %}
+{% endblock navegacion %}
+
+{% block descripcion %}
+    <div class="col-md-6">
+        <p class="robo" style="font-weight: 300; margin-bottom: 0px; font-size: 30px;">Respaldos</p>
+        <p class="robo" style="font-weight: 300; font-size: 14px; height: 40px;">Realice respaldos de la información de sus paciente de forma rápida y sencilla.</p>
+    </div>
+{% endblock %}
+
+
 
 {% block contenido -%}
 
     {% if estado is not null %}
        {% block javascripts_step %} 
+            <script src="{{ asset('Resources/wrapkit/scripts/bootbox.js') }}"></script>
             <script>
                 $(document).ready(function(){
                     if({{estado}}!=null){
@@ -17,7 +59,7 @@
     
     <div class="text-center">
         <div class="jumbotron">
-          <a class="btn btn-primary btn-lg" href="{{path('create_backup') }}" role="button">Realizar Respaldo de datos</a>
+          <a style="color:#FFF !important;" class="btn btn-primary btn-lg" href="{{path('create_backup') }}" role="button">Realizar Respaldo de datos</a>
         </div>
     </div>
 
