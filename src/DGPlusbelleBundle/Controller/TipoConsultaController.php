@@ -84,7 +84,7 @@ class TipoConsultaController extends Controller
 
         $form->add('submit', 'submit', array('label' => 'Guardar',
                                                'attr'=>
-                                                        array('class'=>'btn btn-success btn-sm')));
+                                                        array('class'=>'btn btn-primary btn-sm')));
 
         return $form;
     }
@@ -175,7 +175,7 @@ class TipoConsultaController extends Controller
 
         $form->add('submit', 'submit', array('label' => 'Modificar',
                                                'attr'=>
-                                                        array('class'=>'btn btn-success btn-sm')));
+                                                        array('class'=>'btn btn-primary btn-sm')));
 
         return $form;
     }

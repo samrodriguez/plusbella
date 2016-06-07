@@ -30,7 +30,7 @@
 
 
             <div class="btn-group pull-right">
-              <input id="filterDatatables1" class="form-control input-sm" placeholder="Ingrese expediente...">
+              <input id="filterDatatables1" style="width:250px;" class="form-control input-sm" placeholder="Ingrese expediente, presione 'Enter'...">
             </div>
             <div class="btn-group pull-right">
                 <button style="height: 30px;"  id="reloadTabla" class="btn btn-default btn-xs"> Recargar tabla</button>
@@ -76,7 +76,7 @@
                     </div>#}
                     <div class="hidden-xs">
                         
-                      <h3 class="robo media-heading text-light" id="nombrePaciente">{#{{ paciente.persona.nombres}} {{ paciente.persona.apellidos}}#}</h3>
+                      <h4 class="robo media-heading text-light" id="nombrePaciente">{#{{ paciente.persona.nombres}} {{ paciente.persona.apellidos}}#}</h4>
                         <p class="mb-4x text-light">
                             <span class="mr-1x" id="expediente">
                                 <i class="fa fa-clipboard"></i> {#{{ expediente }}#}

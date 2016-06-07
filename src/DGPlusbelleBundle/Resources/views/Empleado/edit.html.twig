@@ -5,7 +5,7 @@
       
        
 <div class="panel panel-default">
-    <div class="panel-heading"><p>Modificar empleado</p></div>
+    <div class="panel-heading"><p><strong>Modificar empleado</strong></p></div>
 
     {#{{ form(edit_form) }}#}
 
@@ -14,21 +14,20 @@
     {{ form_errors(edit_form) }}
  
    {% include 'DGPlusbelleBundle:Persona:edit_form.html.twig' with { 'edit_form': edit_form.persona }%} 
-        <div class="col-xs-12 col-sm-2">
+        
+        <div class="col-xs-12 col-md-3">
+            {{ form_row(edit_form.porcentaje) }}
+        </div> 
+        <div class="col-xs-12 col-md-3">
+            {{ form_row(edit_form.meta) }}
+        </div> 
+        <div class="col-xs-12 col-md-3">
+            {{ form_row(edit_form.bono) }}
+        </div> 
+        <div class="col-xs-12 col-md-3">
             {{ form_row(edit_form.cargo) }}
         </div>
-     {#   <div class="col-xs-12 col-sm-2">
-            {{ form_row(edit_form.sucursal) }}
-        </div>  #}
-        <div class="col-xs-12 col-sm-2">
-        {{ form_row(edit_form.porcentaje) }}
-         </div> 
-         <div class="col-xs-12 col-sm-2">
-        {{ form_row(edit_form.meta) }}
-         </div> 
-         <div class="col-xs-12 col-sm-2">
-        {{ form_row(edit_form.bono) }}
-         </div> 
+        <div class="clearfix"></div>
         <div class="col-xs-12 col-sm-4">
             <label class="control-label" for="dgplusbellebundle_empleado_sucursal">Foto de perfil</label>
             

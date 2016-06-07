@@ -9,8 +9,10 @@
         .link_expediente{
             cursor: pointer;
         }
+        .link_expediente:hover, .infoPaciente:hover{
+            color:#09F !important; 
+        }
     </style>
-    
         
         <link rel="stylesheet" href="{{ asset('Resources/alertifyjs/css/alertify.css') }}">
         <link rel="stylesheet" href="{{ asset('Resources/bValidator-0.73/themes/bvalidator.theme.bootstrap.rt.css') }}" />
@@ -57,7 +59,7 @@
                   </button>
                 </div>
                 <div class="btn-group pull-left">
-                    <input id="filterDatatables1" class="form-control input-sm" placeholder="Enter para buscar...">
+                    <input style="width:210px;" id="filterDatatables1" class="form-control input-sm" placeholder="Ingrese paciente, presione 'Enter'...">
                 </div>
               </div><!-- /btn-toolbar -->
             </div><!-- /.panel-body -->
@@ -84,7 +86,7 @@
        
      {#<a href="{{ path('admin_paciente_new') }}" class="btn btn-success"> Crear nuevo paciente</a>  #}
 
-    <table id = "datatables1" class="robo table table-bordered table-hover display dt-responsive" style="margin-top: 30px">
+    <table id = "datatables1" class="robo table table-bordered table-hover display dt-responsive" style="margin-top: 0px">
         <thead>
             <tr>
 {#                <th>N°</th>  #}
@@ -116,7 +118,7 @@
     
        
   {% block javascripts_step %}
-        <script src="{{ asset('Resources/alertifyjs/alertify.js') }}"></script>
+        
         <script src="{{ asset('Resources/wrapkit/scripts/jquery.mask.js') }}"></script>
         <script src="{{ asset('Resources/Zebra/js/zebra_datepicker.js') }}"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.2/js/select2.min.js"></script>

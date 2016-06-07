@@ -25,6 +25,7 @@ class TratamientoType extends AbstractType
                 }, 
                 'empty_value'=>'Seleccione Categoria',
                 'attr'=>array(
+                    'style'=>'width:100%;',
                 'class'=>'form-control input-sm categoriaTratamiento'
               )))    
             ->add('nombre','text',array('label' => 'Nombre','required'=>false,

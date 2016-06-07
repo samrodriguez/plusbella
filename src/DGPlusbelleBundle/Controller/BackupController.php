@@ -23,6 +23,15 @@ class BackupController extends Controller{
     public function indexAction(Request $request)
     {
         $estado= $request->get('estado');
+        //var_dump($estado);
+//        if(!isset($estado)){
+//            $estado = 1;
+////            echo "if";
+//        }
+//        else{
+//            $estado = 0;
+//        }
+        
         return array(
             'estado' => $estado,
         );

@@ -3,11 +3,11 @@
 {% extends 'DGPlusbelleBundle:Layout:layouterp.html.twig' %}
 {% block css %}
     {{parent()}}
-    
+    <link rel="stylesheet" href="{{ asset('Resources/dropzone/dropzone.css') }}">
     <link rel="stylesheet" href="{{ asset('Resources/alertifyjs/css/alertify.css') }}">
     <link rel="stylesheet" href="{{ asset('Resources/css/estilopersonalizado.css') }}">
     <link rel="stylesheet" href="{{ asset('Resources/swal/sweetalert2.min.css') }}">
-    <link rel="stylesheet" href="{{ asset('Resources/dropzone/dropzone.css') }}">
+    
     <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.2/css/select2.min.css" rel="stylesheet" />
     <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/material-design-lite/1.1.0/material.min.css">
     <link rel="stylesheet" href="https://cdn.datatables.net/1.10.11/css/dataTables.material.min.css">
@@ -227,22 +227,18 @@
                                         Apellidos
                                     </label>
                                 </div>
-                                <div class="col-md-1">
+                                <div class="col-md-3">
                                     <label>
                                         Telefono 1
                                     </label>
                                 </div>
-                                <div class="col-md-1">
+                                <div class="col-md-3">
                                     <label>
                                         Telefono 2
                                     </label>
                                 </div>
 
-                                <div class="col-md-2">
-                                    <label>
-                                        Dirección
-                                    </label>
-                                </div>                            
+                                                      
                             </div>
                             <div class="row">
                                 <div class="col-md-3">
@@ -253,21 +249,21 @@
                                     <input id="apellidosPaciente" value="{{paciente.persona.apellidos}}" name="apellidosPaciente" class="form-control input-sm"/>
                                 </div>
 
-                                <div class="col-md-1">
+                                <div class="col-md-3">
                                     <input id="telefono1" value="{{paciente.persona.telefono}}" name="telefono1" class="form-control input-sm"/>
                                 </div>
-                                <div class="col-md-1">
+                                <div class="col-md-3">
                                     <input id="telefono2" value="{{paciente.persona.telefono2}}" name="telefono2" class="form-control input-sm"/>
                                 </div>
-                                <div class="col-md-4">
-                                    <input id="direccion" value="{{paciente.persona.direccion}}" name="direccion" class="form-control input-sm"/>
-                                </div>
-                                <div class="col-md-4">
-                                    <input type="hidden" id="idPaciente" value="{{paciente.id}}" name="idPaciente" class="form-control input-sm"/>                                    
-                                </div>
+                                
                             </div>
                         
                             <div class="row" style="margin-top:20px;">
+                                <div class="col-md-3">
+                                    <label>
+                                        Dirección
+                                    </label>
+                                </div>      
                                 <div class="col-md-3">
                                     <label>
                                         Correo
@@ -283,14 +279,14 @@
                                         Estado civil
                                     </label>
                                 </div>
-                                <div class="col-md-3">
-                                    <label>
-                                        Sexo
-                                    </label>
-                                </div>
+                                
                             </div>
                                 
                             <div class="row">
+                                <div class="col-md-3">
+                                    <input id="direccion" value="{{paciente.persona.direccion}}" name="direccion" class="form-control input-sm"/>
+                                </div>
+                                
                                 <div class="col-md-3">
                                     <input id="correo" value="{{paciente.persona.email}}" name="correo" class="form-control input-sm"/>
                                 </div>
@@ -310,17 +306,16 @@
                                     </select>
                                 </div>
                             
-                                <div class="col-md-3">
-                                    <select id="sexo" name="sexo" class="form-control input-sm" style="width:100%;">
-                                        <option {% if paciente.sexo== ''%} selected {% endif %} value="">Seleccione sexo...</option>            
-                                        <option {% if paciente.sexo== 'm' or paciente.sexo=='M' %} selected {% endif %} value="M">Masculino</option>            
-                                        <option {% if paciente.sexo== 'f' or paciente.sexo=='F' %} selected {% endif %} value="F">Femenino</option>            
-                                    </select>
-                                </div>                                
+                                                             
                             </div>
                                     
                                     
                             <div class="row" style="margin-top:20px;">
+                                <div class="col-md-3">
+                                    <label>
+                                        Sexo
+                                    </label>
+                                </div>
                                 <div class="col-md-3">
                                     <label>
                                         Ocupación
@@ -336,15 +331,18 @@
                                         Fecha de nacimiento
                                     </label>
                                 </div>
-                                <div class="col-md-3">
-                                    <label>
-                                        Referido por
-                                    </label>
-                                </div>
+                                
                             </div>
                                     
                                     
                             <div class="row">
+                                <div class="col-md-3">
+                                    <select id="sexo" name="sexo" class="form-control input-sm" style="width:100%;">
+                                        <option {% if paciente.sexo== ''%} selected {% endif %} value="">Seleccione sexo...</option>            
+                                        <option {% if paciente.sexo== 'm' or paciente.sexo=='M' %} selected {% endif %} value="M">Masculino</option>            
+                                        <option {% if paciente.sexo== 'f' or paciente.sexo=='F' %} selected {% endif %} value="F">Femenino</option>            
+                                    </select>
+                                </div>   
                                 <div class="col-md-3">
                                     <input id="ocupacion" value="{{paciente.ocupacion}}" name="ocupacion" class="form-control input-sm"/>
                                 </div>
@@ -356,13 +354,15 @@
                                 <div class="col-md-3">
                                     <input id="fechaNacimiento" value="{{paciente.fechaNacimiento|date('d-m-Y')}}" name="fechaNacimiento" class="form-control calZebra input-sm"/>
                                 </div>
-                            
-                                <div class="col-md-3">
-                                    <input id="referidoPor" value="{{paciente.referidoPor}}" name="referidoPor" class="form-control input-sm"/>
-                                </div>                        
+                                                    
                             </div>
                                 
                             <div class="row" style="margin-top:20px;">
+                                <div class="col-md-3">
+                                    <label>
+                                        Referido por
+                                    </label>
+                                </div>
                                 <div class="col-md-3">
                                     <label>
                                         En caso de emergencia llamar a
@@ -373,9 +373,13 @@
                                         Al teléfono
                                     </label>
                                 </div>
+                                
                             </div>
                                 
                             <div class="row">
+                                <div class="col-md-3">
+                                    <input id="referidoPor" value="{{paciente.referidoPor}}" name="referidoPor" class="form-control input-sm"/>
+                                </div>
                                 <div class="col-md-3">
                                     <input id="llamarA" value="{{paciente.personaEmergencia }}" name="llamarA" class="form-control input-sm"/>
                                 </div>
@@ -396,6 +400,9 @@
                                         <button type="submit" id="guardarNuevoDatosGenerales" name="dgplusbellebundle_consulta[submit]" class="btn btn-primary btn-xs btn btn">Guardar</button>
                                     </div>
                                 </div>
+                            </div>
+                            <div class="col-md-3">
+                                <input type="hidden" id="idPaciente" value="{{paciente.id}}" name="idPaciente" class="form-control input-sm"/>                                    
                             </div>
                       </p>
                     </div>
@@ -587,11 +594,11 @@
                                         
                                         <div class="clearfix"></div>
                                         <div class="col-md-4">
-                                            <div class="col-md-4">
+                                            <div class="col-md-5">
                                                 <input id="presionSistolica" value="{{signos.presionSistolica}}" name="presionSistolica" class="form-control input-sm form-control"/>
                                             </div>
-                                            <div class="col-md-1"><label style="font-size:1.3em;">/</label></div>
-                                            <div class="col-md-4">
+                                            <div class="col-md-2"><label style="font-size:1.3em;">/</label></div>
+                                            <div class="col-md-5">
                                                 <input id="presionDiastolica" value="{{signos.presionDiastolica}}" name="presionDiastolica" class="form-control input-sm form-control"/>
                                             </div>
                                         </div>
@@ -609,7 +616,7 @@
                                         </div>
                                     </div>
                                     
-                                    <div class="row  pull-right" style="margin-top:10px;">
+                                    <div class="row pull-right" style="margin-top:10px;">
                                         <div class="col-md-12">
                                             <div class="form-grouphide col-sm-12">
                                                 <button type="submit" id="guardarSignosConsulta" name="dgplusbellebundle_consulta[submit]" class="btn btn-primary btn-xs btn btn">Guardar</button>
@@ -693,27 +700,26 @@
                         </p>
                     </div>
                     <div class="tab-pane fade in" id="botabs6">
-                        <p>
-                            <strong>Subir imagen</strong>
-                            <div class="row" style="margin-top:20px;">
+                        <p>                            
+                            
+                            <div class="imagenMensaje row" style="margin-top:20px;">
+                                <strong>Subir imagen</strong>
+                                <p>Debe ingresar una consulta antes</p>
+                            </div>
+                            <div class="imagenContent hidden row" style="margin-top:20px;">
+                                <strong>Subir imagen</strong>
                                 <div class="col-md-12">
-                                    <form id="formImagen" role="form" enctype="multipart/form-data" method="post">
+                                    {#<form id="formImagen" role="form" enctype="multipart/form-data" method="post" class="dropzone">
                                         <input id="file-input" required type="file" name="file[]" multiple>
                                         <input type="text" id="idConsulta" value="{% if consulta.id is null %}{%else%}{{consulta.id}}{%endif%}" name="idConsulta" class="hidden form-control input-sm"/>
+                                    </form>#}
+                                    
+                                    <form class="dropzone" id="formImagen" role="form" enctype="multipart/form-data" method="post" action="/lpbsistema/app_dev.php/admin/consulta/ingresar_foto_persona/get?id={{consulta.id}}">
+                                        <div class="fallback">
+                                            <input name="file[]" type="file" multiple required id="file-input"/>
+                                        </div>
+                                        <input type="text" id="idConsulta" value="{% if consulta.id is null %}{%else%}{{consulta.id}}{%endif%}" name="idConsulta" class="hidden form-control input-sm"/>
                                     </form>
-                                    
-                                    <form action="/file-upload" class="dropzone">
-                                        {#<div class="fallback">
-                                            <input name="file" type="file" multiple />
-                                        </div>#}
-                                    </form>
-                                    
-                                    
-                                    
-                                    
-                                    <form action="/file-upload" class="dropzone" id="my-awesome-dropzone"></form>
-                                    
-                                    
                                     
                                     
                                     {#<form action="#" id="formImagen" enctype="multipart/form-data"  method="post">
@@ -727,11 +733,10 @@
                                           </div><!-- /.fileinput -->
                                         </div><!-- /.form-group -->
                                     </form>#}
-                                    
                                 </div>
                             </div>
                             
-                            <div class="row" style="margin-top:20px;">
+                            <div class="row imagenContent hidden" style="margin-top:20px;">
                                 <strong style="margin-top:80px;">Archivos adjuntos</strong>
                                 <div class="col-md-12" id="listadoImagenes">
                                     {% for imagen in archivos %}
@@ -743,17 +748,17 @@
                                 </div>
                             </div>
                             
-                            <div class="row" style="margin-top:10px;">
-                            <div class="col-md-12">
-                                <hr>
+                            <div class="row imagenContent hidden" style="margin-top:10px;">
+                                <div class="col-md-12">
+                                    <hr>
+                                </div>
                             </div>
-                        </div>
 
-                        <div class="row  pull-right" style="margin-top:10px;">
+                        <div class="row pull-right" style="margin-top:10px;">
                             <div class="col-md-12">
                                 <div class="form-grouphide col-sm-12">
                                     {#<a class="btn btn-default btn-xs" id="cancelarNuevoConsulta">Cancelar</a>#}
-                                    <button type="submit" id="guardarImagenes" name="dgplusbellebundle_antecedentes[submit]" class="btn btn-primary btn-xs btn btn">Guardar</button>
+                                    {#<button type="submit" id="guardarImagenes" name="dgplusbellebundle_antecedentes[submit]" class="btn btn-primary btn-xs btn btn">Guardar</button>#}
                                 </div>
                             </div>
                         </div>
@@ -1296,6 +1301,17 @@
      
      
     <script>
+
+
+        
+        $("div#myId").dropzone({ 
+            url: "/file/post",
+            error: function(file) {
+                swal('','Error al cargar imágenes, verifique si se ha guardado una consulta!','error');
+              
+            },
+        });
+
         $(function () { 
             $('.calZebra').Zebra_DatePicker({
                 months:['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
@@ -3214,7 +3230,8 @@
                             $('#nombrePaciente').html(nombres+" "+apellidos);
                             $('#ocupacionPaciente').html(ocup+" "+ocupacion);
 {#                            bootbox.alert("Cambios guardados!", function() {});#}
-                            alertify.success("Cambios guardados!");
+                            {#alertify.success("Cambios guardados!");#}
+                            swal('','Cambios guardados!','success');
                         }
                         
                         {#console.log("pagina actual: "+data);
@@ -3229,7 +3246,7 @@
         
         
         
-        
+        var idconsulta=$('#idConsulta').val();
         $(document).on('click','#guardarNuevoConsulta', function(){
             var id = $('#idPaciente').val();
             var medico = $('#medico_consulta').val();
@@ -3238,7 +3255,7 @@
             var tipoConsulta = $('#tipo_consulta').val();
             var sucursal = $('#sucursal_consulta').val();
             var observaciones = $('#observacionConsulta').val();
-            var idconsulta=$('#idConsulta').val();
+            idconsulta=$('#idConsulta').val();
             var costoconsulta=$('#costoConsulta').val();
             //alert(medico+","+tratamiento+","+tipoConsulta+","+observaciones+","+sucursal);
             
@@ -3271,7 +3288,10 @@
                                                 $('#idConsulta').val(data);
                                                 console.log(data);
 {#                                                bootbox.alert("Consulta registrada!", function() {});#}
-                                                alertify.success("Consulta actualizada!");
+                                                {#alertify.success("Consulta actualizada!");#}
+                                                swal('','Consulta actualizada!','success');
+                                                $('.imagenMensaje').addClass('hidden');
+                                                $('.imagenContent').removeClass('hidden');
                                                 console.log($('#idConsulta').val());
                                             }
                                         },
@@ -3301,7 +3321,14 @@
                                                 $('#idConsulta').val(data);
                                                 console.log(data);
 {#                                                bootbox.alert("Consulta registrada!", function() {});#}
-                                                alertify.success("Consulta registrada!");
+                                                {#alertify.success("Consulta registrada!");#}
+                                                swal('','Consulta registrada!','success');
+                                                $('.imagenMensaje').addClass('hidden');
+                                                $('.imagenContent').removeClass('hidden');
+                                                var action = $('#formImagen').attr('action');
+                                                $('#formImagen').attr('action',action+data);
+                                                
+                                                
                                                 console.log($('#idConsulta').val());
                                             }
                                         },
@@ -3319,7 +3346,13 @@
 {#            }#}
             
         });
-        
+        console.log('imagen: '+idconsulta);
+        if(idconsulta!==''){
+            $('.imagenMensaje').addClass('hidden');
+            $('.imagenContent').removeClass('hidden');
+            
+             
+        }
         
         $(document).on('click','#guardarAntecedentes', function(){
             var id = $('#idPaciente').val();
@@ -3339,7 +3372,8 @@
                         //inicio = data.inicio++;
                         if(data==0){
 {#                            bootbox.alert("Cambios guardados!", function() {});#}
-                            alertify.success("Antecedentes guardados!");
+                            {#alertify.success("Antecedentes guardados!");#}
+                            swal('','Antecedentes guardados!','success');
                         }
                         
                         {#console.log("pagina actual: "+data);
@@ -3376,9 +3410,13 @@
                             //inicio = data.inicio++;
                             if(data!=0){
     {#                            bootbox.alert("Cambios guardados!", function() {});#}
-                                alertify.success("Signos vitales guardados!");
+                                {#alertify.success("Signos vitales guardados!");#}
+                                swal('','Signos vitales guardados!','success');
+                                $('.imagenMensaje').addClass('hidden');
+                                $('.imagenContent').removeClass('hidden');
                                 $('#idConsulta').val(data);
-
+                                var action = $('#formImagen').attr('action');
+                                $('#formImagen').attr('action',action+data);
                             }
     {#                        console.log("pagina actual: "+data);
                             console.log("Inicio de registro: "+data.inicioRegistro);#}
@@ -3399,7 +3437,10 @@
                             //inicio = data.inicio++;
                             if(data!=0){
     {#                            bootbox.alert("Cambios guardados!", function() {});#}
-                                alertify.success("Signos vitales actualizados!");
+                                {#alertify.success("Signos vitales actualizados!");#}
+                                swal('','Signos vitales actualizados!','success');
+                                $('.imagenMensaje').addClass('hidden');
+                                $('.imagenContent').removeClass('hidden');
                                 $('#idConsulta').val(data);
 
                             }
@@ -3430,24 +3471,28 @@
                     success: function (data) {
                             //inicio = data.inicio++;
                             if(data==0){
-                                alertify.success("Costo de consulta guardado!");
+                                {#alertify.success("Costo de consulta guardado!");#}
+                                swal('','Costo de consulta guardado!','success');
                             }
                             else{
-                                alertify.error("Hubo un error, intente de nuevo!");
+                                {#alertify.error("Hubo un error, intente de nuevo!");#}
+                                swal('','Hubo un error, intente de nuevo!','error');
                             }
     {#                        console.log("pagina actual: "+data);
                             console.log("Inicio de registro: "+data.inicioRegistro);#}
 
                         },
                     error: function (data) {
-                        alertify.error("{#Hubo un error, intente de nuevo!#}");
-                        bootbox.alert("Hubo un error, intente de nuevo!", function() {});
+                        {#alertify.error("Hubo un error, intente de nuevo!");#}
+                        swal('','Hubo un error, intente de nuevo!','error');
+                        {#bootbox.alert("Hubo un error, intente de nuevo!", function() {});#}
                     }
                 });
             }
             else{
 {#                alertify.error("Debe ingresar una consulta primero!");#}
-                bootbox.alert("Debe ingresar una consulta primero!", function() {});
+                {#bootbox.alert("Debe ingresar una consulta primero!", function() {});#}
+                swal('','Ingrese una consulta!','error');
             }
         });
         
@@ -3497,7 +3542,8 @@
                                         $('.camposPlantilla').hide();
                                         $('.opcionHistorial').hide();
                                         $('#guardarPlantilla').hide();
-                                        alertify.success("Cambios guardados!");
+                                        {#alertify.success("Cambios guardados!");#}
+                                        swal('','Cambios guardados!','success');
                                     }
                                     else{
                                         $('.camposPlantilla').hide();
@@ -3513,19 +3559,22 @@
                                         $('#dgplusbellebundle_consulta_plantilla').next().hide();
 
                                         $('#guardarPlantilla').hide();
-                                        alertify.success("Cambios guardados!");
+                                        {#alertify.success("Cambios guardados!");#}
+                                        swal('','Cambios guardados!','success');
                                         console.log("otro mensaje");
                                     }
                                     {#console.log("pagina actual: "+data);
                                     console.log("Inicio de registro: "+data.inicioRegistro);#}
                                 },
                             error: function (data) {
-                                alertify.error("Hubo un error, intente de nuevo!");
+                                {#alertify.error("Hubo un error, intente de nuevo!");#}
+                                swal('','Hubo un error, intente de nuevo!','error');
                             }
                         });
                     }
                     else{
-                        bootbox.alert("Debe ingresar una consulta primero!", function() {});
+                        {#bootbox.alert("Debe ingresar una consulta primero!", function() {});#}
+                        swal('','Ingrese una consulta!','error');
                     }
                     
                 }
@@ -3622,7 +3671,8 @@
                                             $('.opcionHistorial').hide();
                                             $('#guardarPlantilla').hide();
 
-                                            alertify.success("Plantilla guardada!");
+                                            {#alertify.success("Plantilla guardada!");#}
+                                            swal('','Plantilla guardada!','success');
 
                                         }
                                         else{
@@ -3639,8 +3689,9 @@
                                             $('#dgplusbellebundle_consulta_plantilla').next().hide();
 
                                             $('#guardarPlantilla').hide();
-                                            alertify.success("Cambios guardados!");
-                                            console.log("otro mensaje");
+                                            {#alertify.success("Cambios guardados!");#}
+                                            swal('','Cambios guardados!','success');
+{#                                            console.log("otro mensaje");#}
                                         }
 
                                         {#console.log("pagina actual: "+data);
@@ -3764,7 +3815,8 @@
                                         $('.opcionHistorial').hide();
                                         $('#guardarPlantilla').hide();
 
-                                        alertify.success("Plantilla guardada!");
+                                        {#alertify.success("Plantilla guardada!");#}
+                                        swal('','Plantilla guardada!','success');
 
                                     }
                                     else{
@@ -3781,8 +3833,9 @@
                                         $('#dgplusbellebundle_consulta_plantilla').next().hide();
 
 //                                        $('#guardarPlantilla').hide();
-                                        alertify.success("Cambios guardados!");
-                                        console.log("otro mensaje");
+                                        {#alertify.success("Cambios guardados!");#}
+                                        swal('','Cambios guardados!','success');
+                                        {#console.log("otro mensaje");#}
                                     }
 
                                     {#console.log("pagina actual: "+data);
@@ -3860,9 +3913,10 @@
                                     success: function(data){
                                         $("#prev").attr('src', "/abgsistema/web/"+data.direccion);
                                         $('#file-input').val('');
-                                        alertify.success("Imagenes guardadas!");
-                                        console.log(data);
-                                        console.log(data.length);
+                                        {#alertify.success("Imagenes guardadas!");#}
+                                        swal('','Imágenes guardadas!','success');
+                                        {#console.log(data);
+                                        console.log(data.length);#}
                                         for(i=0;i<data.length;i++){
 {#                                            $('#listadoImagenes').append('<div class=\"col-md-2\"><a class=\"verImagen\" href=\"{{ asset('Photos/Tmp/')}}'+data[i][1]+'\">Imagen '+(data[i][0]+(i+1))+' </a></div>');#}
                                             $('#listadoImagenes').append('<div style=\"margin-top:10px;\"  class=\"col-md-2\"><a class=\"verImagen\" href=\"{{ asset('Photos/Tmp/')}}'+data[i][1]+'\"><img style=\"width:100%;\" src=\"{{ asset('Photos/Tmp/')}}'+data[i][1]+'\"></a></div>');
@@ -3940,14 +3994,16 @@
                             {#alertify.success("Cambios guardados!");#}
                             }
                             else{
-                                alertify.success("Receta guardada!");
+                                {#alertify.success("Receta guardada!");#}
+                                swal('','Receta guardada!','success');
                                 $('#receta').hide();
                             }
                             {#console.log("pagina actual: "+data);
                             console.log("Inicio de registro: "+data.inicioRegistro);#}
                                     },
                     error: function (data) {
-                        alertify.error("Hubo un error, intente de nuevo!");
+                        {#alertify.error("Hubo un error, intente de nuevo!");#}
+                        swal('','Hubo un error, intente de nuevo!','error');
                     }
                 });
             }

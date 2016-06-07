@@ -2172,7 +2172,7 @@ class ConsultaController extends Controller
     
     
     /**
-     * @Route("/ingresar_empresa_persona/get", name="ingresar_foto_persona", options={"expose"=true})
+     * @Route("/ingresar_foto_persona/get", name="ingresar_foto_persona", options={"expose"=true})
      * @Method("POST")
      */
     public function RegistrarFotoAction(Request $request) {
@@ -2194,14 +2194,18 @@ class ConsultaController extends Controller
             $totalImagen = $em->getRepository('DGPlusbelleBundle:ImagenConsulta')->findBy(array('consulta'=>$idConsulta));
 //            var_dump($totalImagen);
             $arr = Array();
-            for($i=0;$i<count($_FILES['file']['name']);$i++){
-                $nombreimagen=$_FILES['file']['name'][$i];    
+//            for($i=0;$i<count($_FILES['file']['name']);$i++){
+//                $nombreimagen=$_FILES['file']['name'][$i];    
+                $nombreimagen=$_FILES['file']['name'];    
 
                 
 
 
-                $tipo = $_FILES['file']['type'][$i];
+//                $tipo = $_FILES['file']['type'][$i];
+                $tipo = $_FILES['file']['type'];
                 $extension= explode('/',$tipo);
+//                var_dump($_FILES);
+//                var_dump($extension);
                 $nombreimagen2.=".".$extension[1];
             
                 if ($nombreimagen != null){
@@ -2225,7 +2229,8 @@ class ConsultaController extends Controller
                     $nombreBASE=str_replace(" ","", $nombreBASE);
                     $nombreSERVER =str_replace(" ","", $nombreArchivo);
                     $imagen->setFoto($nombreSERVER);
-                    $resultado = move_uploaded_file($_FILES["file"]["tmp_name"][$i], $path1.$nombreSERVER);
+//                    $resultado = move_uploaded_file($_FILES["file"]["tmp_name"][$i], $path1.$nombreSERVER);
+                    $resultado = move_uploaded_file($_FILES["file"]["tmp_name"], $path1.$nombreSERVER);
                     $em->persist($imagen);
                     $em->flush();
                     $arregloim=Array();
@@ -2245,7 +2250,7 @@ class ConsultaController extends Controller
 
 
                 }
-            }
+//            }
          
             
             return new Response(json_encode($arr));
