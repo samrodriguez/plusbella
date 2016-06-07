@@ -777,7 +777,13 @@ class VentaController  extends Controller
             
             $abonos = $em->createNativeQuery($sql2, $rsm2)
                     ->getSingleResult();
-            //var_dump($abonos);
+            
+            if($personaTratamiento->getDescuento() != null){
+                $descuentoVenta = $personaTratamiento->getDescuento()->getPorcentaje();
+            } else {
+                $descuentoVenta = 0;
+            }
+            
             $this->get('bitacora')->escribirbitacora("Se registro un nuevo abono de un tratamiento", $usuario->getId());
             
             $response = new JsonResponse();
@@ -786,7 +792,7 @@ class VentaController  extends Controller
                                 'abonos'    => $abonos['abonos'],
                                 'cuotas'    => $abonos['cuotas'],
                                 'costo'     => $personaTratamiento->getCostoConsulta(),
-                                'descuento' => $personaTratamiento->getDescuento()->getPorcentaje(),
+                                'descuento' => $descuentoVenta,
                                 'abono'     => $entity->getId()
                                 ));  
             

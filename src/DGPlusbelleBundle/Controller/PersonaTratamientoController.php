@@ -475,6 +475,12 @@ class PersonaTratamientoController extends Controller
             $em->merge($personatratamiento);
             $em->flush();
             
+            if($personatratamiento->getDescuento() != null){
+                $descuentoVenta = $personatratamiento->getDescuento()->getPorcentaje();
+            } else {
+                $descuentoVenta = 0;
+            }
+            
             $seguimiento = $em->getRepository('DGPlusbelleBundle:SeguimientoTratamiento')->findOneBy(array('idPersonaTratamiento' => $personatratamiento->getId()));
             
             $sesionTratamiento = array(
@@ -487,7 +493,7 @@ class PersonaTratamientoController extends Controller
                                         'id' => $personatratamiento->getId(), 
                                         'costo' => $personatratamiento->getCostoConsulta(), 
                                         'sesiones' => $personatratamiento->getNumSesiones(), 
-                                        'descuento' => $personatratamiento->getDescuento()->getPorcentaje(),
+                                        'descuento' => $descuentoVenta,
                                         'cuotas' => $personatratamiento->getCuotas()
                                     );
             
