@@ -1,8 +1,16 @@
 {#{% extends 'DGPlusbelleBundle:Layout:general.html.twig' %}#}
-{% extends 'DGPlusbelleBundle:Layout:layout.html.twig' %}
+{% extends 'DGPlusbelleBundle:Layout:layouterp.html.twig' %}
 
 {% block css %}
     {{parent()}}
+    <link rel="stylesheet" href="{{ asset('Resources/dropzone/dropzone.css') }}">
+    <link rel="stylesheet" href="{{ asset('Resources/alertifyjs/css/alertify.css') }}">
+    <link rel="stylesheet" href="{{ asset('Resources/css/estilopersonalizado.css') }}">
+    <link rel="stylesheet" href="{{ asset('Resources/swal/sweetalert2.min.css') }}">
+    
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.2/css/select2.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/material-design-lite/1.1.0/material.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.11/css/dataTables.material.min.css">
     <link rel="stylesheet" href="{{ asset('Resources/alertifyjs/css/alertify.css') }}">
     <style>
         .placas>div:last-child {
@@ -41,6 +49,9 @@
         #info_paciente tr td{
             border: 1px solid black;
         }
+        .tab-pane{
+            background-color:#FFF;
+        }
     </style>
     
 {% endblock %}
@@ -60,7 +71,7 @@
     {#                <div class="col-md-12"><hr></div>#}
                 </div>
                 <div class="content-hero content-hero-lg" style="min-height:140px;">
-                    <div style="height:150px;background: #39a58a; opacity: 1.0" class="content-hero-overlay "></div>
+                    <div style="height:50px;background: #39a58a; opacity: 1.0" class="content-hero-overlay "></div>
                     <div  style="" class="content-hero-body" ></div>
                     <div  style="" class="content-hero-bar" {#style="margin-top:-180px; background-color: red; position: relative;"#}>
                         <div class="row" {#style="margin-top:-180px; background-color: red; position: relative;"#}>
@@ -71,7 +82,7 @@
                                             <h2 class="media-heading text-light" id="nombrePaciente">{{ paciente.persona.nombres}} {{ paciente.persona.apellidos}}</h2>
                                         </div>
                                         <div class="hidden-xs">
-                                            <h2 class="media-heading text-light">{{ paciente.persona.nombres}} {{ paciente.persona.apellidos}}</h2>
+                                            <h4 class="robo media-heading text-light">{{ paciente.persona.nombres}} {{ paciente.persona.apellidos}}</h4>
                                             <p class="mb-4x text-light">
                                                 <span class="mr-1x" id="expediente">
                                                     <i class="fa fa-clipboard"></i> {#{{ expediente }}#}
@@ -435,7 +446,7 @@
                     <div id="datos-generales" class="tab-pane fade in active" style="margin-top: 20px;">
                         <form id="formulario-datos-gnales" method="POST" enctype="multipart/form-data">
                             <div class="row" style="margin-top: 30px;">
-                                <div class="col-md-3" style="margin-left: 30px;">
+                                <div class="col-md-3">
                                     {# Area en donde se ingresa el nombre del paciente a quien se le hará la venta #}    
                                     <div id="nombrePaciente-venta">
                                         <label>Nombres</label>
@@ -449,14 +460,14 @@
                                         <input type="text" name="dgplusbellebundle_venta[apellidos]" id="dgplusbellebundle_venta_apellidos" class="form-control" style="width: 100%" value="{{ paciente.persona.apellidos}}">     
                                     </div>
                                 </div> 
-                                <div class="col-md-2">
+                                <div class="col-md-3">
                                     {# Area en donde se ingresa el telefono 1 del paciente a quien se le hará la venta #}    
                                     <div id="telefono1Paciente-venta">
                                         <label>Telefono 1</label>
                                         <input type="text" name="dgplusbellebundle_venta[telefono1]" id="dgplusbellebundle_venta_telefono1" class="form-control" style="width: 100%" value="{{ paciente.persona.telefono}}">     
                                     </div>
                                 </div>
-                                <div class="col-md-2">
+                                <div class="col-md-3">
                                     {# Area en donde se ingresa el telefono 1 del paciente a quien se le hará la venta #}    
                                     <div id="telefono2Paciente-venta">
                                         <label>Telefono 2</label>
@@ -464,29 +475,29 @@
                                     </div>
                                 </div>    
                             </div>    
-                            <div class="row" style="margin-top: 30px;">
-                                <div class="col-md-4" style="margin-left: 30px;">
+                            <div class="row" style="margin-top:30px;">
+                                <div class="col-md-3" >
                                     {# Area en donde se ingresa la dirección de la persona #}    
                                     <div id="direccionPaciente-venta">
                                         <label>Direccion</label>
                                         <input type="text" name="dgplusbellebundle_venta[direccion]" id="dgplusbellebundle_venta_direccion" class="form-control" style="width: 100%" value="{{ paciente.persona.direccion }}">      
                                     </div>
                                 </div>
-                                <div class="col-md-2">
+                                <div class="col-md-3">
                                     {# Area en donde se ingresa correo electrónico del paciente a quien se le hará la venta #}    
                                     <div id="correoPaciente-venta">
                                         <label>Correo electronico</label>
                                         <input type="text" name="dgplusbellebundle_venta[correo]" id="dgplusbellebundle_venta_correo" class="form-control" style="width: 100%" value="{{ paciente.persona.email}}">     
                                     </div>
                                 </div> 
-                                <div class="col-md-2">
+                                <div class="col-md-3">
                                     {# Area en donde se ingresa DUI del paciente a quien se le hará la venta #}    
                                     <div id="DUIPaciente-venta">
                                         <label>DUI</label>
                                         <input type="text" name="dgplusbellebundle_venta[dui]" id="dgplusbellebundle_venta_dui" class="form-control" style="width: 100%" value="{{ paciente.dui}}">     
                                     </div>
                                 </div> 
-                                <div class="col-md-2">
+                                <div class="col-md-3">
                                     {# Area en donde se ingresa estado civil del paciente a quien se le hará la venta #}    
                                     <div id="EcivilPaciente-venta">
                                         <label>Estado civil {{ paciente.estadoCivil }}</label>
@@ -502,7 +513,7 @@
                                 </div>    
                             </div>
                             <div class="row" style="margin-top: 30px;">  
-                                <div class="col-md-2" style="margin-left: 30px;">
+                                <div class="col-md-3">
                                     {# Area en donde se ingresa estado civil del paciente a quien se le hará la venta #}    
                                     <div id="sexoPaciente-venta">
                                         <label>Sexo </label>
@@ -527,7 +538,7 @@
                                         <input type="text" name="dgplusbellebundle_venta[lugar]" id="dgplusbellebundle_venta_lugar" class="form-control" style="width: 100%" value="{{ paciente.lugarTrabajo}}">     
                                     </div>
                                 </div> 
-                                <div class="col-md-2">
+                                <div class="col-md-3">
                                     {# Area en donde se selecciona la fecha de naciemto del paciente a quien se le hará la venta #}    
                                     <div id="fechaNacimiemtoPaciente-venta">
                                         <label>Fecha de Nacimiento</label>
@@ -536,14 +547,14 @@
                                 </div>    
                             </div> 
                             <div class="row" style="margin-top: 30px;">
-                                <div class="col-md-4" style="margin-left: 30px;">
+                                <div class="col-md-3">
                                     {# Area en donde se ingresa el nombre de la persona a quien llamar en caso de emergencia #}    
                                     <div id="referidoporPaciente-venta">
                                         <label>Referido por</label>
                                         <input type="text" name="dgplusbellebundle_venta[referidopor]" id="dgplusbellebundle_venta_referidopor" class="form-control" style="width: 100%" value="{{ paciente.referidoPor }}">      
                                     </div>
                                 </div>
-                                <div class="col-md-4">
+                                <div class="col-md-3">
                                     {# Area en donde se ingresa el nombre de la persona a quien llamar en caso de emergencia #}    
                                     <div id="nombreEmergenciaPaciente-venta">
                                         <label>En caso de emergencia llamar a</label>
@@ -561,7 +572,7 @@
                             <div class="row">
                                 <div class="col-md-12 col-sm-12 text-center" style="margin-top: 30px; margin-bottom: 10px;" id="registrar-datos-gnales">
                                     <hr>
-                                    <input type="submit" value="Registrar informacion del paciente" style="margin-bottom: 10px; background-color: #39a58a; color: #FFF;" class="btn" id="editar-paciente"/>
+                                    <input type="submit" value="Registrar informacion del paciente" style="margin-bottom: 10px; color: #FFF;" class="btn btn-xs btn-primary" id="editar-paciente"/>
                                 </div>    
                             </div>         
                         </form>
@@ -614,7 +625,7 @@
                                 </div>
                             </div>   
                             <div class="row" style="margin-top: 35px;">
-                                <div class="col-md-3"  style="margin-left: 30px;">
+                                <div class="col-md-4" >
                                     {# Area en donde se selecciona la sucursal en donde se realiza la venta #}    
                                     <div id="sucursal-venta" style="display:none;">
                                         <label>Sucursal</label>
@@ -640,7 +651,7 @@
                                         </select>   
                                     </div>
                                 </div>        
-                                <div class="col-md-2">
+                                <div class="col-md-4">
                                     {# Area en donde se ingresa  el número de sesiones de un tratamiento en el caso 
                                        de haber seleccionado el tipo de venta tratamiento                           #}  
                                     <div id="sesiones-tratamiento" style="display:none;">
@@ -650,7 +661,7 @@
                                 </div>        
                             </div>     
                             <div class="row" style="margin-top: 35px;">
-                                <div class="col-md-3" style="margin-left: 30px;">
+                                <div class="col-md-4">
                                     {# Area en donde se ingresa  el cossto($) del paquete o tratamiento que se ha vendido #}
                                     <div id="costo-venta" style="display:none;">
                                         <label>Costo ($)</label>
@@ -670,7 +681,7 @@
                                         </select>   
                                     </div>
                                 </div>        
-                                <div class="col-md-2">
+                                <div class="col-md-4">
                                     <div id="cuotas-venta" style="display:none;">
                                         <label>Cuotas</label>
                                         <input type="text" name="dgplusbellebundle_venta[cuotas]" id="dgplusbellebundle_venta_cuotas" class="form-control" style="width: 100%">   
@@ -679,11 +690,11 @@
                             </div>
                             <div class="row">
                                 <div id="vventa-observaciones" class="col-md-7 col-sm-7" style="margin-top: 30px; margin-bottom: 10px; display:none;">
-                                    <div id="venta-observaciones-label" style="margin-left: 30px;">
+                                    <div id="venta-observaciones-label">
                                         <label>Observaciones</label>
                                     </div> 
                                     <div class="clearfix"></div>
-                                    <div id="observaciones" style="margin-left: 30px;">
+                                    <div id="observaciones">
                                         <textarea rows="4" cols="100" name="dgplusbellebundle_abono[observaciones]" id="dgplusbellebundle_venta_observaciones" class="form-control"></textarea> 
                                     </div>     
                                 </div>    
@@ -697,12 +708,12 @@
                             <div class="row">
                                 <div class="col-md-12 col-sm-12 text-center" style="margin-top: 30px; margin-bottom: 10px; display:none;" id="registrar-venta">
                                     <hr>
-                                    <input type="submit" value="Registrar venta" style="margin-bottom: 10px; background-color: #39a58a; color: #FFF;" class="btn" id="registro-venta"/>
+                                    <input type="submit" value="Registrar venta" style="margin-bottom: 10px; color: #FFF;" class="btn btn-xs btn-primary" id="registro-venta"/>
                                 </div>  
                                 
                                 <div class="col-md-12 col-sm-12 text-center" style="margin-top: 30px; margin-bottom: 10px; display:none;" id="modificar-venta">
                                     <hr>
-                                    <input type="submit" value="Editar venta" style="margin-bottom: 10px; background-color: #39a58a; color: #FFF;" class="btn" id="edit-venta"/>
+                                    <input type="submit" value="Editar venta" style="margin-bottom: 10px; color: #FFF;" class="btn" id="edit-venta btn-xs btn-primary"/>
                                 </div>
                             </div> 
                         </form>                
@@ -881,11 +892,11 @@
                             </div>
                         </div>
                         <div class="row" style="margin-top: 50px;"></div>  #}      
-                        <div class="row" style="margin-top: 30px;">
+                        <div class="row" style="margin-top: 0px;">
                             <div class="col-md-12" style="margin-bottom: 25px;">
                                <form id="formulario-sesiones-tratamiento" method="POST" enctype="multipart/form-data">
-                                    <div class="row" style="margin-top: 35px;" style="display:none;">
-                                        <div class="col-md-3"  style="margin-left: 30px;">
+                                    <div class="row" style="margin-top: 0px;" style="display:none;">
+                                        <div class="col-md-4" >
                                             {# Area en donde se selecciona la sucursal en donde se realiza la venta #}    
                                             <div id="sucursal-sesion">
                                                 <label>Sucursal</label>
@@ -911,7 +922,7 @@
                                                 </select>   
                                             </div>
                                         </div> 
-                                        <div class="col-md-3" style="display:none;" id="seguimiento-sesiones-tratamiento">
+                                        <div class="col-md-4" style="display:none;" id="seguimiento-sesiones-tratamiento">
                                             <div id="sesiones-tratamiento">
                                                 <label>Tratamiento</label>
                                                 <select id="dgplusbellebundle_sesiones_tratamiento" name="dgplusbellebundle_venta_sesiones[tratamiento]" class="sesion_tratamiento" style="width: 100%">
@@ -923,13 +934,13 @@
                                     <div class="row">
                                         <div class="col-md-12 col-sm-12 text-center" style="margin-top: 30px; margin-bottom: 10px;" id="registrar-sesiones-tratamiento">
                                             {#<hr>#}
-                                            <input type="submit" value="Registrar sesión de tratamiento" style="margin-bottom: 10px; background-color: #39a58a; color: #FFF;" class="btn" id="registro-sesiones-tratamiento"/>
+                                            <input type="submit" value="Registrar sesión de tratamiento" style="margin-bottom: 10px; color: #FFF;" class="btn btn-primary btn-xs" id="registro-sesiones-tratamiento"/>
                                         </div>    
                                     </div>             
                                 </form> 
                             </div>
                         </div>
-                        <div class="row" style="margin-top: 30px;" id="detalle-venta-info">
+                        <div class="row" {#style="margin-top: 30px;"#} id="detalle-venta-info">
                              <div class="col-md-12" style="margin-bottom: 25px;">
                                 <hr>
                             </div>
@@ -964,7 +975,7 @@
                             <div class="col-md-12" style="margin-bottom: 25px;">
                                 <hr>
                             </div>
-                            <div class="col-md-6" style="margin-left: 30px;  margin-top: 10px;">
+                            <div class="col-md-6" style=" margin-top: 10px;">
                                 <div class="row">
                                     <div class="col-md-6" style="margin-bottom: 20px;">
                                         <div class="row">
@@ -1005,11 +1016,11 @@
                                     </div>
                                 </div>             
                             </div>
-                            <div class="col-md-5 col-sm-5" style="margin-left: 20px;">
+                            <div class="col-md-6 col-sm-5" >
                                 <div class="row">
                                     <div class="col-md-12 col-sm-12">
                                         <div id="listadoPaquete" style="display: none;">
-                                            <table id="listadoSesiones1" class="listados table table-bordered table-hover">
+                                            <table id="listadoSesiones1" class="robo listados table table-bordered table-hover" style="width:100%;">
                                                 <thead>
                                                     <tr>
                                                         <th class="text-center">Fecha de sesión</th>
@@ -1021,7 +1032,7 @@
                                             </table>
                                         </div>
                                         <div id="listadoTratamiento" style="display: none;">
-                                            <table id="listadoSesiones2" class="listados table table-bordered table-hover">
+                                            <table id="listadoSesiones2" class="robo listados table table-bordered table-hover" style="width:100%;">
                                                 <thead>
                                                     <tr>
                                                         <th class="text-center">Fecha de sesión</th>
@@ -1043,8 +1054,8 @@
                     {# Sección en donde se registran los abonos y devoluciones de un paquete o tratamiento #}
                     <div id="abonos-devoluciones" class="tab-pane fade" style="margin-top: 20px;">
                         <form id="formulario-sesiones-tratamiento" method="POST" enctype="multipart/form-data">
-                            <div class="row" style="margin-top: 35px;">
-                                <div class="col-md-3"  style="margin-left: 30px;">
+                            <div class="row">
+                                <div class="col-md-4" >
                                     {# Area en donde se selecciona la sucursal en donde se realiza la venta #}    
                                     <div id="sucursal-sesion">
                                         <label>Sucursal</label>
@@ -1070,7 +1081,7 @@
                                         </select>   
                                     </div>
                                 </div> 
-                                <div class="col-md-3">
+                                <div class="col-md-4">
                                     <div id="abono-monto">
                                         <label>Monto ($)</label>
                                         <input type="text" name="dgplusbellebundle_abono[monto]" id="dgplusbellebundle_abono_monto" class="form-control" style="width: 100%">        
@@ -1079,11 +1090,11 @@
                             </div>
                             <div class="row">
                                 <div class="col-md-7 col-sm-7" style="margin-top: 30px; margin-bottom: 10px;" id="abono">
-                                    <div id="abono-descripcion-label" style="margin-left: 30px;">
+                                    <div id="abono-descripcion-label">
                                         <label>Descripcion</label>
                                     </div> 
                                     <div class="clearfix"></div>
-                                    <div id="abono-descripcion" style="margin-left: 30px;">
+                                    <div id="abono-descripcion">
                                         <textarea rows="4" cols="100" name="dgplusbellebundle_abono[descripcion]" id="dgplusbellebundle_abono_descripcion" class="form-control"></textarea> 
                                     </div>     
                                 </div>    
@@ -1091,7 +1102,7 @@
                             <div class="row">
                                 <div class="col-md-12 col-sm-12 text-center" style="margin-top: 30px; margin-bottom: 10px;" id="registrar-abonos-sesiones">
                                     <hr>
-                                    <input type="submit" value="Registrar abono" style="margin-bottom: 10px; background-color: #39a58a; color: #FFF;" class="btn" id="registro-abono"/>
+                                    <input type="submit" value="Registrar abono" style="margin-bottom: 10px; {#background-color: #39a58a;#} color: #FFF;" class="btn btn-xs btn-primary" id="registro-abono"/>
                                 </div>    
                             </div>              
                         </form>
@@ -1105,6 +1116,23 @@
     
     {% block javascripts_step %}
         <script src="{{ asset('Resources/alertifyjs/alertify.js') }}"></script>
+        <script src="{{ asset('Resources/js/ConsultaPaciente.js') }}"></script>
+        <script src="{{ asset('Resources/js/ConsultaEstetica.js') }}"></script>
+
+        <script src="{{ asset('Resources/dropzone/dropzone.js') }}"></script>
+
+        <script src="{{ asset('Resources/swal/sweetalert2.min.js') }}"></script>
+
+        <script src="{{ asset('Resources/wrapkit/scripts/jquery.mask.js') }}"></script>
+        <script src="{{ asset('Resources/Zebra/js/zebra_datepicker.js') }}"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.2/js/select2.min.js"></script>
+        {#<script src="{{ asset('Resources/wrapkit/scripts/dataTables.bootstrap.js') }}"></script>
+        <script src="{{ asset('Resources/wrapkit/scripts/dataTables.tableTools.js') }}"></script>#}
+        <script src="{{ asset('Resources/wrapkit/scripts/bootbox.js') }}"></script>
+        <script src="https://cdn.datatables.net/1.10.11/js/jquery.dataTables.min.js"></script>
+        <script src="https://cdn.datatables.net/1.10.11/js/dataTables.material.min.js "></script>
+        <script src="{{ asset('Resources/src/js/bootstrap.js')}}"></script>
+        
         <script>
             var id_ventapaquete = 0;
             var id_ventatratamiento = 0;
@@ -1190,6 +1218,9 @@
                 {#var totalTratamientos = {{totalTratamientos}};
                 var totalPaquetes = {{totalPaquetes}};
                 var totalConsultas= {{totalConsultas}};#}
+                
+                $("#dgplusbellebundle_venta_sexo").select2();
+                $("#dgplusbellebundle_venta_ecivil").select2();
                 
                 $("#dgplusbellebundle_venta_paquete").select2();
                 $("#dgplusbellebundle_venta_tratamiento").select2();
@@ -1397,7 +1428,8 @@
                             $('#nombrePaciente').html(nombres + " " + apellidos);
                             
                             //bootbox.alert('Se ha resgistrado con exito los datos del paciente');
-                            alertify.success('Se ha actualizado con exito los datos del paciente');
+                            {#alertify.success('Se ha actualizado con exito los datos del paciente');#}
+                            swal('','Datos del paciente actualizados!','success');
                             
                             {#var id = 'P' + {{paciente.id}};
                             var path = Routing.generate('admin_historial_consulta', {'id': id});
@@ -1466,7 +1498,8 @@
                                                 type:  'post',
                                                 success:  function (response) {
                                                     //bootbox.alert('Se ha resgistrado con exito la venta del paquete ' + response.paquete);
-                                                    alertify.success('Se ha resgistrado con exito la venta del paquete');
+                                                    {#alertify.success('Se ha resgistrado con exito la venta del paquete');#}
+                                                    swal('','Venta de paquete registrada!','success');
                                                     $('#num-label-ses').hide();
                                                                                                         
                                                     //var tabsSesiones = document.getElementById('tabs-sesiones');
@@ -1557,21 +1590,25 @@
                                         return false;
                                         
                                     } else {
-                                        bootbox.alert('No se ha ingresado la cantidad de cuotas');
+                                        {#bootbox.alert('No se ha ingresado la cantidad de cuotas');#}
+                                        swal('','Ingrese la cantidad de cuotas!','error');
                                         $( "#dgplusbellebundle_venta_cuotas" ).focus();
                                         return false;
                                     }
                                 } else {
-                                    bootbox.alert('No se ha ingresado el valor a cancelar de la venta');
+                                    {#bootbox.alert('No se ha ingresado el valor a cancelar de la venta');#}
+                                    swal('','Ingrese el valor de la venta!','error');
                                     $( "#dgplusbellebundle_venta_costo" ).focus();
                                     return false;
                                 }
                             } else {
-                                bootbox.alert('No se ha seleccionado a la sucursal donde se ha realizado la venta');
+                                {#bootbox.alert('No se ha seleccionado a la sucursal donde se ha realizado la venta');#}
+                                swal('','Seleccione una sucursal!','error');
                                 return false;
                             }
                         } else {
-                            bootbox.alert('No se ha seleccionado el paquete que se va a vender');
+                            {#bootbox.alert('No se ha seleccionado el paquete que se va a vender');#}
+                            swal('','Seleccione el paquete que desea vender!','error');
                             return false;
                         }    
                         
@@ -1604,8 +1641,8 @@
                                                 type:  'post',
                                                 success:  function (response) {
                                                     //bootbox.alert('Se ha resgistrado con exito la venta del tratamiento ' + response.tratamiento);
-                                                    alertify.success('Se ha resgistrado con exito la venta del tratamiento');
-                                                    
+                                                    {#alertify.success('Se ha resgistrado con exito la venta del tratamiento');#}
+                                                    swal('','Venta de tratamiento registrada!','success');
                                                     //var tabsSesiones = document.getElementById('tabs-sesiones');
                                                     //var tabsImagenes = document.getElementById('tabs-imagenes');
                                                     var tabsAbdev = document.getElementById('tabs-abdev');
@@ -1676,26 +1713,32 @@
                                             });
                                             return false;
                                         } else {
-                                            bootbox.alert('No se ha ingresado la cantidad de sesiones de tratamiento');
+                                            {#bootbox.alert('No se ha ingresado la cantidad de sesiones de tratamiento');#}
+                                            
                                             $( "#dgplusbellebundle_venta_cuotas" ).focus();
+                                            swal('','Ingrese la cantidad de sesiones de tratamientos!','error');
                                             return false;
                                         }
                                     } else {
-                                        bootbox.alert('No se ha ingresado la cantidad de cuotas');
+                                        {#bootbox.alert('No se ha ingresado la cantidad de cuotas');#}
+                                        swal('','Ingrese la cantidad de cuotas!','error');
                                         $( "#dgplusbellebundle_venta_cuotas" ).focus();
                                         return false;
                                     }
                                 } else {
-                                    bootbox.alert('No se ha ingresado el valor a cancelar de la venta');
+                                    {#bootbox.alert('No se ha ingresado el valor a cancelar de la venta');#}
+                                    swal('','Ingrese el valor de la venta!','error');
                                     $( "#dgplusbellebundle_venta_costo" ).focus();
                                     return false;
                                 }
                             } else {
-                                bootbox.alert('No se ha seleccionado a la sucursal donde se ha realizado la venta');
+                                {#bootbox.alert('No se ha seleccionado a la sucursal donde se ha realizado la venta');#}
+                                swal('','Seleccione la sucursal donde se realiza la venta!','error');
                                 return false;
                             }
                         } else {
-                            bootbox.alert('No se ha seleccionado el tratamiento que se va a vender');
+                            {#bootbox.alert('No se ha seleccionado el tratamiento que se va a vender');#}
+                            swal('','Seleccione el tratamiento que desea vender!','error');
                             return false;
                         } 
                     }    
@@ -1759,8 +1802,8 @@
                                             url:   '{{path('admin_registro_editar_venta_paquete')}}',
                                             type:  'post',
                                             success:  function (response) {
-                                                alertify.success('Se ha resgistrado con exito la edicion de la venta del paquete');
-
+                                                {#alertify.success('Se ha resgistrado con exito la edicion de la venta del paquete');#}
+                                                swal('','Venta de paquete actualizada!','success');
                                                 var seguimientoSesionesTratamiento = document.getElementById('seguimiento-sesiones-tratamiento');
                                                 var detalleVentaInfo = document.getElementById('detalle-venta-info');
                                                 id_ventapaquete = response.ventaPaquete;
@@ -1799,17 +1842,20 @@
                                     return false;
 
                                 } else {
-                                    bootbox.alert('No se ha ingresado la cantidad de cuotas');
+                                    {#bootbox.alert('No se ha ingresado la cantidad de cuotas');#}
+                                    swal('','Ingrese la cantidad de cuotas!','error');
                                     $( "#dgplusbellebundle_venta_cuotas" ).focus();
                                     return false;
                                 }
                             } else {
-                                bootbox.alert('No se ha ingresado el valor a cancelar de la venta');
+                                {#bootbox.alert('No se ha ingresado el valor a cancelar de la venta');#}
+                                swal('','Ingrese el valor de la venta!','error');
                                 $( "#dgplusbellebundle_venta_costo" ).focus();
                                 return false;
                             }
                         } else {
-                            bootbox.alert('No se ha seleccionado a la sucursal donde se ha realizado la venta');
+                            {#bootbox.alert('No se ha seleccionado a la sucursal donde se ha realizado la venta');#}
+                            swal('','Seleccione la sucursal donde se realiza la venta!','error');
                             return false;
                         }
 
@@ -1860,8 +1906,8 @@
                                             type:  'post',
                                             success:  function (response) {
                                                 //bootbox.alert('Se ha resgistrado con exito la venta del tratamiento ' + response.tratamiento);
-                                                alertify.success('Se ha resgistrado con exito la venta del tratamiento');
-
+                                                {#alertify.success('Se ha resgistrado con exito la venta del tratamiento');#}
+                                                swal('','Venta de tratamiento registrada!','success');
                                                 //var tabsSesiones = document.getElementById('tabs-sesiones');
                                                 var tabsImagenes = document.getElementById('tabs-imagenes');
                                                 var tabsAbdev = document.getElementById('tabs-abdev');
@@ -1894,22 +1940,26 @@
                                         });
                                         return false;
                                     } else {
-                                        bootbox.alert('No se ha ingresado la cantidad de sesiones de tratamiento');
+                                        {#bootbox.alert('No se ha ingresado la cantidad de sesiones de tratamiento');#}
+                                        swal('','Ingrese la cantidad de sesiones de tratamieto!','error');
                                         $( "#dgplusbellebundle_venta_cuotas" ).focus();
                                         return false;
                                     }
                                 } else {
-                                    bootbox.alert('No se ha ingresado la cantidad de cuotas');
+                                    {#bootbox.alert('No se ha ingresado la cantidad de cuotas');#}
+                                    swal('','Ingrese la cantidad de cuotas!','error');
                                     $( "#dgplusbellebundle_venta_cuotas" ).focus();
                                     return false;
                                 }
                             } else {
-                                bootbox.alert('No se ha ingresado el valor a cancelar de la venta');
+                                {#bootbox.alert('No se ha ingresado el valor a cancelar de la venta');#}
+                                swal('','Ingrese el valor de la venta!','error');
                                 $( "#dgplusbellebundle_venta_costo" ).focus();
                                 return false;
                             }
                         } else {
-                            bootbox.alert('No se ha seleccionado a la sucursal donde se ha realizado la venta');
+                            {#bootbox.alert('No se ha seleccionado a la sucursal donde se ha realizado la venta');#}
+                            swal('','Seleccione la sucursal donde se realiza la venta!','error');                            
                             return false;
                         }
 
@@ -1997,7 +2047,8 @@
                                     });
                                 }
                             } else {
-                                bootbox.alert('Se han completado las sesiones, no se puede registrar una nueva sesion en el paquete');
+                                {#bootbox.alert('Se han completado las sesiones, no se puede registrar una nueva sesion en el paquete');#}
+                                swal('','Se han completado las sesiones, no se pueden registrar más para este paquete!','error');
                             }
                             
                         }, "json"); // Fin de post        
@@ -2017,7 +2068,8 @@
                                 url:   '{{path('admin_sesionventatratamiento_nuevo')}}',
                                 type:  'post',
                                 success:  function (response) {
-                                    alertify.success('Se ha resgistrado con exito la sesion del tratamiento');
+                                    {#alertify.success('Se ha resgistrado con exito la sesion del tratamiento');#}
+                                    swal('','Sesión de tratamiento registrada!','success');
                                     var mensaje = '';
                                     var tabsImagenes = document.getElementById('tabs-imagenes');
                                     tabsImagenes.style.display = 'block';
@@ -2047,11 +2099,13 @@
 
                             return false;
                         } else {
-                            bootbox.alert('No se puede realizar esta operacion. Se han realizado todas las sesiones de este tratamiento');
+                            {#bootbox.alert('No se puede realizar esta operacion. Se han realizado todas las sesiones de este tratamiento');#}
+                            swal('','Se han completado las sesiones, no se pueden registrar más para este tratamiento!','error');
                             return false;
                         }    
                     } else {
-                        bootbox.alert('No se puede realizar esta operacion. No existe ninguna venta relacionada');
+                        {#bootbox.alert('No se puede realizar esta operacion. No existe ninguna venta relacionada');#}
+                        swal('','No se puede realizar esta operación. No existe una venta relacionda!','error');
                         return false;
                     } 
                     
@@ -2094,7 +2148,7 @@
                                 $("#saveImagen").hide();
                             }else{  
                                var pesoKb=(fileSize/1024);
-                               if (pesoKb<=2048){
+                               if (pesoKb<=6144){
                                 var frm = new FormData($("#formImagen")[0]);
                                 console.log(frm);
                                     if (flag != false) {
@@ -2109,7 +2163,8 @@
                                             success: function(data){
                                                 if(data.exito == 0){
                                                     $('#file-input').val('');
-                                                    alertify.success("Imagenes subidas con éxito!");
+                                                    {#alertify.success("Imagenes subidas con éxito!");#}
+                                                    swal('','Imágenes subidas!','success');
                                                     $('#listadoImagenes').html('');
                                                     var key = 1;
                                                     for(i=0;i<data.imagenes.length;i++){
@@ -2117,24 +2172,28 @@
                                                         key++;
                                                     }
                                                 } else {
-                                                    bootbox.alert('Debe guardar una sesion de tratamiento del paquete, primero!');
+                                                    {#bootbox.alert('Debe guardar una sesion de tratamiento del paquete, primero!');#}
+                                                    swal('','Debe guardar una sesión de tratamiento del paquete!','error');
                                                     return false;
                                                 }
                                             },
                                             error: function(data){
-                                                bootbox.alert('Hubo un error al subir las fotos');
+                                                {#bootbox.alert('Hubo un error al subir las fotos');#}
+                                                swal('','Hubo un error al subir las fotos!','error');
                                             }
                                         });
                                     }
                                 }
                                 else{
                                     console.log(pesoKb);
-                                    alert("Imagen demasiado grande, intente con una mas pequeña");
+                                    {#alert("Imagen demasiado grande, intente con una mas pequeña");#}
+                                    swal('','Imagen demasiado grande, intente con una más pequeña!','success');
                                 }
                             }
                         }
                         else{
-                            bootbox.alert('Debe guardar una sesion de tratamiento del paquete, primero!');
+                            {#bootbox.alert('Debe guardar una sesion de tratamiento del paquete, primero!');#}
+                            swal('','Debe guardar una sesión de tratamiento del paquete!','error');
                         }
                     // Si se ha chequeado en el tipo de venta Tratamiento    
                     } else {
@@ -2175,7 +2234,7 @@
                             }else{  
 
                                  var pesoKb=(fileSize/1024);
-                                 if (pesoKb<=2048){
+                                 if (pesoKb<=6144){
                                     var frm = new FormData($("#formImagen")[0]);
                                     console.log(frm);
                                         if (flag != false) {
@@ -2193,7 +2252,8 @@
                                                     console.log(data);
                                                     //$("#prev").attr('src', "/abgsistema/web/"+data.direccion);
                                                     $('#file-input').val('');
-                                                    alertify.success("Imagenes subidas con éxito!");
+                                                    {#alertify.success("Imagenes subidas con éxito!");#}
+                                                    swal('','Imágenes subidas!','success');
                                                     $('#listadoImagenes').html('');
                                                     var key = 1;
                                                     for(i=0;i<data.length;i++){
@@ -2202,7 +2262,8 @@
                                                     }
                                                 },
                                                 error: function(data){
-                                                    bootbox.alert('Hubo un error al subir las fotos');
+                                                    {#bootbox.alert('Hubo un error al subir las fotos');#}
+                                                    swal('','Hubo un error al subir las fotos!','error');
                                                 }
                                                 {#data:frm,
                                                 url:Routing.generate('ingresar_foto_venta'),
@@ -2226,12 +2287,14 @@
                                     }
                                     else{
                                         console.log(pesoKb);
-                                        alert("Imagen demasiado grande, intente con una mas pequeña");
+                                        {#alert("Imagen demasiado grande, intente con una mas pequeña");#}
+                                        swal('','Imagen demasiado grande, intente con una más pequeña!','error');
                                     }
                             }
                         }
                         else{
-                            bootbox.alert('Debe guardar una sesion de tratamiento primero!');
+                            {#bootbox.alert('Debe guardar una sesion de tratamiento primero!');#}
+                            swal('','Debe guardar una sesión de tratamiento!','error');
                         }
                     }    
                 });
@@ -2263,7 +2326,8 @@
                                 url:   '{{path('admin_abonopaquete_nuevo')}}',
                                 type:  'post',
                                 success:  function (response) {
-                                    alertify.success('Se ha resgistrado con exito un abono del paquete');
+                                    {#alertify.success('Se ha resgistrado con exito un abono del paquete');#}
+                                    swal('','Abono de paquete registrado!','success');
                                     deuda_total = (response.costo - ((response.descuento * response.costo)/100) - response.abonos).toFixed(2);
 
                                     $('#detalle-venta-deuda').html('$ ' + deuda_total);
@@ -2271,7 +2335,8 @@
                                 }
                             });
                         }  else {
-                            bootbox.alert('No se puede realizar esta operacion. El monto ingresado es mayor a la deuda de este paquete');
+                            {#bootbox.alert('No se puede realizar esta operacion. El monto ingresado es mayor a la deuda de este paquete');#}
+                            swal('','No se puede realizar esta operación. El monto ingresado es mayor a la deuda de este paquete!','error');
                             return false;
                         }
                         return false;
@@ -2292,7 +2357,8 @@
                                 url:   '{{path('admin_abonotratamiento_nuevo')}}',
                                 type:  'post',
                                 success:  function (response) {
-                                    alertify.success('Se ha resgistrado con exito un abono del tratamiento');
+                                    {#alertify.success('Se ha resgistrado con exito un abono del tratamiento');#}
+                                    swal('','Abono de tratamiento registrado!','success');
                                     deuda_total = (response.costo - ((response.descuento * response.costo)/100) - response.abonos).toFixed(2);
 
                                     $('#detalle-venta-deuda').html('$ ' + deuda_total);
@@ -2300,7 +2366,8 @@
                                 }
                             });
                         }  else {
-                            bootbox.alert('No se puede realizar esta operacion. El monto ingresado es mayor a la deuda de este tratamiento');
+                            {#bootbox.alert('No se puede realizar esta operacion. El monto ingresado es mayor a la deuda de este tratamiento');#}
+                            swal('','No se puede realizar esta operación. El monto ingresado es mayor a la deuda de este tratamiento!','error');
                             return false;
                         }  
                         return false;
@@ -2310,13 +2377,13 @@
                     return false;
                 });
                 
-                $('#dgplusbellebundle_consulta_fechaConsulta').daterangepicker({
+                {#$('#dgplusbellebundle_consulta_fechaConsulta').daterangepicker({
                     singleDatePicker: true,
                     showDropdowns: true,
                     locale: {
                         format: 'YYYY-MM-DD'
                     },
-                }); 
+                }); #}
                 
                 //Seleccionar un registro
                 $('#datatables1>tbody>tr').on('click', function(event) {
@@ -2565,7 +2632,8 @@
                 url:   '{{path('admin_sesiontratamiento_nuevo')}}',
                 type:  'post',
                 success:  function (response) {
-                    alertify.success('Se ha resgistrado con exito la sesion del tratamiento');
+                    {#alertify.success('Se ha resgistrado con exito la sesion del tratamiento');#}
+                    swal('','Sesión de tratamiento registrada!','success');
                     $('.close').click();
                     var tabsImagenes = document.getElementById('tabs-imagenes');
                     tabsImagenes.style.display = 'block';
@@ -2679,7 +2747,8 @@
                     
                 // Si se han completado todas las sesiones de todos tratamientos que cuenta el paquete    
                 } else {
-                    bootbox.alert('Se han completado las sesiones, no se puede registrar una nueva sesion en el paquete');
+                    {#bootbox.alert('Se han completado las sesiones, no se puede registrar una nueva sesion en el paquete');#}
+                    swal('','Sesiones completadas, no se puede registrar una nueva para este paquete!','error');
                 }
                 
             }, "json"); // Fin de post    
@@ -2694,7 +2763,8 @@
                     //window.open(url);
                     window.open(url, "_self");
                 } else {
-                    bootbox.alert('Se han completado las sesiones, no se puede registrar una nueva sesion');
+                    {#bootbox.alert('Se han completado las sesiones, no se puede registrar una nueva sesion');#}
+                    swal('','Sesiones completadas, no se puede registrar una nueva!','error');
                 }
             }, "json"); // Fin de post        
         }
