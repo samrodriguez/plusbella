@@ -641,6 +641,12 @@ class VentaPaqueteController extends Controller
                 //$idTratamientos[$key] = $detalleVenta->getTratamiento()->getId();                
             }
 
+            if($ventaPaquete->getDescuento() != null){
+                $descuentoVenta = $ventaPaquete->getDescuento()->getPorcentaje();
+            } else {
+                $descuentoVenta = 0;
+            }
+            
             $dql = "SELECT t.id, t.nombre FROM DGPlusbelleBundle:Tratamiento t "
                         . "WHERE t.id IN (:ids) ";
                 $tratVenta = $em->createQuery($dql)
@@ -654,7 +660,7 @@ class VentaPaqueteController extends Controller
                                         'tratamientos' => $tratamientos,
                                         'tratVenta' => $tratVenta,
                                         'nomTratamientos' => $nomTratamientos,
-                                        'descuento' => $ventaPaquete->getDescuento()->getPorcentaje(),
+                                        'descuento' => $descuentoVenta,
                                         'cuotas' => $ventaPaquete->getCuotas()
                                     );
             

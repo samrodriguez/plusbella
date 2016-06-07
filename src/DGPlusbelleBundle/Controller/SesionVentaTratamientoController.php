@@ -3,6 +3,7 @@
 namespace DGPlusbelleBundle\Controller;
 
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -422,7 +423,7 @@ class SesionVentaTratamientoController extends Controller
                 ->setMaxResults($longitud)
                 ->getResult();
         
-        var_dump($id);
+//s        var_dump($id);
         
         return new Response(json_encode($paciente));
     }

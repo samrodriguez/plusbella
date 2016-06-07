@@ -213,8 +213,8 @@
                 <ul class="nav nav-tabs" style="margin-top: 30px;">
                     <li><a data-toggle="tab" href="#datos-generales">Datos generales</a></li>
                     <li class="active"><a data-toggle="tab" href="#registros-venta">Datos de la venta</a></li>
-                    <li><a data-toggle="tab" href="#registro-sesiones" id="tabs-sesiones">Registro de sesiones</a></li>
-                    <li><a data-toggle="tab" href="#seguimiento-venta" id="tabs-seguimiento">Seguimiento de la venta</a></li>
+                    {#<li><a data-toggle="tab" href="#registro-sesiones" id="tabs-sesiones">Registro de sesiones</a></li>#}
+                    <li><a data-toggle="tab" href="#seguimiento-venta" id="tabs-seguimiento">Registro y seguimiento de sesiones</a></li>
                     <li><a data-toggle="tab" href="#abonos-devoluciones" id="tabs-abdev">Abonos{# / Devoluciones#}</a></li>
                     <li><a data-toggle="tab" href="#imagenes" id="tabs-imagenes">Imagenes</a></li>
                 </ul>
@@ -489,7 +489,7 @@
                                     {# Area en donde se selecciona la sucursal en donde se realiza la venta #}    
                                     <div id="sucursal-sesion">
                                         <label>Sucursal</label>
-                                        <select id="dgplusbellebundle_sesiones_sucursal" name="dgplusbellebundle_venta_sesiones[sucursal]" class="sesion-sucursal" style="width: 100%">
+                                        <select id="dgplusbellebundle_sesioness_sucursal" name="dgplusbellebundle_venta_sesiones[sucursal]" class="sesion-sucursal" style="width: 100%">
                                             <option value="" disabled selected>Seleccione una sucursal ...</option>
 
                                             {% for sucursal in sucursales %}
@@ -502,7 +502,7 @@
                                     {# Area en donde se selecciona  el empleado que ha realizado la venta #}  
                                     <div id="empleado-sesion">
                                         <label>Empleado</label>
-                                        <select id="dgplusbellebundle_sesiones_empleado" name="dgplusbellebundle_venta_sesiones[empleado]" class="sesion-empleado" style="width: 100%">
+                                        <select id="dgplusbellebundle_sesioness_empleado" name="dgplusbellebundle_venta_sesiones[empleado]" class="sesion-empleado" style="width: 100%">
                                             <option value="" disabled selected>Seleccione un empleado ...</option>
                                             {% for empleado in empleadosVenta %}
                                                 <option value="{{empleado.id}}"> {{empleado.persona}}</option>
@@ -510,10 +510,10 @@
                                         </select>   
                                     </div>
                                 </div> 
-                                <div class="col-md-3" id="seguimiento-sesiones-tratamiento">
+                                <div class="col-md-3" id="seguimiento-sesioness-tratamiento">
                                     <div id="sesiones-tratamiento">
                                         <label>Tratamiento</label>
-                                        <select id="dgplusbellebundle_sesiones_tratamiento" name="dgplusbellebundle_venta_sesiones[tratamiento]" class="sesion_tratamiento" style="width: 100%">
+                                        <select id="dgplusbellebundle_sesioness_tratamiento" name="dgplusbellebundle_venta_sesiones[tratamiento]" class="sesion_tratamiento" style="width: 100%">
                                             <option value="" disabled selected>Seleccione un tratamiento...</option>
                                             {% for tratamiento in tratVenta %}
                                                 <option value="{{tratamiento.id}}"> {{tratamiento.nombre}}</option>
@@ -525,7 +525,7 @@
                             <div class="row">
                                 <div class="col-md-12 col-sm-12 text-center" style="margin-top: 30px; margin-bottom: 10px;" id="registrar-sesiones-tratamiento">
                                     <hr>
-                                    <input type="submit" value="Registrar sesión de tratamiento" style="margin-bottom: 10px; background-color: #39a58a; color: #FFF;" class="btn" id="registro-sesiones-tratamiento"/>
+                                    <input type="submit" value="Registrar sesión de tratamiento" style="margin-bottom: 10px; background-color: #39a58a; color: #FFF;" class="btn" id="registro-sesioness-tratamiento"/>
                                 </div>    
                             </div>             
                         </form>
@@ -533,7 +533,59 @@
                     </div>
                     {# Sección en donde se muestra el seguimiento de la venta #}
                     <div id="seguimiento-venta" class="tab-pane fade" style="margin-top: 20px;">
+                        <div class="row" style="margin-top: 30px;">
+                            <form id="formulario-sesiones-tratamiento" method="POST" enctype="multipart/form-data">
+                                <div class="row" style="margin-top: 35px;" style="display:none;">
+                                    <div class="col-md-3"  style="margin-left: 30px;">
+                                        {# Area en donde se selecciona la sucursal en donde se realiza la venta #}    
+                                        <div id="sucursal-sesion">
+                                            <label>Sucursal</label>
+                                            <select id="dgplusbellebundle_sesiones_sucursal" name="dgplusbellebundle_venta_sesiones[sucursal]" class="sesion-sucursal" style="width: 100%">
+                                                <option value="" disabled selected>Seleccione una sucursal ...</option>
+
+                                                {% for sucursal in sucursales %}
+                                                    <option value="{{sucursal.id}}"> {{sucursal.nombre}}</option>
+                                                {% endfor %}
+                                            </select>   
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        {# Area en donde se selecciona  el empleado que ha realizado la venta #}  
+                                        <div id="empleado-sesion">
+                                            <label>Empleado</label>
+                                            <select id="dgplusbellebundle_sesiones_empleado" name="dgplusbellebundle_venta_sesiones[empleado]" class="sesion-empleado" style="width: 100%">
+                                                <option value="" disabled selected>Seleccione un empleado ...</option>
+                                                {% for empleado in empleadosVenta %}
+                                                    <option value="{{empleado.id}}"> {{empleado.persona}}</option>
+                                                {% endfor %}
+                                            </select>   
+                                        </div>
+                                    </div> 
+                                    <div class="col-md-3" id="seguimiento-sesiones-tratamiento">
+                                        <div id="sesiones-tratamiento">
+                                            <label>Tratamiento</label>
+                                            <select id="dgplusbellebundle_sesiones_tratamiento" name="dgplusbellebundle_venta_sesiones[tratamiento]" class="sesion_tratamiento" style="width: 100%">
+                                                <option value="" disabled selected>Seleccione un tratamiento...</option>
+                                                {% for tratamiento in tratVenta %}
+                                                    <option value="{{tratamiento.id}}"> {{tratamiento.nombre}}</option>
+                                                {% endfor %}
+                                            </select>    
+                                        </div>    
+                                    </div>        
+                                </div>
+                                <div class="row">
+                                   
+                                    <div class="col-md-12 col-sm-12 text-center" style="margin-top: 30px; margin-bottom: 10px;" id="registrar-sesiones-tratamiento">
+                                        
+                                        <input type="submit" value="Registrar sesión de tratamiento" style="margin-bottom: 10px; background-color: #39a58a; color: #FFF;" class="btn" id="registro-sesiones-tratamiento"/>
+                                    </div>    
+                                </div>             
+                            </form>
+                        </div>
                         <div class="row" style="margin-top: 30px;" id="detalle-venta-info">
+                             <div class="col-md-12" style="margin-bottom: 25px;">
+                                <hr>
+                            </div>
                             <div class="col-md-8" style="margin-left: 30px;">
                                 <div class="row">
                                     <div class="col-md-2" style="margin-bottom: 10px;">
@@ -570,7 +622,7 @@
                             <div class="col-md-12" style="margin-bottom: 25px;">
                                 <hr>
                             </div>
-                            <div class="col-md-6" style="margin-left: 30px;">
+                            <div class="col-md-6" style="margin-left: 30px;  margin-top: 10px;">
                                 <div class="row">
                                     <div class="col-md-6" style="margin-bottom: 20px;">
                                         <div class="row">
@@ -642,7 +694,7 @@
                                     </div>
                                 </div>             
                             </div>
-                            <div class="col-md-5 col-sm-5" style="margin-left: 20px; margin-top: -10px;">
+                            <div class="col-md-5 col-sm-5" style="margin-left: 20px;">
                                 <div class="row">
                                     <div class="col-md-12 col-sm-12">
                                         <table id="listadoSesiones" class="listados table table-bordered table-hover">
@@ -1158,6 +1210,7 @@
                     var tratamientos = new Array();
                     var flag = 0;
                     var mensaje = '';
+                    $("#registro-sesiones-tratamiento").prop('disabled', true);
                     
                     if(id_ventapaquete > 0) {
                         $.post( "{{path('admin_evaluar_sesiones_paquete')}}", { id: id_ventapaquete }, function( data ) {
@@ -1168,10 +1221,12 @@
                             var deuda = ( (data.query[0].costoPaquete - ((data.query[0].porcentaje * data.query[0].costoPaquete)/100)) - data.abonos.abonos).toFixed(2);
 
                             $.each( data.query, function( key, value ) {
-                               if(value.numSesion >= value.sesiones){
+                               if(parseInt(value.numSesion) >= parseInt(value.sesiones)){
                                     aux = aux + 1;
                                 }
                             });   
+                            
+                            console.log(data.query);
                             
                             // Si exiten sesiones pendientes
                             if(aux < total){
@@ -1217,10 +1272,12 @@
                                                     empleado: empleado,
                                                     tratamiento: tratamiento
                                                 };
-                                                console.log(sucursal + ' ' + empleado);
+                                                //console.log(sucursal + ' ' + empleado);
                                                 nuevaSesionPaqueteTratamiento(datos);
                                                 return false;                                                
-                                            }
+                                            } else {
+                                                $("#registro-sesiones-tratamiento").prop('disabled', false);
+                                            }    
                                         }
                                     });
                                 }
@@ -1410,44 +1467,7 @@
 
                     });
                     
-                    var url = "{{path('admin_sesiones_paciente_data_paquete')}}"+'?id='+id_ventapaquete;
-
-                    var table1 = $('#listadoSesiones').DataTable({
-                        dom:'tp',
-                        "processing": false,
-                        "serverSide": true,
-                        "pageLength": 3,
-                        "ajax": {
-                            "url": url,
-                            "type": 'GET'
-                        },
-                        "columns": [
-                            { "data": "fechaSesion" },
-                            { "data": "tratamiento" },
-                            { "data": "empleado" },
-                            { "data": "sucursal" }
-                        ],
-                            "columnDefs": [
-                                   {"width":10, "orderable": false, "targets": 0 },
-                                   {"width":45, "orderable": false, "targets": 1 },
-                                   {"width":30, "orderable": false, "targets": 2 },
-                                   {"width":15, "orderable": false, "targets": 3 }
-                            ],
-                            "language": {
-                            "info": "Mostrando página _PAGE_ de _PAGES_",
-                            "infoEmpty": "",
-                            "infoFiltered": "filtrando de _MAX_ registros",
-                            "emptyTable": "No se encontraron registros",
-                            "paginate": { 
-                                "next": "Siguiente",
-                                "previous": "Anterior"
-                            },
-                            "processing": "Procesando petición...",
-                            "search": "Buscar registros:",
-                            "lengthMenu": "Mostrar _MENU_ registros"
-                        }, 
-
-                    });
+                    
                 
                 
                 // Al momento de hacer click en resgistra abono
@@ -1744,6 +1764,46 @@
     </script>
     
     <script>
+        
+            var url = "{{path('admin_sesiones_paciente_data_paquete')}}"+'?id='+id_ventapaquete;
+
+            var table1 = $('#listadoSesiones').DataTable({
+                dom:'tp',
+                "processing": false,
+                "serverSide": true,
+                "pageLength": 3,
+                "ajax": {
+                    "url": url,
+                    "type": 'GET'
+                },
+                "columns": [
+                    { "data": "fechaSesion" },
+                    { "data": "tratamiento" },
+                    { "data": "empleado" },
+                    { "data": "sucursal" }
+                ],
+                    "columnDefs": [
+                           {"width":10, "orderable": false, "targets": 0 },
+                           {"width":45, "orderable": false, "targets": 1 },
+                           {"width":30, "orderable": false, "targets": 2 },
+                           {"width":15, "orderable": false, "targets": 3 }
+                    ],
+                    "language": {
+                    "info": "Mostrando página _PAGE_ de _PAGES_",
+                    "infoEmpty": "",
+                    "infoFiltered": "filtrando de _MAX_ registros",
+                    "emptyTable": "No se encontraron registros",
+                    "paginate": { 
+                        "next": "Siguiente",
+                        "previous": "Anterior"
+                    },
+                    "processing": "Procesando petición...",
+                    "search": "Buscar registros:",
+                    "lengthMenu": "Mostrar _MENU_ registros"
+                }, 
+
+            });
+        
         // Se procede a registrar la sesion del tratamiento mediante ajax
         function nuevaSesionPaqueteTratamiento(data){
             var mensaje = '';
@@ -1754,6 +1814,8 @@
                 url:   '{{path('admin_sesiontratamiento_nuevo')}}',
                 type:  'post',
                 success:  function (response) {
+                    table1.ajax.reload();
+                    
                     alertify.success('Se ha resgistrado con exito la sesion del tratamiento');
                     $('.close').click();
                     var tabsImagenes = document.getElementById('tabs-imagenes');
@@ -1809,7 +1871,11 @@
                     });
                     //$('#dgplusbellebundle_sesiones_tratamiento option[value=""]').attr("selected",true);
                     
-                    table1.ajax.reload();
+                    $("#registro-sesiones-tratamiento").prop('disabled', false);
+                    
+                    $('#dgplusbellebundle_sesiones_sucursal').val('').change();
+                    $('#dgplusbellebundle_sesiones_empleado').val('').change();
+                    $('#dgplusbellebundle_sesiones_tratamiento').val('').change();
                 }
             });
         }
