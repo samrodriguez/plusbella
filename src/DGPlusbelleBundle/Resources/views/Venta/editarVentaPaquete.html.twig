@@ -467,7 +467,7 @@
                                                     <label>{{ vpaquete.ntrata }}</label>
                                                 </div>
                                                 <div class="col-md-4" style="margin-top: 5px;">
-                                                    <input type="text" name="dgplusbellebundle_venta[paqueteTrat][{{vpaquete.id}}]" id="dgplusbellebundle_venta_paqueteTrat_{{vpaquete.id}}" class="form-control sesionesPaqueteTrata" style="width: 100%" value="{{vpaquete.sesiones}}">
+                                                    <input type="text" name="dgplusbellebundle_venta[paqueteTrat][{{vpaquete.id}}]" id="dgplusbellebundle_venta_paqueteTrat_{{vpaquete.id}}" class="form-control sesionesPaqueteTrata numSesionesPaquete" style="width: 100%" value="{{vpaquete.sesiones}}">
                                                 </div>
                                             </div>
                                         {% endfor %}
@@ -1086,7 +1086,8 @@
                             $('#nombrePaciente').html(nombres + " " + apellidos);
                             
                             //bootbox.alert('Se ha resgistrado con exito los datos del paciente');
-                            alertify.success('Se ha actualizado con exito los datos del paciente');
+                            //alertify.success('Se ha actualizado con exito los datos del paciente');
+                            swal("", "Se ha actualizado con exito los datos del paciente!", "success");
                             
                             {#var id = 'P' + {{paciente.id}};
                             var path = Routing.generate('admin_historial_consulta', {'id': id});
@@ -1151,7 +1152,7 @@
                                         type:  'post',
                                         success:  function (response) {
                                             //alertify.success('Se ha resgistrado con exito la edicion de la venta del paquete');
-                                            swal('','Se ha registrado con exito la edicion de la venta del paquete!','error');
+                                            swal('','Se ha registrado con exito la edicion de la venta del paquete!','success');
                                             
                                             var seguimientoSesionesTratamiento = document.getElementById('seguimiento-sesiones-tratamiento');
                                             var detalleVentaInfo = document.getElementById('detalle-venta-info');
@@ -1241,8 +1242,7 @@
                                     }
                                 });   
 
-                                //console.log(data.query);
-
+                                
                                 // Si exiten sesiones pendientes
                                 if(aux < total){
                                     // Si el paciente no tiene deuda pendiente en el paquete seleccionado
@@ -1274,9 +1274,7 @@
                                                 cancelButtonText: "Cancelar",
                                                 closeOnConfirm: false,
                                                 closeOnCancel: false
-                                            },
-                                            
-                                            function(isConfirm){
+                                            }).then(function(isConfirm) {
                                                 if (isConfirm) {
                                                     console.log('aqui');
                                                     $("#registro-sesiones-tratamiento").prop('disabled', true);
@@ -1296,8 +1294,7 @@
                                                 } else {
                                                     $("#registro-sesiones-tratamiento").prop('disabled', false);
                                                 }
-                                            }
-                                        );
+                                            });
                                         
                                         
                                         {#bootbox.confirm({ title: 'Confirmación de registro de nueva sesión',
@@ -1334,7 +1331,7 @@
                                     }
                                 } else {
                                     //bootbox.alert('Se han completado las sesiones, no se puede registrar una nueva sesion en el paquete');
-                                    
+                                    swal("", "Se han completado las sesiones, no se puede registrar una nueva sesion en el paquete!", "error");
                                 }
 
                             }, "json"); // Fin de post  
@@ -1562,7 +1559,8 @@
                                 type:  'post',
                                 success:  function (response) {
 
-                                    alertify.success('Se ha resgistrado con exito un abono del paquete');
+                                    //alertify.success('Se ha resgistrado con exito un abono del paquete');
+                                    swal("", "Se ha resgistrado con exito un abono del paquete!", "success");
                                     deuda_total = (response.costo - ((response.descuento * response.costo)/100) - response.abonos).toFixed(2);
                                     console.log(deuda_total);
                                     {#console.log(deuda_pte);
@@ -1576,7 +1574,8 @@
                                 }
                             });
                         }  else {
-                            bootbox.alert('No se puede realizar esta operacion. El monto ingresado es mayor a la deuda de este paquete');
+                            //bootbox.alert('No se puede realizar esta operacion. El monto ingresado es mayor a la deuda de este paquete');
+                            swal("", "No se puede realizar esta operacion. El monto ingresado es mayor a la deuda de este paquete", "error");
                             $("#registro-abono").prop('disabled', false);
                             return false;
                         }
@@ -1885,7 +1884,8 @@
                 success:  function (response) {
                     table1.ajax.reload();
                     
-                    alertify.success('Se ha resgistrado con exito la sesion del tratamiento');
+                    //alertify.success('Se ha resgistrado con exito la sesion del tratamiento');
+                    swal("","Se ha resgistrado con exito la sesion del tratamiento!", "success");
                     $('.close').click();
                     var tabsImagenes = document.getElementById('tabs-imagenes');
                     tabsImagenes.style.display = 'block';
@@ -1910,7 +1910,7 @@
                                 mensaje += '</div>';
                             }    
                         } else {
-                            console.log(value.numSesion);
+                            //console.log(value.numSesion);
                             for (var i = 0; i < value.numSesion; i++) {
                                 mensaje += '<div class="col-md-1" style="margin-bottom: 10px;">';
                                 mensaje += '<img class="" style="height: 25px;"  src="{{ asset('Photos/Estados/sesion_realizada.png')}}" title="Sesion realizada">';
@@ -1927,7 +1927,7 @@
                         mensaje+= '</div>';
                         mensaje+= '</div>';
                     });
-                    console.log(mensaje);
+                    //console.log(mensaje);
                     //$('#seguimiento-tratamientos-realizados').html(mensaje);
                     $('#detalle-venta-tratamientos').html(mensaje);
 
