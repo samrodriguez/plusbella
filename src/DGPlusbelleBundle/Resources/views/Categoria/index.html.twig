@@ -28,7 +28,7 @@
         <a href="{{ path('admin_usuario') }}" class="leftnava"><li class="leftnav left ">Gestionar usuario<span class="pull-right right"><i class=""></i></span></li></a>
     {% endif %}
     {% if is_granted('ROLE_ADMIN') %}
-        <a href="{{ path('admin_backup') }}" class="leftnava"><li class="leftnav left ">Crear respaldo de datos<span class="pull-right right"><i class=""></i></span></li></a>
+        <a href="{{ path('admin_backup') }}" class="leftnava"><li class="leftnav left ">Respaldo de datos<span class="pull-right right"><i class=""></i></span></li></a>
     {% endif %}
 {% endblock navegacion %}
 
@@ -100,11 +100,11 @@
         <tbody>
        {% for key, entity in entities %}
             <tr id="{{entity.id}}">
-                  <td>
-                      {#<a class="correlativo" href="{{ path('admin_sucursal_show', { 'id': entity.id }) }}">#}
-                          {{key+1}}
-                      {#</a>#}
-                  </td>
+                <td>
+                    {#<a class="correlativo" href="{{ path('admin_sucursal_show', { 'id': entity.id }) }}">#}
+                        {{key+1}}
+                    {#</a>#}
+                </td>
              {#    <td><a href="{{ path('admin_categoria_show', { 'id': entity.id }) }}">{{ entity.id }}</a></td>  #}
                 <td>{{ entity.nombre|upper }}</td>
                 <td>{{ entity.codigo|upper }}</td>
@@ -114,7 +114,6 @@
                     {% else %}
                         Inactivo
                     {% endif %}
-                    
                 </center></td>
              <!--   <td>
                 <ul>

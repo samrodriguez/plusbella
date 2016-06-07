@@ -3,6 +3,8 @@
 namespace DGPlusbelleBundle\Controller;
 
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -2246,6 +2248,186 @@ class ReporteController extends Controller
 //        $this->get('fpdf_printer')->generarPdfReferidoPorRango($titulo, $encabezadoTabla, $anchoCol, $consulta,  $fechaInicio, $fechaFin);
         
     }
+    
+    
+    
+    /**
+     * 
+     *
+     * @Route("/pacientesdeudas", name="admin_reporte_pacientes_deudas", options={"expose"=true})
+     * @Method("GET")
+     * @Template()
+     */
+    public function pacientesdeudasAction()
+    {
+        $em = $this->getDoctrine()->getManager();
+        $entity = $em->getRepository('DGPlusbelleBundle:Sucursal')->findAll();
+        
+        return array(
+            //'empleados'=>$empleados,
+            //'ingresos' => $ingresos[0],
+            'sucursales' => $entity,
+        );
+    }
+    
+    
+    
+    
+    
+    /**
+     * 
+     *
+     * @Route("/bar_pacientesdeudas", name="admin_reporte_pacientes_deudas_tabla", options={"expose"=true})
+     * @Method("GET")
+     * @Template()
+     */
+    public function barpacientesdeudasAction(Request $request){
+        $em = $this->getDoctrine()->getManager();
+        
+        $response = new JsonResponse();
+        $deudaTotal = 0;
+        $sesionesTotal = 0;
+        $sesionesPendientes = 0;
+        $pac = $em->getRepository('DGPlusbelleBundle:Persona')->findAll();
+        //$pac = $em->getRepository('DGPlusbelleBundle:Persona')->find(49,4229);
+//        var_dump($pac);
+        
+//        var_dump($personaTratamiento);
+        //Cambiamos el tiempo de espera
+        set_time_limit ( 600 );
+        $paciente = array();
+        $pacientes = array();
+//        echo "antes for ";
+        
+        
+        foreach ($pac as $valuePac) {
+            $deudaTotal = 0;
+            $sesionesTotal = 0;
+            $sesionesPendientes = 0;
+            $ventaPaquete = $em->getRepository('DGPlusbelleBundle:VentaPaquete')->findBy(array('paciente' => $valuePac->getId()));
+//        var_dump($ventaPaquete);
+            $personaTratamiento = $em->getRepository('DGPlusbelleBundle:PersonaTratamiento')->findBy(array('paciente' => $valuePac->getId()));
+            //echo "for pacientes";
+            foreach ($ventaPaquete as $value) {
+                //echo "for paquetes";
+                $ventaId = $value->getId();
+                $rsm2 = new ResultSetMapping();
+
+                $sql2 = "select cast(IFNULL(sum(abo.monto),0) as decimal(36,2)) abonos "
+                        . "from abono abo inner join venta_paquete vp on abo.venta_paquete = vp.id "
+                        . "where vp.id = '$ventaId'";
+
+                $rsm2->addScalarResult('abonos','abonos');
+
+                $abonos = $em->createNativeQuery($sql2, $rsm2)
+                        ->getSingleResult();
+                //var_dump($abonos);
+                if($value->getDescuento()){
+                    $deudaTotal+= ($value->getCosto() - (($value->getDescuento()->getPorcentaje() * $value->getCosto())/100)) - $abonos['abonos'] ;
+                }
+                else {
+                    $deudaTotal+= ($value->getCosto() - ((0 * $value->getCosto())/100)) - $abonos['abonos'] ;
+                }
+
+                $dql = "SELECT seg.numSesion FROM DGPlusbelleBundle:SeguimientoPaquete seg"
+                        . " INNER JOIN seg.idVentaPaquete ven"
+                        . " INNER JOIN seg.tratamiento tra"
+                        . " WHERE ven.id = :venta";
+
+                $seguimiento = $em->createQuery($dql)
+                               ->setParameter('venta', $ventaId)
+                               ->getResult();
+
+//                foreach ($seguimiento as $value) {
+//                    $sesionesPendientes+=$value['numSesion'];
+//                }
+
+                $dql = "SELECT det.numSesiones FROM DGPlusbelleBundle:DetalleVentaPaquete det"
+                        . " INNER JOIN det.ventaPaquete ven"
+                        . " INNER JOIN det.tratamiento tra"
+                        . " WHERE ven.id = :venta";
+
+                $sesionesVenta = $em->createQuery($dql)
+                               ->setParameter('venta', $ventaId)
+                               ->getResult();
+
+//                foreach ($sesionesVenta as $value) {
+//                    $sesionesTotal+=$value['numSesiones'];
+//                }                        
+            }
+            foreach ($personaTratamiento as $value) {
+                $ventaId = $value->getId();
+                $rsm = new ResultSetMapping();
+
+                $sql = "select cast(IFNULL(sum(abo.monto),0) as decimal(36,2)) abonos "
+                        . "from abono abo inner join persona_tratamiento pt on abo.persona_tratamiento = pt.id "
+                        . "where pt.id = '$ventaId'";
+
+                $rsm->addScalarResult('abonos','abonos');
+
+                $abonos = $em->createNativeQuery($sql, $rsm)
+                               ->getSingleResult();
+                if($value->getDescuento()){
+                    $deudaTotal+= ($value->getCostoConsulta() - (($value->getDescuento()->getPorcentaje() * $value->getCostoConsulta())/100)) - $abonos['abonos'] ;
+                } else {
+                    $deudaTotal+= ($value->getCostoConsulta() - ((0 * $value->getCostoConsulta())/100)) - $abonos['abonos'] ;
+                }
+
+
+                $dql = "SELECT pt.numSesiones, seg.numSesion FROM DGPlusbelleBundle:SeguimientoTratamiento seg"
+                        . " INNER JOIN seg.idPersonaTratamiento pt"
+                        . " WHERE pt.id = :venta";
+
+                $seguimientoT = $em->createQuery($dql)
+                               ->setParameter('venta', $ventaId)
+                               ->getResult();
+
+//               foreach ($seguimientoT as $value) {
+//                   $sesionesPendientes+=$value['numSesion'];
+//                   $sesionesTotal+=$value['numSesiones'];
+//                   //var_dump($value['numSesion'].'/'.$value['numSesiones']);  
+//               }            
+            }
+            //var_dump($sesionesPendientes.'/'.$sesionesTotal);  
+            //die();
+//            var_dump($valuePac);
+            if($deudaTotal!=0){
+                $paciente['expediente'] = $valuePac->getPaciente()[0]->getExpediente()[0]->getNumero();
+                $paciente['nombre'] = $valuePac->getNombres().' '.$valuePac->getApellidos();
+                $paciente['direccion'] = $valuePac->getDireccion();
+                $paciente['telefono'] = $valuePac->getTelefono();
+                $paciente['deuda'] = $deudaTotal; 
+                $paciente['sesionesPendientes'] = $sesionesPendientes;
+                $paciente['sesionesTotal'] = $sesionesTotal;
+                array_push($pacientes, $paciente);
+            }
+            
+        }
+        
+        
+        //var_dump($pacientes);
+        //if(count($paciente['data']==0)){
+//            $data->estado = true;//vacio
+//            $data->nombre = $paciente['data']["nombres"]. ' '. $paciente['data']["apellidos"];
+//            $data->fecha = $paciente['data']["fechaNacimiento"];
+//            $data->direccion = $paciente['data']["direccion"];
+            
+//        }
+//        else{
+            //$data->estado = false;//encontrado
+//            $data->nombre = $paciente['data']["nombres"]. ' '. $paciente['data']["apellidos"];
+//            $data->fecha = $paciente['data']["fechaNacimiento"];
+//            $data->direccion = $paciente['data']["direccion"];
+        //}
+        
+//        $response->setData($paciente);    
+//        return $response; 
+        return array(
+            'pacientes' => $pacientes,
+        );
+          
+    }
+    
     
     
     

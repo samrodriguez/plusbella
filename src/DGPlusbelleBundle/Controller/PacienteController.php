@@ -871,6 +871,9 @@ class PacienteController extends Controller
         $persona = $em->getRepository('DGPlusbelleBundle:Persona')->find($personaId['id']);
         $ventaPaquete = $em->getRepository('DGPlusbelleBundle:VentaPaquete')->findBy(array('paciente' => $persona));
         $personaTratamiento = $em->getRepository('DGPlusbelleBundle:PersonaTratamiento')->findBy(array('paciente' => $persona));
+        
+        
+        
         $deudaTotal = 0;
         $sesionesTotal = 0;
         $sesionesPendientes = 0;

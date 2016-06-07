@@ -7,19 +7,22 @@
         <a href="{{ path('admin_reporte_emergencia') }}" class="leftnava"><li class="leftnav left">Ingresos consulta<span class="pull-right right"><i class=""></i></span></li></a>
     {% endif %}
     {% if is_granted('ROLE_ADMIN') %}
-        <a href="{{ path('admin_reporte_paquete') }}" class="leftnava"><li class="leftnav left">Ingresos por paquete<span class="pull-right right"><i class=""></i></span></li></a>
+        <a href="{{ path('admin_reporte_paquete') }}" class="leftnava"><li class="leftnav left">Ingresos paquete<span class="pull-right right"><i class=""></i></span></li></a>
     {% endif %}
     {% if is_granted('ROLE_ADMIN') %}
-        <a href="{{ path('admin_reporte_consolidado_paquete') }}" class="leftnava"><li class="leftnav left ">Consolidado paquete<span class="pull-right right"><i class=""></i></span></li></a>
+        <a href="{{ path('admin_reporte_consolidado_paquete') }}" class="leftnava"><li class="leftnav left ">Consolidado paq.<span class="pull-right right"><i class=""></i></span></li></a>
     {% endif %}
     {% if is_granted('ROLE_ADMIN') %}
-        <a href="{{ path('admin_reporte_tratamiento_frecuente') }}" class="leftnava"><li class="leftnav left active">Tratamiento frecuente<span class="pull-right right"><i class="fa fa-arrow-right"></i></span></li></a>
+        <a href="{{ path('admin_reporte_tratamiento_frecuente') }}" class="leftnava"><li class="leftnav left active">Tratamiento frec.<span class="pull-right right"><i class="fa fa-arrow-right"></i></span></li></a>
     {% endif %}
     {% if is_granted('ROLE_ADMIN') %}
         <a href="{{ path('admin_reporte_referidos') }}" class="leftnava"><li class="leftnav left ">Pacientes referidos<span class="pull-right right"><i class=""></i></span></li></a>
     {% endif %}
     {% if is_granted('ROLE_ADMIN') %}
-        <a href="{{ path('admin_empleado_progreso_venta') }}" class="leftnava"><li class="leftnav left ">Progreso de empleado<span class="pull-right right"><i class=""></i></span></li></a>
+        <a href="{{ path('admin_reporte_pacientes_deudas') }}" class="leftnava"><li class="leftnav left">Paciente deuda<span class="pull-right right"><i class=""></i></span></li></a>
+    {% endif %}
+    {% if is_granted('ROLE_ADMIN') %}
+        <a href="{{ path('admin_empleado_progreso_venta') }}" class="leftnava"><li class="leftnav left ">Progreso empleado<span class="pull-right right"><i class=""></i></span></li></a>
     {% endif %}
         
 {% endblock navegacion %}

@@ -16,10 +16,10 @@
         <a href="{{ path('admin_reporte_tratamiento_frecuente') }}" class="leftnava"><li class="leftnav left">Tratamiento frec.<span class="pull-right right"><i class=""></i></span></li></a>
     {% endif %}
     {% if is_granted('ROLE_ADMIN') %}
-        <a href="{{ path('admin_reporte_referidos') }}" class="leftnava"><li class="leftnav left active">Pacientes referidos<span class="pull-right right"><i class="fa fa-arrow-right"></i></span></li></a>
+        <a href="{{ path('admin_reporte_referidos') }}" class="leftnava"><li class="leftnav left">Pacientes referidos<span class="pull-right right"><i class=""></i></span></li></a>
     {% endif %}
     {% if is_granted('ROLE_ADMIN') %}
-        <a href="{{ path('admin_reporte_pacientes_deudas') }}" class="leftnava"><li class="leftnav left">Paciente deuda<span class="pull-right right"><i class=""></i></span></li></a>
+        <a href="{{ path('admin_reporte_pacientes_deudas') }}" class="leftnava"><li class="leftnav left active">Paciente deuda<span class="pull-right right"><i class="fa fa-arrow-right"></i></span></li></a>
     {% endif %}
     {% if is_granted('ROLE_ADMIN') %}
         <a href="{{ path('admin_empleado_progreso_venta') }}" class="leftnava"><li class="leftnav left ">Progreso empleado<span class="pull-right right"><i class=""></i></span></li></a>
@@ -29,8 +29,8 @@
 
 {% block descripcion %}
     <div class="col-md-6">
-        <p class="robo" style="font-weight: 300; margin-bottom: 0px; font-size: 30px;">Reporte de pacientes referidos</p>
-        <p class="robo" style="font-weight: 300; font-size: 14px; height: 40px;">Genere reporte de todos los pacientes y el medio por el que han sido referidos.</p>
+        <p class="robo" style="font-weight: 300; margin-bottom: 0px; font-size: 30px;">Pacientes con deuda</p>
+        <p class="robo" style="font-weight: 300; font-size: 14px; height: 40px;">Genere reporte de todos los pacientes que tienen deuda de los paquetes y tratamientos comprados.</p>
     </div>
 {% endblock %}
 {% block contenido -%}
@@ -41,17 +41,18 @@
             
 
             <div class="panel-body">
-                <div class="btn-toolbar clearfix" role="toolbar">
+                {#<div class="clearfix"></div>#}
                
-                
-                <div class="btn-group btn-group-sm pull-left">
-                    
-                    <button style="height: 30px;" id="exportar-pdf" data-toggle="tooltip" data-container="body" title="Exportar a PDF" class="btn btn-default datatables1-actions opciones" role="button">
-                        <i class="fa fa-file-pdf-o"></i>
-                    </button>
-                    
+                <div class="row">
+                    <div class="col-md-12">
+
+{#                        <button style="height: 30px;" id="exportar-pdf" data-toggle="tooltip" data-container="body" title="Exportar a PDF" class="btn btn-default datatables1-actions opciones" role="button">#}
+                        <button style="height: 30px;" id="generar-reporte" data-toggle="tooltip" data-container="body" title="Exportar a PDF" class="center-block btn btn-default datatables1-actions opciones" role="button">
+                            {#<i class="fa fa-file-pdf-o"></i>#} Generar reporte
+                        </button>
+
+                    </div>
                 </div>
-                    
                 {#<div class="btn-group btn-group-sm pull-left">
                     
                     <button id="tabla-listado" data-toggle="tooltip" data-container="body" title="Ver listado de transacciones" class="btn btn-default datatables1-actions " role="button">
@@ -60,19 +61,19 @@
                     
                 </div>#}
                 
-                <div class="btn-group pull-left">
+{#                <div class="btn-group pull-left">#}
                   {#<input id="filterDatatables1" class="form-control input-sm" placeholder="Buscar...">#}
                     
-                    <input id="fecha-inicio" class="form-control input-sm" placeholder="Fecha inicio...">
+{#                    <input id="fecha-inicio" class="form-control input-sm" placeholder="Fecha inicio...">#}
                     {#<input id="fecha-fin" class="form-control input-sm" placeholder="Fecha fin...">#}
 
-                </div>
-                <div class="btn-group pull-left">
+                {#</div>#}
+{#                <div class="btn-group pull-left">#}
                   {#<input id="filterDatatables1" class="form-control input-sm" placeholder="Buscar...">#}
                     
                     {#<input id="fecha-inicio" class="form-control input-sm" placeholder="Fecha inicio...">#}
-                    <input id="fecha-fin" class="form-control input-sm" placeholder="Fecha fin...">
-                </div>
+{#                    <input id="fecha-fin" class="form-control input-sm" placeholder="Fecha fin...">#}
+{#                </div>#}
                     
                 {#<div class="btn-group pull-left">
                     <select id ="sucursalesIngresos" class="form-control input-sm" >
@@ -82,7 +83,7 @@
                     </select>
                 </div>#}
                 
-                </div><!-- /btn-toolbar -->
+                <!-- /btn-toolbar -->
                 
                 <div id="contenedorGrafico" style="margin-top: 20px;">
                 </div>
@@ -124,7 +125,7 @@
         var anioFinUser = $('#fecha-fin').val();
         
         
-        var url = "{{ path('admin_reporte_referidos_por') }}";
+        {#var url = "{{ path('admin_reporte_pacientes_deudas_tabla') }}";
             if(anioInicioUser!=""){
                 if(anioFinUser!=""){
                     url+="?anioInicioUser="+anioInicioUser+"&anioFinUser="+anioFinUser;
@@ -132,7 +133,7 @@
                     $('#contenedorGrafico').load(url);
                     console.log(url);
                 }
-            }       
+            }       #}
         
         {#$(document).on('click','#tabla-listado', function(){
         
@@ -140,36 +141,36 @@
             
         });#}
         
-        var datepickerInicio = $('#fecha-inicio').data('Zebra_DatePicker');
-        var datepickerFin= $('#fecha-fin').data('Zebra_DatePicker');
-        datepickerInicio.update({
+        {#var datepickerInicio = $('#fecha-inicio').data('Zebra_DatePicker');
+        var datepickerFin= $('#fecha-fin').data('Zebra_DatePicker');#}
+        {#datepickerInicio.update({
             show_select_today:"Hoy",
             onSelect: function(){
                     anioInicioUser = $('#fecha-inicio').val();
                     anioFinUser = $('#fecha-fin').val();
                     if(anioFinUser!==""){
-                        var url = "{{ path('admin_reporte_referidos_por') }}";
+                        var url = "{{ path('admin_reporte_pacientes_deudas_tabla') }}";
 {#                        url+="?anioInicioUser="+anioInicioUser+"&anioFinUser="+anioFinUser+"&sucursal="+sucursal;#}
-                        $('#contenedorGrafico').html('<div class="container-fluid"><div class="col-md-12 text-center"><i class="fa fa-circle-o-notch fa-spin"></i> Realizando búsqueda...</div></div>');
+        {#              $('#contenedorGrafico').html('<div class="container-fluid"><div class="col-md-12 text-center"><i class="fa fa-circle-o-notch fa-spin"></i> Realizando búsqueda...</div></div>');
                         $('#contenedorGrafico').load(url);
                         console.log(url);
                     }
             }
-        });  
+        });#}  
         
-        datepickerFin.update({
+        {#datepickerFin.update({
             
             onSelect: function(){
                     if(anioInicioUser!==""){
                         anioFinUser = $('#fecha-fin').val();
-                        var url = "{{ path('admin_reporte_referidos_por') }}";
+                        var url = "{{ path('admin_reporte_pacientes_deudas_tabla') }}";
                         url+="?anioInicioUser="+anioInicioUser+"&anioFinUser="+anioFinUser;
                         $('#contenedorGrafico').html('<div class="container-fluid"><div class="col-md-12 text-center"><i class="fa fa-circle-o-notch fa-spin"></i> Realizando búsqueda...</div></div>');
                         $('#contenedorGrafico').load(url);
                         console.log(url);
                     }
                 }
-        });  
+        });  #}
         
     });//Fin document ready
         
@@ -179,19 +180,27 @@
             $('.opciones').click(function(){
                 var fechaInicio = $("#fecha-inicio").val();
                 var fechaFin = $("#fecha-fin").val();
-{#                var sucursal = $('#sucursalesIngresos').val();#}
+                var url = "{{ path('admin_reporte_pacientes_deudas_tabla') }}";
+                {#url+="?anioInicioUser="+anioInicioUser+"&anioFinUser="+anioFinUser;#}
+                $('#contenedorGrafico').html('<div class="container-fluid"><div class="col-md-12 text-center"><i class="fa fa-circle-o-notch fa-spin"></i> Realizando búsqueda...</div></div>');
+                $('#contenedorGrafico').load(url);
+            });
+            {#$('.opciones').click(function(){
+                var fechaInicio = $("#fecha-inicio").val();
+                var fechaFin = $("#fecha-fin").val();
+
                 if( fechaInicio != '' && fechaFin != '' ){
-                    var url = Routing.generate('admin_referido_por_pdf', {'fechaInicio': fechaInicio, 'fechaFin': fechaFin});
+                    var url = Routing.generate('admin_reporte_pacientes_deudas_tabla', {'fechaInicio': fechaInicio, 'fechaFin': fechaFin});
                     window.open(url,'_blank');
                 }
                 else {
                     var fecha = new Date();
                     var ano = fecha.getFullYear();
                     
-                    var url = Routing.generate('admin_referido_por_pdf', {'fechaInicio': ano + '-01-01', 'fechaFin': ano + '-12-31'});
+                    var url = Routing.generate('admin_reporte_pacientes_deudas_tabla', {'fechaInicio': ano + '-01-01', 'fechaFin': ano + '-12-31'});
                     window.open(url,'_blank');
                 }
-            });
+            });#}
         });//Fin document ready        
     </script>
     {% endblock %} 
