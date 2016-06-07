@@ -1176,22 +1176,26 @@
                                     });
                                     return false;
                                 } else {
-                                    bootbox.alert('No se ha ingresado la cantidad de sesiones de tratamiento');
+                                    {#bootbox.alert('No se ha ingresado la cantidad de sesiones de tratamiento');#}
+                                    swal('','No se ha ingresado la cantidad de sesiones de tratamiento!','error');
                                     $( "#dgplusbellebundle_venta_cuotas" ).focus();
                                     return false;
                                 }
                             } else {
-                                bootbox.alert('No se ha ingresado la cantidad de cuotas');
+                                {#bootbox.alert('No se ha ingresado la cantidad de cuotas');#}
+                                swal('','No se ha ingresado la cantidad de cuotas!','error');
                                 $( "#dgplusbellebundle_venta_cuotas" ).focus();
                                 return false;
                             }
                         } else {
-                            bootbox.alert('No se ha ingresado el valor a cancelar de la venta');
+                            {#bootbox.alert('No se ha ingresado el valor a cancelar de la venta');#}
+                            swal('','No se ha ingresado el valor a cancelar de la venta!','error');
                             $( "#dgplusbellebundle_venta_costo" ).focus();
                             return false;
                         }
                     } else {
-                        bootbox.alert('No se ha seleccionado a la sucursal donde se ha realizado la venta');
+                        {#bootbox.alert('No se ha seleccionado a la sucursal donde se ha realizado la venta');#}
+                        swal('','No se ha seleccionado la sucursal donde se ha realizado la venta!','success');
                         return false;
                     }
                   
@@ -1312,11 +1316,13 @@
 
                             return false;
                         } else {
-                            bootbox.alert('No se puede realizar esta operacion. Se han realizado todas las sesiones de este tratamiento');
+                            {#bootbox.alert('No se puede realizar esta operacion. Se han realizado todas las sesiones de este tratamiento');#}
+                            swal('','No se puede realizar esta operación. Se han realizado todas las sesiones de este tratamiento!','error');
                             return false;
                         }                                
                     } else {
-                        bootbox.alert('No se puede realizar esta operacion. No existe ninguna venta relacionada');
+                        {#bootbox.alert('No se puede realizar esta operacion. No existe ninguna venta relacionada');#}
+                        swal('','No se puede realizar esta operación. No existe ninguna venta relacionada!','error');
                         return false;
                     } 
                     
@@ -1389,7 +1395,8 @@
                                                     }
                                                 },
                                                 error: function(data){
-                                                    bootbox.alert('Hubo un error al subir las fotos');
+                                                    {#bootbox.alert('Hubo un error al subir las fotos');#}
+                                                    swal('','Hubo un error al subir las fotos!','error');
                                                 }
                                                 {#data:frm,
                                                 url:Routing.generate('ingresar_foto_venta'),
@@ -1413,12 +1420,14 @@
                                     }
                                     else{
                                         console.log(pesoKb);
-                                        alert("Imagen demasiado grande, intente con una mas pequeña");
+                                        {#alert("Imagen demasiado grande, intente con una mas pequeña");#}
+                                        swal('','Imagen demasiado grande, intente con una más pequeña!','error');
                                     }
                             }
                         }
                         else{
-                            bootbox.alert('Debe guardar una venta primero!');
+                            {#bootbox.alert('Debe guardar una venta primero!');#}
+                            swal('','Debe guardar una venta primero!','success');
                         }
                 });
                 
@@ -1435,9 +1444,10 @@
                     console.log(monto);#}
                     if( sucursal === null || empleado === null || isNaN(monto) ){
                         console.log("no es un numero");
-                        {#swal('','Para completar el abono, ingrese la información que se solicita.','error');#}
+                        swal('','Para registrar un abono, ingrese la información que se solicita.','error');
+                        return false;
                     }
-                    return false;
+                    
                     var data = {
                             id : idpac,
                             sucursal : sucursal,
@@ -1465,7 +1475,8 @@
                                 }
                             });
                         }  else {
-                            bootbox.alert('No se puede realizar esta operacion. El monto ingresado es mayor a la deuda de este tratamiento');
+                            {#bootbox.alert('No se puede realizar esta operacion. El monto ingresado es mayor a la deuda de este tratamiento');#}
+                            swal('','No se puede realizar este operación. El monto ingresado es mayor a la deuda de este tratamiento!','error');
                             return false;
                         }  
                     }
@@ -1849,7 +1860,8 @@
                     
                 // Si se han completado todas las sesiones de todos tratamientos que cuenta el paquete    
                 } else {
-                    bootbox.alert('Se han completado las sesiones, no se puede registrar una nueva sesion en el paquete');
+                    {#bootbox.alert('Se han completado las sesiones, no se puede registrar una nueva sesion en el paquete');#}
+                    swal('','Se han completado las sesiones, no se puede registrar una  nueva sesion en el paquete!','error');
                 }
                 
             }, "json"); // Fin de post    
@@ -1864,7 +1876,8 @@
                     //window.open(url);
                     window.open(url, "_self");
                 } else {
-                    bootbox.alert('Se han completado las sesiones, no se puede registrar una nueva sesion');
+                    {#bootbox.alert('Se han completado las sesiones, no se puede registrar una nueva sesion');#}
+                    swal('','Se han completado las sesiones, no se puede registrar una nueva sesión!','error');
                 }
             }, "json"); // Fin de post        
         }
