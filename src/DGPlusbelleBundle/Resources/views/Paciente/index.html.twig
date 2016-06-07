@@ -137,7 +137,7 @@
            
             $(document).ready(function(){
                 var idPaciente = 0;
-                
+                $('#filterDatatables1').focus();
                 $(document).on('click','.link_expediente',function(){
                     var exp = $(this).attr('id');
                     var url = "{{path('admin_consulta_expediente_sd')}}";
