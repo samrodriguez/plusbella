@@ -4,6 +4,9 @@
 {% block css %}
     {{parent()}}
     <link rel="stylesheet" href="{{ asset('Resources/alertifyjs/css/alertify.css') }}">
+    <link rel="stylesheet" href="{{ asset('Resources/dropzone/dropzone.css') }}">
+    <link rel="stylesheet" href="{{ asset('Resources/swal/sweetalert2.min.css') }}">
+    
     <style>
         .placas>div:last-child {
             position:absolute;
@@ -866,6 +869,8 @@
     
     {% block javascripts_step %}
         <script src="{{ asset('Resources/alertifyjs/alertify.js') }}"></script>
+        <script src="{{ asset('Resources/dropzone/dropzone.js') }}"></script>
+        <script src="{{ asset('Resources/swal/sweetalert2.min.js') }}"></script>
         <script>
             //var id_ventapaquete = 0;
             var id_ventapaquete = {{ventaPaquete.id}};
@@ -1145,7 +1150,8 @@
                                         url:   '{{path('admin_registro_editar_venta_paquete')}}',
                                         type:  'post',
                                         success:  function (response) {
-                                            alertify.success('Se ha resgistrado con exito la edicion de la venta del paquete');
+                                            //alertify.success('Se ha resgistrado con exito la edicion de la venta del paquete');
+                                            swal('','Se ha registrado con exito la edicion de la venta del paquete!','error');
                                             
                                             var seguimientoSesionesTratamiento = document.getElementById('seguimiento-sesiones-tratamiento');
                                             var detalleVentaInfo = document.getElementById('detalle-venta-info');
@@ -1182,17 +1188,20 @@
                                 return false;
 
                             } else {
-                                bootbox.alert('No se ha ingresado la cantidad de cuotas');
+                                //bootbox.alert('No se ha ingresado la cantidad de cuotas');
+                                swal('','No se ha ingresado la cantidad de cuotas!','error');
                                 $( "#dgplusbellebundle_venta_cuotas" ).focus();
                                 return false;
                             }
                         } else {
-                            bootbox.alert('No se ha ingresado el valor a cancelar de la venta');
+                            //bootbox.alert('No se ha ingresado el valor a cancelar de la venta');
+                            swal('','No se ha ingresado el valor a cancelar de la venta!','error');
                             $( "#dgplusbellebundle_venta_costo" ).focus();
                             return false;
                         }
                     } else {
-                        bootbox.alert('No se ha seleccionado a la sucursal donde se ha realizado la venta');
+                        //bootbox.alert('No se ha seleccionado a la sucursal donde se ha realizado la venta');
+                        swal('','No se ha seleccionado a la sucursal donde se ha realizado la venta!','error');
                         return false;
                     }
                             
@@ -1210,84 +1219,128 @@
                     var tratamientos = new Array();
                     var flag = 0;
                     var mensaje = '';
-                    $("#registro-sesiones-tratamiento").prop('disabled', true);
+                    
                     
                     if(id_ventapaquete > 0) {
-                        $.post( "{{path('admin_evaluar_sesiones_paquete')}}", { id: id_ventapaquete }, function( data ) {
-                            var aux = 0;
-                            var total = data.query.length;
+                        if( sucursal == null || empleado == null || $('#dgplusbellebundle_sesiones_tratamiento').val() == null){
+                            //bootbox.alert('Debe  de ingresar todos los campos que se le solicitan');
+                            swal('','Debe  de ingresar todos los campos que se le solicitan!','error');
+                            $("#registro-sesiones-tratamiento").prop('disabled', false);
+                            return false;
+                        } else {
+                            $.post( "{{path('admin_evaluar_sesiones_paquete')}}", { id: id_ventapaquete }, function( data ) {
+                                var aux = 0;
+                                var total = data.query.length;
 
-                            // Calculando la deuda pendiente que tiene el paciente en el paquete seleccionado
-                            var deuda = ( (data.query[0].costoPaquete - ((data.query[0].porcentaje * data.query[0].costoPaquete)/100)) - data.abonos.abonos).toFixed(2);
+                                // Calculando la deuda pendiente que tiene el paciente en el paquete seleccionado
+                                var deuda = ( (data.query[0].costoPaquete - ((data.query[0].porcentaje * data.query[0].costoPaquete)/100)) - data.abonos.abonos).toFixed(2);
 
-                            $.each( data.query, function( key, value ) {
-                               if(parseInt(value.numSesion) >= parseInt(value.sesiones)){
-                                    aux = aux + 1;
-                                }
-                            });   
-                            
-                            console.log(data.query);
-                            
-                            // Si exiten sesiones pendientes
-                            if(aux < total){
-                                // Si el paciente no tiene deuda pendiente en el paquete seleccionado
-                                if(deuda <= 0){
-                            
-                                    var tratamiento = $('#dgplusbellebundle_sesiones_tratamiento').val();
+                                $.each( data.query, function( key, value ) {
+                                   if(parseInt(value.numSesion) >= parseInt(value.sesiones)){
+                                        aux = aux + 1;
+                                    }
+                                });   
 
-                                    var datos = {
-                                        id : id_ventapaquete,
-                                        sucursal : sucursal,
-                                        empleado: empleado,
-                                        tratamiento: tratamiento
-                                    };
-                                    
-                                    console.log(datos);
-                                    
-                                    nuevaSesionPaqueteTratamiento(datos);
-                                    return false;
-                                    
-                                // Si el paciente tiene deuda pendiente en el paquete seleccionado        
-                                } else {
-                                    bootbox.confirm({ title: 'Confirmación de registro de nueva sesión',
-                                        message: 'El paciente tiene  una deuda de $' + deuda + ', en éste paquete ¿Desea continuar?',
-                                        buttons: {
-                                            'cancel': {
-                                                label: 'Cancelar',
-                                                className: 'btn-default pull-left'
+                                //console.log(data.query);
+
+                                // Si exiten sesiones pendientes
+                                if(aux < total){
+                                    // Si el paciente no tiene deuda pendiente en el paquete seleccionado
+                                    if(deuda <= 0){
+
+                                        var tratamiento = $('#dgplusbellebundle_sesiones_tratamiento').val();
+
+                                        var datos = {
+                                            id : id_ventapaquete,
+                                            sucursal : sucursal,
+                                            empleado: empleado,
+                                            tratamiento: tratamiento
+                                        };
+
+                                        console.log(datos);
+
+                                        nuevaSesionPaqueteTratamiento(datos);
+                                        return false;
+
+                                    // Si el paciente tiene deuda pendiente en el paquete seleccionado        
+                                    } else {
+                                        swal({
+                                                title: "Confirmación de registro de nueva sesión",
+                                                text: "El paciente tiene  una deuda de $" + deuda + ", en éste paquete ¿Desea continuar?",
+                                                type: "warning",
+                                                showCancelButton: true,
+                                                confirmButtonColor: "#1D234D",
+                                                confirmButtonText: "Aceptar",
+                                                cancelButtonText: "Cancelar",
+                                                closeOnConfirm: false,
+                                                closeOnCancel: false
                                             },
-                                            'confirm': {
-                                                label: 'Aceptar',
-                                                className: 'btn-primary pull-right'
-                                            }
-                                        },
-                                        callback: function(result) {
-                                            // Si acepta continuar con el registro de una nueva sesion de tratamiento
-                                            if(result == true){
-                                                var tratamiento = $('#dgplusbellebundle_sesiones_tratamiento').val();
+                                            
+                                            function(isConfirm){
+                                                if (isConfirm) {
+                                                    console.log('aqui');
+                                                    $("#registro-sesiones-tratamiento").prop('disabled', true);
+                                                    
+                                                    // Si acepta continuar con el registro de una nueva sesion de tratamiento
+                                                    var tratamiento = $('#dgplusbellebundle_sesiones_tratamiento').val();
 
-                                                var datos = {
-                                                    id : id_ventapaquete,
-                                                    sucursal : sucursal,
-                                                    empleado: empleado,
-                                                    tratamiento: tratamiento
-                                                };
-                                                //console.log(sucursal + ' ' + empleado);
-                                                nuevaSesionPaqueteTratamiento(datos);
-                                                return false;                                                
-                                            } else {
-                                                $("#registro-sesiones-tratamiento").prop('disabled', false);
-                                            }    
-                                        }
-                                    });
+                                                    var datos = {
+                                                        id : id_ventapaquete,
+                                                        sucursal : sucursal,
+                                                        empleado: empleado,
+                                                        tratamiento: tratamiento
+                                                    };
+                                                    //console.log(sucursal + ' ' + empleado);
+                                                    nuevaSesionPaqueteTratamiento(datos);
+                                                    return false;  
+                                                } else {
+                                                    $("#registro-sesiones-tratamiento").prop('disabled', false);
+                                                }
+                                            }
+                                        );
+                                        
+                                        
+                                        {#bootbox.confirm({ title: 'Confirmación de registro de nueva sesión',
+                                            message: 'El paciente tiene  una deuda de $' + deuda + ', en éste paquete ¿Desea continuar?',
+                                            buttons: {
+                                                'cancel': {
+                                                    label: 'Cancelar',
+                                                    className: 'btn-default pull-left'
+                                                },
+                                                'confirm': {
+                                                    label: 'Aceptar',
+                                                    className: 'btn-primary pull-right'
+                                                }
+                                            },
+                                            callback: function(result) {
+                                                // Si acepta continuar con el registro de una nueva sesion de tratamiento
+                                                if(result == true){
+                                                    var tratamiento = $('#dgplusbellebundle_sesiones_tratamiento').val();
+
+                                                    var datos = {
+                                                        id : id_ventapaquete,
+                                                        sucursal : sucursal,
+                                                        empleado: empleado,
+                                                        tratamiento: tratamiento
+                                                    };
+                                                    //console.log(sucursal + ' ' + empleado);
+                                                    nuevaSesionPaqueteTratamiento(datos);
+                                                    return false;                                                
+                                                } else {
+                                                    $("#registro-sesiones-tratamiento").prop('disabled', false);
+                                                }    
+                                            }
+                                        });#}
+                                    }
+                                } else {
+                                    //bootbox.alert('Se han completado las sesiones, no se puede registrar una nueva sesion en el paquete');
+                                    
                                 }
-                            } else {
-                                bootbox.alert('Se han completado las sesiones, no se puede registrar una nueva sesion en el paquete');
-                            }
-                            
-                        }, "json"); // Fin de post  
-                        
-                        return false;
+
+                            }, "json"); // Fin de post  
+
+                            return false;
+                        }
                     } else if(id_ventatratamiento > 0){
                         console.log(id_ventatratamiento);
                         
@@ -1391,7 +1444,8 @@
                                             success: function(data){
                                                 if(data.exito == 0){
                                                     $('#file-input').val('');
-                                                    alertify.success("Imagenes subidas con éxito!");
+                                                    //alertify.success("Imagenes subidas con éxito!");
+                                                    swal('','Imagenes subidas con éxito!','success');
                                                     $('#listadoImagenes').html('');
                                                     var key = 1;
                                                     for(i=0;i<data.imagenes.length;i++){
@@ -1399,24 +1453,29 @@
                                                         key++;
                                                     }
                                                 } else {
-                                                    bootbox.alert('Debe guardar una sesion de tratamiento del paquete, primero!');
+                                                    swal('','Debe guardar una sesion de tratamiento del paquete, primero!','error');
+                                                    //bootbox.alert('Debe guardar una sesion de tratamiento del paquete, primero!');
                                                     return false;
                                                 }
                                             },
                                             error: function(data){
-                                                bootbox.alert('Hubo un error al subir las fotos');
+                                                //bootbox.alert('Hubo un error al subir las fotos');
+                                                swal('','Hubo un error al subir las fotos!','error');
+                                                return false;
                                             }
                                         });
                                     }
                                 }
                                 else{
                                     console.log(pesoKb);
-                                    alert("Imagen demasiado grande, intente con una mas pequeña");
+                                    //alert("Imagen demasiado grande, intente con una mas pequeña");
+                                    swal('','Imagen demasiado grande, intente con una mas pequeña!','error');
                                 }
                             }
                         }
                         else{
-                            bootbox.alert('Debe guardar una sesion de tratamiento del paquete, primero!');
+                            //bootbox.alert('Debe guardar una sesion de tratamiento del paquete, primero!');
+                            swal('','Debe guardar una sesion de tratamiento del paquete, primero!','error');
                         }
                 });
                 
@@ -1478,39 +1537,49 @@
                     var monto = $('#dgplusbellebundle_abono_monto').val();
                     var descripcion = $('#dgplusbellebundle_abono_descripcion').val();
                     var draw = '';
-                
-                    var data = {
-                            id : idpac,
-                            sucursal : sucursal,
-                            empleado: empleado,
-                            monto: monto,
-                            descripcion: descripcion,
-                            id_ventapaquete : id_ventapaquete
-                        };
-                    console.log("deuda: "+parseFloat(deuda_total));
-                    console.log("monto: "+parseFloat(monto));
-                    if(parseFloat(monto) <= parseFloat(deuda_total)){
-                        // Se procede a registrar la sesion del tratamiento mediante ajax
-                        $.ajax({
-                            data:  data,
-                            url:   '{{path('admin_abonopaquete_nuevo')}}',
-                            type:  'post',
-                            success:  function (response) {
-                                
-                                alertify.success('Se ha resgistrado con exito un abono del paquete');
-                                deuda_total = (response.costo - ((response.descuento * response.costo)/100) - response.abonos).toFixed(2);
-                                console.log(deuda_total);
-                                {#console.log(deuda_pte);
-                                console.log(response.costo - ((response.descuento * response.costo)/100));
-                                console.log(response.abonos);#}
-                                $('#detalle-venta-deuda').html('$ ' + deuda_total);
-                                table.ajax.reload();
-                                return false;
-                            }
-                        });
-                    }  else {
-                        bootbox.alert('No se puede realizar esta operacion. El monto ingresado es mayor a la deuda de este paquete');
+                    $("#registro-abono").prop('disabled', true);
+                    
+                    if(descripcion == '' || monto == '' || sucursal == null || empleado == null){
+                        bootbox.alert('Debe  de ingresar todos los campos que se le solicitan');
+                        $("#registro-abono").prop('disabled', false);
                         return false;
+                    } else {    
+                        var data = {
+                                id : idpac,
+                                sucursal : sucursal,
+                                empleado: empleado,
+                                monto: monto,
+                                descripcion: descripcion,
+                                id_ventapaquete : id_ventapaquete
+                            };
+//                        console.log("deuda: "+parseFloat(deuda_total));
+//                        console.log("monto: "+parseFloat(monto));
+                        if(parseFloat(monto) <= parseFloat(deuda_total)){
+                            // Se procede a registrar la sesion del tratamiento mediante ajax
+                            $.ajax({
+                                data:  data,
+                                url:   '{{path('admin_abonopaquete_nuevo')}}',
+                                type:  'post',
+                                success:  function (response) {
+
+                                    alertify.success('Se ha resgistrado con exito un abono del paquete');
+                                    deuda_total = (response.costo - ((response.descuento * response.costo)/100) - response.abonos).toFixed(2);
+                                    console.log(deuda_total);
+                                    {#console.log(deuda_pte);
+                                    console.log(response.costo - ((response.descuento * response.costo)/100));
+                                    console.log(response.abonos);#}
+                                    $('#detalle-venta-deuda').html('$ ' + deuda_total);
+                                    table.ajax.reload();
+                                    $("#registro-abono").prop('disabled', false);
+
+                                    return false;
+                                }
+                            });
+                        }  else {
+                            bootbox.alert('No se puede realizar esta operacion. El monto ingresado es mayor a la deuda de este paquete');
+                            $("#registro-abono").prop('disabled', false);
+                            return false;
+                        }
                     }
                     //table.ajax.reload();
                     return false;
