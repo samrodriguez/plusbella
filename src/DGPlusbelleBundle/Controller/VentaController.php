@@ -642,6 +642,7 @@ class VentaController  extends Controller
             $dataForm = $request->get('frm');
             
             $idsesion = $_POST["idSesion"];
+//            var_dump($_POST);
             $idtratamiento = $_POST["venta_imagenes_tratamiento"];
             
             $em = $this->getDoctrine()->getManager();
@@ -661,9 +662,11 @@ class VentaController  extends Controller
                 $sesion = $em->getRepository('DGPlusbelleBundle:SesionTratamiento')->find($sesiontrataId);
 
                 for($i=0;$i<count($_FILES['file']['name']);$i++){
-                    $nombreimagen=$_FILES['file']['name'][$i];    
+                    //$nombreimagen=$_FILES['file']['name'][$i];    
+                    $nombreimagen=$_FILES['file']['name'];
 
-                    $tipo = $_FILES['file']['type'][$i];
+                    //$tipo = $_FILES['file']['type'][$i];
+                    $tipo = $_FILES['file']['type'];
                     $extension= explode('/',$tipo);
                     $nombreimagen2.=".".$extension[1];
 
@@ -684,7 +687,8 @@ class VentaController  extends Controller
                         $nombreBASE=str_replace(" ","", $nombreBASE);
                         $nombreSERVER =str_replace(" ","", $nombreArchivo);
                         $imagen->setFotoAntes($nombreSERVER);
-                        $resultado = move_uploaded_file($_FILES["file"]["tmp_name"][$i], $path1.$nombreSERVER);
+                        //$resultado = move_uploaded_file($_FILES["file"]["tmp_name"][$i], $path1.$nombreSERVER);
+                        $resultado = move_uploaded_file($_FILES["file"]["tmp_name"], $path1.$nombreSERVER);
                         $em->persist($imagen);
                         $em->flush();
 
@@ -693,8 +697,6 @@ class VentaController  extends Controller
                         }else{
                             $data['servidor'] = "No se pudo mover la imagen al servidor";
                         }
-
-
                     }
                     else{
 
