@@ -128,7 +128,7 @@
 	<script src="https://cdn.datatables.net/1.10.11/js/dataTables.material.min.js "></script>
         <script type="text/javascript" src="{{ asset('Resources/bValidator-0.73/jquery.bvalidator.js')}}"></script>
         <script type="text/javascript" src="{{ asset('Resources/bValidator-0.73/bvalidator.lang.es.js')}}" ></script>
-        
+        <script src="{{ asset('Resources/wrapkit/scripts/bootbox.js') }}"></script>
         <script src="{{ asset('Resources/js/Paciente.js') }}"></script>
     
     
@@ -471,11 +471,11 @@
                     ],
                     "order":[1,'asc'],
                     "columnDefs": [
-                           { "orderable": false, "targets": 0 },
+                           {#{ "orderable": false, "targets": 0 },
                            { "orderable": false, "targets": 1 },
                            { "orderable": false, "targets": 2 },
-                           { "orderable": false, "targets": 4 },
-                           { "orderable": false, "targets": 3 }
+                           { "orderable": false, "targets": 4 },#}
+                           { "orderable": false, "targets": 4 }
                            
 
                     ],
