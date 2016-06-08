@@ -617,18 +617,12 @@ class VentaPaqueteController extends Controller
 //                $em->flush();
 //            }
 //            
-//            foreach($tratamientos as $key => $value){
-//                $detalleVenta = new \DGPlusbelleBundle\Entity\DetalleVentaPaquete();
-//                        
-//                $paqT = $em->getRepository('DGPlusbelleBundle:PaqueteTratamiento')->find($value);
-//
-//                $detalleVenta->setTratamiento($paqT->getTratamiento());
-//                $detalleVenta->setVentaPaquete($ventaPaquete);
-//                $detalleVenta->setNumSesiones($sesiones[$key]);
-//
-//                $em->persist($detalleVenta);
-//                $em->flush();
-//            }
+            foreach($detallesPaquetes as $key => $value){
+                $value->setNumSesiones($sesiones[$key]);
+
+                $em->merge($value);
+                $em->flush();
+            }
             
             $idtratamientos = array();    
             $dvtratamientos = $em->getRepository('DGPlusbelleBundle:DetalleVentaPaquete')->findBy(array('ventaPaquete' => $ventaPaquete->getId()));
@@ -669,7 +663,7 @@ class VentaPaqueteController extends Controller
                 . "inner join detalle_venta_paquete pt on ven.id = pt.venta_paquete "
                 . "inner join tratamiento tra on pt.tratamiento = tra.id "
                 . "left outer join descuento des on ven.descuento = des.id "
-                . "where ven.id = '$id' and seg.tratamiento = pt.tratamiento";
+                . "where ven.id = '$id_ventapaquete' and seg.tratamiento = pt.tratamiento";
             
             $rsm->addScalarResult('id','id');
             $rsm->addScalarResult('nomPaquete','nomPaquete');
@@ -679,6 +673,8 @@ class VentaPaqueteController extends Controller
             
             $mensaje = $em->createNativeQuery($sql, $rsm)
                     ->getResult();
+            
+            //var_dump($mensaje);
             
             if($ventaPaquete->getDescuento() != null){
                 $descuentoVenta = $ventaPaquete->getDescuento()->getPorcentaje();
