@@ -26,7 +26,7 @@ class SesionVentaTratamiento {
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="fecha_sesion", type="date", nullable=false)
+     * @ORM\Column(name="fecha_sesion", type="datetime", nullable=false)
      */
     private $fechaSesion;
 

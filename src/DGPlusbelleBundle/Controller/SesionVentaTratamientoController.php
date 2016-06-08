@@ -411,7 +411,7 @@ class SesionVentaTratamientoController extends Controller
         
         $busqueda['value'] = str_replace(' ', '%', $busqueda['value']);
         
-        $dql = "SELECT suc.nombre as sucursal, DATE_FORMAT(ab.fechaSesion,'%d-%m-%Y') as fechaSesion, CONCAT(per.nombres,' ', per.apellidos) as empleado FROM DGPlusbelleBundle:SesionVentaTratamiento ab "
+        $dql = "SELECT suc.nombre as sucursal, DATE_FORMAT(ab.fechaSesion,'%d-%m-%Y %H:%i') as fechaSesion, CONCAT(per.nombres,' ', per.apellidos) as empleado FROM DGPlusbelleBundle:SesionVentaTratamiento ab "
                 . "JOIN ab.empleado emp "
                 . "JOIN emp.persona per "
                 . "JOIN ab.sucursal suc "

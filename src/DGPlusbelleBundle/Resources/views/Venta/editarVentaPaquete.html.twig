@@ -638,7 +638,7 @@
                             <div class="col-md-12" style="margin-bottom: 25px;">
                                 <hr>
                             </div>
-                            <div class="col-md-6"  margin-top: 10px;">
+                            <div class="col-md-6"  style="margin-top: 10px;">
                                 <div class="row">
                                     <div class="col-md-6" style="margin-bottom: 20px;">
                                         <div class="row">
@@ -1156,12 +1156,14 @@
                     var sesionesPaqueteTrata = new Array();
                     var tratamientos = new Array();
                     var flag = 0;
-                    var draw = '';
+                    var mensaje = '';
                     
                     if(sucursal != null){
                         if(costo > 0){
                             if(cuotas > 0){
-                                $.each( $('.sesionesPaqueteTrata'), function( key, value ) {
+                                var aux = 0;
+                                
+                                $('.sesionesPaqueteTrata').each(function( key, value ) {
                                     if($(this).val() > 0){
                                         var elemento = $(this).attr('id');
                                         var res = elemento.split("_"); 
@@ -1170,9 +1172,15 @@
                                         tratamientos.push(lastEl); 
                                         sesionesPaqueteTrata.push($(this).val()); 
                                     }
-                                });
 
-                                // Se obtiene la informacion necesaria para registrar la venta
+                                    if(!$(this).val()){
+                                        aux++; 
+                                   }
+                                });
+                                
+                                console.log('tratamientos: ' + tratamientos);
+                                if(aux < 1) {
+                                    // Se obtiene la informacion necesaria para registrar la venta
                                     var data = {
                                         id : idpac,
                                         paquete : paquete,
@@ -1205,7 +1213,7 @@
                                             $('#detalle-venta-cuotas').html(response.ventaPaqueteTratamientos.descuento + '%');
                                             $('#detalle-venta-deuda').html('$ ' + deuda_total);
                                             
-                                            $.each( response.ventaPaqueteTratamientos.nomTratamientos, function( key, value ) {
+                                            {#$.each( response.ventaPaqueteTratamientos.nomTratamientos, function( key, value ) {
                                                 draw+= '<div class="row">';
                                                 draw+= '<div class="col-md-5" style="margin-bottom: 10px;">';
                                                 draw+= '<span>' + value + '</span>';
@@ -1222,13 +1230,52 @@
                                                 draw+= '</div>';
                                                 draw+= '</div>';
                                                 draw+= '</div>';
+                                            });#}
+                                                                                
+                                            $.each( response.ventaPaqueteTratamientos.ventaPaquete, function( key, value ) {
+                                                //console.log(value);
+                                                mensaje+= '<div class="row">';
+                                                mensaje+= '<div class="col-md-5" style="margin-bottom: 10px;">';
+                                                mensaje+= '<span>' + value.ntrata + '</span>';
+                                                mensaje+= '</div>';
+                                                mensaje+= '<div class="col-md-7" style="margin-bottom: 10px;">';
+                                                mensaje+= '<div class="row">';
+
+                                                if(value.numSesion == 0){
+                                                    for (var i = 0; i < value.sesiones; i++) {
+                                                        mensaje += '<div class="col-md-1" style="margin-bottom: 10px;">';
+                                                        mensaje += '<img class="" style="height: 25px;"  src="{{ asset('Photos/Estados/sesion_pendiente.png')}}" title="Sesion pendiente">';
+                                                        mensaje += '</div>';
+                                                    }    
+                                                } else {
+                                                    for (var i = 0; i < value.numSesion; i++) {
+                                                        mensaje += '<div class="col-md-1" style="margin-bottom: 10px;">';
+                                                        mensaje += '<img class="" style="height: 25px;"  src="{{ asset('Photos/Estados/sesion_realizada.png')}}" title="Sesion realizada">';
+                                                        mensaje += '</div>';
+                                                    }
+                                                    for (var i = 0; i < value.sesiones - value.numSesion; i++) {
+                                                        mensaje += '<div class="col-md-1" style="margin-bottom: 10px;">';
+                                                        mensaje += '<img class="" style="height: 25px;"  src="{{ asset('Photos/Estados/sesion_pendiente.png')}}" title="Sesion pendiente">';
+                                                        mensaje += '</div>';
+                                                    }
+                                                }
+
+                                                mensaje+= '</div>';
+                                                mensaje+= '</div>';
+                                                mensaje+= '</div>';
                                             });
 
-                                            $('#detalle-venta-tratamientos').html(draw);
+                                            $('#detalle-venta-tratamientos').html(mensaje);
+
+                                            //$('#detalle-venta-tratamientos').html(draw);
                                         }
                                     });
 
-                                return false;
+                                    return false;
+                                } else {
+                                    swal('','Debe de ingresar las sesiones para todos los tratamientos del paquete!','error');
+                                    return false;
+                                }  
 
                             } else {
                                 //bootbox.alert('No se ha ingresado la cantidad de cuotas');
@@ -1299,7 +1346,7 @@
                                             tratamiento: tratamiento
                                         };
 
-                                        console.log(datos);
+                                        //console.log(datos);
 
                                         nuevaSesionPaqueteTratamiento(datos);
                                         return false;
