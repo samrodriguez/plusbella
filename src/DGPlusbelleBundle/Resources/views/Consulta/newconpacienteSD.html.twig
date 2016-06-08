@@ -3270,7 +3270,8 @@
             }
             else{#}
                 if(tipoConsulta==0){
-                    bootbox.alert("Debe seleccionar un tipo de consulta!", function() {});
+                    {#bootbox.alert("Debe seleccionar un tipo de consulta!", function() {});#}
+                    swal('','Debe seleccionar un tipo de consulta!','error');
                 }
                 else{
                     if(idconsulta!=''){
@@ -3307,9 +3308,18 @@
                     }
                     else{
 {#                        bootbox.alert("!", function() {});#}
-                        bootbox.confirm("Desea registrar esta consulta para el paciente?", function(result) {
-                            {#Example.show("Confirm result: "+result);#}
-                            if(result){
+                        swal({
+                            title: "Esperando confirmación...",
+                            text: "Desea registrar esta consulta para el paciente?",
+                            type: "info",
+                            showCancelButton: true,
+                            {#confirmButtonColor: "#1D234D",#}
+                            confirmButtonText: "Aceptar",
+                            cancelButtonText: "Cancelar",
+                            closeOnConfirm: false,
+                            closeOnCancel: false
+                        }).then(function(isConfirm) {
+                            if (isConfirm) {
                                 //console.log(result);
                                 $.ajax({
                                     data:{id:id,medico:medico,tratamiento:tratamiento,tipoConsulta:tipoConsulta,sucursal:sucursal,observaciones:observaciones,costoconsulta:costoconsulta},
@@ -3336,11 +3346,43 @@
 
                                     }
                                 });
+                            } else {
+                                
+                            }
+                        });
+
+
+                        {#bootbox.confirm("Desea registrar esta consulta para el paciente?", function(result) {
+                            
+                            if(result){
+                                //console.log(result);
+                                $.ajax({
+                                    data:{id:id,medico:medico,tratamiento:tratamiento,tipoConsulta:tipoConsulta,sucursal:sucursal,observaciones:observaciones,costoconsulta:costoconsulta},
+                                    url:"{{path('admin_consulta_guardar_ajax')}}",
+                                    type: "post",
+                                    success: function (data) {
+                                            //inicio = data.inicio++;
+                                            if(data!=0){
+                                                $('#idConsulta').val(data);
+                                                console.log(data);
+{#                                                bootbox.alert("Consulta registrada!", function() {});}
+                                                
+                                                swal('','Consulta registrada!','success');
+                                                $('.imagenMensaje').addClass('hidden');
+                                                $('.imagenContent').removeClass('hidden');
+                                                var action = $('#formImagen').attr('action');
+                                                $('#formImagen').attr('action',action+data);  
+                                                console.log($('#idConsulta').val());
+                                            }
+                                        },
+                                    error: function (data) {
+                                    }
+                                });
                             }
                             else{
                                 //console.log(result);
                             }
-                        }); 
+                        }); #}
                     }
                 }
 {#            }#}
@@ -3704,12 +3746,14 @@
                             });
                         }
                         else{
-                            bootbox.alert('No debe de dejar en blanco ningun detalle de consulta de botox');
+                            {#bootbox.alert('No debe de dejar en blanco ningun detalle de consulta de botox');#}
+                            swal('','No debe dejar en blanco ningún detalle de consulta de botox!','error');
                         }
                             
                     }
                     else{
-                        bootbox.alert("Debe ingresar una consulta primero!", function() {});
+                        {#bootbox.alert("Debe ingresar una consulta primero!", function() {});#}
+                        swal('','Debe ingresar una consulta primero!','error');
                     }
                 }
         });
@@ -3848,12 +3892,14 @@
                         });
                     }
                     else{
-                        bootbox.alert('No debe de dejar en blanco ningun detalle de consulta de botox');
+                        {#bootbox.alert('No debe de dejar en blanco ningun detalle de consulta de botox');#}
+                        swal('','No debe dejar en blanco ningun detalle de consulta de botox!','error');
                     }
 
                 }
                 else{
-                    bootbox.alert("Debe ingresar una consulta primero!", function() {});
+                    {#bootbox.alert("Debe ingresar una consulta primero!", function() {});#}
+                    swal('','Debe ingresar una consulta primero!','error');
                 }            
         });
         
@@ -3923,21 +3969,24 @@
                                         }
                                     },
                                     error: function(data){
-                                        bootbox.alert('Hubo un error al subir las fotos');
+                                        {#bootbox.alert('Hubo un error al subir las fotos');#}
+                                        swal('','Hubo un error al subir las fotos!','error');
                                     }
                                 });
                                 }
                             }
                             else{
                                 console.log(pesoKb);
-                                bootbox.alert('Imagen demasiado grande, intente con una mas pequeña');
+{#                                bootbox.alert('Imagen demasiado grande, intente con una mas pequeña');#}
+                                swal('','Imagen demasiado grande, intente con una más pequeña!','error');
                                 //alert("Imagen demasiado grande, intente con una mas pequeña");
                             }
                     }
 
         }
         else{
-            bootbox.alert('Debe ingresar una consulta antes de subir fotos!');
+            {#bootbox.alert('Debe ingresar una consulta antes de subir fotos!');#}
+            swal('','Debe ingresar una consulta antes de subir fotos!','error');
         }
         });
         
@@ -4008,7 +4057,8 @@
                 });
             }
             else{
-                bootbox.alert("Debe ingresar una consulta antes!", function() {});
+                {#bootbox.alert("Debe ingresar una consulta antes!", function() {});#}
+                swal('','Debe ingresar una consulta antes!','error');
             }
             return false;
         });
@@ -4222,16 +4272,20 @@
                             var url = Routing.generate('admin_botox_por_pdf_previa', { paciente:paciente, sucursal: sucursal, estetica:estetica, corporal:corporal, botox: botox});
                             window.open(url);
                         } else { 
-                            bootbox.alert('No debe de dejar en blanco ningun detalle de consulta de botox');
+                            {#bootbox.alert('No debe de dejar en blanco ningun detalle de consulta de botox');#}
+                            swal('','No debe de dejar en blanco ningun detalle de consulta de botox!','error');
                         }
                     }else {
-                        bootbox.alert('No se ha seleccionado una opción en el tipo de consulta de estetica');
+                        {#bootbox.alert('No se ha seleccionado una opción en el tipo de consulta de estetica');#}
+                        swal('','No se ha seleccionado una opción en el tipo de consulta de estetica!','error');
                     }
                 } else {
-                    bootbox.alert('No se ha seleccionado una sucursal');
+                    {#bootbox.alert('No se ha seleccionado una sucursal');#}
+                    swal('','No se ha seleccionado una sucursal!','error');
                 }
             } else {
-                bootbox.alert('No se ha seleccionado un paciente');
+                {#bootbox.alert('No se ha seleccionado un paciente');#}
+                swal('','No se ha seleccionado un paciente!','error');
             }
             
             return false;
@@ -4302,13 +4356,16 @@
                     } 
                     // Si no se ha seleccionado tipo de consulta corporal
                     else  {
-                        bootbox.alert('No se ha seleccionado la opción de tipo de consulta de estetica corporal');
+                        {#bootbox.alert('No se ha seleccionado la opción de tipo de consulta de estetica corporal');#}
+                        swal('','No se ha seleccionado la opcion de tipo de consulta de estetica corporal!','error');
                     }
                 } else {
-                    bootbox.alert('No se ha seleccionado una sucursal');
+                    {#bootbox.alert('No se ha seleccionado una sucursal');#}
+                    swal('','No se ha seleccionado una sucursal!','error');
                 }
             } else {
-                bootbox.alert('No se ha seleccionado un paciente');
+                {#bootbox.alert('No se ha seleccionado un paciente');#}
+                swal('','No se ha seleccionado un paciente!','error');
             }
             
             return false;
@@ -4374,24 +4431,27 @@
                     } 
                     // Si no se ha seleccionado tipo de consulta de botox
                     else  {
-                        bootbox.alert('No se ha seleccionado la opción de tipo de consulta de estetica de botox');
+                        {#bootbox.alert('No se ha seleccionado la opción de tipo de consulta de estetica de botox');#}
+                        swal('','No se ha seleccionado la opción de tipo de consulta de estetica de botox!','error');
                     }
                 } else {
-                    bootbox.alert('No se ha seleccionado una sucursal');
+                    {#bootbox.alert('No se ha seleccionado una sucursal');#}
+                    swal('','No se ha seleccionado una sucursal!','error');
                 }
             } else {
-                bootbox.alert('No se ha seleccionado un paciente');
+                {#bootbox.alert('No se ha seleccionado un paciente');#}
+                swal('','No se ha seleccionado un paciente!','error');
             }
             
             return false;
         });
         
-        collectionHolder.find('li').each(function() {
+        {#collectionHolder.find('li').each(function() {
             addTagFormDeleteLink($(this));
     });
     collectionHolder2.find('li').each(function() {
             addTagFormDeleteLink2($(this));
-    });
+    });#}
     
                 var seleccionado="";
                 //Eliminar options del select de pacientes
@@ -4417,8 +4477,8 @@
     //Identificar que form esta activo
     /*var editar=$('div.placas').attr('id');
     if(editar!='editar_usuario'){*/
-        addTagForm(collectionHolder, $newLinkLi);   //Muestra un formulario en la carga de la página nuevo
-        addTagForm2(collectionHolder2, $newLinkLi2);   //Muestra un formulario en la carga de la página nuevo
+        //addTagForm(collectionHolder, $newLinkLi);   //Muestra un formulario en la carga de la página nuevo
+        //a/ddTagForm2(collectionHolder2, $newLinkLi2);   //Muestra un formulario en la carga de la página nuevo
     //}
     
 
@@ -4436,15 +4496,15 @@
         e.preventDefault();
 
         // add a new tag form (see next code block)
-        addTagForm2(collectionHolder2, $newLinkLi2);
+        //addTagForm2(collectionHolder2, $newLinkLi2);
         // $('.btn_radio').attr('name', 'rol_predet');
     });
 
- validarConsulta();
+ //validarConsulta();
     
 });
 
-
+{#
 function addTagForm(collectionHolder, $newLinkLi) {
     // Get the data-prototype explained earlier
     var prototype = collectionHolder.data('prototype');
@@ -4554,7 +4614,7 @@ function addTagFormDeleteLink2($tagFormLi2) {
         
     });
 }
-
+#}
 
 
 

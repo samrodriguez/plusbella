@@ -11,9 +11,15 @@
     {{ form_start(form) }}
     {{ form_errors(form) }}
     
-    <div class="row">
-        <div class="col-md-3">
-         {{ form_row(form.paciente ) }}   
+    <div class="row" style="margin-left:-30px; margin-bottom: 20px;">
+        <div class="col-md-6">
+            <div class="col-md-6">
+            {#{{ form_label(form.paciente ) }}#}
+               <label class="">Paciente</label>
+               <select id="dgplusbellebundle_cita_paciente" name="dgplusbellebundle_cita[paciente]" class="form-control input-sm pacienteCita" style="width:100%;">
+                   <option value="{{paciente.id}}" selected>{{paciente.persona.nombres}} {{paciente.persona.apellidos}}</option>
+               </select>
+           </div>
         </div>
     </div>
     
@@ -90,7 +96,7 @@
 {% block javascripts_step %}
     
     <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.2/css/select2.min.css" rel="stylesheet" />
-        
+    <link rel="stylesheet" href="{{ asset('Resources/swal/sweetalert2.min.css') }}">
     <script src="{{ asset('Resources/wrapkit/scripts/dataTables.bootstrap.js') }}"></script>
     <script src="{{ asset('Resources/wrapkit/scripts/dataTables.tableTools.js') }}"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.2/js/select2.min.js"></script>
@@ -114,7 +120,9 @@
                 float:right;
             }
     </style>
+    <script src="{{ asset('Resources/swal/sweetalert2.min.js') }}"></script>
     <script type="text/javascript" src="{{ asset('Resources/zebra/inicializacioncalendarios.js')}}" ></script>
+    <script src="{{ asset('Resources/wrapkit/scripts/bootbox.js') }}"></script>
         <script>
             $(document).ready(function(){
                 //Llamada ajax para validar la fecha y hora de una cita
@@ -123,9 +131,36 @@
                 $("#dgplusbellebundle_cita_submit" ).on( "click", function(e) {
                     var idEmpleado = $('#dgplusbellebundle_cita_empleado').val();
                     var fechaCita= $('#dgplusbellebundle_cita_fechaCita').val();
-                    var horaCita = $('#dgplusbellebundle_cita_horaCita_hour').val()+":"+$('#dgplusbellebundle_cita_horaCita_minute').val();
-                    //alert(idEmpleado);
+                    var min = $('#dgplusbellebundle_cita_horaCita_minute').val();
+                    var pac = $('#dgplusbellebundle_cita_paciente').val();
                     
+                    if(pac===''){
+                        swal('','Elija un paciente','error');
+                        return false;
+                    }
+                    var horInicio = $('#dgplusbellebundle_cita_horaCita_hour').val();
+                    var minInicio = $('#dgplusbellebundle_cita_horaCita_minute').val();
+                    var horFin = $('#dgplusbellebundle_cita_horaFin_hour').val();
+                    var minFin = $('#dgplusbellebundle_cita_horaFin_minute').val();
+                    if(min==='0'){
+                        min="00";
+                    }
+                    
+                    if(parseInt(horInicio)>parseInt(horFin)){
+                        swal('','La hora de inicio no puede ser mayor o igual a la de fin!','error');
+                        return false;
+                    }
+                    if(parseInt(horInicio)==parseInt(horFin)){
+                        if(parseInt(minInicio)==parseInt(minFin)){
+                            swal('','La hora de inicio no puede ser mayor o igual a la de fin!','error');
+                            return false;
+                        }
+                        
+                    }
+                    
+                    var horaCita = $('#dgplusbellebundle_cita_horaCita_hour').val()+":"+min;
+                    //alert(idEmpleado);
+                    var error=0;
                     $.getJSON(Routing.generate('get_existeCita', { idempleado: idEmpleado,fecha:fechaCita,hora:horaCita}), 
                         function(data) {
                             //alert(data.regs.length);
@@ -134,22 +169,27 @@
                                 var mensaje = "";
                                 mensaje += "<div class='row'><div class='col-md-12'><b><p class='text-left'>Error...</p></b></div></div>";
                                 mensaje += "<div class='row'><hr></div>";
-                                mensaje += "<div class='row'><div class='col-md-12'>Ya existe una cita programada para ese doctor en ese dia y esa hora</div></div>"
-                                bootbox.alert(mensaje, function() {   
+                                mensaje += "<div class='row'><div class='col-md-12'>Ya existe una cita programada para ese doctor en ese dia y esa hora</div></div>";
+                                {#bootbox.alert(mensaje, function() {   
                                     $('body').data('error',0);
-                                });  
+                                });  #}
+                                swal('','Ya existe una cita programada para ese doctor en ese día y esa hora','error');
+                                console.log('existe otra cita');
+                                error=0;
                                 //alert(error);
                                 //e.preventDefault();
                             }
                             else{
                                 $('body').data('error',1);
+                                console.log('no existe otra cita');
+                                $('form').submit();
                             }
                         });        
-                    var error = $('body').data('error');
-                    //alert(error);
-                    if(error == 0){
-                        return false;
-                    }                    
+                    
+                    
+                    
+                    
+                    return false;
                 });
 
                 //Generación de calendario zebra

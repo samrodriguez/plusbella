@@ -559,6 +559,28 @@ class PacienteController extends Controller
         $longitud = $request->query->get('length');
         $busqueda = $request->query->get('search');
         
+        $orderParam = $request->query->get('order');
+        $orderBy = $orderParam[0]['column'];
+        $orderDir = $orderParam[0]['dir'];
+//        var_dump($orderDir);
+        $orderByText="";
+            switch(intval($orderBy)){
+                case 0:
+                    $orderByText = "expediente";
+                    break;
+                case 1:
+                    $orderByText = "nombres";
+                    break;
+                case 2:
+                    $orderByText = "apellidos";
+                    break;
+                case 3:
+                    $orderByText = "fechaNacimiento";
+                    break;
+                
+            }
+
+        
         $em = $this->getDoctrine()->getEntityManager();
         $pacientesTotal = $em->getRepository('DGPlusbelleBundle:Paciente')->findBy(array('estado'=>1));
         
@@ -579,7 +601,7 @@ class PacienteController extends Controller
                     
                     $dql = "SELECT CONCAT('<a class=\"link_expediente\" id=\"',exp.numero,'\">',exp.numero,'</a>') as expediente, pac.id as id,per.nombres,per.apellidos,pac.dui,per.telefono,per.email,pac.lugarTrabajo,DATE_FORMAT(pac.fechaNacimiento,'%d-%m-%Y') as fechaNacimiento, '<a ><i style=\"cursor:pointer;\"  class=\"infoPaciente fa fa-info-circle\"></i></a>' as link FROM DGPlusbelleBundle:Paciente pac "
                         . "JOIN pac.persona per JOIN pac.expediente exp "
-                        . "WHERE CONCAT(upper(per.nombres),upper(per.apellidos)) LIKE upper(:busqueda) AND pac.estado=1 "
+                        . "WHERE CONCAT(upper(per.nombres),' ',upper(per.apellidos),' ',exp.numero) LIKE upper(:busqueda) AND pac.estado=1 "
                         . "ORDER BY per.nombres ASC ";
                     $paciente['data'] = $em->createQuery($dql)
                             ->setParameters(array('busqueda'=>"%".$busqueda['value']."%"))
@@ -587,10 +609,10 @@ class PacienteController extends Controller
                     
                     $paciente['recordsFiltered']= count($paciente['data']);
                     
-                    $dql = "SELECT CONCAT('<a class=\"link_expediente\" id=\"',exp.numero,'\">',exp.numero,'</a>') as expediente, pac.id as id,per.nombres,per.apellidos,pac.dui,per.telefono,per.email,pac.lugarTrabajo,DATE_FORMAT(pac.fechaNacimiento,'%d-%m-%Y') as fechaNacimiento, CONCAT('<a ><i id=\"',pac.id,'\" style=\"cursor:pointer;\"  class=\"infoPaciente fa fa-info-circle\"></i></a>') as link FROM DGPlusbelleBundle:Paciente pac "
+                    $dql = "SELECT CONCAT('<a class=\"link_expediente\" id=\"',exp.numero,'\">',exp.numero,'</a>') as expediente, pac.id as id,per.nombres as nombres,per.apellidos as apellidos,pac.dui,per.telefono,per.email,pac.lugarTrabajo,DATE_FORMAT(pac.fechaNacimiento,'%d-%m-%Y') as fechaNacimiento, CONCAT('<a ><i id=\"',pac.id,'\" style=\"cursor:pointer;\"  class=\"infoPaciente fa fa-info-circle\"></i></a>') as link FROM DGPlusbelleBundle:Paciente pac "
                         . "JOIN pac.persona per JOIN pac.expediente exp "
-                        . "WHERE CONCAT(upper(per.nombres),upper(per.apellidos)) LIKE upper(:busqueda) AND pac.estado=1 "
-                        . "ORDER BY per.nombres ASC ";
+                        . "WHERE CONCAT(upper(per.nombres),' ',upper(per.apellidos),' ',exp.numero) LIKE upper(:busqueda) AND pac.estado=1 "
+                        . "ORDER BY ". $orderByText." ".$orderDir;
                     $paciente['data'] = $em->createQuery($dql)
                             ->setParameters(array('busqueda'=>"%".$busqueda['value']."%"))
                             ->setFirstResult($start)
@@ -611,9 +633,9 @@ class PacienteController extends Controller
             //var_dump($paciente['data']);
         }
         else{
-            $dql = "SELECT CONCAT('<a class=\"link_expediente\" id=\"',exp.numero,'\">',exp.numero,'</a>') as expediente,pac.id as id,per.nombres,per.apellidos,pac.dui,per.telefono,per.email,pac.lugarTrabajo,DATE_FORMAT(pac.fechaNacimiento,'%d-%m-%Y') as fechaNacimiento, CONCAT('<a ><i id=\"',pac.id,'\" style=\"cursor:pointer;\"  class=\"infoPaciente fa fa-info-circle\"></i></a>') as link FROM DGPlusbelleBundle:Paciente pac "
+            $dql = "SELECT CONCAT('<a class=\"link_expediente\" id=\"',exp.numero,'\">',exp.numero,'</a>') as expediente,pac.id as id,per.nombres as nombres,per.apellidos as apellidos,pac.dui,per.telefono,per.email,pac.lugarTrabajo,DATE_FORMAT(pac.fechaNacimiento,'%d-%m-%Y') as fechaNacimiento, CONCAT('<a ><i id=\"',pac.id,'\" style=\"cursor:pointer;\"  class=\"infoPaciente fa fa-info-circle\"></i></a>') as link FROM DGPlusbelleBundle:Paciente pac "
                 . "JOIN pac.persona per JOIN pac.expediente exp where pac.estado=1 "
-                . "ORDER BY per.nombres ASC ";
+                . "ORDER BY ".$orderByText." ".$orderDir;
             $paciente['data'] = $em->createQuery($dql)
                     ->setFirstResult($start)
                     ->setMaxResults($longitud)
@@ -686,6 +708,11 @@ class PacienteController extends Controller
         $longitud = $request->query->get('length');
         $busqueda = $request->query->get('search');
         
+        $orderParam = $request->query->get('order');
+        $orderBy = $orderParam[0]['column'];
+        $orderDir = $orderParam[0]['dir'];
+//        var_dump($orderDir);
+        
         $em = $this->getDoctrine()->getEntityManager();
         $expedientesTotal = 0;/*$em->getRepository('DGPlusbelleBundle:Expediente')->findAll();*/
         
@@ -701,8 +728,24 @@ class PacienteController extends Controller
         //echo count($arrayFiltro);
         $busqueda['value'] = str_replace(' ', '%', $busqueda['value']);
         //var_dump($busqueda['value']);
-        if($busqueda['value']!=''){
-                                
+        if($busqueda['value']!=''){ 
+            $orderByText="";
+            switch(intval($orderBy)){
+                case 0:
+                    $orderByText = "fecha";
+                    break;
+                case 1:
+                    $orderByText = "transaccion";
+                    break;
+                case 2:
+                    $orderByText = "atendido";
+                    break;
+                case 3:
+                    $orderByText = "realizado";
+                    break;
+                
+            }
+            
 //                    $dql = "SELECT exp.numero as expediente, per.nombres,per.apellidos,DATE_FORMAT(pac.fechaNacimiento,'%d-%m-%Y') as fechaNacimiento, CONCAT('<a id=\"',pac.id,'\"><i style=\"cursor:pointer;\" data-toggle=\"tooltip\" data-original-title=\"Atrás\" class=\"infoPaciente fa fa-info-circle\"></i></a>') as link FROM DGPlusbelleBundle:Paciente pac "
 //                        . "JOIN pac.persona per "
 //                        . "JOIN pac.expediente exp "
@@ -714,8 +757,8 @@ class PacienteController extends Controller
                     
 //            $dql = "SELECT exp.numero as expediente, per.nombres,per.apellidos,DATE_FORMAT(pac.fechaNacimiento,'%d-%m-%Y') as fechaNacimiento, CONCAT('<a id=\"',pac.id,'\"><i style=\"cursor:pointer;\" data-toggle=\"tooltip\" data-original-title=\"Atrás\" class=\"infoPaciente fa fa-info-circle\"></i></a>') as link FROM DGPlusbelleBundle:Paciente pac "
 //                . "JOIN pac.persona per JOIN pac.expediente exp ORDER BY per.nombres ASC ";
-            $sql = "SELECT count(*) as total FROM listadoexpediente WHERE expediente like '%".strtoupper($busqueda['value'])."' ORDER BY fecha DESC";
-        
+            $sql = "SELECT count(*) as total FROM listadoexpediente WHERE expediente like '%".strtoupper($busqueda['value'])."'" ;
+//            var_dump($sql);
             $em = $this->getDoctrine()->getManager();
             $stmt = $em->getConnection()->prepare($sql);
             $stmt->execute();
@@ -734,14 +777,14 @@ class PacienteController extends Controller
 //                
 //                END AS detalles FROM listadoexpediente WHERE expediente='".strtoupper($busqueda['value'])."' ORDER BY fecha DESC LIMIT ".$start.",".$longitud;
             
-            $sql = "SELECT id as id, fecha as fecha,transaccion,upper(atendido) as atendido,realizado, 
+            $sql = "SELECT fecha as fecha,transaccion,upper(atendido) as atendido,realizado, 
                 CASE
                 WHEN transaccion='Consulta' AND (upper(atendido) = 'JUAN CARLOS PACHECO CARDONA' OR upper(atendido) = 'JUAN CARLOS PACHECO') THEN CONCAT('<a id=\"',idtransaccion,'\" class=\"pull-right link_ SD\">', 'Ver detalles</a>',' <a class=\"pull-right link\" id=\"',idtransaccion,'\">Eliminar consulta</a>')
                 WHEN transaccion='Consulta' AND upper(atendido) = 'MILDRED LARA DE PACHECO' THEN CONCAT('<a id=\"',idtransaccion,'\" class=\"pull-right link_ SD\">', 'Ver detalles</a>',' <a class=\"pull-right link\" id=\"',idtransaccion,'\">Eliminar consulta</a>')
                 WHEN transaccion = 'Venta paquete' THEN CONCAT('<a id=\"',idtransaccion,'\" class=\"pull-right link_ paquete\">', 'Ver detalles</a>')
                 ELSE CONCAT('<a id=\"',idtransaccion,'\" class=\"pull-right link_ tratamiento\">', 'Ver detalles</a>')
                 
-                END AS detalles FROM listadoexpediente WHERE expediente like '%".strtoupper($busqueda['value'])."' ORDER BY fecha DESC LIMIT ".$start.",".$longitud;
+                END AS detalles FROM listadoexpediente WHERE expediente like '%".strtoupper($busqueda['value'])."' ORDER BY ". $orderByText ." ".$orderDir." LIMIT ".$start.",".$longitud;
         
 //            $em = $this->getDoctrine()->getManager();
             $stmt = $em->getConnection()->prepare($sql);
@@ -1520,7 +1563,7 @@ class PacienteController extends Controller
         $paciente->setSexo($sexo);
         $paciente->setOcupacion($ocupacion);
         $paciente->setLugarTrabajo($lugarTrabajo);
-        $paciente->setFechaNacimiento($fechaNacimiento);
+        $paciente->setFechaNacimiento(new \DateTime($fechaNacimiento));
         $paciente->setReferidoPor($referidoPor);
         $paciente->setPersonaEmergencia($personaEmergencia);
         $paciente->setTelefonoEmergencia($telefonoEmergencia);
@@ -1532,7 +1575,7 @@ class PacienteController extends Controller
         $em->flush();
         $paciente->setPersona($persona);
         $paciente->setFechaRegistro(new \DateTime('now'));
-        $paciente->setFechaNacimiento(null);
+        //$paciente->setFechaNacimiento(null);
         $paciente->setEstado(1);
         
         $em->persist($paciente);

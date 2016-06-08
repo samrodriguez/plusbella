@@ -107,7 +107,7 @@ class CitaController extends Controller
         
         $data = $request->request->all();
         $idPac = $data['dgplusbellebundle_cita']['paciente'];
-        
+        //var_dump($idPac);
         $pacienteObj = $em->getRepository('DGPlusbelleBundle:Paciente')->find($idPac);
         
         
@@ -162,8 +162,9 @@ class CitaController extends Controller
         //die();
         
         if($horaFin<$horaCita){
-            var_dump('s');
+            //var_dump('se');
             return array(
+                'paciente',$pacienteObj,
                 'entity' => $entity,
                 'form'   => $form->createView(),
                 'mensaje'=> 'La hora de fin no puede ser menor a la de inicio de cita',
@@ -203,9 +204,9 @@ class CitaController extends Controller
 //                }
             }
             else{
-                var_dump('s');
+                //var_dump('ss');
                 return array(
-                    
+                    'paciente',$pacienteObj,
                     'entity' => $entity,
                     'form'   => $form->createView(),
                     'mensaje'=> 'El empleado seleccionado tiene reserva de tiempo el día y hora seleccionada',
@@ -217,6 +218,7 @@ class CitaController extends Controller
             return array(
                // 'sucursal'=>$sucursal,
                 'entity' => $entity,
+                'paciente',$pacienteObj,
                 'form'   => $form->createView(),
                 'mensaje'=> 'Ya hay una cita programada en esa fecha y hora, para el técnico que selecciono',
             );
@@ -289,6 +291,7 @@ class CitaController extends Controller
             'entity' => $entity,
             'form'   => $form->createView(),
             'mensaje'=> ' ',
+            'paciente'=>$paciente,
         );
     }
 
@@ -780,12 +783,16 @@ class CitaController extends Controller
     public function exitsteCitaAction(Request $request, $idempleado, $fecha, $hora) {
         
         $request = $this->getRequest();
+//        var_dump($idempleado);
+//        var_dump($fecha);
+        $fechaobj = new \DateTime($fecha);
         
+//        var_dump($fechaobj->format('Y-m-d'));
         $em = $this->getDoctrine()->getEntityManager();
         
         $dql = "SELECT c.id FROM DGPlusbelleBundle:Cita c WHERE c.empleado =:empleado AND c.fechaCita=:fecha AND c.horaCita=:hora ";
         $cita['regs'] = $em->createQuery($dql)
-                ->setParameters(array('empleado'=>$idempleado,'fecha'=>$fecha,'hora'=>$hora))
+                ->setParameters(array('empleado'=>$idempleado,'fecha'=>$fechaobj->format('Y-m-d'),'hora'=>$hora))
                 ->getArrayResult();
         
         //var_dump($cita);
@@ -793,7 +800,7 @@ class CitaController extends Controller
         
         
         //var_dump($cita['regs'][0]["primerNombre"]);
-        //var_dump($cita);
+//        var_dump($cita);
         
         return new Response(json_encode($cita));
     }
