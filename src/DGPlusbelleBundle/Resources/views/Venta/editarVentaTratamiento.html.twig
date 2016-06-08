@@ -1275,46 +1275,53 @@
                         
                         return false;
                     } else if(id_ventatratamiento > 0){
-                        console.log(pendientes);
+//                        console.log(pendientes);
                         if(pendientes >  0) {
-                            // Se obtiene la informacion necesaria para registrar la sesion
-                            var data = {
-                                id : id_ventatratamiento,
-                                sucursal : sucursal,
-                                empleado: empleado
-                            };
+                            if( sucursal == null || empleado == null){
+                                //bootbox.alert('Debe  de ingresar todos los campos que se le solicitan');
+                                swal('','Debe  de ingresar todos los campos que se le solicitan!','error');
+                                $("#registro-sesiones-tratamiento").prop('disabled', false);
+                                return false;
+                            } else {
+                                // Se obtiene la informacion necesaria para registrar la sesion
+                                var data = {
+                                    id : id_ventatratamiento,
+                                    sucursal : sucursal,
+                                    empleado: empleado
+                                };
 
-                            // Se procede a registrar la sesion del tratamiento mediante ajax
-                            $.ajax({
-                                data:  data,
-                                url:   '{{path('admin_sesionventatratamiento_nuevo')}}',
-                                type:  'post',
-                                success:  function (response) {
-                                    table1.ajax.reload();
-                                    
-                                    {#alertify.success('Se ha resgistrado con exito la sesion del tratamiento');#}
-                                    swal('','Se ha registrado con éxito sesión del tratamiento!','success');
-                                    pendientes--;
-                                    for (var i = 0; i < response.seguimiento; i++) {
-                                        mensaje += '<div class="col-md-1" style="margin-bottom: 10px;">';
-                                        mensaje += '<img class="" style="height: 25px;"  src="{{ asset('Photos/Estados/sesion_realizada.png')}}" title="Sesion realizada">';
-                                        mensaje += '</div>';
+                                // Se procede a registrar la sesion del tratamiento mediante ajax
+                                $.ajax({
+                                    data:  data,
+                                    url:   '{{path('admin_sesionventatratamiento_nuevo')}}',
+                                    type:  'post',
+                                    success:  function (response) {
+                                        table1.ajax.reload();
+
+                                        {#alertify.success('Se ha resgistrado con exito la sesion del tratamiento');#}
+                                        swal('','Se ha registrado con éxito sesión del tratamiento!','success');
+                                        pendientes--;
+                                        for (var i = 0; i < response.seguimiento; i++) {
+                                            mensaje += '<div class="col-md-1" style="margin-bottom: 10px;">';
+                                            mensaje += '<img class="" style="height: 25px;"  src="{{ asset('Photos/Estados/sesion_realizada.png')}}" title="Sesion realizada">';
+                                            mensaje += '</div>';
+                                        }
+                                        for (var i = 0; i < response.personaTratamiento.sesiones - response.seguimiento; i++) {
+                                            mensaje += '<div class="col-md-1" style="margin-bottom: 10px;">';
+                                            mensaje += '<img class="" style="height: 25px;"  src="{{ asset('Photos/Estados/sesion_pendiente.png')}}" title="Sesion pendiente">';
+                                            mensaje += '</div>';
+                                        }
+
+                                        $('#seguimiento-detalle-sesiones').html(mensaje);
+                                        $("#registro-sesiones-tratamiento").prop('disabled', false);
+
+                                        $('#dgplusbellebundle_sesiones_sucursal').val('').change();
+                                        $('#dgplusbellebundle_sesiones_empleado').val('').change();
                                     }
-                                    for (var i = 0; i < response.personaTratamiento.sesiones - response.seguimiento; i++) {
-                                        mensaje += '<div class="col-md-1" style="margin-bottom: 10px;">';
-                                        mensaje += '<img class="" style="height: 25px;"  src="{{ asset('Photos/Estados/sesion_pendiente.png')}}" title="Sesion pendiente">';
-                                        mensaje += '</div>';
-                                    }
+                                });
 
-                                    $('#seguimiento-detalle-sesiones').html(mensaje);
-                                    $("#registro-sesiones-tratamiento").prop('disabled', false);
-                                    
-                                    $('#dgplusbellebundle_sesiones_sucursal').val('').change();
-                                    $('#dgplusbellebundle_sesiones_empleado').val('').change();
-                                }
-                            });
-
-                            return false;
+                                return false;
+                            }
                         } else {
                             {#bootbox.alert('No se puede realizar esta operacion. Se han realizado todas las sesiones de este tratamiento');#}
                             swal('','No se puede realizar esta operación. Se han realizado todas las sesiones de este tratamiento!','error');
@@ -1469,6 +1476,10 @@
                                     swal('','Se ha registrado con éxito el abono del tratamiento!','success');
                                     deuda_total = (response.costo - ((response.descuento * response.costo)/100) - response.abonos).toFixed(2);
 
+                                    $('#dgplusbellebundle_abono_sucursal').val('').change();
+                                    $('#dgplusbellebundle_abono_empleado').val('').change();
+                                    $('#dgplusbellebundle_abono_descripcion').val('');
+                                    $('#dgplusbellebundle_abono_monto').val('');
                                     $('#detalle-venta-deuda').html('$ ' + deuda_total);
                                     table.ajax.reload();
                                     return false;
