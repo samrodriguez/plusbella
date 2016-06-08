@@ -54,6 +54,7 @@ class AbonoController extends Controller
         $idtratamientos = $request->get('tratamiento');
         $paciente = $request->get('paciente');
         
+        date_default_timezone_set('America/El_Salvador');
         $pac = $em->getRepository('DGPlusbelleBundle:Paciente')->findOneBy(array('persona'=>$paciente));
         //var_dump($pac);
         $form   = $this->createCreateForm($entity, $paciente, $idpaquetes, $idtratamientos);

@@ -359,6 +359,8 @@ class VentaController  extends Controller
     {
         $isAjax = $this->get('Request')->isXMLhttpRequest();
         if($isAjax){
+            date_default_timezone_set('America/El_Salvador');
+            
             $em = $this->getDoctrine()->getManager();
             $usuario= $this->get('security.token_storage')->getToken()->getUser();
             
@@ -488,6 +490,8 @@ class VentaController  extends Controller
     {
         $isAjax = $this->get('Request')->isXMLhttpRequest();
         if($isAjax){
+            date_default_timezone_set('America/El_Salvador');
+            
             $em = $this->getDoctrine()->getManager();
             $usuario= $this->get('security.token_storage')->getToken()->getUser();
             
@@ -556,6 +560,7 @@ class VentaController  extends Controller
             $idsesion = $_POST["idSesion"];
             
             $em = $this->getDoctrine()->getManager();
+            date_default_timezone_set('America/El_Salvador');
             
             $personaTratamiento = $em->getRepository('DGPlusbelleBundle:PersonaTratamiento')->find($idsesion);
             
@@ -644,6 +649,7 @@ class VentaController  extends Controller
             $idsesion = $_POST["idSesion"];
 //            var_dump($_POST);
             $idtratamiento = $_POST["venta_imagenes_tratamiento"];
+            date_default_timezone_set('America/El_Salvador');
             
             $em = $this->getDoctrine()->getManager();
             $ventaPaquete = $em->getRepository('DGPlusbelleBundle:VentaPaquete')->find($idsesion);
@@ -741,6 +747,8 @@ class VentaController  extends Controller
     {
         $isAjax = $this->get('Request')->isXMLhttpRequest();
         if($isAjax){
+            date_default_timezone_set('America/El_Salvador');
+            
             $em = $this->getDoctrine()->getManager();
             $usuario= $this->get('security.token_storage')->getToken()->getUser();
             
@@ -816,6 +824,8 @@ class VentaController  extends Controller
     {
         $isAjax = $this->get('Request')->isXMLhttpRequest();
         if($isAjax){
+            date_default_timezone_set('America/El_Salvador');
+            
             $em = $this->getDoctrine()->getManager();
             $usuario= $this->get('security.token_storage')->getToken()->getUser();
             

@@ -414,6 +414,8 @@ class VentaPaqueteController extends Controller
     {
         $isAjax = $this->get('Request')->isXMLhttpRequest();
         if($isAjax){
+            date_default_timezone_set('America/El_Salvador');
+            
             $em = $this->getDoctrine()->getManager();
             $usuario= $this->get('security.token_storage')->getToken()->getUser();
             
@@ -606,7 +608,15 @@ class VentaPaqueteController extends Controller
             $em->merge($ventaPaquete);
             $em->flush();
             
-            $nomTratamientos = array();
+            $detallesPaquetes = $em->getRepository('DGPlusbelleBundle:DetalleVentaPaquete')->findBy(array('ventaPaquete' => $ventaPaquete->getId()));
+//            foreach ($detallesPaquetes as $trat){
+//                //var_dump($trat);
+//                //die();
+//                
+//                $em->remove($trat);
+//                $em->flush();
+//            }
+//            
 //            foreach($tratamientos as $key => $value){
 //                $detalleVenta = new \DGPlusbelleBundle\Entity\DetalleVentaPaquete();
 //                        
@@ -618,48 +628,72 @@ class VentaPaqueteController extends Controller
 //
 //                $em->persist($detalleVenta);
 //                $em->flush();
-//                
-//                $nomTratamientos[$key] = $detalleVenta->getTratamiento()->getNombre();
-//                $idTratamientos[$key] = $detalleVenta->getTratamiento()->getId();
 //            }
             
             $idtratamientos = array();    
-        
-            $vTratamientos = $em->getRepository('DGPlusbelleBundle:DetalleVentaPaquete')->findBy(array('ventaPaquete' => $ventaPaquete->getId()));
+            $dvtratamientos = $em->getRepository('DGPlusbelleBundle:DetalleVentaPaquete')->findBy(array('ventaPaquete' => $ventaPaquete->getId()));
 
-            foreach ($vTratamientos as $trat){
+            foreach ($dvtratamientos as $trat){
                 $idtrat = $trat->getTratamiento()->getId();
                 $seguimiento = $em->getRepository('DGPlusbelleBundle:SeguimientoPaquete')->findOneBy(array('tratamiento' => $idtrat,
                                                                                                         'idVentaPaquete' => $ventaPaquete->getId()
                                                                                                     ));
+
                 if($seguimiento->getNumSesion() < $trat->getNumSesiones()){
                     array_push($idtratamientos, $idtrat); 
-                    array_push($nomTratamientos, $trat->getTratamiento()->getNombre()); 
                 }            
-
-                //$nomTratamientos[$key] = $detalleVenta->getTratamiento()->getNombre();
-                //$idTratamientos[$key] = $detalleVenta->getTratamiento()->getId();                
             }
 
-            if($ventaPaquete->getDescuento() != null){
-                $descuentoVenta = $ventaPaquete->getDescuento()->getPorcentaje();
-            } else {
-                $descuentoVenta = 0;
-            }
-            
             $dql = "SELECT t.id, t.nombre FROM DGPlusbelleBundle:Tratamiento t "
                         . "WHERE t.id IN (:ids) ";
                 $tratVenta = $em->createQuery($dql)
                            ->setParameter('ids', $idtratamientos)
                            ->getResult();
             
+            $rsm = new ResultSetMapping();
+            $em = $this->getDoctrine()->getManager();            
+                
+            $sql = "select ven.id as id,"
+                . "paq.nombre as nomPaquete, "
+                . "tra.nombre as ntrata, "
+                . "pt.num_sesiones as sesiones, "
+                . "seg.num_sesion as numSesion "
+                . "from venta_paquete ven "
+                . "inner join paquete paq on ven.paquete = paq.id "
+                . "inner join seguimiento_paquete seg on ven.id = seg.id_venta_paquete "
+                . "inner join persona emp on ven.empleado = emp.id "
+                . "inner join persona pac on ven.paciente = pac.id "
+                . "inner join paciente p on pac.id = p.persona "
+                . "inner join expediente exp on p.id = exp.paciente "
+                . "inner join sucursal suc on ven.sucursal = suc.id "
+                . "inner join detalle_venta_paquete pt on ven.id = pt.venta_paquete "
+                . "inner join tratamiento tra on pt.tratamiento = tra.id "
+                . "left outer join descuento des on ven.descuento = des.id "
+                . "where ven.id = '$id' and seg.tratamiento = pt.tratamiento";
+            
+            $rsm->addScalarResult('id','id');
+            $rsm->addScalarResult('nomPaquete','nomPaquete');
+            $rsm->addScalarResult('ntrata','ntrata');
+            $rsm->addScalarResult('sesiones','sesiones');
+            $rsm->addScalarResult('numSesion','numSesion');
+            
+            $mensaje = $em->createNativeQuery($sql, $rsm)
+                    ->getResult();
+            
+            if($ventaPaquete->getDescuento() != null){
+                $descuentoVenta = $ventaPaquete->getDescuento()->getPorcentaje();
+            } else {
+                $descuentoVenta = 0;
+            }
+                
             $ventaPaqueteTratamientos = array(
                                         'id' => $ventaPaquete->getId(), 
                                         'costo' => $ventaPaquete->getCosto(), 
                                         'sesiones' => $sesiones,
                                         'tratamientos' => $tratamientos,
                                         'tratVenta' => $tratVenta,
-                                        'nomTratamientos' => $nomTratamientos,
+                                        //'nomTratamientos' => $nomTratamientos,
+                                        'ventaPaquete' => $mensaje,
                                         'descuento' => $descuentoVenta,
                                         'cuotas' => $ventaPaquete->getCuotas()
                                     );

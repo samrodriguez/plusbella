@@ -1863,7 +1863,7 @@
 
                                 } else {
                                     {#bootbox.alert('No se ha ingresado la cantidad de cuotas');#}
-                                    swal('','Ingrese la cantidad de cuotas!','error');
+                                    swal('','Ingrese un numero de cuotas valido!','error');
                                     $( "#dgplusbellebundle_venta_cuotas" ).focus();
                                     return false;
                                 }
@@ -1902,7 +1902,7 @@
                         var draw = '';
 
                         if(sucursal != null){
-                            if(costo > 0){
+                            if(costo.length > 0){
                                 if(cuotas > 0){
                                     if(sesiones > 0){
                                         // Se obtiene la informacion necesaria para registrar la venta
@@ -1967,7 +1967,7 @@
                                     }
                                 } else {
                                     {#bootbox.alert('No se ha ingresado la cantidad de cuotas');#}
-                                    swal('','Ingrese la cantidad de cuotas!','error');
+                                    swal('','Ingrese un numero de cuotas valido!','error');
                                     $( "#dgplusbellebundle_venta_cuotas" ).focus();
                                     return false;
                                 }
@@ -2269,7 +2269,7 @@
                                                 processData: false,
 
                                                 success: function(data){
-                                                    console.log(data);
+                                                    //console.log(data);
                                                     //$("#prev").attr('src', "/abgsistema/web/"+data.direccion);
                                                     $('#file-input').val('');
                                                     {#alertify.success("Imagenes subidas con éxito!");#}

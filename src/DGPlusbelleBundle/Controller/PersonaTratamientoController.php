@@ -319,6 +319,8 @@ class PersonaTratamientoController extends Controller
     {
         $isAjax = $this->get('Request')->isXMLhttpRequest();
         if($isAjax){
+            date_default_timezone_set('America/El_Salvador');
+            
             $em = $this->getDoctrine()->getManager();
             $usuario= $this->get('security.token_storage')->getToken()->getUser();
             
