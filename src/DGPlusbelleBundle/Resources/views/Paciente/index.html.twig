@@ -280,6 +280,38 @@
                             var mensaje = "";
                             mensaje += "<div class='container-fluid'>";
                             //mensaje += "<div class='col-md-12'><hr></div></div>";
+                            
+                            if(data.regs[0].dui===null){
+                                data.regs[0].dui='';
+                            }
+                            if(data.regs[0].email===null){
+                                data.regs[0].email='';
+                            }
+                            if(data.regs[0].estadoCivil===null){
+                                data.regs[0].estadoCivil='';
+                            }
+                            if(data.regs[0].sexo===null){
+                                data.regs[0].sexo='';
+                            }
+                            if(data.regs[0].ocupacion===null){
+                                data.regs[0].ocupacion='';
+                            }
+                            if(data.regs[0].lugarTrabajo===null){
+                                data.regs[0].lugarTrabajo='';
+                            }
+                            if(data.regs[0].fechaNacimiento===null){
+                                data.regs[0].lugarfechaNacimiento='';
+                            }
+                            if(data.regs[0].referidoPor===null){
+                                data.regs[0].referidoPor='';
+                            }
+                            if(data.regs[0].personaEmergencia===null){
+                                data.regs[0].personaEmergencia='';
+                            }
+                            if(data.regs[0].telefonoEmergencia===null){
+                                data.regs[0].telefonoEmergencia='';
+                            }
+                            
 
                             mensaje += "<div class='col-md-6 text-right'><b>Nombre del paciente: </b></div><div class='col-md-6'>"+data.regs[0].nombres+" "+data.regs[0].apellidos+"</div>";
                             mensaje += "<div class='clearfix'></div>";
@@ -307,6 +339,12 @@
                             mensaje += "<div class='col-md-6 text-right'><b>Teléfono: </b></div><div class='col-md-6'>"+data.regs[0].telefonoEmergencia+"</div>";
                             mensaje += "<div class='clearfix'></div>";
                             mensaje += "</div>";
+                            
+                            
+                            
+                                
+                            
+                            
                             bootbox.dialog({
                                   message: mensaje,
                                   title: "Información del paciente",

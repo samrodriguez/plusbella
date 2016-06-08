@@ -148,9 +148,11 @@
 {% endblock %}
 
 {% block javascripts_step %}
-      <script src="{{ asset('Resources/js/Usuario.js') }}"></script>  
+        <link rel="stylesheet" href="{{ asset('Resources/swal/sweetalert2.min.css') }}">
+        <script src="{{ asset('Resources/swal/sweetalert2.min.js') }}"></script>
+        <script src="{{ asset('Resources/js/Usuario.js') }}"></script>  
       
-       <script>
+        <script>
             $(document).ready(function(){
                  var link=0;
                  var estadoPrevio = "";
@@ -182,9 +184,10 @@
                         $("#editFormContainer").load(link+"/edit");
                     }
                     else{
-                        bootbox.alert("Administrador no se puede editar", function() {
+                        {#bootbox.alert("Administrador no se puede editar", function() {
                                         //Example.show("Hello world callback");
-                                    });
+                                    });#}
+                        swal('','Administrador no se puede editar!','error');
                     }
                     
                     

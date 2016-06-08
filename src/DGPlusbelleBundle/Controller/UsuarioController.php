@@ -105,7 +105,7 @@ class UsuarioController extends Controller
             'method' => 'POST',
         ));
 
-        $form->add('submit', 'submit', array('label' => 'Guardar','attr'=>array('class'=>'btn btn-success btn-sm')));
+        $form->add('submit', 'submit', array('label' => 'Guardar','attr'=>array('class'=>'btn btn-primary btn-sm')));
 
         return $form;
     }
@@ -225,7 +225,7 @@ class UsuarioController extends Controller
             'method' => 'PUT',
         ));
 
-        $form->add('submit', 'submit', array('label' => 'Modificar','attr'=>array('class'=>'btn btn-success btn-sm')));
+        $form->add('submit', 'submit', array('label' => 'Modificar','attr'=>array('class'=>'btn btn-primary btn-sm')));
 
         return $form;
     }
