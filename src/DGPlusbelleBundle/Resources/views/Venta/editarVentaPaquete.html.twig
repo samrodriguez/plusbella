@@ -6,7 +6,7 @@
     
     <link rel="stylesheet" href="{{ asset('Resources/dropzone/dropzone.css') }}">
     <link rel="stylesheet" href="{{ asset('Resources/alertifyjs/css/alertify.css') }}">
-    <link rel="stylesheet" href="{{ asset('Resources/css/estilopersonalizado.css') }}">
+    {#<link rel="stylesheet" href="{{ asset('Resources/css/estilopersonalizado.css') }}">#}
     <link rel="stylesheet" href="{{ asset('Resources/swal/sweetalert2.min.css') }}">
     
     <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.2/css/select2.min.css" rel="stylesheet" />
@@ -84,7 +84,7 @@
                                             <h2 class="media-heading text-light" id="nombrePaciente">{{ paciente.persona.nombres}} {{ paciente.persona.apellidos}}</h2>
                                         </div>
                                         <div class="hidden-xs">
-                                            <h3 class="robo media-heading text-light">{{ paciente.persona.nombres}} {{ paciente.persona.apellidos}}</h3>
+                                            <h4 class="robo media-heading text-light">{{ paciente.persona.nombres}} {{ paciente.persona.apellidos}}</h4>
                                             <p class="mb-4x text-light">
                                                 <span class="mr-1x" id="expediente">
                                                     <i class="fa fa-clipboard"></i> {#{{ expediente }}#}
@@ -229,7 +229,7 @@
                     {#<li><a data-toggle="tab" href="#registro-sesiones" id="tabs-sesiones">Registro de sesiones</a></li>#}
                     <li><a data-toggle="tab" href="#seguimiento-venta" id="tabs-seguimiento">Registro y seguimiento de sesiones</a></li>
                     <li><a data-toggle="tab" href="#abonos-devoluciones" id="tabs-abdev">Abonos{# / Devoluciones#}</a></li>
-                    <li><a data-toggle="tab" href="#imagenes" id="tabs-imagenes">Imagenes</a></li>
+                    <li><a data-toggle="tab" href="#imagenes" id="tabs-imagenes">Imágenes</a></li>
                 </ul>
                 
                 {# Aquí se encuentran las secciones de las tabs #}    
@@ -364,7 +364,7 @@
                             <div class="row">
                                 <div class="col-md-12 col-sm-12 text-center" style="margin-top: 30px; margin-bottom: 10px;" id="registrar-datos-gnales">
                                     <hr>
-                                    <input type="submit" value="Editar informacion del paciente" style="margin-bottom: 10px; color: #FFF;" class="btn btn-xs btn-primary" id="editar-paciente"/>
+                                    <input type="submit" value="Editar información del paciente" style="margin-bottom: 10px; color: #FFF;" class="btn btn-xs btn-primary" id="editar-paciente"/>
                                 </div>    
                             </div>         
                         </form>
@@ -390,7 +390,7 @@
                                 </div>
                             </div>   
                             <div class="row" style="margin-top: 35px;">
-                                <div class="col-md-3"  style="margin-left: 30px;">
+                                <div class="col-md-6">
                                     {# Area en donde se selecciona la sucursal en donde se realiza la venta #}    
                                     <div id="sucursal-venta">
                                         <label>Sucursal</label>
@@ -402,7 +402,7 @@
                                         </select>
                                     </div>
                                 </div>
-                                <div class="col-md-4">
+                                <div class="col-md-6">
                                     {# Area en donde se selecciona  el empleado que ha realizado la venta #}  
                                     <div id="empleados-venta">
                                         <label>Vendido por</label>
@@ -414,10 +414,9 @@
                                         </select>
                                     </div>
                                 </div>        
-                                <div class="col-md-2"></div>        
                             </div>     
                             <div class="row" style="margin-top: 35px;">
-                                <div class="col-md-3" style="margin-left: 30px;">
+                                <div class="col-md-4">
                                     {# Area en donde se ingresa  el cossto($) del paquete o tratamiento que se ha vendido #}
                                     <div id="costo-venta">
                                         <label>Costo ($)</label>
@@ -436,7 +435,7 @@
                                         </select>
                                     </div>
                                 </div>        
-                                <div class="col-md-2">
+                                <div class="col-md-4">
                                     <div id="cuotas-venta">
                                         <label>Cuotas</label>
                                         <input type="text" name="dgplusbellebundle_venta[cuotas]" id="dgplusbellebundle_venta_cuotas" class="form-control" style="width: 100%" value="{{ ventaPaquete.cuotas }}">   
@@ -459,15 +458,19 @@
                                     <hr id="hr-tratamientos-paquete">
                                 </div>
                                 
-                                <div class="col-md-6 col-md-offset-2">
+                                <div class="col-md-8 col-md-offset-2">
                                     <div id="tratamientos-paquete">
                                         <hr>
                                         <div class="row">
                                             <div class="col-md-8">
-                                                <p class="text-center"><strong>Nombre del tratamiento</strong></p>
+                                                <p class="text-center">
+                                                    <strong>Nombre del tratamiento</strong>
+                                                </p>
                                             </div>
                                             <div class="col-md-4">
-                                                <p class="text-center"><strong># de sesiones</strong></p>
+                                                <p class="text-center">
+                                                    <strong># de sesiones</strong>
+                                                </p>
                                             </div>
                                         </div>
                                         <hr>
@@ -635,7 +638,7 @@
                             <div class="col-md-12" style="margin-bottom: 25px;">
                                 <hr>
                             </div>
-                            <div class="col-md-6" style="margin-left: 30px;  margin-top: 10px;">
+                            <div class="col-md-6"  margin-top: 10px;">
                                 <div class="row">
                                     <div class="col-md-6" style="margin-bottom: 20px;">
                                         <div class="row">
@@ -707,10 +710,10 @@
                                     </div>
                                 </div>             
                             </div>
-                            <div class="col-md-5 col-sm-5" style="margin-left: 20px;">
+                            <div class="col-md-6" >
                                 <div class="row">
                                     <div class="col-md-12 col-sm-12">
-                                        <table id="listadoSesiones" class="listados table table-bordered table-hover">
+                                        <table id="listadoSesiones" class="listados table table-bordered table-hover" style="width:100%;">
                                             <thead>
                                                 <tr>
                                                     <th class="text-center">Fecha de sesión</th>
@@ -727,28 +730,37 @@
                     </div>                    
                     {# Sección en donde se encuentran las imagenes de un determinado tratamiento #}
                     <div id="imagenes" class="tab-pane fade" style="margin-top: 20px;">
-                        <div class="row" style="margin-top: 35px; padding: 30px;">
-                            <form id="formImagen" role="form" enctype="multipart/form-data" method="post">
+                        <div class="row" style="margin-top: 35px;">
+                            <form class="dropzone" id="formImagen" role="form" enctype="multipart/form-data" method="post" action="{{path('ingresar_foto_venta_paquete')}}">
                                 <div class="col-md-3 pull-center" id="imagenes-sesiones-tratamiento">
                                     <div id="sesiones-tratamiento">
                                         <label>Tratamiento</label>
                                         <select id="dgplusbellebundle_imagenes_tratamiento" name="venta_imagenes_tratamiento" class="sesion_tratamiento" style="width: 100%">
-                                            <option value="" disabled selected>Seleccione un tratamiento...</option>
+                                            {#<option value="" disabled selected>Seleccione un tratamiento...</option>#}
                                             {% for tratamiento in tratVenta %}
                                                 <option value="{{tratamiento.id}}"> {{tratamiento.nombre}}</option>
                                             {% endfor %}
                                         </select>    
                                     </div>    
                                 </div>
-                                <div class="col-md-3 col-md-offset-1 pull-center" id="imagenes-sesiones-sesiones">
-                                    <div class="row" {#style="margin-top: 35px; padding: 30px;"#}>
+                                <div class="clearfix"></div>
+                                <div class="col-md-12 pull-center" id="imagenes-sesiones-sesiones">
+                                    <div class="row" style=" padding: 30px;">
                                         <strong>Subir imagen</strong>
                                         <div class="row" style="margin-top:20px;">
                                             <div class="col-md-12">
 
-                                                    <input id="file-input" required type="file" name="file[]" multiple>
+                                                    {#<input id="file-input" required type="file" name="file[]" multiple>
+                                                    <input type="hidden" id="idSesion" value="{% if ventaPaquete.id is null %}{%else%}{{ventaPaquete.id}}{%endif%}" name="idSesion" class="form-control input-sm"/>#}
+                                                {#<form class="dropzone" id="formImagen" role="form" enctype="multipart/form-data" method="post" action="{{path('ingresar_foto_venta_paquete')}}">#}
+                                                    <div class="fallback">
+                                                        <input name="file[]" type="file" multiple required id="file-input"/>
+                                                    </div>
                                                     <input type="hidden" id="idSesion" value="{% if ventaPaquete.id is null %}{%else%}{{ventaPaquete.id}}{%endif%}" name="idSesion" class="form-control input-sm"/>
+                                                {#</form>#}
 
+                                                
+                                                
                                                 {#<form action="#" id="formImagen" enctype="multipart/form-data"  method="post">
                                                     <div class="form-group">
                                                       <div class="fileinput fileinput-new input-group" data-provides="fileinput">
@@ -764,16 +776,16 @@
                                             </div>
                                         </div>
 
-                                        <div class="row" style="margin-top:20px;">
+                                        {#<div class="row" style="margin-top:20px;">
 
-                                        </div>                       
+                                        </div>                       #}
                                     </div>
                                 </div>
                             </form>                
                         </div>
-                        <div class="row" style="margin-top: 35px; padding: 30px;">
+                        <div class="row" style="margin-top: 0px; padding: 0px;">
                             <div class="col-md-12">
-                                <strong style="margin-top:80px;">Archivos adjuntos</strong>
+                                <strong style="margin-top:0px;">Archivos adjuntos</strong>
                             </div>    
                             <div class="col-md-12">
                                 <div id="listadoImagenes">
@@ -788,7 +800,7 @@
                         <div class="row">
                             <div class="col-md-12 col-sm-12 text-center" style="margin-top: 30px; margin-bottom: 10px;" id="registrar-sesiones-imagenes">
                                 <hr>
-                                <input type="submit" value="Guardar imagenes" style="margin-bottom: 10px; background-color: #39a58a; color: #FFF;" class="btn" id="registro-sesiones-imagenes"/>
+                                {#<input type="submit" value="Guardar imágenes" style="margin-bottom: 10px; color: #FFF;" class="btn btn-primary btn-xs" id="registro-sesiones-imagenes"/>#}
                             </div>    
                         </div>                
                     </div>
@@ -853,7 +865,7 @@
                         <div class="col-md-5 col-sm-5">
                             <div class="row">
                                 <div class="col-md-12 col-sm-12">
-                                    <table id="listadoAbono" class="listados table table-bordered table-hover">
+                                    <table id="listadoAbono" class="listados table table-bordered table-hover" style="width:100%;">
                                         <thead>
                                             <tr>
                                                 <th class="text-center">Fecha de Abono</th>
@@ -1020,19 +1032,19 @@
                         success:  function (response) {
                             $('#dgplusbellebundle_venta_costo').val(response.data.regs);
                             
-                            draw+='<hr>';
+                            draw+='<hr><div class="clearfix"></div>';
                             draw+='<div class="row">';
-                            draw+='<div class="col-md-8">';
-                            draw+='<p class="text-center"><strong>Nombre del tratamiento</strong></p>';
+                            draw+='<div class="col-md-6">';
+                            draw+='Nombre del tratamiento';
                             draw+='</div>';
                             draw+='<div class="col-md-4">';
-                            draw+='<p class="text-center"><strong># de sesiones</strong></p>';
+                            draw+='# de sesiones';
                             draw+='</div>';
                             draw+='</div>';
                             draw+='<hr>';
                             $.each( response.paqueteTrat, function( key, value ) {
                                 draw+='<div class="row">';
-                                draw+='<div class="col-md-8" style="margin-top: 5px;">';
+                                draw+='<div class="col-md-6" style="margin-top: 5px;">';
                                 draw+='<label>' + value.Nombretrat + '</label>';
                                 draw+='</div>';
                                 draw+='<div class="col-md-4" style="margin-top: 5px;">';
@@ -1566,8 +1578,9 @@
                     var draw = '';
                     $("#registro-abono").prop('disabled', true);
                     
-                    if(descripcion == '' || monto == '' || sucursal == null || empleado == null){
-                        bootbox.alert('Debe  de ingresar todos los campos que se le solicitan');
+                    if(isNaN(monto) || sucursal == null || empleado == null){
+                        {#bootbox.alert('Debe  de ingresar todos los campos que se le solicitan.\nRevise el monto que sea un  número válido.');#}
+                        swal("", "Debe  de ingresar todos los campos que se le solicitan.\nRevise el monto que sea un  número válido!", "error");
                         $("#registro-abono").prop('disabled', false);
                         return false;
                     } else {    
@@ -2098,7 +2111,7 @@
                     
                     mensaje += "<div class='panel-body'>";
                     //mensaje += "<div class='col-md-12'><small>Aqui se muestra la informacion</small></div>";
-                    mensaje += "<div class='clearfix'></div>"
+                    mensaje += "<div class='clearfix'></div>";
                     //mensaje += "<div class='col-md-3 text-right'><b>Expediente No.: </b></div><div class='col-md-3'>" + data.query[0].numExp.toUpperCase() + "</div>";
                     //mensaje += "<div class='col-md-3 text-right'><b>Nombre del paciente: </b></div><div class='col-md-3'>" + data.query[0].paciente + "</div>";
                     //mensaje += "<div class='clearfix'></div>"
@@ -2107,7 +2120,7 @@
                     mensaje += "<div class='col-md-1 text-right' style='margin-top: 25px;'><b>Tratamiento: </b></div><div class='col-md-3' style='margin-top: 25px;'>" + data.query[0].ntratamiento + "</div>";
                     //mensaje += "<div class='clearfix'></div>"
                     mensaje += "<div class='col-md-1 text-right' style='margin-top: 25px;'><b>Vendido por: </b></div><div class='col-md-3' style='margin-top: 25px;'>" + data.query[0].empleado + "</div>";
-                    mensaje += "<div class='clearfix'></div>"
+                    mensaje += "<div class='clearfix'></div>";
                     
                     mensaje += "<div class='col-md-2 text-right' style='margin-top: 15px;'><b>Costo del tratamiento: </b></div><div class='col-md-1' style='margin-top: 15px;'> $ " + ( data.query[0].costoTratamiento - 0 ).toFixed(2) + "</div>";
                     //mensaje += "<div class='clearfix'></div>"
@@ -2115,9 +2128,9 @@
                     mensaje += "<div class='col-md-2 text-right' style='margin-top: 15px;'><b>Descuento aplicado: </b></div><div class='col-md-2' style='margin-top: 15px;'>{#<b style='color:red'>#} $ " + ((data.query[0].porcentaje * data.query[0].costoTratamiento)/100).toFixed(2) + "{#</b>#}</div>";
                     //mensaje += "<div class='clearfix'></div>"
                     mensaje += "<div class='col-md-2 text-right' style='margin-top: 15px;'><b>Monto total a cancelar: </b></div><div class='col-md-2' style='margin-top: 15px;'>{#<b>#} $ " + ( data.query[0].costoTratamiento - ((data.query[0].porcentaje * data.query[0].costoTratamiento)/100)).toFixed(2) + "{#</b>#}</div>";
-                    mensaje += "<div class='clearfix'></div>"
+                    mensaje += "<div class='clearfix'></div>";
                     mensaje += "<div class='col-md-6 text-right' style='margin-top: 30px; margin-bottom: 30px;'><b style='font-size: 20px;'>Deuda pendiente: </b></div><div class='col-md-6' style='margin-top: 30px;'><b style='font-size: 20px;'> $ " + ( (data.query[0].costoTratamiento - ((data.query[0].porcentaje * data.query[0].costoTratamiento)/100)) - data.abonos.abonos).toFixed(2) + "</b></div>";
-                    mensaje += "<div class='clearfix'></div>"
+                    mensaje += "<div class='clearfix'></div>";
                     mensaje += "</div>";
                     
                     mensaje += "<div class='panel-body' style='margin-left: 14px; margin-right: 14px;'>";
