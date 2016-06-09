@@ -57,7 +57,7 @@ class ConsultaController extends Controller
     /**
      * Lista todos los expediente de los paciente.
      *
-     * @Route("/expedienteSD", name="admin_consulta_expediente_sd")
+     * @Route("/expedienteSD", name="admin_consulta_expediente_sd", options={"expose"=true})
      * @Method("GET")
      * @Template("DGPlusbelleBundle:Consulta:expedienteSD.html.twig")
      */

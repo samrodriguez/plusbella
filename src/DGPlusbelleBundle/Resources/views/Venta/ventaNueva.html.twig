@@ -50,6 +50,18 @@
     
 {% endblock %}
 
+{% block descripcion %}
+    <div class="col-md-12" style="margin-bottom: 20px;">
+        <p class="robo" style="font-weight: 300; margin-bottom: 0px; font-size: 27px;">Nueva venta de paquete/tratamiento</p>
+    </div>
+    <div class="col-md-4" style="margin-bottom: 20px;">
+        <label class="robo" style="font-weight: 300; font-size: 16px; height: 25px;">Busqueda del paciente</label>
+        <select id="busqueda-paciente" name="busquedaPaciente" class="form-control input-sm " data-rule-required="true" style=" width: 100%;">
+            <option value="0" disabled selected>Seleccione un paciente ...</option>
+        </select> 
+    </div>
+{% endblock %}
+
 {% block contenido -%}
     <!-- ============================================
     MAIN CONTENT SECTION
@@ -58,648 +70,632 @@
     <div class="content">
         <div class="content-body">
             <div class="panel" data-fill-color="true">
-                <div class="row">
-                </div>
-                <div class="content-hero content-hero-lg" style="min-height:140px;">
-                    <div style="height:50px;background: #39a58a; opacity: 1.0" class="content-hero-overlay "></div>
-                    <div  style="" class="content-hero-body" ></div>
-                    <div  style="" class="content-hero-bar">
+                <div class="content-hero content-hero-lg" style="margin-bottom: 30px; border-bottom: 1px #CCC solid; min-height:50px; display:none;" id="info-Paciente" >
+                    <div class="content-hero-bar">
                         <div class="row">
-                            <div class="col-lg-6" >
-                                <div class="float-bar clearfix" >
-                                    <div class="col-sm-11">
-                                        <div class="visible-xs">
-                                            <h2 class="media-heading text-light" id="nombrePaciente"></h2>
-                                        </div>
-                                        <div class="hidden-xs">
-                                            <h4 class="robo media-heading text-light" id="titulo-paciente"></h4>
-                                            <p class="mb-4x text-light">
-                                                <span class="mr-1x" id="expediente">
-                                                    <i class="fa fa-clipboard"></i> 
-                                                    {#<a style="color:#FFF;text-decoration: underline;" href="{{path('admin_consulta_expediente_sd',{id:paciente.expediente[0].numero})}}">{{paciente.expediente[0].numero}}</a>#}
-                                                </span>
-
-                                                <span class="mr-1x" id="telefono">
-                                                    <i class="fa fa-phone"></i>
-                                                    {#{% if paciente.persona.telefono== ""%}
-                                                        No ingresado al sistema
-                                                    {% else %}
-                                                        {{paciente.persona.telefono}}
-                                                    {% endif %}#}
-                                                </span>
-
-                                                <span class="mr-1x" id="direccionD">
-                                                    <i class="fa fa-map-marker fa-fw"></i>
-                                                    {#{% if paciente.persona.direccion == ""%}
-                                                        No ingresado al sistema
-                                                    {% else %}
-                                                        {{paciente.persona.direccion}}
-                                                    {% endif %}#}
-                                                </span>
-                                            </p>
-                                        </div>
-                                    </div><!-- /.media-body -->
-                                </div><!-- /.float-bar -->
-                            </div><!-- /.cols -->
-                            
-                        </div><!-- /.row -->
-                    </div><!-- /.content-hero-bar -->
-                </div><!-- /.content-hero-bar --><!-- /.content-hero-bar --><!-- /.content-hero-bar --><!-- /.content-hero-bar --><!-- /.content-hero-bar -->
-                
+                            <div class="col-md-12" >
+                                <hr>
+                            </div>
+                            <div class="col-md-12" >
+                                <div class="col-md-8">
+                                    <h4 class="robo media-heading text-light" id="nombrePaciente"></h4>
+                                    <p class="mb-4x text-light">
+                                        <span class="mr-1x" id="expediente">
+                                            <i class="fa fa-clipboard"></i> 
+                                        </span>
+                                        <span class="mr-1x" id="telefono">
+                                            <i class="fa fa-phone"></i>
+                                        </span>
+                                        <span class="mr-1x" id="edad">
+                                            <i class="fa fa-birthday-cake"></i>                                            
+                                        </span>
+                                        <span class="mr-1x" id="direccion">
+                                            <i class="fa fa-map-marker fa-fw"></i>
+                                        </span>
+                                    </p>
+                                </div>
+                                <div class="col-md-4 robo" ></div>
+                                </div>
+                            </div><!-- /.media-body -->
+                        </div><!-- /.cols -->
+                    </div><!-- /.row -->
+                </div><!-- /.content-hero-bar -->
                 <div class="row" style="display:none;"></div>
                 
-                {# Aquí se colocan los nombres de cada sección (tabs) #}    
-                <ul class="nav nav-tabs" style="margin-top: 30px;">
-                    <li class="active"><a data-toggle="tab" href="#datos-generales">Datos generales</a></li>
-                    <li><a data-toggle="tab" href="#registros-venta">Registro de venta</a></li>
-                    <li><a data-toggle="tab" href="#seguimiento-venta" style="display:none;" id="tabs-seguimiento">Registro y seguimiento de sesiones</a></li>
-                    <li><a data-toggle="tab" href="#abonos-devoluciones" style="display:none;" id="tabs-abdev">Abonos</a></li>
-                    <li><a data-toggle="tab" href="#imagenes" style="display:none;" id="tabs-imagenes">Imagenes</a></li>
-                </ul>
-                
-                {# Aquí se encuentran las secciones de las tabs #}    
-                <div class="tab-content">
-                    {# Sección en donde se registra la información general del paciente a quien se le va a efectuar la venta #}
-                    <div id="datos-generales" class="tab-pane fade in active" style="margin-top: 20px;">
-                        <form id="formulario-datos-gnales" method="POST" enctype="multipart/form-data">
-                            <div class="row" style="margin-top: 30px;">
-                                <div class="col-md-3">
-                                    {# Area en donde se ingresa el nombre del paciente a quien se le hará la venta #}    
-                                    <div id="nombrePaciente-venta">
-                                        <label>Nombres</label>
-                                        <input type="text" name="dgplusbellebundle_venta[nombres]" id="dgplusbellebundle_venta_nombres" class="form-control" style="width: 100%" {#value="{{ paciente.persona.nombres}}"#}>      
-                                    </div>
-                                </div>
-                                <div class="col-md-3">
-                                    {# Area en donde se ingresa los apellidos del paciente a quien se le hará la venta #}    
-                                    <div id="apellidosPaciente-venta">
-                                        <label>Apellidos</label>
-                                        <input type="text" name="dgplusbellebundle_venta[apellidos]" id="dgplusbellebundle_venta_apellidos" class="form-control" style="width: 100%" {#value="{{ paciente.persona.apellidos}}"#}>     
-                                    </div>
-                                </div> 
-                                <div class="col-md-3">
-                                    {# Area en donde se ingresa el telefono 1 del paciente a quien se le hará la venta #}    
-                                    <div id="telefono1Paciente-venta">
-                                        <label>Telefono 1</label>
-                                        <input type="text" name="dgplusbellebundle_venta[telefono1]" id="dgplusbellebundle_venta_telefono1" class="form-control" style="width: 100%" {#value="{{ paciente.persona.telefono}}"#}>     
-                                    </div>
-                                </div>
-                                <div class="col-md-3">
-                                    {# Area en donde se ingresa el telefono 1 del paciente a quien se le hará la venta #}    
-                                    <div id="telefono2Paciente-venta">
-                                        <label>Telefono 2</label>
-                                        <input type="text" name="dgplusbellebundle_venta[telefono2]" id="dgplusbellebundle_venta_telefono2" class="form-control" style="width: 100%" {#value="{{ paciente.persona.telefono2}}"#}>     
-                                    </div>
-                                </div>    
-                            </div>    
-                            <div class="row" style="margin-top:30px;">
-                                <div class="col-md-3" >
-                                    {# Area en donde se ingresa la dirección de la persona #}    
-                                    <div id="direccionPaciente-venta">
-                                        <label>Direccion</label>
-                                        <input type="text" name="dgplusbellebundle_venta[direccion]" id="dgplusbellebundle_venta_direccion" class="form-control" style="width: 100%" {#value="{{ paciente.persona.direccion }}"#}>      
-                                    </div>
-                                </div>
-                                <div class="col-md-3">
-                                    {# Area en donde se ingresa correo electrónico del paciente a quien se le hará la venta #}    
-                                    <div id="correoPaciente-venta">
-                                        <label>Correo electronico</label>
-                                        <input type="text" name="dgplusbellebundle_venta[correo]" id="dgplusbellebundle_venta_correo" class="form-control" style="width: 100%" {#value="{{ paciente.persona.email}}"#}>     
-                                    </div>
-                                </div> 
-                                <div class="col-md-3">
-                                    {# Area en donde se ingresa DUI del paciente a quien se le hará la venta #}    
-                                    <div id="DUIPaciente-venta">
-                                        <label>DUI</label>
-                                        <input type="text" name="dgplusbellebundle_venta[dui]" id="dgplusbellebundle_venta_dui" class="form-control" style="width: 100%" {#value="{{ paciente.dui}}"#}>     
-                                    </div>
-                                </div> 
-                                <div class="col-md-3">
-                                    {# Area en donde se ingresa estado civil del paciente a quien se le hará la venta #}    
-                                    <div id="EcivilPaciente-venta">
-                                        <label>Estado civil</label>
-                                        <select id="dgplusbellebundle_venta_ecivil" name="dgplusbellebundle_venta[ecivil]" class="form-control venta-ecivil" style="width: 100%">
-                                            <option value="" disabled style="display:none;" >Seleccione un estado civil ...</option>
-                                            <option value="Soltero/a">Soltero/a</option>
-                                            <option value="Casado/a">Casado/a</option>
-                                            <option value="Divorciado/a">Divorciado/a</option>
-                                            <option value="Acompañado/a">Acompañado/a</option>
-                                            <option value="Viudo/a">Viudo/a</option>
-                                        </select>
-                                    </div>
-                                </div>    
-                            </div>
-                            <div class="row" style="margin-top: 30px;">  
-                                <div class="col-md-3">
-                                    {# Area en donde se ingresa estado civil del paciente a quien se le hará la venta #}    
-                                    <div id="sexoPaciente-venta">
-                                        <label>Sexo </label>
-                                        <select id="dgplusbellebundle_venta_sexo" name="dgplusbellebundle_venta[sexo]" class="form-control venta-sexo" style="width: 100%">
-                                            <option value="" disabled style="display:none;" >Seleccione sexo ...</option>
-                                            <option value="M">Masculino</option>
-                                            <option value="F">Femenino</option>
-                                        </select>
-                                    </div>
-                                </div> 
-                                <div class="col-md-3">
-                                    {# Area en donde se ingresa la ocupacion del paciente a quien se le hará la venta #}    
-                                    <div id="ocupacionPaciente-venta">
-                                        <label>Ocupación</label>
-                                        <input type="text" name="dgplusbellebundle_venta[ocupacion]" id="dgplusbellebundle_venta_ocupacion" class="form-control" style="width: 100%" {#value="{{ paciente.ocupacion}}"#}>     
-                                    </div>
-                                </div> 
-                                <div class="col-md-3">
-                                    {# Area en donde se ingresa la ocupacion del paciente a quien se le hará la venta #}    
-                                    <div id="lugarTrabajoPaciente-venta">
-                                        <label>Lugar de trabajo</label>
-                                        <input type="text" name="dgplusbellebundle_venta[lugar]" id="dgplusbellebundle_venta_lugar" class="form-control" style="width: 100%" {#value="{{ paciente.lugarTrabajo}}"#}>     
-                                    </div>
-                                </div> 
-                                <div class="col-md-3">
-                                    {# Area en donde se selecciona la fecha de naciemto del paciente a quien se le hará la venta #}    
-                                    <div id="fechaNacimiemtoPaciente-venta">
-                                        <label>Fecha de Nacimiento</label>
-                                        <input type="text" name="dgplusbellebundle_venta[fechaNacimiemto]" id="dgplusbellebundle_venta_fechaNacimiemto" class="form-control calZebra" style="width: 100%" {#value="{{ paciente.fechaNacimiento|date('d-m-Y') }}"#}>      
-                                    </div>
-                                </div>    
-                            </div> 
-                            <div class="row" style="margin-top: 30px;">
-                                <div class="col-md-3">
-                                    {# Area en donde se ingresa el nombre de la persona a quien llamar en caso de emergencia #}    
-                                    <div id="referidoporPaciente-venta">
-                                        <label>Referido por</label>
-                                        <input type="text" name="dgplusbellebundle_venta[referidopor]" id="dgplusbellebundle_venta_referidopor" class="form-control" style="width: 100%" {#value="{{ paciente.referidoPor }}"#}>      
-                                    </div>
-                                </div>
-                                <div class="col-md-3">
-                                    {# Area en donde se ingresa el nombre de la persona a quien llamar en caso de emergencia #}    
-                                    <div id="nombreEmergenciaPaciente-venta">
-                                        <label>En caso de emergencia llamar a</label>
-                                        <input type="text" name="dgplusbellebundle_venta[nombreEmergencia]" id="dgplusbellebundle_venta_nombreEmergencia" class="form-control" style="width: 100%" {#value="{{ paciente.personaEmergencia }}"#}>      
-                                    </div>
-                                </div>
-                                <div class="col-md-2">
-                                    {# Area en donde se ingresa el telefono de la persona a quien llamar en caso de emergencia #}    
-                                    <div id="telefonoEmergenciaPaciente-venta">
-                                        <label>Al telefono</label>
-                                        <input type="text" name="dgplusbellebundle_venta[telefonoEmergencia]" id="dgplusbellebundle_venta_telefonoEmergencia" class="form-control" style="width: 100%" {#value="{{ paciente.telefonoEmergencia }}"#}>     
-                                    </div>
-                                </div>
-                            </div>     
-                            <div class="row">
-                                <div class="col-md-12 col-sm-12 text-center" style="margin-top: 30px; margin-bottom: 10px;" id="registrar-datos-gnales">
-                                    <hr>
-                                    <input type="submit" value="Registrar informacion del paciente" style="margin-bottom: 10px; color: #FFF;" class="btn btn-xs btn-primary" id="editar-paciente"/>
-                                </div>    
-                            </div>         
-                        </form>
-                        <div class="row" style="margin-top: 50px;"></div>            
-                    </div>
-                                   
-                    {# Sección en donde se registran ventas de paqutes/tratamientos #}                
-                    <div id="registros-venta" class="tab-pane fade" style="margin-top: 20px;">
-                        <form id="formulario-venta" method="POST" enctype="multipart/form-data">
-                            <div class="row" style="margin-top: 30px;">
-                                {# Selección de qué tipo de venta se va a realizar #}    
-                                <div class="col-md-2">
-                                    <label class="pull-right">Tipo de venta:</label>      
-                                </div>
-                                <div class="col-md-2">
-                                    <div id="label-tipo-venta">
-                                        <p>
-                                            <input type = "radio" name = "tipo-venta" id = "tipo-venta-paquete" value = "1" />
-                                            <label for = "tipo-venta-paquete">Paquete</label>
-                                        </p>
-                                        <p>
-                                            <input type = "radio" name = "tipo-venta" id = "tipo-venta-tratamiento" value = "0" />
-                                            <label for = "tipo-venta-tratamiento">Tratamiento</label>
-                                        </p> 
-                                    </div>
-                                </div>
+                <div id="acciones-venta"    >
+                    {# Aquí se colocan los nombres de cada sección (tabs) #}    
+                    <ul class="nav nav-tabs" style="margin-top: 30px;">
+                        <li><a data-toggle="tab" href="#datos-generales">Datos generales</a></li>
+                        <li class="active"><a data-toggle="tab" href="#registros-venta">Registro de venta</a></li>
+                        <li><a data-toggle="tab" href="#seguimiento-venta" style="display:none;" id="tabs-seguimiento">Registro y seguimiento de sesiones</a></li>
+                        <li><a data-toggle="tab" href="#abonos-devoluciones" style="display:none;" id="tabs-abdev">Abonos</a></li>
+                        <li><a data-toggle="tab" href="#imagenes" style="display:none;" id="tabs-imagenes">Imagenes</a></li>
+                    </ul>
 
-                                {# Area en donde se selecciona un paquete o tratamiento dependiendo el tipo de venta seleccionado#}    
-                                <div class="col-md-3 col-md-offset-1">
-                                    <div id="venta-paquete" style="display:none;">
-                                        <label>Paquete</label>
-                                        <select id="dgplusbellebundle_venta_paquete" name="dgplusbellebundle_venta[paquete]" class="venta-paquete" style="width: 100%">
-                                            <option value="" disabled selected>Seleccione un paquete...</option>
-
-                                            {% for vpaquete in ventaPaquetes %}
-                                                <option value="{{vpaquete.id}}"> {{vpaquete.nombre}}</option>
-                                            {% endfor %}
-                                        </select>   
+                    {# Aquí se encuentran las secciones de las tabs #}    
+                    <div class="tab-content">
+                        {# Sección en donde se registra la información general del paciente a quien se le va a efectuar la venta #}
+                        <div id="datos-generales" class="tab-pane fade" style="margin-top: 20px;">
+                            <form id="formulario-datos-gnales" method="POST" enctype="multipart/form-data">
+                                <div class="row" style="margin-top: 30px;">
+                                    <div class="col-md-3">
+                                        {# Area en donde se ingresa el nombre del paciente a quien se le hará la venta #}    
+                                        <div id="nombrePaciente-venta">
+                                            <label>Nombres</label>
+                                            <input type="text" name="dgplusbellebundle_venta[nombres]" id="dgplusbellebundle_venta_nombres" class="form-control" style="width: 100%" {#value="{{ paciente.persona.nombres}}"#}>      
+                                        </div>
                                     </div>
-                                    <div id="venta-tratamiento" style="display:none;">
-                                        <label>Tratamiento</label>
-                                        <select id="dgplusbellebundle_venta_tratamiento" name="dgplusbellebundle_venta[tratamiento]" class="venta_tratamiento" style="width: 100%">
-                                            <option value="" disabled selected>Seleccione un tratamiento...</option>
-
-                                            {% for vtratamiento in ventaTratamientos %}
-                                                <option value="{{vtratamiento.id}}"> {{vtratamiento.nombre}}</option>
-                                            {% endfor %}
-                                        </select>    
+                                    <div class="col-md-3">
+                                        {# Area en donde se ingresa los apellidos del paciente a quien se le hará la venta #}    
+                                        <div id="apellidosPaciente-venta">
+                                            <label>Apellidos</label>
+                                            <input type="text" name="dgplusbellebundle_venta[apellidos]" id="dgplusbellebundle_venta_apellidos" class="form-control" style="width: 100%" {#value="{{ paciente.persona.apellidos}}"#}>     
+                                        </div>
+                                    </div> 
+                                    <div class="col-md-3">
+                                        {# Area en donde se ingresa el telefono 1 del paciente a quien se le hará la venta #}    
+                                        <div id="telefono1Paciente-venta">
+                                            <label>Telefono 1</label>
+                                            <input type="text" name="dgplusbellebundle_venta[telefono1]" id="dgplusbellebundle_venta_telefono1" class="form-control" style="width: 100%" {#value="{{ paciente.persona.telefono}}"#}>     
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        {# Area en donde se ingresa el telefono 1 del paciente a quien se le hará la venta #}    
+                                        <div id="telefono2Paciente-venta">
+                                            <label>Telefono 2</label>
+                                            <input type="text" name="dgplusbellebundle_venta[telefono2]" id="dgplusbellebundle_venta_telefono2" class="form-control" style="width: 100%" {#value="{{ paciente.persona.telefono2}}"#}>     
+                                        </div>
+                                    </div>    
+                                </div>    
+                                <div class="row" style="margin-top:30px;">
+                                    <div class="col-md-3" >
+                                        {# Area en donde se ingresa la dirección de la persona #}    
+                                        <div id="direccionPaciente-venta">
+                                            <label>Direccion</label>
+                                            <input type="text" name="dgplusbellebundle_venta[direccion]" id="dgplusbellebundle_venta_direccion" class="form-control" style="width: 100%" {#value="{{ paciente.persona.direccion }}"#}>      
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        {# Area en donde se ingresa correo electrónico del paciente a quien se le hará la venta #}    
+                                        <div id="correoPaciente-venta">
+                                            <label>Correo electronico</label>
+                                            <input type="text" name="dgplusbellebundle_venta[correo]" id="dgplusbellebundle_venta_correo" class="form-control" style="width: 100%" {#value="{{ paciente.persona.email}}"#}>     
+                                        </div>
+                                    </div> 
+                                    <div class="col-md-3">
+                                        {# Area en donde se ingresa DUI del paciente a quien se le hará la venta #}    
+                                        <div id="DUIPaciente-venta">
+                                            <label>DUI</label>
+                                            <input type="text" name="dgplusbellebundle_venta[dui]" id="dgplusbellebundle_venta_dui" class="form-control" style="width: 100%" {#value="{{ paciente.dui}}"#}>     
+                                        </div>
+                                    </div> 
+                                    <div class="col-md-3">
+                                        {# Area en donde se ingresa estado civil del paciente a quien se le hará la venta #}    
+                                        <div id="EcivilPaciente-venta">
+                                            <label>Estado civil</label>
+                                            <select id="dgplusbellebundle_venta_ecivil" name="dgplusbellebundle_venta[ecivil]" class="form-control venta-ecivil" style="width: 100%">
+                                                <option value="" disabled style="display:none;" >Seleccione un estado civil ...</option>
+                                                <option value="Soltero/a">Soltero/a</option>
+                                                <option value="Casado/a">Casado/a</option>
+                                                <option value="Divorciado/a">Divorciado/a</option>
+                                                <option value="Acompañado/a">Acompañado/a</option>
+                                                <option value="Viudo/a">Viudo/a</option>
+                                            </select>
+                                        </div>
                                     </div>    
                                 </div>
-                            </div>   
-                            <div class="row" style="margin-top: 35px;">
-                                <div class="col-md-4" >
-                                    {# Area en donde se selecciona la sucursal en donde se realiza la venta #}    
-                                    <div id="sucursal-venta" style="display:none;">
-                                        <label>Sucursal</label>
-                                        <select id="dgplusbellebundle_venta_sucursal" name="dgplusbellebundle_venta[sucursal]" class="venta-sucursal" style="width: 100%">
-                                            <option value="" disabled selected>Seleccione una sucursal ...</option>
-
-                                            {% for sucursal in sucursales %}
-                                                <option value="{{sucursal.id}}"> {{sucursal.nombre}}</option>
-                                            {% endfor %}
-                                        </select>   
-                                    </div>
-                                </div>
-                                <div class="col-md-4">
-                                    {# Area en donde se selecciona  el empleado que ha realizado la venta #}  
-                                    <div id="empleados-venta" style="display:none;">
-                                        <label>Vendido por</label>
-                                        <select id="dgplusbellebundle_venta_empleado" name="dgplusbellebundle_venta[empleado]" class="venta-empleado" style="width: 100%">
-                                            <option value="" disabled selected>Seleccione un empleado ...</option>
-
-                                            {% for empleado in empleadosVenta %}
-                                                <option value="{{empleado.id}}"> {{empleado.persona}}</option>
-                                            {% endfor %}
-                                        </select>   
-                                    </div>
-                                </div>        
-                                <div class="col-md-4">
-                                    {# Area en donde se ingresa  el número de sesiones de un tratamiento en el caso 
-                                       de haber seleccionado el tipo de venta tratamiento                           #}  
-                                    <div id="sesiones-tratamiento" style="display:none;">
-                                        <label># de sesiones</label>
-                                        <input type="text" name="dgplusbellebundle_venta[num_sesiones]" id="dgplusbellebundle_venta_sesiones" class="form-control" style="width: 100%">   
-                                    </div>
-                                </div>        
-                            </div>     
-                            <div class="row" style="margin-top: 35px;">
-                                <div class="col-md-4">
-                                    {# Area en donde se ingresa  el cossto($) del paquete o tratamiento que se ha vendido #}
-                                    <div id="costo-venta" style="display:none;">
-                                        <label>Costo ($)</label>
-                                        <input type="text" name="dgplusbellebundle_venta[costo]" id="dgplusbellebundle_venta_costo" class="form-control" style="width: 100%">     
-                                    </div>
-                                </div>
-                                <div class="col-md-4">
-                                    {# Area en donde se seleciona  el descuento que se le va a aplicar a la venta en el caso de ser necesario #} 
-                                    <div id="descuento-venta" style="display:none;">
-                                        <label>Descuento</label>
-                                        <select id="dgplusbellebundle_venta_descuento" name="dgplusbellebundle_venta[descuento]" class="venta-descuento" style="width: 100%">
-                                            <option value="" selected>Seleccione un tipo de descuento ...</option>
-
-                                            {% for descuento in descuentos %}
-                                                <option value="{{descuento.id}}"> {{descuento.nombre}} - {{descuento.porcentaje}}%</option>
-                                            {% endfor %}
-                                        </select>   
-                                    </div>
-                                </div>        
-                                <div class="col-md-4">
-                                    <div id="cuotas-venta" style="display:none;">
-                                        <label>Cuotas</label>
-                                        <input type="text" name="dgplusbellebundle_venta[cuotas]" id="dgplusbellebundle_venta_cuotas" class="form-control" style="width: 100%">   
-                                    </div>
-                                </div>        
-                            </div>
-                            <div class="row">
-                                <div id="vventa-observaciones" class="col-md-7 col-sm-7" style="margin-top: 30px; margin-bottom: 10px; display:none;">
-                                    <div id="venta-observaciones-label">
-                                        <label>Observaciones</label>
+                                <div class="row" style="margin-top: 30px;">  
+                                    <div class="col-md-3">
+                                        {# Area en donde se ingresa estado civil del paciente a quien se le hará la venta #}    
+                                        <div id="sexoPaciente-venta">
+                                            <label>Sexo </label>
+                                            <select id="dgplusbellebundle_venta_sexo" name="dgplusbellebundle_venta[sexo]" class="form-control venta-sexo" style="width: 100%">
+                                                <option value="" disabled style="display:none;" >Seleccione sexo ...</option>
+                                                <option value="M">Masculino</option>
+                                                <option value="F">Femenino</option>
+                                            </select>
+                                        </div>
                                     </div> 
-                                    <div class="clearfix"></div>
-                                    <div id="observaciones">
-                                        <textarea rows="4" cols="100" name="dgplusbellebundle_abono[observaciones]" id="dgplusbellebundle_venta_observaciones" class="form-control"></textarea> 
-                                    </div>     
-                                </div>    
-                            </div>             
-                            <div class="row" style="margin-top: 50px;">
-                                <hr id="hr-tratamientos-paquete" class="hide">
-                                <div class="col-md-6 col-md-offset-2">
-                                    <div id="tratamientos-paquete" style="display:none;"></div>
-                                </div>    
-                            </div>            
-                            <div class="row">
-                                <div class="col-md-12 col-sm-12 text-center" style="margin-top: 30px; margin-bottom: 10px; display:none;" id="registrar-venta">
-                                    <hr>
-                                    <input type="submit" value="Registrar venta" style="margin-bottom: 10px; color: #FFF;" class="btn btn-xs btn-primary" id="registro-venta"/>
-                                </div>  
-                                
-                                <div class="col-md-12 col-sm-12 text-center" style="margin-top: 30px; margin-bottom: 10px; display:none;" id="modificar-venta">
-                                    <hr>
-                                    <input type="submit" value="Editar venta" style="margin-bottom: 10px; color: #FFF;" class="btn btn-xs btn-primary" id="edit-venta"/>
-                                </div>
-                            </div> 
-                        </form>                
-                        <div class="row" style="margin-top: 50px;"></div>
-                    </div>
-                    
-                    {# Sección en donde se registran las sesiones de un tratamiento #}
-                    <div id="registro-sesiones" class="tab-pane fade" style="margin-top: 20px;">
-                        <form id="formulario-sesiones-tratamiento" method="POST" enctype="multipart/form-data">
-                            <div class="row" style="margin-top: 35px;" style="display:none;">
-                                <div class="col-md-3"  style="margin-left: 30px;">
-                                    {# Area en donde se selecciona la sucursal en donde se realiza la venta #}    
-                                    <div id="sucursal-sesion">
-                                        <label>Sucursal</label>
-                                        <select id="dgplusbellebundle_sesioness_sucursal" name="dgplusbellebundle_venta_sesiones[sucursal]" class="sesion-sucursal" style="width: 100%">
-                                            <option value="" disabled selected>Seleccione una sucursal ...</option>
-
-                                            {% for sucursal in sucursales %}
-                                                <option value="{{sucursal.id}}"> {{sucursal.nombre}}</option>
-                                            {% endfor %}
-                                        </select>   
+                                    <div class="col-md-3">
+                                        {# Area en donde se ingresa la ocupacion del paciente a quien se le hará la venta #}    
+                                        <div id="ocupacionPaciente-venta">
+                                            <label>Ocupación</label>
+                                            <input type="text" name="dgplusbellebundle_venta[ocupacion]" id="dgplusbellebundle_venta_ocupacion" class="form-control" style="width: 100%" {#value="{{ paciente.ocupacion}}"#}>     
+                                        </div>
+                                    </div> 
+                                    <div class="col-md-3">
+                                        {# Area en donde se ingresa la ocupacion del paciente a quien se le hará la venta #}    
+                                        <div id="lugarTrabajoPaciente-venta">
+                                            <label>Lugar de trabajo</label>
+                                            <input type="text" name="dgplusbellebundle_venta[lugar]" id="dgplusbellebundle_venta_lugar" class="form-control" style="width: 100%" {#value="{{ paciente.lugarTrabajo}}"#}>     
+                                        </div>
+                                    </div> 
+                                    <div class="col-md-3">
+                                        {# Area en donde se selecciona la fecha de naciemto del paciente a quien se le hará la venta #}    
+                                        <div id="fechaNacimiemtoPaciente-venta">
+                                            <label>Fecha de Nacimiento</label>
+                                            <input type="text" name="dgplusbellebundle_venta[fechaNacimiemto]" id="dgplusbellebundle_venta_fechaNacimiemto" class="form-control calZebra" style="width: 100%" {#value="{{ paciente.fechaNacimiento|date('d-m-Y') }}"#}>      
+                                        </div>
+                                    </div>    
+                                </div> 
+                                <div class="row" style="margin-top: 30px;">
+                                    <div class="col-md-3">
+                                        {# Area en donde se ingresa el nombre de la persona a quien llamar en caso de emergencia #}    
+                                        <div id="referidoporPaciente-venta">
+                                            <label>Referido por</label>
+                                            <input type="text" name="dgplusbellebundle_venta[referidopor]" id="dgplusbellebundle_venta_referidopor" class="form-control" style="width: 100%" {#value="{{ paciente.referidoPor }}"#}>      
+                                        </div>
                                     </div>
-                                </div>
-                                <div class="col-md-4">
-                                    {# Area en donde se selecciona  el empleado que ha realizado la venta #}  
-                                    <div id="empleado-sesion">
-                                        <label>Empleado</label>
-                                        <select id="dgplusbellebundle_sesioness_empleado" name="dgplusbellebundle_venta_sesiones[empleado]" class="sesion-empleado" style="width: 100%">
-                                            <option value="" disabled selected>Seleccione un empleado ...</option>
+                                    <div class="col-md-3">
+                                        {# Area en donde se ingresa el nombre de la persona a quien llamar en caso de emergencia #}    
+                                        <div id="nombreEmergenciaPaciente-venta">
+                                            <label>En caso de emergencia llamar a</label>
+                                            <input type="text" name="dgplusbellebundle_venta[nombreEmergencia]" id="dgplusbellebundle_venta_nombreEmergencia" class="form-control" style="width: 100%" {#value="{{ paciente.personaEmergencia }}"#}>      
+                                        </div>
+                                    </div>
+                                    <div class="col-md-2">
+                                        {# Area en donde se ingresa el telefono de la persona a quien llamar en caso de emergencia #}    
+                                        <div id="telefonoEmergenciaPaciente-venta">
+                                            <label>Al telefono</label>
+                                            <input type="text" name="dgplusbellebundle_venta[telefonoEmergencia]" id="dgplusbellebundle_venta_telefonoEmergencia" class="form-control" style="width: 100%" {#value="{{ paciente.telefonoEmergencia }}"#}>     
+                                        </div>
+                                    </div>
+                                </div>     
+                                <div class="row">
+                                    <div class="col-md-12 col-sm-12 text-center" style="margin-top: 30px; margin-bottom: 10px;" id="registrar-datos-gnales">
+                                        <hr>
+                                        <input type="submit" value="Registrar informacion del paciente" style="margin-bottom: 10px; color: #FFF;" class="btn btn-xs btn-primary" id="editar-paciente"/>
+                                    </div>    
+                                </div>         
+                            </form>
+                            <div class="row" style="margin-top: 50px;"></div>            
+                        </div>
 
-                                            {% for empleado in empleadosVenta %}
-                                                <option value="{{empleado.id}}"> {{empleado.persona}}</option>
-                                            {% endfor %}
-                                        </select>   
+                        {# Sección en donde se registran ventas de paqutes/tratamientos #}                
+                        <div id="registros-venta" class="tab-pane fade in active" style="margin-top: 20px;">
+                            <form id="formulario-venta" method="POST" enctype="multipart/form-data">
+                                <div class="row" style="margin-top: 30px;">
+                                    {# Selección de qué tipo de venta se va a realizar #}    
+                                    <div class="col-md-2">
+                                        <label class="pull-right">Tipo de venta:</label>      
+                                    </div>
+                                    <div class="col-md-2">
+                                        <div id="label-tipo-venta">
+                                            <p>
+                                                <input type = "radio" name = "tipo-venta" id = "tipo-venta-paquete" value = "1" />
+                                                <label for = "tipo-venta-paquete">Paquete</label>
+                                            </p>
+                                            <p>
+                                                <input type = "radio" name = "tipo-venta" id = "tipo-venta-tratamiento" value = "0" />
+                                                <label for = "tipo-venta-tratamiento">Tratamiento</label>
+                                            </p> 
+                                        </div>
+                                    </div>
+
+                                    {# Area en donde se selecciona un paquete o tratamiento dependiendo el tipo de venta seleccionado#}    
+                                    <div class="col-md-3 col-md-offset-1">
+                                        <div id="venta-paquete" style="display:none;">
+                                            <label>Paquete</label>
+                                            <select id="dgplusbellebundle_venta_paquete" name="dgplusbellebundle_venta[paquete]" class="venta-paquete" style="width: 100%">
+                                                <option value="" disabled selected>Seleccione un paquete...</option>
+
+                                                {% for vpaquete in ventaPaquetes %}
+                                                    <option value="{{vpaquete.id}}"> {{vpaquete.nombre}}</option>
+                                                {% endfor %}
+                                            </select>   
+                                        </div>
+                                        <div id="venta-tratamiento" style="display:none;">
+                                            <label>Tratamiento</label>
+                                            <select id="dgplusbellebundle_venta_tratamiento" name="dgplusbellebundle_venta[tratamiento]" class="venta_tratamiento" style="width: 100%">
+                                                <option value="" disabled selected>Seleccione un tratamiento...</option>
+
+                                                {% for vtratamiento in ventaTratamientos %}
+                                                    <option value="{{vtratamiento.id}}"> {{vtratamiento.nombre}}</option>
+                                                {% endfor %}
+                                            </select>    
+                                        </div>    
+                                    </div>
+                                </div>   
+                                <div class="row" style="margin-top: 35px;">
+                                    <div class="col-md-4" >
+                                        {# Area en donde se selecciona la sucursal en donde se realiza la venta #}    
+                                        <div id="sucursal-venta" style="display:none;">
+                                            <label>Sucursal</label>
+                                            <select id="dgplusbellebundle_venta_sucursal" name="dgplusbellebundle_venta[sucursal]" class="venta-sucursal" style="width: 100%">
+                                                <option value="" disabled selected>Seleccione una sucursal ...</option>
+
+                                                {% for sucursal in sucursales %}
+                                                    <option value="{{sucursal.id}}"> {{sucursal.nombre}}</option>
+                                                {% endfor %}
+                                            </select>   
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        {# Area en donde se selecciona  el empleado que ha realizado la venta #}  
+                                        <div id="empleados-venta" style="display:none;">
+                                            <label>Vendido por</label>
+                                            <select id="dgplusbellebundle_venta_empleado" name="dgplusbellebundle_venta[empleado]" class="venta-empleado" style="width: 100%">
+                                                <option value="" disabled selected>Seleccione un empleado ...</option>
+
+                                                {% for empleado in empleadosVenta %}
+                                                    <option value="{{empleado.id}}"> {{empleado.persona}}</option>
+                                                {% endfor %}
+                                            </select>   
+                                        </div>
+                                    </div>        
+                                    <div class="col-md-4">
+                                        {# Area en donde se ingresa  el número de sesiones de un tratamiento en el caso 
+                                           de haber seleccionado el tipo de venta tratamiento                           #}  
+                                        <div id="sesiones-tratamiento" style="display:none;">
+                                            <label># de sesiones</label>
+                                            <input type="text" name="dgplusbellebundle_venta[num_sesiones]" id="dgplusbellebundle_venta_sesiones" class="form-control" style="width: 100%">   
+                                        </div>
+                                    </div>        
+                                </div>     
+                                <div class="row" style="margin-top: 35px;">
+                                    <div class="col-md-4">
+                                        {# Area en donde se ingresa  el cossto($) del paquete o tratamiento que se ha vendido #}
+                                        <div id="costo-venta" style="display:none;">
+                                            <label>Costo ($)</label>
+                                            <input type="text" name="dgplusbellebundle_venta[costo]" id="dgplusbellebundle_venta_costo" class="form-control" style="width: 100%">     
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        {# Area en donde se seleciona  el descuento que se le va a aplicar a la venta en el caso de ser necesario #} 
+                                        <div id="descuento-venta" style="display:none;">
+                                            <label>Descuento</label>
+                                            <select id="dgplusbellebundle_venta_descuento" name="dgplusbellebundle_venta[descuento]" class="venta-descuento" style="width: 100%">
+                                                <option value="" selected>Seleccione un tipo de descuento ...</option>
+
+                                                {% for descuento in descuentos %}
+                                                    <option value="{{descuento.id}}"> {{descuento.nombre}} - {{descuento.porcentaje}}%</option>
+                                                {% endfor %}
+                                            </select>   
+                                        </div>
+                                    </div>        
+                                    <div class="col-md-4">
+                                        <div id="cuotas-venta" style="display:none;">
+                                            <label>Cuotas</label>
+                                            <input type="text" name="dgplusbellebundle_venta[cuotas]" id="dgplusbellebundle_venta_cuotas" class="form-control" style="width: 100%">   
+                                        </div>
+                                    </div>        
+                                </div>
+                                <div class="row">
+                                    <div id="vventa-observaciones" class="col-md-7 col-sm-7" style="margin-top: 30px; margin-bottom: 10px; display:none;">
+                                        <div id="venta-observaciones-label">
+                                            <label>Observaciones</label>
+                                        </div> 
+                                        <div class="clearfix"></div>
+                                        <div id="observaciones">
+                                            <textarea rows="4" cols="100" name="dgplusbellebundle_abono[observaciones]" id="dgplusbellebundle_venta_observaciones" class="form-control"></textarea> 
+                                        </div>     
+                                    </div>    
+                                </div>             
+                                <div class="row" style="margin-top: 50px;">
+                                    <hr id="hr-tratamientos-paquete" class="hide">
+                                    <div class="col-md-6 col-md-offset-2">
+                                        <div id="tratamientos-paquete" style="display:none;"></div>
+                                    </div>    
+                                </div>            
+                                <div class="row">
+                                    <div class="col-md-12 col-sm-12 text-center" style="margin-top: 30px; margin-bottom: 10px; display:none;" id="registrar-venta">
+                                        <hr>
+                                        <input type="submit" value="Registrar venta" style="margin-bottom: 10px; color: #FFF;" class="btn btn-xs btn-primary" id="registro-venta"/>
+                                    </div>  
+
+                                    <div class="col-md-12 col-sm-12 text-center" style="margin-top: 30px; margin-bottom: 10px; display:none;" id="modificar-venta">
+                                        <hr>
+                                        <input type="submit" value="Editar venta" style="margin-bottom: 10px; color: #FFF;" class="btn btn-xs btn-primary" id="edit-venta"/>
                                     </div>
                                 </div> 
-                                <div class="col-md-3" style="display:none;" id="seguimiento-sesioness-tratamiento">
+                            </form>                
+                            <div class="row" style="margin-top: 50px;"></div>
+                        </div>
+
+                        {# Sección en donde se registran las sesiones de un tratamiento #}
+                        <div id="registro-sesiones" class="tab-pane fade" style="margin-top: 20px;">
+                            <form id="formulario-sesiones-tratamiento" method="POST" enctype="multipart/form-data">
+                                <div class="row" style="margin-top: 35px;" style="display:none;">
+                                    <div class="col-md-3"  style="margin-left: 30px;">
+                                        {# Area en donde se selecciona la sucursal en donde se realiza la venta #}    
+                                        <div id="sucursal-sesion">
+                                            <label>Sucursal</label>
+                                            <select id="dgplusbellebundle_sesioness_sucursal" name="dgplusbellebundle_venta_sesiones[sucursal]" class="sesion-sucursal" style="width: 100%">
+                                                <option value="" disabled selected>Seleccione una sucursal ...</option>
+
+                                                {% for sucursal in sucursales %}
+                                                    <option value="{{sucursal.id}}"> {{sucursal.nombre}}</option>
+                                                {% endfor %}
+                                            </select>   
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        {# Area en donde se selecciona  el empleado que ha realizado la venta #}  
+                                        <div id="empleado-sesion">
+                                            <label>Empleado</label>
+                                            <select id="dgplusbellebundle_sesioness_empleado" name="dgplusbellebundle_venta_sesiones[empleado]" class="sesion-empleado" style="width: 100%">
+                                                <option value="" disabled selected>Seleccione un empleado ...</option>
+
+                                                {% for empleado in empleadosVenta %}
+                                                    <option value="{{empleado.id}}"> {{empleado.persona}}</option>
+                                                {% endfor %}
+                                            </select>   
+                                        </div>
+                                    </div> 
+                                    <div class="col-md-3" style="display:none;" id="seguimiento-sesioness-tratamiento">
+                                        <div id="sesiones-tratamiento">
+                                            <label>Tratamiento</label>
+                                            <select id="dgplusbellebundle_sesioness_tratamiento" name="dgplusbellebundle_venta_sesiones[tratamiento]" class="sesion_tratamiento" style="width: 100%">
+                                                <option value="" disabled selected>Seleccione un tratamiento...</option>
+                                            </select>    
+                                        </div>    
+                                    </div>        
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-12 col-sm-12 text-center" style="margin-top: 30px; margin-bottom: 10px;" id="registrar-sesiones-tratamiento">
+                                        <hr>
+                                        <input type="submit" value="Registrar sesión de tratamiento" style="margin-bottom: 10px; background-color: #39a58a; color: #FFF;" class="btn" id="registro-sesioness-tratamiento"/>
+                                    </div>    
+                                </div>             
+                            </form>
+                            <div class="row" style="margin-top: 50px;"></div>                
+                        </div>
+
+                        {# Sección en donde se encuentran las imagenes de un determinado tratamiento #}
+                        <div id="imagenes" class="tab-pane fade" style="margin-top: 20px;">
+                            <div class="row" style="margin-top: 35px; padding: 30px;" style="display:none;">
+                                <form id="formImagen" role="form" enctype="multipart/form-data" method="post">
+                                <div class="col-md-3 pull-center" id="imagenes-sesiones-tratamiento">
                                     <div id="sesiones-tratamiento">
                                         <label>Tratamiento</label>
-                                        <select id="dgplusbellebundle_sesioness_tratamiento" name="dgplusbellebundle_venta_sesiones[tratamiento]" class="sesion_tratamiento" style="width: 100%">
+                                        <select id="dgplusbellebundle_imagenes_tratamiento" name="venta_imagenes_tratamiento" class="sesion_tratamiento" style="width: 100%">
                                             <option value="" disabled selected>Seleccione un tratamiento...</option>
                                         </select>    
                                     </div>    
-                                </div>        
-                            </div>
-                            <div class="row">
-                                <div class="col-md-12 col-sm-12 text-center" style="margin-top: 30px; margin-bottom: 10px;" id="registrar-sesiones-tratamiento">
-                                    <hr>
-                                    <input type="submit" value="Registrar sesión de tratamiento" style="margin-bottom: 10px; background-color: #39a58a; color: #FFF;" class="btn" id="registro-sesioness-tratamiento"/>
-                                </div>    
-                            </div>             
-                        </form>
-                        <div class="row" style="margin-top: 50px;"></div>                
-                    </div>
-                    
-                    {# Sección en donde se encuentran las imagenes de un determinado tratamiento #}
-                    <div id="imagenes" class="tab-pane fade" style="margin-top: 20px;">
-                        <div class="row" style="margin-top: 35px; padding: 30px;" style="display:none;">
-                            <form id="formImagen" role="form" enctype="multipart/form-data" method="post">
-                            <div class="col-md-3 pull-center" id="imagenes-sesiones-tratamiento">
-                                <div id="sesiones-tratamiento">
-                                    <label>Tratamiento</label>
-                                    <select id="dgplusbellebundle_imagenes_tratamiento" name="venta_imagenes_tratamiento" class="sesion_tratamiento" style="width: 100%">
-                                        <option value="" disabled selected>Seleccione un tratamiento...</option>
-                                    </select>    
-                                </div>    
-                            </div>
-                            <div class="col-md-3 col-md-offset-1 pull-center" id="imagenes-sesiones-sesiones">
-                                <div class="row">        
-                                    <strong>Subir imagen</strong>
-                                    <div class="row" style="margin-top:20px;">
-                                        <div class="col-md-12">
-                                            
-                                                <input id="file-input" required type="file" name="file[]" multiple>
-                                                <input type="hidden" id="idSesion" name="idSesion" class="form-control input-sm"/>
-                                            
+                                </div>
+                                <div class="col-md-3 col-md-offset-1 pull-center" id="imagenes-sesiones-sesiones">
+                                    <div class="row">        
+                                        <strong>Subir imagen</strong>
+                                        <div class="row" style="margin-top:20px;">
+                                            <div class="col-md-12">
+
+                                                    <input id="file-input" required type="file" name="file[]" multiple>
+                                                    <input type="hidden" id="idSesion" name="idSesion" class="form-control input-sm"/>
+
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
+                                </form>        
                             </div>
-                            </form>        
-                        </div>
-                        <div class="row" style="margin-top:20px; padding: 30px;">
-                            <div class="col-md-12">
-                                <strong style="margin-top:80px;">Archivos adjuntos</strong>
-                            </div>    
-                            <div class="col-md-12">
-                                <div id="listadoImagenes"></div>
+                            <div class="row" style="margin-top:20px; padding: 30px;">
+                                <div class="col-md-12">
+                                    <strong style="margin-top:80px;">Archivos adjuntos</strong>
+                                </div>    
+                                <div class="col-md-12">
+                                    <div id="listadoImagenes"></div>
+                                </div>
                             </div>
+                            <div class="row">
+                                <div class="col-md-12 col-sm-12 text-center" style="margin-top: 30px; margin-bottom: 10px;" id="registrar-sesiones-imagenes">
+                                    <hr>
+                                    <input type="submit" value="Guardar imagenes" style="margin-bottom: 10px; background-color: #39a58a; color: #FFF;" class="btn" id="registro-sesiones-imagenes"/>
+                                </div>    
+                            </div>                
                         </div>
-                        <div class="row">
-                            <div class="col-md-12 col-sm-12 text-center" style="margin-top: 30px; margin-bottom: 10px;" id="registrar-sesiones-imagenes">
-                                <hr>
-                                <input type="submit" value="Guardar imagenes" style="margin-bottom: 10px; background-color: #39a58a; color: #FFF;" class="btn" id="registro-sesiones-imagenes"/>
-                            </div>    
-                        </div>                
-                    </div>
-                    
-                    {# Sección en donde se muestra el seguimiento de la venta #}
-                    <div id="seguimiento-venta" class="tab-pane fade" style="margin-top: 20px;">
-                        <div class="row" style="margin-top: 0px;">
-                            <div class="col-md-12" style="margin-bottom: 25px;">
-                               <form id="formulario-sesiones-tratamiento" method="POST" enctype="multipart/form-data">
-                                    <div class="row" style="margin-top: 0px;" style="display:none;">
-                                        <div class="col-md-4" >
-                                            {# Area en donde se selecciona la sucursal en donde se realiza la venta #}    
-                                            <div id="sucursal-sesion">
-                                                <label>Sucursal</label>
-                                                <select id="dgplusbellebundle_sesiones_sucursal" name="dgplusbellebundle_venta_sesiones[sucursal]" class="sesion-sucursal" style="width: 100%">
-                                                    <option value="" disabled selected>Seleccione una sucursal ...</option>
 
-                                                    {% for sucursal in sucursales %}
-                                                        <option value="{{sucursal.id}}"> {{sucursal.nombre}}</option>
-                                                    {% endfor %}
-                                                </select>   
+                        {# Sección en donde se muestra el seguimiento de la venta #}
+                        <div id="seguimiento-venta" class="tab-pane fade" style="margin-top: 20px;">
+                            <div class="row" style="margin-top: 0px;">
+                                <div class="col-md-12" style="margin-bottom: 25px;">
+                                   <form id="formulario-sesiones-tratamiento" method="POST" enctype="multipart/form-data">
+                                        <div class="row" style="margin-top: 0px;" style="display:none;">
+                                            <div class="col-md-4" >
+                                                {# Area en donde se selecciona la sucursal en donde se realiza la venta #}    
+                                                <div id="sucursal-sesion">
+                                                    <label>Sucursal</label>
+                                                    <select id="dgplusbellebundle_sesiones_sucursal" name="dgplusbellebundle_venta_sesiones[sucursal]" class="sesion-sucursal" style="width: 100%">
+                                                        <option value="" disabled selected>Seleccione una sucursal ...</option>
+
+                                                        {% for sucursal in sucursales %}
+                                                            <option value="{{sucursal.id}}"> {{sucursal.nombre}}</option>
+                                                        {% endfor %}
+                                                    </select>   
+                                                </div>
                                             </div>
+                                            <div class="col-md-4">
+                                                {# Area en donde se selecciona  el empleado que ha realizado la venta #}  
+                                                <div id="empleado-sesion">
+                                                    <label>Empleado</label>
+                                                    <select id="dgplusbellebundle_sesiones_empleado" name="dgplusbellebundle_venta_sesiones[empleado]" class="sesion-empleado" style="width: 100%">
+                                                        <option value="" disabled selected>Seleccione un empleado ...</option>
+
+                                                        {% for empleado in empleadosVenta %}
+                                                            <option value="{{empleado.id}}"> {{empleado.persona}}</option>
+                                                        {% endfor %}
+                                                    </select>   
+                                                </div>
+                                            </div> 
+                                            <div class="col-md-4" style="display:none;" id="seguimiento-sesiones-tratamiento">
+                                                <div id="sesiones-tratamiento">
+                                                    <label>Tratamiento</label>
+                                                    <select id="dgplusbellebundle_sesiones_tratamiento" name="dgplusbellebundle_venta_sesiones[tratamiento]" class="sesion_tratamiento" style="width: 100%">
+                                                        <option value="" disabled selected>Seleccione un tratamiento...</option>
+                                                    </select>    
+                                                </div>    
+                                            </div>        
                                         </div>
-                                        <div class="col-md-4">
-                                            {# Area en donde se selecciona  el empleado que ha realizado la venta #}  
-                                            <div id="empleado-sesion">
-                                                <label>Empleado</label>
-                                                <select id="dgplusbellebundle_sesiones_empleado" name="dgplusbellebundle_venta_sesiones[empleado]" class="sesion-empleado" style="width: 100%">
-                                                    <option value="" disabled selected>Seleccione un empleado ...</option>
-
-                                                    {% for empleado in empleadosVenta %}
-                                                        <option value="{{empleado.id}}"> {{empleado.persona}}</option>
-                                                    {% endfor %}
-                                                </select>   
-                                            </div>
-                                        </div> 
-                                        <div class="col-md-4" style="display:none;" id="seguimiento-sesiones-tratamiento">
-                                            <div id="sesiones-tratamiento">
-                                                <label>Tratamiento</label>
-                                                <select id="dgplusbellebundle_sesiones_tratamiento" name="dgplusbellebundle_venta_sesiones[tratamiento]" class="sesion_tratamiento" style="width: 100%">
-                                                    <option value="" disabled selected>Seleccione un tratamiento...</option>
-                                                </select>    
-                                            </div>    
-                                        </div>        
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-md-12 col-sm-12 text-center" style="margin-top: 30px; margin-bottom: 10px;" id="registrar-sesiones-tratamiento">
-                                            <input type="submit" value="Registrar sesión de tratamiento" style="margin-bottom: 10px; color: #FFF;" class="btn btn-primary btn-xs" id="registro-sesiones-tratamiento"/>
-                                        </div>    
-                                    </div>             
-                                </form> 
-                            </div>
-                        </div>
-                        <div class="row" id="detalle-venta-info">
-                             <div class="col-md-12" style="margin-bottom: 25px;">
-                                <hr>
-                            </div>
-                            <div class="col-md-8" style="margin-left: 30px;">
-                                <div class="row">
-                                    <div class="col-md-2" style="margin-bottom: 10px;">
-                                        <strong>Costo:</strong>
-                                    </div>
-                                    <div class="col-md-2" style="margin-bottom: 10px;">
-                                        <span id="detalle-venta-costo"></span>
-                                    </div>
-                                    <div class="col-md-2" style="margin-bottom: 10px;">
-                                        <strong>Cuotas:</strong>
-                                    </div>
-                                    <div class="col-md-2" style="margin-bottom: 10px;">
-                                        <span id="detalle-venta-cuotas"></span>
-                                    </div>
-                                    <div class="col-md-2" style="margin-bottom: 10px;">
-                                        <strong>Deuda:</strong><span></span>
-                                    </div>
-                                    <div class="col-md-2" style="margin-bottom: 10px;">
-                                        <span id="detalle-venta-deuda">
-                                        </span>
-                                    </div>
-                                </div>  
-                            </div>
-                            <div class="clearfix"></div>
-                            <div class="col-md-12" style="margin-bottom: 25px;">
-                                <hr>
-                            </div>
-                            <div class="col-md-6" style=" margin-top: 10px;">
-                                <div class="row">
-                                    <div class="col-md-6" style="margin-bottom: 20px;">
                                         <div class="row">
-                                            <div class="col-md-4" style="margin-bottom: 20px;">
-                                                <strong>Paquete: </strong>
-                                            </div>
-                                            <div class="col-md-8" style="margin-bottom: 20px;">
-                                                <span></span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-1" style="margin-bottom: 20px;">
-                                        <img class='' style='height: 25px;'  src='{{ asset('Photos/Estados/sesion_realizada.png')}}' title='Sesion pendiente'>
-                                    </div>
-                                    <div class="col-md-2" style="margin-bottom: 20px;">
-                                        <span>Sesion realizada</span>
-                                    </div>
-                                    <div class="col-md-1" style="margin-bottom: 20px;">
-                                        <img class='' style='height: 25px;'  src='{{ asset('Photos/Estados/sesion_pendiente.png')}}' title='Sesion pendiente'>
-                                    </div>
-                                    <div class="col-md-2" style="margin-bottom: 20px;">
-                                        <span>Sesion pendiente</span>
-                                    </div>
-                                </div> 
-                                <div class="row">
-                                    <div class="col-md-12" style="margin-bottom: 10px;">
-                                        <hr>
-                                        <p class="text-center"><strong>Sesiones</strong></p>
-                                        <hr>
-                                    </div>
-                                </div> 
-                                <div id="detalle-venta-tratamientos">
-                                    
-                                </div>    
-                                <div class="row">
-                                    <div class="col-md-12" style="margin-bottom: 10px;">
-                                        <hr>
-                                    </div>
-                                </div>             
-                            </div>
-                            <div class="col-md-6 col-sm-5" >
-                                <div class="row">
-                                    <div class="col-md-12 col-sm-12">
-                                        <div id="listadoPaquete" style="display: none;">
-                                            <table id="listadoSesiones1" class="robo listados table table-bordered table-hover" style="width:100%;">
-                                                <thead>
-                                                    <tr>
-                                                        <th class="text-center">Fecha de sesión</th>
-                                                        <th class="text-center">Tratamiento</th>
-                                                        <th class="text-center">Empleado</th>
-                                                        <th class="text-center">Sucursal</th>
-                                                    </tr>
-                                                </thead>
-                                            </table>
-                                        </div>
-                                        <div id="listadoTratamiento" style="display: none;">
-                                            <table id="listadoSesiones2" class="robo listados table table-bordered table-hover" style="width:100%;">
-                                                <thead>
-                                                    <tr>
-                                                        <th class="text-center">Fecha de sesión</th>
-                                                        <th class="text-center">Empleado</th>
-                                                        <th class="text-center">Sucursal</th>
-                                                    </tr>
-                                                </thead>
-                                            </table>
-                                        </div>
-                                    </div>
+                                            <div class="col-md-12 col-sm-12 text-center" style="margin-top: 30px; margin-bottom: 10px;" id="registrar-sesiones-tratamiento">
+                                                <input type="submit" value="Registrar sesión de tratamiento" style="margin-bottom: 10px; color: #FFF;" class="btn btn-primary btn-xs" id="registro-sesiones-tratamiento"/>
+                                            </div>    
+                                        </div>             
+                                    </form> 
                                 </div>
                             </div>
-                        </div>                            
-                    </div>                
-                                    
-                    {# Sección en donde se registran los abonos y devoluciones de un paquete o tratamiento #}
-                    <div id="abonos-devoluciones" class="tab-pane fade" style="margin-top: 20px;">
-                        <form id="formulario-sesiones-tratamiento" method="POST" enctype="multipart/form-data">
-                            <div class="row">
-                                <div class="col-md-4" >
-                                    {# Area en donde se selecciona la sucursal en donde se realiza la venta #}    
-                                    <div id="sucursal-sesion">
-                                        <label>Sucursal</label>
-                                        <select id="dgplusbellebundle_abono_sucursal" name="dgplusbellebundle_abono[sucursal]" class="sesion-sucursal" style="width: 100%">
-                                            <option value="" disabled selected>Seleccione una sucursal ...</option>
-
-                                            {% for sucursal in sucursales %}
-                                                <option value="{{sucursal.id}}"> {{sucursal.nombre}}</option>
-                                            {% endfor %}
-                                        </select>   
-                                    </div>
-                                </div>
-                                <div class="col-md-4">
-                                    {# Area en donde se selecciona  el empleado que ha realizado la venta #}  
-                                    <div id="empleado-sesion">
-                                        <label>Empleado</label>
-                                        <select id="dgplusbellebundle_abono_empleado" name="dgplusbellebundle_abono[empleado]" class="sesion-empleado" style="width: 100%">
-                                            <option value="" disabled selected>Seleccione un empleado ...</option>
-
-                                            {% for empleado in empleadosVenta %}
-                                                <option value="{{empleado.id}}"> {{empleado.persona}}</option>
-                                            {% endfor %}
-                                        </select>   
-                                    </div>
-                                </div> 
-                                <div class="col-md-4">
-                                    <div id="abono-monto">
-                                        <label>Monto ($)</label>
-                                        <input type="text" name="dgplusbellebundle_abono[monto]" id="dgplusbellebundle_abono_monto" class="form-control" style="width: 100%">        
-                                    </div>    
-                                </div>        
-                            </div>
-                            <div class="row">
-                                <div class="col-md-7 col-sm-7" style="margin-top: 30px; margin-bottom: 10px;" id="abono">
-                                    <div id="abono-descripcion-label">
-                                        <label>Descripcion</label>
-                                    </div> 
-                                    <div class="clearfix"></div>
-                                    <div id="abono-descripcion">
-                                        <textarea rows="4" cols="100" name="dgplusbellebundle_abono[descripcion]" id="dgplusbellebundle_abono_descripcion" class="form-control"></textarea> 
-                                    </div>     
-                                </div>    
-                            </div>               
-                            <div class="row">
-                                <div class="col-md-12 col-sm-12 text-center" style="margin-top: 30px; margin-bottom: 10px;" id="registrar-abonos-sesiones">
+                            <div class="row" id="detalle-venta-info">
+                                 <div class="col-md-12" style="margin-bottom: 25px;">
                                     <hr>
-                                    <input type="submit" value="Registrar abono" style="margin-bottom: 10px; color: #FFF;" class="btn btn-xs btn-primary" id="registro-abono"/>
-                                </div>    
-                            </div>              
-                        </form>
-                        <div class="row" style="margin-top: 50px;"></div>          
-                    </div>
-                </div> 
+                                </div>
+                                <div class="col-md-8" style="margin-left: 30px;">
+                                    <div class="row">
+                                        <div class="col-md-2" style="margin-bottom: 10px;">
+                                            <strong>Costo:</strong>
+                                        </div>
+                                        <div class="col-md-2" style="margin-bottom: 10px;">
+                                            <span id="detalle-venta-costo"></span>
+                                        </div>
+                                        <div class="col-md-2" style="margin-bottom: 10px;">
+                                            <strong>Cuotas:</strong>
+                                        </div>
+                                        <div class="col-md-2" style="margin-bottom: 10px;">
+                                            <span id="detalle-venta-cuotas"></span>
+                                        </div>
+                                        <div class="col-md-2" style="margin-bottom: 10px;">
+                                            <strong>Deuda:</strong><span></span>
+                                        </div>
+                                        <div class="col-md-2" style="margin-bottom: 10px;">
+                                            <span id="detalle-venta-deuda">
+                                            </span>
+                                        </div>
+                                    </div>  
+                                </div>
+                                <div class="clearfix"></div>
+                                <div class="col-md-12" style="margin-bottom: 25px;">
+                                    <hr>
+                                </div>
+                                <div class="col-md-6" style=" margin-top: 10px;">
+                                    <div class="row">
+                                        <div class="col-md-6" style="margin-bottom: 20px;">
+                                            <div class="row">
+                                                <div class="col-md-4" style="margin-bottom: 20px;">
+                                                    <strong>Paquete: </strong>
+                                                </div>
+                                                <div class="col-md-8" style="margin-bottom: 20px;">
+                                                    <span></span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-1" style="margin-bottom: 20px;">
+                                            <img class='' style='height: 25px;'  src='{{ asset('Photos/Estados/sesion_realizada.png')}}' title='Sesion pendiente'>
+                                        </div>
+                                        <div class="col-md-2" style="margin-bottom: 20px;">
+                                            <span>Sesion realizada</span>
+                                        </div>
+                                        <div class="col-md-1" style="margin-bottom: 20px;">
+                                            <img class='' style='height: 25px;'  src='{{ asset('Photos/Estados/sesion_pendiente.png')}}' title='Sesion pendiente'>
+                                        </div>
+                                        <div class="col-md-2" style="margin-bottom: 20px;">
+                                            <span>Sesion pendiente</span>
+                                        </div>
+                                    </div> 
+                                    <div class="row">
+                                        <div class="col-md-12" style="margin-bottom: 10px;">
+                                            <hr>
+                                            <p class="text-center"><strong>Sesiones</strong></p>
+                                            <hr>
+                                        </div>
+                                    </div> 
+                                    <div id="detalle-venta-tratamientos">
+
+                                    </div>    
+                                    <div class="row">
+                                        <div class="col-md-12" style="margin-bottom: 10px;">
+                                            <hr>
+                                        </div>
+                                    </div>             
+                                </div>
+                                <div class="col-md-6 col-sm-5" >
+                                    <div class="row">
+                                        <div class="col-md-12 col-sm-12">
+                                            <div id="listadoPaquete" style="display: none;">
+                                                <table id="listadoSesiones1" class="robo listados table table-bordered table-hover" style="width:100%;">
+                                                    <thead>
+                                                        <tr>
+                                                            <th class="text-center">Fecha de sesión</th>
+                                                            <th class="text-center">Tratamiento</th>
+                                                            <th class="text-center">Empleado</th>
+                                                            <th class="text-center">Sucursal</th>
+                                                        </tr>
+                                                    </thead>
+                                                </table>
+                                            </div>
+                                            <div id="listadoTratamiento" style="display: none;">
+                                                <table id="listadoSesiones2" class="robo listados table table-bordered table-hover" style="width:100%;">
+                                                    <thead>
+                                                        <tr>
+                                                            <th class="text-center">Fecha de sesión</th>
+                                                            <th class="text-center">Empleado</th>
+                                                            <th class="text-center">Sucursal</th>
+                                                        </tr>
+                                                    </thead>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>                            
+                        </div>                
+
+                        {# Sección en donde se registran los abonos y devoluciones de un paquete o tratamiento #}
+                        <div id="abonos-devoluciones" class="tab-pane fade" style="margin-top: 20px;">
+                            <form id="formulario-sesiones-tratamiento" method="POST" enctype="multipart/form-data">
+                                <div class="row">
+                                    <div class="col-md-4" >
+                                        {# Area en donde se selecciona la sucursal en donde se realiza la venta #}    
+                                        <div id="sucursal-sesion">
+                                            <label>Sucursal</label>
+                                            <select id="dgplusbellebundle_abono_sucursal" name="dgplusbellebundle_abono[sucursal]" class="sesion-sucursal" style="width: 100%">
+                                                <option value="" disabled selected>Seleccione una sucursal ...</option>
+
+                                                {% for sucursal in sucursales %}
+                                                    <option value="{{sucursal.id}}"> {{sucursal.nombre}}</option>
+                                                {% endfor %}
+                                            </select>   
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        {# Area en donde se selecciona  el empleado que ha realizado la venta #}  
+                                        <div id="empleado-sesion">
+                                            <label>Empleado</label>
+                                            <select id="dgplusbellebundle_abono_empleado" name="dgplusbellebundle_abono[empleado]" class="sesion-empleado" style="width: 100%">
+                                                <option value="" disabled selected>Seleccione un empleado ...</option>
+
+                                                {% for empleado in empleadosVenta %}
+                                                    <option value="{{empleado.id}}"> {{empleado.persona}}</option>
+                                                {% endfor %}
+                                            </select>   
+                                        </div>
+                                    </div> 
+                                    <div class="col-md-4">
+                                        <div id="abono-monto">
+                                            <label>Monto ($)</label>
+                                            <input type="text" name="dgplusbellebundle_abono[monto]" id="dgplusbellebundle_abono_monto" class="form-control" style="width: 100%">        
+                                        </div>    
+                                    </div>        
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-7 col-sm-7" style="margin-top: 30px; margin-bottom: 10px;" id="abono">
+                                        <div id="abono-descripcion-label">
+                                            <label>Descripcion</label>
+                                        </div> 
+                                        <div class="clearfix"></div>
+                                        <div id="abono-descripcion">
+                                            <textarea rows="4" cols="100" name="dgplusbellebundle_abono[descripcion]" id="dgplusbellebundle_abono_descripcion" class="form-control"></textarea> 
+                                        </div>     
+                                    </div>    
+                                </div>               
+                                <div class="row">
+                                    <div class="col-md-12 col-sm-12 text-center" style="margin-top: 30px; margin-bottom: 10px;" id="registrar-abonos-sesiones">
+                                        <hr>
+                                        <input type="submit" value="Registrar abono" style="margin-bottom: 10px; color: #FFF;" class="btn btn-xs btn-primary" id="registro-abono"/>
+                                    </div>    
+                                </div>              
+                            </form>
+                            <div class="row" style="margin-top: 50px;"></div>          
+                        </div>
+                    </div> 
+                </div>
             </div><!-- /.panel -->
         </div>
     </div>
@@ -727,6 +723,7 @@
             var id_ventatratamiento = 0;
             var pendientes = 0;
             var deuda_total = 0;
+            var idPac = 0;
             var url = "{{path('admin_sesiones_paciente_data_paquete')}}"+'?id='+id_ventapaquete;
 
             var table1 = $('#listadoSesiones1').DataTable({
@@ -803,7 +800,58 @@
 
             });
             
+            function formatRepo (data) {
+                if(data.nombres){
+                    var markup = "<div class='select2-result-repository clearfix'>" +
+                                 "<div class='select2-result-repository__meta'>" +
+                                 "<div class='select2-result-repository__title'>" + data.numero + " - " + data.nombres + " " + data.apellidos + "</div>" +
+                                 "</div></div>";
+                } else {
+                    var markup = "Seleccione un paciente";
+                }
+
+                return markup;
+            }
+
+            function formatRepoSelection (data) {
+                if(data.nombres){
+                    return data.numero + " - " + data.nombres + " " + data.apellidos;
+                } else {
+                    return "Seleccione un paciente";
+                }   
+            }
+            
             $(document).ready(function(){
+                $("#busqueda-paciente").select2({
+                    ajax: {
+                        url: "{{path('busqueda_paciente_form')}}",
+                        dataType: 'json',
+                        delay: 250,
+                        data: function (params) {
+                          return {
+                            q: params.term, 
+                            page: params.page
+                          };
+                        },
+                        processResults: function (data, params) {
+                            var select2Data = $.map(data.data, function (obj) {
+                                obj.id = obj.pacienteid;
+                                obj.text = obj.numero + ' - ' + obj.nombres + ' ' + obj.apellidos;
+
+                                return obj;
+                            });
+
+                            return {
+                                results: select2Data};
+                        },
+                        cache: true
+                    },
+                    escapeMarkup: function (markup) { return markup; }, 
+                    minimumInputLength: 1,
+                    templateResult: formatRepo, 
+                    templateSelection: formatRepoSelection 
+                });
+                
                 $("#dgplusbellebundle_venta_sexo").select2();
                 $("#dgplusbellebundle_venta_ecivil").select2();
                 
@@ -818,7 +866,97 @@
                 $('#dgplusbellebundle_abono_sucursal').select2();
                 $('#dgplusbellebundle_abono_empleado').select2();
                 $('#dgplusbellebundle_imagenes_tratamiento').select2();
-                $('#dgplusbellebundle_venta_tratamiento').val('');
+                $('#dgplusbellebundle_venta_tratamiento').val('').change();
+                $('#busqueda-paciente').val('').change();
+                $('#dgplusbellebundle_venta_nombres').val('');
+                $('#dgplusbellebundle_venta_apellidos').val('');
+                $('#dgplusbellebundle_venta_telefono1').val('');
+                $('#dgplusbellebundle_venta_telefono2').val('');
+                $('#dgplusbellebundle_venta_direccion').val('');
+                $('#dgplusbellebundle_venta_correo').val('');
+                $('#dgplusbellebundle_venta_dui').val('');
+                $('#dgplusbellebundle_venta_ecivil').val('').change();
+                $('#dgplusbellebundle_venta_sexo').val('').change();
+                $('#dgplusbellebundle_venta_ocupacion').val('');
+                $('#dgplusbellebundle_venta_lugar').val('');
+                $('#dgplusbellebundle_venta_fechaNacimiemto').val('');
+                $('#dgplusbellebundle_venta_referidopor').val('');
+                $('#dgplusbellebundle_venta_nombreEmergencia').val('');
+                $('#dgplusbellebundle_venta_telefonoEmergencia').val('');
+                
+                $("#editar-paciente").prop('disabled', true);
+                $("#registro-venta").prop('disabled', true);
+                
+                // Al seleccionar un paciente de la busqueda
+                $(document).on("change","#busqueda-paciente", function(){
+                    idPac = $(this).val();
+                    
+                    $.ajax({
+                        data:{idPac:idPac},
+                        url:"{{path('busqueda_informacion_paciente')}}",
+                        type: "post",
+                        success: function (data) {
+                            if(data.data.length!=0){
+                                var nombres = ""; 
+                                nombres = data.data[0].nombres+" "+ data.data[0].apellidos;
+                                $('#nombrePaciente').html(nombres);
+
+                                var telefono= '<i class="fa fa-phone"></i>';
+                                if(data.data[0].telefono==null){
+                                    $('#telefono').html(telefono+" N/A");
+                                }
+                                else{
+                                    $('#telefono').html(telefono+ " "+data.data[0].telefono);
+                                }
+
+                                var direccion = '<i class="fa fa-map-marker fa-fw"></i>';
+                                if(!data.data[0].direccion){
+                                    $('#direccion').html(direccion+" "+data.data[0].direccion);
+                                }
+                                else{
+                                    $('#direccion').html(direccion+' N/A');
+                                }
+
+                                var expediente ='<i class="fa fa-clipboard"></i>';
+//                                $('#expediente').html(expediente + " " + data.data[0].numero);
+                                $('#expediente').html('<i class=\"fa fa-clipboard\"></i> <a style=\"color:#FFF;text-decoration: underline;\" href=\"'+Routing.generate('admin_consulta_expediente_sd')+"?id="+data.data[0].numero+'\">'+data.data[0].numero+'</a>');
+                                
+                                var edad='<i class="fa fa-birthday-cake"></i>';
+                                if(data.data[0].direccion==null){
+                                    $('#edad').html(edad+" N/A");
+                                }
+                                else{
+                                    $('#edad').html(edad+" "+data.edad);
+                                }
+                                
+                                var fecha_nacimiento = data.data[0].fechaNacimiento;
+                                fecha_nacimiento = fecha_nacimiento.split("-"); 
+                                
+                                $('#dgplusbellebundle_venta_nombres').val(data.data[0].nombres);
+                                $('#dgplusbellebundle_venta_apellidos').val(data.data[0].apellidos);
+                                $('#dgplusbellebundle_venta_telefono1').val(data.data[0].telefono);
+                                $('#dgplusbellebundle_venta_telefono2').val(data.data[0].telefono2);
+                                $('#dgplusbellebundle_venta_direccion').val(data.data[0].direccion);
+                                $('#dgplusbellebundle_venta_correo').val(data.data[0].email);
+                                $('#dgplusbellebundle_venta_dui').val(data.data[0].dui);
+                                $('#dgplusbellebundle_venta_ecivil').val(data.data[0].estadoCivil).change();
+                                $('#dgplusbellebundle_venta_sexo').val(data.data[0].sexo).change();
+                                $('#dgplusbellebundle_venta_ocupacion').val(data.data[0].ocupacion);
+                                $('#dgplusbellebundle_venta_lugar').val(data.data[0].lugarTrabajo);
+                                $('#dgplusbellebundle_venta_fechaNacimiemto').val(fecha_nacimiento[2] + '-' + fecha_nacimiento[1] + '-' + fecha_nacimiento[0]);
+                                $('#dgplusbellebundle_venta_referidopor').val(data.data[0].referidoPor);
+                                $('#dgplusbellebundle_venta_nombreEmergencia').val(data.data[0].personaEmergencia);
+                                $('#dgplusbellebundle_venta_telefonoEmergencia').val(data.data[0].telefonoEmergencia);
+                                
+                                $("#editar-paciente").prop('disabled', false);
+                                $("#registro-venta").prop('disabled', false);
+                                
+                                var infoPaciente = document.getElementById('info-Paciente');                                
+                                infoPaciente.style.display = 'block';
+                            }
+                        }
+                    });
+                });
                 
                 // Estableciendo la máscara a los campos que lo requieren
                 $('#dgplusbellebundle_venta_dui').mask('00000000-0');  
@@ -982,7 +1120,7 @@
                     var telefonoEmergencia = $('#dgplusbellebundle_venta_telefonoEmergencia').val();
                 
                     var data = {
-                                  {#id : {{paciente.id}},#}
+                                  id : idPac,
                                   nombres : nombres,
                                   apellidos : apellidos,
                                   telefono : telefono,
@@ -1021,7 +1159,7 @@
                 
                 // Al momento de hacer click en Registrar venta 
                 $(document).on("click", "#registro-venta", function(){
-                    {#var idpac = '{{paciente.id}}';#}
+                    var idpac = idPac;
                     var paquete = $('#dgplusbellebundle_venta_paquete').val();
                     var tratamiento = $('#dgplusbellebundle_venta_tratamiento').val();
                     var sucursal = $('#dgplusbellebundle_venta_sucursal').val();
@@ -1038,91 +1176,220 @@
                     var listadoSesiones1 = document.getElementById('listadoPaquete');
                     var listadoSesiones2 = document.getElementById('listadoTratamiento');
                     
-                    // Si se ha chequeado en el tipo de venta Paquete
-                    if($("#tipo-venta-paquete").is(':checked')) {
-                        if(paquete != null){
-                            if(sucursal != null){
-                                if(costo.length > 0){
-                                    if(cuotas > 0){
-                                        var aux = 0;
-                                        
-                                        $('.sesionesPaqueteTrata').each(function( key, value ) {
-                                            if($(this).val() > 0){
-                                                var elemento = $(this).attr('id');
-                                                var res = elemento.split("_"); 
-                                                var lastEl = res[res.length-1];
-                                                
-                                                tratamientos.push(lastEl); 
-                                                sesionesPaqueteTrata.push($(this).val()); 
-                                            }
-                                            
-                                            if(!$(this).val()){
-                                                aux++; 
-                                           }
-                                        });
-                                        if(aux < 1) {
-                                        // Se obtiene la informacion necesaria para registrar la venta
-                                            var data = {
-                                                id : idpac,
-                                                paquete : paquete,
-                                                sucursal : sucursal,
-                                                empleado: empleado,
-                                                costo : costo,
-                                                descuento : descuento,
-                                                cuotas : cuotas,
-                                                observaciones : observaciones,
-                                                tratamientos : tratamientos,
-                                                sesiones : sesionesPaqueteTrata,
-                                            };
-                                            
-                                            // Se procede a registrar la venta del paquete mediante ajax
-                                            $.ajax({
-                                                data:  data,
-                                                url:   '{{path('admin_registro_nueva_venta_paquete')}}',
-                                                type:  'post',
-                                                success:  function (response) {
-                                                    swal('','Venta de paquete registrada!','success');
-                                                    $('#num-label-ses').hide();
-                                                                                                        
-                                                    var tabsAbdev = document.getElementById('tabs-abdev');
-                                                    var seguimientoSesionesTratamiento = document.getElementById('seguimiento-sesiones-tratamiento');
-                                                    var detalleVentaInfo = document.getElementById('detalle-venta-info');
-                                                    var tabsSeguimiento = document.getElementById('tabs-seguimiento');
-                                                    tabsSeguimiento.style.display = 'block';
-                                                    var totalpagar = response.ventaPaqueteTratamientos.costo - response.ventaPaqueteTratamientos.descuento;
-                                                    
-                                                    var costpVenta = response.ventaPaqueteTratamientos.costo - 0;
-                                                    
-                                                    id_ventapaquete = response.ventaPaquete;
-                                                    deuda_total = totalpagar.toFixed(2);
-                                                    
-                                                    var costpVenta = response.ventaPaqueteTratamientos.costo - 0;
-                                                    costpVenta = costpVenta.toFixed(2);
-                                                    
-                                                    // Se guarda el select que será utilizado para el llenado de tratamientos
-                                                    var vtratamientos = $("#dgplusbellebundle_sesiones_tratamiento");
-                                                    
-                                                    $('#detalle-venta-costo').html('$ ' + costpVenta);
-                                                    $('#detalle-venta-cuotas').html(response.ventaPaqueteTratamientos.cuotas);
-                                                    $('#detalle-venta-deuda').html('$ ' + deuda_total);
-                                                    
-                                                    $('#label-tipo-venta').html('<p> Paquete</p>');
-                                                    $('#venta-paquete').html('<label>Paquete</label><p>' + response.paquete + '</p>');
-                                                    
-                                                    var url = "{{path('admin_sesiones_paciente_data_paquete')}}"+'?id='+id_ventapaquete;
-                                                    table1.ajax.url(url).load();
-                                                    listadoSesiones1.style.display = 'block';
-                                                    
-                                                    
-                                                    $.each( response.ventaPaqueteTratamientos.nomTratamientos, function( key, value ) {
+                    // Se verifica que se haya seleccionado un paciente
+                    if(idpac > 0) {
+                        // Si se ha chequeado en el tipo de venta Paquete
+                        if($("#tipo-venta-paquete").is(':checked')) {
+                            if(paquete != null){
+                                if(sucursal != null){
+                                    if(costo.length > 0){
+                                        if(cuotas > 0){
+                                            var aux = 0;
+
+                                            $('.sesionesPaqueteTrata').each(function( key, value ) {
+                                                if($(this).val() > 0){
+                                                    var elemento = $(this).attr('id');
+                                                    var res = elemento.split("_"); 
+                                                    var lastEl = res[res.length-1];
+
+                                                    tratamientos.push(lastEl); 
+                                                    sesionesPaqueteTrata.push($(this).val()); 
+                                                }
+
+                                                if(!$(this).val()){
+                                                    aux++; 
+                                               }
+                                            });
+                                            if(aux < 1) {
+                                            // Se obtiene la informacion necesaria para registrar la venta
+                                                var data = {
+                                                    id : idpac,
+                                                    paquete : paquete,
+                                                    sucursal : sucursal,
+                                                    empleado: empleado,
+                                                    costo : costo,
+                                                    descuento : descuento,
+                                                    cuotas : cuotas,
+                                                    observaciones : observaciones,
+                                                    tratamientos : tratamientos,
+                                                    sesiones : sesionesPaqueteTrata,
+                                                };
+
+                                                // Se procede a registrar la venta del paquete mediante ajax
+                                                $.ajax({
+                                                    data:  data,
+                                                    url:   '{{path('admin_registro_nueva_venta_paquete')}}',
+                                                    type:  'post',
+                                                    success:  function (response) {
+                                                        swal('','Venta de paquete registrada!','success');
+                                                        $('#num-label-ses').hide();
+
+                                                        var tabsAbdev = document.getElementById('tabs-abdev');
+                                                        var seguimientoSesionesTratamiento = document.getElementById('seguimiento-sesiones-tratamiento');
+                                                        var detalleVentaInfo = document.getElementById('detalle-venta-info');
+                                                        var tabsSeguimiento = document.getElementById('tabs-seguimiento');
+                                                        tabsSeguimiento.style.display = 'block';
+                                                        var totalpagar = response.ventaPaqueteTratamientos.costo - response.ventaPaqueteTratamientos.descuento;
+
+                                                        var costpVenta = response.ventaPaqueteTratamientos.costo - 0;
+
+                                                        id_ventapaquete = response.ventaPaquete;
+                                                        deuda_total = totalpagar.toFixed(2);
+
+                                                        var costpVenta = response.ventaPaqueteTratamientos.costo - 0;
+                                                        costpVenta = costpVenta.toFixed(2);
+
+                                                        // Se guarda el select que será utilizado para el llenado de tratamientos
+                                                        var vtratamientos = $("#dgplusbellebundle_sesiones_tratamiento");
+
+                                                        $('#detalle-venta-costo').html('$ ' + costpVenta);
+                                                        $('#detalle-venta-cuotas').html(response.ventaPaqueteTratamientos.cuotas);
+                                                        $('#detalle-venta-deuda').html('$ ' + deuda_total);
+
+                                                        $('#label-tipo-venta').html('<p> Paquete</p>');
+                                                        $('#venta-paquete').html('<label>Paquete</label><p>' + response.paquete + '</p>');
+
+                                                        var url = "{{path('admin_sesiones_paciente_data_paquete')}}"+'?id='+id_ventapaquete;
+                                                        table1.ajax.url(url).load();
+                                                        listadoSesiones1.style.display = 'block';
+
+
+                                                        $.each( response.ventaPaqueteTratamientos.nomTratamientos, function( key, value ) {
+                                                            draw+= '<div class="row">';
+                                                            draw+= '<div class="col-md-5" style="margin-bottom: 10px;">';
+                                                            draw+= '<span>' + value + '</span>';
+                                                            draw+= '</div>';
+                                                            draw+= '<div class="col-md-7" style="margin-bottom: 10px;">';
+                                                            draw+= '<div class="row">';
+
+                                                            for (i = 0; i < response.ventaPaqueteTratamientos.sesiones[key]; i++) {
+                                                                draw+= '<div class="col-md-1" style="margin-bottom: 10px;">';
+                                                                draw+= '<img class="" style="height: 25px;"  src="{{ asset('Photos/Estados/sesion_pendiente.png')}}" title="Sesion pendiente">';
+                                                                draw+= '</div>';
+                                                            }
+
+                                                            draw+= '</div>';
+                                                            draw+= '</div>';
+                                                            draw+= '</div>';
+                                                        });
+
+                                                        $('#detalle-venta-tratamientos').html(draw);
+
+                                                        // LLenado del combobox de tratamientos de la sección de registro de sesiones
+                                                        // con los tratamientos que pertenecen al paquete que se le ha realizado la
+                                                        // la venta
+                                                        $(response.ventaPaqueteTratamientos.tratVenta).each(function(i, v){ 
+                                                            vtratamientos.append('<option value="' + v.id + '">' + v.nombre + '</option>');
+                                                        });
+
+                                                        var imgtratamientos = $("#dgplusbellebundle_imagenes_tratamiento");
+                                                        $(response.ventaPaqueteTratamientos.tratVenta).each(function(i, v){ 
+                                                            imgtratamientos.append('<option value="' + v.id + '">' + v.nombre + '</option>');
+                                                        });
+
+                                                        $("#dgplusbellebundle_imagenes_tratamiento").show();
+
+                                                        tabsAbdev.style.display = 'block';
+                                                        seguimientoSesionesTratamiento.style.display = 'block';
+                                                        detalleVentaInfo.style.display = 'block';
+
+                                                        $('#registro-venta').attr("disabled", true);
+
+                                                        var registrarVenta = document.getElementById('registrar-venta');
+                                                        registrarVenta.style.display = 'none';
+
+                                                        var editarVenta = document.getElementById('modificar-venta');
+                                                        editarVenta.style.display = 'block';
+                                                    }
+                                                });
+
+                                                return false;
+                                            } else {
+                                                swal('','Debe de ingresar las sesiones para todos los tratamientos del paquete!','error');
+                                                return false;
+                                            }                                       
+                                        } else {
+                                            swal('','Ingrese un numero de cuotas valido!','error');
+                                            $( "#dgplusbellebundle_venta_cuotas" ).focus();
+                                            return false;
+                                        }
+                                    } else {
+                                        swal('','Ingrese el valor de la venta ($)!','error');
+                                        $( "#dgplusbellebundle_venta_costo" ).focus();
+                                        return false;
+                                    }
+                                } else {
+                                    swal('','Seleccione una sucursal!','error');
+                                    return false;
+                                }
+                            } else {
+                                swal('','Seleccione el paquete que desea vender!','error');
+                                return false;
+                            }    
+
+                        // Si se ha chequeado en el tipo de venta Tratamiento    
+                        } else {
+                            sesiones = $('#dgplusbellebundle_venta_sesiones').val();
+
+                            if(tratamiento != null){
+                                if(sucursal != null){
+                                    if(costo.length > 0){
+                                        if(cuotas > 0){
+                                            if(sesiones > 0){
+                                                // Se obtiene la informacion necesaria para registrar la venta
+                                                var data = {
+                                                    id : idpac,
+                                                    tratamiento : tratamiento,
+                                                    sucursal : sucursal,
+                                                    empleado: empleado,
+                                                    costo : costo,
+                                                    descuento : descuento,
+                                                    cuotas : cuotas,
+                                                    observaciones : observaciones,
+                                                    sesiones : sesiones,
+                                                };
+
+                                                // Se procede a registrar la venta del tratamiento mediante ajax
+                                                $.ajax({
+                                                    data:  data,
+                                                    url:   '{{path('admin_registro_nueva_venta_tratamiento')}}',
+                                                    type:  'post',
+                                                    success:  function (response) {
+                                                        swal('','Venta de tratamiento registrada!','success');
+
+                                                        var tabsAbdev = document.getElementById('tabs-abdev');
+                                                        var detalleVentaInfo = document.getElementById('detalle-venta-info');
+                                                        var costoTratamiento = response.personaTratamiento.costo;
+                                                        var tabsSeguimiento = document.getElementById('tabs-seguimiento');
+                                                        tabsSeguimiento.style.display = 'block';
+                                                        id_ventatratamiento = response.personaTratamiento.id;
+                                                        deuda_total = (response.personaTratamiento.costo - ((response.personaTratamiento.descuento * response.personaTratamiento.costo)/100) - response.abonos.abonos).toFixed(2);
+                                                        var costpVenta = response.personaTratamiento.costo - 0;
+                                                        costpVenta = costpVenta.toFixed(2);
+
+                                                        $('#detalle-venta-costo').html('$ ' + costpVenta);
+                                                        $('#detalle-venta-cuotas').html(response.personaTratamiento.cuotas);
+                                                        $('#detalle-venta-deuda').html('$ ' + deuda_total);
+
+                                                        $('#detalle-venta-sesiones').html(response.personaTratamiento.sesiones);
+
+                                                        $('#label-tipo-venta').html('<p>Tratamiento</p>');
+                                                        $('#venta-tratamiento').html('<label>Tratamiento</label><p>' + response.tratamiento + '</p>');
+
+                                                        var url2 = "{{path('admin_sesiones_paciente_data_tratamiento')}}"+'?id='+id_ventatratamiento;
+                                                        table2.ajax.url(url2).load();
+                                                        listadoSesiones2.style.display = 'block';
+
                                                         draw+= '<div class="row">';
                                                         draw+= '<div class="col-md-5" style="margin-bottom: 10px;">';
-                                                        draw+= '<span>' + value + '</span>';
+                                                        draw+= '<span>' + response.tratamiento + '</span>';
                                                         draw+= '</div>';
                                                         draw+= '<div class="col-md-7" style="margin-bottom: 10px;">';
-                                                        draw+= '<div class="row">';
+                                                        draw+= '<div class="row" id ="seguimiento-tratamientos-realizados">';
 
-                                                        for (i = 0; i < response.ventaPaqueteTratamientos.sesiones[key]; i++) {
+                                                        pendientes = response.personaTratamiento.sesiones;
+
+                                                        for (i = 0; i < response.personaTratamiento.sesiones; i++) {
                                                             draw+= '<div class="col-md-1" style="margin-bottom: 10px;">';
                                                             draw+= '<img class="" style="height: 25px;"  src="{{ asset('Photos/Estados/sesion_pendiente.png')}}" title="Sesion pendiente">';
                                                             draw+= '</div>';
@@ -1131,176 +1398,53 @@
                                                         draw+= '</div>';
                                                         draw+= '</div>';
                                                         draw+= '</div>';
-                                                    });
-                                                    
-                                                    $('#detalle-venta-tratamientos').html(draw);
-                                                    
-                                                    // LLenado del combobox de tratamientos de la sección de registro de sesiones
-                                                    // con los tratamientos que pertenecen al paquete que se le ha realizado la
-                                                    // la venta
-                                                    $(response.ventaPaqueteTratamientos.tratVenta).each(function(i, v){ 
-                                                        vtratamientos.append('<option value="' + v.id + '">' + v.nombre + '</option>');
-                                                    });
-                                                    
-                                                    var imgtratamientos = $("#dgplusbellebundle_imagenes_tratamiento");
-                                                    $(response.ventaPaqueteTratamientos.tratVenta).each(function(i, v){ 
-                                                        imgtratamientos.append('<option value="' + v.id + '">' + v.nombre + '</option>');
-                                                    });
-                                                    
-                                                    $("#dgplusbellebundle_imagenes_tratamiento").show();
-                                                    
-                                                    tabsAbdev.style.display = 'block';
-                                                    seguimientoSesionesTratamiento.style.display = 'block';
-                                                    detalleVentaInfo.style.display = 'block';
-                                                    
-                                                    $('#registro-venta').attr("disabled", true);
-                                                    
-                                                    var registrarVenta = document.getElementById('registrar-venta');
-                                                    registrarVenta.style.display = 'none';
-                                                    
-                                                    var editarVenta = document.getElementById('modificar-venta');
-                                                    editarVenta.style.display = 'block';
-                                                }
-                                            });
-                                            
-                                            return false;
-                                        } else {
-                                            swal('','Debe de ingresar las sesiones para todos los tratamientos del paquete!','error');
-                                            return false;
-                                        }                                       
-                                    } else {
-                                        swal('','Ingrese un numero de cuotas valido!','error');
-                                        $( "#dgplusbellebundle_venta_cuotas" ).focus();
-                                        return false;
-                                    }
-                                } else {
-                                    swal('','Ingrese el valor de la venta ($)!','error');
-                                    $( "#dgplusbellebundle_venta_costo" ).focus();
-                                    return false;
-                                }
-                            } else {
-                                swal('','Seleccione una sucursal!','error');
-                                return false;
-                            }
-                        } else {
-                            swal('','Seleccione el paquete que desea vender!','error');
-                            return false;
-                        }    
-                        
-                    // Si se ha chequeado en el tipo de venta Tratamiento    
-                    } else {
-                        sesiones = $('#dgplusbellebundle_venta_sesiones').val();
-                        
-                        if(tratamiento != null){
-                            if(sucursal != null){
-                                if(costo.length > 0){
-                                    if(cuotas > 0){
-                                        if(sesiones > 0){
-                                            // Se obtiene la informacion necesaria para registrar la venta
-                                            var data = {
-                                                id : idpac,
-                                                tratamiento : tratamiento,
-                                                sucursal : sucursal,
-                                                empleado: empleado,
-                                                costo : costo,
-                                                descuento : descuento,
-                                                cuotas : cuotas,
-                                                observaciones : observaciones,
-                                                sesiones : sesiones,
-                                            };
-                                            
-                                            // Se procede a registrar la venta del tratamiento mediante ajax
-                                            $.ajax({
-                                                data:  data,
-                                                url:   '{{path('admin_registro_nueva_venta_tratamiento')}}',
-                                                type:  'post',
-                                                success:  function (response) {
-                                                    swal('','Venta de tratamiento registrada!','success');
-                                                    
-                                                    var tabsAbdev = document.getElementById('tabs-abdev');
-                                                    var detalleVentaInfo = document.getElementById('detalle-venta-info');
-                                                    var costoTratamiento = response.personaTratamiento.costo;
-                                                    var tabsSeguimiento = document.getElementById('tabs-seguimiento');
-                                                    tabsSeguimiento.style.display = 'block';
-                                                    id_ventatratamiento = response.personaTratamiento.id;
-                                                    deuda_total = (response.personaTratamiento.costo - ((response.personaTratamiento.descuento * response.personaTratamiento.costo)/100) - response.abonos.abonos).toFixed(2);
-                                                    var costpVenta = response.personaTratamiento.costo - 0;
-                                                    costpVenta = costpVenta.toFixed(2);
-                                                    
-                                                    $('#detalle-venta-costo').html('$ ' + costpVenta);
-                                                    $('#detalle-venta-cuotas').html(response.personaTratamiento.cuotas);
-                                                    $('#detalle-venta-deuda').html('$ ' + deuda_total);
-                                                    
-                                                    $('#detalle-venta-sesiones').html(response.personaTratamiento.sesiones);
-                                                    
-                                                    $('#label-tipo-venta').html('<p>Tratamiento</p>');
-                                                    $('#venta-tratamiento').html('<label>Tratamiento</label><p>' + response.tratamiento + '</p>');
-                                                    
-                                                    var url2 = "{{path('admin_sesiones_paciente_data_tratamiento')}}"+'?id='+id_ventatratamiento;
-                                                    table2.ajax.url(url2).load();
-                                                    listadoSesiones2.style.display = 'block';
-                                                    
-                                                    draw+= '<div class="row">';
-                                                    draw+= '<div class="col-md-5" style="margin-bottom: 10px;">';
-                                                    draw+= '<span>' + response.tratamiento + '</span>';
-                                                    draw+= '</div>';
-                                                    draw+= '<div class="col-md-7" style="margin-bottom: 10px;">';
-                                                    draw+= '<div class="row" id ="seguimiento-tratamientos-realizados">';
-                                                    
-                                                    pendientes = response.personaTratamiento.sesiones;
-                                                    
-                                                    for (i = 0; i < response.personaTratamiento.sesiones; i++) {
-                                                        draw+= '<div class="col-md-1" style="margin-bottom: 10px;">';
-                                                        draw+= '<img class="" style="height: 25px;"  src="{{ asset('Photos/Estados/sesion_pendiente.png')}}" title="Sesion pendiente">';
-                                                        draw+= '</div>';
+
+                                                        $('#detalle-venta-tratamientos').html(draw);
+
+                                                        tabsAbdev.style.display = 'block';
+                                                        detalleVentaInfo.style.display = 'block';
+
+                                                        var registrarVenta = document.getElementById('registrar-venta');
+                                                        registrarVenta.style.display = 'none';
+
+                                                        var editarVenta = document.getElementById('modificar-venta');
+                                                        editarVenta.style.display = 'block';
+
+                                                        $('#registro-venta').attr("disabled", true);
+                                                        $("#imagenes-sesiones-tratamiento").hide();                                                    
                                                     }
-                                                    
-                                                    draw+= '</div>';
-                                                    draw+= '</div>';
-                                                    draw+= '</div>';
-                                                    
-                                                    $('#detalle-venta-tratamientos').html(draw);
-                                                    
-                                                    tabsAbdev.style.display = 'block';
-                                                    detalleVentaInfo.style.display = 'block';
-                                                    
-                                                    var registrarVenta = document.getElementById('registrar-venta');
-                                                    registrarVenta.style.display = 'none';
-                                                    
-                                                    var editarVenta = document.getElementById('modificar-venta');
-                                                    editarVenta.style.display = 'block';
-                                                    
-                                                    $('#registro-venta').attr("disabled", true);
-                                                    $("#imagenes-sesiones-tratamiento").hide();                                                    
-                                                }
-                                            });
-                                            return false;
+                                                });
+                                                return false;
+                                            } else {
+                                                $( "#dgplusbellebundle_venta_cuotas" ).focus();
+                                                swal('','Ingrese la cantidad de sesiones de tratamientos!','error');
+                                                return false;
+                                            }
                                         } else {
+                                            swal('','Ingrese un numero de cuotas valido!','error');
                                             $( "#dgplusbellebundle_venta_cuotas" ).focus();
-                                            swal('','Ingrese la cantidad de sesiones de tratamientos!','error');
                                             return false;
                                         }
                                     } else {
-                                        swal('','Ingrese un numero de cuotas valido!','error');
-                                        $( "#dgplusbellebundle_venta_cuotas" ).focus();
+                                        swal('','Ingrese el valor de la venta!','error');
+                                        $( "#dgplusbellebundle_venta_costo" ).focus();
                                         return false;
                                     }
                                 } else {
-                                    swal('','Ingrese el valor de la venta!','error');
-                                    $( "#dgplusbellebundle_venta_costo" ).focus();
+                                    swal('','Seleccione la sucursal donde se realiza la venta!','error');
                                     return false;
                                 }
                             } else {
-                                swal('','Seleccione la sucursal donde se realiza la venta!','error');
+                                swal('','Seleccione el tratamiento que desea vender!','error');
                                 return false;
-                            }
-                        } else {
-                            swal('','Seleccione el tratamiento que desea vender!','error');
-                            return false;
-                        } 
-                    }    
+                            } 
+                        }    
+                    } else {
+                        swal('','Debe de seleccionar un paciente para registrar la venta!','error');
+                        return false;
+                    } 
                     
-                    console.log(id_ventatratamiento);
+//                    console.log(id_ventatratamiento);
                     return false;
                 });
                 
@@ -1309,7 +1453,7 @@
                 $(document).on("click", "#edit-venta", function(){
                     // Si se ha chequeado en el tipo de venta Paquete
                     if(id_ventapaquete > 0) {
-                        {#var idpac = '{{paciente.id}}';#}
+                        var idpac = idPac;
                         var paquete = $('#dgplusbellebundle_venta_paquete').val();
                         var tratamiento = $('#dgplusbellebundle_venta_tratamiento').val();
                         var sucursal = $('#dgplusbellebundle_venta_sucursal').val();
@@ -1438,7 +1582,7 @@
                         
                     // Si se ha chequeado en el tipo de venta Tratamiento    
                     } else {
-                        {#var idpac = '{{paciente.id}}';#}
+                        var idpac = idPac;
                         var paquete = $('#dgplusbellebundle_venta_paquete').val();
                         var tratamiento = $('#dgplusbellebundle_venta_tratamiento').val();
                         var sucursal = $('#dgplusbellebundle_venta_sucursal').val();
@@ -1829,7 +1973,7 @@
                 
                 // Al momento de hacer click en resgistra abono
                 $(document).on("click", "#registro-abono", function(){
-                    {#var idpac = '{{paciente.id}}';#}
+                    var idpac = idPac;
                     var sucursal = $('#dgplusbellebundle_abono_sucursal').val();
                     var empleado = $('#dgplusbellebundle_abono_empleado').val();
                     var monto = $('#dgplusbellebundle_abono_monto').val();

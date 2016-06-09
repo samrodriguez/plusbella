@@ -682,7 +682,34 @@ class PacienteController extends Controller
         return new Response(json_encode($paciente));
     }
     
-    
+    /**
+    * Ajax utilizado para buscar informacion de una consulta de estetica
+    *  
+    * @Route("/busqueda/data-paciente", name="busqueda_paciente_form")
+    */
+    public function busquedaPacienteFormeAction(Request $request)
+    {
+        $busqueda = $request->query->get('q');
+        $page = $request->query->get('page');
+        
+        //var_dump($page);
+        
+        $em = $this->getDoctrine()->getEntityManager();
+        $dql = "SELECT pac.id pacienteid, per.nombres, per.apellidos, exp.numero "
+                        . "FROM DGPlusbelleBundle:Expediente exp "
+                        . "JOIN exp.paciente pac "
+                        . "JOIN pac.persona per "
+                        . "WHERE (CONCAT(upper(per.nombres), ' ', upper(per.apellidos)) LIKE upper(:busqueda)) "
+                        . "OR upper(exp.numero) LIKE upper(:busqueda) "
+                        . "ORDER BY exp.numero ASC ";
+        
+        $paciente['data'] = $em->createQuery($dql)
+                ->setParameters(array('busqueda'=>"%".$busqueda."%"))
+                ->setMaxResults( 10 )
+                ->getResult();
+        
+        return new Response(json_encode($paciente));
+    }        
     
     /**
      * 
@@ -832,12 +859,50 @@ class PacienteController extends Controller
     }
     
     
-    
-    
-    
-    
-    
-    
+    /**
+     * 
+     *
+     * @Route("/busqueda/registros-generales", name="busqueda_informacion_paciente")
+     */
+    public function busquedaInformacionPacienteAction(Request $request)
+    {
+        $pacienteId = $request->get('idPac');
+        
+        $response = new JsonResponse();
+        
+        $em = $this->getDoctrine()->getEntityManager();
+        $dql = "SELECT per.direccion, per.telefono, per.telefono2, per.nombres as nombres, per.apellidos as apellidos, DATE_FORMAT(pac.fechaNacimiento,'%Y-%m-%d') as fechaNacimiento, per.direccion, per.email, exp.numero, "
+                        . "pac.id as id, pac.ocupacion, pac.dui, pac.estadoCivil, pac.sexo, pac.lugarTrabajo, pac.referidoPor, pac.personaEmergencia, pac.telefonoEmergencia "
+                        . "FROM DGPlusbelleBundle:Expediente exp "
+                        . "JOIN exp.paciente pac "
+                        . "JOIN pac.persona per "
+                        . "WHERE pac.id = :busqueda";
+        
+        $paciente['data'] = $em->createQuery($dql)
+                ->setParameters(array('busqueda'=>$pacienteId)) 
+                ->getResult();
+        
+        if(count($paciente['data'])!=0){
+            if($paciente['data'][0]['fechaNacimiento']!=''){
+                    $fecha = $paciente['data'][0]['fechaNacimiento'];
+
+                    //Calculo de la edad
+                    list($Y,$m,$d) = explode("-",$fecha);
+                    $edad = date("md") < $m.$d ? date("Y")-$Y-1 : date("Y")-$Y;       
+                    $edad = $edad. " años";
+            }
+            else{
+                $edad = "No se ha ingresado fecha de nacimiento";
+            }
+            $paciente['edad'] = $edad;
+        }
+        else{
+            $paciente['edad'] = 0;
+        }
+        
+        $response->setData($paciente);    
+        return $response; 
+    }
     
     
     
