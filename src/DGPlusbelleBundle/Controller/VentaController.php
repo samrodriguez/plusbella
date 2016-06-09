@@ -23,6 +23,35 @@ class VentaController  extends Controller
     /**
      * Nueva venta de paquete o tratamiento
      *
+     * @Route("/nueva", name="admin_nueva_venta", options={"expose"=true})
+     * @Method("GET")
+     * @Template()
+     */
+    public function ventaNuevaAction(){
+        $em = $this->getDoctrine()->getManager();
+        $regnoeditpaquete = array();
+        $regnoedittratamiento = array();
+
+        $ventaPaquetes = $em->getRepository('DGPlusbelleBundle:Paquete')->findBy(array('estado' => true));
+        $ventaTratamientos = $em->getRepository('DGPlusbelleBundle:Tratamiento')->findBy(array('estado' => true));
+        $sucursales = $em->getRepository('DGPlusbelleBundle:Sucursal')->findBy(array('estado' => true));
+        $empleadosVenta = $em->getRepository('DGPlusbelleBundle:Empleado')->findBy(array('estado' => true));
+        $descuentos = $em->getRepository('DGPlusbelleBundle:Descuento')->findBy(array('estado' => true));
+        
+        return array(
+            'paquetesnoedit'=>$regnoeditpaquete,
+            'tratamientosnoedit'=>$regnoedittratamiento,
+            'ventaPaquetes' => $ventaPaquetes,
+            'ventaTratamientos' => $ventaTratamientos,
+            'sucursales' => $sucursales,
+            'empleadosVenta' => $empleadosVenta,
+            'descuentos' => $descuentos
+            );
+    }
+    
+    /**
+     * Nueva venta de paquete o tratamiento
+     *
      * @Route("/", name="admin_historial_consulta", options={"expose"=true})
      * @Method("GET")
      * @Template()

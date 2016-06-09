@@ -1,11 +1,9 @@
-{#{% extends 'DGPlusbelleBundle:Layout:general.html.twig' %}#}
 {% extends 'DGPlusbelleBundle:Layout:layouterp.html.twig' %}
 
 {% block css %}
     {{parent()}}
     <link rel="stylesheet" href="{{ asset('Resources/dropzone/dropzone.css') }}">
     <link rel="stylesheet" href="{{ asset('Resources/alertifyjs/css/alertify.css') }}">
-    {#<link rel="stylesheet" href="{{ asset('Resources/css/estilopersonalizado.css') }}">#}
     <link rel="stylesheet" href="{{ asset('Resources/swal/sweetalert2.min.css') }}">
     
     <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.2/css/select2.min.css" rel="stylesheet" />
@@ -71,32 +69,32 @@
                                 <div class="float-bar clearfix" >
                                     <div class="col-sm-11">
                                         <div class="visible-xs">
-                                            <h2 class="media-heading text-light" id="nombrePaciente">{{ paciente.persona.nombres}} {{ paciente.persona.apellidos}}</h2>
+                                            <h2 class="media-heading text-light" id="nombrePaciente"></h2>
                                         </div>
                                         <div class="hidden-xs">
-                                            <h4 class="robo media-heading text-light">{{ paciente.persona.nombres}} {{ paciente.persona.apellidos}}</h4>
+                                            <h4 class="robo media-heading text-light" id="titulo-paciente"></h4>
                                             <p class="mb-4x text-light">
                                                 <span class="mr-1x" id="expediente">
                                                     <i class="fa fa-clipboard"></i> 
-                                                    <a style="color:#FFF;text-decoration: underline;" href="{{path('admin_consulta_expediente_sd',{id:paciente.expediente[0].numero})}}">{{paciente.expediente[0].numero}}</a>
+                                                    {#<a style="color:#FFF;text-decoration: underline;" href="{{path('admin_consulta_expediente_sd',{id:paciente.expediente[0].numero})}}">{{paciente.expediente[0].numero}}</a>#}
                                                 </span>
 
                                                 <span class="mr-1x" id="telefono">
                                                     <i class="fa fa-phone"></i>
-                                                    {% if paciente.persona.telefono== ""%}
+                                                    {#{% if paciente.persona.telefono== ""%}
                                                         No ingresado al sistema
                                                     {% else %}
                                                         {{paciente.persona.telefono}}
-                                                    {% endif %}
+                                                    {% endif %}#}
                                                 </span>
 
                                                 <span class="mr-1x" id="direccionD">
                                                     <i class="fa fa-map-marker fa-fw"></i>
-                                                    {% if paciente.persona.direccion == ""%}
+                                                    {#{% if paciente.persona.direccion == ""%}
                                                         No ingresado al sistema
                                                     {% else %}
                                                         {{paciente.persona.direccion}}
-                                                    {% endif %}
+                                                    {% endif %}#}
                                                 </span>
                                             </p>
                                         </div>
@@ -129,28 +127,28 @@
                                     {# Area en donde se ingresa el nombre del paciente a quien se le hará la venta #}    
                                     <div id="nombrePaciente-venta">
                                         <label>Nombres</label>
-                                        <input type="text" name="dgplusbellebundle_venta[nombres]" id="dgplusbellebundle_venta_nombres" class="form-control" style="width: 100%" value="{{ paciente.persona.nombres}}">      
+                                        <input type="text" name="dgplusbellebundle_venta[nombres]" id="dgplusbellebundle_venta_nombres" class="form-control" style="width: 100%" {#value="{{ paciente.persona.nombres}}"#}>      
                                     </div>
                                 </div>
                                 <div class="col-md-3">
                                     {# Area en donde se ingresa los apellidos del paciente a quien se le hará la venta #}    
                                     <div id="apellidosPaciente-venta">
                                         <label>Apellidos</label>
-                                        <input type="text" name="dgplusbellebundle_venta[apellidos]" id="dgplusbellebundle_venta_apellidos" class="form-control" style="width: 100%" value="{{ paciente.persona.apellidos}}">     
+                                        <input type="text" name="dgplusbellebundle_venta[apellidos]" id="dgplusbellebundle_venta_apellidos" class="form-control" style="width: 100%" {#value="{{ paciente.persona.apellidos}}"#}>     
                                     </div>
                                 </div> 
                                 <div class="col-md-3">
                                     {# Area en donde se ingresa el telefono 1 del paciente a quien se le hará la venta #}    
                                     <div id="telefono1Paciente-venta">
                                         <label>Telefono 1</label>
-                                        <input type="text" name="dgplusbellebundle_venta[telefono1]" id="dgplusbellebundle_venta_telefono1" class="form-control" style="width: 100%" value="{{ paciente.persona.telefono}}">     
+                                        <input type="text" name="dgplusbellebundle_venta[telefono1]" id="dgplusbellebundle_venta_telefono1" class="form-control" style="width: 100%" {#value="{{ paciente.persona.telefono}}"#}>     
                                     </div>
                                 </div>
                                 <div class="col-md-3">
                                     {# Area en donde se ingresa el telefono 1 del paciente a quien se le hará la venta #}    
                                     <div id="telefono2Paciente-venta">
                                         <label>Telefono 2</label>
-                                        <input type="text" name="dgplusbellebundle_venta[telefono2]" id="dgplusbellebundle_venta_telefono2" class="form-control" style="width: 100%" value="{{ paciente.persona.telefono2}}">     
+                                        <input type="text" name="dgplusbellebundle_venta[telefono2]" id="dgplusbellebundle_venta_telefono2" class="form-control" style="width: 100%" {#value="{{ paciente.persona.telefono2}}"#}>     
                                     </div>
                                 </div>    
                             </div>    
@@ -159,34 +157,34 @@
                                     {# Area en donde se ingresa la dirección de la persona #}    
                                     <div id="direccionPaciente-venta">
                                         <label>Direccion</label>
-                                        <input type="text" name="dgplusbellebundle_venta[direccion]" id="dgplusbellebundle_venta_direccion" class="form-control" style="width: 100%" value="{{ paciente.persona.direccion }}">      
+                                        <input type="text" name="dgplusbellebundle_venta[direccion]" id="dgplusbellebundle_venta_direccion" class="form-control" style="width: 100%" {#value="{{ paciente.persona.direccion }}"#}>      
                                     </div>
                                 </div>
                                 <div class="col-md-3">
                                     {# Area en donde se ingresa correo electrónico del paciente a quien se le hará la venta #}    
                                     <div id="correoPaciente-venta">
                                         <label>Correo electronico</label>
-                                        <input type="text" name="dgplusbellebundle_venta[correo]" id="dgplusbellebundle_venta_correo" class="form-control" style="width: 100%" value="{{ paciente.persona.email}}">     
+                                        <input type="text" name="dgplusbellebundle_venta[correo]" id="dgplusbellebundle_venta_correo" class="form-control" style="width: 100%" {#value="{{ paciente.persona.email}}"#}>     
                                     </div>
                                 </div> 
                                 <div class="col-md-3">
                                     {# Area en donde se ingresa DUI del paciente a quien se le hará la venta #}    
                                     <div id="DUIPaciente-venta">
                                         <label>DUI</label>
-                                        <input type="text" name="dgplusbellebundle_venta[dui]" id="dgplusbellebundle_venta_dui" class="form-control" style="width: 100%" value="{{ paciente.dui}}">     
+                                        <input type="text" name="dgplusbellebundle_venta[dui]" id="dgplusbellebundle_venta_dui" class="form-control" style="width: 100%" {#value="{{ paciente.dui}}"#}>     
                                     </div>
                                 </div> 
                                 <div class="col-md-3">
                                     {# Area en donde se ingresa estado civil del paciente a quien se le hará la venta #}    
                                     <div id="EcivilPaciente-venta">
-                                        <label>Estado civil {{ paciente.estadoCivil }}</label>
+                                        <label>Estado civil</label>
                                         <select id="dgplusbellebundle_venta_ecivil" name="dgplusbellebundle_venta[ecivil]" class="form-control venta-ecivil" style="width: 100%">
                                             <option value="" disabled style="display:none;" >Seleccione un estado civil ...</option>
-                                            <option value="Soltero/a" {% if paciente.estadoCivil == 'Soltero/a' %} selected {% endif %} >Soltero/a</option>
-                                            <option value="Casado/a" {% if paciente.estadoCivil == 'Casado/a' %} selected="selected" {% endif %} >Casado/a</option>
-                                            <option value="Divorciado/a" {% if paciente.estadoCivil == 'Divorciado/a' %} selected="selected" {% endif %} >Divorciado/a</option>
-                                            <option value="Acompañado/a" {% if paciente.estadoCivil == 'Acompañado/a' %} selected="selected" {% endif %} >Acompañado/a</option>
-                                            <option value="Viudo/a" {% if paciente.estadoCivil == 'Viudo/a' %} selected="selected" {% endif %} >Viudo/a</option>
+                                            <option value="Soltero/a">Soltero/a</option>
+                                            <option value="Casado/a">Casado/a</option>
+                                            <option value="Divorciado/a">Divorciado/a</option>
+                                            <option value="Acompañado/a">Acompañado/a</option>
+                                            <option value="Viudo/a">Viudo/a</option>
                                         </select>
                                     </div>
                                 </div>    
@@ -198,8 +196,8 @@
                                         <label>Sexo </label>
                                         <select id="dgplusbellebundle_venta_sexo" name="dgplusbellebundle_venta[sexo]" class="form-control venta-sexo" style="width: 100%">
                                             <option value="" disabled style="display:none;" >Seleccione sexo ...</option>
-                                            <option value="M" {% if paciente.sexo == 'M' %} selected {% endif %} >Masculino</option>
-                                            <option value="F" {% if paciente.sexo == 'F' %} selected="selected" {% endif %} >Femenino</option>
+                                            <option value="M">Masculino</option>
+                                            <option value="F">Femenino</option>
                                         </select>
                                     </div>
                                 </div> 
@@ -207,21 +205,21 @@
                                     {# Area en donde se ingresa la ocupacion del paciente a quien se le hará la venta #}    
                                     <div id="ocupacionPaciente-venta">
                                         <label>Ocupación</label>
-                                        <input type="text" name="dgplusbellebundle_venta[ocupacion]" id="dgplusbellebundle_venta_ocupacion" class="form-control" style="width: 100%" value="{{ paciente.ocupacion}}">     
+                                        <input type="text" name="dgplusbellebundle_venta[ocupacion]" id="dgplusbellebundle_venta_ocupacion" class="form-control" style="width: 100%" {#value="{{ paciente.ocupacion}}"#}>     
                                     </div>
                                 </div> 
                                 <div class="col-md-3">
                                     {# Area en donde se ingresa la ocupacion del paciente a quien se le hará la venta #}    
                                     <div id="lugarTrabajoPaciente-venta">
                                         <label>Lugar de trabajo</label>
-                                        <input type="text" name="dgplusbellebundle_venta[lugar]" id="dgplusbellebundle_venta_lugar" class="form-control" style="width: 100%" value="{{ paciente.lugarTrabajo}}">     
+                                        <input type="text" name="dgplusbellebundle_venta[lugar]" id="dgplusbellebundle_venta_lugar" class="form-control" style="width: 100%" {#value="{{ paciente.lugarTrabajo}}"#}>     
                                     </div>
                                 </div> 
                                 <div class="col-md-3">
                                     {# Area en donde se selecciona la fecha de naciemto del paciente a quien se le hará la venta #}    
                                     <div id="fechaNacimiemtoPaciente-venta">
                                         <label>Fecha de Nacimiento</label>
-                                        <input type="text" name="dgplusbellebundle_venta[fechaNacimiemto]" id="dgplusbellebundle_venta_fechaNacimiemto" class="form-control calZebra" style="width: 100%" value="{{ paciente.fechaNacimiento|date('d-m-Y') }}">      
+                                        <input type="text" name="dgplusbellebundle_venta[fechaNacimiemto]" id="dgplusbellebundle_venta_fechaNacimiemto" class="form-control calZebra" style="width: 100%" {#value="{{ paciente.fechaNacimiento|date('d-m-Y') }}"#}>      
                                     </div>
                                 </div>    
                             </div> 
@@ -230,21 +228,21 @@
                                     {# Area en donde se ingresa el nombre de la persona a quien llamar en caso de emergencia #}    
                                     <div id="referidoporPaciente-venta">
                                         <label>Referido por</label>
-                                        <input type="text" name="dgplusbellebundle_venta[referidopor]" id="dgplusbellebundle_venta_referidopor" class="form-control" style="width: 100%" value="{{ paciente.referidoPor }}">      
+                                        <input type="text" name="dgplusbellebundle_venta[referidopor]" id="dgplusbellebundle_venta_referidopor" class="form-control" style="width: 100%" {#value="{{ paciente.referidoPor }}"#}>      
                                     </div>
                                 </div>
                                 <div class="col-md-3">
                                     {# Area en donde se ingresa el nombre de la persona a quien llamar en caso de emergencia #}    
                                     <div id="nombreEmergenciaPaciente-venta">
                                         <label>En caso de emergencia llamar a</label>
-                                        <input type="text" name="dgplusbellebundle_venta[nombreEmergencia]" id="dgplusbellebundle_venta_nombreEmergencia" class="form-control" style="width: 100%" value="{{ paciente.personaEmergencia }}">      
+                                        <input type="text" name="dgplusbellebundle_venta[nombreEmergencia]" id="dgplusbellebundle_venta_nombreEmergencia" class="form-control" style="width: 100%" {#value="{{ paciente.personaEmergencia }}"#}>      
                                     </div>
                                 </div>
                                 <div class="col-md-2">
                                     {# Area en donde se ingresa el telefono de la persona a quien llamar en caso de emergencia #}    
                                     <div id="telefonoEmergenciaPaciente-venta">
                                         <label>Al telefono</label>
-                                        <input type="text" name="dgplusbellebundle_venta[telefonoEmergencia]" id="dgplusbellebundle_venta_telefonoEmergencia" class="form-control" style="width: 100%" value="{{ paciente.telefonoEmergencia }}">     
+                                        <input type="text" name="dgplusbellebundle_venta[telefonoEmergencia]" id="dgplusbellebundle_venta_telefonoEmergencia" class="form-control" style="width: 100%" {#value="{{ paciente.telefonoEmergencia }}"#}>     
                                     </div>
                                 </div>
                             </div>     
@@ -642,9 +640,6 @@
                                 </div>
                             </div>
                         </div>                            
-                        
-                        
-                        
                     </div>                
                                     
                     {# Sección en donde se registran los abonos y devoluciones de un paquete o tratamiento #}
@@ -987,7 +982,7 @@
                     var telefonoEmergencia = $('#dgplusbellebundle_venta_telefonoEmergencia').val();
                 
                     var data = {
-                                  id : {{paciente.id}},
+                                  {#id : {{paciente.id}},#}
                                   nombres : nombres,
                                   apellidos : apellidos,
                                   telefono : telefono,
@@ -1026,7 +1021,7 @@
                 
                 // Al momento de hacer click en Registrar venta 
                 $(document).on("click", "#registro-venta", function(){
-                    var idpac = '{{paciente.id}}';
+                    {#var idpac = '{{paciente.id}}';#}
                     var paquete = $('#dgplusbellebundle_venta_paquete').val();
                     var tratamiento = $('#dgplusbellebundle_venta_tratamiento').val();
                     var sucursal = $('#dgplusbellebundle_venta_sucursal').val();
@@ -1314,7 +1309,7 @@
                 $(document).on("click", "#edit-venta", function(){
                     // Si se ha chequeado en el tipo de venta Paquete
                     if(id_ventapaquete > 0) {
-                        var idpac = '{{paciente.id}}';
+                        {#var idpac = '{{paciente.id}}';#}
                         var paquete = $('#dgplusbellebundle_venta_paquete').val();
                         var tratamiento = $('#dgplusbellebundle_venta_tratamiento').val();
                         var sucursal = $('#dgplusbellebundle_venta_sucursal').val();
@@ -1443,7 +1438,7 @@
                         
                     // Si se ha chequeado en el tipo de venta Tratamiento    
                     } else {
-                        var idpac = '{{paciente.id}}';
+                        {#var idpac = '{{paciente.id}}';#}
                         var paquete = $('#dgplusbellebundle_venta_paquete').val();
                         var tratamiento = $('#dgplusbellebundle_venta_tratamiento').val();
                         var sucursal = $('#dgplusbellebundle_venta_sucursal').val();
@@ -1834,7 +1829,7 @@
                 
                 // Al momento de hacer click en resgistra abono
                 $(document).on("click", "#registro-abono", function(){
-                    var idpac = '{{paciente.id}}';
+                    {#var idpac = '{{paciente.id}}';#}
                     var sucursal = $('#dgplusbellebundle_abono_sucursal').val();
                     var empleado = $('#dgplusbellebundle_abono_empleado').val();
                     var monto = $('#dgplusbellebundle_abono_monto').val();
