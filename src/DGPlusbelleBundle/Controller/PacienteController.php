@@ -1611,7 +1611,13 @@ class PacienteController extends Controller
                         . "JOIN pac.persona per "
                         . "JOIN pac.expediente exp "
                         . "WHERE CONCAT(upper(per.nombres), ' ', upper(per.apellidos), ' ',exp.numero) LIKE upper(:busqueda) "
-                        . "ORDER BY per.nombres ASC ";
+                        . "ORDER BY exp.numero ASC ";
+//        $dql = "SELECT exp.numero, pac.id pacienteid, per.nombres, per.apellidos "
+//                        . "FROM DGPlusbelleBundle:Paciente pac "
+//                        . "JOIN pac.persona per "
+//                        . "JOIN pac.expediente exp "
+//                        . "WHERE CONCAT(upper(per.nombres), ' ', upper(per.apellidos), ' ',exp.numero) LIKE upper(:busqueda) "
+//                        . "ORDER BY per.nombres ASC ";
         
         $paciente['data'] = $em->createQuery($dql)
                 ->setParameters(array('busqueda'=>"%".$busqueda."%"))

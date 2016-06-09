@@ -59,7 +59,7 @@
             {% endblock %}
     
     </head>
-    <body>
+    <body class="robo">
  {% block body %}
         
         <!-- Barra de Navegacion con Breadcrumb -->
@@ -71,35 +71,44 @@
   <!-- Template -->
 <div class="container">
             {% block descripcion_y_acciones %}
+                
                 <div class="row">
-                    {% block descripcion %}
+                    <div>
+                        {% block descripcion %}
 
-                    {% endblock %}
+                        {% endblock %}
+                    </div>
                     {% block acciones %}
 
                     {% endblock acciones %}
                 </div>
 
-
+                
 
             {% endblock %}	
+            
             <div class="clearfix"></div>
+            {#<hr style="margin-top:-10px;">#}
             {% block navegacion_Y_body %}
+                
                 <div class="row">
+                    
                     <div class="col-md-2">
                     {% block navegacion %}
 
 {#                            {% include 'DGPlusbelleBundle:Layout:sidebar.html.twig'%}#}
 
-
                     {% endblock %}
+                    
                     </div>
+                    
                 <div class="col-md-12">
                     {% block contenido %}
 
                     {% endblock contenido %}
                 </div>
                 </div>
+                
             {% endblock %}	
 
         
