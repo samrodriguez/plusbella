@@ -13,14 +13,14 @@
                             <!-- Stylesheet Personales -->
                             <link href="{{ asset('Resources/src/css/style.css')}}" rel="stylesheet">
                             <link rel="stylesheet" href="{{ asset('Resources/fontawesome/css/font-awesome.min.css')}}" >
-                            <script type="text/javascript" src="{{ asset('Resources/jquery/jquery-1.11.3.min.js') }}"></script>
+                            {#<script type="text/javascript" src="{{ asset('Resources/jquery/jquery-1.11.3.min.js') }}"></script>#}
                             <script src="{{ asset('bundles/fosjsrouting/js/router.js') }}"></script>
                             <script src="{{ path('fos_js_routing_js', {'callback': 'fos.Router.setData'}) }}"></script>
                             <link rel="shortcut icon" href="{{ asset('Resources/imagenes/favicon.png')}}" type="image/x-icon">
                             <link rel="icon" href="{{ asset('Resources/imagenes/favicon.png')}}" type="image/x-icon">
                     
     </head>
-    <body>
+    <body class="robo">
         <style>
             .tamanhoFuente{
                 font-size: 12px !important;
