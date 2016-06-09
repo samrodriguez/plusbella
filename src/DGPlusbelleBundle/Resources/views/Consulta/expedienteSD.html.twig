@@ -53,103 +53,59 @@
 
         
         <div class="content-body">
-          <div class="panel" data-fill-color="true">
+        <div class="panel" data-fill-color="true">
               
            
-            <div class="content-hero content-hero-lg" style="min-height:140px; display:none;" id="infoExpediente" >
+        <div class="content-hero content-hero-lg" style="margin-bottom: 30px; border-bottom: 1px #CCC solid; min-height:50px; display:none;" id="infoExpediente" >
 {#            <img class="content-hero-embed" src="{{ asset('Photos/')}}logo-01.png" alt="cover" style="background: #649579;height:200px;">#}
-          <div style="height:50px;background: #39a58a; opacity: 1.0" class="content-hero-overlay "></div>
-          <div  style="" class="content-hero-body" >
+          <div style="height:0px;background: #39a58a; opacity: 1.0" class="content-hero-overlay "></div>
+          <div style="" class="content-hero-body" >
           </div>
           <div class="content-hero-bar" {#style="margin-top:-180px; background-color: red; position: relative;"#}>
             <div class="row" {#style="margin-top:-180px; background-color: red; position: relative;"#}>
               
-              <div class="col-lg-6" >
-                <div class="float-bar clearfix" >
-                  <div class="col-md-11">
-                    <div class="hidden-xs col-md-1">
-                        
-                      <h2 class="display-name media-heading text-teal"></h2>
-{#                      <p class="text-muted mb-4x"><span class="mr-2x">Senior UI Design</span> <span><i class="fa fa-map-marker fa-fw"></i> San Francisco, CA</span></p>#}
-                    </div>
-                    {#<div class="col-md-2 col-xs-2">
-                            <img id="fotoPaciente" style="border-radius: 50px; margin-top:-24px;width:100%;" src="">
-                    </div>#}
-                    <div class="hidden-xs">
-                        
-                      <h4 class="robo media-heading text-light" id="nombrePaciente">{#{{ paciente.persona.nombres}} {{ paciente.persona.apellidos}}#}</h4>
-                        <p class="mb-4x text-light">
-                            <span class="mr-1x" id="expediente">
-                                <i class="fa fa-clipboard"></i> {#{{ expediente }}#}
-                            </span>
-                            {#<span class="mr-2x">
-                                <i class="fa fa-briefcase"></i>
-                                {% if paciente.ocupacion == ""%}
-                                    No se ha especificado profesión
-                                {% else %}
-                                    {{paciente.ocupacion}}
-                                {% endif %}
-                            </span>#}
-                            <span class="mr-1x" id="telefono">
-                                <i class="fa fa-phone"></i>
-                                {#{% if paciente.persona.telefono== ""%}
-                                    No ingresado al sistema
-                                {% else %}
-                                    {{paciente.persona.telefono}}
-                                {% endif %}#}
-                            </span>
-                            
-                            <span class="mr-1x" id="edad">
-                                <i class="fa fa-birthday-cake"></i>
-                                
-                                    {#{{edad}}#}
-                            </span>
-                            
-                            <span class="mr-1x" id="direccion">
-                                <i class="fa fa-map-marker fa-fw"></i>
-                                
-                                {#{% if paciente.persona.direccion == ""%}
-                                    No ingresado al sistema
-                                {% else %}
-                                    {{paciente.persona.direccion}}
-                                {% endif %}#}
-                            </span>
-                                
-                        </p>
-                    </div>
+              <div class="col-md-12" >
+                {#<div class="float-bar clearfix" >#}
+                
+                <div class="col-md-6">
+                    <h4 class="robo media-heading text-light" id="nombrePaciente">{#{{ paciente.persona.nombres}} {{ paciente.persona.apellidos}}#}</h4>
+                    <p class="mb-4x text-light">
+                        <span class="mr-1x" id="expediente">
+                            <i class="fa fa-clipboard"></i> {#{{ expediente }}#}
+                        </span>
+
+                        <span class="mr-1x" id="telefono">
+                            <i class="fa fa-phone"></i>
+
+                        </span>
+
+                        <span class="mr-1x" id="edad">
+                            <i class="fa fa-birthday-cake"></i>
+
+                                {#{{edad}}#}
+                        </span>
+
+                        <span class="mr-1x" id="direccion">
+                            <i class="fa fa-map-marker fa-fw"></i>
+
+                        </span>
+
+                    </p>
+                </div>
+                <div class="col-md-6 robo" >
+                    
+                        <div class="col-md-12">
+                            <p id="total-sesiones" class="mb-4x text-light text-right" style="font-size: 20px;"></p>
+                            <p id="deuda-total" class="text-light text-right" style="margin-top: -15px; font-size: 20px;"></p>
+                        </div>
+                    
+                </div>
                     
                   </div><!-- /.media-body -->
-                </div><!-- /.float-bar -->
+                {#</div><!-- /.float-bar -->#}
               </div><!-- /.cols -->
-              <div class="col-lg-6" >
-                  <div class="float-bar clearfix" >
-                      <div class="col-sm-11">
-                          <p id="total-sesiones" class="mb-4x text-light text-right" style="font-size: 20px;"></p>
-                          <p id="deuda-total" class="mb-4x text-light text-right" style="margin-top: -15px; font-size: 20px;"></p>
-                      </div>
-                  </div>
-              </div>
-              {#<div class="col-lg-6">
-                <h4 class="text-muted">Achievement</h4>
-                <div class="row">
-                  <div class="col-xs-3">
-                    <span class="headline"><strong>68</strong></span>
-                    <p>Posts</p>
-                  </div>
-                  <div class="col-xs-3">
-                    <span class="headline"><strong>23</strong></span>
-                    <p>Projects</p>
-                  </div>
-                  <div class="col-xs-3">
-                    <span class="headline"><strong>1,2K</strong></span>
-                    <p>Followers</p>
-                  </div>
-                  <div class="col-xs-3">
-                    <span class="headline"><strong>26K</strong></span>
-                    <p>Sales</p>
-                  </div>
-                </div>
-              </div><!-- /.cols -->#}
+              
+              
             </div><!-- /.row -->
           </div><!-- /.content-hero-bar -->
         </div>

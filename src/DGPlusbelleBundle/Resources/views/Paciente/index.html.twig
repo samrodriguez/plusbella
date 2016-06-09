@@ -130,7 +130,8 @@
         <script type="text/javascript" src="{{ asset('Resources/bValidator-0.73/bvalidator.lang.es.js')}}" ></script>
         <script src="{{ asset('Resources/wrapkit/scripts/bootbox.js') }}"></script>
         <script src="{{ asset('Resources/js/Paciente.js') }}"></script>
-    
+        <link rel="stylesheet" href="{{ asset('Resources/swal/sweetalert2.min.css') }}">
+        <script src="{{ asset('Resources/swal/sweetalert2.min.js') }}"></script>
     
 
         <script>
@@ -168,7 +169,7 @@
                     console.log(apellidos);
                     console.log(telefono);
                     if(nombre=='' || apellidos =='' || telefono ==''){
-                        alertify.error('Debe ingresar nombre, apellido y telefono de contacto del paciente');
+                        swal('','Debe ingresar nombre, apellido y telefono de contacto del paciente','error');
                         return false;
                     }
                     $.ajax({
@@ -178,17 +179,18 @@
                         type: "post",
                         success: function (data) {
                             if(data!=0){
-                                bootbox.alert("Paciente guardado, en unos momentos se cargará la programación de citas!", function() {});
+                                //bootbox.alert("Paciente guardado, en unos momentos se cargará la programación de citas!", function() {});
+                                swal("","Paciente guardado, en unos momentos se cargará la programación de citas!","info");
                                 var url = "{{path('admin_cita_new',{id:'P'})}}"+data;
                                 window.location = url;
                             }
                             else{
-                                alertify.success("Receta guardada!");
+                                //alertify.success("Receta guardada!");
                                 $('#receta').hide();
                             }
                         },
                         error: function (data) {
-                            alertify.error("Hubo un error, intente de nuevo!");
+                            swal('',"Hubo un error, intente de nuevo!",'error');
                         }
                     });
                     return false;
@@ -220,7 +222,7 @@
                     console.log(telefono);
                     
                     if(nombre=='' || apellidos =='' || telefono ==''){
-                        alertify.error('Debe ingresar nombre, apellido y telefono de contacto del paciente');
+                        swal('','Debe ingresar nombre, apellido y telefono de contacto del paciente','error');
                         return false;
                     }
                         
@@ -233,7 +235,8 @@
                         type: "post",
                         success: function (data) {
                             if(data!=0){
-                                bootbox.alert("Paciente guardado, en unos momentos se cargara el expediente del paciente!", function() {});
+                                //bootbox.alert("Paciente guardado, en unos momentos se cargara el expediente del paciente!", function() {});
+                                swal("","Paciente guardado, en unos momentos se cargará el expediente del paciente!","info");
                                 console.log(data);
                                 var cadena = data.replace('"','');
                                 cadena = cadena.replace('"','');
@@ -242,12 +245,12 @@
                                 window.location = url;
                             }
                             else{
-                                alertify.success("Receta guardada!");
+                                //alertify.success("Receta guardada!");
                                 $('#receta').hide();
                             }
                         },
                         error: function (data) {
-                            alertify.error("Hubo un error, intente de nuevo!");
+                            swal('',"Hubo un error, intente de nuevo!",'error');
                         }
                     });
                     return false;
@@ -535,7 +538,44 @@
         
         $("#delete-datatables1").click(function(){
             console.log(idPaciente);
-            bootbox.confirm("Desea eliminar este registro de paciente?", function(result) {
+            
+            
+            swal({
+                title: "Esperando confirmación...",
+                text: "Desea eliminar este registro de paciente?",
+                type: "info",
+                showCancelButton: true,
+                {#confirmButtonColor: "#1D234D",#}
+                confirmButtonText: "Aceptar",
+                cancelButtonText: "Cancelar",
+                closeOnConfirm: false,
+                closeOnCancel: false
+            }).then(function(isConfirm) {
+                if (isConfirm) {
+                    $.ajax({
+                        data:{idPaciente:idPaciente},
+                        url:"{{path('deshabilitar_paciente_ajax')}}",
+                        type: "post",
+                        success: function (data) {
+                            if(data==0){
+                                //alertify.success("Paciente eliminado!");
+                                swal("","Paciente eliminado!","success");
+                                tabla.ajax.reload();
+                            }
+
+                        },
+                        error: function (data) {
+                            {#alertify.error("Hubo un error, intente de nuevo!");#}
+                            swal("","Ocurrió un error, intente de nuevo!","error");
+                        }
+                    });
+                } else {
+
+                }
+            });
+            
+            
+           {# bootbox.confirm("Desea eliminar este registro de paciente?", function(result) {
                 if(result){
                     $.ajax({
                         data:{idPaciente:idPaciente},
@@ -552,11 +592,11 @@
                             alertify.error("Hubo un error, intente de nuevo!");
                         }
                     });
-                    }
+                }
                 else{
                     //console.log(result);
                 }
-            }); 
+            }); #}
             return false;
         });
                 
