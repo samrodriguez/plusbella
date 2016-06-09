@@ -57,7 +57,7 @@ class ConsultaController extends Controller
     /**
      * Lista todos los expediente de los paciente.
      *
-     * @Route("/expedienteSD", name="admin_consulta_expediente_sd")
+     * @Route("/expedienteSD", name="admin_consulta_expediente_sd", options={"expose"=true})
      * @Method("GET")
      * @Template("DGPlusbelleBundle:Consulta:expedienteSD.html.twig")
      */
@@ -965,6 +965,283 @@ class ConsultaController extends Controller
             $paciente = new \DGPlusbelleBundle\Entity\Paciente();
             $form   = $this->createCreateForm($entity, 3, $cadena, $paciente);
             $flag = 1;
+        }
+        
+        if($paciente->getFechaNacimiento()!=null){
+            $fecha = $paciente->getFechaNacimiento()->format("Y-m-d");
+
+            //Calculo de la edad
+            list($Y,$m,$d) = explode("-",$fecha);
+            $edad = date("md") < $m.$d ? date("Y")-$Y-1 : date("Y")-$Y;       
+            $edad = $edad. " años";
+        }
+        else{
+            $edad = "No se ha ingresado fecha de nacimiento";
+        }
+        
+        if(count($signos)==0){
+            $signos=new Signos();
+        }
+        else{
+            $signos=$signos[0];
+        }
+        
+        
+        
+        $sucursales = $em->getRepository('DGPlusbelleBundle:Sucursal')->findBy(array('estado'=>1));
+        $empleados = $em->getRepository('DGPlusbelleBundle:Empleado')->findBy(array('id'=>array(3,5),'estado'=>1));
+        $tipoConsulta= $em->getRepository('DGPlusbelleBundle:TipoConsulta')->findBy(array('estado'=>1));
+        
+//           var_dump($existePlantilla); 
+//           var_dump($botox); 
+//           var_dump($estetica); 
+//           var_dump($valores); 
+//           var_dump($parametros);
+//           var_dump($tienePlantilla); 
+           
+           
+        return array(
+            'idrec'=>$idrec,
+            'parametros'=>$parametros,
+            'corporal'=>$corporal,
+            'botox'=>$botox,
+            'estetica'=>$estetica,
+            'valores'=>$valores,
+            'plantillasEstetica'=>$plantillasEstetica,
+            'ruta'=>$ruta,
+            'rutaReceta'=>$rutaReceta,
+            'existePlantilla'=>$existePlantilla,
+            'existeReceta'=>$existeReceta,
+            'recetas'=>$recetas,
+            'archivos'=>$archivos,
+            'consulta'=>$consulta,
+            'plantillas'=>$plantillas,
+            'entity' => $entity,
+            'sucursales' => $sucursales,
+            'tipoConsulta' => $tipoConsulta,
+            'empleados' => $empleados,
+            'edad' => $edad,
+            'paciente' => $paciente,
+            //'form'   => $form->createView(),
+            'flag'   => $flag,
+            'signos' => $signos,
+            'tipoPlantilla' => $tipoPlantilla,
+            'tienePlantilla'=> $tienePlantilla
+        );
+            
+    }
+    
+    
+    /**
+     * Displays a form to create a new Consulta entity.
+     *
+     * @Route("/newconpacienteSDP", name="admin_consulta_nueva_paciente_SDP", options={"expose"=true})
+     * @Method("GET")
+     * @Template()
+     */
+    public function newconpacienteSDPAction()
+    {
+        //Metodo para consulta nueva con id de paciente
+        $entity = new Consulta();
+        
+        $em = $this->getDoctrine()->getManager();
+        
+        //Recuperación del paciente
+        $request = $this->getRequest();
+        $cadena= $request->get('id');
+        $idconsulta = $request->get('idtransaccion');
+        //var_dump($idconsulta);
+        $idconsulta = substr($idconsulta, 2);
+        //var_dump($idconsulta);
+        $flag = 0;
+        
+        $ruta="";
+        $rutaReceta="";
+        
+        $mostrarplantilla=true;
+        $parametros = Array();
+        $botox = Array();
+        $botoxData = Array();
+        $valores = Array();
+        $corporal = Array();
+        
+//        var_dump($cadena);
+//        var_dump($idconsulta);
+        if($cadena != NULL) {
+            //Obtener el id del parametro
+            $idEntidad = substr($cadena, 1);
+            //$identidad= $request->get('identidad');
+            
+            //Busqueda del paciente
+            $paciente = $em->getRepository('DGPlusbelleBundle:Paciente')->find($idEntidad);
+            $plantillas = $em->getRepository('DGPlusbelleBundle:Plantilla')->findAll();
+            
+            
+            
+            if($idconsulta!=null){
+                $consulta = $em->getRepository('DGPlusbelleBundle:Consulta')->find($idconsulta);
+                
+            }
+            else{
+                $consulta = $entity;
+            }
+            $signos = $em->getRepository('DGPlusbelleBundle:Signos')->findBy(array('consulta'=>$consulta->getId()),array('id'=>'DESC'));
+            //Seteo del paciente en la entidad
+            $entity->setPaciente($paciente);
+            //var_dump($paciente);
+            //$form   = $this->createCreateForm($entity,2,$cadena, $paciente);
+            $entity->setPaciente($paciente);
+            //var_dump($consulta->getEmpleado()->getPersona()->getNombres());
+            
+            
+            $existePlantilla = false;
+            $existeReceta = false;
+            $estetica = 0;
+            $tienePlantilla = $em->getRepository('DGPlusbelleBundle:HistorialConsulta')->findBy(array('consulta'=>$idconsulta));
+            
+            $tipoPlantilla = 0;    
+            if(count($tienePlantilla)!=0){
+                $tipoPlantilla = 1;
+                $existePlantilla = true;
+                $ruta = "admin_reporteplantilla_pdf";
+//                var_dump($ruta);
+            }
+            else{
+                $tienePlantilla = $em->getRepository('DGPlusbelleBundle:ConsultaBotox')->findBy(array('consulta'=>$idconsulta));
+                //var_dump($tienePlantilla);
+                if(count($tienePlantilla)==0){
+                    $tienePlantilla = $em->getRepository('DGPlusbelleBundle:ComposicionCorporal')->findBy(array('consulta'=>$idconsulta));
+                    //var_dump($tienePlantilla);
+                    if(count($tienePlantilla)==0){
+                        $tienePlantilla = $em->getRepository('DGPlusbelleBundle:HistorialEstetica')->findBy(array('consulta'=>$idconsulta));
+                        if(count($tienePlantilla)!=0){
+                            $dql = "SELECT det.id, det.nombre, opc.id opcid, opc.nombre opcnom "
+                                    . "FROM DGPlusbelleBundle:OpcionesDetalleEstetica opc "
+                                    . "JOIN opc.detalleEstetica det "
+                                    . "JOIN det.estetica est "
+                                    . "WHERE est.id =  :esteticaid";
+
+                            $parametros = $em->createQuery($dql)
+                                        ->setParameter('esteticaid', 2)
+                                        ->getResult();
+                            
+                            $tipoPlantilla = 4;
+                            
+                            foreach($tienePlantilla as $row){
+                                array_push($valores,$row->getDetalleEstetica()->getId());
+                            }
+                            $ruta="admin_prevpdf_facial_por_pdf";
+                            $existePlantilla = true;
+                            $estetica = 2;//facial
+                        }
+                    }
+                    else{
+                        $dql = "SELECT det.id, det.nombre, opc.id opcid, opc.nombre opcnom "
+                                . "FROM DGPlusbelleBundle:OpcionesDetalleEstetica opc "
+                                . "JOIN opc.detalleEstetica det "
+                                . "JOIN det.estetica est "
+                                . "WHERE est.id =  :esteticaid";
+
+                        $parametros = $em->createQuery($dql)
+                                    ->setParameter('esteticaid', 1)
+                                    ->getResult();
+                        
+                        $tipoPlantilla = 3;
+                        
+                        //esta lleva comparativo
+                        $ruta="admin_prevpdfcorporal_por_pdf";
+                        $existePlantilla = true;
+
+                        array_push($corporal,$tienePlantilla[0]->getPeso());
+                        array_push($corporal,$tienePlantilla[0]->getGrasaCorporal());
+                        array_push($corporal,$tienePlantilla[0]->getAguaCorporal());
+                        array_push($corporal,$tienePlantilla[0]->getMasaMusculo());
+                        array_push($corporal,$tienePlantilla[0]->getValoracionFisica());
+                        array_push($corporal,$tienePlantilla[0]->getDciBmr());
+
+                        array_push($corporal,$tienePlantilla[0]->getEdadMetabolica());
+                        array_push($corporal,$tienePlantilla[0]->getMasaOsea());
+                        array_push($corporal,$tienePlantilla[0]->getGrasaVisceral());
+                        $estetica = 1;//corporal
+                        $checkboxes = $em->getRepository('DGPlusbelleBundle:HistorialEstetica')->findBy(array('consulta'=>$idconsulta));
+                        //var_dump($checkboxes);
+
+                        foreach($checkboxes as $row){
+                            array_push($valores,$row->getDetalleEstetica()->getId());
+                        }
+                    }
+                }
+                else{
+                    // tipo de plantilla: Botox
+                    $tipoPlantilla = 2;
+                    
+                    //var_dump($tienePlantilla);+
+                    $i = 0;
+                    
+                    foreach($tienePlantilla as $key=>$row){
+                        array_push($botox,$row->getAreaInyectar());        
+                        array_push($botox,$row->getUnidades());        
+                        array_push($botox,$row->getfechaCaducidad()->format('Y-m-d'));        
+                        array_push($botox,$row->getLote());        
+                        array_push($botox,$row->getMarcaProducto());        
+                        array_push($botox,$row->getNumAplicacion());        
+                        array_push($botox,$row->getValor());
+                        
+                        //$botoxData['area_inyectar'] = $row->getAreaInyectar();
+                        //$botoxData['unidades'] = $row->getUnidades();
+                        
+                        if($row->getRecomendaciones()!=null)
+                            array_push($botox,$row->getRecomendaciones());
+                        
+                        //array_push($botoxData, $tienePlantilla);
+                    }
+                    //var_dump($botoxData);
+                    //var_dump($tienePlantilla);
+                    
+//                    $ruta="admin_pdf_botox_por_pdf";
+                    $ruta="admin_botox_por_pdf_previa";
+//                    $ruta="admin_comparativo_botox_por_pdf";
+                    $existePlantilla=true;
+                    $estetica = 3;//botox
+                }
+            }
+            
+            
+//            var_dump($existePlantilla);
+//            var_dump($tienePlantilla);
+//            
+//            
+//            var_dump($existePlantilla);
+            $idrec = 0;
+            $archivos = $em->getRepository('DGPlusbelleBundle:ImagenConsulta')->findBy(array('consulta'=>$idconsulta));
+            //$recetas = $em->getRepository('DGPlusbelleBundle:ImagenConsulta')->findBy(array('consulta'=>$idconsulta));
+            //var_dump($archivos);
+            $recetas = $em->getRepository('DGPlusbelleBundle:HistorialConsulta')->findBy(array('consultareceta'=>$idconsulta));
+            if(count($recetas)!=0){
+                //var_dump($tienePlantilla);
+                $existeReceta = true;
+                $idrec=$recetas[0]->getDetallePlantilla()->getPlantilla()->getId();
+                //var_dump($idrec);
+                $rutaReceta = "admin_reporteconsultarecetaplantilla_pdf";
+            }
+            //var_dump($recetas);
+        } else {
+            $paciente = new \DGPlusbelleBundle\Entity\Paciente();
+            $form   = $this->createCreateForm($entity, 3, $cadena, $paciente);
+            $flag = 0;
+            $signos=null;
+            $idrec=0;
+            $estetica=0;
+            $plantillasEstetica = $em->getRepository('DGPlusbelleBundle:Estetica')->findAll();
+            $existePlantilla = false;
+            $existeReceta = false;
+            $recetas = null;
+            $archivos= null;
+            $consulta = $entity;
+            $plantillas = $em->getRepository('DGPlusbelleBundle:Plantilla')->findAll();
+            $tipoPlantilla = 0;
+            $tienePlantilla = false;
+            
         }
         
         if($paciente->getFechaNacimiento()!=null){
