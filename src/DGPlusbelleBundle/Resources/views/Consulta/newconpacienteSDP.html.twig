@@ -96,13 +96,37 @@
     </style>
 {% endblock %}
 
-
+{#
 {% block descripcion %}
     <div class="col-md-6">
         <p class="robo" style="font-weight: 300; margin-bottom: 0px; font-size: 30px;">Consulta</p>
         <p class="robo" style="font-weight: 300; font-size: 14px; height: 40px;">Cree consultas a sus paciente en un solo lugar, de forma fácil y rápida.</p>
     </div>
+{% endblock %}#}
+
+
+
+
+
+{% block descripcion %}
+    <div class="col-md-12" style="margin-bottom: 20px;">
+        <p class="robo" style="font-weight: 300; margin-bottom: 0px; font-size: 27px;">Consulta</p>
+    </div>
+    <div class="col-md-4" style="margin-bottom: 20px;">
+        <label class="robo" style="font-weight: 300; font-size: 16px; height: 25px;">Busqueda del paciente</label>
+        <select id="busquedaPacienteConsulta" name="busquedaPaciente" class="form-control input-sm " data-rule-required="true" style=" width: 100%;">
+            <option value="0" disabled selected>Seleccione un paciente ...</option>
+        </select>
+    </div>
 {% endblock %}
+{#
+**********************************************************************************************************************************************************************************
+Dentro de la div  con clase content- body
+#}
+
+
+
+
 
 {% block acciones %}
     
@@ -118,101 +142,44 @@
             {#<div class="panel-heading">
                 <p>Registrar consulta</p>
             </div>#}
-        <div class="clearfix"></div>
-        <div class="content-hero content-hero-lg" style="margin-bottom: 20px; min-height:20px; border-bottom: 1px #CCC solid;" id="infoExpediente" >
-{#            <img class="content-hero-embed" src="{{ asset('Photos/')}}logo-01.png" alt="cover" style="background: #649579;height:200px;">#}
-          <div style="height:0px;background: #39a58a; opacity: 1.0" class="content-hero-overlay "></div>
-          <div style="" class="content-hero-body">
-          </div>
-          <div class="content-hero-bar" {#style="margin-top:-180px; background-color: red; position: relative;"#}>
-            <div class="row" {#style="margin-top:-180px; background-color: red; position: relative;"#}>
-              
-              <div class="col-lg-6" >
-                <div class="float-bar clearfix" >
-                  <div class="col-sm-11">
-                    <div class="visible-xs">
-                      <h2 class="display-name media-heading text-teal"></h2>
-{#                      <p class="text-muted mb-4x"><span class="mr-2x">Senior UI Design</span> <span><i class="fa fa-map-marker fa-fw"></i> San Francisco, CA</span></p>#}
-                    </div>
-                    <div class="hidden-xs">
-                      <h4 class="robo media-heading text-light" id="nombrePaciente">{{ paciente.persona.nombres}} {{ paciente.persona.apellidos}}</h4>
-                        <p class="mb-4x text-light">
-                            <span class="mr-1x" id="expediente">
-                                <i class="fa fa-clipboard"></i> {#{{ expediente }}#}
-                                <a style="color:#FFF;text-decoration: underline;" href="{{path('admin_consulta_expediente_sd',{id:paciente.expediente[0].numero})}}">{{paciente.expediente[0].numero}}</a>
-                            </span>
-                            <span class="mr-2x" id="ocupacionPaciente">
-                                <i class="fa fa-briefcase"></i>
-                                {% if paciente.ocupacion == ""%}
-                                    No se ha especificado profesión
-                                {% else %}
-                                    {{paciente.ocupacion}}
-                                {% endif %}
-                            </span>
-                            <span class="mr-1x" id="telefono">
-                                <i class="fa fa-phone"></i>
-                                
-                                {% if paciente.persona.telefono== ""%}
-                                    No ingresado al sistema
-                                {% else %}
-                                    {{paciente.persona.telefono}}
-                                {% endif %}
-                            </span>
-                            
-                            <span class="mr-1x" id="edad">
-                                <i class="fa fa-birthday-cake"></i>
-                                
-                                    {{edad}}
-                            </span>
-                            
-                            <span class="mr-1x" id="direccionD">
-                                <i class="fa fa-map-marker fa-fw"></i>
-                                
-                                {% if paciente.persona.direccion == ""%}
-                                    No ingresado al sistema
-                                {% else %}
-                                    {{paciente.persona.direccion}}
-                                {% endif %}
-                            </span>
-                                
-                        </p>
-                    </div>
-                    
-                  </div><!-- /.media-body -->
-                </div><!-- /.float-bar -->
-              </div><!-- /.cols -->
-
-              
-              
-              
-              
-              {#<div class="col-lg-6">
-                <h4 class="text-muted">Achievement</h4>
-                <div class="row">
-                  <div class="col-xs-3">
-                    <span class="headline"><strong>68</strong></span>
-                    <p>Posts</p>
-                  </div>
-                  <div class="col-xs-3">
-                    <span class="headline"><strong>23</strong></span>
-                    <p>Projects</p>
-                  </div>
-                  <div class="col-xs-3">
-                    <span class="headline"><strong>1,2K</strong></span>
-                    <p>Followers</p>
-                  </div>
-                  <div class="col-xs-3">
-                    <span class="headline"><strong>26K</strong></span>
-                    <p>Sales</p>
-                  </div>
-                </div>
-              </div><!-- /.cols -->#}
-            </div><!-- /.row -->
-          </div><!-- /.content-hero-bar -->
+        <div class="panel" data-fill-color="true">
+                <div class="content-hero content-hero-lg" style="margin-bottom: 30px; border-bottom: 1px #CCC solid; min-height:50px; display:none;" id="info-Paciente" >
+                    <div class="content-hero-bar">
+                        <div class="row">
+                            <div class="col-md-12" >
+                                <hr>
+                            </div>
+                            <div class="col-md-12" >
+                                <div class="col-md-8">
+                                    <h4 class="robo media-heading text-light" id="nombrePaciente"></h4>
+                                    <p class="mb-4x text-light">
+                                        <span class="mr-1x" id="expediente">
+                                            <i class="fa fa-clipboard"></i>
+                                        </span>
+                                        <span class="mr-1x" id="telefono">
+                                            <i class="fa fa-phone"></i>
+                                        </span>
+                                        <span class="mr-1x" id="edad">
+                                            <i class="fa fa-birthday-cake"></i>                                           
+                                        </span>
+                                        <span class="mr-1x" id="direccion">
+                                            <i class="fa fa-map-marker fa-fw"></i>
+                                        </span>
+                                    </p>
+                                </div>
+                                <div class="col-md-4 robo" ></div>
+                                </div>
+                            </div><!-- /.media-body -->
+                        </div><!-- /.cols -->
+                    </div><!-- /.row -->
+                </div><!-- /.content-hero-bar -->
         </div>
          
     <div class="panel-body">
-        <div data-init-panel="true" class=" fade in">
+        {#<select id="busquedaPacienteConsulta" style="width: 350px;" class="form-control">
+                    <option value="0">Buscar paciente...</option>
+        </select>#}
+        <div data-init-panel="true" class=" fade in" style="margin-top:25px;">
             <ul class="nav nav-tabs" id="demo1-tabs">
               {#<li class="active"><a aria-expanded="false" href="#botabs1" data-toggle="tab">Datos generales</a></li>#}
               <li class=""><a href="#botabs1" data-toggle="tab">Datos generales</a></li>
@@ -255,18 +222,18 @@
                             </div>
                             <div class="row">
                                 <div class="col-md-3">
-                                    <input id="nombresPaciente" value="{{paciente.persona.nombres}}" name="nombresPaciente" class="form-control input-sm"/>
+                                    <input id="nombresPaciente" value="" name="nombresPaciente" class="form-control input-sm"/>    
                                 </div>
                                                         
                                 <div class="col-md-3">
-                                    <input id="apellidosPaciente" value="{{paciente.persona.apellidos}}" name="apellidosPaciente" class="form-control input-sm"/>
+                                    <input id="apellidosPaciente" value="" name="apellidosPaciente" class="form-control input-sm"/>
                                 </div>
 
                                 <div class="col-md-3">
-                                    <input id="telefono1" value="{{paciente.persona.telefono}}" name="telefono1" class="form-control input-sm"/>
+                                    <input id="telefono1" value="" name="telefono1" class="form-control input-sm"/>
                                 </div>
                                 <div class="col-md-3">
-                                    <input id="telefono2" value="{{paciente.persona.telefono2}}" name="telefono2" class="form-control input-sm"/>
+                                    <input id="telefono2" value="" name="telefono2" class="form-control input-sm"/>
                                 </div>
                                 
                             </div>
@@ -297,15 +264,15 @@
                                 
                             <div class="row">
                                 <div class="col-md-3">
-                                    <input id="direccion" value="{{paciente.persona.direccion}}" name="direccion" class="form-control input-sm"/>
+                                    <input id="direccion" value="" name="direccion" class="form-control input-sm"/>
                                 </div>
                                 
                                 <div class="col-md-3">
-                                    <input id="correo" value="{{paciente.persona.email}}" name="correo" class="form-control input-sm"/>
+                                    <input id="correo" value="" name="correo" class="form-control input-sm"/>
                                 </div>
                                 
                                 <div class="col-md-3">
-                                    <input id="dui" value="{{paciente.dui}}" name="dui" class="form-control input-sm"/>
+                                    <input id="dui" value="" name="dui" class="form-control input-sm"/>
                                 </div>                        
                                 
                                 <div class="col-md-3">
@@ -435,11 +402,6 @@
                                                 Costo de consulta
                                             </label>
                                         </div>
-                                        {#<div class="col-md-3">
-                                            <label>
-                                                Tratamiento
-                                            </label>
-                                        </div>#}
                                         
                                         <div class="col-md-6">
                                             <label>
@@ -3130,6 +3092,189 @@
     
 
     jQuery(document).ready(function() {
+    
+    
+    
+        $(document).on('change','#busquedaPacienteConsulta',function(){
+            var id = $(this).val();
+            console.log('id de paciente: '+id);
+            $.ajax({
+                data:{'id':id
+                },
+                url:"{{path('busqueda_paciente_info_exp')}}",
+                type: "post",
+                success: function (data) {
+                    //var dat = JSON.parse(data);
+                    console.log(data);
+                    $('#nombresPaciente').val(data.data[0].nombres);
+                    $('#apellidosPaciente').val(data.data[0].apellidos);
+                    $('#telefono1').val(data.data[0].telefono);
+                    $('#telefono2').val(data.data[0].telefono2);
+                    $('#direccion').val(data.data[0].direccion);
+                    $('#correo').val(data.data[0].email);
+                    $('#dui').val(data.data[0].dui);
+                    
+                    $('#estadoCivil').val(data.data[0].estadoCivil).change();
+                    $('#sexo').val(data.data[0].sexo).change();
+                    
+                    $('#ocupacion').val(data.data[0].ocupacion);
+                    $('#lugarTrabajo').val(data.data[0].lugarTrabajo);
+                    var fecha=data.data[0].fechaNacimiento;
+                    var fechaD = fecha.toString();
+                    {#console.log(fecha);
+                    console.log(fechaD);#}
+                    $('#fechaNacimiento').val(fecha);
+{#                    console.log(dat[0].fechaNacimiento);#}
+    
+                    $('#referidoPor').val(data.data[0].referidoPor);
+                    $('#llamarA').val(data.data[0].personaEmergencia);
+                    $('#telefonoEmergencia').val(data.data[0].telefonoEmergencia);
+                    $('#nombrePaciente').html(data.data[0].nombres+" "+data.data[0].apellidos);
+                    $('#expediente').html('<i class=\"fa fa-clipboard\"></i> <a style=\"color:#FFF;text-decoration: underline;\" href=\"'+Routing.generate('admin_consulta_expediente_sd')+"?id="+data.data[0].numero+'\">'+data.data[0].numero+'</a>');
+                    $('#ocupacionPaciente').html('<i class=\"fa fa-briefcase\"></i> '+data.data[0].cupacion);
+                    $('#telefono').html('<i class=\"fa fa-phone\"></i> '+data.data[0].telefono);
+                    $('#direccionD').html('<i class="fa fa-map-marker fa-fw"></i> '+data.data[0].direccion);
+                    $('#edad').html('<i class="fa fa-birthday-cake"></i> '+data.edad);
+                    
+                    
+                    
+                    $('#idPaciente').val(data.data[0].id);
+                    $('#info-Paciente').show();
+                },
+                error: function (data) {
+
+
+                }
+            });
+            console.log('vdfsvfdv');
+        });
+    
+    
+    
+    
+        var busqueda = $('#busquedaPacienteConsulta').select2({
+                                    
+            ajax: {
+                url: "{{path('busqueda_paciente_select_exp')}}",
+                dataType: 'json',
+                delay: 250,
+                data: function (params) {
+                    return {
+                      q: params.term, 
+                      page: params.page
+                    };
+                },
+                processResults: function (data, params) {
+                    var select2Data = $.map(data.data, function (obj) {
+                        obj.id = obj.numero;
+                        obj.text = obj.numero+" "+obj.nombres+" "+obj.apellidos;
+
+                        return obj;
+                    });
+
+                    return {
+                        results: select2Data
+                        {#pagination: {
+                            more: (params.page * 30) < data.total_count
+                        }#}
+                    };
+                },
+                cache: true
+            },
+            escapeMarkup: function (markup) { return markup; }, 
+            minimumInputLength: 1,
+            templateResult: formatRepoPac, 
+            templateSelection: formatRepoSelectionPac
+        });
+    
+        
+        function formatRepoPac (data) {
+            if(data.numero){
+                var markup = "<div class='select2-result-repository clearfix'>" +
+                             "<div class='select2-result-repository__meta'>" +
+                             "<div class='select2-result-repository__title'>" + data.numero+" | "+data.nombres+" "+data.apellidos+"</div>" +
+                             "</div></div>";
+            } else {
+                var markup = "Buscar paciente..."; 
+            }
+
+
+            {#if (repo.description) {
+              markup += "<div class='select2-result-repository__description'>" + repo.description + "</div>";
+            }
+
+            markup += "<div class='select2-result-repository__statistics'>" +
+                    "<div class='select2-result-repository__forks'><i class='fa fa-flash'></i> " + repo.forks_count + " Forks</div>" +
+                    "<div class='select2-result-repository__stargazers'><i class='fa fa-star'></i> " + repo.stargazers_count + " Stars</div>" +
+                    "<div class='select2-result-repository__watchers'><i class='fa fa-eye'></i> " + repo.watchers_count + " Watchers</div>" +
+                "</div>" +
+                "</div></div>";#}
+
+            return markup;
+        }
+
+        function formatRepoSelectionPac (data) {
+            if(data.numero){
+                return data.numero+" | "+data.nombres+" "+data.apellidos;
+            } else {
+                return "Buscar paciente..."; 
+            }    
+        }
+        
+        
+        
+        function calcular_edad(fecha){
+
+        //calculo la fecha de hoy
+        var hoy=new Date();
+        //alert(hoy)
+
+        //calculo la fecha que recibo
+        //La descompongo en un array
+        var array_fecha = fecha.split("-")
+        //si el array no tiene tres partes, la fecha es incorrecta
+        if (array_fecha.length!=3)
+           return false
+
+        //compruebo que los ano, mes, dia son correctos
+        var ano
+        ano = parseInt(array_fecha[2]);
+        if (isNaN(ano))
+           return false
+
+        var mes
+        mes = parseInt(array_fecha[1]);
+        if (isNaN(mes))
+           return false
+
+        var dia
+        dia = parseInt(array_fecha[0]);
+        if (isNaN(dia))
+           return false
+
+
+        //si el año de la fecha que recibo solo tiene 2 cifras hay que cambiarlo a 4
+        if (ano<=99)
+           ano +=1900
+
+        //resto los años de las dos fechas
+        var edad=hoy.getYear()- ano - 1; //-1 porque no se si ha cumplido años ya este año
+
+        //si resto los meses y me da menor que 0 entonces no ha cumplido años. Si da mayor si ha cumplido
+        if (hoy.getMonth() + 1 - mes < 0) //+ 1 porque los meses empiezan en 0
+           return edad
+        if (hoy.getMonth() + 1 - mes > 0)
+           return edad+1
+
+        //entonces es que eran iguales. miro los dias
+        //si resto los dias y me da menor que 0 entonces no ha cumplido años. Si da mayor o igual si ha cumplido
+        if (hoy.getUTCDate() - dia >= 0)
+           return edad + 1
+
+        return edad
+    } 
+    
+    
         $('#dui').mask('00000000-0');  
         $('#telefono1').mask('0000-0000'); 
         $('#telefono2').mask('0000-0000'); 
@@ -3224,6 +3369,7 @@
             //alert(fechaNacimiento);
             if(nombres==='' || apellidos==='' || telefono1===''){
                 swal('','El nombre, apellidos y teléfono1 no pueden quedar en vacios','error');
+                return false;
             }
             
             $.ajax({
@@ -3287,6 +3433,7 @@
                 if(tipoConsulta==0){
                     {#bootbox.alert("Debe seleccionar un tipo de consulta!", function() {});#}
                     swal('','Debe seleccionar un tipo de consulta!','error');
+                    return false;
                 }
                 else{
                     if(idconsulta!=''){

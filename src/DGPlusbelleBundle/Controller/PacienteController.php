@@ -1692,4 +1692,65 @@ class PacienteController extends Controller
         return new Response(json_encode($paciente));
     }
     
+    
+    
+    
+    /**
+    * Ajax utilizado para buscar informacion de una consulta de estetica
+    *  
+    * @Route("/busqueda-paciente-info/data/exp", name="busqueda_paciente_info_exp")
+    */
+    public function busquedaInfoExpPacienteAction(Request $request)
+    {
+        //$busqueda = $request->query->get('id');
+        $busqueda = $request->get('id');
+        
+        
+        //var_dump($busqueda);
+        $response = new JsonResponse();
+        $em = $this->getDoctrine()->getEntityManager();
+        $dql = "SELECT exp.numero, pac.id, per.nombres, per.apellidos, per.telefono, per.telefono2, per.direccion, per.email, pac.dui, pac.estadoCivil, "
+                . "pac.sexo, pac.ocupacion, pac.lugarTrabajo, date_format(pac.fechaNacimiento,'%Y-%m-%d') as fechaNacimiento, pac.referidoPor, pac.personaEmergencia, pac.telefonoEmergencia "
+                        . "FROM DGPlusbelleBundle:Paciente pac "
+                        . "JOIN pac.persona per "
+                        . "JOIN pac.expediente exp "
+                        . "WHERE exp.numero =:busqueda "
+                        . "ORDER BY exp.numero ASC ";
+//        $dql = "SELECT exp.numero, pac.id pacienteid, per.nombres, per.apellidos "
+//                        . "FROM DGPlusbelleBundle:Paciente pac "
+//                        . "JOIN pac.persona per "
+//                        . "JOIN pac.expediente exp "
+//                        . "WHERE CONCAT(upper(per.nombres), ' ', upper(per.apellidos), ' ',exp.numero) LIKE upper(:busqueda) "
+//                        . "ORDER BY per.nombres ASC ";
+        
+        $paciente['data'] = $em->createQuery($dql)
+                ->setParameters(array('busqueda'=>$busqueda))
+                ->setMaxResults( 10 )
+                ->getResult();
+        
+        
+        if(count($paciente['data'])!=0){
+            if($paciente['data'][0]['fechaNacimiento']!=''){
+                    $fecha = $paciente['data'][0]['fechaNacimiento'];
+
+                    //Calculo de la edad
+                    list($Y,$m,$d) = explode("-",$fecha);
+                    $edad = date("md") < $m.$d ? date("Y")-$Y-1 : date("Y")-$Y;       
+                    $edad = $edad. " años";
+            }
+            else{
+                $edad = "No se ha ingresado fecha de nacimiento";
+            }
+            $paciente['edad'] = $edad;
+        }
+        else{
+            $paciente['edad'] = 0;
+        }
+        
+        $response->setData($paciente);
+        
+//        var_dump($paciente['data']);
+        return $response;
+    }
+    
 }

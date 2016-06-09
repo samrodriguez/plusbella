@@ -49,7 +49,7 @@
             {% endblock %}
     
     </head>
-    <body>
+    <body class="robo">
  {% block body %}
         
         <!-- Barra de Navegacion con Breadcrumb -->
@@ -127,39 +127,40 @@
                                 window.location=url;
                             });
 
-                            $('#busquedaRapida').select2({
-                                ajax: {
-                                    url: "{{path('busqueda_paciente_select')}}",
-                                    dataType: 'json',
-                                    delay: 250,
-                                    data: function (params) {
-                                      return {
-                                        q: params.term, 
-                                        page: params.page
-                                      };
-                                    },
-                                    processResults: function (data, params) {
-                                        var select2Data = $.map(data.data, function (obj) {
-                                            obj.id = obj.numero;
-                                            obj.text = obj.numero+" "+obj.nombres+" "+obj.apellidos;
+                            var busqueda = $('#busquedaRapida').select2({
+                                    
+                                    ajax: {
+                                        url: "{{path('busqueda_paciente_select_exp')}}",
+                                        dataType: 'json',
+                                        delay: 250,
+                                        data: function (params) {
+                                            return {
+                                              q: params.term, 
+                                              page: params.page
+                                            };
+                                        },
+                                        processResults: function (data, params) {
+                                            var select2Data = $.map(data.data, function (obj) {
+                                                obj.id = obj.numero;
+                                                obj.text = obj.numero+" "+obj.nombres+" "+obj.apellidos;
 
-                                            return obj;
-                                        });
+                                                return obj;
+                                            });
 
-                                        return {
-                                            results: select2Data
-                                            {#pagination: {
-                                                more: (params.page * 30) < data.total_count
-                                            }#}
-                                                    };
+                                            return {
+                                                results: select2Data
+                                                {#pagination: {
+                                                    more: (params.page * 30) < data.total_count
+                                                }#}
+                                            };
+                                        },
+                                        cache: true
                                     },
-                                    cache: true
-                                },
-                                escapeMarkup: function (markup) { return markup; }, 
-                                minimumInputLength: 1,
-                                templateResult: formatRepo, 
-                                templateSelection: formatRepoSelection 
-                            });
+                                    escapeMarkup: function (markup) { return markup; }, 
+                                    minimumInputLength: 1,
+                                    templateResult: formatRepo, 
+                                    templateSelection: formatRepoSelection 
+                                });
                             shortcut.add("Ctrl+g",function() {
                                 {#busqueda.click();
                                 console.log('click');#}
