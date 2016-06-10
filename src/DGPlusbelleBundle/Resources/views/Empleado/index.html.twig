@@ -149,6 +149,8 @@
 {% endblock %}
      
   {% block javascripts_step %}
+        <script src="{{ asset('Resources/swal/sweetalert2.min.js') }}"></script>
+        <link rel="stylesheet" href="{{ asset('Resources/swal/sweetalert2.min.css') }}">
         <script src="{{ asset('Resources/wrapkit/scripts/jquery.mask.js') }}"></script>
         <script src="{{ asset('Resources/js/Empleado.js') }}"></script>
       
@@ -221,35 +223,78 @@
                 
                  $("#delete-datatables1").click(function(){
                      if(!$(this).hasClass('disabled')){                     
-                     bootbox.confirm("¿Desea cambiar el estado de este registro?", function(result) {
-                        if(result){
-                        $.getJSON(Routing.generate('admin_empleado_desactivar', { id: link}), 
-                          function(data) {
-                          var mensaje="";
-                                    if(data.regs==0){
-                                        //Se cambia a desactivado
-                                        mensaje ="Empleado desactivado con exito";
-                                        $('#'+link + ' > td:nth-child(4)').html('Inactivo');
-                                        $('#delete-datatables1').children().removeClass("fa fa-toggle-on");
-                                        $('#delete-datatables1').children().addClass("fa fa-toggle-off");
-                                    //$('#datatables1>tbody>tr>td:nth-child(5)').html('Inactivo');
-                                    }
-                                    if(data.regs==1){
-                                        //Se cambia a activado
-                                        mensaje ="Empleado activada con exito";
-                                        $('#'+link + ' > td:nth-child(4)').html('Activo');
-                                        $('#delete-datatables1').children().removeClass("fa fa-toggle-off");
-                                        $('#delete-datatables1').children().addClass("fa fa-toggle-on");
-                                    }
-                                    bootbox.alert(mensaje, function() {
-                                        //Example.show("Hello world callback");
-                                    });
-                                    
-                                // alert(link);
-                            }); 
-                        }
-                                    
-                    });     
+                            
+                            
+                            swal({
+                                  title: "Esperando confirmación...",
+                                  text: "¿Desea cambiar el estado de este registro?",
+                                  type: "info",
+                                  showCancelButton: true,
+                                  {#confirmButtonColor: "#1D234D",#}
+                                  confirmButtonText: "Aceptar",
+                                  cancelButtonText: "Cancelar",
+                                  closeOnConfirm: false,
+                                  closeOnCancel: false
+                            }).then(function(isConfirm) {
+                                if (isConfirm) {
+
+                                    $.getJSON(Routing.generate('admin_empleado_desactivar', { id: link}), 
+                                 function(data) {
+                                 var mensaje="";
+                                           if(data.regs==0){
+                                               //Se cambia a desactivado
+                                               mensaje ="Empleado desactivado con éxito!";
+                                               $('#'+link + ' > td:nth-child(4)').html('Inactivo');
+                                               $('#delete-datatables1').children().removeClass("fa fa-toggle-on");
+                                               $('#delete-datatables1').children().addClass("fa fa-toggle-off");
+                                           //$('#datatables1>tbody>tr>td:nth-child(5)').html('Inactivo');
+                                           }
+                                           if(data.regs==1){
+                                               //Se cambia a activado
+                                               mensaje ="Empleado activado con éxito!";
+                                               $('#'+link + ' > td:nth-child(4)').html('Activo');
+                                               $('#delete-datatables1').children().removeClass("fa fa-toggle-off");
+                                               $('#delete-datatables1').children().addClass("fa fa-toggle-on");
+                                           }
+                                           swal('',mensaje,'success');
+
+                                       // alert(link);
+                                   }); 
+                                
+                                } else {
+
+                                }
+                            });
+            
+                            {#bootbox.confirm("¿Desea cambiar el estado de este registro?", function(result) {
+                               if(result){
+                               $.getJSON(Routing.generate('admin_empleado_desactivar', { id: link}), 
+                                 function(data) {
+                                 var mensaje="";
+                                           if(data.regs==0){
+                                               //Se cambia a desactivado
+                                               mensaje ="Empleado desactivado con exito";
+                                               $('#'+link + ' > td:nth-child(4)').html('Inactivo');
+                                               $('#delete-datatables1').children().removeClass("fa fa-toggle-on");
+                                               $('#delete-datatables1').children().addClass("fa fa-toggle-off");
+                                           //$('#datatables1>tbody>tr>td:nth-child(5)').html('Inactivo');
+                                           }
+                                           if(data.regs==1){
+                                               //Se cambia a activado
+                                               mensaje ="Empleado activada con exito";
+                                               $('#'+link + ' > td:nth-child(4)').html('Activo');
+                                               $('#delete-datatables1').children().removeClass("fa fa-toggle-off");
+                                               $('#delete-datatables1').children().addClass("fa fa-toggle-on");
+                                           }
+                                           bootbox.alert(mensaje, function() {
+                                               //Example.show("Hello world callback");
+                                           });
+
+                                       // alert(link);
+                                   }); 
+                               }
+
+                           });     #}
                         } 
 
                 }); 
