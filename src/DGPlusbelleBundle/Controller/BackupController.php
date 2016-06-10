@@ -62,7 +62,7 @@ class BackupController extends Controller{
         
         
     //var_dump($path);
-    exec("mysqldump -h localhost -u root marvinvi_laplusbelle -R> ".$path.$backupFile);
+    exec("mysqldump -h localhost -u root marvinvi_lpbsistema -R> ".$path.$backupFile);
     
     // open some file for reading
     $file = 'backup/'.$backupFile;
