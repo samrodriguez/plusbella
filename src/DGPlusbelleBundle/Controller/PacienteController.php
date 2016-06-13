@@ -1709,7 +1709,7 @@ class PacienteController extends Controller
         //var_dump($busqueda);
         $response = new JsonResponse();
         $em = $this->getDoctrine()->getEntityManager();
-        $dql = "SELECT exp.numero, pac.id, per.nombres, per.apellidos, per.telefono, per.telefono2, per.direccion, per.email, pac.dui, pac.estadoCivil, "
+        $dql = "SELECT pac.patologicos, pac.familiares, pac.alergias, exp.numero, pac.id, per.nombres, per.apellidos, per.telefono, per.telefono2, per.direccion, per.email, pac.dui, pac.estadoCivil, "
                 . "pac.sexo, pac.ocupacion, pac.lugarTrabajo, date_format(pac.fechaNacimiento,'%Y-%m-%d') as fechaNacimiento, pac.referidoPor, pac.personaEmergencia, pac.telefonoEmergencia "
                         . "FROM DGPlusbelleBundle:Paciente pac "
                         . "JOIN pac.persona per "
