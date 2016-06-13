@@ -234,14 +234,21 @@
                         </div>             
                     </div>
                 </div>
+                {% set tratNom = '' %}
+                {% for vpaquete in sesionesVenta %}
+                    {% if vpaquete.numSesion > 0 %}
+                        {% set tratNom = vpaquete.ntrata %}
+                    {% endif %}  
+                {% endfor %}
+                            
                 {# Aquí se colocan los nombres de cada sección (tabs) #}    
                 <ul class="nav nav-tabs" style="margin-top: 30px;">
                     <li><a data-toggle="tab" href="#datos-generales">Datos generales</a></li>
                     <li class="active"><a data-toggle="tab" href="#registros-venta">Datos de la venta</a></li>
                     {#<li><a data-toggle="tab" href="#registro-sesiones" id="tabs-sesiones">Registro de sesiones</a></li>#}
                     <li><a data-toggle="tab" href="#seguimiento-venta" id="tabs-seguimiento">Registro y seguimiento de sesiones</a></li>
-                    <li><a data-toggle="tab" href="#abonos-devoluciones" id="tabs-abdev">Abonos{# / Devoluciones#}</a></li>
-                    <li><a data-toggle="tab" href="#imagenes" id="tabs-imagenes">Imágenes</a></li>
+                    <li><a data-toggle="tab" href="#abonos-devoluciones" id="tabs-abdev" {% if ventaPaquete.cuotas == 0 %} style="display:none;" {% endif %} >Abonos</a></li>
+                    <li><a data-toggle="tab" href="#imagenes" id="tabs-imagenes" {% if tratNom == '' %} style="display:none;" {% endif %}>Imágenes</a></li>
                 </ul>
                 
                 {# Aquí se encuentran las secciones de las tabs #}    
@@ -450,7 +457,7 @@
                                 <div class="col-md-4">
                                     <div id="cuotas-venta">
                                         <label>Cuotas</label>
-                                        <input type="text" name="dgplusbellebundle_venta[cuotas]" id="dgplusbellebundle_venta_cuotas" class="form-control" style="width: 100%" value="{{ ventaPaquete.cuotas }}">   
+                                        <input type="text" name="dgplusbellebundle_venta[cuotas]" id="dgplusbellebundle_venta_cuotas" class="form-control" style="width: 100%" value="{{ ventaPaquete.cuotas }}" {% if ventaPaquete.cuotas == 0 %} readonly {% endif %} >   
                                     </div>
                                 </div>        
                             </div>
@@ -742,23 +749,18 @@
                     </div>                    
                     {# Sección en donde se encuentran las imagenes de un determinado tratamiento #}
                     <div id="imagenes" class="tab-pane fade" style="margin-top: 20px;">
+                        <strong>Subir imagen</strong>
                         <div class="row" style="margin-top: 35px;">
                             <form class="dropzone" id="formImagen" role="form" enctype="multipart/form-data" method="post" action="{{path('ingresar_foto_venta_paquete')}}">
                                 <div class="col-md-3 pull-center" id="imagenes-sesiones-tratamiento">
                                     <div id="sesiones-tratamiento">
-                                        <label>Tratamiento</label>
-                                        <select id="dgplusbellebundle_imagenes_tratamiento" name="venta_imagenes_tratamiento" class="sesion_tratamiento" style="width: 100%">
-                                            {#<option value="" disabled selected>Seleccione un tratamiento...</option>#}
-                                            {% for tratamiento in tratVenta %}
-                                                <option value="{{tratamiento.id}}"> {{tratamiento.nombre}}</option>
-                                            {% endfor %}
-                                        </select>    
+                                        {#<label>Tratamiento</label>#}
+                                        {#<select id="dgplusbellebundle_imagenes_tratamiento" name="venta_imagenes_tratamiento" class="sesion_tratamiento" style="width: 100%"></select>    #}
                                     </div>    
                                 </div>
                                 <div class="clearfix"></div>
                                 <div class="col-md-12 pull-center" id="imagenes-sesiones-sesiones">
                                     <div class="row" style=" padding: 30px;">
-                                        <strong>Subir imagen</strong>
                                         <div class="row" style="margin-top:20px;">
                                             <div class="col-md-12">
 
@@ -769,6 +771,18 @@
                                                         <input name="file[]" type="file" multiple required id="file-input"/>
                                                     </div>
                                                     <input type="hidden" id="idSesion" value="{% if ventaPaquete.id is null %}{%else%}{{ventaPaquete.id}}{%endif%}" name="idSesion" class="form-control input-sm"/>
+                                                    
+                                                    {% if tratNom != '' %}
+                                                        {% for tratamiento in tratVenta %}
+                                                            {% if tratamiento.nombre == tratNom %}
+                                                                <input type="hidden" id="ventasImagenesTratamiento" name="venta_imagenes_tratamiento" class="form-control input-sm" value="{{ tratamiento.id }}" />
+                                                            {% endif %}
+                                                        {% endfor %}
+                                                    {% else %}
+                                                        <input type="hidden" id="ventasImagenesTratamiento" name="venta_imagenes_tratamiento" class="form-control input-sm"/>
+                                                    {% endif %}
+                                                    
+                                                    
                                                 {#</form>#}
 
                                                 
@@ -996,6 +1010,8 @@
                     $('#dgplusbellebundle_venta_cuotas').val('');
                     $('#dgplusbellebundle_venta_descuento').val('');
                     $('#dgplusbellebundle_venta_paquete').val('');
+                    
+                    $('#dgplusbellebundle_venta_cuotas').prop("readonly", false);
                 });
                 
                 // Al hacer click en la opcion de tipo de venta de tratamiento
@@ -1026,6 +1042,8 @@
                     $('#dgplusbellebundle_venta_cuotas').val('');
                     $('#dgplusbellebundle_venta_descuento').val('');
                     $('#dgplusbellebundle_venta_tratamiento').val('');
+                    
+                    $('#dgplusbellebundle_venta_cuotas').prop("readonly", false);
                 });
                 
                 // Al seleccionar un paquete
@@ -1088,6 +1106,19 @@
                             $('#dgplusbellebundle_venta_costo').val(response.data.regs);
                         }
                     });
+                });
+                
+                // Verificando el costo ingresado
+                $(document).on("input","#dgplusbellebundle_venta_costo", function(){
+                    var venta = $('#dgplusbellebundle_venta_costo').val();
+                    
+                    if(parseFloat(venta) == 0){
+                        $('#dgplusbellebundle_venta_cuotas').val(0);
+                        $('#dgplusbellebundle_venta_cuotas').prop("readonly", true);
+                    } else {
+                        $('#dgplusbellebundle_venta_cuotas').val('');
+                        $('#dgplusbellebundle_venta_cuotas').prop("readonly", false);
+                    }
                 });
                 
                 // Al momento de hacer click en Registrar informacion del paciente
@@ -1172,7 +1203,7 @@
                     
                     if(sucursal != null){
                         if(costo > 0){
-                            if(cuotas > 0){
+                            if((cuotas.length > 0) && (parseInt(cuotas) >= 0)){
                                 var aux = 0;
                                 
                                 $('.sesionesPaqueteTrata').each(function( key, value ) {
@@ -1225,32 +1256,12 @@
                                             $('#detalle-venta-cuotas').html(response.ventaPaqueteTratamientos.descuento + '%');
                                             $('#detalle-venta-deuda').html('$ ' + deuda_total);
                                             
-                                            {#$.each( response.ventaPaqueteTratamientos.nomTratamientos, function( key, value ) {
-                                                draw+= '<div class="row">';
-                                                draw+= '<div class="col-md-5" style="margin-bottom: 10px;">';
-                                                draw+= '<span>' + value + '</span>';
-                                                draw+= '</div>';
-                                                draw+= '<div class="col-md-7" style="margin-bottom: 10px;">';
-                                                draw+= '<div class="row">';
-
-                                                for (i = 0; i < response.ventaPaqueteTratamientos.sesiones[key]; i++) {
-                                                    draw+= '<div class="col-md-1" style="margin-bottom: 10px;">';
-                                                    draw+= '<img class="" style="height: 25px;"  src="{{ asset('Photos/Estados/sesion_pendiente.png')}}" title="Sesion pendiente">';
-                                                    draw+= '</div>';
-                                                }
-
-                                                draw+= '</div>';
-                                                draw+= '</div>';
-                                                draw+= '</div>';
-                                            });#}
-                                            console.log(response.ventaPaqueteTratamientos.ventaPaquete);
-    
                                             $.each( response.ventaPaqueteTratamientos.ventaPaquete, function( key, value ) {
                                                 //console.log(value);
-                                                mensaje+= '<div class="row">';
-                                                mensaje+= '<div class="col-md-5" style="margin-bottom: 10px;">';
-                                                mensaje+= '<span>' + value.ntrata + '</span>';
-                                                mensaje+= '</div>';
+                                            mensaje+= '<div class="row">';
+                                            mensaje+= '<div class="col-md-5" style="margin-bottom: 10px;">';
+                                            mensaje+= '<span>' + value.ntrata + '</span>';
+                                            mensaje+= '</div>';
                                                 mensaje+= '<div class="col-md-7" style="margin-bottom: 10px;">';
                                                 mensaje+= '<div class="row">';
 
@@ -1279,8 +1290,13 @@
                                             });
 
                                             $('#detalle-venta-tratamientos').html(mensaje);
-
-                                            //$('#detalle-venta-tratamientos').html(draw);
+                                            
+                                            var tabsAbdev = document.getElementById('tabs-abdev');
+                                            if(parseInt(response.ventaPaqueteTratamientos.cuotas) > 0){
+                                                tabsAbdev.style.display = 'block';
+                                            } else {
+                                                tabsAbdev.style.display = 'none';
+                                            }
                                         }
                                     });
 
@@ -1378,7 +1394,6 @@
                                                 closeOnCancel: false
                                             }).then(function(isConfirm) {
                                                 if (isConfirm) {
-                                                    console.log('aqui');
                                                     $("#registro-sesiones-tratamiento").prop('disabled', true);
                                                     
                                                     // Si acepta continuar con el registro de una nueva sesion de tratamiento
@@ -1390,11 +1405,15 @@
                                                         empleado: empleado,
                                                         tratamiento: tratamiento
                                                     };
-                                                    //console.log(sucursal + ' ' + empleado);
+                                                    
                                                     nuevaSesionPaqueteTratamiento(datos);
                                                     return false;  
                                                 } else {
                                                     $("#registro-sesiones-tratamiento").prop('disabled', false);
+                                                    
+                                                    $('#dgplusbellebundle_sesiones_sucursal').val('').change();
+                                                    $('#dgplusbellebundle_sesiones_empleado').val('').change();
+                                                    $('#dgplusbellebundle_sesiones_tratamiento').val('').change();
                                                 }
                                             });
                                         
@@ -1484,18 +1503,6 @@
                 
                 // Al hacer click en guardar imagenes
                 $(document).on("click","#registro-sesiones-imagenes",function(){
-                    {#var datosgenerales = document.getElementById('datos-generales');
-                    var sesiones = document.getElementById('registro-sesiones');
-                    var registroventa = document.getElementById('registro-venta');
-                    var abonosdevoluciones = document.getElementById('abonos-devoluciones');
-                    var seguimiento = document.getElementById('seguimiento-venta');
-                    
-                    datosgenerales.style.display = 'none';
-                    sesiones.style.display = 'none';
-                    registroventa.style.display = 'none';
-                    abonosdevoluciones.style.display = 'none';
-                    seguimiento.style.display = 'none';#}
-                
                     $("#prev").show();
                     $("#saveImagen").hide();
 
@@ -1512,8 +1519,7 @@
 
                     //obtenemos el tipo de archivo image/png ejemplo
                     var fileType = file.type;
-                    // console.log(fileType);
-                    // console.log(fileExtension);
+                    
                     if (fileExtension == 'PNG' || fileExtension == 'png' ||fileExtension == 'JPG'|| fileExtension == 'jpg' && fileType =='imagen' || fileType =='image' || fileType =='image/jpeg' )
                     {
                         flag = true;
@@ -1672,7 +1678,12 @@
                                     $('#detalle-venta-deuda').html('$ ' + deuda_total);
                                     table.ajax.reload();
                                     $("#registro-abono").prop('disabled', false);
-
+                                    
+                                    $('#dgplusbellebundle_abono_sucursal').val('').change();
+                                    $('#dgplusbellebundle_abono_empleado').val('').change();
+                                    $('#dgplusbellebundle_abono_monto').val('');
+                                    $('#dgplusbellebundle_abono_descripcion').val('');
+                                    
                                     return false;
                                 }
                             });
@@ -1988,7 +1999,9 @@
                     tabsImagenes.style.display = 'block';
 
                     var vtratamientos = $("#dgplusbellebundle_sesiones_tratamiento");
-                    $('#idSesion').val(id_ventatratamiento);
+                    //$('#idSesion').val(id_ventatratamiento);
+                    $('#idSesion').val(id_ventapaquete);
+                    $('#ventasImagenesTratamiento').val(data.tratamiento);
 
                     $.each( response.ventaPaquete, function( key, value ) {
                         //console.log(value);
