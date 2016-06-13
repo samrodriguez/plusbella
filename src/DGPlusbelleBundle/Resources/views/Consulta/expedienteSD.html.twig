@@ -9,12 +9,16 @@
         .link_, .link{
             cursor:pointer;
         }
+        .link_:hover, .link:hover{
+            color:#09F !important;
+        }
     </style>
 {#        <link rel="stylesheet" href="{{asset('Resources/datatables/serversideprocessing.css')}}" />#}
         <link rel="stylesheet" href="{{ asset('Resources/alertifyjs/css/alertify.css') }}">
         <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/material-design-lite/1.1.0/material.min.css">
         <link rel="stylesheet" href="https://cdn.datatables.net/1.10.11/css/dataTables.material.min.css">
         <link rel="stylesheet" href="{{ asset('Resources/swal/sweetalert2.min.css') }}">
+        <script src="{{ asset('Resources/src/js/bootstrap.js')}}"></script>
 {% endblock %}
 
 
@@ -143,7 +147,6 @@
         
         <script src="https://cdn.datatables.net/1.10.11/js/jquery.dataTables.min.js"></script>
 	<script src="https://cdn.datatables.net/1.10.11/js/dataTables.material.min.js "></script>
-        <script src="{{ asset('Resources/wrapkit/scripts/bootbox.js') }}"></script>
         <script src="{{ asset('bundles/fosjsrouting/js/router.js') }}"></script>
         <script src="{{ path('fos_js_routing_js', {'callback': 'fos.Router.setData'}) }}"></script>
         <script src="{{ asset('Resources/wrapkit/scripts/bootbox.js') }}"></script>

@@ -146,9 +146,11 @@
  
   {% block javascripts_step %}
       
-       <script src="{{ asset('Resources/js/Categoria.js') }}"></script>
+        <script src="{{ asset('Resources/swal/sweetalert2.min.js') }}"></script>
+        <link rel="stylesheet" href="{{ asset('Resources/swal/sweetalert2.min.css') }}">
+        <script src="{{ asset('Resources/js/Categoria.js') }}"></script>
       
-       <script>
+        <script>
             $(document).ready(function(){
                 var link=0;
                  var estadoPrevio = "";
@@ -205,36 +207,48 @@
                 });
                 
                  $("#delete-datatables1").click(function(){
-                      if(!$(this).hasClass('disabled')){ 
-                      bootbox.confirm("¿Desea cambiar el estado de este registro?", function(result) {
-                        if(result){
-                        $.getJSON(Routing.generate('admin_categoria_desactivar', { id: link}), 
-                          function(data) {
-                          var mensaje="";
-                                    if(data.regs==0){
-                                        //Se cambia a desactivado
-                                        mensaje ="Categoria desactivada con exito";
-                                        $('#'+link + ' > td:nth-child(4)').html('<center>Inactivo</center>');
-                                        $('#delete-datatables1').children().removeClass("fa fa-toggle-on");
-                                        $('#delete-datatables1').children().addClass("fa fa-toggle-off");
-                                    //$('#datatables1>tbody>tr>td:nth-child(5)').html('Inactivo');
-                                    }
-                                    if(data.regs==1){
-                                        //Se cambia a activado
-                                        mensaje ="Categoria activada con exito";
-                                        $('#'+link + ' > td:nth-child(4)').html('<center>Activo</center>');
-                                        $('#delete-datatables1').children().removeClass("fa fa-toggle-off");
-                                        $('#delete-datatables1').children().addClass("fa fa-toggle-on");
-                                    }
-                                    bootbox.alert(mensaje, function() {
-                                        //Example.show("Hello world callback");
-                                    });
-                                    
-                                // alert(link);
-                            }); 
-                        }
-                                    
-                    });     
+                      if(!$(this).hasClass('disabled')){
+                          
+                            swal({
+                                  title: "Esperando confirmación...",
+                                  text: "¿Desea cambiar el estado de este registro?",
+                                  type: "info",
+                                  showCancelButton: true,
+                                  {#confirmButtonColor: "#1D234D",#}
+                                  confirmButtonText: "Aceptar",
+                                  cancelButtonText: "Cancelar",
+                                  closeOnConfirm: false,
+                                  closeOnCancel: false
+                            }).then(function(isConfirm) {
+                                if (isConfirm) {
+
+                                    $.getJSON(Routing.generate('admin_categoria_desactivar', { id: link}), 
+                                        function(data) {
+                                        var mensaje="";
+                                            if(data.regs==0){
+                                                //Se cambia a desactivado
+                                                mensaje ="Categoria desactivada con exito";
+                                                $('#'+link + ' > td:nth-child(4)').html('<center>Inactivo</center>');
+                                                $('#delete-datatables1').children().removeClass("fa fa-toggle-on");
+                                                $('#delete-datatables1').children().addClass("fa fa-toggle-off");
+                                            //$('#datatables1>tbody>tr>td:nth-child(5)').html('Inactivo');
+                                            }
+                                            if(data.regs==1){
+                                                //Se cambia a activado
+                                                mensaje ="Categoria activada con exito";
+                                                $('#'+link + ' > td:nth-child(4)').html('<center>Activo</center>');
+                                                $('#delete-datatables1').children().removeClass("fa fa-toggle-off");
+                                                $('#delete-datatables1').children().addClass("fa fa-toggle-on");
+                                            }
+                                            swal('','Registro desactivado','success');
+
+                                              // alert(link);
+                                        }); 
+                                } else {
+
+                                }
+                            });
+                          
                         }
 
                 }); 

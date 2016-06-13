@@ -1260,7 +1260,7 @@ Dentro de la div  con clase content- body
      
      
      
-     
+    {#<script src="{{ asset('Resources/src/js/bootstrap.js')}}"></script>#}
      
     <script src="{{ asset('Resources/swal/sweetalert2.min.js') }}"></script>
     
@@ -1272,14 +1272,14 @@ Dentro de la div  con clase content- body
     <script src="{{ asset('Resources/wrapkit/scripts/bootbox.js') }}"></script>
     <script src="https://cdn.datatables.net/1.10.11/js/jquery.dataTables.min.js"></script>
     <script src="https://cdn.datatables.net/1.10.11/js/dataTables.material.min.js "></script>
-    <script src="{{ asset('Resources/src/js/bootstrap.js')}}"></script>
-     
+    
+    
      
     <script>
 
 
         
-        $("div#myId").dropzone({ 
+        $("div#myId").dropzone({
             url: "/file/post",
             error: function(file) {
                 swal('','Error al cargar imágenes, verifique si se ha guardado una consulta!','error');
@@ -1287,7 +1287,7 @@ Dentro de la div  con clase content- body
             },
         });
 
-        $(function () { 
+        $(function () {
             $('.calZebra').Zebra_DatePicker({
                 months:['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
                 days: ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'],
@@ -3097,6 +3097,56 @@ Dentro de la div  con clase content- body
     
         $(document).on('change','#busquedaPacienteConsulta',function(){
             var id = $(this).val();
+            
+            var myAwesomeDropzone = $('#formImagen');
+            
+            Dropzone.options.myAwesomeDropzone = {
+                paramName: "file", // The name that will be used to transfer the file
+                
+                maxFilesize: 2, // MB
+                accept: function(file, done) {
+                  if (file.name == "justinbieber.jpg") {
+                    done("Naha, you don't.");
+                  }
+                  else { done(); }
+                }
+            };
+            //limpiar campos de consultas
+            $('#idConsulta').val('');
+            $('#costoConsulta').val('');
+            $('#observacionConsulta').val('');
+            
+            ///limpiar campos de signos
+            $('#tipo_consulta').val(0).change();
+            $('#pesoPaciente').val('');
+            $('#tallaPaciente').val('');
+            $('#frecRespiratoria').val('');
+            $('#presionSistolica').val('');
+            $('#presionDiastolica').val('');
+            $('#temperaturaPaciente').val('');
+            $('#frecCardiaca').val('');
+            
+            
+            //$('#planOpciones input').prop('checked','false');
+            $('#selectPlantilla0').click();
+            $('#selectPlantilla0,#selectPlantilla1').prop('checked','false');
+            $('#selectPlantilla0,#selectPlantilla1').removeAttr('checked');
+            //se ocultan las historias clinicas
+            $('.LPB,.SD').hide();
+            
+            //limpiamos campo receta
+            $('#receta').val('');
+            
+            //limpimos las imágenes
+            $('.imagenMensaje').show();
+            $('.imagenContent').addClass('hidden');
+            
+        
+        
+            {#$('#formImagen').remove();
+            var formulario = '<form class=\"dropzone\" id=\"formImagen\" role=\"form\" enctype=\"multipart/form-data\" method=\"post\" action=\"/lpbsistema/app_dev.php/admin/consulta/ingresar_foto_persona/get?id=\"><div class=\"fallback\"><input name=\"file[]\" type=\"file\" multiple required id=\"file-input\"/></div><input type=\"text\" id=\"idConsulta\" value=\"\" name=\"idConsulta\" class=\"hidden form-control input-sm\"/></form>';
+            $('.imagenContent').children().html(formulario);#}
+            
             console.log('id de paciente: '+id);
             $.ajax({
                 data:{'id':id
@@ -3104,6 +3154,7 @@ Dentro de la div  con clase content- body
                 url:"{{path('busqueda_paciente_info_exp')}}",
                 type: "post",
                 success: function (data) {
+                    
                     //var dat = JSON.parse(data);
                     console.log(data);
                     $('#nombresPaciente').val(data.data[0].nombres);
@@ -3120,7 +3171,13 @@ Dentro de la div  con clase content- body
                     $('#ocupacion').val(data.data[0].ocupacion);
                     $('#lugarTrabajo').val(data.data[0].lugarTrabajo);
                     var fecha=data.data[0].fechaNacimiento;
-                    var fechaD = fecha.toString();
+                    var fechaD="";
+                    if(fecha!=null){
+                        fechaD = fecha.toString();
+                    }
+                    else{
+                        fechaD = "N/A";
+                    }
                     {#console.log(fecha);
                     console.log(fechaD);#}
                     $('#fechaNacimiento').val(fecha);
@@ -3136,17 +3193,18 @@ Dentro de la div  con clase content- body
                     $('#direccionD').html('<i class="fa fa-map-marker fa-fw"></i> '+data.data[0].direccion);
                     $('#edad').html('<i class="fa fa-birthday-cake"></i> '+data.edad);
                     
-                    
+                    $('#antecedentesPatologicos').val(data.data[0].patologicos);
+                    $('#antecedentesFamiliares').val(data.data[0].familiares);
+                    $('#antecedentesAlergias').val(data.data[0].alergias);
                     
                     $('#idPaciente').val(data.data[0].id);
                     $('#info-Paciente').show();
                 },
                 error: function (data) {
-
-
+                    swal('','Ocurrió un error, seleccione un paciente de nuevo!','error');
                 }
             });
-            console.log('vdfsvfdv');
+            //console.log('vdfsvfdv');
         });
     
     
@@ -3160,8 +3218,8 @@ Dentro de la div  con clase content- body
                 delay: 250,
                 data: function (params) {
                     return {
-                      q: params.term, 
-                      page: params.page
+                        q: params.term, 
+                        page: params.page
                     };
                 },
                 processResults: function (data, params) {
@@ -3367,10 +3425,15 @@ Dentro de la div  con clase content- body
 {#            alert(direccion);#}
             
             //alert(fechaNacimiento);
+            if(id===''){
+                swal('','Debe seleccionar un paciente','error');
+                return false;
+            }
             if(nombres==='' || apellidos==='' || telefono1===''){
                 swal('','El nombre, apellidos y teléfono1 no pueden quedar en vacios','error');
                 return false;
             }
+            
             
             $.ajax({
                 data:{id:id,nombres:nombres,apellidos:apellidos,telefono1:telefono1,telefono2:telefono2,direccion:direccion,correo:correo,dui:dui,estadoCivil:estadoCivil,sexo:sexo,ocupacion:ocupacion,
@@ -3421,7 +3484,10 @@ Dentro de la div  con clase content- body
             //alert(medico+","+tratamiento+","+tipoConsulta+","+observaciones+","+sucursal);
             
             
-            
+            if(id===''){
+                swal('','Debe seleccionar un paciente','error');
+                return false;
+            }
 {#            alert(medico);#}
             
             //return false;
@@ -3563,11 +3629,14 @@ Dentro de la div  con clase content- body
             var patologicos = $('#antecedentesPatologicos').val();
             var familiares = $('#antecedentesFamiliares').val();
             var alergias = $('#antecedentesAlergias').val();
-            console.log(patologicos);
+            {#console.log(patologicos);
             console.log(familiares);
-            console.log(alergias);
+            console.log(alergias);#}
             //alert(fechaNacimiento);
-            
+            if(id===''){
+                swal('','Debe seleccionar un paciente','error');
+                return false;
+            }
             $.ajax({
                 data:{id:id,patologicos:patologicos,familiares:familiares,alergias:alergias},
                 url:"{{path('admin_paciente_guardar_antecedentes_ajax')}}",
@@ -3603,7 +3672,10 @@ Dentro de la div  con clase content- body
             var frecCardiaca = $('#frecCardiaca').val();
             var medico = $('#medico_consulta').val();
             var sucursal = $('#sucursal_consulta').val();
-            
+            if(id===''){
+                swal('','Debe seleccionar un paciente','error');
+                return false;
+            }
             
             if(idConsulta==''){
                 $.ajax({
@@ -3707,7 +3779,10 @@ Dentro de la div  con clase content- body
         $(document).on('click','#guardarPlantilla', function(){
             var id = $('#idPaciente').val();
             var idConsulta = $('#idConsulta').val();
-            
+            if(id===''){
+                swal('','Debe seleccionar un paciente','error');
+                return false;
+            }
 {#            alert(direccion);#}
             var valores = new Array();
             var idParameters = new Array();
@@ -4163,6 +4238,10 @@ Dentro de la div  con clase content- body
             var idConsulta = $('#idConsulta').val();
             var valores = new Array();
 {#            alert(direccion);#}
+            if(id===''){
+                swal('','Debe seleccionar un paciente','error');
+                return false;
+            }
             var nombre=$('#idPaciente').val();
 {#            var id=12;#}
             var medico = $('#medico_consulta').val();

@@ -1560,7 +1560,7 @@ class PacienteController extends Controller
         $paciente->setSexo($sexo);
         $paciente->setOcupacion($ocupacion);
         $paciente->setLugarTrabajo($lugarTrabajo);
-        $paciente->setFechaNacimiento($fechaNacimiento);
+        $paciente->setFechaNacimiento(new \DateTime($fechaNacimiento));
         $paciente->setReferidoPor($referidoPor);
         $paciente->setPersonaEmergencia($personaEmergencia);
         $paciente->setTelefonoEmergencia($telefonoEmergencia);
@@ -1572,7 +1572,7 @@ class PacienteController extends Controller
         $em->flush();
         $paciente->setPersona($persona);
         $paciente->setFechaRegistro(new \DateTime('now'));
-        $paciente->setFechaNacimiento(null);
+        //$paciente->setFechaNacimiento(null);
         $paciente->setEstado(1);
         
         $em->persist($paciente);
@@ -1709,7 +1709,7 @@ class PacienteController extends Controller
         //var_dump($busqueda);
         $response = new JsonResponse();
         $em = $this->getDoctrine()->getEntityManager();
-        $dql = "SELECT exp.numero, pac.id, per.nombres, per.apellidos, per.telefono, per.telefono2, per.direccion, per.email, pac.dui, pac.estadoCivil, "
+        $dql = "SELECT pac.patologicos, pac.familiares, pac.alergias, exp.numero, pac.id, per.nombres, per.apellidos, per.telefono, per.telefono2, per.direccion, per.email, pac.dui, pac.estadoCivil, "
                 . "pac.sexo, pac.ocupacion, pac.lugarTrabajo, date_format(pac.fechaNacimiento,'%Y-%m-%d') as fechaNacimiento, pac.referidoPor, pac.personaEmergencia, pac.telefonoEmergencia "
                         . "FROM DGPlusbelleBundle:Paciente pac "
                         . "JOIN pac.persona per "
