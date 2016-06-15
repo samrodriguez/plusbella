@@ -678,14 +678,15 @@ class VentaController  extends Controller
             $idsesion = $_POST["idSesion"];
 //            var_dump($_POST);
             $idtratamiento = $_POST["venta_imagenes_tratamiento"];
-            date_default_timezone_set('America/El_Salvador');
             
+            date_default_timezone_set('America/El_Salvador');
+            //var_dump('venta paquete: '.$idsesion . ' Tratamiento: ' . $idtratamiento);
             $em = $this->getDoctrine()->getManager();
             $ventaPaquete = $em->getRepository('DGPlusbelleBundle:VentaPaquete')->find($idsesion);
             
             $tratamiento = $em->getRepository('DGPlusbelleBundle:Tratamiento')->find($idtratamiento);
             $sesiontratamiento = $em->getRepository('DGPlusbelleBundle:SesionTratamiento')->findBy(array('ventaPaquete' => $ventaPaquete, 'tratamiento' => $tratamiento ));
-            
+            //var_dump($sesiontratamiento);
             $ban = 0;
             if(!is_null($sesiontratamiento) && !empty($sesiontratamiento)){
                 $sesiontratamientoId = array();
@@ -896,7 +897,13 @@ class VentaController  extends Controller
             
             $abonos = $em->createNativeQuery($sql2, $rsm2)
                     ->getSingleResult();
-            //var_dump($abonos);
+            
+            if($ventaPaquete->getDescuento() != null){
+                $descuentoVenta = $ventaPaquete->getDescuento()->getPorcentaje();
+            } else {
+                $descuentoVenta = 0;
+            }
+            
             $this->get('bitacora')->escribirbitacora("Se registro un nuevo abono de un paquete", $usuario->getId());
             
             $response = new JsonResponse();
@@ -905,7 +912,7 @@ class VentaController  extends Controller
                                 'abonos'    => $abonos['abonos'],
                                 'cuotas'    => $abonos['cuotas'],
                                 'costo'     => $ventaPaquete->getCosto(),
-                                'descuento' => $ventaPaquete->getDescuento()->getPorcentaje(),
+                                'descuento' => $descuentoVenta,
                                 ));  
             
             return $response; 

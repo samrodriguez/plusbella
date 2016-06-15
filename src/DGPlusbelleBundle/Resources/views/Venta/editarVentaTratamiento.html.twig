@@ -223,14 +223,16 @@
                         </div>             
                     </div>
                 </div>
+                {% set numSesion = seguimiento.numSesion %}
+                                    
                 {# Aquí se colocan los nombres de cada sección (tabs) #}    
                 <ul class="nav nav-tabs" style="margin-top: 30px;">
                     <li><a data-toggle="tab" href="#datos-generales">Datos generales</a></li>
                     <li class="active"><a data-toggle="tab" href="#registros-venta">Datos de la venta</a></li>
                     {#<li><a data-toggle="tab" href="#registro-sesiones" id="tabs-sesiones">Registro de sesiones</a></li>#}
                     <li><a data-toggle="tab" href="#seguimiento-venta" id="tabs-seguimiento">Registro y seguimiento de sesiones</a></li>
-                    <li><a data-toggle="tab" href="#abonos-devoluciones" id="tabs-abdev">Abonos{# / Devoluciones#}</a></li>
-                    <li><a data-toggle="tab" href="#imagenes" id="tabs-imagenes">Imagenes</a></li>
+                    <li><a data-toggle="tab" href="#abonos-devoluciones" id="tabs-abdev" {% if personaTratamiento.cuotas == 0 %} style="display:none;" {% endif %} >Abonos{# / Devoluciones#}</a></li>
+                    <li><a data-toggle="tab" href="#imagenes" id="tabs-imagenes" {% if numSesion == 0 %} style="display:none;" {% endif %}>Imagenes</a></li>
                 </ul>
                 
                 {# Aquí se encuentran las secciones de las tabs #}    
@@ -452,7 +454,7 @@
                                 <div class="col-md-4">
                                     <div id="cuotas-venta">
                                         <label>Cuotas</label>
-                                        <input type="text" name="dgplusbellebundle_venta[cuotas]" id="dgplusbellebundle_venta_cuotas" class="form-control" style="width: 100%" value="{{ personaTratamiento.cuotas }}">   
+                                        <input type="text" name="dgplusbellebundle_venta[cuotas]" id="dgplusbellebundle_venta_cuotas" class="form-control" style="width: 100%" value="{{ personaTratamiento.cuotas }}" {% if personaTratamiento.cuotas == 0 %} readonly {% endif %}>   
                                     </div>
                                 </div>        
                             </div>
@@ -664,7 +666,6 @@
                                         </div>
                                         <div class="col-md-7" style="margin-bottom: 10px;">
                                             <div class="row" id="seguimiento-detalle-sesiones">
-                                                {% set numSesion = seguimiento.numSesion %}
                                                 {% set pendientes = personaTratamiento.numSesiones - seguimiento.numSesion %}
                                                 {% if numSesion > 0 %}
                                                     {% for i in 1..numSesion %}
@@ -1050,6 +1051,19 @@
                     });
                 });
                 
+                // Verificando el costo ingresado
+                $(document).on("input","#dgplusbellebundle_venta_costo", function(){
+                    var venta = $('#dgplusbellebundle_venta_costo').val();
+                    
+                    if(parseFloat(venta) == 0){
+                        $('#dgplusbellebundle_venta_cuotas').val(0);
+                        $('#dgplusbellebundle_venta_cuotas').prop("readonly", true);
+                    } else {
+                        $('#dgplusbellebundle_venta_cuotas').val('');
+                        $('#dgplusbellebundle_venta_cuotas').prop("readonly", false);
+                    }
+                });
+                
                 // Al momento de hacer click en Registrar informacion del paciente
                 $(document).on("click", "#editar-paciente", function(){
                     var nombres = $('#dgplusbellebundle_venta_nombres').val();
@@ -1069,23 +1083,23 @@
                     var telefonoEmergencia = $('#dgplusbellebundle_venta_telefonoEmergencia').val();
                 
                     var data = {
-                                  id : {{paciente.id}},
-                                  nombres : nombres,
-                                  apellidos : apellidos,
-                                  telefono : telefono,
-                                  telefono2 : telefono2,
-                                  direccion : direccion,
-                                  correo : correo,
-                                  dui : dui,
-                                  ecivil : ecivil,
-                                  sexo : sexo,
-                                  ocupacion : ocupacion,
-                                  lugarTrabajo : lugarTrabajo,
-                                  fechaNacimiento : fechaNacimiento,
-                                  referidoPor : referidoPor,
-                                  personaEmergencia : personaEmergencia,
-                                  telefonoEmergencia : telefonoEmergencia
-                              };
+                              id : {{paciente.id}},
+                              nombres : nombres,
+                              apellidos : apellidos,
+                              telefono : telefono,
+                              telefono2 : telefono2,
+                              direccion : direccion,
+                              correo : correo,
+                              dui : dui,
+                              ecivil : ecivil,
+                              sexo : sexo,
+                              ocupacion : ocupacion,
+                              lugarTrabajo : lugarTrabajo,
+                              fechaNacimiento : fechaNacimiento,
+                              referidoPor : referidoPor,
+                              personaEmergencia : personaEmergencia,
+                              telefonoEmergencia : telefonoEmergencia
+                          };
                               
                      $.ajax({
                         data:  data,
@@ -1131,7 +1145,7 @@
                     
                     if(sucursal != null){
                         if(costo > 0){
-                            if(cuotas > 0){
+                            if((cuotas.length > 0) && (parseInt(cuotas) >= 0)){
                                 if(sesiones > 0){
                                     // Se obtiene la informacion necesaria para registrar la venta
                                     var data = {
@@ -1184,6 +1198,11 @@
 
                                             $('#seguimiento-detalle-sesiones').html(mensaje);
                                             
+                                            if(parseInt(response.personaTratamiento.cuotas) > 0){
+                                                tabsAbdev.style.display = 'block';
+                                            } else {
+                                                tabsAbdev.style.display = 'none';
+                                            }                                            
                                         }
                                     });
                                     return false;
@@ -1287,58 +1306,65 @@
                         
                         return false;
                     } else if(id_ventatratamiento > 0){
-//                        console.log(pendientes);
-                        if(pendientes >  0) {
-                            if( sucursal == null || empleado == null){
-                                //bootbox.alert('Debe  de ingresar todos los campos que se le solicitan');
-                                swal('','Debe  de ingresar todos los campos que se le solicitan!','error');
-                                $("#registro-sesiones-tratamiento").prop('disabled', false);
-                                return false;
-                            } else {
-                                // Se obtiene la informacion necesaria para registrar la sesion
-                                var data = {
-                                    id : id_ventatratamiento,
-                                    sucursal : sucursal,
-                                    empleado: empleado
-                                };
-
-                                // Se procede a registrar la sesion del tratamiento mediante ajax
-                                $.ajax({
-                                    data:  data,
-                                    url:   '{{path('admin_sesionventatratamiento_nuevo')}}',
-                                    type:  'post',
-                                    success:  function (response) {
-                                        table1.ajax.reload();
-
-                                        {#alertify.success('Se ha resgistrado con exito la sesion del tratamiento');#}
-                                        swal('','Se ha registrado con éxito sesión del tratamiento!','success');
-                                        pendientes--;
-                                        for (var i = 0; i < response.seguimiento; i++) {
-                                            mensaje += '<div class="col-md-1" style="margin-bottom: 10px;">';
-                                            mensaje += '<img class="" style="height: 25px;"  src="{{ asset('Photos/Estados/sesion_realizada.png')}}" title="Sesion realizada">';
-                                            mensaje += '</div>';
-                                        }
-                                        for (var i = 0; i < response.personaTratamiento.sesiones - response.seguimiento; i++) {
-                                            mensaje += '<div class="col-md-1" style="margin-bottom: 10px;">';
-                                            mensaje += '<img class="" style="height: 25px;"  src="{{ asset('Photos/Estados/sesion_pendiente.png')}}" title="Sesion pendiente">';
-                                            mensaje += '</div>';
-                                        }
-
-                                        $('#seguimiento-detalle-sesiones').html(mensaje);
-                                        $("#registro-sesiones-tratamiento").prop('disabled', false);
-
-                                        $('#dgplusbellebundle_sesiones_sucursal').val('').change();
-                                        $('#dgplusbellebundle_sesiones_empleado').val('').change();
-                                    }
-                                });
-
-                                return false;
-                            }
-                        } else {
-                            {#bootbox.alert('No se puede realizar esta operacion. Se han realizado todas las sesiones de este tratamiento');#}
-                            swal('','No se puede realizar esta operación. Se han realizado todas las sesiones de este tratamiento!','error');
+                        if(sucursal == null || empleado == null){
+                            swal("", "Debe  de ingresar todos los campos que se le solicitan.", "error");
+                            $("#registro-sesiones-tratamiento").prop('disabled', false);
                             return false;
-                        }                                
+                        } else {
+                            if(pendientes >  0) {
+                                if( sucursal == null || empleado == null){
+                                    //bootbox.alert('Debe  de ingresar todos los campos que se le solicitan');
+                                    swal('','Debe  de ingresar todos los campos que se le solicitan!','error');
+                                    $("#registro-sesiones-tratamiento").prop('disabled', false);
+                                    return false;
+                                } else {
+                                    // Se obtiene la informacion necesaria para registrar la sesion
+                                    var data = {
+                                        id : id_ventatratamiento,
+                                        sucursal : sucursal,
+                                        empleado: empleado
+                                    };
+
+                                    // Se procede a registrar la sesion del tratamiento mediante ajax
+                                    $.ajax({
+                                        data:  data,
+                                        url:   '{{path('admin_sesionventatratamiento_nuevo')}}',
+                                        type:  'post',
+                                        success:  function (response) {
+                                            table1.ajax.reload();
+
+                                            var tabsImagenes = document.getElementById('tabs-imagenes');
+                                            tabsImagenes.style.display = 'block';
+                                            
+                                            swal('','Se ha registrado con éxito sesión del tratamiento!','success');
+                                            pendientes--;
+                                            for (var i = 0; i < response.seguimiento; i++) {
+                                                mensaje += '<div class="col-md-1" style="margin-bottom: 10px;">';
+                                                mensaje += '<img class="" style="height: 25px;"  src="{{ asset('Photos/Estados/sesion_realizada.png')}}" title="Sesion realizada">';
+                                                mensaje += '</div>';
+                                            }
+                                            for (var i = 0; i < response.personaTratamiento.sesiones - response.seguimiento; i++) {
+                                                mensaje += '<div class="col-md-1" style="margin-bottom: 10px;">';
+                                                mensaje += '<img class="" style="height: 25px;"  src="{{ asset('Photos/Estados/sesion_pendiente.png')}}" title="Sesion pendiente">';
+                                                mensaje += '</div>';
+                                            }
+
+                                            $('#seguimiento-detalle-sesiones').html(mensaje);
+                                            $("#registro-sesiones-tratamiento").prop('disabled', false);
+
+                                            $('#dgplusbellebundle_sesiones_sucursal').val('').change();
+                                            $('#dgplusbellebundle_sesiones_empleado').val('').change();
+                                        }
+                                    });
+
+                                    return false;
+                                }
+                            } else {
+                                {#bootbox.alert('No se puede realizar esta operacion. Se han realizado todas las sesiones de este tratamiento');#}
+                                swal('','No se puede realizar esta operación. Se han realizado todas las sesiones de este tratamiento!','error');
+                                return false;
+                            } 
+                        }
                     } else {
                         {#bootbox.alert('No se puede realizar esta operacion. No existe ninguna venta relacionada');#}
                         swal('','No se puede realizar esta operación. No existe ninguna venta relacionada!','error');
@@ -1458,9 +1484,7 @@
                     var monto = parseFloat($('#dgplusbellebundle_abono_monto').val());
                     var descripcion = $('#dgplusbellebundle_abono_descripcion').val();
                     var draw = '';
-                    {#console.log(sucursal);
-                    console.log(empleado);
-                    console.log(monto);#}
+                    
                     if( sucursal === null || empleado === null || isNaN(monto) ){
                         console.log("no es un numero");
                         swal('','Para registrar un abono, ingrese la información que se solicita.','error');
@@ -1506,14 +1530,6 @@
                     return false;
                 }); 
                 
-                {#$('#dgplusbellebundle_consulta_fechaConsulta').daterangepicker({
-                    singleDatePicker: true,
-                    showDropdowns: true,
-                    locale: {
-                        format: 'YYYY-MM-DD'
-                    },
-                }); #}
-                
                 //Seleccionar un registro
                 $('#datatables1>tbody>tr').on('click', function(event) {
                     $("#editFormContainer").html();
@@ -1528,18 +1544,12 @@
                     $("#edit-datatables1").removeClass("disabled");
                     $("#delete-datatables1").removeClass("disabled");
                     
-                    //var link=$('#datatables1>tbody>tr>td>a').attr("href");
-                    //var link=$(this).children("td:first").children().attr("href");
                     //Obtener el id del registro
                     var link=$(this).attr("id");
-                    //alert(link);
-                    
                 });
                 
                 
                 $("#tratamientos-datatables1").click(function(){
-                    //alert("tratamiento");
-                    //alert('oculto tabla2');
                     $("#tabla1").show();
                     $("#tabla2").hide();
                     $("#tabla3").hide();
@@ -1560,8 +1570,6 @@
                 });
                 
                 $("#ventapaquetes-datatables2").click(function(){
-                    //alert("paquete");
-                    //alert('oculto tabla1');
                     $("#tabla1").hide();
                     $("#tabla2").show();
                     $("#tabla3").hide();
@@ -1582,8 +1590,6 @@
                 });
                 
                 $("#consultas-datatables3").click(function(){
-                    //alert("paquete");
-                    //alert('oculto tabla1');
                     $("#tabla1").hide();
                     $("#tabla2").hide();
                     $("#tabla3").show();
@@ -1602,15 +1608,9 @@
                     $('#datatables2_filter').children().children().val('');
                     
                 });
-                /*
-                $("#dgplusbellebundle_sucursal_submit").click(function(){
-                    $(".icon-refresh").click();
-                    return false;
-                });
-                */
+                
                 $('#filterDatatables1').on('keyup', function(event) {
                     var filtro = $(this).val(); 
-                    //alert(filtro);
                     $('#datatables1_filter>label>input').val($(this).val());
                     $('#datatables1_filter>label>input').keyup();
 
@@ -1618,14 +1618,12 @@
                 
                 $('#filterDatatables2').on('keyup', function(event) {
                     var filtro = $(this).val(); 
-                    //alert(filtro);
                     $('#datatables2_filter>label>input').val($(this).val());
                     $('#datatables2_filter>label>input').keyup();
                 });
                 
                 $('#filterDatatables3').on('keyup', function(event) {
                     var filtro = $(this).val(); 
-                    //alert(filtro);
                     $('#datatables3_filter>label>input').val($(this).val());
                     $('#datatables3_filter>label>input').keyup();
                 });
@@ -1638,8 +1636,6 @@
                                { "orderable": false, "targets": 2 },
                                { "orderable": false, "targets": 3 },
                                { "orderable": false, "targets": 4 }
-                               
-                               //{ "orderData": [ 2, 3, 4 ], "targets": 2 }
                         ],
                         "language": {
                         "info": "Mostrando página _PAGE_ de _PAGES_",
@@ -1662,8 +1658,7 @@
                     searching:true,
                     "order":[[0, "desc"],[1,"desc"]],
                     "columnDefs": [
-                           { "orderable": false, "targets": 0 }
-                           //{ "orderData": [ 2, 3, 4 ], "targets": 2 }
+                        { "orderable": false, "targets": 0 }
                     ],
                     "language": {
                     "info": "Mostrando página _PAGE_ de _PAGES_",
@@ -1690,7 +1685,6 @@
                                { "orderable": false, "targets": 3 },
                                { "orderable": false, "targets": 4 },
                                { "orderable": false, "targets": 5 }
-                               //{ "orderData": [ 2, 3, 4 ], "targets": 2 }
                         ],
                         "language": {
                         "info": "Mostrando página _PAGE_ de _PAGES_",
@@ -1721,24 +1715,16 @@
                         "type": 'GET'
                     },
                     "columns": [
-                        {#{ "data": "id" },   #}
                         { "data": "fechaAbono" },
                         { "data": "empleado" },
                         { "data": "sucursal" },
                         { "data": "monto" }
-                        {#{ "data": "dui" },#}
-{#                        { "data": "telefono" },#}
-                        {#{ "data": "email" },
-                        { "data": "lugarTrabajo" },#}
                     ],
                         "columnDefs": [
                                {"width":10, "orderable": false, "targets": 0 },
                                {"width":45, "orderable": false, "targets": 1 },
                                {"width":30, "orderable": false, "targets": 2 },
                                {"width":15, "orderable": false, "targets": 3 }
-                               
-                               
-                               //{ "orderData": [ 2, 3, 4 ], "targets": 2 }
                         ],
                         "language": {
                         "info": "Mostrando página _PAGE_ de _PAGES_",
@@ -1793,14 +1779,8 @@
 
                     });
         
-        
-        //Oculta el filtro de las tablas
-        
-        
         //Oculta la tabla paquete
-        //$('#tabla2').hide();
-        //$('#tabla2').hide();
-        $('#filterDatatables2').hide();
+       $('#filterDatatables2').hide();
         $('#tabla2').hide();
         
         $('#datatables1_filter, #datatables2_filter,#datatables3_filter').hide();
@@ -1809,10 +1789,6 @@
         $('#filterDatatables3').hide();
         $('#tabla3').hide();
         $('#filterDatatables1, #filterDatatables2, #filterDatatables3').val('');
-        
-        
-        
-        
         
     });//Fin document ready
         
@@ -1829,9 +1805,7 @@
             }
             else{
                 $(this).removeAttr("selected");
-            }
-
-        
+            }        
 	});             
     };
     </script>
@@ -1896,7 +1870,6 @@
             $.post( "{{path('admin_evaluar_sesiones_tratamiento')}}", { id: id }, function( data ) {
                 if(data.query[0].numSesion < data.query[0].sesiones){
                     var url = Routing.generate('admin_sesionventatratamiento_new', {'id': id});
-                    //window.open(url);
                     window.open(url, "_self");
                 } else {
                     {#bootbox.alert('Se han completado las sesiones, no se puede registrar una nueva sesion');#}
@@ -1919,23 +1892,14 @@
                 if(par.length !== 0){
                     var mensaje = "";
                     mensaje += "<div class='panel-body'>";
-                    //mensaje += "<div class='col-md-12'><small>Aqui se muestra la informacion</small></div>";
                     mensaje += "<div class='clearfix'></div>"
-                    //mensaje += "<div class='col-md-3 text-right'><b>Expediente No.: </b></div><div class='col-md-3'>" + data.query[0].numExp.toUpperCase() + "</div>";
-                    //mensaje += "<div class='col-md-3 text-right'><b>Nombre del paciente: </b></div><div class='col-md-3'>" + data.query[0].paciente + "</div>";
-                    //mensaje += "<div class='clearfix'></div>"
                     mensaje += "<div class='col-md-1 col-md-offset-1 text-right' style='margin-top: 25px;'><b>Fecha de venta: </b></div><div class='col-md-2' style='margin-top: 25px;'>" + fecha[2] + "/" +fecha[1] + "/" +fecha[0] + "</div>";
-                    //mensaje += "<div class='clearfix'></div>"
                     mensaje += "<div class='col-md-1 text-right' style='margin-top: 25px;'><b>Paquete: </b></div><div class='col-md-3' style='margin-top: 25px;'>" + data.query[0].nomPaquete + "</div>";
-                    //mensaje += "<div class='clearfix'></div>"
                     mensaje += "<div class='col-md-1 text-right' style='margin-top: 25px;'><b>Vendido por: </b></div><div class='col-md-3' style='margin-top: 25px;'>" + data.query[0].empleado + "</div>";
                     mensaje += "<div class='clearfix'></div>"
                     
                     mensaje += "<div class='col-md-2 text-right' style='margin-top: 15px;'><b>Costo del paquete: </b></div><div class='col-md-1' style='margin-top: 15px;'> $ " + ( data.query[0].costoPaquete - 0 ).toFixed(2) + "</div>";
-                    //mensaje += "<div class='clearfix'></div>"
-                    //mensaje += "<div class='col-md-2 text-right' style='margin-top: 15px;'><b>Descuento aplicado: </b></div><div class='col-md-2' style='margin-top: 15px;'><b style='color:red'> $ " + redondeoV4(((data.query[0].porcentaje * data.query[0].costoPaquete)/100),2) + "</b></div>";
                     mensaje += "<div class='col-md-2 text-right' style='margin-top: 15px;'><b>Descuento aplicado: </b></div><div class='col-md-2' style='margin-top: 15px;'>{#<b style='color:red'>#} $ " + ((data.query[0].porcentaje * data.query[0].costoPaquete)/100).toFixed(2) + "{#</b>#}</div>";
-                    //mensaje += "<div class='clearfix'></div>"
                     mensaje += "<div class='col-md-2 text-right' style='margin-top: 15px;'><b>Monto total a cancelar: </b></div><div class='col-md-2' style='margin-top: 15px;'>{#<b>#} $ " + ( data.query[0].costoPaquete - ((data.query[0].porcentaje * data.query[0].costoPaquete)/100)).toFixed(2) + "{#</b>#}</div>";
                     mensaje += "<div class='clearfix'></div>"
                     mensaje += "<div class='col-md-6 text-right' style='margin-top: 30px; margin-bottom: 30px;'><b style='font-size: 20px;'>Deuda pendiente: </b></div><div class='col-md-6' style='margin-top: 30px;'><b style='font-size: 20px;'> $ " + ( (data.query[0].costoPaquete - ((data.query[0].porcentaje * data.query[0].costoPaquete)/100)) - data.abonos.abonos).toFixed(2) + "</b></div>";
@@ -1954,34 +1918,18 @@
                         mensaje +=  "<td class='text-center'>" + value.sesiones + "</td><td><div class'row'>";
                         if(value.numSesion == 0){
                             for (var i = 0; i < value.sesiones; i++) {
-                                //mensaje += "<div class='fa fa-certificate'></div>";
                                  mensaje +=  "{#<div>#}<img class='' style='height: 50px;'  src='{{ asset('Photos/Estados/pendiente.png')}}' title='Sesion pendiente'>{#</div>#}";
                             }    
                         } else {
                             for (var i = 0; i < value.numSesion; i++) {
-                                //mensaje += "<td><div class='fa fa-check'></div></td>";
                                 mensaje +=  "{#<div>#}<img class='' style='height: 50px;'  src='{{ asset('Photos/Estados/realizado.png')}}' title='Sesion realizada'>{#</div>#}";
                             }
                             for (var i = 0; i < value.sesiones - value.numSesion; i++) {
-                                //mensaje += "<div class='fa fa-certificate'></div>";
                                 mensaje +=  "{#<div>#}<img class='' style='height: 50px;'  src='{{ asset('Photos/Estados/pendiente.png')}}' title='Sesion pendiente'>{#</div>#}";
                             }
                             
                         }
-{#                            alert(data.query.id);#}
-                        mensaje+= "</div></td>{#<td>#}";
-                            {#{% for key, entity in paquetes %}
-                                    {% for ent in entity.ventapaq %}
-                                        if(data.query.id=={{ent.id}})
-                                        {
-                                            mensaje+="<button id='ver-receta' data-toggle='tooltip' data-container='body' title='Consultar receta' class='btn btn-default datatables1-actions' role='button' onclick='exportarPaqueteRecetaPDF(5);'><i class='fa fa-file-pdf-o'></i><a href=''></a></button>"
-                                        }
-                                        else{
-                                            mensaje+="";
-                                        }
-                                        
-                                    {% endfor %}
-                            {% endfor %}#}
+
                         mensaje+="</td></tr>";
                     });    
 
@@ -1989,19 +1937,6 @@
                     mensaje += "</table>";
                     mensaje += "</div>";
                     
-                    {#bootbox.dialog({
-                          message: mensaje,
-                          title: "Información del paquete ",
-                          buttons: {
-                            main: {
-                              label: "Aceptar",
-                              className: "btn-primary",
-                              callback: function() {
-
-                              }
-                            }
-                          }
-                    });#}
                     document.getElementById('tabla4').innerHTML = mensaje;   
                     $("#tabla4").show();
                 }
@@ -2028,23 +1963,14 @@
                     var mensaje = "";
                     
                     mensaje += "<div class='panel-body'>";
-                    //mensaje += "<div class='col-md-12'><small>Aqui se muestra la informacion</small></div>";
                     mensaje += "<div class='clearfix'></div>"
-                    //mensaje += "<div class='col-md-3 text-right'><b>Expediente No.: </b></div><div class='col-md-3'>" + data.query[0].numExp.toUpperCase() + "</div>";
-                    //mensaje += "<div class='col-md-3 text-right'><b>Nombre del paciente: </b></div><div class='col-md-3'>" + data.query[0].paciente + "</div>";
-                    //mensaje += "<div class='clearfix'></div>"
                     mensaje += "<div class='col-md-1 col-md-offset-1 text-right' style='margin-top: 25px;'><b>Fecha de venta: </b></div><div class='col-md-2' style='margin-top: 25px;'>" + fecha[2] + "/" +fecha[1] + "/" +fecha[0] + "</div>";
-                    //mensaje += "<div class='clearfix'></div>"
                     mensaje += "<div class='col-md-1 text-right' style='margin-top: 25px;'><b>Tratamiento: </b></div><div class='col-md-3' style='margin-top: 25px;'>" + data.query[0].ntratamiento + "</div>";
-                    //mensaje += "<div class='clearfix'></div>"
                     mensaje += "<div class='col-md-1 text-right' style='margin-top: 25px;'><b>Vendido por: </b></div><div class='col-md-3' style='margin-top: 25px;'>" + data.query[0].empleado + "</div>";
                     mensaje += "<div class='clearfix'></div>"
                     
                     mensaje += "<div class='col-md-2 text-right' style='margin-top: 15px;'><b>Costo del tratamiento: </b></div><div class='col-md-1' style='margin-top: 15px;'> $ " + ( data.query[0].costoTratamiento - 0 ).toFixed(2) + "</div>";
-                    //mensaje += "<div class='clearfix'></div>"
-                    //mensaje += "<div class='col-md-2 text-right' style='margin-top: 15px;'><b>Descuento aplicado: </b></div><div class='col-md-2' style='margin-top: 15px;'><b style='color:red'> $ " + redondeoV4(((data.query[0].porcentaje * data.query[0].costoPaquete)/100),2) + "</b></div>";
                     mensaje += "<div class='col-md-2 text-right' style='margin-top: 15px;'><b>Descuento aplicado: </b></div><div class='col-md-2' style='margin-top: 15px;'>{#<b style='color:red'>#} $ " + ((data.query[0].porcentaje * data.query[0].costoTratamiento)/100).toFixed(2) + "{#</b>#}</div>";
-                    //mensaje += "<div class='clearfix'></div>"
                     mensaje += "<div class='col-md-2 text-right' style='margin-top: 15px;'><b>Monto total a cancelar: </b></div><div class='col-md-2' style='margin-top: 15px;'>{#<b>#} $ " + ( data.query[0].costoTratamiento - ((data.query[0].porcentaje * data.query[0].costoTratamiento)/100)).toFixed(2) + "{#</b>#}</div>";
                     mensaje += "<div class='clearfix'></div>"
                     mensaje += "<div class='col-md-6 text-right' style='margin-top: 30px; margin-bottom: 30px;'><b style='font-size: 20px;'>Deuda pendiente: </b></div><div class='col-md-6' style='margin-top: 30px;'><b style='font-size: 20px;'> $ " + ( (data.query[0].costoTratamiento - ((data.query[0].porcentaje * data.query[0].costoTratamiento)/100)) - data.abonos.abonos).toFixed(2) + "</b></div>";
@@ -2063,34 +1989,18 @@
                         mensaje +=  "<td class='text-center'>" + value.sesiones + "</td><td><div class'row'>";
                         if(value.numSesion == 0){
                             for (var i = 0; i < value.sesiones; i++) {
-                                //mensaje += "<div class='fa fa-certificate'></div>";
                                  mensaje +=  "{#<div>#}<img class='' style='height: 50px;'  src='{{ asset('Photos/Estados/pendiente.png')}}' title='Sesion pendiente'>{#</div>#}";
                             }    
                         } else {
                             for (var i = 0; i < value.numSesion; i++) {
-                                //mensaje += "<td><div class='fa fa-check'></div></td>";
                                 mensaje +=  "{#<div>#}<img class='' style='height: 50px;'  src='{{ asset('Photos/Estados/realizado.png')}}' title='Sesion realizada'>{#</div>#}";
                             }
                             for (var i = 0; i < value.sesiones - value.numSesion; i++) {
-                                //mensaje += "<div class='fa fa-certificate'></div>";
                                 mensaje +=  "{#<div>#}<img class='' style='height: 50px;'  src='{{ asset('Photos/Estados/pendiente.png')}}' title='Sesion pendiente'>{#</div>#}";
-                            }
-                            
+                            }                            
                         }
-{#                            alert(data.query.id);#}
+
                         mensaje+= "</div></td>{#<td>#}";
-                            {#{% for key, entity in paquetes %}
-                                    {% for ent in entity.ventapaq %}
-                                        if(data.query.id=={{ent.id}})
-                                        {
-                                            mensaje+="<button id='ver-receta' data-toggle='tooltip' data-container='body' title='Consultar receta' class='btn btn-default datatables1-actions' role='button' onclick='exportarPaqueteRecetaPDF(5);'><i class='fa fa-file-pdf-o'></i><a href=''></a></button>"
-                                        }
-                                        else{
-                                            mensaje+="";
-                                        }
-                                        
-                                    {% endfor %}
-                            {% endfor %}#}
                         mensaje+="</td></tr>";
                     });    
 
@@ -2098,67 +2008,9 @@
                     mensaje += "</table>";
                     mensaje += "</div>";
                     
-                    {#mensaje += "<div class='row'></div>";
-                    mensaje += "<div class='col-md-6 text-right'><b>Vendido por: </b></div><div class='col-md-6'>" + data.query[0].empleado + "</div>";
-                    mensaje += "<div class='clearfix'></div>"
-                    mensaje += "<div class='col-md-6 text-right'><b>Nombre del paciente: </b></div><div class='col-md-6'>" + data.query[0].paciente + "</div>";
-                    mensaje += "<div class='clearfix'></div>"
-                    mensaje += "<div class='col-md-6 text-right'><b>Expediente No.: </b></div><div class='col-md-6'>" + data.query[0].numExp.toUpperCase() + "</div>";
-                    mensaje += "<div class='clearfix'></div>"
-                    mensaje += "<div class='col-md-6 text-right'><b>Fecha de venta: </b></div><div class='col-md-6'>" + fecha[2] + "/" +fecha[1] + "/" +fecha[0] + "</div>";
-                    mensaje += "<div class='clearfix'></div>"
-                    mensaje += "<div class='col-md-6 text-right'><b>Costo del tratamiento: </b></div><div class='col-md-6'> $ " + data.query[0].costoTratamiento + "</div>";
-                    mensaje += "<div class='clearfix'></div>"
-                    mensaje += "<div class='col-md-6 text-right'><b>Descuento aplicado: </b></div><div class='col-md-6'><b style='color:red'> $ " + redondeoV4(((data.query[0].porcentaje * data.query[0].costoTratamiento)/100),2) + "</b></div>";
-                    mensaje += "<div class='clearfix'></div>"
-                    mensaje += "<div class='col-md-6 text-right'><b>Monto total a cancelar: </b></div><div class='col-md-6'><b> $ " + redondeoV4(( data.query[0].costoTratamiento - ((data.query[0].porcentaje * data.query[0].costoTratamiento)/100)),2) + "</b></div>";
-                    mensaje += "<div class='clearfix'></div>"
-                    mensaje += "<div class='col-md-6 text-right'><b>Deuda pendiente: </b></div><div class='col-md-6'> $ " + redondeoV4(( (data.query[0].costoTratamiento - ((data.query[0].porcentaje * data.query[0].costoTratamiento)/100)) - data.abonos.abonos),2) + "</div>";
-                    mensaje += "<div class='clearfix'></div>"
-                    mensaje += "</div>";
-                    
-                    mensaje += "<div class='row' ></div>";
-                    mensaje += "<table class='table table-bordered table-condensed' style='margin-top:25px'>";
-                    mensaje += "<thead>";
-                    mensaje += "<tr><th class='text-center'>Tratamiento</th><th class='text-center'>Sesiones</th></tr>";
-                    mensaje += "</thead>";
-                    mensaje += "<tbody>";
-                    mensaje +=  "<tr><td>" + data.query[0].ntratamiento + "</td><td>";
-
-                    if(data.query[0].numSesion == 0){
-                        for (var i = 0; i < data.query[0].sesiones; i++) {
-                            mensaje += "<div class='fa fa-certificate'></div>";
-                        }    
-                    } else {
-                        for (var i = 0; i < data.query[0].numSesion; i++) {
-                            mensaje += "<div class='fa fa-check'></div>";
-                        }
-                        for (var i = 0; i < data.query[0].sesiones - data.query[0].numSesion; i++) {
-                            mensaje += "<div class='fa fa-certificate'></div>";
-                        }
-
-                    }
-
-                    mensaje += "</td></tr>";
-                    mensaje += "</tbody>";
-                    mensaje += "</table>";
-                    mensaje += "</div>";#}
-                    
                     document.getElementById('tabla4').innerHTML = mensaje;   
                     $("#tabla4").show();
-                    {#bootbox.dialog({
-                          message: mensaje,
-                          title: "Información del tratamiento ",
-                          buttons: {
-                            main: {
-                              label: "Aceptar",
-                              className: "btn-primary",
-                              callback: function() {
 
-                              }
-                            }
-                          }
-                    });#}
                 }
                 else{
                     console.log( 'Este paquete no tiene sesiones que mostrar' );

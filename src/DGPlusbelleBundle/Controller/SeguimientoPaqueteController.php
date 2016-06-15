@@ -155,7 +155,7 @@ class SeguimientoPaqueteController extends Controller
             $sql = "select pt.num_sesiones as sesiones, "
                     . "seg.num_sesion as numSesion, "
                     . "des.porcentaje as porcentaje, "
-                    . "paq.costo as costoPaquete "
+                    . "ven.costo as costoPaquete "
                     . "from venta_paquete ven "
                     . "inner join paquete paq on ven.paquete = paq.id "
                     . "inner join seguimiento_paquete seg on ven.id = seg.id_venta_paquete "
