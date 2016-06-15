@@ -63,30 +63,37 @@
 {#    <input id="sucursal" value="{{sucursal}}" type="hidden">#}
     {#<input id="fechaInicio" value="" type="text">
     <input id="fechaFin" value="" type="text">#}
-    <div class="col-md-5">
-
-        <input placeholder="Buscar citas de paciente..." id="nombrePaciente" class="clearable form-group" type="text">
-        <button data-toggle="tooltip" data-original-title="Buscar paciente" id="botonBuscar" class="btn btn-default"><i class="fa fa-search"></i></button>
-            <select  id="filtroSucursales" class="col-md-12 input-sm form-control" style="width:50%;">
+    <div class="col-md-8">
+        <div class="col-md-4">
+            <select  id="filtroSucursales" class="col-md-12 input-sm form-control" style="width:100%;">
                 {% for sucursal in sucursales %}
                     <option value="{{sucursal.id}}">{{sucursal.nombre}}</option>
                 {% endfor %}
             </select>
-        <div class='col-md-12' style="margin-top:10px;">
-            <a id="0" style='background:transparent; border:0px; border-radius:80px; text-decoration: none; margin-right: 20px;'>
-                <img class="userFilter" data-toggle="tooltip" data-original-title="Todos" rel="tooltip" src='{{ asset('Photos/Empleado/')}}na.jpg' alt='Foto perfil' style='border-radius:80px;width: 35px; height: 35px;'>
-            </a>
-        {% for empleado in empleados %}
-            
-                <a id="{{empleado.id}}" style='background:transparent; border:0px; border-radius:80px; text-decoration: none;'>
-                    {% if empleado.foto!=""%}
-                        <img class="userFilter" data-toggle="tooltip" data-original-title="{{empleado.persona.nombres|upper}} {{empleado.persona.apellidos|upper}}" rel="tooltip" src='{{ asset('Photos/Empleado/')}}{{empleado.foto}}' alt='Foto perfil' style='border-radius:80px;width: 35px; height: 35px;'>
-                    {% else %}
-                        <img class="userFilter" data-toggle="tooltip" data-original-title="{{empleado.persona.nombres|upper}} {{empleado.persona.apellidos|upper}}" rel="tooltip" src='{{ asset('Photos/Empleado/')}}na.jpg' alt='Foto perfil' style='border-radius:80px;width: 35px; height: 35px;'>
-                    {% endif %}
-                </a>
-        {% endfor %}
         </div>
+        <div class="col-md-4">
+            <input placeholder="Buscar citas de paciente..." id="nombrePaciente" class="clearable form-group" type="text" style="width:100%; height: 30px;">
+        </div>
+        <div class="col-md-4">
+            <button style="height:30px;" data-toggle="tooltip" data-original-title="Buscar paciente" id="botonBuscar" class="btn btn-default"><i class="fa fa-search"></i></button>
+        </div>
+            <div class="clearfix"></div>
+
+            <div class='col-md-12' style="margin-top:10px;">
+                <a id="0" style='background:transparent; border:0px; border-radius:80px; text-decoration: none; margin-right: 20px;'>
+                    <img class="userFilter" data-toggle="tooltip" data-original-title="Todos" rel="tooltip" src='{{ asset('Photos/Empleado/')}}na.jpg' alt='Foto perfil' style='border-radius:80px;width: 35px; height: 35px;'>
+                </a>
+                {% for empleado in empleados %}
+
+                    <a id="{{empleado.id}}" style='background:transparent; border:0px; border-radius:80px; text-decoration: none;'>
+                        {% if empleado.foto!=""%}
+                            <img class="userFilter" data-toggle="tooltip" data-original-title="{{empleado.persona.nombres|upper}} {{empleado.persona.apellidos|upper}}" rel="tooltip" src='{{ asset('Photos/Empleado/')}}{{empleado.foto}}' alt='Foto perfil' style='border-radius:80px;width: 35px; height: 35px;'>
+                        {% else %}
+                            <img class="userFilter" data-toggle="tooltip" data-original-title="{{empleado.persona.nombres|upper}} {{empleado.persona.apellidos|upper}}" rel="tooltip" src='{{ asset('Photos/Empleado/')}}na.jpg' alt='Foto perfil' style='border-radius:80px;width: 35px; height: 35px;'>
+                        {% endif %}
+                    </a>
+                {% endfor %}
+            </div>
         
     </div>
     
@@ -199,10 +206,11 @@
     <script type="text/javascript" src="{{ asset('Resources/bValidator-0.73/bvalidator.lang.es.js')}}" ></script>
     <script src="{{ asset('Resources/wrapkit/scripts/bootbox.js') }}"></script>
     <script src="{{ asset('Resources/src/js/bootstrap.js')}}"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.2/css/select2.min.css" rel="stylesheet" />
     <script type="text/javascript">
         $(function () {
           $('[data-toggle="tooltip"]').tooltip();
-          
+          $('#filtroSucursales').select2();
         });
     </script>
     {% endblock %}
