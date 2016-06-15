@@ -1,4 +1,12 @@
-{% extends 'DGPlusbelleBundle:Layout:layout.html.twig' %}
+{% extends 'DGPlusbelleBundle:Layout:layouterp.html.twig' %}
+{#{% extends 'DGPlusbelleBundle:Layout:layout.html.twig' %}#}
+
+{% block descripcion %}
+    <div class="col-md-6">
+        <p class="robo" style="font-weight: 300; margin-bottom: 0px; font-size: 30px;">Nueva contraseña</p>
+        <p class="robo" style="font-weight: 300; font-size: 14px; height: 40px;">Ingrese su nueva contraseña.</p>
+    </div>
+{% endblock %}
 
 {% block contenido -%}
     
@@ -9,31 +17,21 @@
   {{ form_start(edit_form) }}
     {{ form_errors(edit_form) }}
     <div class="row">
-    
-        {#<div class="col-md-2">
-            {{ form_row(edit_form.username) }}
-        </div>#}
-        <div class="col-md-2">
+        <div class="col-md-3">
             {{ form_row(edit_form.password.first) }}
         </div>
-        <div class="col-md-2">
+        <div class="col-md-3">
             {{ form_row(edit_form.password.second) }}
         </div>
-         {#<div class="col-md-2">
-        {{ form_row(form.estado) }}
-         </div>#}
     </div>
   
-        {#{{ form_row(form.estado) }}#}
-        
-   
-   
-             <div class="form-grouphide col-sm-9">
-                <a href="{{ path('admin_producto') }}" class="btn btn-default btn-sm" id="cancelarNuevo">Cancelar</a>
-                {{ form_widget(edit_form.submit) }}
-              </div>
-              {{ form_widget(edit_form._token) }}
-    
+     <div class="form-grouphide col-sm-9">
+        <a href="{{ path('admin_cita') }}" class="btn btn-default btn-sm" id="cancelarNuevo">Cancelar</a>
+        {{ form_widget(edit_form.submit) }}
+      </div>
+      <div>
+            {{ form_widget(edit_form._token) }}
+      </div>
   </div>
 
 

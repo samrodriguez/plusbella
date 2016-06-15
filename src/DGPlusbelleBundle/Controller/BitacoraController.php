@@ -32,17 +32,18 @@ class BitacoraController extends Controller
         $entities = array(); 
         $userId = $usuario->getId();
         
-        if ($userId != 1) {
+        //if ($userId != 1) {
             $dql = "SELECT bi FROM DGPlusbelleBundle:Bitacora bi "
                     . "JOIN bi.usuario us "
                     . "JOIN us.persona per "
-                    . "WHERE us.id = :id ";
+                    . "WHERE us.id = :id "
+                    . "ORDER BY bi.fechaAccion DESC ";
             $entities = $em->createQuery($dql)
                        ->setParameter('id', $userId)
                        ->getResult();
-        } else {
-            $entities = $em->getRepository('DGPlusbelleBundle:Bitacora')->findAll();
-        }
+        //} else {
+            $entities = $em->getRepository('DGPlusbelleBundle:Bitacora')->findBy(array(), array('fechaAccion'=>'DESC'));
+        //}
         
         return array(
             'usuario' => $usuario,

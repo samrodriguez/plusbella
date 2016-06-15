@@ -1,4 +1,4 @@
-{#{% extends 'DGPlusbelleBundle:Layout:general.html.twig' %}#}
+    {#{% extends 'DGPlusbelleBundle:Layout:general.html.twig' %}#}
 {#{% extends 'DGPlusbelleBundle:Layout:layout.html.twig' %}#}
 {% extends 'DGPlusbelleBundle:Layout:layouterp.html.twig' %}
 {% block css %}
@@ -818,7 +818,7 @@
                                         <div class="col-md-12">
                                             <div class="form-grouphide col-sm-12">
                                                 {#<a class="btn btn-default btn-xs" id="cancelarNuevoConsulta">Cancelar</a>#}
-                                                <button type="submit" id="guardarPlantilla" name="dgplusbellebundle_antecedentes[submit]" class="btn btn-primary btn-xs btn btn" style="color: #FFF">Guardar</button>
+                                                <button type="submit" id="guardarPlantilla" name="dgplusbellebundle_antecedentes[submit]" class="btn btn-primary btn-xs btn btn guardarPlantilla" style="color: #FFF">Guardar</button>
                                             </div>
                                         </div>
                                     </div>
@@ -1212,7 +1212,7 @@
                                             <div class="col-md-12">
                                                 <div class="form-grouphide col-sm-12">
                                                     {#<a class="btn btn-default btn-xs" id="cancelarNuevoConsulta">Cancelar</a>#}
-                                                    <button type="submit" id="guardarPlantilla" name="dgplusbellebundle_antecedentes[submit]" class="btn btn-primary btn-xs btn btn">Guardar</button>
+                                                    <button type="submit" id="guardarPlantilla" name="dgplusbellebundle_antecedentes[submit]" class="btn btn-primary btn-xs btn btn guardarPlantilla">Guardar</button>
                                                 </div>
                                             </div>
                                         </div>
@@ -3134,6 +3134,7 @@
         $('#telefono1').mask('0000-0000'); 
         $('#telefono2').mask('0000-0000'); 
         $('#telefonoEmergencia').mask('0000-0000'); 
+        $('.guardarPlantilla').prop('disabled', false);
         
         $('.calBotox').Zebra_DatePicker({
             months:['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
@@ -3263,6 +3264,7 @@
         
         var idconsulta=$('#idConsulta').val();
         $(document).on('click','#guardarNuevoConsulta', function(){
+            $("#guardarNuevoConsulta").prop('disabled', true);
             var id = $('#idPaciente').val();
             var medico = $('#medico_consulta').val();
             
@@ -3287,6 +3289,7 @@
                 if(tipoConsulta==0){
                     {#bootbox.alert("Debe seleccionar un tipo de consulta!", function() {});#}
                     swal('','Debe seleccionar un tipo de consulta!','error');
+                    $("#guardarNuevoConsulta").prop('disabled', false);
                 }
                 else{
                     if(idconsulta!=''){
@@ -3309,10 +3312,11 @@
                                                 $('.imagenMensaje').addClass('hidden');
                                                 $('.imagenContent').removeClass('hidden');
                                                 console.log($('#idConsulta').val());
+                                                $("#guardarNuevoConsulta").prop('disabled', false);
                                             }
                                         },
                                     error: function (data) {
-
+                                        $("#guardarNuevoConsulta").prop('disabled', false);
                                     }
                                 });
 {#                            }#}
@@ -3355,14 +3359,15 @@
                                                 
                                                 
                                                 console.log($('#idConsulta').val());
+                                                $("#guardarNuevoConsulta").prop('disabled', false);
                                             }
                                         },
                                     error: function (data) {
-
+                                        $("#guardarNuevoConsulta").prop('disabled', false);
                                     }
                                 });
                             } else {
-                                
+                                $("#guardarNuevoConsulta").prop('disabled', false);
                             }
                         });
 
@@ -3445,6 +3450,7 @@
         
         
         $(document).on('click','#guardarSignosConsulta', function(){
+            $("#guardarSignosConsulta").prop('disabled', true);
             var id = $('#idPaciente').val();
             var idConsulta = $('#idConsulta').val();
             var peso = $('#pesoPaciente').val();
@@ -3474,13 +3480,15 @@
                                 $('#idConsulta').val(data);
                                 var action = $('#formImagen').attr('action');
                                 $('#formImagen').attr('action',action+data);
+                                
+                                $("#guardarSignosConsulta").prop('disabled', false);
                             }
     {#                        console.log("pagina actual: "+data);
                             console.log("Inicio de registro: "+data.inicioRegistro);#}
 
                         },
                     error: function (data) {
-
+                        $("#guardarSignosConsulta").prop('disabled', true);
 
                     }
                 });
@@ -3499,14 +3507,15 @@
                                 $('.imagenMensaje').addClass('hidden');
                                 $('.imagenContent').removeClass('hidden');
                                 $('#idConsulta').val(data);
-
+                                
+                                $("#guardarSignosConsulta").prop('disabled', false);
                             }
     {#                        console.log("pagina actual: "+data);
                             console.log("Inicio de registro: "+data.inicioRegistro);#}
 
                         },
                     error: function (data) {
-
+                        $("#guardarSignosConsulta").prop('disabled', true);
 
                     }
                 });
@@ -3560,8 +3569,9 @@
         $(document).on('click','#guardarPlantilla', function(){
             var id = $('#idPaciente').val();
             var idConsulta = $('#idConsulta').val();
-            
+            //$(this).prop('disabled', true);
 {#            alert(direccion);#}
+            $('.guardarPlantilla').hide();
             var valores = new Array();
             var idParameters = new Array();
             var idPlantilla= $('#dgplusbellebundle_consulta_plantilla').val();
@@ -3618,12 +3628,14 @@
                                         $('#guardarPlantilla').hide();
                                         {#alertify.success("Cambios guardados!");#}
                                         swal('','Cambios guardados!','success');
+                                        //$(this).prop('disabled', false);
                                         console.log("otro mensaje");
                                     }
                                     {#console.log("pagina actual: "+data);
                                     console.log("Inicio de registro: "+data.inicioRegistro);#}
                                 },
                             error: function (data) {
+                                $('#guardarPlantilla').show();
                                 {#alertify.error("Hubo un error, intente de nuevo!");#}
                                 swal('','Hubo un error, intente de nuevo!','error');
                             }
@@ -3632,6 +3644,7 @@
                     else{
                         {#bootbox.alert("Debe ingresar una consulta primero!", function() {});#}
                         swal('','Ingrese una consulta!','error');
+                        $('#guardarPlantilla').show();
                     }
                     
                 }
@@ -3769,6 +3782,7 @@
                     else{
                         {#bootbox.alert("Debe ingresar una consulta primero!", function() {});#}
                         swal('','Debe ingresar una consulta primero!','error');
+                        $('#guardarPlantilla').show();
                     }
                 }
         });
@@ -4015,11 +4029,12 @@
             var id = $('#idPaciente').val();
             var idConsulta = $('#idConsulta').val();
             var valores = new Array();
-{#            alert(direccion);#}
             var nombre=$('#idPaciente').val();
-{#            var id=12;#}
             var medico = $('#medico_consulta').val();
             var id = 0;
+            
+            $('#guardarReceta').hide();
+            
             if(medico==3){ //dra.
                 id = 13;
             }
@@ -4074,6 +4089,7 @@
             else{
                 {#bootbox.alert("Debe ingresar una consulta antes!", function() {});#}
                 swal('','Debe ingresar una consulta antes!','error');
+                $('#guardarReceta').show();
             }
             return false;
         });

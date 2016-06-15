@@ -28,6 +28,9 @@
         <a href="{{ path('admin_usuario') }}" class="leftnava"><li class="leftnav left">Gestionar usuario<span class="pull-right right"><i class=""></i></span></li></a>
     {% endif %}
     {% if is_granted('ROLE_ADMIN') %}
+        <a href="{{ path('admin_bitacora') }}" class="leftnava"><li class="leftnav left ">Bitacora de usuario<span class="pull-right right"><i class=""></i></span></li></a>
+    {% endif %}
+    {% if is_granted('ROLE_ADMIN') %}
         <a href="{{ path('admin_backup') }}" class="leftnava"><li class="leftnav left">Respaldo de datos<span class="pull-right right"><i class=""></i></span></li></a>
     {% endif %}
 {% endblock navegacion %}

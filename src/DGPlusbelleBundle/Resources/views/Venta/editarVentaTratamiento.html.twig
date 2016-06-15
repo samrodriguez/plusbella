@@ -888,15 +888,16 @@
             var deuda_total = 0;
             
             {% if personaTratamiento.descuento %}
-                 deuda_total = {{ (( personaTratamiento.costoConsulta - (( personaTratamiento.descuento.porcentaje * personaTratamiento.costoConsulta ) / 100)) - abonos.abonos )|number_format(2, '.', ',') }};
+                 deuda_total = {{ (( personaTratamiento.costoConsulta - (( personaTratamiento.descuento.porcentaje * personaTratamiento.costoConsulta ) / 100)) - abonos.abonos ) }};
             {% else %}
-                 deuda_total = {{ (( personaTratamiento.costoConsulta - (( 0 * personaTratamiento.costoConsulta ) / 100)) - abonos.abonos )|number_format(2, '.', ',') }};
+                 deuda_total = {{ (( personaTratamiento.costoConsulta - (( 0 * personaTratamiento.costoConsulta ) / 100)) - abonos.abonos ) }};
             {% endif %} 
             
             var pendientes = {{ personaTratamiento.numSesiones - seguimiento.numSesion }};
             var id_ventatratamiento = {{ personaTratamiento.id}};
                         
             $(document).ready(function(){
+                console.log('total de la deuda: '+ deuda_total);
                 {#var totalTratamientos = {{totalTratamientos}};
                 var totalPaquetes = {{totalPaquetes}};
                 var totalConsultas= {{totalConsultas}};#}
