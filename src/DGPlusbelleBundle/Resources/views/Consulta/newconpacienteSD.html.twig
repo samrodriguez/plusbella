@@ -3768,7 +3768,7 @@
                                         console.log("Inicio de registro: "+data.inicioRegistro);#}
                                     },
                                 error: function (data) {
-
+                                    $('#guardarPlantilla').show();
 
                                 }
                             });
@@ -3776,6 +3776,7 @@
                         else{
                             {#bootbox.alert('No debe de dejar en blanco ningun detalle de consulta de botox');#}
                             swal('','No debe dejar en blanco ningún detalle de consulta de botox!','error');
+                            $('#guardarPlantilla').show();
                         }
                             
                     }
@@ -4062,6 +4063,7 @@
                     success: function (data) {
                             //inicio = data.inicio++;
                             if(data==0){
+                                $('#guardarReceta').show();
                                 {#var iTel='<i class="fa fa-phone"></i>';
                                 var dir='<i class="fa fa-map-marker fa-fw"></i>';
                                 var ocup = '<i class="fa fa-briefcase"></i>';
@@ -4083,6 +4085,7 @@
                     error: function (data) {
                         {#alertify.error("Hubo un error, intente de nuevo!");#}
                         swal('','Hubo un error, intente de nuevo!','error');
+                        $('#guardarReceta').show();
                     }
                 });
             }
