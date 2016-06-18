@@ -73,10 +73,11 @@
 {% block contenido -%}
     
     
-    
     <!-- ============================================
     MAIN CONTENT SECTION
     =============================================== -->
+    
+    
     
     <div class="content">
         <div class="content-body">
@@ -939,15 +940,25 @@
             //var id_ventapaquete = 0;
             var id_ventapaquete = {{ventaPaquete.id}};
             var id_ventatratamiento = 0;
-            var deuda_total = 0;
-            {#var deuda_total = {{ (( ventaPaquete.costo - (( ventaPaquete.descuento.porcentaje * ventaPaquete.costo ) / 100)) - abonos.abonos )|number_format(2, '.', ',') }};#}
+            
+            {#{% set deuda_total = 0 %}
             {% if ventaPaquete.descuento %}
-                  deuda_total = {{ (( ventaPaquete.costo - (( ventaPaquete.descuento.porcentaje * ventaPaquete.costo ) / 100)) - abonos.abonos )|number_format(2, '.', ',') }}
+                {% set  deuda_total =  (( ventaPaquete.costo - (( ventaPaquete.descuento.porcentaje * ventaPaquete.costo ) / 100)) - abonos.abonos )|number_format(2, '.', ',') %}
             {% else %}
-                  deuda_total = {{ (( ventaPaquete.costo - (( 0 * ventaPaquete.costo ) / 100)) - abonos.abonos )|number_format(2, '.', ',') }}
+                {% set deuda_total = (( ventaPaquete.costo - (( 0 * ventaPaquete.costo ) / 100)) - abonos.abonos )|number_format(2, '.', ',') %}
+            {% endif %}
+            
+            var deuda_total = {{deuda_total}};#}
+            {#var deuda_total = {{ (( ventaPaquete.costo - (( ventaPaquete.descuento.porcentaje * ventaPaquete.costo ) / 100)) - abonos.abonos )|number_format(2, '.', ',') }};#}
+            var deuda_total = 0;
+            {% if ventaPaquete.descuento %}
+                  deuda_total = {{ (( ventaPaquete.costo - (( ventaPaquete.descuento.porcentaje * ventaPaquete.costo ) / 100)) - abonos.abonos ) }}
+            {% else %}
+                  deuda_total = {{ (( ventaPaquete.costo - (( 0 * ventaPaquete.costo ) / 100)) - abonos.abonos ) }}
             {% endif %}
                 
             $(document).ready(function(){
+                console.log('total de la deuda: '+ deuda_total);
                 {#var totalTratamientos = {{totalTratamientos}};
                 var totalPaquetes = {{totalPaquetes}};
                 var totalConsultas= {{totalConsultas}};#}
@@ -1658,8 +1669,8 @@
                                 descripcion: descripcion,
                                 id_ventapaquete : id_ventapaquete
                             };
-//                        console.log("deuda: "+parseFloat(deuda_total));
-//                        console.log("monto: "+parseFloat(monto));
+                        console.log("deuda: "+parseFloat(deuda_total));
+                        console.log("monto: "+parseFloat(monto));
                         if(parseFloat(monto) <= parseFloat(deuda_total)){
                             // Se procede a registrar la sesion del tratamiento mediante ajax
                             $.ajax({

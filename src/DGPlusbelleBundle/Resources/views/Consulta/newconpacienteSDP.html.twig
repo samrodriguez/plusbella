@@ -3472,6 +3472,7 @@ Dentro de la div  con clase content- body
         
         var idconsulta=$('#idConsulta').val();
         $(document).on('click','#guardarNuevoConsulta', function(){
+            $("#guardarNuevoConsulta").prop('disabled', true);
             var id = $('#idPaciente').val();
             var medico = $('#medico_consulta').val();
             
@@ -3486,6 +3487,7 @@ Dentro de la div  con clase content- body
             
             if(id===''){
                 swal('','Debe seleccionar un paciente','error');
+                $("#guardarNuevoConsulta").prop('disabled', false);
                 return false;
             }
 {#            alert(medico);#}
@@ -3499,6 +3501,7 @@ Dentro de la div  con clase content- body
                 if(tipoConsulta==0){
                     {#bootbox.alert("Debe seleccionar un tipo de consulta!", function() {});#}
                     swal('','Debe seleccionar un tipo de consulta!','error');
+                    $("#guardarNuevoConsulta").prop('disabled', false);
                     return false;
                 }
                 else{
@@ -3522,10 +3525,11 @@ Dentro de la div  con clase content- body
                                                 $('.imagenMensaje').addClass('hidden');
                                                 $('.imagenContent').removeClass('hidden');
                                                 console.log($('#idConsulta').val());
+                                                $("#guardarNuevoConsulta").prop('disabled', false);
                                             }
                                         },
                                     error: function (data) {
-
+                                        $("#guardarNuevoConsulta").prop('disabled', false);
                                     }
                                 });
 {#                            }#}
@@ -3566,16 +3570,16 @@ Dentro de la div  con clase content- body
                                                 var action = $('#formImagen').attr('action');
                                                 $('#formImagen').attr('action',action+data);
                                                 
-                                                
+                                                $("#guardarNuevoConsulta").prop('disabled', false);
                                                 console.log($('#idConsulta').val());
                                             }
                                         },
                                     error: function (data) {
-
+                                        $("#guardarNuevoConsulta").prop('disabled', false);
                                     }
                                 });
                             } else {
-                                
+                                $("#guardarNuevoConsulta").prop('disabled', false);
                             }
                         });
 
@@ -3661,6 +3665,7 @@ Dentro de la div  con clase content- body
         
         
         $(document).on('click','#guardarSignosConsulta', function(){
+            $("#guardarSignosConsulta").prop('disabled', true);
             var id = $('#idPaciente').val();
             var idConsulta = $('#idConsulta').val();
             var peso = $('#pesoPaciente').val();
@@ -3693,13 +3698,16 @@ Dentro de la div  con clase content- body
                                 $('#idConsulta').val(data);
                                 var action = $('#formImagen').attr('action');
                                 $('#formImagen').attr('action',action+data);
+                                
+                                $("#guardarSignosConsulta").prop('disabled', false);
                             }
     {#                        console.log("pagina actual: "+data);
                             console.log("Inicio de registro: "+data.inicioRegistro);#}
+                                                    
 
                         },
                     error: function (data) {
-
+                        $("#guardarSignosConsulta").prop('disabled', false);
 
                     }
                 });
@@ -3719,13 +3727,14 @@ Dentro de la div  con clase content- body
                                 $('.imagenContent').removeClass('hidden');
                                 $('#idConsulta').val(data);
 
+                                $("#guardarSignosConsulta").prop('disabled', false);
                             }
     {#                        console.log("pagina actual: "+data);
                             console.log("Inicio de registro: "+data.inicioRegistro);#}
 
                         },
                     error: function (data) {
-
+                        $("#guardarSignosConsulta").prop('disabled', false);
 
                     }
                 });
@@ -3784,6 +3793,7 @@ Dentro de la div  con clase content- body
                 return false;
             }
 {#            alert(direccion);#}
+            $('.guardarPlantilla').hide();
             var valores = new Array();
             var idParameters = new Array();
             var idPlantilla= $('#dgplusbellebundle_consulta_plantilla').val();
@@ -3847,6 +3857,7 @@ Dentro de la div  con clase content- body
                                 },
                             error: function (data) {
                                 {#alertify.error("Hubo un error, intente de nuevo!");#}
+                                $('#guardarPlantilla').show();
                                 swal('','Hubo un error, intente de nuevo!','error');
                             }
                         });
@@ -3854,6 +3865,7 @@ Dentro de la div  con clase content- body
                     else{
                         {#bootbox.alert("Debe ingresar una consulta primero!", function() {});#}
                         swal('','Ingrese una consulta!','error');
+                        $('#guardarPlantilla').show();
                     }
                     
                 }
@@ -3977,7 +3989,7 @@ Dentro de la div  con clase content- body
                                         console.log("Inicio de registro: "+data.inicioRegistro);#}
                                     },
                                 error: function (data) {
-
+                                    $('#guardarPlantilla').show();
 
                                 }
                             });
@@ -3985,12 +3997,14 @@ Dentro de la div  con clase content- body
                         else{
                             {#bootbox.alert('No debe de dejar en blanco ningun detalle de consulta de botox');#}
                             swal('','No debe dejar en blanco ningún detalle de consulta de botox!','error');
+                            $('#guardarPlantilla').show();
                         }
                             
                     }
                     else{
                         {#bootbox.alert("Debe ingresar una consulta primero!", function() {});#}
                         swal('','Debe ingresar una consulta primero!','error');
+                        $('#guardarPlantilla').show();
                     }
                 }
         });
@@ -4246,6 +4260,8 @@ Dentro de la div  con clase content- body
 {#            var id=12;#}
             var medico = $('#medico_consulta').val();
             var id = 0;
+            $('#guardarReceta').hide();
+            
             if(medico==3){ //dra.
                 id = 13;
             }
@@ -4273,6 +4289,7 @@ Dentro de la div  con clase content- body
                     success: function (data) {
                             //inicio = data.inicio++;
                             if(data==0){
+                                $('#guardarReceta').show();
                                 {#var iTel='<i class="fa fa-phone"></i>';
                                 var dir='<i class="fa fa-map-marker fa-fw"></i>';
                                 var ocup = '<i class="fa fa-briefcase"></i>';
@@ -4294,12 +4311,16 @@ Dentro de la div  con clase content- body
                     error: function (data) {
                         {#alertify.error("Hubo un error, intente de nuevo!");#}
                         swal('','Hubo un error, intente de nuevo!','error');
+                        $('#guardarReceta').show();
+                        $('#receta').show();
                     }
                 });
             }
             else{
                 {#bootbox.alert("Debe ingresar una consulta antes!", function() {});#}
                 swal('','Debe ingresar una consulta antes!','error');
+                $('#guardarReceta').show();
+                $('#receta').show();
             }
             return false;
         });

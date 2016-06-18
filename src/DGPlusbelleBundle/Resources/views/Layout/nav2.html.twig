@@ -38,8 +38,12 @@
             <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"> <img src="{{ asset('Photos/Empleado/')}}{{app.user.persona.empleado[0].foto}}" style="width: 25px;"> &nbsp; {{app.user.persona.nombres}} {{app.user.persona.apellidos}}<span class="caret"></span></a>
             <ul class="dropdown-menu">
                 <li role="presentation"><a role="menuitem" tabindex="-1" href="{{ path('admin_usuario_edit2', {'id':app.user.id})}}"><span class="pull-right"><i class="fa fa-key"></i></span>Editar contraseña</a></li>
-                <li role="presentation"><a role="menuitem" tabindex="-1" href="{{ path('admin_bitacora')}}"><span class="pull-right"><i class="fa fa-book text-muted"></i></span>Mostrar bitacora</a></li>
-                <li role="presentation"><a role="menuitem" tabindex="-1" href="{{ path('admin_usuario')}}"><span class="pull-right"><i class="glyphicon glyphicon-cog text-muted"></i></span>Ajustes</a></li>
+                {% if is_granted('ROLE_ADMIN') %}
+                    <li role="presentation"><a role="menuitem" tabindex="-1" href="{{ path('admin_bitacora')}}"><span class="pull-right"><i class="fa fa-book text-muted"></i></span>Mostrar bitacora</a></li>
+                {% endif %}
+                {% if is_granted('ROLE_ADMIN') %}
+                    <li role="presentation"><a role="menuitem" tabindex="-1" href="{{ path('admin_usuario')}}"><span class="pull-right"><i class="glyphicon glyphicon-cog text-muted"></i></span>Ajustes</a></li>
+                {% endif %}
                 <li role="separator" class="divider"></li>
                 <li role="presentation"><a role="menuitem" tabindex="-1" href="{{path('plusbelle_logout')}}"><span class="pull-right"><i class="fa fa-sign-out text-muted"></i></span> Cerrar sesión</a></li>
             </ul>
