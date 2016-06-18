@@ -174,7 +174,7 @@
                     }
                     $.ajax({
                         data:{nombre:nombre,apellidos:apellidos, telefono:telefono, telefono2:telefono2,direccion:direccion, email:email, dui:dui, estadoCivil:estadoCivil,sexo:sexo,ocupacion:ocupacion,
-                        lugarTrabajo:lugarTrabajo, fechaNacimiento:fechaNacimiento, referifoPor:referidoPor,personaEmergencia:personaEmergencia,telefonoEmergencia:telefonoEmergencia},
+                        lugarTrabajo:lugarTrabajo, fechaNacimiento:fechaNacimiento, referidoPor:referidoPor,personaEmergencia:personaEmergencia,telefonoEmergencia:telefonoEmergencia},
                         url:"{{path('crear_paciente_cita_ajax')}}",
                         type: "post",
                         success: function (data) {
@@ -230,7 +230,7 @@
                     
                     $.ajax({
                         data:{nombre:nombre,apellidos:apellidos, telefono:telefono, telefono2:telefono2,direccion:direccion, email:email, dui:dui, estadoCivil:estadoCivil,sexo:sexo,ocupacion:ocupacion,
-                        lugarTrabajo:lugarTrabajo, fechaNacimiento:fechaNacimiento, referifoPor:referidoPor,personaEmergencia:personaEmergencia,telefonoEmergencia:telefonoEmergencia},
+                        lugarTrabajo:lugarTrabajo, fechaNacimiento:fechaNacimiento, referidoPor:referidoPor,personaEmergencia:personaEmergencia,telefonoEmergencia:telefonoEmergencia},
                         url:"{{path('crear_paciente_expediente_ajax')}}",
                         type: "post",
                         success: function (data) {
