@@ -790,7 +790,7 @@ class CitaController extends Controller
 //        var_dump($fechaobj->format('Y-m-d'));
         $em = $this->getDoctrine()->getEntityManager();
         
-        $dql = "SELECT c.id FROM DGPlusbelleBundle:Cita c WHERE c.empleado =:empleado AND c.fechaCita=:fecha AND c.horaCita=:hora ";
+        $dql = "SELECT c.id FROM DGPlusbelleBundle:Cita c WHERE c.empleado =:empleado AND c.fechaCita=:fecha AND c.horaCita=:hora AND c.estado='P'";
         $cita['regs'] = $em->createQuery($dql)
                 ->setParameters(array('empleado'=>$idempleado,'fecha'=>$fechaobj->format('Y-m-d'),'hora'=>$hora))
                 ->getArrayResult();
