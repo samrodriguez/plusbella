@@ -604,7 +604,7 @@ class CitaController extends Controller
                 //var_dump($entity->getHoraInicio());
                 $dql = "SELECT c
                     FROM DGPlusbelleBundle:Cita c
-                    WHERE c.empleado =:idEmp AND c.horaCita =:hora AND c.fechaCita=:fecha AND c.id <>:id";
+                    WHERE c.empleado =:idEmp AND c.horaCita =:hora AND c.fechaCita=:fecha AND c.id <>:id AND c.estado='P'";
                 $entityDuplicada = $em->createQuery($dql)
                                     ->setParameters(array('idEmp'=>$empleado->getId(),'hora'=>$entity->getHoraCita()->format('H:i:s'),'fecha'=>$newformat,'id'=>$entity->getId()))
                                     ->getArrayResult();
