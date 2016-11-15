@@ -1,4 +1,50 @@
-{% extends 'DGPlusbelleBundle:Layout:layout.html.twig' %}
+{% extends 'DGPlusbelleBundle:Layout:layouterpajustes.html.twig' %}
+
+
+{% block navegacion %}
+    
+    {% if is_granted('ROLE_ADMIN') %}
+        <a href="{{ path('admin_tipoconsulta') }}" class="leftnava"><li class="leftnav left">Tipo de consulta<span class="pull-right right"><i class=""></i></span></li></a>
+    {% endif %}
+    {% if is_granted('ROLE_ADMIN') %}
+        <a href="{{ path('admin_tratamiento') }}" class="leftnava"><li class="leftnav left">Gestionar trat.<span class="pull-right right"><i class=""></i></span></li></a>
+    {% endif %}
+    {% if is_granted('ROLE_ADMIN') %}
+        <a href="{{ path('admin_categoria') }}" class="leftnava"><li class="leftnav left ">Gestionar categoria<span class="pull-right right"><i class=""></i></span></li></a>
+    {% endif %}
+    {% if is_granted('ROLE_ADMIN') %}
+        <a href="{{ path('admin_plantilla') }}" class="leftnava"><li class="leftnav left active">Gestionar plantilla<span class="pull-right right"><i class="fa fa-arrow-right"></i></span></li></a>
+    {% endif %}
+    {% if is_granted('ROLE_ADMIN') %}
+        <a href="{{ path('admin_paquete') }}" class="leftnava"><li class="leftnav left ">Gestionar paquete<span class="pull-right right"><i class=""></i></span></li></a>
+    {% endif %}
+    {% if is_granted('ROLE_ADMIN') %}
+        <a href="{{ path('admin_empleado') }}" class="leftnava"><li class="leftnav left ">Gestionar empleado<span class="pull-right right"><i class=""></i></span></li></a>
+    {% endif %}
+    {% if is_granted('ROLE_ADMIN') %}
+        <a href="{{ path('admin_sucursal') }}" class="leftnava"><li class="leftnav left ">Gestionar sucursal<span class="pull-right right"><i class=""></i></span></li></a>
+    {% endif %}
+    {% if is_granted('ROLE_ADMIN') %}
+        <a href="{{ path('admin_descuento') }}" class="leftnava"><li class="leftnav left ">Gestionar desc.<span class="pull-right right"><i class=""></i></span></li></a>
+    {% endif %}
+    {% if is_granted('ROLE_ADMIN') %}
+        <a href="{{ path('admin_usuario') }}" class="leftnava"><li class="leftnav left ">Gestionar usuario<span class="pull-right right"><i class=""></i></span></li></a>
+    {% endif %}
+    {% if is_granted('ROLE_ADMIN') %}
+        <a href="{{ path('admin_bitacora') }}" class="leftnava"><li class="leftnav left ">Bitacora de usuario<span class="pull-right right"><i class=""></i></span></li></a>
+    {% endif %}
+    {% if is_granted('ROLE_ADMIN') %}
+        <a href="{{ path('admin_backup') }}" class="leftnava"><li class="leftnav left ">Respaldo de datos<span class="pull-right right"><i class=""></i></span></li></a>
+    {% endif %}
+{% endblock navegacion %}
+
+{% block descripcion %}
+    <div class="col-md-6">
+        <p class="robo" style="font-weight: 300; margin-bottom: 0px; font-size: 30px;">Plantillas</p>
+        <p class="robo" style="font-weight: 300; font-size: 14px; height: 40px;">Gestione los tratamientos que realiza en su consultorio.</p>
+    </div>
+{% endblock %}
+
 
 {% block css %}
     {{parent()}}
@@ -39,6 +85,13 @@
             margin-top:30px;
             margin-left: -12px;
         }
+        .link{
+            color:#FFF !important;
+        }
+
+        .add_placa_link{
+            color:#FFF !important;  
+        }
         
         {#.panel-default {
             height: 164px;
@@ -62,12 +115,12 @@
 
     {# {{ form(edit_form) }} #}
 
-        <div class="row">        
+        {# <div class="row">        
             <div class="col-md-12">
                 <h3 class="text-left">Historia clínica</h3>
                 <hr>
             </div>
-        </div>
+        </div> #}
         <div class="row">
             <br>
             <div class="col-xs-12 col-sm-4">
@@ -76,9 +129,9 @@
             <div class="col-xs-12 col-sm-6">
                 {{ form_row(edit_form.descripcion) }}
             </div>
-            <div class="col-xs-12 col-sm-2">
+            {# <div class="col-xs-12 col-sm-2">
                 {{ form_row(edit_form.clinica) }}
-            </div>
+            </div> #}
             {#
             <div class="col-md-2">
                 {{ form_row(edit_form.horaInicio) }}
@@ -165,20 +218,20 @@ jQuery(document).ready(function() {
 
     $("#dgplusbellebundle_consulta_pacienteSelectBoxItOptions li").remove();
 
-    $('#dgplusbellebundle_consulta_fechaConsulta').daterangepicker({
-                    singleDatePicker: true,
-                    showDropdowns: true,
-                    locale: {
-                        format: 'YYYY-MM-DD'
-                    },
-                });
+    // $('#dgplusbellebundle_consulta_fechaConsulta').daterangepicker({
+    //                 singleDatePicker: true,
+    //                 showDropdowns: true,
+    //                 locale: {
+    //                     format: 'YYYY-MM-DD'
+    //                 },
+    //             });
 
-    $('select[id$=dgplusbellebundle_consulta_placas_]').selectBoxIt();
+    // $('select[id$=dgplusbellebundle_consulta_placas_]').selectBoxIt();
 
-    collectionHolder.find('.panel-body').each(function() {
-        addTagFormDeleteLink($(this));
+    // collectionHolder.find('.panel-body').each(function() {
+    //     addTagFormDeleteLink($(this));
 
-    });
+    // });
 
     
 

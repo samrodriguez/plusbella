@@ -52,6 +52,13 @@ class Cita
     /**
      * @var string
      *
+     * @ORM\Column(name="tipo_cita", type="integer", nullable=false)
+     */
+    private $tipoCita;
+    
+    /**
+     * @var string
+     *
      * @ORM\Column(name="estado", type="string", nullable=false)
      */
     private $estado;
@@ -99,6 +106,25 @@ class Cita
      * })
      */
     private $tratamiento;
+    
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="tratamiento1", type="integer", nullable=false)
+     */
+    private $tratamiento1;
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="tratamiento2", type="integer", nullable=false)
+     */
+    private $tratamiento2;
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="paquete", type="integer", nullable=false)
+     */
+    private $paquete;
 
      /**
      * @var \DateTime
@@ -250,6 +276,30 @@ class Cita
         return $this->estado;
     }
     
+    /**
+     * Set tipoCita
+     *
+     * @param integer $tipoCita
+     *
+     * @return Cita
+     */
+    public function setTipoCita($tipoCita)
+    {
+        $this->tipoCita= $tipoCita;
+
+        return $this;
+    }
+
+    /**
+     * Get tipoCita
+     *
+     * @return boolean
+     */
+    public function getTipoCita()
+    {
+        return $this->tipoCita;
+    }
+    
     
     
     /**
@@ -348,6 +398,78 @@ class Cita
     public function getTratamiento()
     {
         return $this->tratamiento;
+    }
+    
+    /**
+     * Set tratamiento
+     *
+     * @param integer $tratamiento
+     *
+     * @return Cita
+     */
+    public function setTratamiento1($tratamiento1)
+    {
+        $this->tratamiento1 = $tratamiento1;
+
+        return $this;
+    }
+
+    /**
+     * Get tratamiento1
+     *
+     * @return tratamiento1
+     */
+    public function getTratamiento1()
+    {
+        return $this->tratamiento1;
+    }
+    
+    
+    /**
+     * Set tratamiento
+     *
+     * @param integer $tratamiento2
+     *
+     * @return Cita
+     */
+    public function setTratamiento2($tratamiento2)
+    {
+        $this->tratamiento2 = $tratamiento2;
+        return $this;
+    }
+
+    /**
+     * Get tratamiento2
+     *
+     * @return tratamiento2
+     */
+    public function getTratamiento2()
+    {
+        return $this->tratamiento2;
+    }
+    
+    
+    /**
+     * Set tratamiento
+     *
+     * @param integer $paquete
+     *
+     * @return Cita
+     */
+    public function setPaquete($paquete)
+    {
+        $this->paquete= $paquete;
+        return $this;
+    }
+
+    /**
+     * Get paquete
+     *
+     * @return paquete
+     */
+    public function getPaquete()
+    {
+        return $this->paquete;
     }
     
     

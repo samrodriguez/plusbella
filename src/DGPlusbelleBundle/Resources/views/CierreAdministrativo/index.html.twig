@@ -19,11 +19,14 @@
             <div class="btn-group btn-group-sm pull-left">
                 <button style="height:30px;" data-toggle="tooltip" data-container="body" title="Nuevo cierre" id="add-datatables1" class="btn btn-primary" role="button">
 {#                    <i class="fa fa-plus"></i>#}Nuevo
-                </button> 
+                </button>
             </div>
             <div class="btn-group btn-group-sm pull-left">
                 <button style="height:30px;" id="edit-datatables1" data-toggle="tooltip" data-container="body" title="Modificar cierre" class="btn btn-default datatables1-actions disabled" role="button">
                     {#<i class="fa fa-edit"></i>#}Modificar
+                </button>
+                <button style="height:30px;" id="delete-datatables1" data-toggle="tooltip" data-container="body" title="Eliminar" class="btn btn-default datatables1-actions disabled" role="button">
+                    {#<i class="fa fa-toggle-off"></i>#} Eliminar
                 </button>
             </div>
             <div class="btn-group pull-left">
@@ -53,7 +56,7 @@
                 <th>Horainicio</th>
                 <th>Horafin</th>
                 <th>Motivo</th>
-                
+               
 {#                <th>Actions</th>#}
             </tr>
         </thead>
@@ -62,11 +65,11 @@
             <tr id="{{entity.id}}">
 {#                <td><a href="{{ path('admin_cierreadministrativo_show', { 'id': entity.id }) }}">{{ entity.id }}</a></td>#}
                 <td>{{ entity.empleado.persona.nombres|upper}} {{ entity.empleado.persona.apellidos|upper}}</td>
-                <td>{% if entity.fecha %}{{ entity.fecha|date('d-m-Y') }}{% endif %}</td>
+                <td>{% if entity.fecha %}{{ entity.fecha|date('Y-m-d') }}{% endif %}</td>
                 <td>{% if entity.horaInicio %}{{ entity.horaInicio|date('H:i') }}{% endif %}</td>
                 <td>{% if entity.horaFin %}{{ entity.horaFin|date('H:i') }}{% endif %}</td>
                 <td>{{ entity.motivo }}</td>
-                
+               
                 {#<td>
                 <ul>
                     <li>
@@ -92,11 +95,11 @@
         </div><!-- /.templateSetup -->  #}
 
       </div><!-- /.content -->
-   
+  
 
 {% endblock %}
 
-    
+   
 
 {% block javascripts_step %}
     <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.2/css/select2.min.css" rel="stylesheet" />
@@ -107,26 +110,27 @@
         <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.2/js/select2.min.js"></script>
         <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/material-design-lite/1.1.0/material.min.css">
         <link rel="stylesheet" href="https://cdn.datatables.net/1.10.11/css/dataTables.material.min.css">
-        
-        
+       
+       
         <script src="https://cdn.datatables.net/1.10.11/js/jquery.dataTables.min.js"></script>
-	<script src="https://cdn.datatables.net/1.10.11/js/dataTables.material.min.js "></script>
+    <script src="https://cdn.datatables.net/1.10.11/js/dataTables.material.min.js "></script>
         <script type="text/javascript" src="{{ asset('Resources/bValidator-0.73/jquery.bvalidator.js')}}"></script>
         <script type="text/javascript" src="{{ asset('Resources/bValidator-0.73/bvalidator.lang.es.js')}}" ></script>
         <script src="{{ asset('Resources/wrapkit/scripts/bootbox.js') }}"></script>
-        
+        <link rel="stylesheet" href="{{ asset('Resources/swal/sweetalert2.min.css') }}">
+        <script src="{{ asset('Resources/swal/sweetalert2.min.js') }}"></script>
 {#       <script type="text/javascript" src="{{ asset('Resources/zebra/inicializacioncalendarios.js')}}" ></script>#}
        <script>
             $(document).ready(function(){
                 var link=0;
                 var estadoPrevio = "";
-                
-                
-                
-        
+               
+               
+               
+       
                 // Validando campo telefono
-                 $('#dgplusbellebundle_empleado_persona_telefono').mask('0000-0000'); 
-                
+                 $('#dgplusbellebundle_empleado_persona_telefono').mask('0000-0000');
+               
                 //Seleccionar un registro
                 $('#datatables1>tbody>tr').on('click', function(event) {
                     //Se limpia los otros que esten activos
@@ -138,20 +142,20 @@
                     //Se habilitan los botones de editar y borrar
                     $("#edit-datatables1").removeClass("disabled");
                     $("#delete-datatables1").removeClass("disabled");
-                    
+                   
                     //var link=$('#datatables1>tbody>tr>td>a').attr("href");
                     //var link=$(this).children("td:first").children().attr("href");
                     //Obtener el id del registro
                     link=$(this).attr("id");
                     //alert(link);
                     //Carga del form modificar
-                    
+                   
                     $("#editFormContainer").load(link+"/edit");
-                    
-                    
-                    
-                            
-                    
+                   
+                   
+                   
+                           
+                   
                      //Hay que cambiar el numero de la columna para las otras tablas
                     estadoPrevio = $(this).children('td:nth-child(4)').html();
                     estadoPrevio = estadoPrevio.trim();
@@ -165,18 +169,18 @@
                     }
                     //var href=link.attr("href");
                     //alert(object);
-                    
-                    
+                   
+                   
                 });
-                
-                
+               
+               
                 $("#add-datatables1").click(function(){
                     if($("#addFormContainer").hasClass("hide")){
                         $("#addFormContainer").removeClass("hide");
                         $("#editFormContainer").addClass("hide");
                         {#var datepicker = $('.fecha').data('Zebra_DatePicker');
                         datepicker.destroy();#}
-                        
+                       
                         $('.fecha1').Zebra_DatePicker({
                             months:['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
                             days: ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'],
@@ -193,24 +197,24 @@
                     }
 
                 });
-                
-                                 
+               
+                                
                 //Accion cancelar del boton nuevo
                 $("#cancelarNuevo").click(function(){
                     $("#add-datatables1").click();
                     limpiarCampos();
                     return false;
                 });
-                
+               
                 //Accion cancelar del boton modificar
                 $("#cancelarModificar").click(function(){
                     $("#edit-datatables1").click();
                     return false;
                 });
-                
-                
+               
+               
                 $("#edit-datatables1").click(function(){
-                    
+                   
                     if(!$("#edit-datatables1").hasClass("disabled")){
                         if($("#editFormContainer").hasClass("hide")){
                             $("#addFormContainer").addClass("hide");
@@ -238,92 +242,117 @@
                 });
                 */
                 $('#filterDatatables1').on('keyup', function(event) {
-                    var filtro = $(this).val(); 
+                    var filtro = $(this).val();
                     //alert(filtro);
                     $('#datatables1_filter>label>input').val($(this).val());
                     $('#datatables1_filter>label>input').keyup();
 
                 });
-                
-                
-                
-                $(document).on('click', '#dgplusbellebundle_cierreadministrativo_submit', function(){
+               
+               
+               
+                {#$(document).on('click', '#dgplusbellebundle_cierreadministrativo_submit', function(){
                     var horaInicio=$('#dgplusbellebundle_cierreadministrativo_horaInicio_hour').val();
                     var minutoInicio=$('#dgplusbellebundle_cierreadministrativo_horaInicio_minute').val();
-                    
+                   
                     if(parseInt(horaInicio)<10){
                         horaInicio='0'+horaInicio;
                     }
-                    
-                    
+                   
+                   
                     var horaFin=$('#dgplusbellebundle_cierreadministrativo_horaFin_hour').val();
                     var minutoFin=$('#dgplusbellebundle_cierreadministrativo_horaFin_minute').val();
-                    
+                   
                     if(parseInt(horaFin)<10){
                         horaFin='0'+horaFin;
                     }
-                    
+                   
                     var inicio= horaInicio+minutoInicio;
                     var fin= horaFin+minutoFin;
-                    
+                   
                     if(inicio>=fin){
                         bootbox.alert("La hora de inicio no puede ser menor a la de fin");
                         return false;
                     }
                         //alert("Hora correctas");
 
-                    
-                    
+                   
+                });#}
+               
+               
+                $("#delete-datatables1").click(function(){
+                    console.log(link);
+                    $.ajax({
+                        data:{id:link},
+                        url:"{{path('borrar_cierre')}}",
+                        type: "post",
+                        success: function (data) {
+                                //inicio = data.inicio++;
+                                if(data==0){
+                                    //alertify.success("Cierre eliminado!");
+                                    swal("","Cierre administrativo eliminado!","success");
+                                    $('#'+link).remove();
+                                    $('#delete-datatables1').addClass('disabled');
+                                }
+                                else{
+                                    swal("","No se pudo eliminar el cierre!","error");
+                                    //alertify.error("No se pudo eliminar el cierre!");
+                                }
+                                {#console.log("pagina actual: "+data);
+                                console.log("Inicio de registro: "+data.inicioRegistro);#}
+                            },
+                        error: function (data) {
+                        }
+                    });
                 });
-                
-                
-                
-                $('#datatables1').DataTable({ 
+               
+               
+                $('#datatables1').DataTable({
                     dom:'ftp',
                     searching:true,
                     "order":[1,"desc"],
                     "columnDefs": [
-                           
+                          
                            { "orderable": false, "targets": 0 },
-                           { "orderable": false, "targets": 1 },
+                           {#{ "orderable": false, "targets": 1 },#}
                            { "orderable": false, "targets": 2 },
                            { "orderable": false, "targets": 3 },
                            { "orderable": false, "targets": 4 }
-                          
-                          
-                        
+                         
+                         
+                       
 
-                           
+                          
                            //{ "orderData": [ 2, 3, 4 ], "targets": 2 }
                     ],
                     "language": {
                     "info": "Mostrando página _PAGE_ de _PAGES_",
                     "infoEmpty": "",
                     "emptyTable": "No se encontraron registros",
-                    "paginate": { 
+                    "paginate": {
                         "next": "Siguiente",
                         "previous": "Anterior"
                     },
                     "processing": "Procesando petición...",
                     "search": "Buscar registros:",
                     "lengthMenu": "Mostrar _MENU_ registros"
-                }, 
-                    
+                },
+                   
         });
-        
+       
         $('#datatables1>tr>td').on('click', function(event) {
             alert('dsv');
         });
         //Oculta el filtro de la tabla
         $('#datatables1_filter').hide();
         $('#filterDatatables1').val('');
-        
-        
+       
+       
         $('#dgplusbellebundle_cierreadministrativo_empleado').select2();
-        validarCierre(); 
-        
+        validarCierre();
+       
     });//Fin document ready
-        
+       
     //Definición de funciones
     function limpiarCampos(){
         //Limpiar los campos de tipo text
@@ -338,14 +367,11 @@
             else{
                 $(this).removeAttr("selected");
             }
-            
-        
-	});             
+           
+       
+    });            
     };
         </script>
 
-    {% endblock %} 
+    {% endblock %}
   
-   
-
-      

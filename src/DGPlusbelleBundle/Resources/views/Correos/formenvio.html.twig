@@ -1,0 +1,45 @@
+{# empty Twig template #}
+
+<div class="col-md-12" style="margin-top:25px;">
+    <form id="frmCorreo"  method="post" enctype="multipart/form-data">
+        <div class="col-md-6">
+            <label>Elija una opción</label>
+            <br>
+            <select name="opcion" id="opcion" style="width:100%;" >
+                <option value="0"> Cumpleañeros del día</option>
+                <option value="1"> Todos los pacientes</option>
+                <option value="2"> Individual </option>
+            </select>
+            <br>
+            <br>
+            <label>Elija un paciente o pacientes</label>
+            <select id="toEmail" style="width:100%;" multiple="multiple" name="toEmail[]">
+            </select>
+            <br>
+            <br>
+            <textarea name="emailBody" style="height: 250px;margin-bottom: 25px;" placeholder="Contenido del correo" class="form-control"></textarea>
+            <button id="enviarCorreo" style="cursor: pointer;" class="btn-sm btn btn-primary">Enviar correo</button>
+        </div>
+        <div class="col-md-6">
+            <div class="col-md-6">
+                <label>Previsualización de archivo</label>
+            </div>
+            <div class="text-right col-md-6">
+                <label class="btn btn-default btn-file">
+                    Adjuntar archivo <br><input style="display:none;" type="file" name="file" id="file" class="imgProvider btn-file btn file">
+                </label>
+                <br>
+                <br>
+            </div>
+            <div class="clearfix"></div>
+            <div class="col-md-12 text-right">
+                <label class="hidden imageError">Error</label>
+                <img id="imgTest" src="http://placehold.it/960x960" style="margin-top:57px !important; width:100%; margin:auto; border:1px solid #DDD;">
+                <br>
+            </div>
+        </div>
+    </form>
+</div>
+
+
+

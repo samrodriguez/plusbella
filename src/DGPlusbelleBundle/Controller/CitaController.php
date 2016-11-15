@@ -4,6 +4,7 @@ namespace DGPlusbelleBundle\Controller;
 
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -34,6 +35,12 @@ class CitaController extends Controller
         //$entities = $em->getRepository('DGPlusbelleBundle:Cita')->findAll();
         $sucursales= $em->getRepository('DGPlusbelleBundle:Sucursal')->findBy(array('estado'=>true), array('id' => 'DESC'));
         $categorias = $em->getRepository('DGPlusbelleBundle:Categoria')->findAll();
+        date_default_timezone_set('America/El_Salvador');
+        
+        $hoy = date('Y-m-d');
+        $horaActual = date('H:i:s', time()-7200);
+        $date = new \DateTime('now',new \DateTimeZone('America/El_Salvador'));
+        $dateString = $date->format('-m-d');
         //var_dump($categorias);
         /*$dql = "SELECT exp.paciente"
                 . "FROM DGPlusbelleBundle:Cita c, DGPlusbelleBundle:Paciente p, DGPlusbelleBundle:Expediente exp"
@@ -44,10 +51,37 @@ class CitaController extends Controller
         
         var_dump($entities);
         */
-        //var_dump($sucursales);
+        //var_dump($hoy);
+        
+        //$date = new DateTime();
+        
+        $sql = "SELECT pac.fechaNacimiento, pac.id, per.nombres, per.apellidos, per.telefono,per.telefono2 FROM DGPlusbelleBundle:Paciente pac "
+                . "JOIN pac.persona per "
+                . "WHERE pac.fechaNacimiento LIKE '%". $dateString ."%'";
+        
+        
+        $cumpleaneros = $em->createQuery($sql)
+                //->setParameters(array('empleado'=>$idEmpleado,'horaCita'=>$horaCita,'fechaCita'=>$fechaCita,'estado'=>'P'))
+                ->getArrayResult();
+        
+        $sql = "SELECT c.id FROM DGPlusbelleBundle:Cita c "
+                . "WHERE c.fechaCita LIKE '%". $hoy."%'";
+        
+        
+        $citas = $em->createQuery($sql)
+                //->setParameters(array('empleado'=>$idEmpleado,'horaCita'=>$horaCita,'fechaCita'=>$fechaCita,'estado'=>'P'))
+                ->getArrayResult();
+        
+        
+        //var_dump($cumpleaneros);
+        
+        //$cumpleaneros = $em->getRepository('DGPlusbelleBundle:Paciente')->findBy(array('fechaNacimiento' => $date), array('fechaNacimiento' => 'DESC'));
+        
         
         $sucursal = $request->get('id');
         
+        
+             
         
         if($sucursal==null){
             $sucursal=3;
@@ -55,10 +89,15 @@ class CitaController extends Controller
         
         //var_dump($sucursal);
         $empleados = $em->getRepository('DGPlusbelleBundle:Empleado')->findBy(array('estado'=>true));
-        date_default_timezone_set('America/El_Salvador');
         
-        $hoy = date('Y-m-d');
-        $horaActual = date('H:i:s', time()-7200);
+        //$tratamiento = $em->getRepository('DGPlusbelleBundle:Tratamiento')->
+        $trat = $em->getRepository('DGPlusbelleBundle:Tratamiento');
+        
+        //var_dump(get_class_methods($trat->obtenerConsultaTratActivo()));
+        //var_dump(get_class_methods($trat->obtenerConsultaTratActivo()->getQuery()));
+        //var_dump($trat->obtenerConsultaTratActivo()->getQuery()->getResult());
+        $tratamientosConsulta = $trat->obtenerConsultaTratActivo()->getQuery()->getResult();
+                
         
         /*$dql = "SELECT c from DGPlusbelleBundle:Cita c "
                 . "WHERE c.fechaCita <:hoy AND c.horaCita <:horaActual AND c.estado='P'";*/
@@ -83,10 +122,14 @@ class CitaController extends Controller
        
         return array(
             //'entities' => $entities,
+            'consultas' => $tratamientosConsulta,
             'sucursales' => $sucursales,
             'categorias' => $categorias,
             'empleados'=>$empleados,
+            'cumpleaneros'=>$cumpleaneros,
+            'citas'=>$citas,
             'sucursal'=>$sucursal,
+            'hoy'=>$date,
         );
     }
     /**
@@ -115,6 +158,51 @@ class CitaController extends Controller
         $horaCita = $entity->getHoraCita()->format('H:i:s');
         $horaFin = $entity->getHoraFin()->format('H:i:s');
         $fechaCita = $entity->getFechaCita()->format('Y-m-d');
+        
+        ////Nuevos valores
+        
+        
+        $paquete = $_POST['cita_paquete'];
+        //$tipo_cita= $_POST['dgplusbellebundle_cita[tipoCita]'];
+        $trat1= $_POST['cita_trat1'];
+        $trat2= $_POST['cita_trat2'];
+        $tipoCita= $data['dgplusbellebundle_cita']['tipoCita'];
+        //var_dump($entity);
+//        var_dump($tipoCita);
+//        die();
+//        var_dump($paquete);
+//        var_dump($trat1);
+//        var_dump($trat2);
+        
+        $entity->setTipoCita(intval($tipoCita));
+        
+        switch($tipoCita){
+            case 1://///Consultas
+                
+                $entity->setTratamiento1(null);
+                $entity->setTratamiento2(null);
+                
+                break;
+            case 2://///Tratamientos sin paquetes
+                
+                $entity->setTratamiento1($trat1);
+                $entity->setTratamiento2($trat2);
+                
+                break;
+            case 3://///Tratamientos de paquetes
+                
+                $entity->setTratamiento1($trat1);
+                $entity->setTratamiento2($trat2);
+                
+                break;
+        }
+        
+        
+        
+        
+        
+        
+        
         
 //        $idEmpleado = $entity->getEmpleado();
 //        $horaCita = $entity->getHoraCita();
@@ -196,10 +284,18 @@ class CitaController extends Controller
     //                die();
                     $usuario= $this->get('security.token_storage')->getToken()->getUser();
                     $em = $this->getDoctrine()->getManager();
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
                     $em->persist($entity);
                     $em->flush();
                     $this->get('bitacora')->escribirbitacora("Se creo una nueva cita",$usuario->getId());
-                    var_dump('s');
+                    //var_dump('s');
                     return $this->redirect($this->generateUrl('admin_cita'));
 //                }
             }
@@ -604,7 +700,7 @@ class CitaController extends Controller
                 //var_dump($entity->getHoraInicio());
                 $dql = "SELECT c
                     FROM DGPlusbelleBundle:Cita c
-                    WHERE c.empleado =:idEmp AND c.horaCita =:hora AND c.fechaCita=:fecha AND c.id <>:id";
+                    WHERE c.empleado =:idEmp AND c.horaCita =:hora AND c.fechaCita=:fecha AND c.id <>:id AND c.estado='P'";
                 $entityDuplicada = $em->createQuery($dql)
                                     ->setParameters(array('idEmp'=>$empleado->getId(),'hora'=>$entity->getHoraCita()->format('H:i:s'),'fecha'=>$newformat,'id'=>$entity->getId()))
                                     ->getArrayResult();
@@ -657,19 +753,19 @@ class CitaController extends Controller
                         else{
                             //echo "propbando2";
                             if($entity->getEstado()=="P"){
-                                    if(count($cierreAdmin)==0){
-                                        $entity->setFechaCita(new \DateTime($newformat));
-                                        $em->persist($entity);
-                                        $em->flush();   
-                                        $exito['regs']=0; //Cita reprogramada con exito
-                                    }
-                                    else{
-                                        $exito['regs']=5; //Existe un cierre administrativo para el empleado
-                                    }
+                                if(count($cierreAdmin)==0){
+                                    $entity->setFechaCita(new \DateTime($newformat));
+                                    $em->persist($entity);
+                                    $em->flush();   
+                                    $exito['regs']=0; //Cita reprogramada con exito
                                 }
                                 else{
-                                    $exito['regs']=1;//Error, La cita tiene estado asistida o cancelada
+                                    $exito['regs']=5; //Existe un cierre administrativo para el empleado
                                 }
+                            }
+                            else{
+                                $exito['regs']=1;//Error, La cita tiene estado asistida o cancelada
+                            }
                         }
 	                 
                         
@@ -790,7 +886,7 @@ class CitaController extends Controller
 //        var_dump($fechaobj->format('Y-m-d'));
         $em = $this->getDoctrine()->getEntityManager();
         
-        $dql = "SELECT c.id FROM DGPlusbelleBundle:Cita c WHERE c.empleado =:empleado AND c.fechaCita=:fecha AND c.horaCita=:hora ";
+        $dql = "SELECT c.id FROM DGPlusbelleBundle:Cita c WHERE c.empleado =:empleado AND c.fechaCita=:fecha AND c.horaCita=:hora AND c.estado='P'";
         $cita['regs'] = $em->createQuery($dql)
                 ->setParameters(array('empleado'=>$idempleado,'fecha'=>$fechaobj->format('Y-m-d'),'hora'=>$hora))
                 ->getArrayResult();
@@ -1112,7 +1208,497 @@ class CitaController extends Controller
         
         return new Response(json_encode($flag));
     }
+
+    /**
+     * @Route("/cumpleanos/get/listado", name="admin_cumpleanos", options={"expose"=true})
+     * @Method("GET")
+     */
+    public function listadoCumpleanosAction(Request $request){
+            try {
+                $start = $request->query->get('start');
+                $draw = $request->query->get('draw');
+                $longitud = $request->query->get('length');
+                $busqueda = $request->query->get('search');
+                $fecha = $request->query->get('fecha');
+                $em = $this->getDoctrine()->getEntityManager();
+                //var_dump($fecha);
+                $date=  date_create_from_format('d-m-Y', $fecha);
+                $dateString = $date->format('Y-m-d');
+                //var_dump($dateString);
+                $sql = "SELECT obj.id as id FROM DGPlusbelleBundle:Paciente obj "
+                            . " WHERE Month(obj.fechaNacimiento) = Month('".$dateString."')"
+                            . " AND Day(obj.fechaNacimiento) = Day('".$dateString."')";
+                $rowsTotal = $em->createQuery($sql)
+                            //->setParameter('fecha', "'%".$dateString)
+                            ->getResult();
+                    
+                $row['draw']=$draw++;  
+                $row['recordsTotal'] = count($rowsTotal);
+                $row['recordsFiltered']= count($rowsTotal);
+                $row['data']= array();
+
+                $arrayFiltro = explode(' ',$busqueda['value']);
+                
+                $orderParam = $request->query->get('order');
+                $orderBy = $orderParam[0]['column'];
+                $orderDir = $orderParam[0]['dir'];
+                $orderByText="";
+                switch(intval($orderBy)){
+                    case 0:
+                        $orderByText = "nombres";
+                        break;
+                    case 1:
+                        $orderByText = "telefono";
+                        break;
+                    case 2:
+                        $orderByText = "";
+                        break;
+                }
+                $busqueda['value'] = str_replace(' ', '%', $busqueda['value']);
+                if($busqueda['value']!=''){
+                    $sql = "SELECT pac.fecha_nacimiento as fechaNacimiento, pac.id, concat(per.nombres,' ',per.apellidos) as  nombres, per.telefono as telefono,per.telefono2 FROM paciente pac "
+                    . "INNER JOIN persona per on (per.id=pac.persona)"
+                    . " WHERE Month(pac.fecha_nacimiento) = Month('".$dateString."') "
+                    . " AND Day(pac.fecha_nacimiento) = Day('".$dateString."') " 
+                    . " HAVING upper(CONCAT(fechaNacimiento,' ',nombres,' ',telefono)) LIKE upper('%".$busqueda['value']."%') ";
+                    $stmt = $em->getConnection()->prepare($sql);
+                    $stmt->execute();
+                    $row['data'] = $stmt->fetchAll();
+                    $row['recordsFiltered']= count($row['data']);
+                    $sql = "SELECT pac.fecha_nacimiento as fechaNacimiento, pac.id, UPPER(concat(per.nombres,' ',per.apellidos)) as nombres, per.telefono as telefono,per.telefono2 FROM paciente pac "
+                    . "INNER JOIN persona per on (per.id=pac.persona)"
+                    . " WHERE Month(pac.fecha_nacimiento) = Month('".$dateString."') "
+                    . " AND Day(pac.fecha_nacimiento) = Day('".$dateString."') "
+                    . " HAVING upper(CONCAT(fechaNacimiento,' ',nombres,' ',telefono)) LIKE upper('%".$busqueda['value']."%') "
+                    . "ORDER BY ". $orderByText." ".$orderDir." LIMIT " . $start . "," . $longitud;
+                    $stmt = $em->getConnection()->prepare($sql);
+                    $stmt->execute();
+                    $row['data'] = $stmt->fetchAll();
+                }
+                else{
+                    $sql = "SELECT DATE_FORMAT(pac.fecha_nacimiento,'%d-%m-%Y') as fechaNacimiento, pac.id, UPPER(concat(per.nombres,' ',per.apellidos)) as  nombres, per.telefono as telefono,per.telefono2 FROM paciente pac "
+                    . "INNER JOIN persona per on (per.id=pac.persona)"
+                    . " WHERE Month(pac.fecha_nacimiento) = Month('".$dateString."') "
+                    . " AND Day(pac.fecha_nacimiento) = Day('".$dateString."') "
+                    . " HAVING upper(CONCAT(fechaNacimiento,' ',nombres,' ',telefono)) LIKE upper('%".$busqueda['value']."%') "
+                    . "ORDER BY ". $orderByText." ".$orderDir." LIMIT " . $start . "," . $longitud;
+                    $stmt = $em->getConnection()->prepare($sql);
+                    $stmt->execute();
+                    $row['data'] = $stmt->fetchAll();
+                }
+                
+                return new Response(json_encode($row));
+            } catch (\Exception $e) {  
+                var_dump($e);
+                if(method_exists($e,'getErrorCode')){ 
+                    switch (intval($e->getErrorCode()))
+                    {
+                        case 2003: 
+                            $serverOffline= $this->getParameter('app.serverOffline');
+                            $row['data'][0]['name'] =$serverOffline.'. CODE: '.$e->getErrorCode();
+                        break;
+                        default :
+                            $row['data'][0]['name'] = $e->getMessage();                           
+                        break;
+                    }
+                    $row['data'][0]['chk'] ='';
+                    
+                    $row['recordsFiltered']= 0;
+                    }
+                    else{
+                            $data['error']=$e->getMessage();
+                    }
+                return new Response(json_encode($row));
+        }
+    }
     
+    
+    
+    
+    
+    
+    
+    /**
+     * @Route("/citas/get/listado", name="admin_citas_listado", options={"expose"=true})
+     * @Method("GET")
+     */
+    public function listadoCitasAction(Request $request){
+            try {
+                $start = $request->query->get('start');
+                $draw = $request->query->get('draw');
+                $longitud = $request->query->get('length');
+                $busqueda = $request->query->get('search');
+                $fechaInicio = $request->query->get('fechaInicio');
+                $fechaFin = $request->query->get('fechaFin');
+                $em = $this->getDoctrine()->getEntityManager();
+//                var_dump($fechaInicio);
+//                var_dump($fechaFin);
+                $date=  date_create_from_format('d-m-Y', $fechaInicio);
+                $fechaInicio = $date->format('Y-m-d');
+                $date=  date_create_from_format('d-m-Y', $fechaFin);
+                $fechaFin= $date->format('Y-m-d');
+                //var_dump($dateString);
+                
+                $sql = "SELECT c.id as id FROM DGPlusbelleBundle:Cita c "
+                            . " WHERE c.fechaCita>= :fechaInicio "
+                            . " AND c.fechaCita <= :fechaFin";
+                $rowsTotal = $em->createQuery($sql)
+                            ->setParameters(array('fechaInicio'=> $fechaInicio,'fechaFin'=> $fechaFin))
+                            ->getResult();
+                    
+                    //var_dump($rowsTotal);
+                $row['draw']=$draw++;  
+                $row['recordsTotal'] = count($rowsTotal);
+                $row['recordsFiltered']= count($rowsTotal);
+                $row['data']= array();
+
+                $arrayFiltro = explode(' ',$busqueda['value']);
+                
+                $orderParam = $request->query->get('order');
+                $orderBy = $orderParam[0]['column'];
+                $orderDir = $orderParam[0]['dir'];
+                $orderByText="";
+                switch(intval($orderBy)){
+//                    case 0:
+//                        $orderByText = "fecha_cita, hora_cita";
+//                        break;
+                    case 1:
+                        $orderByText = "expediente";
+                        break;
+                    case 2:
+                        $orderByText = "nombres";
+                        break;
+                    case 3:
+                        $orderByText = "telefono";
+                        break;
+                    case 4:
+                        $orderByText = "tratamiento";
+                        break;
+                }
+                $busqueda['value'] = str_replace(' ', '%', $busqueda['value']);
+                if($busqueda['value']!=''){
+                    $sql = "SELECT CONCAT('<a class=\"citaEdit\" href=\"\" id=\"',c.id,'\">Editar cita</a>') as actions,c.id as id, CONCAT('<a class=\"link_expediente\" id=\"',exp.numero,'\">',exp.numero,'</a>') as expediente, CONCAT(DATE_FORMAT(c.fecha_cita, '%d-%m-%Y'),' ',DATE_FORMAT(c.hora_cita,'%H:%i')) as fecha, UPPER(CONCAT(per.nombres,' ',per.apellidos)) as nombres,per.telefono as tel, UPPER(trat.nombre) as tratamiento  FROM Cita c "
+                            . "INNER JOIN paciente pac on(pac.id=c.paciente) "
+                            . "INNER JOIN persona per ON(per.id=pac.persona) "
+                            . "INNER JOIN tratamiento trat ON(trat.id=c.tratamiento) "
+                            . "INNER JOIN expediente exp ON(exp.paciente=pac.id) "
+                            . " WHERE c.fecha_cita BETWEEN '".$fechaInicio."' AND '".$fechaFin
+                            . "' HAVING upper(CONCAT(expediente,' ',nombres,' ',telefono)) LIKE upper('%".$busqueda['value']."%') ";
+                    $stmt = $em->getConnection()->prepare($sql);
+                    $stmt->execute();
+                    $row['data'] = $stmt->fetchAll();
+                    $row['recordsFiltered']= count($row['data']);
+                    $sql = "SELECT CONCAT('<a class=\"citaEdit\" href=\"\" id=\"',c.id,'\">Editar cita</a>') as actions,c.id as id, CONCAT('<a class=\"link_expediente\" id=\"',exp.numero,'\">',exp.numero,'</a>') as expediente, CONCAT(DATE_FORMAT(c.fecha_cita, '%d-%m-%Y'),' ',DATE_FORMAT(c.hora_cita,'%H:%i')) as fecha, UPPER(CONCAT(per.nombres,' ',per.apellidos)) as nombres,per.telefono as tel, UPPER(trat.nombre) as tratamiento  FROM Cita c "
+                            . "INNER JOIN paciente pac on(pac.id=c.paciente) "
+                            . "INNER JOIN persona per ON(per.id=pac.persona) "
+                            . "INNER JOIN tratamiento trat ON(trat.id=c.tratamiento) "
+                            . "INNER JOIN expediente exp ON(exp.paciente=pac.id) "
+                            . " WHERE c.fecha_cita BETWEEN '".$fechaInicio."' AND '".$fechaFin
+                            . "' HAVING upper(CONCAT(expediente,' ',nombres,' ',telefono)) LIKE upper('%".$busqueda['value']."%') "
+                            . "ORDER BY c.fecha_cita DESC, c.hora_cita DESC, ". $orderByText." ".$orderDir." LIMIT " . $start . "," . $longitud;
+                    $stmt = $em->getConnection()->prepare($sql);
+                    $stmt->execute();
+                    $row['data'] = $stmt->fetchAll();
+                }
+                else{
+                    
+                    
+                    $sql = "SELECT CONCAT('<a class=\"citaEdit\" href=\"\" id=\"',c.id,'\">Editar cita</a>') as actions,c.id as id, CONCAT('<a class=\"link_expediente\" id=\"',exp.numero,'\">',exp.numero,'</a>') as expediente, CONCAT(DATE_FORMAT(c.fechaCita, '%d-%m-%Y'),' ', DATE_FORMAT(c.horaCita,'%H:%i')) as fecha, UPPER(CONCAT(per.nombres,' ',per.apellidos)) as nombres,per.telefono as tel, UPPER(trat.nombre) as tratamiento  FROM DGPlusbelleBundle:Cita c "
+                            . "JOIN c.paciente pac "
+                            . "JOIN pac.persona per "
+                            . "JOIN c.tratamiento trat "
+                            . "JOIN pac.expediente exp "
+                            . " WHERE c.fechaCita BETWEEN :fechaInicio AND :fechaFin "
+                            . "ORDER BY c.fechaCita DESC, c.horaCita DESC, ". $orderByText." ".$orderDir;
+                    $row['data'] = $em->createQuery($sql)
+                            ->setParameters(array('fechaInicio'=> $fechaInicio,'fechaFin'=> $fechaFin))
+                            ->setFirstResult($start)
+                            ->setMaxResults($longitud)
+                            ->getResult();
+                    
+                    
+//                    $sql = "SELECT pac.fecha_nacimiento as fechaNacimiento, pac.id, concat(per.nombres,' ',per.apellidos) as  nombres, per.telefono as telefono,per.telefono2 FROM paciente pac "
+//                    . "INNER JOIN persona per on (per.id=pac.persona)"
+//                    . " WHERE Month(pac.fecha_nacimiento) = Month('".$dateString."') "
+//                    . " AND Day(pac.fecha_nacimiento) = Day('".$dateString."') "
+//                    . " HAVING upper(CONCAT(fechaNacimiento,' ',nombres,' ',telefono)) LIKE upper('%".$busqueda['value']."%') "
+//                    . "ORDER BY ". $orderByText." ".$orderDir." LIMIT " . $start . "," . $longitud;
+//                    $stmt = $em->getConnection()->prepare($sql);
+//                    $stmt->execute();
+//                    $row['data'] = $stmt->fetchAll();
+                }
+                
+                return new Response(json_encode($row));
+            } catch (\Exception $e) {  
+                var_dump($e);
+                if(method_exists($e,'getErrorCode')){ 
+                    switch (intval($e->getErrorCode()))
+                    {
+                        case 2003: 
+                            $serverOffline= $this->getParameter('app.serverOffline');
+                            $row['data'][0]['name'] =$serverOffline.'. CODE: '.$e->getErrorCode();
+                        break;
+                        default :
+                            $row['data'][0]['name'] = $e->getMessage();                           
+                        break;
+                    }
+                    $row['data'][0]['chk'] ='';
+                    
+                    $row['recordsFiltered']= 0;
+                    }
+                    else{
+                            $data['error']=$e->getMessage();
+                    }
+                return new Response(json_encode($row));
+        }
+    }
+    
+    
+    
+    /**
+     * @Route("/paquete/get/pendientes", name="admin_paquetes_pendiente", options={"expose"=true})
+     * @Method("GET")
+     */
+    public function paquetesPendientesAction(Request $request){
+        $response = new JsonResponse();
+        $em = $this->getDoctrine()->getManager();
+        $idPaciente = $request->get('param1');
+        
+        $paciente = $em->getRepository('DGPlusbelleBundle:Paciente')->find($idPaciente);
+        $paquetes = $em->getRepository('DGPlusbelleBundle:VentaPaquete')->findBy(array('paciente'=>$paciente->getPersona()->getId()));
+        $data['data'] = "";
+        $paquetesPendientesAux = array();
+        $paquetesPendientesId = array();
+        $paquetesPendientesNombre = array();
+        foreach($paquetes as $key=>$paq){
+            //var_dump($paq->getId());
+            $detallePaquetes = $em->getRepository('DGPlusbelleBundle:DetalleVentaPaquete')->findBy(array('ventaPaquete'=>$paq->getId()));
+            $sesionesPaquetes = $em->getRepository('DGPlusbelleBundle:SeguimientoPaquete')->findBy(array('idVentaPaquete'=>$paq->getId()));
+//            var_dump($detallePaquetes);
+//            var_dump($sesionesPaquetes);
+            foreach ($detallePaquetes as $k =>$detPaq){
+//                var_dump($k);
+                //var_dump($detPaq->getNumSesiones().'-'.$sesionesPaquetes[$k]->getNumSesion());
+                if($detPaq->getNumSesiones()!=$sesionesPaquetes[$k]->getNumSesion()){
+                    if(!in_array($paq->getId(), $paquetesPendientesAux)){
+                        array_push($paquetesPendientesAux, $paq->getId());
+                        array_push($paquetesPendientesId, $paq->getId());
+                        array_push($paquetesPendientesNombre, $paq->getPaquete()->getNombre());
+                        
+                    }
+                }
+            }
+                
+//            var_dump($detallePaquetes->getNumSesiones());
+//            var_dump($sesionesPaquetes->getNumSesion());
+            
+        }
+        $data['id']=$paquetesPendientesId;  
+        $data['nombre']=$paquetesPendientesNombre;
+        
+        $response->setData($data); 
+        return $response;
+        //return new Response(json_encode($paquetesPendientes));
+        
+        
+    }
+    
+    /////Tratamientos pendientes del paquete
+    /**
+     * @Route("/tratamiento/get/pendientes", name="admin_tratamientos_pendiente", options={"expose"=true})
+     * @Method("GET")
+     */
+    public function tratamientosPendientesPaqueteAction(Request $request){
+        $response = new JsonResponse();
+        $em = $this->getDoctrine()->getManager();
+        $idPaquete = $request->get('param1');
+        
+        $idtratamientos = array();
+        
+        $tratamientos = $em->getRepository('DGPlusbelleBundle:DetalleVentaPaquete')->findBy(array('ventaPaquete' => $idPaquete));
+        
+        foreach ($tratamientos as $trat){
+            $idtrat = $trat->getTratamiento()->getId();
+            $seguimiento = $em->getRepository('DGPlusbelleBundle:SeguimientoPaquete')->findOneBy(array('tratamiento' => $idtrat,
+                                                                                                    'idVentaPaquete' => $idPaquete
+                                                                                                ));
+            if($seguimiento->getNumSesion() < $trat->getNumSesiones()){
+                array_push($idtratamientos, $idtrat);
+            }
+        }
+        
+        $dql = "SELECT t.id as id, t.nombre as nombre FROM DGPlusbelleBundle:Tratamiento t "
+                    . "WHERE t.id IN (:ids) ";
+        $data = $em->createQuery($dql)
+                       ->setParameter('ids', $idtratamientos)
+                       ->getResult();
+//        var_dump($data);
+//        die();
+        $response->setData($data); 
+        return $response;
+        //return new Response(json_encode($paquetesPendientes));
+        
+        
+    }
+    
+    
+    /////Tratamientos pendientes SIN paquete
+    /**
+     * @Route("/cita/get/editar/", name="admin_cita_editar_trat", options={"expose"=true})
+     * @Method("GET")
+     */
+    public function citaEditarAction(Request $request){
+        $response = new JsonResponse();
+        $em = $this->getDoctrine()->getManager();
+        $idCita= $request->get('param1');
+        
+        $cita= $em->getRepository('DGPlusbelleBundle:Cita')->find($idCita);
+                
+        $data['id']=$cita->getId();
+        $data['pacienteId']=$cita->getPaciente()->getId();
+        $data['paciente']=  ucwords(strtolower($cita->getPaciente()->getPersona()->getNombres(). ' '. $cita->getPaciente()->getPersona()->getApellidos()));
+        $data['medico']=  ucwords(strtolower($cita->getEmpleado()->getPersona()->getNombres(). ' '. $cita->getEmpleado()->getPersona()->getApellidos()));
+        $data['sucursal']=$cita->getSucursal()->getNombre();
+        $data['fecha']=$cita->getFechaCita()->format('d-m-Y');
+        $data['horaInicio']=$cita->getHoraCita()->format('H:i');
+        $data['horaFin']=$cita->getHoraFin()->format('H:i');
+        $data['descripcion']=$cita->getDescripcion();
+        $data['estado']=$cita->getEstado();
+        
+        $data['citaPor']=$cita->getTipoCita();
+        $data['paquete']=$cita->getPaquete();
+        $data['tratamiento1']=$cita->getTratamiento1();
+        $data['tratamiento2']=$cita->getTratamiento2();
+               
+        $response->setData($data); 
+        return $response;
+        //return new Response(json_encode($paquetesPendientes));
+        
+        
+    }
+    
+    
+    
+    /////Tratamientos pendientes SIN paquete
+    /**
+     * @Route("/tratamiento/get/pend/", name="admin_tratamientos_pendiente_no_paquete", options={"expose"=true})
+     * @Method("GET")
+     */
+    public function tratamientosPendientesAction(Request $request){
+        $response = new JsonResponse();
+        $em = $this->getDoctrine()->getManager();
+        $idPaciente= $request->get('param1');
+        
+        $paciente = $em->getRepository('DGPlusbelleBundle:Paciente')->find($idPaciente);
+        $tratamientos= $em->getRepository('DGPlusbelleBundle:PersonaTratamiento')->findBy(array('paciente'=>$paciente->getPersona()->getId()));
+        //var_dump($tratamientos);
+        $data['data'] = "";
+        $paquetesPendientesAux = array();
+        $paquetesPendientesId = array();
+        $paquetesPendientesNombre = array();
+        foreach($tratamientos as $key=>$paq){
+            //var_dump($paq->getId());
+            //$detallePaquetes = $em->getRepository('DGPlusbelleBundle:SeguimientoTratamiento')->findBy(array('idPersonaTratamiento'=>$paq->getId()));
+            $sesionesPaquetes = $em->getRepository('DGPlusbelleBundle:SeguimientoTratamiento')->findBy(array('idPersonaTratamiento'=>$paq->getId()));
+            //var_dump($sesionesPaquetes);
+            
+            if($paq->getNumSesiones()!=$sesionesPaquetes[0]->getNumSesion()){
+                if(!in_array($paq->getId(), $paquetesPendientesAux)){
+                    array_push($paquetesPendientesAux, $paq->getId());
+                    array_push($paquetesPendientesId, $paq->getId());
+                    array_push($paquetesPendientesNombre, $paq->getTratamiento()->getNombre());
+
+                }
+            }
+            
+                
+//            var_dump($detallePaquetes->getNumSesiones());
+//            var_dump($sesionesPaquetes->getNumSesion());
+            
+        }
+        $data['id']=$paquetesPendientesId;  
+        $data['nombre']=$paquetesPendientesNombre;
+        
+        $response->setData($data); 
+        return $response;
+        //return new Response(json_encode($paquetesPendientes));
+        
+        
+    }
+    
+    
+    /////Actualizar cita
+    /**
+     * @Route("/cita/editar/estadoytrat/", name="admin_cita_estado_edit_trat", options={"expose"=true})
+     * @Method("POST")
+     */
+    public function citaEditEstadoTratAction(Request $request){
+        $response = new JsonResponse();
+        $em = $this->getDoctrine()->getManager();
+        $citaId = $request->get('param1');
+        $citaPor = $request->get('param2');
+        $citaEstado= $request->get('param3');
+        $citaConsulta = $request->get('param4');
+        $citaPaquete= $request->get('param5');
+        $citaTrat1= $request->get('param6');
+        $citaTrat2= $request->get('param7');
+        
+        //var_dump($request);
+//        var_dump($citaId);
+//        var_dump($citaPor);
+//        var_dump($citaEstado);
+//        var_dump($citaConsulta);
+//        var_dump($citaPaquete);
+//        var_dump($citaTrat1);
+//        var_dump($citaTrat2);
+        
+        date_default_timezone_set('America/El_Salvador');
+
+        
+        $citaObj = $em->getRepository('DGPlusbelleBundle:Cita')->find($citaId);
+        
+        
+        
+        
+        $citaObj->setTipoCita($citaPor);
+        
+        $tratamiento = $em->getRepository('DGPlusbelleBundle:Tratamiento')->find($citaConsulta);
+        $citaObj->setTratamiento($tratamiento);
+        
+        $citaObj->setEstado($citaEstado);
+        
+       
+        
+        switch($citaPor){
+            case 1://///Consultas
+                
+                $citaObj->setTratamiento1(null);
+                $citaObj->setTratamiento2(null);
+                
+                break;
+            case 2://///Tratamientos sin paquetes
+                
+                $citaObj->setTratamiento1($citaTrat1);
+                $citaObj->setTratamiento2($citaTrat2);
+                
+                break;
+            case 3://///Tratamientos de paquetes
+                
+                $citaObj->setTratamiento1($citaTrat1);
+                $citaObj->setTratamiento2($citaTrat2);
+                
+                break;
+        }
+        
+        $em->merge($citaObj);
+        $em->flush();
+        
+        $data['msg'] = "Cita modificada";
+        $response->setData($data); 
+        return $response;
+        //return new Response(json_encode($paquetesPendientes));
+
+    }
     
     
 }

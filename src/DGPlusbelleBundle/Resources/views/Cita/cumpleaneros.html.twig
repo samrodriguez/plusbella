@@ -1,0 +1,49 @@
+{# empty Twig template #}
+<div class="row">
+    <div class="col-md-12" style="margin-top: 25px;">
+        <label>Listado de cumpleañeros del día: </label>
+    </div>
+    <div class="clearfix"></div>
+    <div class="col-md-6" style="margin-top:25px;margin-bottom:25px;">
+        <input class="form-control input-sm" style="width: 200px;" type="text" id="filtroCumpleanos" value="{{hoy|date('d-m-Y','America/El_Salvador')}}">    
+    </div>
+    <div class="col-md-6" style="margin-top:25px;margin-bottom:25px;">
+        <input class="pull-right form-control input-sm" style="width: 200px;" type="text" id="filtroText" >
+        <label class="pull-right" style="margin-right: 20px;">Buscar: </label>
+    </div>
+    <div class="clearfix"></div>
+    
+    <div class="col-md-12">
+        {#{{dump(cumpleaneros)}}#}
+        <table id="cumpleanosTabla" style="width:100%;" class="robo table table-bordered table-hover display dt-responsive">
+            <thead>
+                {#<th style="width:10%">Nº</th>#}
+                <th>Nombres</th>
+                <th>Teléfono</th>
+                <th>Fecha</th>
+            </thead>
+            {#<tbody>
+                {% for cumpleanero in cumpleaneros %}
+                    <tr>
+                        {#<td>{{loop.index}} </td>#}
+                        {#<td>{{cumpleanero.nombres}} {{cumpleanero.apellidos}} </td>
+                        <td>
+                            {% if cumpleanero.telefono is not null %}
+                                {{cumpleanero.telefono}}
+                            {% else %}
+                                
+                            {% endif %}
+                            {% if cumpleanero.telefono2 is not null %}
+                                {{cumpleanero.apellidos}} 
+                            {% else %}
+                                
+                            {% endif %}
+                        </td>
+                        <td>{{cumpleanero.fechaNacimiento|date('d-m-Y')}}</td>
+                    </tr>
+                {% endfor  %}
+            </tbody>#}
+        
+        </table>
+    </div>
+</div>

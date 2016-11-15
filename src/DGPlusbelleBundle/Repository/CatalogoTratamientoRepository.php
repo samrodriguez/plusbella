@@ -18,5 +18,16 @@ class CatalogoTratamientoRepository extends EntityRepository
                         ->orderBy('ttrat.nombre','ASC')
                         ;
     }
+    public function obtenerConsultaTratActivo()
+    {
+        return $this->getEntityManager()
+                        ->createQueryBuilder()
+                        ->select('ttrat')
+                        ->from('DGPlusbelleBundle:Tratamiento', 'ttrat')
+                        ->where('ttrat.estado = true')
+                        ->andWhere("upper(ttrat.nombre) LIKE '%CONSULTA%'")
+                        ->orderBy('ttrat.nombre','ASC')
+                        ;
+    }
 
 }

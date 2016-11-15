@@ -31,14 +31,14 @@ class PlantillaType extends AbstractType
                 'allow_delete' => true,
                 ))  
                 
-            ->add('clinica', 'choice', array(
-                    'label'=> 'Clínica',
-                    'choices'  => array('0' => 'Sonodigest', '1' => 'La plus belle'),
-                    'multiple' => false,
-                    'expanded'=>'true'
+            // ->add('clinica', 'choice', array(
+            //         'label'=> 'Clínica',
+            //         'choices'  => array('0' => 'Sonodigest', '1' => 'La plus belle'),
+            //         'multiple' => false,
+            //         'expanded'=>'true'
                    
                  
-                ))
+            //     ))
         ;
     }
     

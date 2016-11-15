@@ -1,0 +1,998 @@
+{% extends "DGPlusbelleBundle:Layout:calendar.html.twig" %}
+
+{% block bodycontenido -%}
+    <style>
+        .modal-footer{
+            border-top:none;
+        }
+        .footer{
+            background: #F5F7FA;
+        }
+    </style>
+    
+{% include 'ADesignsCalendarBundle::calendar.html.twig' %}
+{% endblock %}
+
+
+{% block jquery -%}
+<script type="text/javascript">     
+var calendario = null;
+var sucursal = $('#sucursal').val();
+//var fechaInicio = new Date();
+//var fechaFin = new Date();
+var hoyFiltro = new Date();
+///var fechaInicio= $('#fechaInicio').val();
+//var fechaFin= $('#fechaFin').val();
+                                    
+                var ddFiltro = hoyFiltro.getDate();
+                var mmFiltro = hoyFiltro.getMonth()+1; //hoy es 0!
+                var yyyyFiltro = hoyFiltro.getFullYear();
+                //alert(view.name);
+                if(ddFiltro<10) {
+                    ddFiltro='0'+ddFiltro;
+                } 
+
+                if(mmFiltro<10) {
+                    mmFiltro='0'+mmFiltro;
+                } 
+
+                hoyFiltro = yyyyFiltro+'-'+mmFiltro+'-'+ddFiltro;
+                //hoyFiltro = ddFiltro+'-'+mmFiltro+'-'+yyyyFiltro;
+
+//alert(hoyFiltro);
+var user=0;
+var i=0;
+var paciente="";
+var sources=new Array();
+var source = 
+    {
+        url: Routing.generate('fullcalendar_loader')+'?sucursal='+sucursal,
+        type: 'POST',
+        data: {
+            filtro: 1
+        },
+        error: function() {
+            bootbox.alert('Se produjo un error al recuperar los datos del calendario, recargue la página!');
+        }
+        
+    };
+/*var sourceSuc = 
+    {
+        url: Routing.generate('fullcalendar_loader_suc'),
+        type: 'POST',
+        data: {
+            filtro: 1
+        },
+        error: function() {
+            bootbox.alert('Se produjo un error al recuperar los datos del calendario, recargue la página!');
+        }
+        
+    };
+  */  
+  
+  function tog(v){return v?'addClass':'removeClass';} 
+    $(document).on('input', '.clearable', function(){
+        $(this)[tog(this.value)]('x');
+    }).on('mousemove', '.x', function( e ){
+        $(this)[tog(this.offsetWidth-18 < e.clientX-this.getBoundingClientRect().left)]('onX');
+    }).on('touchstart click', '.onX', function( ev ){
+        ev.preventDefault();
+        $(this).removeClass('x onX').val('').change();
+    });
+  
+  $(document).on('change','#filtroSucursales',function(){
+        
+            setsource();
+        //calendario.fullCalendar('removeEvents');    
+	//calendario.fullCalendar('removeEventSource',source);
+//	calendario.fullCalendar('addEventSource', source);
+        
+        //alert('dcdsc');
+
+        
+
+    });
+    $(document).on('click','.userFilter',function(){
+        user=$(this).parent().attr('id');
+        console.log(user);
+        
+        setsource();
+        //return false;
+    });
+$(document).ready(function() {        
+    // page is now ready, initialize the calendar...
+    Date.prototype.timeNow = function () {
+         return ((this.getHours() < 10)?"0":"") + this.getHours() +":"+ ((this.getMinutes() < 10)?"0":"") + this.getMinutes()/* +":"+ ((this.getSeconds() < 10)?"0":"") + this.getSeconds()*/;
+    }
+    $("#nombrePaciente").tooltip({
+ 
+        // place tooltip on the right edge
+        position: "center right",
+
+        // a little tweaking of the position
+        offset: [-2, 10],
+
+        // use the built-in fadeIn/fadeOut effect
+        effect: "fade",
+
+        // custom opacity setting
+        opacity: 0.7
+ 
+    });
+    //var horaInicial=null;
+    $(document).on('click','#botonBuscar', function(event){
+        {#if($(this).val()==''){
+            //paciente = $(this).val();
+            setsource();
+        }#}
+        setsource();
+    });
+{#    sucursal = $('#filtroSucursales').val();#}
+    sucursal = $('#sucursal').val();
+    //fechaInicio= $('#fechaInicio').val();
+    //fechaFin= $('#fechaFin').val();
+    var fecha=null;
+    //$('#filtroSucursales').change();
+    //alert(hoy);
+    calendario = $('#calendar-holder').fullCalendar({
+        
+        header: {
+            left: 'prev,next, today',
+            center: 'title',
+            right: 'month,agendaWeek,agendaDay'
+        },
+        buttonText: {
+            today:    'Hoy',
+            month:    'Mes',
+            week:     'Semana',
+            day:      'Día'
+        },
+        default: "es",
+        monthNames: ['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'],
+        monthNamesShort: ['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'],
+        dayNames: ['Domingo','Lunes','Martes','Miércoles','Jueves','Viernes','Sábado'],
+        dayNamesShort: ['Dom','Lun','Mar','Mié','Jue','Vie','Sáb'],
+        lazyFetching: true,
+        defaultView: 'agendaDay',
+        editable: true,
+        disableResizing:true,
+        eventDurationEditable:false,
+        weekends: true,
+        weekNumbers: true,
+        firstDay: 0,
+        slotMinutes: 30,
+        axisFormat: 'H:mm',
+        firstHour: 6,
+        //displayEventTime: false,
+        timeFormat: '',
+        //height:'auto',
+        minTime: '06:00:00',
+        maxTime: '23:00:00',
+        allDaySlot: false,
+        selectable: true,
+        selectHelper: true,
+        slotEventOverlap:false,
+        viewDisplay: function (element) {
+            
+            {#console.log(element.start);
+            console.log(element.end);
+            console.log(element.name);#}
+            fechaInicio= element.start;
+            fechaFin= element.end;
+            {#console.log(fechaInicio);
+            console.log(fechaFin);#}
+            $('#fechaInicio').val(fechaInicio);
+            $('#fechaFin').val(fechaFin);
+            //$(this).fullCalendar('refetchEvents');
+            //setsource();
+            {#$(this).fullCalendar('removeEventSource',source);
+    $(this).fullCalendar('removeEventSource',source2);
+    $(this).fullCalendar('removeEventSource',source);
+//  	calendario.fullCalendar('removeEventSource',source2);
+//  	calendario.fullCalendar('removeEventSource',source2);
+    $(this).fullCalendar('removeEventSource');
+//	$('#calendar-holder').fullCalendar( 'removeEvents').fullCalendar('removeEventSources');
+	sucursal = $('#sucursal').val();
+        //alert(Routing.generate('fullcalendar_loader')+'?sucursal='+sucursal);
+        $(this).fullCalendar('removeEvents');
+        fechaInicio= $('#fechaInicio').val();
+        fechaFin= $('#fechaFin').val();
+        console.log(fechaInicio);
+        console.log(fechaFin);
+        for(j=0;j<sources.length;j++){
+            console.log(j);
+            $(this).fullCalendar('removeEventSource',sources[j]);
+            //sources.remove(j);
+        }
+        console.log(sources[0]);
+        var source2 = 
+            {
+                url: Routing.generate('fullcalendar_loader')+'?sucursal='+sucursal+'&hoyFiltro='+hoyFiltro+'&fechaInicio='+fechaInicio+'&fechaFin='+fechaFin+'&user='+user,
+                type: 'POST',
+                data: {
+                    filtro: 1
+                },
+                error: function() {
+                    bootbox.alert('Se produjo un error al recuperar los datos del calendario, recargue la página!');
+                }
+
+            };
+            sources.push(source2);
+        $('#calendar-holder').fullCalendar('addEventSource', source2);
+        $(this).fullCalendar('removeEventSource',source2);
+        $(this).fullCalendar('addEventSource', source2);
+        
+            $(this).fullCalendar('removeEvents');#}
+        },
+        select: function( startDate, endDate, allDay, jsEvent, view ){
+            var stdate = $.fullCalendar.formatDate(startDate,'dd-MM-yyyy');
+            var stdate2 = $.fullCalendar.formatDate(startDate,'yyyy-MM-dd');
+            var endate = $.fullCalendar.formatDate(endDate,'dd-MM-yyyy');
+            var starttm = $.fullCalendar.formatDate(startDate,'HH:mm');
+            var endtm = $.fullCalendar.formatDate(endDate,'HH:mm');
+            var day = $.fullCalendar.formatDate(startDate,'dddd'); 
+            var element = $(jsEvent.srcElement);
+            //fecha=$.fullCalendar.formatDate(startDate,'dd-MM-yyyy');
+            //alert(endDate);
+            
+            
+            if(view.name == 'agendaDay' ){
+                //alert(view.name);
+                //alert("Fecha: "+stdate+", Hora: "+starttm);
+                var hoy = new Date();
+                                    
+                var dd = hoy.getDate();
+                var mm = hoy.getMonth()+1; //hoy es 0!
+                var yyyy = hoy.getFullYear();
+                //alert(view.name);
+                if(dd<10) {
+                    dd='0'+dd;
+                } 
+
+                if(mm<10) {
+                    mm='0'+mm;
+                } 
+
+                hoy = yyyy+'-'+mm+'-'+dd;
+                //hoy = dd+'-'+mm+'-'+yyyy;
+                
+                var date = new Date();
+                //date.setTime(result_from_Date_getTime);
+
+                var seconds = date.getSeconds();
+                var minutes = date.getMinutes();
+                var hour = date.getHours();
+                
+                {#var ho = new Date(stdate);
+                var ho2 = new Date(hoy);#}
+                //alert(date.timeNow());
+                {#alert(ho);
+                alert(ho2);#}
+                
+
+               
+
+
+                if(stdate2<hoy){
+                    //alert('menor');// no programar cita
+                    var mensaje = "";
+                    mensaje += "<div class='row'><div class='col-md-12'><b><p class='text-left'>Error...</p></b></div></div>";
+                    mensaje += "<div class='row'><hr></div>";
+                    mensaje += "<div class='row'><div class='col-md-12'>No se puede programar cita en un día pasado</div></div>"
+                    bootbox.alert(mensaje, function() {});
+                }
+                else{
+                    if(stdate2>hoy){
+                        //alert('permitir programar cita');// programar cita
+                        var url = Routing.generate('admin_cita_new2', { fecha: stdate, hora:starttm});
+                        window.location = url;
+                    }
+                    else{
+                        if(starttm<=(date.timeNow())){
+                            //alert('no permitir');// no programar cita
+                            var mensaje = "";
+                            mensaje += "<div class='row'><div class='col-md-12'><b><p class='text-left'>Error...</p></b></div></div>";
+                            mensaje += "<div class='row'><hr></div>";
+                            mensaje += "<div class='row'><div class='col-md-12'>No se puede programar una cita a una hora pasada el día de hoy</div></div>"
+                            bootbox.alert(mensaje, function() {});
+                        }
+                        else{
+                            //alert('permitir programar cita');// 
+                            var url = Routing.generate('admin_cita_new2', { fecha: stdate, hora:starttm});
+                            window.location = url;
+                        }
+                    }
+                }
+            }
+            
+            
+        },
+            {#eventSources: [
+            {
+                url: Routing.generate('fullcalendar_loader')+'?sucursal='+sucursal+'&hoyFiltro='+hoyFiltro+'&fechaInicio='+$('#fechaInicio').val()+'&fechaFin='+$('#fechaFin').val()+'&user='+user,
+                type: 'POST',
+                data: {
+                    filtro: 1
+                },
+                error: function() {
+                    bootbox.alert('Se produjo un error al recuperar los datos del calendario, recargue la página!');
+                }
+            }
+        ],#}
+        eventDrop: function( startDate, event, dayDelta, minuteDelta, allDay, revertFunc, jsEvent, ui, view ) { 
+            var stdate = $.fullCalendar.formatDate(event.start,'dd-MM-yyyy');
+            var endate = $.fullCalendar.formatDate(event.end,'dd-MM-yyyy');
+            var starttm = $.fullCalendar.formatDate(event.start,'HH:mm');
+            var endtm = $.fullCalendar.formatDate(event.end,'HH:mm');    
+            var err = 0;
+            
+            var date = startDate.start;
+            //alert(date);
+            //return false;
+            var id=startDate.id;
+            if (typeof id === 'undefined') {
+                bootbox.alert("Este evento no puede ser reprogramado", function() {});
+                allDay();
+                return false;
+            }
+            $.getJSON(Routing.generate('get_nuevaHora', { id: id, delta:dayDelta, fecha:date}), 
+                function(data) {
+                    //alert(data.regs);
+                    switch(data.regs){
+                        
+                        case 0:
+                            //Cita reprogramada con éxito
+                            //err=0;
+                            var mensaje = "";
+                            mensaje += "<div class='row'><div class='col-md-12'><b><p class='text-left'>Actualización exitosa</p></b></div></div>";
+                            mensaje += "<div class='row'><hr></div>";
+                            mensaje += "<div class='row'><div class='col-md-12'>Cita reprogramada exitosamente</div></div>"
+                            bootbox.alert(mensaje, function() {
+                                
+                            });
+                            break;
+                       case 1:
+                            //Cita no puede ser reprogramada por el estado, asistida o cancelada
+                            var mensaje = "";
+                            mensaje += "<div class='row'><div class='col-md-12'><b><p class='text-left'>Error...</p></b></div></div>";
+                            mensaje += "<div class='row'><hr></div>";
+                            mensaje += "<div class='row'><div class='col-md-12'>Esta cita no puede ser reprogramada</div></div>"
+                            bootbox.alert(mensaje, function() {
+                                
+                            });
+                            allDay();
+                            break;
+                        case 2:
+                            //Conflicto con otra cita
+                            //jsEvent.revertFunc();
+                            //alert("cupo no disponible");
+                            //err=2;
+                            //Revierte el drag and drop el parametro revertFunc hace la inversión, pero por agregar
+                            //el parametro startDate se despleza a allDay
+                            var mensaje = "";
+                            mensaje += "<div class='row'><div class='col-md-12'><b><p class='text-left'>Error...</p></b></div></div>";
+                            mensaje += "<div class='row'><hr></div>";
+                            mensaje += "<div class='row'><div class='col-md-12'>Esta cita no puede ser, porque hay otra a la misma hora con el mismo técnico</div></div>"
+                            bootbox.alert(mensaje, function() {
+                                
+                            });
+                            allDay();
+                            break;
+                        case 3:
+                            var mensaje = "";
+                            mensaje += "<div class='row'><div class='col-md-12'><b><p class='text-left'>Error...</p></b></div></div>";
+                            mensaje += "<div class='row'><hr></div>";
+                            mensaje += "<div class='row'><div class='col-md-12'>Esta cita no puede ser reprogramada a un día antes de hoy</div></div>"
+                            bootbox.alert(mensaje, function() {
+                                
+                            });
+                            allDay();
+                            break;
+                        case 4:
+                            var mensaje = "";
+                            mensaje += "<div class='row'><div class='col-md-12'><b><p class='text-left'>Error...</p></b></div></div>";
+                            mensaje += "<div class='row'><hr></div>";
+                            mensaje += "<div class='row'><div class='col-md-12'>Esta cita no puede ser reprogramada a un hora antes de la actual</div></div>"
+                            bootbox.alert(mensaje, function() {
+                                
+                            });
+                            allDay();
+                            break;
+                    }
+                          
+                }); 
+            //alert(dayDelta);
+            //
+            
+        },
+        /*eventResize: function( event, dayDelta, minuteDelta, revertFunc, jsEvent, ui, view ) { 
+            var stdate = $.fullCalendar.formatDate(event.start,'dd-MM-yyyy');
+            var endate = $.fullCalendar.formatDate(event.end,'dd-MM-yyyy');
+            var starttm = $.fullCalendar.formatDate(event.start,'HH:mm');
+            var endtm = $.fullCalendar.formatDate(event.end,'HH:mm');    
+        },*/
+{#viewRender:function(view, element){
+            alert('prueba');
+        },#}
+        eventClick: function ( startDate, endDate, event, jsEvent, view )  {
+            var hoy = new Date();
+            var hoyDate = new Date();
+            var dd = hoy.getDate();
+            var mm = hoy.getMonth()+1; //hoy es 0!
+            var yyyy = hoy.getFullYear();
+            //alert(view.name);
+            if(dd<10) {
+                dd='0'+dd
+            } 
+
+            if(mm<10) {
+                mm='0'+mm
+            } 
+
+            //hoy = yyyy+'-'+mm+'-'+dd;
+            hoy = dd+'-'+mm+'-'+yyyy;
+            //alert('"'+hoy+'"');
+            //alert(startDate.id);
+            //alert("Información de la citra");
+            //alert(hoyDate);
+            if (typeof startDate.id === 'undefined') {
+                return false;
+            }
+            $.getJSON(Routing.generate('get_infoCita', { id: startDate.id}), 
+                function(data) {
+                            //alert(data.regs[0].fechaCita["date"].toString());1
+  {#                          alert(data.regs);#}
+                            //var dt = data.regs[0].fechaCita;
+                            //var hr = data.regs[0].horaInicio;
+                            var mensaje = "";
+  {#                        if(data.regs!=0){#}
+                            //alert(data.regs[0].numero);
+                            var expediente=data.regs[0].numero;
+                            var hinicio=(data.regs[0].horaCita);
+                            var hfin=(data.regs[0].horaFinCita);
+                            var telef=(data.regs[0].telefono);
+                            
+                            mensaje += "<div class='container-fluid'>";
+                            //mensaje += "<div class='col-md-12'><hr></div></div>";
+                            mensaje += "<div class='col-md-6 text-right'><b>Estado: </b></div><div class='col-md-6'>"+data.regs[0].estado+"</div>";
+                            mensaje += "<div class='clearfix'></div>";
+                            
+                            if ( data.regs[0].numero !== 0){
+                                mensaje += "<div class='col-md-6 text-right'><b>Expediente: </b></div><div class='col-md-6'>"+expediente+"</div>";
+                                mensaje += "<div class='clearfix'></div>";
+                                mensaje += "<div class='col-md-6 text-right'><b>Nombre del paciente: </b></div><div class='col-md-6'>"+data.regs[0].nombres+" "+data.regs[0].apellidos+"</div>";
+                                mensaje += "<div class='clearfix'></div>";
+                            
+                            }
+                            else{
+                                mensaje += "<div class='col-md-6 text-right'><b>Nombre del paciente: </b></div><div class='col-md-6'>Paciente no registrado</div>";
+                                mensaje += "<div class='clearfix'></div>";
+                            }
+                            
+                            
+                            mensaje += "<div class='col-md-6 text-right'><b>Doctor del paciente: </b></div><div class='col-md-6'>"+data.regs[0].primerNombreEmp+" "+data.regs[0].primerApellidoEmp+"</div>";
+                            mensaje += "<div class='clearfix'></div>";
+                            mensaje += "<div class='col-md-6 text-right'><b>Tratamiento: </b></div><div class='col-md-6'>"+data.regs[0].nombreTratamiento+"</div>";
+                            mensaje += "<div class='clearfix'></div>";
+                            mensaje += "<div class='col-md-6 text-right'><b>Fecha: </b></div><div class='col-md-6'>"+data.regs[0].fechaCita+"</div>";
+                            mensaje += "<div class='clearfix'></div>";
+                            mensaje += "<div class='col-md-6 text-right'><b>Descripción: </b></div><div class='col-md-6'>"+data.regs[0].descripcion+"</div>";
+                            mensaje += "<div class='clearfix'></div>";
+                            
+                            if(!hinicio){
+
+                              mensaje += "<div class='col-md-6 text-right'><b>Hora inicio: </b></div><div class='col-md-6'>-</div>";  
+                              
+                            } else{
+                                
+                              mensaje += "<div class='col-md-6 text-right'><b>Hora inicio: </b></div><div class='col-md-6'>"+data.regs[0].horaCita+"</div>";  
+                            
+                            } 
+                                                 
+                            mensaje += "<div class='clearfix'></div>";
+                            
+                            if(!hfin){
+
+                              mensaje += "<div class='col-md-6 text-right'><b>Hora final: </b></div><div class='col-md-6'>-</div>";  
+                              
+                            } else{
+                                
+                              mensaje += "<div class='col-md-6 text-right'><b>Hora final: </b></div><div class='col-md-6'>"+data.regs[0].horaFinCita+"</div>";  
+                            
+                            } 
+                            mensaje += "<div class='clearfix'></div>";
+ 
+    
+                           if(!telef){
+ 
+                              mensaje += "<div class='col-md-6 text-right'><b>Telefono: </b></div><div class='col-md-6'>-</div>";   
+                            } else{
+                                
+                            mensaje += "<div class='col-md-6 text-right'><b>Telefono: </b></div><div class='col-md-6'>"+data.regs[0].telefono+"</div>"; 
+
+                            } 
+                            mensaje += "<div class='clearfix'></div>";
+                            mensaje += "</div>";
+                        
+                          //alert('"'+data.regs[0].fechaCita+'"');
+                          /*if(data.regs[0].fechaCita==hoy){
+                              alert('iguales');
+                          }*/
+                            
+                            if(data.regs[0].estado=="Pendiente" || data.regs[0].estado=="No asistio"){
+                                
+                              bootbox.dialog({
+                                message: mensaje,
+                                title: "Información de la cita",
+                                buttons: {
+                                    reminder: {
+                                        label: "Recordar cita",
+                                        className: "btn-default btn-warning",
+                                        callback: function() {
+                                            var evento = calendario.fullCalendar('clientEvents',startDate.id);
+                                            var tituloEvento = "";
+                                            var id=0;
+                                            console.log(evento);
+                                            console.log(evento.id);
+                                            Object.keys(evento).forEach(function (key) {
+                                                    tituloEvento = evento[key].title;
+                                                    console.log();
+                                                    id=evento[key].id;
+                                                    
+                                                });
+                                            console.log(id);
+                                            $.getJSON(Routing.generate('admin_cita_reminder', { id: id}), 
+                                                        function(data) {
+                                                            var mensaje = "";
+                                                            console.log(data);
+                                                            if(data==0){// correo enviado
+                                                                mensaje += "<div class='row'><div class='col-md-12'><b><p class='text-left'>Recordatorio...</p></b></div></div>";
+                                                                mensaje += "<hr>";
+                                                                mensaje += "<div class='row'><div class='col-md-12'>¡Recordatorio enviado con éxito!</div></div>"
+                                                                bootbox.alert(mensaje, function() {
+
+                                                                });
+                                                                
+                                                            }
+                                                            else{//correo no enviado
+                                                                mensaje += "<div class='row'><div class='col-md-12'><b><p class='text-left'>Error...</p></b></div></div>";
+                                                                mensaje += "<hr>";
+                                                                mensaje += "<div class='row'><div class='col-md-12'>¡El paciente no ha proporciado su correo, no se puede enviar un recordatorio de cita!</div></div>"
+                                                                calendario.fullCalendar('updateEvent', evento);
+                                                                
+                                                                bootbox.alert(mensaje, function() {
+
+                                                                });
+                                                            }
+                                                        });
+                                        }
+                                    },
+                                    danger: {
+                                            label: "Cancelar cita",
+                                            className: "btn-danger",
+                                            callback: function() {
+                                                var evento = calendario.fullCalendar('clientEvents',startDate.id);
+                                                var tituloEvento = "";
+                                                var eventoId = 0;
+                                                Object.keys(evento).forEach(function (key) {
+                                                    tituloEvento = evento[key].title;
+
+                                                    var subTituloEvento = tituloEvento.split("|");
+//                                                    var iconoX = '<div class="fa fa-calendar-times-o"></div> | ';
+                                                    //var iconoX = '<div class="fa fa-calendar-times-o" style="width: 17px; height: 100%; float: left; background: #F00;  position: absolute; margin-left: -3px; padding-left:2px "></div> <div style="width: 91%; height: 100%; float: right; position: relative; ">';
+                                                    var iconoX = '<div class="col-xs-1 fa fa-calendar-times-o" style="border:1px solid #C3C3C3; border-right:0px solid #F00; color:#FFF; height: 100%; float: left; background: #F00;  position: absolute; padding-left:2px "></div> <div class="col-xs-11" style="border-left:0px solid #000 !important; border:1px solid #C3C3C3; height: 100%; float: right; position: relative; "> ';
+                                                    //console.log(subTituloEvento);
+                                                    var nuevoTitulo = iconoX+' | '+subTituloEvento[1]+' | '+subTituloEvento[2] + ' | ' +subTituloEvento[3];
+                                                    evento[key].title = nuevoTitulo;
+                                                    $.getJSON(Routing.generate('get_cancelarCita', { id: evento[key].id}), 
+                                                    function(data) {
+                                                        var mensaje = "";
+                                                        if(data.regs==0){
+                                                            mensaje += "<div class='row'><div class='col-md-12'><b><p class='text-left'>Actualización exitosa...</p></b></div></div>";
+                                                            mensaje += "<hr>";
+                                                            mensaje += "<div class='row'><div class='col-md-12'>¡Cita cancelada satisfactoriamente!</div></div>";
+                                                            calendario.fullCalendar('updateEvent', evento);
+                                                            console.log('estado');
+                                                            bootbox.alert(mensaje, function() {
+
+                                                            });
+                                                        }
+                                                        else{
+                                                            mensaje += "<div class='row'><div class='col-md-12'><b><p class='text-left'>Error...</p></b></div></div>";
+                                                            mensaje += "<hr>";
+                                                            mensaje += "<div class='row'><div class='col-md-12'>¡La cita no pudo cancelarse, intente de nuevo!</div></div>";
+                                                            bootbox.alert(mensaje, function() {
+
+                                                            });
+                                                        }
+                                                    });
+                                                });
+
+
+                                                //console.log('texto de prueba');
+                                                //console.log(evento.backgroundColor);
+                                                //console.log( JSON.stringify(evento['backgroundColor']) );
+                                                //alert(evento.id);
+                                                /*alert(evento.title);
+                                                alert(evento.allDay);
+                                                alert(evento.start);
+
+                                                alert(evento.end);
+                                                alert(evento.url);
+                                                alert(evento.className);
+
+                                                alert(evento.color);
+                                                alert(evento.backgroundColor);
+                                                alert(evento.borderColor);
+                                                alert(evento.textColor);*/
+
+                                                //calendario.fullCalendar('eventColor','#000');
+                                                /*bootbox.alert("uh oh, look out!");*/
+                                            }
+                                        },   
+                                //if(data.regs[0].estado=="Pendiente"){
+                                success: {
+                                        label: "Asistida",
+                                        className: "btn-success",
+                                        callback: function() {
+                                            
+                                            var evento = calendario.fullCalendar('clientEvents',startDate.id);
+                                            var tituloEvento = "";
+                                            var eventoId = 0;
+                                            Object.keys(evento).forEach(function (key) {
+                                                tituloEvento = evento[key].title;
+
+                                                var subTituloEvento = tituloEvento.split(" | ");
+                                                //var iconoX = '<div class="fa fa-calendar-check-o" style="width: 17px; height: 100%; float: left; background: #69BD45;  position: absolute; margin-left: -3px; padding-left:2px "></div> <div style="width: 91%; height: 100%; float: right; position: relative; ">  | ';
+                                                var iconoX = '<div class="col-xs-1 fa fa-calendar-check-o" style="border:1px solid #C3C3C3; border-right:0px solid #F00; color:#FFF; height: 100%; float: left; background: #69BD45;  position: absolute; padding-left:2px "></div> <div class="col-xs-11" style="border-left:0px solid #000 !important; border:1px solid #C3C3C3;  height: 100%; float: right; position: relative; ">';
+                                                console.log(subTituloEvento[0]);
+                                                var nuevoTitulo = iconoX+' | '+subTituloEvento[1]+' | '+subTituloEvento[2] + ' | ' +subTituloEvento[3];
+                                                evento[key].title = nuevoTitulo;
+                                                $.getJSON(Routing.generate('get_asistidaCita', { id: evento[key].id}), 
+                                                function(data) {
+                                                    var mensaje = "";
+                                                    if(data.regs==0){
+                                                        mensaje += "<div class='row'><div class='col-md-12'><b><p class='text-left'>Actualización exitosa...</p></b></div></div>";
+                                                            mensaje += "<hr>";
+                                                            mensaje += "<div class='row'><div class='col-md-12'>¡Cita registrada como asistida satisfactoriamente!</div></div>";
+                                                        calendario.fullCalendar('updateEvent', evento);
+                                                        bootbox.alert(mensaje, function() {
+
+                                                        });
+                                                    }
+                                                    else{
+                                                        mensaje += "<div class='row'><div class='col-md-12'><b><p class='text-left'>Error...</p></b></div></div>";
+                                                            mensaje += "<hr>";
+                                                            mensaje += "<div class='row'><div class='col-md-12'>¡La cita no pudo modificarse, intente de nuevo!</div></div>";
+                                                        bootbox.alert(mensaje, function() {
+
+                                                        });
+                                                    }
+                                                });
+                                            });
+                                            
+                                            
+                                            //console.log('texto de prueba');
+                                            //console.log(evento.backgroundColor);
+                                            //console.log( JSON.stringify(evento['backgroundColor']) );
+                                            //alert(evento.id);
+                                            
+                                            
+                                            
+                                            
+                                            
+                                            
+                                            /*alert(evento.title);
+                                            alert(evento.allDay);
+                                            alert(evento.start);
+                                            
+                                            alert(evento.end);
+                                            alert(evento.url);
+                                            alert(evento.className);
+                                            
+                                            alert(evento.color);
+                                            alert(evento.backgroundColor);
+                                            alert(evento.borderColor);
+                                            alert(evento.textColor);*/
+
+                                            //calendario.fullCalendar('eventColor','#000');
+                                            /*bootbox.alert("uh oh, look out!");*/
+                                        }
+                                    },
+                                //}
+                                {#success: {
+                                        label: "Asistida",
+                                        className: "btn-success",
+                                        callback: function() {
+                                            alert(startDate.id);
+                                        //window.location.href = "../consulta/newconcita?id=C"+data.regs[0].id;
+                                            $.getJSON(Routing.generate('get_asistidaCita', { id: startDate.id}), 
+                                            function(data) {
+                                                var mensaje = "";
+                                                    if(data.regs==0){
+                                                            mensaje += "<div class='row'><div class='col-md-12'><b><p class='text-left'>Actualización exitosa...</p></b></div></div>";
+                                                            mensaje += "<hr>";
+                                                            mensaje += "<div class='row'><div class='col-md-12'>¡Cita registrada como asistida satisfactoriamente!</div></div>"
+                                                            calendario.fullCalendar('updateEvent', evento);
+                                                        }
+                                                        else{
+                                                            mensaje += "<div class='row'><div class='col-md-12'><b><p class='text-left'>Error...</p></b></div></div>";
+                                                            mensaje += "<hr>";
+                                                            mensaje += "<div class='row'><div class='col-md-12'>¡La cita no pudo modificarse, intente de nuevo!</div></div>"
+                                                        }
+                                                    bootbox.alert(mensaje, function() {
+
+                                                    });
+                                            });
+                                        }
+                                    },#}
+                                    main: {
+                                        label: "Ver expediente",
+                                        className: "btn-primary",
+                                        callback: function() {
+                                            {#var evento = calendario.fullCalendar('clientEvents',startDate.id);
+                                            var tituloEvento = "";
+                                            var eventoId = 0;
+                                            console.log(evento);
+                                            console.log(expediente);
+                                            var evento = calendario.fullCalendar('clientEvents',startDate.id);
+                                            var tituloEvento = "";
+                                            var eventoId = 0;#}
+                                            var url = '{{path('admin_consulta_expediente_sd')}}'+"?id="+expediente;
+                                            console.log(url);
+                                            {#Object.keys(evento).forEach(function (key) {
+                                                tituloEvento = evento[key].title;
+                                        
+                                                console.log(evento[key].id);
+                                                var subTituloEvento = tituloEvento.split(" | ");
+                                                var iconoX = '<div class="fa fa-calendar-check-o" style="width: 17px; height: 100%; float: left; background: #69BD45;  position: absolute; margin-left: -3px; padding-left:2px "></div> <div style="width: 91%; height: 100%; float: right; position: relative; ">  | ';
+                                                //console.log(subTituloEvento);
+                                                var nuevoTitulo = iconoX+' | '+subTituloEvento[1]+' | '+subTituloEvento[2];
+                                                evento[key].title = nuevoTitulo;#}
+                                                {#$.getJSON(Routing.generate('get_asistidaCita', { id: evento[key].id}), 
+                                                function(data) {
+                                                    var mensaje = "";
+                                                    if(data.regs==0){
+                                                        mensaje += "<div class='row'><div class='col-md-12'><b><p class='text-left'>Actualización exitosa...</p></b></div></div>";
+                                                            mensaje += "<hr>";
+                                                            mensaje += "<div class='row'><div class='col-md-12'>¡Cita registrada como asistida satisfactoriamente!</div></div>"
+                                                        calendario.fullCalendar('updateEvent', evento);
+                                                        bootbox.alert(mensaje, function() {
+
+                                                        });
+                                                    }
+                                                    else{
+                                                        mensaje += "<div class='row'><div class='col-md-12'><b><p class='text-left'>Error...</p></b></div></div>";
+                                                            mensaje += "<hr>";
+                                                            mensaje += "<div class='row'><div class='col-md-12'>¡La cita no pudo modificarse, intente de nuevo!</div></div>"
+                                                        bootbox.alert(mensaje, function() {
+
+                                                        });
+                                                    }
+                                                });#}
+{#                                            });#}
+                                            window.location = url;
+                                            
+                                        }
+                                    }
+                                }
+                            });
+                          }
+                          else{
+                          //alert(data.regs[0].fechaCita);
+                          /*if(new Date(data.regs[0].fechaCita)>new Date(hoy)){
+                          	alert(data.regs[0].fechaCita+' > '+hoy);
+                          }*/
+                          
+                          var dateCita= data.regs[0].fechaCita.split("-"); 
+                          
+                                if(data.regs[0].estado=="Pendiente" && ((dateCita[2]>yyyy) || (dateCita[2]==yyyy && dateCita[1]>mm) || (dateCita[2]==yyyy && dateCita[1]==mm && dateCita[0]>dd)  )){
+                                bootbox.dialog({
+                                    message: mensaje,
+                                    title: "Información de la cita",
+                                    buttons: {
+
+                                    //if(data.regs[0].estado=="Pendiente"){
+                                        danger: {
+                                            label: "Cancelar cita",
+                                            className: "btn-danger",
+                                            callback: function() {
+                                                var evento = calendario.fullCalendar('clientEvents',startDate.id);
+                                                var tituloEvento = "";
+                                                var eventoId = 0;
+                                                Object.keys(evento).forEach(function (key) {
+                                                    tituloEvento = evento[key].title;
+
+                                                    var subTituloEvento = tituloEvento.split(" | ");
+                                                    var iconoX = '<div class="fa fa-calendar-times-o" style="width: 17px; height: 100%; float: left; background: #F00;  position: absolute; margin-left: -3px; padding-left:2px "></div> <div style="width: 91%; height: 100%; float: right; position: relative; ">'
+                                                    //console.log(subTituloEvento);
+                                                    var nuevoTitulo = iconoX+' | '+subTituloEvento[1]+' | '+subTituloEvento[2];
+                                                    evento[key].title = nuevoTitulo;
+                                                    $.getJSON(Routing.generate('get_cancelarCita', { id: evento[key].id}), 
+                                                    function(data) {
+                                                        var mensaje = "";
+                                                        if(data.regs==0){
+                                                            mensaje += "<div class='row'><div class='col-md-12'><b><p class='text-left'>Actualización exitosa...</p></b></div></div>";
+                                                            mensaje += "<hr>";
+                                                            mensaje += "<div class='row'><div class='col-md-12'>¡Cita cancelada satisfactoriamente!</div></div>"
+                                                            calendario.fullCalendar('updateEvent', evento);
+                                                            bootbox.alert(mensaje, function() {
+
+                                                            });
+                                                        }
+                                                        else{
+                                                            mensaje += "<div class='row'><div class='col-md-12'><b><p class='text-left'>Error...</p></b></div></div>";
+                                                            mensaje += "<hr>";
+                                                            mensaje += "<div class='row'><div class='col-md-12'>¡La cita no pudo cancelarse, intente de nuevo!</div></div>"
+                                                            bootbox.alert(mensaje, function() {
+
+                                                            });
+                                                        }
+                                                    });
+                                                });
+
+
+                                                //console.log('texto de prueba');
+                                                //console.log(evento.backgroundColor);
+                                                //console.log( JSON.stringify(evento['backgroundColor']) );
+                                                //alert(evento.id);
+                                                /*alert(evento.title);
+                                                alert(evento.allDay);
+                                                alert(evento.start);
+
+                                                alert(evento.end);
+                                                alert(evento.url);
+                                                alert(evento.className);
+
+                                                alert(evento.color);
+                                                alert(evento.backgroundColor);
+                                                alert(evento.borderColor);
+                                                alert(evento.textColor);*/
+
+                                                //calendario.fullCalendar('eventColor','#000');
+                                                /*bootbox.alert("uh oh, look out!");*/
+                                            }
+                                        },
+                                    //}
+                                        /*success: {
+                                            label: "Registrar consulta",
+                                            className: "btn-success",
+                                            callback: function() {
+                                            window.location.href = "../consulta/newconcita?id=C"+data.regs[0].id;
+
+                                            }
+                                        },*/
+                                        main: {
+                                            label: "Aceptar",
+                                            className: "btn-primary",
+                                            callback: function() {
+
+                                            }
+                                        }
+                                    }
+                                });
+                            }
+                            else{ 
+                              
+                                    bootbox.dialog({
+                                        message: mensaje,
+                                        title: "Información de la cita",
+                                        buttons: {
+                                        {#main: {
+                                            label: "Aceptar",
+                                            className: "btn-primary",
+                                            callback: function() {
+
+                                            }
+                                        },#}
+					main:{
+						}
+                                    }
+                                });
+                            }
+                        }
+                          
+                        {#}  
+                {#else{
+                            mensaje += "<div class='container-fluid'>";
+                            //mensaje += "<div class='col-md-12'><hr></div></div>";
+                            mensaje += "<div class='col-md-12 text-center'><b>Paciente no esta registrado en el sistema </b></div>";
+                            mensaje += "<div class='clearfix'></div>";
+                            mensaje += "</div>";
+                            bootbox.alert(mensaje, function() {
+                                {#Example.show("Hello world callback");#}
+                                                    {#}{#);
+                                                         #}
+                            
+                          //bootbox.alert(mensaje, function() {
+                                //Example.show("Hello world callback");
+                          //});
+            }); 
+           
+        },
+        
+        
+        
+        dayClick: function(date, jsEvent, view) {
+            //alert('Clicked on: '+date);
+            //fecha=new Date(fecha);
+            //alert('Clicked on: '+fecha);
+            //alert('Coordinates: ' + jsEvent.pageX + ',' + jsEvent.pageY);
+
+            calendario.fullCalendar( 'changeView', 'agendaDay' );
+            calendario.fullCalendar('gotoDate', date);
+
+        },
+        
+        
+        
+        
+        //eventSources: [ source ],
+        eventRender: function(event, element) {
+            element.find('.fc-event-title').html(element.find('.fc-event-title').text());
+        },
+        
+        eventAfterAllRender: function( view ) {
+            calendario.bind('dblclick', function() {
+              alert('double click!');
+            });
+            //setsource();
+        },
+        
+       
+
+        
+    });//FIN DE LA CONFIGURACION DEL CALENDARIO
+    calendario.fullCalendar('removeEventSource',source);
+    calendario.fullCalendar('removeEvents');
+    //$('#0').click();
+                setsource();
+    
+    
+    
+    
+});//FIN
+
+function setsource(){
+  //	calendario.fullCalendar('removeEventSource',source);
+//  	calendario.fullCalendar('removeEventSource',source2);
+  	calendario.fullCalendar('removeEventSource');
+//	$('#calendar-holder').fullCalendar( 'removeEvents').fullCalendar('removeEventSources');
+	sucursal = $('#filtroSucursales').val();
+        console.log("sucursal: "+sucursal);
+        //paciente = $('#nombrePaciente').val();
+        //alert(Routing.generate('fullcalendar_loader')+'?sucursal='+sucursal);
+        calendario.fullCalendar('removeEvents');
+        fechaInicio= $('#fechaInicio').val();
+        fechaFin= $('#fechaFin').val();
+        paciente=$('#nombrePaciente').val();
+        console.log(fechaInicio);
+        console.log(fechaFin);
+        for(j=0;j<sources.length;j++){
+            console.log(j);
+            calendario.fullCalendar('removeEventSource',sources[j]);
+            //sources.remove(j);
+        }
+        console.log(sources[0]);
+        var source2 = 
+            {
+                url: Routing.generate('fullcalendar_loader')+'?sucursal='+sucursal+'&user='+user+'&paciente='+paciente,
+                type: 'POST',
+                data: {
+                    filtro: 1
+                },
+                error: function() {
+                    bootbox.alert('Se produjo un error al recuperar los datos del calendario, recargue la página!');
+                }
+
+            };
+        sources.push(source2);
+        calendario.fullCalendar('addEventSource', source2);
+        
+  	calendario.fullCalendar('removeEvents');    
+
+	
+	//calendario.fullCalendar('addEventSource', source2);
+  }
+</script> 
+{% endblock %}

@@ -1,0 +1,60 @@
+{# empty Twig template #}
+<div id="contenedorListadoCita">
+<div class="row">
+    <div class="col-md-12" style="margin-top: 25px;">
+        <label>Listado de citas: </label>
+    </div>
+    <div class="clearfix"></div>
+    <div class="col-md-2" style="margin-top:25px;margin-bottom:25px;">
+        <label>Inicio: </label>
+        <input class="form-control input-sm" style="width: 150px;" type="text" id="filtroCitasInicio" value="{{hoy|date('d-m-Y')}}">
+    </div>
+    <div class="col-md-2" style="margin-top:25px;margin-bottom:25px;">
+        <label>Fin: </label>
+        <input class="form-control input-sm" style="width: 150px;" type="text" id="filtroCitasFin" value="{{hoy|date('d-m-Y')}}">
+    </div>
+    <div class="col-md-offset-6 col-md-2" style="margin-top:25px;margin-bottom:25px;">
+        <label class="" style="">Buscar: </label>
+        <input class="form-control input-sm" style="width: 150px;" type="text" id="filtroTextListado" >
+        
+    </div>
+    <div class="clearfix"></div>
+    
+    <div class="col-md-12">
+        {#{{dump(cumpleaneros)}}#}
+        <table id="citasTabla" style="width:100%;" class="robo table table-bordered table-hover display dt-responsive">
+            <thead>
+                {#<th style="width:10%">Nº</th>#}
+                <th>Fecha</th>
+                <th>Expediente</th>
+                <th>Nombre</th>
+                <th>Teléfono</th>
+                <th>Tratamiento</th>
+                <th>Acciones</th>
+            </thead>
+            {#<tbody>
+                {% for cumpleanero in cumpleaneros %}
+                    <tr>
+                        {#<td>{{loop.index}} </td>#}
+                        {#<td>{{cumpleanero.nombres}} {{cumpleanero.apellidos}} </td>
+                        <td>
+                            {% if cumpleanero.telefono is not null %}
+                                {{cumpleanero.telefono}}
+                            {% else %}
+                                
+                            {% endif %}
+                            {% if cumpleanero.telefono2 is not null %}
+                                {{cumpleanero.apellidos}} 
+                            {% else %}
+                                
+                            {% endif %}
+                        </td>
+                        <td>{{cumpleanero.fechaNacimiento|date('d-m-Y')}}</td>
+                    </tr>
+                {% endfor  %}
+            </tbody>#}
+        
+        </table>
+    </div>
+</div>
+</div>

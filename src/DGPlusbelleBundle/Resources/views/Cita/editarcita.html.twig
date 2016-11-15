@@ -1,0 +1,102 @@
+<div id="formEdit" class="hidden">
+    <div class="col-md-4" style="margin-top: 25px;">
+        <label >Paciente:</label><br>
+        <input id="citaId" value="" type="hidden">
+        <input id="pacienteId" value="" type="hidden">
+        <label id="citaPaciente"></label>
+    </div>
+    <div class="col-md-4" style="margin-top: 25px;">
+        <label >Médico/Esteticista:</label><br>
+        <label id="citaMedico"></label>
+    </div>
+    <div class="col-md-4" style="margin-top: 25px;"> 
+        <label >Sucursal</label><br>
+        <label id="citaSucursal"></label>
+    </div>
+    <div class="clearfix"></div>
+    <div class="col-md-4" style="margin-top: 25px;">
+        <label >Fecha:</label><br>
+        <label id="citaFecha"></label>
+    </div>
+    <div class="col-md-2" style="margin-top: 25px;">
+        <label >Hora: </label><br>
+        <label id="citaHoraInicio"></label>
+    </div>
+    <div class="col-md-2" style="margin-top: 25px;">
+        <label >Hora fin:</label><br>
+        <label id="citaHoraFin"></label>
+    </div>
+    
+    <div class="clearfix"></div>
+    
+    <div class="col-md-6" style="margin-top: 25px;">
+        <label >Descripción</label><br>
+        <label id="citaDescripcion"></label>
+    </div>
+    <div class="col-md-6" style="margin-top: 25px;">
+        <label >Estado:</label><br>
+        <select id="citaEstado" style="width: 100%;">
+            <option value="A">Asistida</option>
+            <option value="P">Pendiente</option>
+            <option value="N">No asistio</option>
+            <option value="C">Cancelada</option>
+        </select>
+    </div>
+    <div class="clearfix"></div>
+    
+        <div class="col-md-3" style="margin-top:25px;">
+            <label style="margin-bottom:15px;" class="control-label" for="dgplusbellebundle_cita_paciente">Cita por:</label>
+            <div id="dgplusbellebundle_cita_tipoCita" class="tipoCita">
+                <div class="radio">
+                    <label class="">
+                        <input id="dgplusbellebundle_cita_tipoCita_0" name="dgplusbellebundle_cita[tipoCita]" value="1" type="radio"> Consulta
+                    </label>
+                </div>
+                <div class="radio">
+                    <label class="">
+                        <input id="dgplusbellebundle_cita_tipoCita_1" name="dgplusbellebundle_cita[tipoCita]" value="2" type="radio"> Sesión tratamiento
+                    </label>
+                </div>
+                <div class="radio">
+                    <label class="">
+                        <input id="dgplusbellebundle_cita_tipoCita_2" name="dgplusbellebundle_cita[tipoCita]" value="3" type="radio"> Sesión de tratamiento con paquete
+                    </label>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-3 paquete" style="margin-top:25px;">
+            <label class="control-label">Paquetes</label>
+            <select style="width:100%;" id="dgplusbellebundle_cita_paquetes" name="cita_paquete" class="form-control input-sm pacienteCita">
+                
+            </select>
+        </div>
+        
+        <div class="col-md-3 tratamientoC" style="margin-top:25px;">
+            <label class="control-label" style="width:100%;">Tratamiento</label>
+            <select style="width:100%;" id="dgplusbellebundle_cita_consulta" name="cita_paquete" class="form-control input-sm pacienteCita">
+                {% for c in consultas %}
+                    <option value="{{c.id}}">{{c.nombre}}</option>
+                {% endfor%}
+            </select>
+        </div>
+        <div class="col-md-3 tratamiento1" style="margin-top:25px;">
+            <label class="control-label" style="width:100%;">Tratamiento 1</label>
+            <select style="width:100%;" id="dgplusbellebundle_cita_paquetes_trat1" name="cita_trat1" class="form-control input-sm pacienteCita">
+                
+            </select>
+        </div>
+        <div class="col-md-3 tratamiento2" style="margin-top:25px;">
+            <label class="control-label" style="width:100%;">Tratamiento 2</label>
+            <select style="width:100%;" id="dgplusbellebundle_cita_paquetes_trat2" name="cita_trat2" class="form-control input-sm pacienteCita">
+                
+            </select>
+        </div>
+        <div class="clearfix"></div>
+        <div class="col-md-12">
+            <button class="btn btn-primary btn-sm pull-right" id="editBtnGuardar" style="margin-left: 10px;">Guardar</button>
+            <button class="btn btn-default btn-sm pull-right" id="editBtnCancel">Cancel</button>
+        </div>
+    </div>
+
+                

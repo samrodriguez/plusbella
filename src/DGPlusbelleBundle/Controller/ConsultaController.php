@@ -2120,7 +2120,7 @@ class ConsultaController extends Controller
                     . " WHERE vp.fechaVenta LIKE :mes AND em.estado=true AND em.id=:idEmpleado";
                 
                 $ventaspaquete = $em->createQuery($dql)
-                       ->setParameters(array('mes'=>$fecha.'___','idEmpleado'=>$empleado['id']))
+                       ->setParameters(array('mes'=>$fecha.'%','idEmpleado'=>$empleado['id']))
                        ->getResult();
                 
                 $dql = "SELECT sum(vp.costoConsulta)"
@@ -2172,7 +2172,7 @@ class ConsultaController extends Controller
             //var_dump($usuario->getPersona()->getId());
             //var_dump($empleados);
             /**/
-        
+        //var_dump($empleados);
         return $empleados;
     }
     

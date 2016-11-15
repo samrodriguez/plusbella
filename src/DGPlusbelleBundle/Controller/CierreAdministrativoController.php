@@ -197,7 +197,8 @@ class CierreAdministrativoController extends Controller
         if ($editForm->isValid()) {
             $em->flush();
 
-            return $this->redirect($this->generateUrl('admin_cierreadministrativo_edit', array('id' => $id)));
+            //return $this->redirect($this->generateUrl('admin_cierreadministrativo_edit', array('id' => $id)));
+            return $this->redirect($this->generateUrl('admin_cierreadministrativo'));
         }
 
         return array(

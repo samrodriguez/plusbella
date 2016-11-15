@@ -1,6 +1,13 @@
 {% extends 'DGPlusbelleBundle:Layout:layouterp.html.twig' %} 
 
-
+{% block css %}
+    {{parent()}}
+    <style>
+        .selectA {
+            width: 100% !important;
+        }
+    </style>
+{% endblock %}
 
 {% block contenido -%}
  
@@ -12,23 +19,28 @@
     {{ form_errors(form) }}
     
     <div class="row" style="margin-bottom:30px;">
-        <div class="col-md-3">
+        <div class="col-md-4">
          {#{{ form_label(form.paciente ) }}#}
             <label class="form-group">Paciente</label>
             <select id="dgplusbellebundle_cita_paciente" name="dgplusbellebundle_cita[paciente]" class="form-control input-sm pacienteCita">
                 <option value="">Seleccione un paciente...</option>
             </select>
         </div>
+        <div class="col-md-4">
+            <label style="margin-bottom:15px;" class="control-label" for="dgplusbellebundle_cita_paciente">Médico/Esteticista</label>
+            {{ form_widget(form.empleado) }}
+        </div>
+        <div class="col-md-4">
+            <label style="margin-bottom:15px;" class="control-label" for="dgplusbellebundle_cita_paciente">Sucursal</label>
+            {{ form_widget(form.sucursal ) }}   
+        </div>
+
     </div>
     
     <div class="row">
-        <div class="col-md-3">
-         
-        <label class="control-label" for="dgplusbellebundle_cita_paciente">Médico/Esteticista</label>
-            {{ form_widget(form.empleado) }}
-        </div>
         
-        <div class="col-md-3">
+        
+        <div class="col-md-4 ">
             {{ form_row(form.fechaCita) }} 
         </div>
         
@@ -36,41 +48,69 @@
          {{ form_row(form.horario ) }}   
         </div>
         #}
-        <div class="col-md-3">
+        <div class="col-md-2">
             {{ form_row(form.horaCita) }} 
         </div>
-        <div class="col-md-3">
+        <div class="col-md-2">
             {{ form_row(form.horaFin) }}
         </div>
-         {#{{ form_row(form.estado) }} #}
-        {#
-            <div class="col-md-3">
-                {{ form_row(form.estado) }} 
-            </div>   
-        #}
     </div>
+    
     <div class="row">
-        <div class="col-md-3">
-            {{ form_row(form.tratamiento ) }}   
-        </div>
-        <div class="col-md-3">
-            {{ form_row(form.sucursal ) }}   
-        </div>
-        <div class="col-md-3">
-            {{ form_row(form.descripcion ) }}   
+        <div class="col-md-6">
+            <label style="margin-bottom:15px;" class="control-label" for="dgplusbellebundle_cita_paciente">Descripción</label>
+            {{ form_widget(form.descripcion ) }}   
         </div>
     </div>
+        
     <div class="row">
+        
+        <div class="col-md-3" style="margin-top:20px;">
+            <label style="margin-bottom:15px;" class="control-label" for="dgplusbellebundle_cita_paciente">Cita por:</label>
+            {{ form_widget(form.tipoCita) }}
+        </div>
+        <div class="col-md-3 paquete" style="margin-top:20px;">
+            <label class="control-label">Paquetes</label>
+            <select style="width:100%;" id="dgplusbellebundle_cita_paquetes" name="cita_paquete" class="form-control input-sm pacienteCita">
+                {#{% for paquete in paquetes %}
+                    <option value="{{paquete.id}}">{{paquete.nombre}}</option>
+                {% endfor%}#}
+            </select>
+        </div>
+        <div class="col-md-3 tratamientoC" style="margin-top:20px;">
+            <label class="control-label" style="width:100%;">Tratamiento</label>
+            {{ form_widget(form.tratamiento ) }}   
+        </div>
+        <div class="col-md-3 tratamiento1" style="margin-top:20px;">
+            <label class="control-label" style="width:100%;">Tratamiento 1</label>
+            <select style="width:100%;" id="dgplusbellebundle_cita_paquetes_trat1" name="cita_trat1" class="form-control input-sm pacienteCita">
+                {#{% for paquete in paquetes %}
+                    <option value="{{paquete.id}}">{{paquete.nombre}}</option>
+                {% endfor%}#}
+            </select>
+        </div>
+        <div class="col-md-3 tratamiento2" style="margin-top:20px;">
+            <label class="control-label" style="width:100%;">Tratamiento 2</label>
+            <select style="width:100%;" id="dgplusbellebundle_cita_paquetes_trat2" name="cita_trat2" class="form-control input-sm pacienteCita">
+                {#{% for paquete in paquetes %}
+                    <option value="{{paquete.id}}">{{paquete.nombre}}</option>
+                {% endfor%}#}
+            </select>
+        </div>
+        
+        {#<div class="col-md-3 " style="margin-top:20px;">
+            <button class="btn btn-success"><i class="fa fa-plus"></i></button>
+        </div>#}
         
     </div>
          
-             <div class="form-grouphide"> 
-                <a href="{{ path('admin_paciente') }}" class="btn btn-default btn-sm" id="cancelarNuevo">Cancelar</a>
-                    {{ form_widget(form.submit) }} 
-                <label style="color:#F00; ">
-                    {{ mensaje }}
-                </label>
-             </div>
+    <div class="form-grouphide"> 
+       <a href="{{ path('admin_paciente') }}" class="btn btn-default btn-sm" id="cancelarNuevo">Cancelar</a>
+           {{ form_widget(form.submit) }} 
+       <label style="color:#F00; ">
+           {{ mensaje }}
+       </label>
+    </div>
         
    
  
@@ -120,18 +160,6 @@
                     var markup = "Seleccione un paciente"; 
                 }
 
-
-                {#if (repo.description) {
-                  markup += "<div class='select2-result-repository__description'>" + repo.description + "</div>";
-                }
-
-                markup += "<div class='select2-result-repository__statistics'>" +
-                        "<div class='select2-result-repository__forks'><i class='fa fa-flash'></i> " + repo.forks_count + " Forks</div>" +
-                        "<div class='select2-result-repository__stargazers'><i class='fa fa-star'></i> " + repo.stargazers_count + " Stars</div>" +
-                        "<div class='select2-result-repository__watchers'><i class='fa fa-eye'></i> " + repo.watchers_count + " Watchers</div>" +
-                    "</div>" +
-                    "</div></div>";#}
-
                 return markup;
             }
 
@@ -144,6 +172,14 @@
             }
 
             $(document).ready(function(){
+                
+                
+                $('.tratamiento2').children().addClass('hidden');
+                $('.tratamiento1').children().addClass('hidden');
+                $('.tratamiento1').addClass('hidden');
+                $('.tratamientoC').children().addClass('hidden');
+                $('.tratamientoC').addClass('hidden');
+                $('.paquete').children().addClass('hidden');
                 
                 $('#dgplusbellebundle_cita_paciente').select2({
                     ajax: {
@@ -166,9 +202,7 @@
 
                             return {
                                 results: select2Data
-                                {#pagination: {
-                                    more: (params.page * 30) < data.total_count
-                                }#}
+                                
                             };
                         },
                         cache: true
@@ -186,15 +220,34 @@
                     var fechaCita= $('#dgplusbellebundle_cita_fechaCita').val();
                     var min = $('#dgplusbellebundle_cita_horaCita_minute').val();
                     var pac = $('#dgplusbellebundle_cita_paciente').val();
-                    
+                    var med = $('#dgplusbellebundle_cita_empleado').val();
+                    var suc = $('#dgplusbellebundle_cita_sucursal').val();
+                    console.log(fechaCita);
                     if(pac===''){
                         swal('','Elija un paciente','error');
                         return false;
                     }
+                    if(med===''){
+                        swal('','Elija un médico','error');
+                        return false;
+                    }
+                    if(suc===''){
+                        swal('','Elija una sucursal','error');
+                        return false;
+                    }
+                    if(fechaCita==''){
+                        swal('','Elija una fecha','error');
+                        return false;
+                    }
+                    
                     var horInicio = $('#dgplusbellebundle_cita_horaCita_hour').val();
                     var minInicio = $('#dgplusbellebundle_cita_horaCita_minute').val();
                     var horFin = $('#dgplusbellebundle_cita_horaFin_hour').val();
                     var minFin = $('#dgplusbellebundle_cita_horaFin_minute').val();
+                    {#console.log(horInicio);
+                    console.log(minInicio);
+                    console.log(horFin);
+                    console.log(minFin);#}
                     if(min==='0'){
                         min="00";
                     }
@@ -210,6 +263,55 @@
                         }
                         
                     }
+                    
+                    
+                    
+                    if (document.getElementById('dgplusbellebundle_cita_tipoCita_0').checked) {
+                        rate_value = document.getElementById('dgplusbellebundle_cita_tipoCita_0').value;
+                    }
+                    if (document.getElementById('dgplusbellebundle_cita_tipoCita_1').checked) {
+                        rate_value = document.getElementById('dgplusbellebundle_cita_tipoCita_1').value;
+                    }
+                    if (document.getElementById('dgplusbellebundle_cita_tipoCita_2').checked) {
+                        rate_value = document.getElementById('dgplusbellebundle_cita_tipoCita_2').value;
+                    }
+                    console.log(rate_value);
+                    switch(parseInt(rate_value)){
+
+                        case 1://///Consulta
+                            if($('#dgplusbellebundle_cita_tratamiento').val()==""){
+                                swal('','Seleccione una consulta!','error');
+                                return false;
+                            }
+                            break;
+                        case 2://///Tratamiento
+                            if($('#dgplusbellebundle_cita_paquetes_trat1').val()==0){
+                                    swal('','Seleccione un tratamiento!','error');
+                                    return false;
+                            }
+                            break;
+                        case 3://///Paquete
+                            if($('#dgplusbellebundle_cita_paquetes').val()==0){
+                                swal('','Seleccione un paquete!','error');
+                                return false;
+                            }
+                            if( $('#dgplusbellebundle_cita_paquetes_trat1').val()==""){
+                                swal('','Seleccione un tratamiento del paquete!','error');
+                                return false;
+                            }
+                            break;
+                        default:
+                            swal('','Elija una opción de la cita!','error');
+                            return false;
+                            break;
+                    }
+                    
+                    {#else{
+                        if(parseInt(minInicio)==parseInt(minFin)){
+                            swal('','La hora de inicio no puede ser mayor o igual a la de fin!','error');
+                            return false;
+                        }
+                    }#}
                     var horaCita = $('#dgplusbellebundle_cita_horaCita_hour').val()+":"+min;
                     //alert(idEmpleado);
                     var error=0;
@@ -222,14 +324,10 @@
                                 mensaje += "<div class='row'><div class='col-md-12'><b><p class='text-left'>Error...</p></b></div></div>";
                                 mensaje += "<div class='row'><hr></div>";
                                 mensaje += "<div class='row'><div class='col-md-12'>Ya existe una cita programada para ese doctor en ese dia y esa hora</div></div>";
-                                {#bootbox.alert(mensaje, function() {   
-                                    $('body').data('error',0);
-                                });  #}
+                                
                                 swal('','Ya existe una cita programada para ese doctor en ese día y esa hora','error');
                                 console.log('existe otra cita');
                                 error=0;
-                                //alert(error);
-                                //e.preventDefault();
                             }
                             else{
                                 $('body').data('error',1);
@@ -237,80 +335,223 @@
                                 $('form').submit();
                             }
                         });        
-                    
-                    
-                    
-                    
                     return false;
                 });
 
-                //Generación de calendario zebra
-                //$('#dgplusbellebundle_cita_fechaCita').Zebra_DatePicker(//{
-                    /*onSelect:
-                        $.getJSON(Routing.generate('get_horas', { idEmp: idEmp}), 
-                        function(data) {
-                            var numRegistros = data.regs.length;
-                            var x='1,2,3,4,5,6,0,';
-                            $.each(data.regs, function(indice, reg) {
-                                //alert(indice);
-                                switch(reg.diaHorario){
-                                    case 'Lunes'    : index = x.indexOf('1'); break;
-                                    case 'Martes'   : index = x.indexOf('2'); break;
-                                    case 'Miercoles': index = x.indexOf('3'); break;
-                                    case 'Jueves'   : index = x.indexOf('4'); break;
-                                    case 'Viernes'  : index = x.indexOf('5'); break; 
-                                    case 'Sabado'   : index = x.indexOf('6'); break; 
-                                    case 'Domingo'  : index = x.indexOf('0'); break;
-                                }
-                                x = x.substring(0, index) + x.substring(index+2, x.length);   
-
-
-                                //alert(deshabilitar);
-                                datepicker.update({
-                                    direction: true,
-                                    disabled_dates: ['* * * '+x] 
-                                });
-                            });        
-                        }); */
-               /* }*///);
-               
-                
-                {#$('#dgplusbellebundle_cita_fechaCita').daterangepicker({
-                    singleDatePicker: true,
-                    showDropdowns: true,
-                    locale: {
-                        format: 'YYYY-MM-DD'
-                    },
-                });#}
-                var seleccionado="";
-                //Eliminar options del select de pacientes
-               //Eliminar options del select de pacientes
-               
-               {# $('#dgplusbellebundle_cita_paciente option').each(function(index, val) {
-                    
-                    seleccionado = $(this).attr('selected');
-                    if (!seleccionado){
-                        $(this).remove();
-                    }
-                });#}
-                    
+                var seleccionado="";                    
                    
                 //Eliminar las opciones de la lista creada por el selectBoxIt
                 $("#dgplusbellebundle_cita_pacienteSelectBoxItOptions li").remove();
 		$('#dgplusbellebundle_cita_empleado').select2();
-                $('#dgplusbellebundle_cita_tratamiento').select2();
+                
+                $('#dgplusbellebundle_cita_paquetes_trat1').select2();
+                $('#dgplusbellebundle_cita_paquetes_trat2').select2();
+                
                 $('#dgplusbellebundle_cita_sucursal').select2();
+                $('#dgplusbellebundle_cita_horaCita_hour').select2();
+                $('#dgplusbellebundle_cita_horaCita_minute').select2();
+                $('#dgplusbellebundle_cita_horaFin_hour').select2();
+                $('#dgplusbellebundle_cita_horaFin_minute').select2();
+                $('#dgplusbellebundle_cita_paquetes').select2();
                 
                 //$('#dgplusbellebundle_cita_horaInicio').ptTimeSelect();
-
-
                 
-                //Cargar los horarios al inicio
-                //$('#dgplusbellebundle_cita_empleado').change();
-                //Modificar horarios al cmabiar dropdown
-              
-        
-              validarCita(); 
+                $(document).on('click','#dgplusbellebundle_cita_tipoCita_0',function(){
+                    //if(verificarPaciente($(this))){
+                        $('.tratamiento2').children().addClass('hidden');
+                        $('.tratamientoC').children().removeClass('hidden');
+                        $('.tratamientoC').removeClass('hidden');
+                        $('.tratamiento1').children().addClass('hidden');
+                        $('.tratamiento1').addClass('hidden');
+                        $('.paquete').children().addClass('hidden');
+                    //}
+                });
+                $(document).on('click','#dgplusbellebundle_cita_tipoCita_1',function(){
+                    if(verificarPaciente($(this))){
+                        $('.tratamiento1').children().removeClass('hidden');
+                        $('.tratamiento1').removeClass('hidden');
+                        $('.tratamiento2').children().removeClass('hidden');
+                        $('.tratamientoC').children().addClass('hidden');
+                        $('.tratamientoC').addClass('hidden');
+                        $('.paquete').children().addClass('hidden');
+                        
+                        
+                        $.ajax({
+                            url: Routing.generate('admin_tratamientos_pendiente_no_paquete'),
+                            type: 'GET',
+                            data: {param1: $('#dgplusbellebundle_cita_paciente').val()},
+                            success:function(data){
+                                //$('#dgplusbellebundle_cita_paquetes').select2('destroy');
+                                {#console.log(data.id);
+                                console.log(data.nombre);#}
+                                var numPaquetes= data.id.length;
+                                var options ="";
+                                var defectoValor = 0;
+                                //options+='<option value="0">Seleccione un tratamiento...</option>';
+                                for (var i = 0; i < numPaquetes; i++) {   
+                                    if(i==0){
+                                        options+='<option value="'+data.id[i]+'">'+data.nombre[i]+' </option>';
+                                        defectoValor = data.id[i];
+                                    }
+                                    else{
+                                        options+='<option value="'+data.id[i]+'">'+data.nombre[i]+' </option>';
+                                    }								
+                                }     
+                                $('#dgplusbellebundle_cita_paquetes_trat1').html(options);
+                                $('#dgplusbellebundle_cita_paquetes_trat2').html(options);
+{#                                $('#dgplusbellebundle_cita_paquetes').select2();#}
+                                //console.log(defectoValor);
+                                $("#dgplusbellebundle_cita_paquetes_trat1").val(defectoValor).trigger("change");
+                                $("#dgplusbellebundle_cita_paquetes_trat2").val(defectoValor).trigger("change");
+                            },
+                            error:function(data){
+                                if(data.error){
+                                    console.log(data.id);
+                                    swal('',data.error,'error');
+                                }       
+                            }
+                        });
+                        
+                    }
+                });
+                $(document).on('click','#dgplusbellebundle_cita_tipoCita_2',function(){
+                    if(verificarPaciente($(this))){
+                        $('.paquete').children().removeClass('hidden');
+                        $('.tratamientoC').children().addClass('hidden');
+                        $('.tratamientoC').addClass('hidden');
+                        $('.tratamiento1,.tratamiento2').children().removeClass('hidden');
+                        $('.tratamiento1').removeClass('hidden');
+                        $.ajax({
+                            url: Routing.generate('admin_paquetes_pendiente'),
+                            type: 'GET',
+                            data: {param1: $('#dgplusbellebundle_cita_paciente').val()},
+                            success:function(data){
+                                //$('#dgplusbellebundle_cita_paquetes').select2('destroy');
+                                console.log(data.id);
+                                console.log(data.nombre);
+                                var numPaquetes= data.id.length;
+                                var options ="";
+                                var defectoValor = 0;
+                                {#options+='<option value="0">Seleccione un paquete...</option>';#}
+                                for (var i = 0; i < numPaquetes; i++) {   
+                                    if(i==0){
+                                        options+='<option value="'+data.id[i]+'">'+data.nombre[i]+' </option>';
+                                        defectoValor = data.id[i];
+                                    }
+                                    else{
+                                        options+='<option value="'+data.id[i]+'">'+data.nombre[i]+' </option>';
+                                    }								
+                                }     
+                                $('#dgplusbellebundle_cita_paquetes_trat1').html(options);
+                                $('#dgplusbellebundle_cita_paquetes_trat2').html(options);
+                                //$('#dgplusbellebundle_cita_paquetes').html(options);
+                                {#$('#dgplusbellebundle_cita_paquetes_trat2').html(options);#}
+{#                                $('#dgplusbellebundle_cita_paquetes').select2();#}
+                                $("#dgplusbellebundle_cita_paquetes_trat1").val(defectoValor).trigger("change");
+                                $("#dgplusbellebundle_cita_paquetes_trat2").val(defectoValor).trigger("change");
+                            },
+                            error:function(data){
+                                if(data.error){
+                                    console.log(data.id);
+                                    swal('',data.error,'error');
+                                }       
+                            }
+                        });
+                        
+                    }
+                });
+                
+                
+                $(document).on('change','#dgplusbellebundle_cita_paciente',function(){
+                    $.ajax({
+                        url: Routing.generate('admin_paquetes_pendiente'),
+                        type: 'GET',
+                        data: {param1: $(this).val()},
+                        success:function(data){
+                                //$('#dgplusbellebundle_cita_paquetes').select2('destroy');
+                                {#console.log(data.id);
+                                console.log(data.nombre);#}
+                                var numPaquetes= data.id.length;
+                                var options ="";
+                                var defectoValor = 0;
+                                options+='<option value="0">Seleccione un paquete...</option>';
+                                for (var i = 0; i < numPaquetes; i++) {   
+                                    if(i==0){
+                                        options+='<option value="'+data.id[i]+'">'+data.nombre[i]+' </option>';
+                                        defectoValor = data.id[i];
+                                    }
+                                    else{
+                                        options+='<option value="'+data.id[i]+'">'+data.nombre[i]+' </option>';
+                                    }								
+                                }     
+                                $('#dgplusbellebundle_cita_paquetes').html(options);
+{#                                $('#dgplusbellebundle_cita_paquetes').select2();#}
+                                $("#dgplusbellebundle_cita_paquetes").val(defectoValor).trigger("change");
+                        },
+                        error:function(data){
+                            if(data.error){
+                                    console.log(data.id);
+                                    swal('',data.error,'error');
+                            }       
+                        }
+                    });
+                });
+                
+                $(document).on('change','#dgplusbellebundle_cita_paquetes',function(){
+                    var idP = $(this).val();
+                    console.log(idP);
+                    $.ajax({
+                        url: Routing.generate('admin_tratamientos_pendiente'),
+                        type: 'GET',
+                        data: {param1: idP},
+                        success:function(data){
+                                {#$('#dgplusbellebundle_cita_tratamiento').select2('destroy');
+                                $('#dgplusbellebundle_cita_tratamiento2').select2('destroy');#}
+                                {#console.log(data.id);
+                                console.log(data.nombre);#}
+                                var numPaquetes= data.length;
+                                var options ="";
+                                var defectoValor = 0;
+                                for (var i = 0; i < numPaquetes; i++) {
+                                    if(i==0){	
+                                        options+='<option selected value="'+data[i].id+'">'+data[i].nombre+' </option>';                   
+                                    }
+                                    else{
+                                        options+='<option value="'+data[i].id+'">'+data[i].nombre+' </option>';
+                                    }	
+                                }
+                                $('#dgplusbellebundle_cita_paquetes_trat1').html(options);
+                                //$('#dgplusbellebundle_cita_paquetes').change();
+{#                                $('#dgplusbellebundle_cita_tratamiento').select2();#}
+                                $('#dgplusbellebundle_cita_paquetes_trat2   ').html(options);
+{#                                $('#dgplusbellebundle_cita_tratamiento2').select2();#}
+                        },
+                        error:function(data){
+                            if(data.error){
+                                console.log(data.id);
+                                swal('',data.error,'error');
+                            }
+                        }
+                    });
+                });
+                
+                $('#dgplusbellebundle_cita_tratamiento').select2();
+                $('#dgplusbellebundle_cita_tratamiento2').select2();
+                $('#dgplusbellebundle_cita_tipoCita_0').click();
+                validarCita(); 
         });
+        
+        function verificarPaciente(domElem){
+            if($("#dgplusbellebundle_cita_paciente").val()==''){
+                swal('','Elija un paciente','error');
+                //domElem.prop('checked',false);
+                $('#dgplusbellebundle_cita_tipoCita_0').prop('checked',true);
+                $('#dgplusbellebundle_cita_tipoCita_0').click();
+                return false;
+            }
+            else{
+                return true;
+            }
+        }
         </script>
 {% endblock %}

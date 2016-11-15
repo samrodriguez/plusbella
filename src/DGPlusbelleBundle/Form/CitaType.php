@@ -35,12 +35,20 @@ class CitaType extends AbstractType
                     'hours'=> array('6','7','8','9','10','11','12','13','14','15','16','17','18','19','20'),
                     'minutes'=> array('0','30')
                 ))
-->add('horaFin', 'time', array(
+                ->add('horaFin', 'time', array(
                     'input'  => 'datetime',
                     'widget' => 'choice',
                     'hours'=> array('6','7','8','9','10','11','12','13','14','15','16','17','18','19','20'),
                     'minutes'=> array('0','30')
                 ))
+                
+                ->add('tipoCita','choice',array('label' => 'Tipo cita','required'=>false, 'empty_value'=>null,
+                    'choices'  => array('1' => 'Consulta', '2' => 'Sesión tratamiento', '3' => 'Sesión de tratamiento con paquete'),
+                    'expanded' => true,
+                    'multiple' => false,
+                    'attr'=>array(
+                    'class'=>'tipoCita'
+                    )))
            // ->add('fechaRegistro')
             //->add('estado')
             
@@ -78,12 +86,24 @@ class CitaType extends AbstractType
                          'empty_value'   => 'Seleccione un tratamiento...',
                          'class'         => 'DGPlusbelleBundle:Tratamiento',
                          'query_builder' => function(EntityRepository $repository) {
-                            return $repository->obtenerTratActivo();
+                            return $repository->obtenerConsultaTratActivo();
                        },     
                          'attr'=>array(
-                         'class'=>'form-control input-sm tratamientoCita'
+                         'class'=>'form-control input-sm tratamientoCita',
+                         'style'=>'width:100%;'
                          )
                        ))
+//            ->add('tratamiento2','entity', array( 'label' => 'Tratamiento','required'=>false,
+//                         'empty_value'   => 'Seleccione un tratamiento...',
+//                         'class'         => 'DGPlusbelleBundle:Tratamiento',
+//                         'query_builder' => function(EntityRepository $repository) {
+//                            return $repository->obtenerTratActivo();
+//                       },     
+//                         'attr'=>array(
+//                         'class'=>'form-control input-sm tratamientoCita',
+//                         'style'=>'width:100%;'
+//                         )
+//                       ))
             ->add('sucursal',null,array('label' => 'Sucursal','required'=>false,'empty_value'=>'Seleccione Sucursal...',
                     'attr'=>array(
                     'class'=>'form-control input-sm sucursalEmpleado'

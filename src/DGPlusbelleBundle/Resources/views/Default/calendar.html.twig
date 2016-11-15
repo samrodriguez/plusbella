@@ -878,13 +878,14 @@ $(document).ready(function() {
                                         message: mensaje,
                                         title: "Información de la cita",
                                         buttons: {
-                                        main: {
-                                            label: "Aceptar",
-                                            className: "btn-primary",
-                                            callback: function() {
-
-                                            }
-                                        }
+                                        main:{
+						label:"Ver expediente",
+						className:"btn-primary",
+						callback: function(){
+							var url='{{path('admin_consulta_expediente_sd')}}'+"?id="+expediente;
+							window.location=url;
+						}
+					}
                                     }
                                 });
                             }

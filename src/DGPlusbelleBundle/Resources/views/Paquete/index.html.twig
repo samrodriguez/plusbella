@@ -13,6 +13,9 @@
         <a href="{{ path('admin_categoria') }}" class="leftnava"><li class="leftnav left">Gestionar categoria<span class="pull-right right"><i class=""></i></span></li></a>
     {% endif %}
     {% if is_granted('ROLE_ADMIN') %}
+        <a href="{{ path('admin_plantilla') }}" class="leftnava"><li class="leftnav left">Gestionar plantilla<span class="pull-right right"><i class=""></i></span></li></a>
+    {% endif %}
+    {% if is_granted('ROLE_ADMIN') %}
         <a href="{{ path('admin_paquete') }}" class="leftnava"><li class="leftnav left active">Gestionar paquete<span class="pull-right right"><i class="fa fa-arrow-right"></i></span></li></a>
     {% endif %}
     {% if is_granted('ROLE_ADMIN') %}

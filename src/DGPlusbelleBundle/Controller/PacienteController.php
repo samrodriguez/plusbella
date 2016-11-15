@@ -1670,12 +1670,25 @@ class PacienteController extends Controller
         
         //var_dump($page);
         
+        //var_dump($orderBy);
+        $busquedaWords = explode(' ',$busqueda);
+        $busquedaString="";
+        foreach($busquedaWords as $key=>$word){
+            
+            if($key<(count($busquedaWords)-1)){
+                $busquedaString.="CONCAT(upper(per.nombres),' ',upper(per.apellidos),' ',exp.numero) LIKE upper('%".$word."%') OR ";
+            }
+            else{
+                $busquedaString.=" CONCAT(upper(per.nombres),' ',upper(per.apellidos),' ',exp.numero) LIKE upper('%".$word."%') ";
+            }
+        }
+        
         $em = $this->getDoctrine()->getEntityManager();
         $dql = "SELECT exp.numero, pac.id pacienteid, per.nombres, per.apellidos "
                         . "FROM DGPlusbelleBundle:Paciente pac "
                         . "JOIN pac.persona per "
                         . "JOIN pac.expediente exp "
-                        . "WHERE CONCAT(upper(per.nombres), ' ', upper(per.apellidos), ' ',exp.numero) LIKE upper(:busqueda) "
+                        . "WHERE ".$busquedaString
                         . "ORDER BY exp.numero ASC ";
 //        $dql = "SELECT exp.numero, pac.id pacienteid, per.nombres, per.apellidos "
 //                        . "FROM DGPlusbelleBundle:Paciente pac "
@@ -1685,8 +1698,8 @@ class PacienteController extends Controller
 //                        . "ORDER BY per.nombres ASC ";
         
         $paciente['data'] = $em->createQuery($dql)
-                ->setParameters(array('busqueda'=>"%".$busqueda."%"))
-                ->setMaxResults( 10 )
+                //->setParameters(array('busqueda'=>"%".$busqueda."%"))
+                
                 ->getResult();
 //        var_dump($paciente['data']);
         return new Response(json_encode($paciente));
@@ -1725,7 +1738,7 @@ class PacienteController extends Controller
         
         $paciente['data'] = $em->createQuery($dql)
                 ->setParameters(array('busqueda'=>$busqueda))
-                ->setMaxResults( 10 )
+                
                 ->getResult();
         
         
@@ -1752,5 +1765,72 @@ class PacienteController extends Controller
 //        var_dump($paciente['data']);
         return $response;
     }
+    
+    
+    
+    
+    /**
+    * Envio de correo
+    *  
+    * @Route("/enviar-correo/data/correo", name="envio_correo_pacientes", options={"expose"=true})
+    */
+    public function correoEnvioAction(Request $request)
+    {
+        //$busqueda = $request->query->get('id');
+        $opcion = $request->get('opcion');
+        //$ = $request->get('opcion');
+        $emailBody= $request->get('emailBody');
+        $toEmail= $request->get('toEmail');
+        $em = $this->getDoctrine()->getEntityManager();
+        var_dump($_FILES);
+        switch($opcion){
+            case 0://///Cumpleañeros
+                $date = new \DateTime('now');
+                $dateString = $date->format('-m-d');
+                $sql = "SELECT per.email, pac.fechaNacimiento, pac.id, per.nombres, per.apellidos, per.telefono,per.telefono2 FROM DGPlusbelleBundle:Paciente pac "
+                        . "JOIN pac.persona per "
+                        . "WHERE pac.fechaNacimiento LIKE '%". $dateString ."%'";
+                $listados = $em->createQuery($sql)
+                        //->setParameters(array('empleado'=>$idEmpleado,'horaCita'=>$horaCita,'fechaCita'=>$fechaCita,'estado'=>'P'))
+                        ->getArrayResult();
+                /////var_dump($cumpleaneros);
+                
+                break;
+            case 1://///Todos
+                
+                
+                
+                break;
+            case 2://///Individual
+                
+                
+                
+                break;
+            
+        }
+        
+        
+        foreach ($listados as $key=>$listado){
+            if($key==0){
+                $this->get('envio_correo')->sendEmail('mario@digitalitygarage.com',"","","",$emailBody);
+            }
+        }
+        //var_dump($opcion);
+        //var_dump($emailBody);
+        //var_dump($toEmail);
+        //var_dump($request);
+        
+        die();
+        
+        $response->setData($paciente);
+        
+//        var_dump($paciente['data']);
+        return $response;
+    }
+    
+    
+    
+    
+    
     
 }

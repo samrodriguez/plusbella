@@ -60,6 +60,7 @@ class PlantillaController extends Controller
         
         if ($form->isValid()) {
             $em = $this->getDoctrine()->getManager();
+            $entity->setClinica(0);
             $em->persist($entity);
             $em->flush();
             $coleccion = $entity->getPlacas();
@@ -82,6 +83,7 @@ class PlantillaController extends Controller
                             
                             $detalleOpcionesPlantilla->setNombre($row2);
                             $detalleOpcionesPlantilla->setDetallePlantilla($entity->getPlacas()[$key]);
+                            $detalleOpcionesPlantilla->setTipoParametro('Textarea');
                             $em->persist($detalleOpcionesPlantilla);
                             $em->flush($detalleOpcionesPlantilla);
                             //var_dump($entity->getPlacas());
