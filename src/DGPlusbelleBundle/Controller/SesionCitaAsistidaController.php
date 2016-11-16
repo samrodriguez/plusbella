@@ -52,7 +52,7 @@ class SesionCitaAsistidaController extends Controller
                 if($registroSesionCita == 1) {
                     $mensaje = '¡Cita registrada como asistida satisfactoriamente!';
                 } else {
-                    $mensaje = '¡Cita como asistida y sesiones de tratamiento registrados satisfactoriamente !';
+                    $mensaje = '¡Cambio de cita a asistida y sesiones de tratamiento registrados satisfactoriamente !';
                 }
                 
                 $cita->setEstado('A');
