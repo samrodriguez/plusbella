@@ -889,7 +889,7 @@ class CitaController extends Controller
                     $cita['regs'][0]["paquete"] = '';
                 }
                 if($cita['regs'][0]["tratamiento1"]!=null){
-                    $tratamiento1= $em->getRepository('DGPlusbelleBundle:Tratamiento')->find($cita['regs'][0]["tratamiento1"]);
+                    $tratamiento1= $em->getRepository('DGPlusbelleBundle:DetalleVentaPaquete')->find($cita['regs'][0]["tratamiento1"]);
                     if(count($tratamiento1)!=0)
                         $cita['regs'][0]["tratamiento1"] = $tratamiento1->getTratamiento()->getNombre();
                     else
@@ -899,7 +899,7 @@ class CitaController extends Controller
                     $cita['regs'][0]["tratamiento1"] = '';
                 }
                 if($cita['regs'][0]["tratamiento1"]!=null){
-                    $tratamiento2= $em->getRepository('DGPlusbelleBundle:Tratamiento')->find($cita['regs'][0]["tratamiento2"]);
+                    $tratamiento2= $em->getRepository('DGPlusbelleBundle:DetalleVentaPaquete')->find($cita['regs'][0]["tratamiento2"]);
                     if(count($tratamiento2)!=0)
                         $cita['regs'][0]["tratamiento2"] = $tratamiento2->getTratamiento()->getNombre();
                     else
