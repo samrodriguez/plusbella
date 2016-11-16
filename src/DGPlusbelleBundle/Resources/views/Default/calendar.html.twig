@@ -659,7 +659,7 @@ $(document).ready(function() {
                                                 evento[key].title = nuevoTitulo;
                                                 $.getJSON(Routing.generate('evaluar_sesiones_cita', { id: evento[key].id}), function(data) {
                                                     var mensaje = "";
-                                                    if(data.regs==0){
+                                                    if(data.regs==1){
                                                         mensaje += "<div class='row'><div class='col-md-12'><b><p class='text-left'>Actualización exitosa...</p></b></div></div>";
                                                             mensaje += "<hr>";
                                                             mensaje += "<div class='row'><div class='col-md-12'>¡Cita registrada como asistida satisfactoriamente!</div></div>";
