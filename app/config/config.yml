@@ -9,6 +9,7 @@ parameters:
     locale: en
     photo.empleado: %kernel.root_dir%/../Photos/Empleado/
     photo.paciente: %kernel.root_dir%/../Photos/Paciente/
+    photo.correos: %kernel.root_dir%/../Photos/correos/
     photo.tmp: %kernel.root_dir%/../Photos/Tmp/
     plusbelle.logo: %kernel.root_dir%/../Resources/img/dgplusbelle/images/
     plusbelle.graph: %kernel.root_dir%/../Resources/
@@ -33,10 +34,7 @@ framework:
     trusted_proxies: ~
     session:
         # handler_id set to null will use default session handler from php.ini
-        handler_id:  ~
-#       default_locale: %locale%
-        cookie_lifetime: 600
-#       auto_start:     true
+        cookie_lifetime: 36000
     fragments:       ~
     http_method_override: true
 

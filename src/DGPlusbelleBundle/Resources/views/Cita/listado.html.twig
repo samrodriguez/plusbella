@@ -13,7 +13,15 @@
         <label>Fin: </label>
         <input class="form-control input-sm" style="width: 150px;" type="text" id="filtroCitasFin" value="{{hoy|date('d-m-Y')}}">
     </div>
-    <div class="col-md-offset-6 col-md-2" style="margin-top:25px;margin-bottom:25px;">
+    <div class="col-md-4" style="margin-top:25px;margin-bottom:25px;">
+        <label>Sucursal: </label>
+        <select  id="filtroSucursalesL" class="col-md-12 input-sm form-control" style="width:100%;">
+            {% for sucursal in sucursales %}
+                <option value="{{sucursal.id}}">{{sucursal.nombre}}</option>
+            {% endfor %}
+        </select>
+    </div>
+    <div class="col-md-offset-2 col-md-2" style="margin-top:25px;margin-bottom:25px;">
         <label class="" style="">Buscar: </label>
         <input class="form-control input-sm" style="width: 150px;" type="text" id="filtroTextListado" >
         

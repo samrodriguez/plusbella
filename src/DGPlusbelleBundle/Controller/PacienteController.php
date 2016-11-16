@@ -676,7 +676,7 @@ class PacienteController extends Controller
         
         $paciente['data'] = $em->createQuery($dql)
                 ->setParameters(array('busqueda'=>"%".$busqueda."%"))
-                ->setMaxResults( 10 )
+                //->setMaxResults( 10 )
                 ->getResult();
         
         return new Response(json_encode($paciente));
@@ -1684,6 +1684,53 @@ class PacienteController extends Controller
         }
         
         $em = $this->getDoctrine()->getEntityManager();
+//        $dql = "SELECT exp.numero, pac.id pacienteid, per.nombres, per.apellidos "
+//                        . "FROM DGPlusbelleBundle:Paciente pac "
+//                        . "JOIN pac.persona per "
+//                        . "JOIN pac.expediente exp "
+//                        . "WHERE ".$busquedaString
+//                        . "ORDER BY exp.numero ASC ";
+        $dql = "SELECT exp.numero, pac.id pacienteid, per.nombres, per.apellidos "
+                        . "FROM DGPlusbelleBundle:Paciente pac "
+                        . "JOIN pac.persona per "
+                        . "JOIN pac.expediente exp "
+                        . "WHERE CONCAT(upper(per.nombres), ' ', upper(per.apellidos), ' ',exp.numero) LIKE upper(:busqueda) "
+                        . "ORDER BY per.nombres ASC ";
+        
+        $paciente['data'] = $em->createQuery($dql)
+                ->setParameters(array('busqueda'=>"%".$busqueda."%"))
+                
+                ->getResult();
+//        var_dump($paciente['data']);
+        return new Response(json_encode($paciente));
+    }
+    
+    /**
+    * Ajax utilizado para buscar informacion de una consulta de estetica
+    *  
+    * @Route("/busqueda-paciente-select-solo-correos/data/exp", name="busqueda_paciente_select_exp_solo_correos")
+    */
+    public function busquedaExpPacienteSoloCorreoAction(Request $request)
+    {
+        $busqueda = $request->query->get('q');
+        $page = $request->query->get('page');
+        
+        //var_dump($page);
+        
+        //var_dump($orderBy);
+        $busquedaWords = explode(' ',$busqueda);
+        $busquedaString="";
+        foreach($busquedaWords as $key=>$word){
+            
+            if($key<(count($busquedaWords)-1)){
+                $busquedaString.="CONCAT(upper(per.nombres),' ',upper(per.apellidos),' ',exp.numero) LIKE upper('%".$word."%') OR ";
+            }
+            else{
+                $busquedaString.=" CONCAT(upper(per.nombres),' ',upper(per.apellidos),' ',exp.numero) LIKE upper('%".$word."%') ";
+            }
+        }
+        
+        $em = $this->getDoctrine()->getEntityManager();
         $dql = "SELECT exp.numero, pac.id pacienteid, per.nombres, per.apellidos "
                         . "FROM DGPlusbelleBundle:Paciente pac "
                         . "JOIN pac.persona per "
@@ -1778,18 +1825,64 @@ class PacienteController extends Controller
     {
         //$busqueda = $request->query->get('id');
         $opcion = $request->get('opcion');
+        $response = new JsonResponse();
         //$ = $request->get('opcion');
+        $subject= $request->get('subject');
+        $subjectArchivo= $subject;
         $emailBody= $request->get('emailBody');
         $toEmail= $request->get('toEmail');
+        date_default_timezone_set('America/El_Salvador');
+        
+        //var_dump($subject);
+        
+        
+        
+        $originales = 'ÀÁÂÃÄÅÆÇÈÉÊËÌÍÎÏÐÑÒÓÔÕÖØÙÚÛÜÝÞßàáâãäåæçèéêëìíîïðñòóôõöøùúûýýþÿŔŕ# ';
+        $modificadas = 'aaaaaaaceeeeiiiidnoooooouuuuybsaaaaaaaceeeeiiiidnoooooouuuyybyRr__';
+        $subjectArchivo = utf8_decode($subjectArchivo);
+        $subjectArchivo = strtr($subjectArchivo, utf8_decode($originales), $modificadas);
+        $subjectArchivo = strtolower($subjectArchivo);
+        
+        //$subject = str_replace(" ", "_", strtolower($subject));
+        
+        $archivos = $_FILES['file'];
+        $fecha = date('Y-m-d-H-i-s');
+        $path = $this->getParameter('photo.correos');
+        $nombreArchivos =Array();
+        //var_dump($subject);
+        //var_dump($_FILES);
+        foreach($archivos['tmp_name'] as $key=>$item){
+            if($item!=''){
+                $extensionTmp = $archivos['type'][$key];
+
+                $extensionArray= explode('/', $extensionTmp);
+                $extension = $extensionArray[1];
+                $nombreArchivo =  $key.'_'.$subjectArchivo.'_'.$fecha.".".$extension;
+
+                if(move_uploaded_file($archivos['tmp_name'][$key], $path.$nombreArchivo)){
+                    array_push($nombreArchivos,$nombreArchivo);               
+                }
+            }
+        }
+        
+        //var_dump($nombreArchivos);
+        //die();
+        
+        
+        
+        
+        
+        
+        //var_dump($toEmail);
         $em = $this->getDoctrine()->getEntityManager();
-        var_dump($_FILES);
+        //var_dump($_FILES);
         switch($opcion){
             case 0://///Cumpleañeros
                 $date = new \DateTime('now');
                 $dateString = $date->format('-m-d');
                 $sql = "SELECT per.email, pac.fechaNacimiento, pac.id, per.nombres, per.apellidos, per.telefono,per.telefono2 FROM DGPlusbelleBundle:Paciente pac "
                         . "JOIN pac.persona per "
-                        . "WHERE pac.fechaNacimiento LIKE '%". $dateString ."%'";
+                        . "WHERE per.email<>'' AND pac.fechaNacimiento LIKE '%". $dateString ."%'";
                 $listados = $em->createQuery($sql)
                         //->setParameters(array('empleado'=>$idEmpleado,'horaCita'=>$horaCita,'fechaCita'=>$fechaCita,'estado'=>'P'))
                         ->getArrayResult();
@@ -1797,32 +1890,65 @@ class PacienteController extends Controller
                 
                 break;
             case 1://///Todos
-                
+                //$sql = "SELECT per.email, pac.fechaNacimiento, pac.id, per.nombres, per.apellidos, per.telefono,per.telefono2 FROM DGPlusbelleBundle:Paciente pac "
+                //        . "JOIN pac.persona per ";
+                $sql = "SELECT per.email, pac.id, per.nombres, per.apellidos FROM DGPlusbelleBundle:Paciente pac "
+                        . "JOIN pac.persona per "
+                        . "WHERE per.email<>'' ";
+                $listados = $em->createQuery($sql)
+                        //->setParameters(array('empleado'=>$idEmpleado,'horaCita'=>$horaCita,'fechaCita'=>$fechaCita,'estado'=>'P'))
+                        ->getArrayResult();
                 
                 
                 break;
             case 2://///Individual
+                $stringExp ="";
+                $listados = array();
+                foreach($toEmail as $key=>$e){
+//                    if($key==0){
+//                        $stringExp.="'".$e."'";
+//                    }
+//                    else{
+//                        $stringExp.=","."'".$e."'";
+//                    }
                 
-                
+                    $sql = "SELECT exp.numero, per.email, pac.id, per.nombres, per.apellidos FROM DGPlusbelleBundle:Paciente pac "
+                            . "JOIN pac.persona per "
+                            . "JOIN pac.expediente exp "
+                            . "WHERE exp.numero = '".$e."'";
+                    //var_dump($sql);
+                    $listadosAux = $em->createQuery($sql)
+                        //->setParameters(array('empleado'=>$idEmpleado,'horaCita'=>$horaCita,'fechaCita'=>$fechaCita,'estado'=>'P'))
+                        ->getArrayResult();
+                    
+                    //var_dump($listadosAux);
+                    array_push($listados, $listadosAux);
+                }
                 
                 break;
             
         }
+        //var_dump($listados);
+        //die();
+        //var_dump($nombreArchivos);
+        //$this->get('envio_correo')->sendEmail('mario@digitalitygarage.com',"","","",$emailBody,$nombreArchivos,$subject);
+        //$this->get('envio_correo')->sendEmail('anthony@digitalitygarage.com',"","","",$emailBody,$nombreArchivos,$subject);
         
-        
-        foreach ($listados as $key=>$listado){
-            if($key==0){
-                $this->get('envio_correo')->sendEmail('mario@digitalitygarage.com',"","","",$emailBody);
-            }
-        }
+//        $this->get('envio_correo')->sendEmail('anthony@digitalitygarage.com',"","","",$emailBody);
+//        foreach ($listados as $key=>$listado){
+//            if($key==0){
+//                $this->get('envio_correo')->sendEmail('mario@digitalitygarage.com',"","","",$emailBody);
+//            }
+//        }
         //var_dump($opcion);
         //var_dump($emailBody);
         //var_dump($toEmail);
         //var_dump($request);
         
-        die();
+        //die();
+        $correos['msg']="Correos enviados";
         
-        $response->setData($paciente);
+        $response->setData($correos);
         
 //        var_dump($paciente['data']);
         return $response;

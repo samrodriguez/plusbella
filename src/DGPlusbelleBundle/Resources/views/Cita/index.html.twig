@@ -146,7 +146,7 @@
 
                 </div>
                 
-                <div class="col-md-3 pull-right menContent1" style="height:20px;">
+                <div class="col-md-3 pull-right menContent1" style="height:20px;margin-top:25px;">
                     <button data-toggle="tooltip" data-container="body" title="Cita completada" class="btn btn-default datatables1-actions" style="color:#FFF;background:#69BD45; float: right;" role="button">
                         <i class="fa fa-calendar-check-o"></i>
                     </button>
@@ -522,7 +522,7 @@
                         },
                         "order":[0,'asc'],
                         "columns": [
-                            { "data": "nombres" },
+                            { "data": "nombresComp" },
                             { "data": "telefono" },
                             { "data": "fechaNacimiento" },
                             
@@ -555,14 +555,14 @@
                     }, 
             });
             
-            var tablaCitas= $('#citasTabla').DataTable({ 
+            var tablaCitas= $('#citasTabla').DataTable({
                         {#searching:true,
                         order:[[1,"asc"]],#}
                         "dom":"ftp",
                         "processing": false,
                         "serverSide": true,
                         "ajax": {
-                            "url": '{{path('admin_citas_listado')}}'+"?fechaInicio="+$('#filtroCitasInicio').val()+"&fechaFin="+$('#filtroCitasFin').val(),
+                            "url": '{{path('admin_citas_listado')}}'+"?fechaInicio="+$('#filtroCitasInicio').val()+"&fechaFin="+$('#filtroCitasFin').val()+"&sucursal="+$('#filtroSucursalesL').val(),
                             "type": 'GET'
                         },
                         "order":[1,'asc'],
@@ -573,21 +573,8 @@
                             { "data": "tel" },
                             { "data": "tratamiento" },
                             { "data": "actions" },
-                            
-                            
-                            {#{ "data": "email" },#}
-                            // { "data": "interes" }
-                            // { "data": "industry" },
-
-                            // { "data": "probability" },
-                            // { "data": "state" }
-                            // { "data": "actions" }
                             ],
                         "columnDefs": [
-                               {#{ "orderable": false, "targets": 0 },
-                               { "orderable": false, "targets": 1 },
-                               { "orderable": false, "targets": 2 },
-                               { "orderable": false, "targets": 4 },#}
                                { "orderable": false, "targets": 0 },
                                { "orderable": false, "targets": 5 }
                         ],
@@ -615,10 +602,12 @@
             default_position:"below",
             //show_icon:false,
             onSelect: function() {
-                url = "{{path('admin_cumpleanos')}}";
+                {#url = "{{path('admin_cumpleanos')}}";
                 hy = $('#filtroCumpleanos').val();
                 url+="?fecha="+hy;
-                tablaCumpleanos.ajax.url( url ).load();
+                tablaCumpleanos.ajax.url( url ).load();#}
+                url = '{{path('admin_citas_listado')}}'+"?fechaInicio="+$('#filtroCitasInicio').val()+"&fechaFin="+$('#filtroCitasFin').val()+"&sucursal="+$('#filtroSucursalesL').val();
+                tablaCitas.ajax.url( url ).load();
             }
         });
         /////Citas
@@ -631,12 +620,18 @@
             default_position:"below",
             //show_icon:false,
             onSelect: function() {
-                url = '{{path('admin_citas_listado')}}'+"?fechaInicio="+$('#filtroCitasInicio').val()+"&fechaFin="+$('#filtroCitasFin').val();
+                url = '{{path('admin_citas_listado')}}'+"?fechaInicio="+$('#filtroCitasInicio').val()+"&fechaFin="+$('#filtroCitasFin').val()+"&sucursal="+$('#filtroSucursalesL').val();
                 tablaCitas.ajax.url( url ).load();
             }
         });
         
         
+        /////Sucursales
+        $(document).on('change','#filtroSucursalesL',function(){
+            url = '{{path('admin_citas_listado')}}'+"?fechaInicio="+$('#filtroCitasInicio').val()+"&fechaFin="+$('#filtroCitasFin').val()+"&sucursal="+$('#filtroSucursalesL').val();
+            tablaCitas.ajax.url( url ).load();
+            
+        });
         /////Correos
         $(document).on('change','#opcion',function(){
             console.log($(this).val());
@@ -658,44 +653,87 @@
                     break;
             }
         });
-        
+        var filesSelectedPrev = document.getElementById("file").files;
+        $(document).on('change', '#file', function(event) {
+            var filesSelected = document.getElementById("file").files;
+            if(filesSelectedPrev[0]=="undefined"){
+                    filesSelectedPrev = document.getElementById("file").files;
+            }
+            var fileToLoad = filesSelected[0];
+            var fileReader = new FileReader();
+            if ((filesSelected[0].size<=4096000)){
+                fileReader.onload = function(fileLoadedEvent) {
+                    srcData = fileLoadedEvent.target.result;
+                    $('#imgTest').attr('src', srcData);
+                };		        	
+                var imgBase64 = $('#imgTest').attr('src');
+                fileReader.readAsDataURL(fileToLoad);
+                $('#imgTest').show();
+            }
+            else{
+                $(this).val('');
+                $('#imgTest').attr('src', 'http://placehold.it/960x960');
+                //$('#imgTest').hide();
+                swal('',$('.imageError').html()+", imagen demasiado grande",'error');
+            }
+	});
         
         $('#frmCorreo').on('submit',(function(event) {
-            var $btn = $('#enviarCorreo').button('loading');
+            var em = $('#toEmail').val();
+            var emBod = $('#emailBody').val();
+            var emSub = $('#subject').val();
+            if(em==null){
+                swal('','Seleccione un paciente','error');
+                return false;
+            }
+            if(emSub==''){
+                swal('','Ingrese el asunto del correo','error');
+                return false;
+            }
+            if(emBod==''){
+                swal('','Ingrese el cuerpo del correo','error');
+                return false;
+            }
+                
+            return false;
             
-            console.log($('#toEmail').val());
             
-            //var frmData = new FormData('#frmCorreo');
-            $.ajax({
-                url: Routing.generate('envio_correo_pacientes'),
-                type: "POST",            
-                data: new FormData(this),
-                contentType: false,    
-                cache: false,           
-                processData:false,   
-                success: function(data)  
-                {
-                        $("#txtId1").val(data.id1);
-                        $("#txtId2").val(data.id2);
-                        if(data.msg){
-                                swal('',data.msg,'success');
-                                
-                                $('#txtId1').val('');
-                                $('#txtId2').val('');
-                                $('#txtName').val('');
-                                $('#btnCancelTop').click();
-                        }
-                        if(data.error){
-                                swal('',data.error,'error');
-                                $btn.button('reset');
-                        }
-                        //table.ajax.reload();
-                        $btn.button('reset');
-                },
-                error:function(data) {
-                        $btn.button('reset');
-                }
-            });
+                var $btn = $('#enviarCorreo').button('loading');
+
+                console.log($('#toEmail').val());
+
+                //var frmData = new FormData('#frmCorreo');
+                $.ajax({
+                    url: Routing.generate('envio_correo_pacientes'),
+                    type: "POST",            
+                    data: new FormData(this),
+                    contentType: false,    
+                    cache: false,           
+                    processData:false,   
+                    success: function(data)  
+                    {
+                            $("#txtId1").val(data.id1);
+                            $("#txtId2").val(data.id2);
+                            if(data.msg){
+                                    swal('',data.msg,'success');
+
+                                    $('.select2-selection__clear').click();
+                                    $('#opcion').val('0').trigger('change');
+                                    $('#subject').val('');
+                                    $('#emailBody').val('');
+                                    document.getElementById("file").value = "";
+                            }
+                            if(data.error){
+                                    swal('',data.error,'error');
+                                    $btn.button('reset');
+                            }
+                            //table.ajax.reload();
+                            $btn.button('reset');
+                    },
+                    error:function(data) {
+                            $btn.button('reset');
+                    }
+                });
             return false;
         }));
         
@@ -714,7 +752,7 @@
                 return "";
             },
             ajax: {
-                url: "{{path('busqueda_paciente_select_exp')}}",
+                url: "{{path('busqueda_paciente_select_exp_solo_correos')}}",
                 dataType: 'json',
                 delay: 250,
                 data: function (params) {

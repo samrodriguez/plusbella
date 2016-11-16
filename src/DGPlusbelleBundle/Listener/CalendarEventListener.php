@@ -245,11 +245,17 @@ class CalendarEventListener
             //var_dump($h);
             
             //$this->get('envio_correo')->sendEmail("77456982@sms.claro.com.sv","","","","Recordatorio de cita el dia: ");
-            $st    = new \DateTime($fi.' '.$ih);
-            $nh    = new \DateTime($fi.' '.$h);
+            //$st    = new \DateTime($fi.' '.$ih);
+            //$nh    = new \DateTime($fi.' '.$h);
             //$//end   = new \DateTime($fi.' '.$fh);
-            $eventEntity = new EventEntity('', $st,$nh );
+            //$eventEntity = new EventEntity('', $st,$nh );
+            $ih = $companyEvent->getHoraCita()->format('H:i');
+            $fh = $companyEvent->getHoraFin()->format('H:i');
             
+            $st    = new \DateTime($fi.' '.$ih);
+            $nh    = new \DateTime($fi.' '.$fh);
+            
+            $eventEntity = new EventEntity('', $st,$nh );
             
             //var_dump($companyEvent);
             //echo $companyEvent->getHoraFin()=='00:00';
