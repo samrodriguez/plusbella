@@ -44,16 +44,16 @@ class BackupController extends Controller{
      */
     public function createAction()
     {
-    
     //echo PHP_OS; 
     //include_once "conexion/def.php";
-    $backupFile = "lpbsistema_".date("d-m-Y_H-i-s").".sql";
+    date_default_timezone_set("America/El_Salvador");
+    $backupFile = "sepes_".date("d-m-Y_H-i-s").".sql";
     $path = $this->container->getParameter('plusbelle.backup');
     
     $kernel = $this->get('kernel');
     //$path = $kernel->locateResource('@DGPlusbelleBundle/backup/'.$backupFile);
     $path = $this->get('kernel')->locateResource("@DGPlusbelleBundle/Resources/backup/");
-    
+    //var_dump($path);
     //$pathdirname($this->container->getParameter('kernel.root_dir')) . '/web/bundles/mybundle/myfiles' 
     
 //    if(strpos(strtolower($path), 'win') !== false){
@@ -62,8 +62,12 @@ class BackupController extends Controller{
         
         
     //var_dump($path);
-    exec("mysqldump -h localhost -u root marvinvi_lpbsistema -R> ".$path.$backupFile);
-    
+    try {
+        var_dump(exec("mysqldump -h localhost -u root marvinvi_plusbella -R> ".$path.$backupFile));
+    } catch (Exception $e) {
+        var_dump($e->getMessage());
+    }
+    //die();
     // open some file for reading
     $file = 'backup/'.$backupFile;
     
@@ -79,11 +83,11 @@ class BackupController extends Controller{
     $login_result = ftp_login($conn_id, $ftp_user_name, $ftp_user_pass);
 
     // try to upload $file
-    if (ftp_fput($conn_id, $file, $fp, FTP_ASCII)) {
-        //echo "Successfully uploaded $file\n";
-    } else {
-        echo "There was a problem while uploading $file\n";
-    }
+     if (ftp_fput($conn_id, $file, $fp, FTP_ASCII)) {
+         echo "Successfully uploaded $file\n";
+     } else {
+         echo "There was a problem while uploading $file\n";
+     }
 
     // close the connection and the file handler
     ftp_close($conn_id);

@@ -659,10 +659,10 @@ $(document).ready(function() {
                                                 evento[key].title = nuevoTitulo;
                                                 $.getJSON(Routing.generate('evaluar_sesiones_cita', { id: evento[key].id}), function(data) {
                                                     var mensaje = "";
-                                                    if(data.regs==1){
+                                                    if(data.regs>=1){
                                                         mensaje += "<div class='row'><div class='col-md-12'><b><p class='text-left'>Actualización exitosa...</p></b></div></div>";
                                                             mensaje += "<hr>";
-                                                            mensaje += "<div class='row'><div class='col-md-12'>¡Cita registrada como asistida satisfactoriamente!</div></div>";
+                                                            mensaje += "<div class='row'><div class='col-md-12'>"+data.mensaje+"</div></div>";
                                                         calendario.fullCalendar('updateEvent', evento);
                                                         bootbox.alert(mensaje, function() {
 
@@ -671,7 +671,7 @@ $(document).ready(function() {
                                                     else{
                                                         mensaje += "<div class='row'><div class='col-md-12'><b><p class='text-left'>Error...</p></b></div></div>";
                                                             mensaje += "<hr>";
-                                                            mensaje += "<div class='row'><div class='col-md-12'>¡La cita no pudo modificarse, intente de nuevo!</div></div>";
+                                                            mensaje += "<div class='row'><div class='col-md-12'>"+data.mensaje+"</div></div>";
                                                         bootbox.alert(mensaje, function() {
 
                                                         });
