@@ -19,37 +19,44 @@ class EmailService
 	$this->templating = $templating;
       
         $this->mail   = $mail;
-        $this->subject = 'Pluss Belle';
-        $this->from   = 'system@digitalitygarage.com'; 
+        $this->subject = 'La Plus Belle & Sonodigest';
+        $this->from   = 'anthony@digitalitygarage.com'; 
+        $this->info = 'La Plus Belle y Sonodigest';
     }  
     
     public function setEmail($to,$bcc=null){
         
         $this->view   = 'DGPlusbelleBundle:Emails:test.html.twig';
         $this->to     = $to;
-        $contenido    = 'Este correo es enviado desde el sistema de plussbelle';
+        $contenido    = 'Este correo es enviado desde el sistema de La Plus Belle y Sonodigest';
         $this->body = $this->templating->render($this->view, array('body'=>$contenido));
         $this->sendEmail($this->to,null,$bcc,null,$this->body);
         
     }
     
-    public function sendEmail($to, $cc, $bcc,$replay, $body){
+    public function sendEmail($to, $cc, $bcc,$replay, $body,$nombreArchivos,$asunto){
         $email = \Swift_Message::newInstance();
         $email->setContentType('text/html');                    
-        $email->setFrom($this->from);
+        $email->setFrom($this->from,'La Plus Belle y Sonodigest');
         $email->setTo($to);
+        
+        foreach($nombreArchivos as $key=>$nombre){
+            $email->attach(\Swift_Attachment::fromPath('http://localhost/laplusbelle/Photos/correos/'.$nombre));
+        }
+        
         if($cc != null ){
-        $email->setCc($cc);
+            $email->setCc($cc);
         }
         if($replay != null ){
-        $email->setReplyTo($replay);
+            $email->setReplyTo($replay);
         }else{
-        $email->setReplyTo('system@digitalitygarage.com');            
+            $email->setReplyTo('no-reply@laplusbelle.com.sv');            
         }
         if($bcc != null ){
-        $email->setBcc($bcc);
+            $email->setBcc($bcc);
         }
-        $email->setSubject($this->subject);  
+        //$email->setSubject($this->subject);  
+        $email->setSubject($asunto);  
         $email->setBody($body); 
         $this->mail->send($email);
     }

@@ -451,57 +451,70 @@ $(document).ready(function() {
                             var hinicio=(data.regs[0].horaCita);
                             var hfin=(data.regs[0].horaFinCita);
                             var telef=(data.regs[0].telefono);
-                            
                             mensaje += "<div class='container-fluid'>";
                             //mensaje += "<div class='col-md-12'><hr></div></div>";
                             mensaje += "<div class='col-md-6 text-right'><b>Estado: </b></div><div class='col-md-6'>"+data.regs[0].estado+"</div>";
                             mensaje += "<div class='clearfix'></div>";
-                            
                             if ( data.regs[0].numero !== 0){
                                 mensaje += "<div class='col-md-6 text-right'><b>Expediente: </b></div><div class='col-md-6'>"+expediente+"</div>";
                                 mensaje += "<div class='clearfix'></div>";
                                 mensaje += "<div class='col-md-6 text-right'><b>Nombre del paciente: </b></div><div class='col-md-6'>"+data.regs[0].nombres+" "+data.regs[0].apellidos+"</div>";
                                 mensaje += "<div class='clearfix'></div>";
-                            
                             }
                             else{
                                 mensaje += "<div class='col-md-6 text-right'><b>Nombre del paciente: </b></div><div class='col-md-6'>Paciente no registrado</div>";
                                 mensaje += "<div class='clearfix'></div>";
                             }
-                            
-                            
                             mensaje += "<div class='col-md-6 text-right'><b>Doctor del paciente: </b></div><div class='col-md-6'>"+data.regs[0].primerNombreEmp+" "+data.regs[0].primerApellidoEmp+"</div>";
                             mensaje += "<div class='clearfix'></div>";
-                            mensaje += "<div class='col-md-6 text-right'><b>Tratamiento: </b></div><div class='col-md-6'>"+data.regs[0].nombreTratamiento+"</div>";
-                            mensaje += "<div class='clearfix'></div>";
+                            var tratamiento = "";
+                            switch(data.regs[0].citaPor){
+                                case 0:
+                                        mensaje += "<div class='col-md-6 text-right'><b>Consulta: </b></div><div class='col-md-6'>"+data.regs[0].nombreTratamiento+"</div>";
+                                        mensaje += "<div class='clearfix'></div>";
+                                    break;
+                                case 1:
+                                        if(data.regs[0].tratamiento1!=''){
+                                            tratamiento= data.regs[0].tratamiento1;
+                                        }
+                                        if(data.regs[0].tratamiento2!=''){
+                                            tratamiento+=", "+data.regs[0].tratamiento2;
+                                        }
+                                        mensaje += "<div class='col-md-6 text-right'><b>Tratamiento: </b></div><div class='col-md-6'>"+tratamiento+"</div>";
+                                        mensaje += "<div class='clearfix'></div>";
+                                    break;
+                                case 2:
+                                        if(data.regs[0].tratamiento1!=''){
+                                            tratamiento= data.regs[0].tratamiento1;
+                                        }
+                                        if(data.regs[0].tratamiento2!=''){
+                                            tratamiento+=", "+data.regs[0].tratamiento2;
+                                        }
+                                        mensaje += "<div class='col-md-6 text-right'><b>Paquete: </b></div><div class='col-md-6'>"+data.regs[0].paquete+"</div>";
+                                        mensaje += "<div class='clearfix'></div>";
+                                        mensaje += "<div class='col-md-6 text-right'><b>Tratamiento: </b></div><div class='col-md-6'>"+tratamiento+"</div>";
+                                        mensaje += "<div class='clearfix'></div>";
+                                    break;
+                            }
+                            
+                            
                             mensaje += "<div class='col-md-6 text-right'><b>Fecha: </b></div><div class='col-md-6'>"+data.regs[0].fechaCita+"</div>";
                             mensaje += "<div class='clearfix'></div>";
                             mensaje += "<div class='col-md-6 text-right'><b>Descripción: </b></div><div class='col-md-6'>"+data.regs[0].descripcion+"</div>";
                             mensaje += "<div class='clearfix'></div>";
                             
                             if(!hinicio){
-
                               mensaje += "<div class='col-md-6 text-right'><b>Hora inicio: </b></div><div class='col-md-6'>-</div>";  
-                              
                             } else{
-                                
                               mensaje += "<div class='col-md-6 text-right'><b>Hora inicio: </b></div><div class='col-md-6'>"+data.regs[0].horaCita+"</div>";  
-                            
-                            } 
-                                                 
+                            }             
                             mensaje += "<div class='clearfix'></div>";
-                            
                             if(!hfin){
-
                               mensaje += "<div class='col-md-6 text-right'><b>Hora final: </b></div><div class='col-md-6'>-</div>";  
-                              
                             } else{
-                                
                               mensaje += "<div class='col-md-6 text-right'><b>Hora final: </b></div><div class='col-md-6'>"+data.regs[0].horaFinCita+"</div>";  
-                            
                             } 
                             mensaje += "<div class='clearfix'></div>";
- 
     
                            if(!telef){
  
@@ -514,10 +527,7 @@ $(document).ready(function() {
                             mensaje += "<div class='clearfix'></div>";
                             mensaje += "</div>";
                         
-                          //alert('"'+data.regs[0].fechaCita+'"');
-                          /*if(data.regs[0].fechaCita==hoy){
-                              alert('iguales');
-                          }*/
+                          
                             
                             if(data.regs[0].estado=="Pendiente" || data.regs[0].estado=="No asistio"){
                                 
@@ -643,13 +653,11 @@ $(document).ready(function() {
                                                 tituloEvento = evento[key].title;
 
                                                 var subTituloEvento = tituloEvento.split(" | ");
-                                                //var iconoX = '<div class="fa fa-calendar-check-o" style="width: 17px; height: 100%; float: left; background: #69BD45;  position: absolute; margin-left: -3px; padding-left:2px "></div> <div style="width: 91%; height: 100%; float: right; position: relative; ">  | ';
                                                 var iconoX = '<div class="col-xs-1 fa fa-calendar-check-o" style="border:1px solid #C3C3C3; border-right:0px solid #F00; color:#FFF; height: 100%; float: left; background: #69BD45;  position: absolute; padding-left:2px "></div> <div class="col-xs-11" style="border-left:0px solid #000 !important; border:1px solid #C3C3C3;  height: 100%; float: right; position: relative; ">';
                                                 console.log(subTituloEvento[0]);
                                                 var nuevoTitulo = iconoX+' | '+subTituloEvento[1]+' | '+subTituloEvento[2] + ' | ' +subTituloEvento[3];
                                                 evento[key].title = nuevoTitulo;
-                                                $.getJSON(Routing.generate('get_asistidaCita', { id: evento[key].id}), 
-                                                function(data) {
+                                                $.getJSON(Routing.generate('evaluar_sesiones_cita', { id: evento[key].id}), function(data) {
                                                     var mensaje = "";
                                                     if(data.regs==0){
                                                         mensaje += "<div class='row'><div class='col-md-12'><b><p class='text-left'>Actualización exitosa...</p></b></div></div>";

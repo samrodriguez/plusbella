@@ -31,7 +31,7 @@ class CitaController extends Controller
     public function indexAction(Request $request)
     {
         $em = $this->getDoctrine()->getManager();
-
+        
         //$entities = $em->getRepository('DGPlusbelleBundle:Cita')->findAll();
         $sucursales= $em->getRepository('DGPlusbelleBundle:Sucursal')->findBy(array('estado'=>true), array('id' => 'DESC'));
         $categorias = $em->getRepository('DGPlusbelleBundle:Categoria')->findAll();
@@ -797,7 +797,7 @@ class CitaController extends Controller
         
         $dql = "SELECT c.id,exp.numero, pac.nombres, pac.apellidos, t.nombre as nombreTratamiento,
                 per.nombres as primerNombreEmp, per.apellidos as primerApellidoEmp, 
-                c.fechaCita, c.horaCita,c.horaFin, c.estado, c.descripcion
+                c.fechaCita, c.horaCita,c.horaFin, c.estado, c.descripcion,c.tipoCita as citaPor, c.tratamiento1, c.tratamiento2, c.paquete
                     FROM DGPlusbelleBundle:Cita c
                     JOIN c.empleado emp
                     JOIN c.tratamiento t
@@ -848,6 +848,68 @@ class CitaController extends Controller
         $cita['regs'][0]["fechaCita"] = $cita['regs'][0]["fechaCita"]->format("d-m-Y");
         $cita['regs'][0]["horaCita"] = $cita['regs'][0]["horaCita"]->format("H:i");
         $cita['regs'][0]["horaFin"] = $cita['regs'][0]["horaFin"]->format("H:i");
+        
+        
+        switch ($cita['regs'][0]["citaPor"]){
+            case 0:
+                
+                break;
+            case 1:
+                if($cita['regs'][0]["tratamiento1"]!=null){
+                    $tratamiento1= $em->getRepository('DGPlusbelleBundle:PersonaTratamiento')->find($cita['regs'][0]["tratamiento1"]);
+                    if(count($tratamiento1)!=0)
+                        $cita['regs'][0]["tratamiento1"] = $tratamiento1->getTratamiento()->getNombre();
+                    else
+                        $cita['regs'][0]["tratamiento1"] = '';
+                }
+                else{
+                    $cita['regs'][0]["tratamiento1"] = '';
+                }
+                if($cita['regs'][0]["tratamiento2"]!=null){
+                    $tratamiento2= $em->getRepository('DGPlusbelleBundle:PersonaTratamiento')->find($cita['regs'][0]["tratamiento2"]);
+                    if(count($tratamiento2)!=0)
+                        $cita['regs'][0]["tratamiento2"] = $tratamiento2->getTratamiento()->getNombre();
+                    else
+                        $cita['regs'][0]["tratamiento2"] = '';
+                }
+                else{
+                    $cita['regs'][0]["tratamiento2"] = '';
+                }
+                
+                break;
+            case 2:
+                if($cita['regs'][0]["paquete"]!=null){
+                    $paquete = $em->getRepository('DGPlusbelleBundle:VentaPaquete')->find($cita['regs'][0]["paquete"]);
+                    if(count($paquete)!=0)
+                        $cita['regs'][0]["paquete"] = $tratamiento1->getPaquete()->getNombre();
+                    else
+                        $cita['regs'][0]["paquete"] = '';
+                }
+                else{
+                    $cita['regs'][0]["paquete"] = '';
+                }
+                if($cita['regs'][0]["tratamiento1"]!=null){
+                    $tratamiento1= $em->getRepository('DGPlusbelleBundle:Tratamiento')->find($cita['regs'][0]["tratamiento1"]);
+                    if(count($tratamiento1)!=0)
+                        $cita['regs'][0]["tratamiento1"] = $tratamiento1->getTratamiento()->getNombre();
+                    else
+                        $cita['regs'][0]["tratamiento1"] = '';
+                }
+                else{
+                    $cita['regs'][0]["tratamiento1"] = '';
+                }
+                if($cita['regs'][0]["tratamiento1"]!=null){
+                    $tratamiento2= $em->getRepository('DGPlusbelleBundle:Tratamiento')->find($cita['regs'][0]["tratamiento2"]);
+                    if(count($tratamiento2)!=0)
+                        $cita['regs'][0]["tratamiento2"] = $tratamiento2->getTratamiento()->getNombre();
+                    else
+                        $cita['regs'][0]["tratamiento2"] = '';
+                }
+                else{
+                    $cita['regs'][0]["tratamiento2"] = '';
+                }
+                break;
+        }
         
         switch ($cita['regs'][0]["estado"]){
             case "A":
@@ -1256,31 +1318,31 @@ class CitaController extends Controller
                 }
                 $busqueda['value'] = str_replace(' ', '%', $busqueda['value']);
                 if($busqueda['value']!=''){
-                    $sql = "SELECT pac.fecha_nacimiento as fechaNacimiento, pac.id, concat(per.nombres,' ',per.apellidos) as  nombres, per.telefono as telefono,per.telefono2 FROM paciente pac "
+                    $sql = "SELECT pac.fecha_nacimiento as fechaNacimiento, pac.id, concat(per.nombres,' ',per.apellidos) as  nombresComp, per.telefono as telefono,per.telefono2 FROM paciente pac "
                     . "INNER JOIN persona per on (per.id=pac.persona)"
                     . " WHERE Month(pac.fecha_nacimiento) = Month('".$dateString."') "
                     . " AND Day(pac.fecha_nacimiento) = Day('".$dateString."') " 
-                    . " HAVING upper(CONCAT(fechaNacimiento,' ',nombres,' ',telefono)) LIKE upper('%".$busqueda['value']."%') ";
+                    . " HAVING upper(CONCAT(fechaNacimiento,' ',nombresComp,' ',telefono)) LIKE upper('%".$busqueda['value']."%') ";
                     $stmt = $em->getConnection()->prepare($sql);
                     $stmt->execute();
                     $row['data'] = $stmt->fetchAll();
                     $row['recordsFiltered']= count($row['data']);
-                    $sql = "SELECT pac.fecha_nacimiento as fechaNacimiento, pac.id, UPPER(concat(per.nombres,' ',per.apellidos)) as nombres, per.telefono as telefono,per.telefono2 FROM paciente pac "
+                    $sql = "SELECT pac.fecha_nacimiento as fechaNacimiento, pac.id, UPPER(concat(per.nombres,' ',per.apellidos)) as nombresComp, per.telefono as telefono,per.telefono2 FROM paciente pac "
                     . "INNER JOIN persona per on (per.id=pac.persona)"
                     . " WHERE Month(pac.fecha_nacimiento) = Month('".$dateString."') "
                     . " AND Day(pac.fecha_nacimiento) = Day('".$dateString."') "
-                    . " HAVING upper(CONCAT(fechaNacimiento,' ',nombres,' ',telefono)) LIKE upper('%".$busqueda['value']."%') "
+                    . " HAVING upper(CONCAT(fechaNacimiento,' ',nombresComp,' ',telefono)) LIKE upper('%".$busqueda['value']."%') "
                     . "ORDER BY ". $orderByText." ".$orderDir." LIMIT " . $start . "," . $longitud;
                     $stmt = $em->getConnection()->prepare($sql);
                     $stmt->execute();
                     $row['data'] = $stmt->fetchAll();
                 }
                 else{
-                    $sql = "SELECT DATE_FORMAT(pac.fecha_nacimiento,'%d-%m-%Y') as fechaNacimiento, pac.id, UPPER(concat(per.nombres,' ',per.apellidos)) as  nombres, per.telefono as telefono,per.telefono2 FROM paciente pac "
+                    $sql = "SELECT DATE_FORMAT(pac.fecha_nacimiento,'%d-%m-%Y') as fechaNacimiento, pac.id, UPPER(concat(per.nombres,' ',per.apellidos)) as  nombresComp, per.telefono as telefono,per.telefono2 FROM paciente pac "
                     . "INNER JOIN persona per on (per.id=pac.persona)"
                     . " WHERE Month(pac.fecha_nacimiento) = Month('".$dateString."') "
                     . " AND Day(pac.fecha_nacimiento) = Day('".$dateString."') "
-                    . " HAVING upper(CONCAT(fechaNacimiento,' ',nombres,' ',telefono)) LIKE upper('%".$busqueda['value']."%') "
+                    . " HAVING upper(CONCAT(fechaNacimiento,' ',nombresComp,' ',telefono)) LIKE upper('%".$busqueda['value']."%') "
                     . "ORDER BY ". $orderByText." ".$orderDir." LIMIT " . $start . "," . $longitud;
                     $stmt = $em->getConnection()->prepare($sql);
                     $stmt->execute();
@@ -1330,6 +1392,7 @@ class CitaController extends Controller
                 $busqueda = $request->query->get('search');
                 $fechaInicio = $request->query->get('fechaInicio');
                 $fechaFin = $request->query->get('fechaFin');
+                $sucursal = $request->query->get('sucursal');
                 $em = $this->getDoctrine()->getEntityManager();
 //                var_dump($fechaInicio);
 //                var_dump($fechaFin);
@@ -1340,10 +1403,11 @@ class CitaController extends Controller
                 //var_dump($dateString);
                 
                 $sql = "SELECT c.id as id FROM DGPlusbelleBundle:Cita c "
+                            . "JOIN c.sucursal suc"
                             . " WHERE c.fechaCita>= :fechaInicio "
-                            . " AND c.fechaCita <= :fechaFin";
+                            . " AND c.fechaCita <= :fechaFin AND suc.id= :sucursal";
                 $rowsTotal = $em->createQuery($sql)
-                            ->setParameters(array('fechaInicio'=> $fechaInicio,'fechaFin'=> $fechaFin))
+                            ->setParameters(array('fechaInicio'=> $fechaInicio,'fechaFin'=> $fechaFin,'sucursal'=>$sucursal))
                             ->getResult();
                     
                     //var_dump($rowsTotal);
@@ -1377,23 +1441,25 @@ class CitaController extends Controller
                 }
                 $busqueda['value'] = str_replace(' ', '%', $busqueda['value']);
                 if($busqueda['value']!=''){
-                    $sql = "SELECT CONCAT('<a class=\"citaEdit\" href=\"\" id=\"',c.id,'\">Editar cita</a>') as actions,c.id as id, CONCAT('<a class=\"link_expediente\" id=\"',exp.numero,'\">',exp.numero,'</a>') as expediente, CONCAT(DATE_FORMAT(c.fecha_cita, '%d-%m-%Y'),' ',DATE_FORMAT(c.hora_cita,'%H:%i')) as fecha, UPPER(CONCAT(per.nombres,' ',per.apellidos)) as nombres,per.telefono as tel, UPPER(trat.nombre) as tratamiento  FROM Cita c "
+                    $sql = "SELECT suc.nombre as sucursal, CONCAT('<a class=\"citaEdit\" href=\"\" id=\"',c.id,'\">Editar cita</a>') as actions,c.id as id, CONCAT('<a class=\"link_expediente\" id=\"',exp.numero,'\">',exp.numero,'</a>') as expediente, CONCAT(DATE_FORMAT(c.fecha_cita, '%d-%m-%Y'),' ',DATE_FORMAT(c.hora_cita,'%H:%i')) as fecha, UPPER(CONCAT(per.nombres,' ',per.apellidos)) as nombres,per.telefono as tel, UPPER(trat.nombre) as tratamiento  FROM Cita c "
                             . "INNER JOIN paciente pac on(pac.id=c.paciente) "
                             . "INNER JOIN persona per ON(per.id=pac.persona) "
                             . "INNER JOIN tratamiento trat ON(trat.id=c.tratamiento) "
                             . "INNER JOIN expediente exp ON(exp.paciente=pac.id) "
-                            . " WHERE c.fecha_cita BETWEEN '".$fechaInicio."' AND '".$fechaFin
+                            . "INNER JOIN sucursal suc ON(suc.id=c.sucursal) "
+                            . " WHERE suc.id=".$sucursal." c.fecha_cita BETWEEN '".$fechaInicio."' AND '".$fechaFin
                             . "' HAVING upper(CONCAT(expediente,' ',nombres,' ',telefono)) LIKE upper('%".$busqueda['value']."%') ";
                     $stmt = $em->getConnection()->prepare($sql);
                     $stmt->execute();
                     $row['data'] = $stmt->fetchAll();
                     $row['recordsFiltered']= count($row['data']);
-                    $sql = "SELECT CONCAT('<a class=\"citaEdit\" href=\"\" id=\"',c.id,'\">Editar cita</a>') as actions,c.id as id, CONCAT('<a class=\"link_expediente\" id=\"',exp.numero,'\">',exp.numero,'</a>') as expediente, CONCAT(DATE_FORMAT(c.fecha_cita, '%d-%m-%Y'),' ',DATE_FORMAT(c.hora_cita,'%H:%i')) as fecha, UPPER(CONCAT(per.nombres,' ',per.apellidos)) as nombres,per.telefono as tel, UPPER(trat.nombre) as tratamiento  FROM Cita c "
+                    $sql = "SELECT suc.nombre as sucursal, CONCAT('<a class=\"citaEdit\" href=\"\" id=\"',c.id,'\">Editar cita</a>') as actions,c.id as id, CONCAT('<a class=\"link_expediente\" id=\"',exp.numero,'\">',exp.numero,'</a>') as expediente, CONCAT(DATE_FORMAT(c.fecha_cita, '%d-%m-%Y'),' ',DATE_FORMAT(c.hora_cita,'%H:%i')) as fecha, UPPER(CONCAT(per.nombres,' ',per.apellidos)) as nombres,per.telefono as tel, UPPER(trat.nombre) as tratamiento  FROM Cita c "
                             . "INNER JOIN paciente pac on(pac.id=c.paciente) "
                             . "INNER JOIN persona per ON(per.id=pac.persona) "
                             . "INNER JOIN tratamiento trat ON(trat.id=c.tratamiento) "
                             . "INNER JOIN expediente exp ON(exp.paciente=pac.id) "
-                            . " WHERE c.fecha_cita BETWEEN '".$fechaInicio."' AND '".$fechaFin
+                            . "INNER JOIN sucursal suc ON(suc.id=c.sucursal) "
+                            . " WHERE suc.id=".$sucursal." c.fecha_cita BETWEEN '".$fechaInicio."' AND '".$fechaFin
                             . "' HAVING upper(CONCAT(expediente,' ',nombres,' ',telefono)) LIKE upper('%".$busqueda['value']."%') "
                             . "ORDER BY c.fecha_cita DESC, c.hora_cita DESC, ". $orderByText." ".$orderDir." LIMIT " . $start . "," . $longitud;
                     $stmt = $em->getConnection()->prepare($sql);
@@ -1403,15 +1469,16 @@ class CitaController extends Controller
                 else{
                     
                     
-                    $sql = "SELECT CONCAT('<a class=\"citaEdit\" href=\"\" id=\"',c.id,'\">Editar cita</a>') as actions,c.id as id, CONCAT('<a class=\"link_expediente\" id=\"',exp.numero,'\">',exp.numero,'</a>') as expediente, CONCAT(DATE_FORMAT(c.fechaCita, '%d-%m-%Y'),' ', DATE_FORMAT(c.horaCita,'%H:%i')) as fecha, UPPER(CONCAT(per.nombres,' ',per.apellidos)) as nombres,per.telefono as tel, UPPER(trat.nombre) as tratamiento  FROM DGPlusbelleBundle:Cita c "
+                    $sql = "SELECT CONCAT('<a class=\"citaEdit\" href=\"\" id=\"',c.id,'\">Editar cita</a>') as actions,c.id as id, CONCAT('<a class=\"link_expediente\" id=\"',exp.numero,'\">',exp.numero,'</a>') as expediente, CONCAT(DATE_FORMAT(c.fechaCita, '%d-%m-%Y'),' ', DATE_FORMAT(c.horaCita,'%H:%i')) as fecha, UPPER(CONCAT(per.nombres,' ',per.apellidos)) as nombres,per.telefono as tel, UPPER(trat.nombre) as tratamiento, suc.nombre as sucursal  FROM DGPlusbelleBundle:Cita c "
                             . "JOIN c.paciente pac "
                             . "JOIN pac.persona per "
                             . "JOIN c.tratamiento trat "
                             . "JOIN pac.expediente exp "
-                            . " WHERE c.fechaCita BETWEEN :fechaInicio AND :fechaFin "
+                            . "JOIN c.sucursal suc "
+                            . " WHERE suc.id =:sucursal AND c.fechaCita BETWEEN :fechaInicio AND :fechaFin "
                             . "ORDER BY c.fechaCita DESC, c.horaCita DESC, ". $orderByText." ".$orderDir;
                     $row['data'] = $em->createQuery($sql)
-                            ->setParameters(array('fechaInicio'=> $fechaInicio,'fechaFin'=> $fechaFin))
+                            ->setParameters(array('sucursal'=>$sucursal, 'fechaInicio'=> $fechaInicio,'fechaFin'=> $fechaFin))
                             ->setFirstResult($start)
                             ->setMaxResults($longitud)
                             ->getResult();
