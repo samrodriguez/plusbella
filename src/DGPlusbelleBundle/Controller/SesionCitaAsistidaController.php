@@ -23,7 +23,7 @@ class SesionCitaAsistidaController extends Controller
      * @Method("GET")
      * @Template()
      */
-    public function evaluarSesionesCitaAction(/*$idCita*/ Request $request )
+    public function evaluarSesionesCitaAction(Request $request)
     {
         $isAjax = $this->get('Request')->isXMLhttpRequest();
         if($isAjax){
@@ -67,7 +67,7 @@ class SesionCitaAsistidaController extends Controller
             
                 return $response; 
                 
-            }catch (Exception $ex) {
+            } catch (\Exception $ex) {  
                 $response = new JsonResponse();
                 $response->setData(array(
                                     'regs' => 0,
@@ -129,7 +129,8 @@ class SesionCitaAsistidaController extends Controller
                 $accion = 1;
             }
         }
-                
+        
+        return $accion;
     }
     
     private function evaluarVentaPaquete($em, $entity) {
@@ -139,7 +140,10 @@ class SesionCitaAsistidaController extends Controller
             $ventaPaquete = $em->getRepository('DGPlusbelleBundle:VentaPaquete')->find($entity->getPaquete());
                                                 
             if(!is_null($entity->getTratamiento1())) {
-                $detalleVenta1 = $em->getRepository('DGPlusbelleBundle:DetalleVentaPaquete')->find($entity->getTratamiento1());
+                $detalleVenta1 = $em->getRepository('DGPlusbelleBundle:DetalleVentaPaquete')->findOneBy(array(
+                                                                                                            'ventaPaquete' => $ventaPaquete->getId(),
+                                                                                                            'tratamiento'  => $entity->getTratamiento1(),
+                                                                                                        ));
                 $seguimiento1 = $em->getRepository('DGPlusbelleBundle:SeguimientoPaquete')->findOneBy(array(
                                                                                                             'idVentaPaquete' => $entity->getPaquete(), 
                                                                                                             'tratamiento' => $detalleVenta1->getTratamiento()->getId()
@@ -184,13 +188,18 @@ class SesionCitaAsistidaController extends Controller
                     $em->flush();
 
                     $accion = 2;
+                } else {
+                    $accion = 1;
                 }
             } else {
                 $accion = 1;
             }
 
             if(!is_null($entity->getTratamiento2())) {
-                $detalleVenta2 = $em->getRepository('DGPlusbelleBundle:DetalleVentaPaquete')->find($entity->getTratamiento2());
+                $detalleVenta2 = $em->getRepository('DGPlusbelleBundle:DetalleVentaPaquete')->findOneBy(array(
+                                                                                                            'ventaPaquete' => $ventaPaquete->getId(),
+                                                                                                            'tratamiento'  => $entity->getTratamiento2(),
+                                                                                                        ));
                 $seguimiento2 = $em->getRepository('DGPlusbelleBundle:SeguimientoPaquete')->findOneBy(array(
                                                                                                             'idVentaPaquete' => $entity->getPaquete(), 
                                                                                                             'tratamiento' => $detalleVenta2->getTratamiento()->getId()
@@ -232,6 +241,8 @@ class SesionCitaAsistidaController extends Controller
                     $em->merge($ventaPaquete);
                     $em->flush();
                     
+                    $accion = 2;
+                } else {
                     $accion = 1;
                 }
             } else {
@@ -240,5 +251,8 @@ class SesionCitaAsistidaController extends Controller
         } else {
             $accion = 1;
         }
+        
+                
+        return $accion;
     }
 }
