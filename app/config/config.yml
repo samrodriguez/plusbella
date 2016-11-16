@@ -92,6 +92,8 @@ doctrine:
                         DAY: DoctrineExtensions\Query\Mysql\Day
                         MONTH: DoctrineExtensions\Query\Mysql\Month
                         YEAR: DoctrineExtensions\Query\Mysql\Year
+                    string_functions:
+                        IFNULL: DoctrineExtensions\Query\Mysql\IfNull
         auto_generate_proxy_classes: "%kernel.debug%"
         #naming_strategy: doctrine.orm.naming_strategy.underscore
         #auto_mapping: true
