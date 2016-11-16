@@ -1442,7 +1442,7 @@ class CitaController extends Controller
                 }
                 $busqueda['value'] = str_replace(' ', '%', $busqueda['value']);
                 if($busqueda['value']!=''){
-                    $sql = "SELECT suc.nombre as sucursal, CONCAT('<a class=\"citaEdit\" href=\"\" id=\"',c.id,'\">Editar cita</a>') as actions,c.id as id, CONCAT('<a class=\"link_expediente\" id=\"',exp.numero,'\">',exp.numero,'</a>') as expediente, CONCAT(DATE_FORMAT(c.fecha_cita, '%d-%m-%Y'),' ',DATE_FORMAT(c.hora_cita,'%H:%i')) as fecha, UPPER(CONCAT(per.nombres,' ',per.apellidos)) as nombres,per.telefono as tel, "
+                    $sql = "SELECT UPPER(CONCAT(per2.nombres,' ',per2.apellidos)) as nombresEmp, suc.nombre as sucursal, CONCAT('<a class=\"citaEdit\" href=\"\" id=\"',c.id,'\">Editar cita</a>') as actions,c.id as id, CONCAT('<a class=\"link_expediente\" id=\"',exp.numero,'\">',exp.numero,'</a>') as expediente, CONCAT(DATE_FORMAT(c.fecha_cita, '%d-%m-%Y'),' ',DATE_FORMAT(c.hora_cita,'%H:%i')) as fecha, UPPER(CONCAT(per.nombres,' ',per.apellidos)) as nombres,per.telefono as tel, "
                             . "CASE "
                             . "WHEN c.tipo_cita=0 OR c.tipo_cita IS NULL THEN trat.nombre "
                             . "WHEN c.tipo_cita=1 THEN (SELECT ta.nombre FROM persona_tratamiento pt INNER JOIN tratamiento ta ON (pt.tratamiento=ta.id) WHERE pt.id=IFNULL(c.tratamiento1,0)) "
@@ -1451,6 +1451,8 @@ class CitaController extends Controller
                             . "FROM Cita c "
                             . "INNER JOIN paciente pac on(pac.id=c.paciente) "
                             . "INNER JOIN persona per ON(per.id=pac.persona) "
+                            . "INNER JOIN empleado emp on(emp.id=c.empleado) "
+                            . "INNER JOIN persona per2 ON(per2.id=emp.persona) "
                             . "LEFT JOIN tratamiento trat ON(trat.id=c.tratamiento) "
                             . "INNER JOIN expediente exp ON(exp.paciente=pac.id) "
                             . "INNER JOIN sucursal suc ON(suc.id=c.sucursal) "
@@ -1460,7 +1462,7 @@ class CitaController extends Controller
                     $stmt->execute();
                     $row['data'] = $stmt->fetchAll();
                     $row['recordsFiltered']= count($row['data']);
-                    $sql = "SELECT suc.nombre as sucursal, CONCAT('<a class=\"citaEdit\" href=\"\" id=\"',c.id,'\">Editar cita</a>') as actions,c.id as id, CONCAT('<a class=\"link_expediente\" id=\"',exp.numero,'\">',exp.numero,'</a>') as expediente, CONCAT(DATE_FORMAT(c.fecha_cita, '%d-%m-%Y'),' ',DATE_FORMAT(c.hora_cita,'%H:%i')) as fecha, UPPER(CONCAT(per.nombres,' ',per.apellidos)) as nombres,per.telefono as tel, "
+                    $sql = "SELECT UPPER(CONCAT(per2.nombres,' ',per2.apellidos)) as nombresEmp,suc.nombre as sucursal, CONCAT('<a class=\"citaEdit\" href=\"\" id=\"',c.id,'\">Editar cita</a>') as actions,c.id as id, CONCAT('<a class=\"link_expediente\" id=\"',exp.numero,'\">',exp.numero,'</a>') as expediente, CONCAT(DATE_FORMAT(c.fecha_cita, '%d-%m-%Y'),' ',DATE_FORMAT(c.hora_cita,'%H:%i')) as fecha, UPPER(CONCAT(per.nombres,' ',per.apellidos)) as nombres,per.telefono as tel, "
                             . "CASE "
                             . "WHEN c.tipo_cita=0 OR c.tipo_cita IS NULL THEN trat.nombre "
                             . "WHEN c.tipo_cita=1 THEN (SELECT ta.nombre FROM persona_tratamiento pt INNER JOIN tratamiento ta ON (pt.tratamiento=ta.id) WHERE pt.id=IFNULL(c.tratamiento1,0)) "
@@ -1469,6 +1471,8 @@ class CitaController extends Controller
                             . "FROM Cita c "
                             . "INNER JOIN paciente pac on(pac.id=c.paciente) "
                             . "INNER JOIN persona per ON(per.id=pac.persona) "
+                            . "INNER JOIN empleado emp on(emp.id=c.empleado) "
+                            . "INNER JOIN persona per2 ON(per2.id=emp.persona) "
                             . "LEFT JOIN tratamiento trat ON(trat.id=c.tratamiento) "
                             . "INNER JOIN expediente exp ON(exp.paciente=pac.id) "
                             . "INNER JOIN sucursal suc ON(suc.id=c.sucursal) "
@@ -1499,7 +1503,7 @@ class CitaController extends Controller
 //                            ->setFirstResult($start)
 //                            ->setMaxResults($longitud)
 //                            ->getResult();
-                    $sql = "SELECT suc.nombre as sucursal, CONCAT('<a class=\"citaEdit\" href=\"\" id=\"',c.id,'\">Editar cita</a>') as actions,c.id as id, CONCAT('<a class=\"link_expediente\" id=\"',exp.numero,'\">',exp.numero,'</a>') as expediente, CONCAT(DATE_FORMAT(c.fecha_cita, '%d-%m-%Y'),' ',DATE_FORMAT(c.hora_cita,'%H:%i')) as fecha, UPPER(CONCAT(per.nombres,' ',per.apellidos)) as nombres,per.telefono as tel, "
+                    $sql = "SELECT UPPER(CONCAT(per2.nombres,' ',per2.apellidos)) as nombresEmp, suc.nombre as sucursal, CONCAT('<a class=\"citaEdit\" href=\"\" id=\"',c.id,'\">Editar cita</a>') as actions,c.id as id, CONCAT('<a class=\"link_expediente\" id=\"',exp.numero,'\">',exp.numero,'</a>') as expediente, CONCAT(DATE_FORMAT(c.fecha_cita, '%d-%m-%Y'),' ',DATE_FORMAT(c.hora_cita,'%H:%i')) as fecha, UPPER(CONCAT(per.nombres,' ',per.apellidos)) as nombres,per.telefono as tel, "
                             . "CASE "
                             . "WHEN c.tipo_cita=0 OR c.tipo_cita IS NULL THEN trat.nombre "
                             . "WHEN c.tipo_cita=1 THEN CONCAT((SELECT ta.nombre FROM persona_tratamiento pt INNER JOIN tratamiento ta ON (pt.tratamiento=ta.id) WHERE pt.id=IFNULL(c.tratamiento1,0)),'<br>',(SELECT ta.nombre FROM persona_tratamiento pt INNER JOIN tratamiento ta ON (pt.tratamiento=ta.id) WHERE pt.id=IFNULL(c.tratamiento2,0))) "
@@ -1508,6 +1512,8 @@ class CitaController extends Controller
                             . "FROM Cita c "
                             . "INNER JOIN paciente pac on(pac.id=c.paciente) "
                             . "INNER JOIN persona per ON(per.id=pac.persona) "
+                            . "INNER JOIN empleado emp on(emp.id=c.empleado) "
+                            . "INNER JOIN persona per2 ON(per2.id=emp.persona) "
                             . "LEFT JOIN tratamiento trat ON(trat.id=c.tratamiento) "
                             . "INNER JOIN expediente exp ON(exp.paciente=pac.id) "
                             . "INNER JOIN sucursal suc ON(suc.id=c.sucursal) "

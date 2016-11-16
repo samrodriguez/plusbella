@@ -570,6 +570,7 @@
                             { "data": "fecha" },
                             { "data": "expediente" },
                             { "data": "nombres" },
+                            { "data": "nombresEmp" },
                             { "data": "tel" },
                             { "data": "tratamiento" },
                             { "data": "actions" },
@@ -841,11 +842,12 @@ function formatRepoSelection (data) {
         
         
         
-        
+
         
         $(function () {
           $('[data-toggle="tooltip"]').tooltip();
           $('#filtroSucursales').select2();
+          $('#filtroSucursalesL').select2();
         });
     </script>
     {% endblock %}
