@@ -1442,25 +1442,37 @@ class CitaController extends Controller
                 }
                 $busqueda['value'] = str_replace(' ', '%', $busqueda['value']);
                 if($busqueda['value']!=''){
-                    $sql = "SELECT suc.nombre as sucursal, CONCAT('<a class=\"citaEdit\" href=\"\" id=\"',c.id,'\">Editar cita</a>') as actions,c.id as id, CONCAT('<a class=\"link_expediente\" id=\"',exp.numero,'\">',exp.numero,'</a>') as expediente, CONCAT(DATE_FORMAT(c.fecha_cita, '%d-%m-%Y'),' ',DATE_FORMAT(c.hora_cita,'%H:%i')) as fecha, UPPER(CONCAT(per.nombres,' ',per.apellidos)) as nombres,per.telefono as tel, UPPER(trat.nombre) as tratamiento  FROM Cita c "
+                    $sql = "SELECT suc.nombre as sucursal, CONCAT('<a class=\"citaEdit\" href=\"\" id=\"',c.id,'\">Editar cita</a>') as actions,c.id as id, CONCAT('<a class=\"link_expediente\" id=\"',exp.numero,'\">',exp.numero,'</a>') as expediente, CONCAT(DATE_FORMAT(c.fecha_cita, '%d-%m-%Y'),' ',DATE_FORMAT(c.hora_cita,'%H:%i')) as fecha, UPPER(CONCAT(per.nombres,' ',per.apellidos)) as nombres,per.telefono as tel, "
+                            . "CASE "
+                            . "WHEN c.tipo_cita=0 OR c.tipo_cita IS NULL THEN trat.nombre "
+                            . "WHEN c.tipo_cita=1 THEN (SELECT ta.nombre FROM persona_tratamiento pt INNER JOIN tratamiento ta ON (pt.tratamiento=ta.id) WHERE pt.id=IFNULL(c.tratamiento1,0)) "
+                            . "ELSE CONCAT((SELECT CONCAT(tb.nombre) FROM detalle_venta_paquete detpaq INNER JOIN tratamiento tb ON (detpaq.tratamiento=tb.id) WHERE detpaq.id=c.tratamiento1 AND detpaq.venta_paquete=c.paquete),'<br>',(SELECT CONCAT(tb.nombre) FROM detalle_venta_paquete detpaq INNER JOIN tratamiento tb ON (detpaq.tratamiento=tb.id) WHERE detpaq.id=c.tratamiento2 AND detpaq.venta_paquete=c.paquete))"
+                            . " END as tratamiento "
+                            . "FROM Cita c "
                             . "INNER JOIN paciente pac on(pac.id=c.paciente) "
                             . "INNER JOIN persona per ON(per.id=pac.persona) "
-                            . "INNER JOIN tratamiento trat ON(trat.id=c.tratamiento) "
+                            . "LEFT JOIN tratamiento trat ON(trat.id=c.tratamiento) "
                             . "INNER JOIN expediente exp ON(exp.paciente=pac.id) "
                             . "INNER JOIN sucursal suc ON(suc.id=c.sucursal) "
-                            . " WHERE suc.id=".$sucursal." c.fecha_cita BETWEEN '".$fechaInicio."' AND '".$fechaFin
+                            . " WHERE suc.id=".$sucursal." AND c.fecha_cita BETWEEN '".$fechaInicio."' AND '".$fechaFin
                             . "' HAVING upper(CONCAT(expediente,' ',nombres,' ',telefono)) LIKE upper('%".$busqueda['value']."%') ";
                     $stmt = $em->getConnection()->prepare($sql);
                     $stmt->execute();
                     $row['data'] = $stmt->fetchAll();
                     $row['recordsFiltered']= count($row['data']);
-                    $sql = "SELECT suc.nombre as sucursal, CONCAT('<a class=\"citaEdit\" href=\"\" id=\"',c.id,'\">Editar cita</a>') as actions,c.id as id, CONCAT('<a class=\"link_expediente\" id=\"',exp.numero,'\">',exp.numero,'</a>') as expediente, CONCAT(DATE_FORMAT(c.fecha_cita, '%d-%m-%Y'),' ',DATE_FORMAT(c.hora_cita,'%H:%i')) as fecha, UPPER(CONCAT(per.nombres,' ',per.apellidos)) as nombres,per.telefono as tel, UPPER(trat.nombre) as tratamiento  FROM Cita c "
+                    $sql = "SELECT suc.nombre as sucursal, CONCAT('<a class=\"citaEdit\" href=\"\" id=\"',c.id,'\">Editar cita</a>') as actions,c.id as id, CONCAT('<a class=\"link_expediente\" id=\"',exp.numero,'\">',exp.numero,'</a>') as expediente, CONCAT(DATE_FORMAT(c.fecha_cita, '%d-%m-%Y'),' ',DATE_FORMAT(c.hora_cita,'%H:%i')) as fecha, UPPER(CONCAT(per.nombres,' ',per.apellidos)) as nombres,per.telefono as tel, "
+                            . "CASE "
+                            . "WHEN c.tipo_cita=0 OR c.tipo_cita IS NULL THEN trat.nombre "
+                            . "WHEN c.tipo_cita=1 THEN (SELECT ta.nombre FROM persona_tratamiento pt INNER JOIN tratamiento ta ON (pt.tratamiento=ta.id) WHERE pt.id=IFNULL(c.tratamiento1,0)) "
+                            . "ELSE CONCAT((SELECT CONCAT(tb.nombre) FROM detalle_venta_paquete detpaq INNER JOIN tratamiento tb ON (detpaq.tratamiento=tb.id) WHERE detpaq.id=c.tratamiento1 AND detpaq.venta_paquete=c.paquete),'<br>',(SELECT CONCAT(tb.nombre) FROM detalle_venta_paquete detpaq INNER JOIN tratamiento tb ON (detpaq.tratamiento=tb.id) WHERE detpaq.id=c.tratamiento2 AND detpaq.venta_paquete=c.paquete))"
+                            . " END as tratamiento "
+                            . "FROM Cita c "
                             . "INNER JOIN paciente pac on(pac.id=c.paciente) "
                             . "INNER JOIN persona per ON(per.id=pac.persona) "
-                            . "INNER JOIN tratamiento trat ON(trat.id=c.tratamiento) "
+                            . "LEFT JOIN tratamiento trat ON(trat.id=c.tratamiento) "
                             . "INNER JOIN expediente exp ON(exp.paciente=pac.id) "
                             . "INNER JOIN sucursal suc ON(suc.id=c.sucursal) "
-                            . " WHERE suc.id=".$sucursal." c.fecha_cita BETWEEN '".$fechaInicio."' AND '".$fechaFin
+                            . " WHERE suc.id=".$sucursal." AND c.fecha_cita BETWEEN '".$fechaInicio."' AND '".$fechaFin
                             . "' HAVING upper(CONCAT(expediente,' ',nombres,' ',telefono)) LIKE upper('%".$busqueda['value']."%') "
                             . "ORDER BY c.fecha_cita DESC, c.hora_cita DESC, ". $orderByText." ".$orderDir." LIMIT " . $start . "," . $longitud;
                     $stmt = $em->getConnection()->prepare($sql);
@@ -1470,19 +1482,60 @@ class CitaController extends Controller
                 else{
                     
                     
-                    $sql = "SELECT CONCAT('<a class=\"citaEdit\" href=\"\" id=\"',c.id,'\">Editar cita</a>') as actions,c.id as id, CONCAT('<a class=\"link_expediente\" id=\"',exp.numero,'\">',exp.numero,'</a>') as expediente, CONCAT(DATE_FORMAT(c.fechaCita, '%d-%m-%Y'),' ', DATE_FORMAT(c.horaCita,'%H:%i')) as fecha, UPPER(CONCAT(per.nombres,' ',per.apellidos)) as nombres,per.telefono as tel, UPPER(trat.nombre) as tratamiento, suc.nombre as sucursal  FROM DGPlusbelleBundle:Cita c "
-                            . "JOIN c.paciente pac "
-                            . "JOIN pac.persona per "
-                            . "JOIN c.tratamiento trat "
-                            . "JOIN pac.expediente exp "
-                            . "JOIN c.sucursal suc "
-                            . " WHERE suc.id =:sucursal AND c.fechaCita BETWEEN :fechaInicio AND :fechaFin "
-                            . "ORDER BY c.fechaCita DESC, c.horaCita DESC, ". $orderByText." ".$orderDir;
-                    $row['data'] = $em->createQuery($sql)
-                            ->setParameters(array('sucursal'=>$sucursal, 'fechaInicio'=> $fechaInicio,'fechaFin'=> $fechaFin))
-                            ->setFirstResult($start)
-                            ->setMaxResults($longitud)
-                            ->getResult();
+//                    $sql = "SELECT CONCAT('<a class=\"citaEdit\" href=\"\" id=\"',c.id,'\">Editar cita</a>') as actions,c.id as id, CONCAT('<a class=\"link_expediente\" id=\"',exp.numero,'\">',exp.numero,'</a>') as expediente, CONCAT(DATE_FORMAT(c.fechaCita, '%d-%m-%Y'),' ', DATE_FORMAT(c.horaCita,'%H:%i')) as fecha, UPPER(CONCAT(per.nombres,' ',per.apellidos)) as nombres,per.telefono as tel, suc.nombre as sucursal, "
+//                            . "CASE "
+//                            . "WHEN c.tipoCita=0 THEN '' "
+//                            . "WHEN c.tipoCita=1 THEN (SELECT t1.nombre FROM DGPlusbelleBundle:PersonaTratamiento pt WHERE pt.id=c.tratamiento1) "
+//                            . "ELSE '' END as tratamiento FROM DGPlusbelleBundle:Cita c "
+//                            . "JOIN c.paciente pac "
+//                            . "JOIN pac.persona per "
+//                            . "LEFT JOIN c.tratamiento trat "
+//                            . "JOIN pac.expediente exp "
+//                            . "JOIN c.sucursal suc "
+//                            . " WHERE suc.id =:sucursal AND c.fechaCita BETWEEN :fechaInicio AND :fechaFin "
+//                            . "ORDER BY c.fechaCita DESC, c.horaCita DESC, ". $orderByText." ".$orderDir;
+//                    $row['data'] = $em->createQuery($sql)
+//                            ->setParameters(array('sucursal'=>$sucursal, 'fechaInicio'=> $fechaInicio,'fechaFin'=> $fechaFin))
+//                            ->setFirstResult($start)
+//                            ->setMaxResults($longitud)
+//                            ->getResult();
+                    $sql = "SELECT suc.nombre as sucursal, CONCAT('<a class=\"citaEdit\" href=\"\" id=\"',c.id,'\">Editar cita</a>') as actions,c.id as id, CONCAT('<a class=\"link_expediente\" id=\"',exp.numero,'\">',exp.numero,'</a>') as expediente, CONCAT(DATE_FORMAT(c.fecha_cita, '%d-%m-%Y'),' ',DATE_FORMAT(c.hora_cita,'%H:%i')) as fecha, UPPER(CONCAT(per.nombres,' ',per.apellidos)) as nombres,per.telefono as tel, "
+                            . "CASE "
+                            . "WHEN c.tipo_cita=0 OR c.tipo_cita IS NULL THEN trat.nombre "
+                            . "WHEN c.tipo_cita=1 THEN CONCAT((SELECT ta.nombre FROM persona_tratamiento pt INNER JOIN tratamiento ta ON (pt.tratamiento=ta.id) WHERE pt.id=IFNULL(c.tratamiento1,0)),'<br>',(SELECT ta.nombre FROM persona_tratamiento pt INNER JOIN tratamiento ta ON (pt.tratamiento=ta.id) WHERE pt.id=IFNULL(c.tratamiento2,0))) "
+                            . "ELSE CONCAT((SELECT CONCAT(tb.nombre) FROM detalle_venta_paquete detpaq INNER JOIN tratamiento tb ON (detpaq.tratamiento=tb.id) WHERE detpaq.id=c.tratamiento1 AND detpaq.venta_paquete=c.paquete),'<br>',(SELECT CONCAT(tb.nombre) FROM detalle_venta_paquete detpaq INNER JOIN tratamiento tb ON (detpaq.tratamiento=tb.id) WHERE detpaq.id=c.tratamiento2 AND detpaq.venta_paquete=c.paquete))"
+                            . " END as tratamiento "
+                            . "FROM Cita c "
+                            . "INNER JOIN paciente pac on(pac.id=c.paciente) "
+                            . "INNER JOIN persona per ON(per.id=pac.persona) "
+                            . "LEFT JOIN tratamiento trat ON(trat.id=c.tratamiento) "
+                            . "INNER JOIN expediente exp ON(exp.paciente=pac.id) "
+                            . "INNER JOIN sucursal suc ON(suc.id=c.sucursal) "
+                            . " WHERE suc.id=".$sucursal." AND c.fecha_cita BETWEEN '".$fechaInicio."' AND '".$fechaFin."' "
+                            . "ORDER BY c.fecha_cita DESC, c.hora_cita DESC, ". $orderByText." ".$orderDir." LIMIT " . $start . "," . $longitud;
+                    
+                    
+                 
+//                    SELECT suc.nombre as sucursal, CONCAT('<a class=\"citaEdit\" href=\"\" id=\"',c.id,'\">Editar cita</a>') as actions,c.id as id, CONCAT('<a class=\"link_expediente\" id=\"',exp.numero,'\">',exp.numero,'</a>') as expediente, CONCAT(DATE_FORMAT(c.fecha_cita, '%d-%m-%Y'),' ',DATE_FORMAT(c.hora_cita,'%H:%i')) as fecha, UPPER(CONCAT(per.nombres,' ',per.apellidos)) as nombres,per.telefono as tel, 
+//                            CASE 
+//                            WHEN c.tipo_cita=0 THEN trat.nombre
+//                            WHEN c.tipo_cita is null THEN trat.nombre
+//                            WHEN c.tipo_cita=1 THEN 
+//                            (SELECT ta.nombre FROM persona_tratamiento pt INNER JOIN tratamiento ta ON (pt.tratamiento=ta.id) WHERE ta.id=478) 
+//                            ELSE '' END as tratamiento 
+//                            FROM Cita c INNER JOIN paciente pac on(pac.id=c.paciente)
+//                            INNER JOIN persona per ON(per.id=pac.persona)
+//                            LEFT JOIN tratamiento trat ON(trat.id=c.tratamiento) 
+//                            INNER JOIN expediente exp ON(exp.paciente=pac.id) 
+//                            INNER JOIN sucursal suc ON(suc.id=c.sucursal) 
+//                            WHERE c.fecha_cita BETWEEN '2016-11-16' AND '2016-11-16' 
+//                            ORDER BY c.fecha_cita DESC, c.hora_cita DESC
+                    
+                    
+                    
+                    $stmt = $em->getConnection()->prepare($sql);
+                    $stmt->execute();
+                    $row['data'] = $stmt->fetchAll();
                     
                     
 //                    $sql = "SELECT pac.fecha_nacimiento as fechaNacimiento, pac.id, concat(per.nombres,' ',per.apellidos) as  nombres, per.telefono as telefono,per.telefono2 FROM paciente pac "
@@ -1504,7 +1557,7 @@ class CitaController extends Controller
                     {
                         case 2003: 
                             $serverOffline= $this->getParameter('app.serverOffline');
-                            $row['data'][0]['name'] =$serverOffline.'. CODE: '.$e->getErrorCode();
+                            $row['data'][0]['name'] = $serverOffline.'. CODE: '.$e->getErrorCode();
                         break;
                         default :
                             $row['data'][0]['name'] = $e->getMessage();                           

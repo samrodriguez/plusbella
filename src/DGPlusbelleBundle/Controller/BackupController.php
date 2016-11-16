@@ -47,7 +47,7 @@ class BackupController extends Controller{
     //echo PHP_OS; 
     //include_once "conexion/def.php";
     date_default_timezone_set("America/El_Salvador");
-    $backupFile = "sepes_".date("d-m-Y_H-i-s").".sql";
+    $backupFile = "laplusbelle_".date("d-m-Y_H-i-s").".sql";
     $path = $this->container->getParameter('plusbelle.backup');
     
     $kernel = $this->get('kernel');
