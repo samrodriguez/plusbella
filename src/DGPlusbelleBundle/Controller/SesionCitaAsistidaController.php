@@ -18,7 +18,7 @@ class SesionCitaAsistidaController extends Controller
 {
     /**
      * @Route("/evaluar-sesiones-cita", name="evaluar_sesiones_cita", options={"expose"=true})
-     * @Method("POST")
+     * @Method("GET")
      * @Template()
      */
     public function evaluarSesionesCitaAction(/*$idCita*/ Request$request )
