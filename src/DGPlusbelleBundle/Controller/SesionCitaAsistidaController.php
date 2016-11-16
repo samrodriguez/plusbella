@@ -3,6 +3,8 @@
 namespace DGPlusbelleBundle\Controller;
 
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -21,7 +23,7 @@ class SesionCitaAsistidaController extends Controller
      * @Method("GET")
      * @Template()
      */
-    public function evaluarSesionesCitaAction(/*$idCita*/ Request$request )
+    public function evaluarSesionesCitaAction(/*$idCita*/ Request $request )
     {
         $isAjax = $this->get('Request')->isXMLhttpRequest();
         if($isAjax){
@@ -30,7 +32,7 @@ class SesionCitaAsistidaController extends Controller
                 $em = $this->getDoctrine()->getManager();
                 $registroSesionCita = 0;
                 
-                $idCita = $this->get('request')->request->get('id');
+                $idCita = $request->get('id');
                 $cita = $em->getRepository('DGPlusbelleBundle:Cita')->find($idCita);                
                 $tipoCita = $cita->getTipoCita();
                 
@@ -43,6 +45,14 @@ class SesionCitaAsistidaController extends Controller
                             $registroSesionCita = $this->evaluarVentaPaquete($em, $cita);
                             break;
                     }
+                } else {
+                    $registroSesionCita = 1;
+                }
+                
+                if($registroSesionCita == 1) {
+                    $mensaje = '¡Cita registrada como asistida satisfactoriamente!';
+                } else {
+                    $mensaje = '¡Cambio de cita a asistida y sesiones de tratamiento registrados satisfactoriamente !';
                 }
                 
                 $cita->setEstado('A');
@@ -51,13 +61,18 @@ class SesionCitaAsistidaController extends Controller
                 
                 $response = new JsonResponse();
                 $response->setData(array(
-                                    'accion'       => $registroSesionCita,
+                                    'regs' => $registroSesionCita,
+                                    'mensaje' => $mensaje,
                                 ));  
             
                 return $response; 
                 
             }catch (Exception $ex) {
-
+                $response = new JsonResponse();
+                $response->setData(array(
+                                    'regs' => 0,
+                                    'mensaje' => '¡La cita no pudo modificarse, intente de nuevo!',
+                                ));  
             }                                
         } else {    
             return new Response('0');              
@@ -85,9 +100,9 @@ class SesionCitaAsistidaController extends Controller
                 $em->merge($segTratamiento1);
                 $em->flush();
 
-                $accion = 1;
+                $accion = 2;
             } else {
-
+                $accion = 1;
             }
         }
         
@@ -109,9 +124,9 @@ class SesionCitaAsistidaController extends Controller
                 $em->merge($segTratamiento2);
                 $em->flush();
 
-                $accion = 1;
+                $accion = 2;
             } else {
-
+                $accion = 1;
             }
         }
                 
@@ -168,10 +183,10 @@ class SesionCitaAsistidaController extends Controller
                     $em->merge($ventaPaquete);
                     $em->flush();
 
-                    $accion = 1;
+                    $accion = 2;
                 }
             } else {
-
+                $accion = 1;
             }
 
             if(!is_null($entity->getTratamiento2())) {
@@ -220,10 +235,10 @@ class SesionCitaAsistidaController extends Controller
                     $accion = 1;
                 }
             } else {
-
+                $accion = 1;
             }
         } else {
-            
+            $accion = 1;
         }
     }
 }
