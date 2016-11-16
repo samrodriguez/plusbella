@@ -251,19 +251,19 @@
                     console.log(rate_value);
                     switch(parseInt(rate_value)){
 
-                        case 1://///Consulta
+                        case 0://///Consulta
                             if($('#dgplusbellebundle_cita_tratamiento').val()==""){
                                 swal('','Seleccione una consulta!','error');
                                 return false;
                             }
                             break;
-                        case 2://///Tratamiento
+                        case 1://///Tratamiento
                             if($('#dgplusbellebundle_cita_paquetes_trat1').val()==0){
                                     swal('','Seleccione un tratamiento!','error');
                                     return false;
                             }
                             break;
-                        case 3://///Paquete
+                        case 2://///Paquete
                             if($('#dgplusbellebundle_cita_paquetes').val()==0){
                                 swal('','Seleccione un paquete!','error');
                                 return false;

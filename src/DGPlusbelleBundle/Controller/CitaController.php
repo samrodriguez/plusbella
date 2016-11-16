@@ -177,19 +177,19 @@ class CitaController extends Controller
         $entity->setTipoCita(intval($tipoCita));
         
         switch($tipoCita){
-            case 1://///Consultas
+            case 0://///Consultas
                 
                 $entity->setTratamiento1(null);
                 $entity->setTratamiento2(null);
                 
                 break;
-            case 2://///Tratamientos sin paquetes
+            case 1://///Tratamientos sin paquetes
                 
                 $entity->setTratamiento1($trat1);
                 $entity->setTratamiento2($trat2);
                 
                 break;
-            case 3://///Tratamientos de paquetes
+            case 2://///Tratamientos de paquetes
                 
                 $entity->setTratamiento1($trat1);
                 $entity->setTratamiento2($trat2);
@@ -800,7 +800,7 @@ class CitaController extends Controller
                 c.fechaCita, c.horaCita,c.horaFin, c.estado, c.descripcion,c.tipoCita as citaPor, c.tratamiento1, c.tratamiento2, c.paquete
                     FROM DGPlusbelleBundle:Cita c
                     JOIN c.empleado emp
-                    JOIN c.tratamiento t
+                    LEFT JOIN c.tratamiento t
                     JOIN c.paciente p
                     JOIN p.persona pac
                     JOIN emp.persona per
@@ -822,7 +822,7 @@ class CitaController extends Controller
                 c.fechaCita, c.horaCita,c.horaFin, c.estado
                     FROM DGPlusbelleBundle:Cita c
                     JOIN c.empleado emp
-                    JOIN c.tratamiento t
+                    LEFT JOIN c.tratamiento t
                     JOIN emp.persona per
                 WHERE c.id =:id";
             $cita['regs'] = $em->createQuery($dql)

@@ -43,7 +43,7 @@ class CitaType extends AbstractType
                 ))
                 
                 ->add('tipoCita','choice',array('label' => 'Tipo cita','required'=>false, 'empty_value'=>null,
-                    'choices'  => array('1' => 'Consulta', '2' => 'Sesión tratamiento', '3' => 'Sesión de tratamiento con paquete'),
+                    'choices'  => array('0' => 'Consulta', '1' => 'Sesión tratamiento', '2' => 'Sesión de tratamiento con paquete'),
                     'expanded' => true,
                     'multiple' => false,
                     'attr'=>array(
