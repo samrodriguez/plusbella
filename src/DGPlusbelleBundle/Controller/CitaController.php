@@ -191,6 +191,7 @@ class CitaController extends Controller
                 break;
             case 2://///Tratamientos de paquetes
                 
+                $entity->setPaquete($paquete);
                 $entity->setTratamiento1($trat1);
                 $entity->setTratamiento2($trat2);
                 
@@ -881,7 +882,7 @@ class CitaController extends Controller
                 if($cita['regs'][0]["paquete"]!=null){
                     $paquete = $em->getRepository('DGPlusbelleBundle:VentaPaquete')->find($cita['regs'][0]["paquete"]);
                     if(count($paquete)!=0)
-                        $cita['regs'][0]["paquete"] = $tratamiento1->getPaquete()->getNombre();
+                        $cita['regs'][0]["paquete"] = $paquete->getPaquete()->getNombre();
                     else
                         $cita['regs'][0]["paquete"] = '';
                 }
