@@ -387,7 +387,7 @@
                                 var numPaquetes= data.id.length;
                                 var options ="";
                                 var defectoValor = 0;
-                                //options+='<option value="0">Seleccione un tratamiento...</option>';
+                                options+='<option value="0">Seleccione un tratamiento...</option>';
                                 for (var i = 0; i < numPaquetes; i++) {   
                                     if(i==0){
                                         options+='<option value="'+data.id[i]+'">'+data.nombre[i]+' </option>';
@@ -512,6 +512,7 @@
                                 var numPaquetes= data.length;
                                 var options ="";
                                 var defectoValor = 0;
+                                options+='<option value="0">Seleccione un paquete...</option>';
                                 for (var i = 0; i < numPaquetes; i++) {
                                     if(i==0){	
                                         options+='<option selected value="'+data[i].id+'">'+data[i].nombre+' </option>';                   
