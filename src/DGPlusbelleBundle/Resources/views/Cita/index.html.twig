@@ -101,7 +101,7 @@
                 <a id="men2" data-toggle="tab" href="#listadoCitas"><i class="fa fa-list-ul"></i> Listado de citas {#({{citas|length}})#}</a>
             </li>
             <li>
-                <a id="men3" data-toggle="tab" href="#listadoCumpleaneros"><i class="fa fa-birthday-cake"></i> Cumpleañeros del día ({{cumpleaneros|length}})</a>
+                <a id="men3" data-toggle="tab" href="#listadoCumpleaneros"><i class="fa fa-birthday-cake"></i> Cumpleañeros del día {#({{cumpleaneros|length}})#}</a>
             </li>
             <li>
                 <a id="men4" data-toggle="tab" href="#envioCorreo"><i class="fa fa-envelope"></i> Correos</a>
@@ -603,12 +603,14 @@
             default_position:"below",
             //show_icon:false,
             onSelect: function() {
-                {#url = "{{path('admin_cumpleanos')}}";
+                url = "{{path('admin_cumpleanos')}}";
                 hy = $('#filtroCumpleanos').val();
                 url+="?fecha="+hy;
-                tablaCumpleanos.ajax.url( url ).load();#}
-                url = '{{path('admin_citas_listado')}}'+"?fechaInicio="+$('#filtroCitasInicio').val()+"&fechaFin="+$('#filtroCitasFin').val()+"&sucursal="+$('#filtroSucursalesL').val();
-                tablaCitas.ajax.url( url ).load();
+                tablaCumpleanos.ajax.url( url ).load();
+               {# var filas =tablaCumpleanos.ajax.url( url ).page.info();
+                console.log(filas);#}
+                {#url = '{{path('admin_citas_listado')}}'+"?fechaInicio="+$('#filtroCitasInicio').val()+"&fechaFin="+$('#filtroCitasFin').val()+"&sucursal="+$('#filtroSucursalesL').val();
+                //tablaCitas.ajax.url( url ).load();#}
             }
         });
         /////Citas
