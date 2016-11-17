@@ -63,9 +63,9 @@ class BackupController extends Controller{
         
     //var_dump($path);
     try {
-        var_dump(exec("mysqldump -h localhost -u root marvinvi_plusbella -R> ".$path.$backupFile));
+        exec("mysqldump -h localhost -u admin -p 919293marvin marvinvi_demo_plusbella -R> ".$path.$backupFile);
     } catch (Exception $e) {
-        var_dump($e->getMessage());
+        echo $e->getMessage();
     }
     //die();
     // open some file for reading
@@ -92,7 +92,7 @@ class BackupController extends Controller{
     // close the connection and the file handler
     ftp_close($conn_id);
     fclose($fp);
-    
+    die();
 //    return $this->redirect($this->generateUrl('admin_backup'));
     return $this->redirect($this->generateUrl('admin_backup', array('estado' => '0')));
 
