@@ -1448,7 +1448,7 @@ class CitaController extends Controller
                             . "WHEN c.tipo_cita=1 THEN (SELECT ta.nombre FROM persona_tratamiento pt INNER JOIN tratamiento ta ON (pt.tratamiento=ta.id) WHERE pt.id=IFNULL(c.tratamiento1,0)) "
                             . "ELSE CONCAT((SELECT CONCAT(tb.nombre) FROM detalle_venta_paquete detpaq INNER JOIN tratamiento tb ON (detpaq.tratamiento=tb.id) WHERE detpaq.id=c.tratamiento1 AND detpaq.venta_paquete=c.paquete),'<br>',(SELECT CONCAT(tb.nombre) FROM detalle_venta_paquete detpaq INNER JOIN tratamiento tb ON (detpaq.tratamiento=tb.id) WHERE detpaq.id=c.tratamiento2 AND detpaq.venta_paquete=c.paquete))"
                             . " END as tratamiento "
-                            . "FROM Cita c "
+                            . "FROM cita c "
                             . "INNER JOIN paciente pac on(pac.id=c.paciente) "
                             . "INNER JOIN persona per ON(per.id=pac.persona) "
                             . "INNER JOIN empleado emp on(emp.id=c.empleado) "
@@ -1468,7 +1468,7 @@ class CitaController extends Controller
                             . "WHEN c.tipo_cita=1 THEN (SELECT ta.nombre FROM persona_tratamiento pt INNER JOIN tratamiento ta ON (pt.tratamiento=ta.id) WHERE pt.id=IFNULL(c.tratamiento1,0)) "
                             . "ELSE CONCAT((SELECT CONCAT(tb.nombre) FROM detalle_venta_paquete detpaq INNER JOIN tratamiento tb ON (detpaq.tratamiento=tb.id) WHERE detpaq.id=c.tratamiento1 AND detpaq.venta_paquete=c.paquete),'<br>',(SELECT CONCAT(tb.nombre) FROM detalle_venta_paquete detpaq INNER JOIN tratamiento tb ON (detpaq.tratamiento=tb.id) WHERE detpaq.id=c.tratamiento2 AND detpaq.venta_paquete=c.paquete))"
                             . " END as tratamiento "
-                            . "FROM Cita c "
+                            . "FROM cita c "
                             . "INNER JOIN paciente pac on(pac.id=c.paciente) "
                             . "INNER JOIN persona per ON(per.id=pac.persona) "
                             . "INNER JOIN empleado emp on(emp.id=c.empleado) "
@@ -1509,7 +1509,7 @@ class CitaController extends Controller
                             . "WHEN c.tipo_cita=1 THEN CONCAT((SELECT ta.nombre FROM persona_tratamiento pt INNER JOIN tratamiento ta ON (pt.tratamiento=ta.id) WHERE pt.id=IFNULL(c.tratamiento1,0)),'<br>',(SELECT ta.nombre FROM persona_tratamiento pt INNER JOIN tratamiento ta ON (pt.tratamiento=ta.id) WHERE pt.id=IFNULL(c.tratamiento2,0))) "
                             . "ELSE CONCAT((SELECT CONCAT(tb.nombre) FROM detalle_venta_paquete detpaq INNER JOIN tratamiento tb ON (detpaq.tratamiento=tb.id) WHERE detpaq.id=c.tratamiento1 AND detpaq.venta_paquete=c.paquete),'<br>',(SELECT CONCAT(tb.nombre) FROM detalle_venta_paquete detpaq INNER JOIN tratamiento tb ON (detpaq.tratamiento=tb.id) WHERE detpaq.id=c.tratamiento2 AND detpaq.venta_paquete=c.paquete))"
                             . " END as tratamiento "
-                            . "FROM Cita c "
+                            . "FROM cita c "
                             . "INNER JOIN paciente pac on(pac.id=c.paciente) "
                             . "INNER JOIN persona per ON(per.id=pac.persona) "
                             . "INNER JOIN empleado emp on(emp.id=c.empleado) "
@@ -1557,7 +1557,8 @@ class CitaController extends Controller
                 
                 return new Response(json_encode($row));
             } catch (\Exception $e) {  
-                var_dump($e);
+                echo $e->getMessage();
+                echo $e->getLine();
                 if(method_exists($e,'getErrorCode')){ 
                     switch (intval($e->getErrorCode()))
                     {
