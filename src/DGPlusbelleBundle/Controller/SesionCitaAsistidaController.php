@@ -106,7 +106,7 @@ class SesionCitaAsistidaController extends Controller
             }
         }
         
-        if(!is_null($entity->getTratamiento1())) {
+        if(!is_null($entity->getTratamiento2())) {
             $ventaTratamiento2 = $em->getRepository('DGPlusbelleBundle:PersonaTratamiento')->find($entity->getTratamiento2());
             $segTratamiento2 = $em->getRepository('DGPlusbelleBundle:SeguimientoTratamiento')->findOneBy(array('idPersonaTratamiento' => $ventaTratamiento2));
 
