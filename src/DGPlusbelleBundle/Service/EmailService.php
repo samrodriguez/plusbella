@@ -47,6 +47,7 @@ class EmailService
         if($cc != null ){
             $email->setCc($cc);
         }
+        
         if($replay != null ){
             $email->setReplyTo($replay);
         }else{
