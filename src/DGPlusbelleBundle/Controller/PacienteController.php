@@ -705,7 +705,7 @@ class PacienteController extends Controller
         
         $paciente['data'] = $em->createQuery($dql)
                 ->setParameters(array('busqueda'=>"%".$busqueda."%"))
-                ->setMaxResults( 10 )
+                //->setMaxResults( 10 )
                 ->getResult();
         
         return new Response(json_encode($paciente));

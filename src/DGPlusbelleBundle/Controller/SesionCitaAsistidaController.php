@@ -35,29 +35,34 @@ class SesionCitaAsistidaController extends Controller
                 $idCita = $request->get('id');
                 $cita = $em->getRepository('DGPlusbelleBundle:Cita')->find($idCita);                
                 $tipoCita = $cita->getTipoCita();
+                //$estadoCita = $cita->getEstado();
                 
-                if(!is_null($tipoCita) && $tipoCita > 0) {
-                    switch ($tipoCita){
-                        case 1:
-                            $registroSesionCita = $this->evaluarVentaTratamiento($em, $cita);
-                            break;
-                        case 2:
-                            $registroSesionCita = $this->evaluarVentaPaquete($em, $cita);
-                            break;
+                //if($estadoCita != 'A') {
+                    if(!is_null($tipoCita) && $tipoCita > 0) {
+                        switch ($tipoCita){
+                            case 1:
+                                $registroSesionCita = $this->evaluarVentaTratamiento($em, $cita);
+                                break;
+                            case 2:
+                                $registroSesionCita = $this->evaluarVentaPaquete($em, $cita);
+                                break;
+                        }
+                    } else {
+                        $registroSesionCita = 1;
                     }
-                } else {
-                    $registroSesionCita = 1;
-                }
-                
-                if($registroSesionCita == 1) {
-                    $mensaje = '¡Cita registrada como asistida satisfactoriamente!';
-                } else {
-                    $mensaje = '¡Cambio de cita a asistida y sesiones de tratamiento registrados satisfactoriamente !';
-                }
-                
-                $cita->setEstado('A');
-                $em->merge($cita);
-                $em->flush();
+
+                    if($registroSesionCita == 1) {
+                        $mensaje = '¡Cita registrada como asistida satisfactoriamente!';
+                    } else {
+                        $mensaje = '¡Cambio de cita a asistida y sesiones de tratamiento registrados satisfactoriamente !';
+                    }
+
+                    $cita->setEstado('A');
+                    $em->merge($cita);
+                    $em->flush();
+                /*} else {
+                    $mensaje = '¡Error, Cita se encuentra como asistida, no puede ser modificada!';
+                }*/
                 
                 $response = new JsonResponse();
                 $response->setData(array(
