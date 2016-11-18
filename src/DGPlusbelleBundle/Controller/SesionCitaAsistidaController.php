@@ -83,50 +83,56 @@ class SesionCitaAsistidaController extends Controller
         $accion = 0;
         
         if(!is_null($entity->getTratamiento1())) {
-            $ventaTratamiento1 = $em->getRepository('DGPlusbelleBundle:PersonaTratamiento')->find($entity->getTratamiento1());
-            $segTratamiento1 = $em->getRepository('DGPlusbelleBundle:SeguimientoTratamiento')->findOneBy(array('idPersonaTratamiento' => $ventaTratamiento1));        
-        
-            if(($ventaTratamiento1->getNumSesiones() - $segTratamiento1->getNumSesion()) > 0) {
-                $sesionTratamiento1 = new SesionVentaTratamiento();
-                $sesionTratamiento1->setEmpleado($entity->getEmpleado());
-                $sesionTratamiento1->setSucursal($entity->getSucursal());
-                $sesionTratamiento1->setPersonaTratamiento($ventaTratamiento1);
-                $sesionTratamiento1->setFechaSesion(new \DateTime('now'));
+            if($entity->getTratamiento1() > 0){
+                $ventaTratamiento1 = $em->getRepository('DGPlusbelleBundle:PersonaTratamiento')->find($entity->getTratamiento1());
+                $segTratamiento1 = $em->getRepository('DGPlusbelleBundle:SeguimientoTratamiento')->findOneBy(array('idPersonaTratamiento' => $ventaTratamiento1));        
 
-                $em->persist($sesionTratamiento1);
-                $em->flush();
+                if(($ventaTratamiento1->getNumSesiones() - $segTratamiento1->getNumSesion()) > 0) {
+                    $sesionTratamiento1 = new SesionVentaTratamiento();
+                    $sesionTratamiento1->setEmpleado($entity->getEmpleado());
+                    $sesionTratamiento1->setSucursal($entity->getSucursal());
+                    $sesionTratamiento1->setPersonaTratamiento($ventaTratamiento1);
+                    $sesionTratamiento1->setFechaSesion(new \DateTime('now'));
 
-                $segTratamiento1->setNumSesion($segTratamiento1->getNumSesion() + 1);
-                $em->merge($segTratamiento1);
-                $em->flush();
+                    $em->persist($sesionTratamiento1);
+                    $em->flush();
 
-                $accion = 2;
+                    $segTratamiento1->setNumSesion($segTratamiento1->getNumSesion() + 1);
+                    $em->merge($segTratamiento1);
+                    $em->flush();
+
+                    $accion = 2;
+                } else {
+                    $accion = 1;
+                }
             } else {
                 $accion = 1;
             }
         }
         
-        if(!is_null($entity->getTratamiento1())) {
-            $ventaTratamiento2 = $em->getRepository('DGPlusbelleBundle:PersonaTratamiento')->find($entity->getTratamiento2());
-            $segTratamiento2 = $em->getRepository('DGPlusbelleBundle:SeguimientoTratamiento')->findOneBy(array('idPersonaTratamiento' => $ventaTratamiento2));
+        if(!is_null($entity->getTratamiento2())) {
+            if($entity->getTratamiento2() > 0){
+                $ventaTratamiento2 = $em->getRepository('DGPlusbelleBundle:PersonaTratamiento')->find($entity->getTratamiento2());
+                $segTratamiento2 = $em->getRepository('DGPlusbelleBundle:SeguimientoTratamiento')->findOneBy(array('idPersonaTratamiento' => $ventaTratamiento2));
 
-            if(($ventaTratamiento2->getNumSesiones() - $segTratamiento2->getNumSesion()) > 0) {
-                $sesionTratamiento2 = new SesionVentaTratamiento();
-                $sesionTratamiento2->setEmpleado($entity->getEmpleado());
-                $sesionTratamiento2->setSucursal($entity->getSucursal());
-                $sesionTratamiento2->setPersonaTratamiento($ventaTratamiento2);
-                $sesionTratamiento2->setFechaSesion(new \DateTime('now'));
+                if(($ventaTratamiento2->getNumSesiones() - $segTratamiento2->getNumSesion()) > 0) {
+                    $sesionTratamiento2 = new SesionVentaTratamiento();
+                    $sesionTratamiento2->setEmpleado($entity->getEmpleado());
+                    $sesionTratamiento2->setSucursal($entity->getSucursal());
+                    $sesionTratamiento2->setPersonaTratamiento($ventaTratamiento2);
+                    $sesionTratamiento2->setFechaSesion(new \DateTime('now'));
 
-                $em->persist($sesionTratamiento2);
-                $em->flush();
+                    $em->persist($sesionTratamiento2);
+                    $em->flush();
 
-                $segTratamiento2->setNumSesion($segTratamiento2->getNumSesion() + 1);
-                $em->merge($segTratamiento2);
-                $em->flush();
+                    $segTratamiento2->setNumSesion($segTratamiento2->getNumSesion() + 1);
+                    $em->merge($segTratamiento2);
+                    $em->flush();
 
-                $accion = 2;
-            } else {
-                $accion = 1;
+                    $accion = 2;
+                } else {
+                    $accion = 1;
+                }
             }
         }
         
@@ -140,54 +146,58 @@ class SesionCitaAsistidaController extends Controller
             $ventaPaquete = $em->getRepository('DGPlusbelleBundle:VentaPaquete')->find($entity->getPaquete());
                                                 
             if(!is_null($entity->getTratamiento1())) {
-                $detalleVenta1 = $em->getRepository('DGPlusbelleBundle:DetalleVentaPaquete')->findOneBy(array(
-                                                                                                            'ventaPaquete' => $ventaPaquete->getId(),
-                                                                                                            'tratamiento'  => $entity->getTratamiento1(),
-                                                                                                        ));
-                $seguimiento1 = $em->getRepository('DGPlusbelleBundle:SeguimientoPaquete')->findOneBy(array(
-                                                                                                            'idVentaPaquete' => $entity->getPaquete(), 
-                                                                                                            'tratamiento' => $detalleVenta1->getTratamiento()->getId()
-                                                                                                        ));
-                
-                //$tratamiento1 = $em->getRepository('DGPlusbelleBundle:Tratamiento')->find($entity->getTratamiento1());
-                
-                if(($detalleVenta1->getNumSesiones() - $seguimiento1->getNumSesion()) > 0) {
-                    $sesionTratamiento1 = new SesionTratamiento();
+                if($entity->getTratamiento1() > 0){
+                    $detalleVenta1 = $em->getRepository('DGPlusbelleBundle:DetalleVentaPaquete')->findOneBy(array(
+                                                                                                                'ventaPaquete' => $ventaPaquete->getId(),
+                                                                                                                'tratamiento'  => $entity->getTratamiento1(),
+                                                                                                            ));
+                    $seguimiento1 = $em->getRepository('DGPlusbelleBundle:SeguimientoPaquete')->findOneBy(array(
+                                                                                                                'idVentaPaquete' => $entity->getPaquete(), 
+                                                                                                                'tratamiento' => $detalleVenta1->getTratamiento()->getId()
+                                                                                                            ));
 
-                    $sesionTratamiento1->setVentaPaquete($ventaPaquete);
-                    $sesionTratamiento1->setFechaSesion(new \DateTime('now'));
-                    $sesionTratamiento1->setEmpleado($entity->getEmpleado());
-                    $sesionTratamiento1->setSucursal($entity->getSucursal());
-                    $sesionTratamiento1->setTratamiento($detalleVenta1->getTratamiento());
-                    $sesionTratamiento1->setRegistraReceta("0");
+                    //$tratamiento1 = $em->getRepository('DGPlusbelleBundle:Tratamiento')->find($entity->getTratamiento1());
 
-                    $em->persist($sesionTratamiento1);
-                    $em->flush();
+                    if(($detalleVenta1->getNumSesiones() - $seguimiento1->getNumSesion()) > 0) {
+                        $sesionTratamiento1 = new SesionTratamiento();
 
-                    $seguimiento1->setNumSesion($seguimiento1->getNumSesion() + 1);
-                    $em->merge($seguimiento1);
-                    $em->flush();
-                    
-                    $tratamientos = $em->getRepository('DGPlusbelleBundle:DetalleVentaPaquete')->findBy(array('ventaPaquete' => $ventaPaquete->getId()));
-            
-                    $aux = 0;
-                    $total = count($tratamientos);
-                    foreach ($tratamientos as $trat){
-                         if($seguimiento1->getNumSesion() >= $trat->getNumSesiones()){
-                             $aux++;
+                        $sesionTratamiento1->setVentaPaquete($ventaPaquete);
+                        $sesionTratamiento1->setFechaSesion(new \DateTime('now'));
+                        $sesionTratamiento1->setEmpleado($entity->getEmpleado());
+                        $sesionTratamiento1->setSucursal($entity->getSucursal());
+                        $sesionTratamiento1->setTratamiento($detalleVenta1->getTratamiento());
+                        $sesionTratamiento1->setRegistraReceta("0");
+
+                        $em->persist($sesionTratamiento1);
+                        $em->flush();
+
+                        $seguimiento1->setNumSesion($seguimiento1->getNumSesion() + 1);
+                        $em->merge($seguimiento1);
+                        $em->flush();
+
+                        $tratamientos = $em->getRepository('DGPlusbelleBundle:DetalleVentaPaquete')->findBy(array('ventaPaquete' => $ventaPaquete->getId()));
+
+                        $aux = 0;
+                        $total = count($tratamientos);
+                        foreach ($tratamientos as $trat){
+                             if($seguimiento1->getNumSesion() >= $trat->getNumSesiones()){
+                                 $aux++;
+                            }
                         }
-                    }
 
-                    if($aux < $total){
-                        $ventaPaquete->setEstado(2);
+                        if($aux < $total){
+                            $ventaPaquete->setEstado(2);
+                        } else {
+                            $ventaPaquete->setEstado(3);
+                        }
+
+                        $em->merge($ventaPaquete);
+                        $em->flush();
+
+                        $accion = 2;
                     } else {
-                        $ventaPaquete->setEstado(3);
+                        $accion = 1;
                     }
-
-                    $em->merge($ventaPaquete);
-                    $em->flush();
-
-                    $accion = 2;
                 } else {
                     $accion = 1;
                 }
@@ -196,52 +206,56 @@ class SesionCitaAsistidaController extends Controller
             }
 
             if(!is_null($entity->getTratamiento2())) {
-                $detalleVenta2 = $em->getRepository('DGPlusbelleBundle:DetalleVentaPaquete')->findOneBy(array(
-                                                                                                            'ventaPaquete' => $ventaPaquete->getId(),
-                                                                                                            'tratamiento'  => $entity->getTratamiento2(),
-                                                                                                        ));
-                $seguimiento2 = $em->getRepository('DGPlusbelleBundle:SeguimientoPaquete')->findOneBy(array(
-                                                                                                            'idVentaPaquete' => $entity->getPaquete(), 
-                                                                                                            'tratamiento' => $detalleVenta2->getTratamiento()->getId()
-                                                                                                        ));
-                
-                if(($detalleVenta2->getNumSesiones() - $seguimiento2->getNumSesion()) > 0) {
-                    $sesionTratamiento2 = new SesionTratamiento();
+                if($entity->getTratamiento2() > 0){
+                    $detalleVenta2 = $em->getRepository('DGPlusbelleBundle:DetalleVentaPaquete')->findOneBy(array(
+                                                                                                                'ventaPaquete' => $ventaPaquete->getId(),
+                                                                                                                'tratamiento'  => $entity->getTratamiento2(),
+                                                                                                            ));
+                    $seguimiento2 = $em->getRepository('DGPlusbelleBundle:SeguimientoPaquete')->findOneBy(array(
+                                                                                                                'idVentaPaquete' => $entity->getPaquete(), 
+                                                                                                                'tratamiento' => $detalleVenta2->getTratamiento()->getId()
+                                                                                                            ));
 
-                    $sesionTratamiento2->setVentaPaquete($ventaPaquete);
-                    $sesionTratamiento2->setFechaSesion(new \DateTime('now'));
-                    $sesionTratamiento2->setEmpleado($entity->getEmpleado());
-                    $sesionTratamiento2->setSucursal($entity->getSucursal());
-                    $sesionTratamiento2->setTratamiento($detalleVenta2->getTratamiento());                
-                    $sesionTratamiento2->setRegistraReceta("0");
+                    if(($detalleVenta2->getNumSesiones() - $seguimiento2->getNumSesion()) > 0) {
+                        $sesionTratamiento2 = new SesionTratamiento();
 
-                    $em->persist($sesionTratamiento2);
-                    $em->flush();
+                        $sesionTratamiento2->setVentaPaquete($ventaPaquete);
+                        $sesionTratamiento2->setFechaSesion(new \DateTime('now'));
+                        $sesionTratamiento2->setEmpleado($entity->getEmpleado());
+                        $sesionTratamiento2->setSucursal($entity->getSucursal());
+                        $sesionTratamiento2->setTratamiento($detalleVenta2->getTratamiento());                
+                        $sesionTratamiento2->setRegistraReceta("0");
 
-                    $seguimiento2->setNumSesion($seguimiento2->getNumSesion() + 1);
-                    $em->merge($seguimiento2);
-                    $em->flush();
-                    
-                    $tratamientos = $em->getRepository('DGPlusbelleBundle:DetalleVentaPaquete')->findBy(array('ventaPaquete' => $ventaPaquete->getId()));
-            
-                    $aux = 0;
-                    $total = count($tratamientos);
-                    foreach ($tratamientos as $trat){
-                         if($seguimiento2->getNumSesion() >= $trat->getNumSesiones()){
-                             $aux++;
+                        $em->persist($sesionTratamiento2);
+                        $em->flush();
+
+                        $seguimiento2->setNumSesion($seguimiento2->getNumSesion() + 1);
+                        $em->merge($seguimiento2);
+                        $em->flush();
+
+                        $tratamientos = $em->getRepository('DGPlusbelleBundle:DetalleVentaPaquete')->findBy(array('ventaPaquete' => $ventaPaquete->getId()));
+
+                        $aux = 0;
+                        $total = count($tratamientos);
+                        foreach ($tratamientos as $trat){
+                             if($seguimiento2->getNumSesion() >= $trat->getNumSesiones()){
+                                 $aux++;
+                            }
                         }
-                    }
 
-                    if($aux < $total){
-                        $ventaPaquete->setEstado(2);
+                        if($aux < $total){
+                            $ventaPaquete->setEstado(2);
+                        } else {
+                            $ventaPaquete->setEstado(3);
+                        }
+
+                        $em->merge($ventaPaquete);
+                        $em->flush();
+
+                        $accion = 2;
                     } else {
-                        $ventaPaquete->setEstado(3);
+                        $accion = 1;
                     }
-
-                    $em->merge($ventaPaquete);
-                    $em->flush();
-                    
-                    $accion = 2;
                 } else {
                     $accion = 1;
                 }
