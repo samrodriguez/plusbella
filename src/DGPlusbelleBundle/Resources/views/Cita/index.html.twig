@@ -235,59 +235,7 @@
             $("#citaId").val('');
             $("#pacienteId").val('');
             
-            $(document).on('click','#editBtnGuardar',function(){
-                var citaId = $('#citaId').val();
-                
-                var citaPor = $('#input[name="dgplusbellebundle_cita[tipoCita]"]').val();
-                var citaEstado = $('#citaEstado').val();
-                var citaConsulta = $('#dgplusbellebundle_cita_consulta').val();
-                var citaPaquete = $('#dgplusbellebundle_cita_paquetes').val();
-                var citaTrat1 = $('#dgplusbellebundle_cita_paquetes_trat1').val();
-                var citaTrat2 = $('#dgplusbellebundle_cita_paquetes_trat2').val();
-                
-                if (document.getElementById('dgplusbellebundle_cita_tipoCita_0').checked) {
-                    citaPor = document.getElementById('dgplusbellebundle_cita_tipoCita_0').value;
-                }
-                if (document.getElementById('dgplusbellebundle_cita_tipoCita_1').checked) {
-                    citaPor = document.getElementById('dgplusbellebundle_cita_tipoCita_1').value;
-                }
-                if (document.getElementById('dgplusbellebundle_cita_tipoCita_2').checked) {
-                    citaPor = document.getElementById('dgplusbellebundle_cita_tipoCita_2').value;
-                }
-                
-                var data= {
-                    param1: citaId, 
-                    param2: citaPor,
-                    param3: citaEstado,
-                    param4: citaConsulta,
-                    param5: citaPaquete,
-                    param6: citaTrat1,
-                    param7: citaTrat2,
-                };
-                
-                $.ajax({
-                    url: Routing.generate('admin_cita_estado_edit_trat'),
-                    type: 'POST',
-                    data: data,
-                    success:function(data){   
-
-                        if(data.msg){
-                            swal('',data.msg,'success');
-                            $('#formEdit').addClass('hidden');
-                            $('#contenedorListadoCita').removeClass('hidden');
-                            tablaCitas.ajax.reload();
-                        }
-                    },
-                    error:function(data){
-                        if(data.error){
-                            swal('',data.error,'error');
-                        }       
-                    }
-                });
-                
-                
-                return false;
-            });
+            
             
             
             $(document).on('click','#editBtnCancel',function(){
@@ -300,7 +248,7 @@
                 var citaId = $(this).attr('id');
                 var citaIdForm = $('#citaId').val();
                 
-                if(citaId!=citaIdForm){
+                {#if(citaId!=citaIdForm){#}
                     $.ajax({
                         url: Routing.generate('admin_cita_editar_trat'),
                         type: 'GET',
@@ -321,27 +269,176 @@
                             //console.log("Cita: "+parseInt(data.citaPor));
                             //if(data.CitaPor!=null){
                                 switch(parseInt(data.citaPor)){
-                                    case 1:
-                                        $('#dgplusbellebundle_cita_tipoCita_0').click();
+                                    case 0://///Consulta
+                                            //$('#dgplusbellebundle_cita_tipoCita_0').click();
+                                            $('#dgplusbellebundle_cita_tipoCita_0').prop('checked',true);
+                                            $('.tratamiento2').children().addClass('hidden');
+                                            $('.tratamientoC').children().removeClass('hidden');
+                                            $('.tratamientoC').removeClass('hidden');
+                                            $('.tratamiento1').children().addClass('hidden');
+                                            $('.tratamiento1').addClass('hidden');
+                                            $('.paquete').children().addClass('hidden');
+                                            
+                                            $('#dgplusbellebundle_cita_consulta').val(data.consulta).trigger("change");
                                         break;
-                                    case 2:
-                                        $('#dgplusbellebundle_cita_tipoCita_1').click();
+                                    case 1://///tratamiento
+                                        //$('#dgplusbellebundle_cita_tipoCita_1').click();
+                                        $('#dgplusbellebundle_cita_tipoCita_1').prop('checked',true);
+                                        
+                                        $('.tratamiento1').children().removeClass('hidden');
+                                        $('.tratamiento1').removeClass('hidden');
+                                        $('.tratamiento2').children().removeClass('hidden');
+                                        $('.tratamientoC').children().addClass('hidden');
+                                        $('.tratamientoC').addClass('hidden');
+                                        $('.paquete').children().addClass('hidden');
+
+                                        var defecto1 = data.tratamiento1;
+                                        var defecto2 = data.tratamiento2;
+                                        $.ajax({
+                                            url: Routing.generate('admin_tratamientos_pendiente_no_paquete'),
+                                            type: 'GET',
+                                            data: {param1: $('#pacienteId').val()},
+                                            success:function(data){
+                                                //$('#dgplusbellebundle_cita_paquetes').select2('destroy');
+                                                {#console.log(data.id);
+                                                console.log(data.nombre);#}
+                                                var numPaquetes= data.id.length;
+                                                var options ="";
+                                                var defectoValor = data.tratamiento1;
+                                                options+='<option value="0">Seleccione un tratamiento...</option>';
+                                                for (var i = 0; i < numPaquetes; i++) {   
+                                                    if(i==0){
+                                                        options+='<option value="'+data.id[i]+'">'+data.nombre[i]+' </option>';
+                                                        defectoValor = data.id[i];
+                                                    }
+                                                    else{
+                                                        options+='<option value="'+data.id[i]+'">'+data.nombre[i]+' </option>';
+                                                    }								
+                                                }     
+                                                $('#dgplusbellebundle_cita_paquetes_trat1').html(options);
+                                                $('#dgplusbellebundle_cita_paquetes_trat2').html(options);
+                {#                                $('#dgplusbellebundle_cita_paquetes').select2();#}
+                                                $("#dgplusbellebundle_cita_paquetes_trat1").val(defecto1).trigger("change");
+                                                
+                                                
+                                                $("#dgplusbellebundle_cita_paquetes_trat2").val(defecto2).trigger("change");
+                                                
+                                            },
+                                            error:function(data){
+                                                if(data.error){
+                                                    //console.log(data.id);
+                                                    swal('',data.error,'error');
+                                                }       
+                                            }
+                                        });
+                                        
+                                        
+                                        
+{#                                        $('#dgplusbellebundle_cita_paquetes_trat1').html('<option value="'+data.tratamiento1+'">'++'</option>');
+                                        $('#dgplusbellebundle_cita_paquetes_trat1').html('<option value="'+data.tratamiento2+'">'++'</option>');#}
+
                                         break;
-                                    case 3:
-                                        $('#dgplusbellebundle_cita_tipoCita_2').click();
+                                    case 2:////Paquete
+                                        //$('#dgplusbellebundle_cita_tipoCita_2').click();
+                                        $('#dgplusbellebundle_cita_tipoCita_2').prop('checked',true);
+                                        $('.paquete').children().removeClass('hidden');
+                                        $('.tratamientoC').children().addClass('hidden');
+                                        $('.tratamientoC').addClass('hidden');
+                                        $('.tratamiento1,.tratamiento2').children().removeClass('hidden');
+                                        $('.tratamiento1').removeClass('hidden');
+                                        var defectoPaquete=data.paquete;
+                                        var defecto1 = data.tratamiento1;
+                                        var defecto2 = data.tratamiento2;
+                                        $.ajax({
+                                            url: Routing.generate('admin_paquetes_pendiente'),
+                                            type: 'GET',
+                                            data: {param1: $('#pacienteId').val()},
+                                            success:function(data){
+
+                                                var numPaquetes= data.id.length;
+                                                var options ="";
+                                                var defectoValor = 0;
+                                                options+='<option value="0">Seleccione un paquete...</option>';
+                                                for (var i = 0; i < numPaquetes; i++) {   
+                                                    if(i==0){
+                                                        options+='<option value="'+data.id[i]+'">'+data.nombre[i]+' </option>';
+                                                        defectoValor = data.id[i];
+                                                    }
+                                                    else{
+                                                        options+='<option value="'+data.id[i]+'">'+data.nombre[i]+' </option>';
+                                                    }								
+                                                }     
+                {#                                $('#dgplusbellebundle_cita_paquetes_trat1').html(options);
+                                                $('#dgplusbellebundle_cita_paquetes_trat2').html(options);#}
+                                                $('#dgplusbellebundle_cita_paquetes').html(options);
+                                                $("#dgplusbellebundle_cita_paquetes").val(defectoPaquete).trigger("change");
+                                                {#$('#dgplusbellebundle_cita_paquetes_trat2').html(options);#}
+                {#                                $('#dgplusbellebundle_cita_paquetes').select2();#}
+                                                {#$("#dgplusbellebundle_cita_paquetes_trat1").val(defectoValor).trigger("change");
+                                                $("#dgplusbellebundle_cita_paquetes_trat2").val(defectoValor).trigger("change");#}
+                                                                                            
+                                                                                            
+                                                $.ajax({
+                                                    url: Routing.generate('admin_tratamientos_pendiente'),
+                                                    type: 'GET',
+                                                    data: {param1: defectoPaquete},
+                                                    success:function(data){
+                                                            $('#dgplusbellebundle_cita_tratamiento').select2('destroy');
+                                                            $('#dgplusbellebundle_cita_tratamiento2').select2('destroy');
+                                                            {#console.log(data.id);
+                                                            console.log(data.nombre);#}
+                                                            var numPaquetes= data.length;
+                                                            var options ="";
+                                                            options+='<option value="0">Seleccione un tratamiento...</option>';
+                                                            var defectoValor = 0;
+                                                            for (var i = 0; i < numPaquetes; i++) {
+                                                                if(i==0){	
+                                                                    options+='<option selected value="'+data[i].id+'">'+data[i].nombre+' </option>';  
+                                                                    defectoValor = data[i].id;
+                                                                }
+                                                                else{
+                                                                    options+='<option value="'+data[i].id+'">'+data[i].nombre+' </option>';
+                                                                }	
+                                                            }
+                                                            $('#dgplusbellebundle_cita_paquetes_trat1').html(options);
+                                                            $("#dgplusbellebundle_cita_paquetes_trat1").val(defecto1).trigger("change");
+                                                            //$('#dgplusbellebundle_cita_paquetes').change();
+                            {#                                $('#dgplusbellebundle_cita_tratamiento').select2();#}
+                                                            $('#dgplusbellebundle_cita_paquetes_trat2').html(options);
+                                                            $("#dgplusbellebundle_cita_paquetes_trat2").val(defecto2).trigger("change");
+                            {#                                $('#dgplusbellebundle_cita_tratamiento2').select2();#}
+                                                    },
+                                                    error:function(data){
+                                                        if(data.error){
+                                                            //console.log(data.id);
+                                                            swal('',data.error,'error');
+                                                        }
+                                                    }
+                                                });
+                                                                                            
+                                                                                            
+                                            },
+                                            error:function(data){
+                                                if(data.error){
+                                                    //console.log(data.id);
+                                                    swal('',data.error,'error');
+                                                }       
+                                            }
+                                        });
                                         break;
                                     default:
                                         $('#dgplusbellebundle_cita_tipoCita_0').click();
                                         break;
                                 }
                             //}
-                            
+                                                        
                             $('#citaPaquete').val(data.paquete).change();
                             $('#citaEstado').val(data.estado).change();
                             $('#citaTratamiento1').val(data.tratamiento1).change();
                             $('#citatratamiento2').val(data.tratamiento1).change();
                             $('#formEdit').removeClass('hidden');
                             $('#contenedorListadoCita').addClass('hidden');
+                            
                         },
                         error:function(data){
                             if(data.error){
@@ -350,11 +447,11 @@
                             }       
                         }
                     });
-                }
+                {# }
                 else{
                     $('#formEdit').removeClass('hidden');
                     $('#contenedorListadoCita').addClass('hidden');
-                }
+                }#}
                 return false;
             });
             
@@ -698,7 +795,7 @@
                 return false;
             }
                 
-            return false;
+            //return false;
             
             
                 var $btn = $('#enviarCorreo').button('loading');
