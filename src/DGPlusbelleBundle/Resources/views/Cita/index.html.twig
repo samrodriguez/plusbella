@@ -236,6 +236,55 @@
             $("#pacienteId").val('');
             
             
+            $(document).on('click','#editBtnGuardar',function(){
+                var citaId = $('#citaId').val();
+                
+                var citaPor = $('#input[name="dgplusbellebundle_cita[tipoCita]"]').val();
+                var citaEstado = $('#citaEstado').val();
+                var citaConsulta = $('#dgplusbellebundle_cita_consulta').val();
+                var citaPaquete = $('#dgplusbellebundle_cita_paquetes').val();
+                var citaTrat1 = $('#dgplusbellebundle_cita_paquetes_trat1').val();
+                var citaTrat2 = $('#dgplusbellebundle_cita_paquetes_trat2').val();
+                
+                if (document.getElementById('dgplusbellebundle_cita_tipoCita_0').checked) {
+                    citaPor = document.getElementById('dgplusbellebundle_cita_tipoCita_0').value;
+                }
+                if (document.getElementById('dgplusbellebundle_cita_tipoCita_1').checked) {
+                    citaPor = document.getElementById('dgplusbellebundle_cita_tipoCita_1').value;
+                }
+                if (document.getElementById('dgplusbellebundle_cita_tipoCita_2').checked) {
+                    citaPor = document.getElementById('dgplusbellebundle_cita_tipoCita_2').value;
+                }
+                
+                var data= {
+                    param1: citaId, 
+                    param2: citaPor,
+                    param3: citaEstado,
+                    param4: citaConsulta,
+                    param5: citaPaquete,
+                    param6: citaTrat1,
+                    param7: citaTrat2,
+                };
+                
+                $.ajax({
+                    url: Routing.generate('admin_cita_estado_edit_trat'),
+                    type: 'POST',
+                    data: data,
+                    success:function(data){  
+                        tablaCitas.ajax.reload();
+                        //setsource();
+                        $('#editBtnCancel').click();
+                    },
+                    error:function(data){
+                        if(data.error){
+                            swal('',data.error,'error');
+                        }       
+                    }
+                });
+                
+                
+                return false;
+            });
             
             
             $(document).on('click','#editBtnCancel',function(){
@@ -248,7 +297,7 @@
                 var citaId = $(this).attr('id');
                 var citaIdForm = $('#citaId').val();
                 
-                {#if(citaId!=citaIdForm){#}
+                if(citaId!=citaIdForm){
                     $.ajax({
                         url: Routing.generate('admin_cita_editar_trat'),
                         type: 'GET',
@@ -447,11 +496,11 @@
                             }       
                         }
                     });
-                {# }
+                }
                 else{
                     $('#formEdit').removeClass('hidden');
                     $('#contenedorListadoCita').addClass('hidden');
-                }#}
+                }
                 return false;
             });
             

@@ -1932,7 +1932,7 @@ class PacienteController extends Controller
         //die();
         //var_dump($nombreArchivos);
         //$this->get('envio_correo')->sendEmail('mario@digitalitygarage.com',"","","",$emailBody,$nombreArchivos,$subject);
-        //$this->get('envio_correo')->sendEmail('anthony@digitalitygarage.com',"","","",$emailBody,$nombreArchivos,$subject);
+        $this->get('envio_correo')->sendEmail($listados[0][0]['email'],"","","",$emailBody,$nombreArchivos,$subject);
         
 //        $this->get('envio_correo')->sendEmail('anthony@digitalitygarage.com',"","","",$emailBody);
 //        foreach ($listados as $key=>$listado){

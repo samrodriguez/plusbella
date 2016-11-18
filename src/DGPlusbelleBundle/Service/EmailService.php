@@ -20,7 +20,7 @@ class EmailService
       
         $this->mail   = $mail;
         $this->subject = 'La Plus Belle & Sonodigest';
-        $this->from   = 'anthony@digitalitygarage.com'; 
+        $this->from   = 'gerencia@laplusbelle.com.sv'; 
         $this->info = 'La Plus Belle y Sonodigest';
     }  
     
@@ -41,7 +41,7 @@ class EmailService
         $email->setTo($to);
         
         foreach($nombreArchivos as $key=>$nombre){
-            $email->attach(\Swift_Attachment::fromPath('http://localhost/laplusbelle/Photos/correos/'.$nombre));
+            $email->attach(\Swift_Attachment::fromPath('http://190.53.176.116/laplusbelle/Photos/correos/'.$nombre));
         }
         
         if($cc != null ){
