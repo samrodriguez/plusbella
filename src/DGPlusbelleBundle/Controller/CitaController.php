@@ -890,19 +890,19 @@ class CitaController extends Controller
                     $cita['regs'][0]["paquete"] = '';
                 }
                 if($cita['regs'][0]["tratamiento1"]!=null){
-                    $tratamiento1= $em->getRepository('DGPlusbelleBundle:DetalleVentaPaquete')->find($cita['regs'][0]["tratamiento1"]);
+                    $tratamiento1= $em->getRepository('DGPlusbelleBundle:Tratamiento')->find($cita['regs'][0]["tratamiento1"]);
                     if(count($tratamiento1)!=0)
-                        $cita['regs'][0]["tratamiento1"] = $tratamiento1->getTratamiento()->getNombre();
+                        $cita['regs'][0]["tratamiento1"] = $tratamiento1->getNombre();
                     else
                         $cita['regs'][0]["tratamiento1"] = '';
                 }
                 else{
                     $cita['regs'][0]["tratamiento1"] = '';
                 }
-                if($cita['regs'][0]["tratamiento1"]!=null){
-                    $tratamiento2= $em->getRepository('DGPlusbelleBundle:DetalleVentaPaquete')->find($cita['regs'][0]["tratamiento2"]);
+                if($cita['regs'][0]["tratamiento2"]!=null){
+                    $tratamiento2= $em->getRepository('DGPlusbelleBundle:Tratamiento')->find($cita['regs'][0]["tratamiento2"]);
                     if(count($tratamiento2)!=0)
-                        $cita['regs'][0]["tratamiento2"] = $tratamiento2->getTratamiento()->getNombre();
+                        $cita['regs'][0]["tratamiento2"] = $tratamiento2->getNombre();
                     else
                         $cita['regs'][0]["tratamiento2"] = '';
                 }
@@ -1445,8 +1445,38 @@ class CitaController extends Controller
                     $sql = "SELECT UPPER(CONCAT(per2.nombres,' ',per2.apellidos)) as nombresEmp, suc.nombre as sucursal, CONCAT('<a class=\"citaEdit\" href=\"\" id=\"',c.id,'\">Editar cita</a>') as actions,c.id as id, CONCAT('<a class=\"link_expediente\" id=\"',exp.numero,'\">',exp.numero,'</a>') as expediente, CONCAT(DATE_FORMAT(c.fecha_cita, '%d-%m-%Y'),' ',DATE_FORMAT(c.hora_cita,'%H:%i')) as fecha, UPPER(CONCAT(per.nombres,' ',per.apellidos)) as nombres,per.telefono as tel, "
                             . "CASE "
                             . "WHEN c.tipo_cita=0 OR c.tipo_cita IS NULL THEN trat.nombre "
-                            . "WHEN c.tipo_cita=1 THEN (SELECT ta.nombre FROM persona_tratamiento pt INNER JOIN tratamiento ta ON (pt.tratamiento=ta.id) WHERE pt.id=IFNULL(c.tratamiento1,0)) "
-                            . "ELSE CONCAT((SELECT CONCAT(tb.nombre) FROM detalle_venta_paquete detpaq INNER JOIN tratamiento tb ON (detpaq.tratamiento=tb.id) WHERE detpaq.id=c.tratamiento1 AND detpaq.venta_paquete=c.paquete),'<br>',(SELECT CONCAT(tb.nombre) FROM detalle_venta_paquete detpaq INNER JOIN tratamiento tb ON (detpaq.tratamiento=tb.id) WHERE detpaq.id=c.tratamiento2 AND detpaq.venta_paquete=c.paquete))"
+                            . "WHEN c.tipo_cita=1 THEN "
+                            . "(CASE "
+                            . "WHEN (c.tratamiento1 IS NOT NULL AND c.tratamiento1 <>0) AND ( c.tratamiento2 IS NULL OR c.tratamiento2=0 )"
+                                . "THEN (SELECT ta.nombre FROM persona_tratamiento pt INNER JOIN tratamiento ta ON (pt.tratamiento=ta.id) "
+                                . "WHERE pt.id=c.tratamiento1)"
+                            
+                            . "WHEN (c.tratamiento1 IS NULL AND c.tratamiento1=0 )AND (c.tratamiento2 IS NOT NULL AND c.tratamiento1<>0 )"
+                                . "THEN (SELECT tb.nombre FROM persona_tratamiento ptb INNER JOIN tratamiento tb ON (ptb.tratamiento=tb.id) "
+                                . "WHERE ptb.id=c.tratamiento2)"
+                            
+                            . "WHEN (c.tratamiento1 IS NOT NULL AND c.tratamiento1<>0) AND (c.tratamiento2 IS NOT NULL AND c.tratamiento2 <>0) "
+                                . "THEN (CONCAT("
+                                            . "(SELECT ta.nombre FROM persona_tratamiento pt INNER JOIN tratamiento ta ON (pt.tratamiento=ta.id) WHERE pt.id=c.tratamiento1),"
+                                            . "'<br>',"
+                                            . "(SELECT tb.nombre FROM persona_tratamiento ptb INNER JOIN tratamiento tb ON (ptb.tratamiento=tb.id) "
+                                . "WHERE ptb.id=c.tratamiento2)))"
+                            
+                            . " ELSE '' END) "
+                            
+                            . "ELSE "
+                            
+                            . "(CASE "
+                            . "WHEN (c.tratamiento1 IS NOT NULL AND c.tratamiento1<>0 ) AND (c.tratamiento2 IS NULL OR c.tratamiento2=0) "
+                                . "THEN (SELECT tb.nombre FROM detalle_venta_paquete detpaq INNER JOIN tratamiento tb ON (detpaq.tratamiento=tb.id) WHERE detpaq.tratamiento=c.tratamiento1 AND detpaq.venta_paquete=c.paquete) "
+                            
+                            . "WHEN (c.tratamiento1 IS NULL OR c.tratamiento1=0) AND (c.tratamiento2 IS NOT NULL AND c.tratamiento2 <>0) "
+                                . "THEN (SELECT tb.nombre FROM detalle_venta_paquete detpaq INNER JOIN tratamiento tb ON (detpaq.tratamiento=tb.id) WHERE detpaq.tratamiento=c.tratamiento2 AND detpaq.venta_paquete=c.paquete) "
+                            
+                            . "WHEN c.tratamiento1 IS NOT NULL AND c.tratamiento2 IS NOT NULL "
+                                . "THEN CONCAT((SELECT CONCAT(tb.nombre) FROM detalle_venta_paquete detpaq INNER JOIN tratamiento tb ON (detpaq.tratamiento=tb.id) WHERE tb.id=c.tratamiento1 AND detpaq.venta_paquete=c.paquete),'<br>',(SELECT CONCAT(tb.nombre) FROM detalle_venta_paquete detpaq INNER JOIN tratamiento tb ON (detpaq.tratamiento=tb.id) WHERE tb.id=c.tratamiento2 AND detpaq.venta_paquete=c.paquete)) "
+                            . " END)"
+                            
                             . " END as tratamiento "
                             . "FROM cita c "
                             . "INNER JOIN paciente pac on(pac.id=c.paciente) "
@@ -1465,8 +1495,38 @@ class CitaController extends Controller
                     $sql = "SELECT UPPER(CONCAT(per2.nombres,' ',per2.apellidos)) as nombresEmp,suc.nombre as sucursal, CONCAT('<a class=\"citaEdit\" href=\"\" id=\"',c.id,'\">Editar cita</a>') as actions,c.id as id, CONCAT('<a class=\"link_expediente\" id=\"',exp.numero,'\">',exp.numero,'</a>') as expediente, CONCAT(DATE_FORMAT(c.fecha_cita, '%d-%m-%Y'),' ',DATE_FORMAT(c.hora_cita,'%H:%i')) as fecha, UPPER(CONCAT(per.nombres,' ',per.apellidos)) as nombres,per.telefono as tel, "
                             . "CASE "
                             . "WHEN c.tipo_cita=0 OR c.tipo_cita IS NULL THEN trat.nombre "
-                            . "WHEN c.tipo_cita=1 THEN (SELECT ta.nombre FROM persona_tratamiento pt INNER JOIN tratamiento ta ON (pt.tratamiento=ta.id) WHERE pt.id=IFNULL(c.tratamiento1,0)) "
-                            . "ELSE CONCAT((SELECT CONCAT(tb.nombre) FROM detalle_venta_paquete detpaq INNER JOIN tratamiento tb ON (detpaq.tratamiento=tb.id) WHERE detpaq.id=c.tratamiento1 AND detpaq.venta_paquete=c.paquete),'<br>',(SELECT CONCAT(tb.nombre) FROM detalle_venta_paquete detpaq INNER JOIN tratamiento tb ON (detpaq.tratamiento=tb.id) WHERE detpaq.id=c.tratamiento2 AND detpaq.venta_paquete=c.paquete))"
+                            . "WHEN c.tipo_cita=1 THEN "
+                            . "(CASE "
+                            . "WHEN (c.tratamiento1 IS NOT NULL AND c.tratamiento1 <>0) AND ( c.tratamiento2 IS NULL OR c.tratamiento2=0 )"
+                                . "THEN (SELECT ta.nombre FROM persona_tratamiento pt INNER JOIN tratamiento ta ON (pt.tratamiento=ta.id) "
+                                . "WHERE pt.id=c.tratamiento1)"
+                            
+                            . "WHEN (c.tratamiento1 IS NULL AND c.tratamiento1=0 )AND (c.tratamiento2 IS NOT NULL AND c.tratamiento1<>0 )"
+                                . "THEN (SELECT tb.nombre FROM persona_tratamiento ptb INNER JOIN tratamiento tb ON (ptb.tratamiento=tb.id) "
+                                . "WHERE ptb.id=c.tratamiento2)"
+                            
+                            . "WHEN (c.tratamiento1 IS NOT NULL AND c.tratamiento1<>0) AND (c.tratamiento2 IS NOT NULL AND c.tratamiento2 <>0) "
+                                . "THEN (CONCAT("
+                                            . "(SELECT ta.nombre FROM persona_tratamiento pt INNER JOIN tratamiento ta ON (pt.tratamiento=ta.id) WHERE pt.id=c.tratamiento1),"
+                                            . "'<br>',"
+                                            . "(SELECT tb.nombre FROM persona_tratamiento ptb INNER JOIN tratamiento tb ON (ptb.tratamiento=tb.id) "
+                                . "WHERE ptb.id=c.tratamiento2)))"
+                            
+                            . " ELSE '' END) "
+                            
+                            . "ELSE "
+                            
+                            . "(CASE "
+                            . "WHEN (c.tratamiento1 IS NOT NULL AND c.tratamiento1<>0 ) AND (c.tratamiento2 IS NULL OR c.tratamiento2=0) "
+                                . "THEN (SELECT tb.nombre FROM detalle_venta_paquete detpaq INNER JOIN tratamiento tb ON (detpaq.tratamiento=tb.id) WHERE detpaq.tratamiento=c.tratamiento1 AND detpaq.venta_paquete=c.paquete) "
+                            
+                            . "WHEN (c.tratamiento1 IS NULL OR c.tratamiento1=0) AND (c.tratamiento2 IS NOT NULL AND c.tratamiento2 <>0) "
+                                . "THEN (SELECT tb.nombre FROM detalle_venta_paquete detpaq INNER JOIN tratamiento tb ON (detpaq.tratamiento=tb.id) WHERE detpaq.tratamiento=c.tratamiento2 AND detpaq.venta_paquete=c.paquete) "
+                            
+                            . "WHEN c.tratamiento1 IS NOT NULL AND c.tratamiento2 IS NOT NULL "
+                                . "THEN CONCAT((SELECT CONCAT(tb.nombre) FROM detalle_venta_paquete detpaq INNER JOIN tratamiento tb ON (detpaq.tratamiento=tb.id) WHERE tb.id=c.tratamiento1 AND detpaq.venta_paquete=c.paquete),'<br>',(SELECT CONCAT(tb.nombre) FROM detalle_venta_paquete detpaq INNER JOIN tratamiento tb ON (detpaq.tratamiento=tb.id) WHERE tb.id=c.tratamiento2 AND detpaq.venta_paquete=c.paquete)) "
+                            . " END)"
+                            
                             . " END as tratamiento "
                             . "FROM cita c "
                             . "INNER JOIN paciente pac on(pac.id=c.paciente) "
@@ -1506,8 +1566,38 @@ class CitaController extends Controller
                     $sql = "SELECT UPPER(CONCAT(per2.nombres,' ',per2.apellidos)) as nombresEmp, suc.nombre as sucursal, CONCAT('<a class=\"citaEdit\" href=\"\" id=\"',c.id,'\">Editar cita</a>') as actions,c.id as id, CONCAT('<a class=\"link_expediente\" id=\"',exp.numero,'\">',exp.numero,'</a>') as expediente, CONCAT(DATE_FORMAT(c.fecha_cita, '%d-%m-%Y'),' ',DATE_FORMAT(c.hora_cita,'%H:%i')) as fecha, UPPER(CONCAT(per.nombres,' ',per.apellidos)) as nombres,per.telefono as tel, "
                             . "CASE "
                             . "WHEN c.tipo_cita=0 OR c.tipo_cita IS NULL THEN trat.nombre "
-                            . "WHEN c.tipo_cita=1 THEN CONCAT((SELECT ta.nombre FROM persona_tratamiento pt INNER JOIN tratamiento ta ON (pt.tratamiento=ta.id) WHERE pt.id=IFNULL(c.tratamiento1,0)),'<br>',(SELECT ta.nombre FROM persona_tratamiento pt INNER JOIN tratamiento ta ON (pt.tratamiento=ta.id) WHERE pt.id=IFNULL(c.tratamiento2,0))) "
-                            . "ELSE CONCAT((SELECT CONCAT(tb.nombre) FROM detalle_venta_paquete detpaq INNER JOIN tratamiento tb ON (detpaq.tratamiento=tb.id) WHERE detpaq.id=c.tratamiento1 AND detpaq.venta_paquete=c.paquete),'<br>',(SELECT CONCAT(tb.nombre) FROM detalle_venta_paquete detpaq INNER JOIN tratamiento tb ON (detpaq.tratamiento=tb.id) WHERE detpaq.id=c.tratamiento2 AND detpaq.venta_paquete=c.paquete))"
+                            . "WHEN c.tipo_cita=1 THEN "
+                            . "(CASE "
+                            . "WHEN (c.tratamiento1 IS NOT NULL AND c.tratamiento1 <>0) AND ( c.tratamiento2 IS NULL OR c.tratamiento2=0 )"
+                                . "THEN (SELECT ta.nombre FROM persona_tratamiento pt INNER JOIN tratamiento ta ON (pt.tratamiento=ta.id) "
+                                . "WHERE pt.id=c.tratamiento1)"
+                            
+                            . "WHEN (c.tratamiento1 IS NULL AND c.tratamiento1=0 )AND (c.tratamiento2 IS NOT NULL AND c.tratamiento1<>0 )"
+                                . "THEN (SELECT tb.nombre FROM persona_tratamiento ptb INNER JOIN tratamiento tb ON (ptb.tratamiento=tb.id) "
+                                . "WHERE ptb.id=c.tratamiento2)"
+                            
+                            . "WHEN (c.tratamiento1 IS NOT NULL AND c.tratamiento1<>0) AND (c.tratamiento2 IS NOT NULL AND c.tratamiento2 <>0) "
+                                . "THEN (CONCAT("
+                                            . "(SELECT ta.nombre FROM persona_tratamiento pt INNER JOIN tratamiento ta ON (pt.tratamiento=ta.id) WHERE pt.id=c.tratamiento1),"
+                                            . "'<br>',"
+                                            . "(SELECT tb.nombre FROM persona_tratamiento ptb INNER JOIN tratamiento tb ON (ptb.tratamiento=tb.id) "
+                                . "WHERE ptb.id=c.tratamiento2)))"
+                            
+                            . " ELSE '' END) "
+                            
+                            . "ELSE "
+                            
+                            . "(CASE "
+                            . "WHEN (c.tratamiento1 IS NOT NULL AND c.tratamiento1<>0 ) AND (c.tratamiento2 IS NULL OR c.tratamiento2=0) "
+                                . "THEN (SELECT tb.nombre FROM detalle_venta_paquete detpaq INNER JOIN tratamiento tb ON (detpaq.tratamiento=tb.id) WHERE detpaq.tratamiento=c.tratamiento1 AND detpaq.venta_paquete=c.paquete) "
+                            
+                            . "WHEN (c.tratamiento1 IS NULL OR c.tratamiento1=0) AND (c.tratamiento2 IS NOT NULL AND c.tratamiento2 <>0) "
+                                . "THEN (SELECT tb.nombre FROM detalle_venta_paquete detpaq INNER JOIN tratamiento tb ON (detpaq.tratamiento=tb.id) WHERE detpaq.tratamiento=c.tratamiento2 AND detpaq.venta_paquete=c.paquete) "
+                            
+                            . "WHEN c.tratamiento1 IS NOT NULL AND c.tratamiento2 IS NOT NULL "
+                                . "THEN CONCAT((SELECT CONCAT(tb.nombre) FROM detalle_venta_paquete detpaq INNER JOIN tratamiento tb ON (detpaq.tratamiento=tb.id) WHERE tb.id=c.tratamiento1 AND detpaq.venta_paquete=c.paquete),'<br>',(SELECT CONCAT(tb.nombre) FROM detalle_venta_paquete detpaq INNER JOIN tratamiento tb ON (detpaq.tratamiento=tb.id) WHERE tb.id=c.tratamiento2 AND detpaq.venta_paquete=c.paquete)) "
+                            . " END)"
+                            
                             . " END as tratamiento "
                             . "FROM cita c "
                             . "INNER JOIN paciente pac on(pac.id=c.paciente) "
@@ -1608,6 +1698,7 @@ class CitaController extends Controller
 //                var_dump($k);
                 //var_dump($detPaq->getNumSesiones().'-'.$sesionesPaquetes[$k]->getNumSesion());
                 if($detPaq->getNumSesiones()!=$sesionesPaquetes[$k]->getNumSesion()){
+                    
                     if(!in_array($paq->getId(), $paquetesPendientesAux)){
                         array_push($paquetesPendientesAux, $paq->getId());
                         array_push($paquetesPendientesId, $paq->getId());
@@ -1694,9 +1785,33 @@ class CitaController extends Controller
         $data['estado']=$cita->getEstado();
         
         $data['citaPor']=$cita->getTipoCita();
-        $data['paquete']=$cita->getPaquete();
-        $data['tratamiento1']=$cita->getTratamiento1();
-        $data['tratamiento2']=$cita->getTratamiento2();
+        
+        if($cita->getPaquete()!=null){
+            $data['paquete']=$cita->getPaquete();
+        }
+        else{
+            $data['paquete']=0;
+        }
+        if($cita->getTratamiento()!=null){
+            $data['consulta']=$cita->getTratamiento()->getId();
+        }
+        else{
+            $data['consulta']=0;
+        }
+        
+        if($cita->getTratamiento1()!=null){
+            $data['tratamiento1']=$cita->getTratamiento1();
+        }
+        else{
+            $data['tratamiento1']=0;
+        }
+        
+        if($cita->getTratamiento2()!=null){
+            $data['tratamiento2']=$cita->getTratamiento2();
+        }
+        else{
+            $data['tratamiento2']=0;
+        }
                
         $response->setData($data); 
         return $response;
@@ -1779,7 +1894,7 @@ class CitaController extends Controller
 //        var_dump($citaPaquete);
 //        var_dump($citaTrat1);
 //        var_dump($citaTrat2);
-        
+//        die();
         date_default_timezone_set('America/El_Salvador');
 
         
@@ -1798,19 +1913,19 @@ class CitaController extends Controller
        
         
         switch($citaPor){
-            case 1://///Consultas
+            case 0://///Consultas
                 
                 $citaObj->setTratamiento1(null);
                 $citaObj->setTratamiento2(null);
                 
                 break;
-            case 2://///Tratamientos sin paquetes
+            case 1://///Tratamientos sin paquetes
                 
                 $citaObj->setTratamiento1($citaTrat1);
                 $citaObj->setTratamiento2($citaTrat2);
                 
                 break;
-            case 3://///Tratamientos de paquetes
+            case 2://///Tratamientos de paquetes
                 
                 $citaObj->setTratamiento1($citaTrat1);
                 $citaObj->setTratamiento2($citaTrat2);

@@ -307,7 +307,7 @@
 
                                 
                                 {#console.log('no existe otra cita');#}
-                                //$('form').submit();
+                                $('form').submit();
                             }
                         });        
                     
@@ -423,7 +423,7 @@
                                 var numPaquetes= data.id.length;
                                 var options ="";
                                 var defectoValor = 0;
-                                //options+='<option value="0">Seleccione un paquete...</option>';
+                                options+='<option value="0">Seleccione un paquete...</option>';
                                 for (var i = 0; i < numPaquetes; i++) {   
                                     if(i==0){
                                         options+='<option value="'+data.id[i]+'">'+data.nombre[i]+' </option>';
