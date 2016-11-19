@@ -483,6 +483,18 @@
                                                         
                             $('#citaPaquete').val(data.paquete).change();
                             $('#citaEstado').val(data.estado).change();
+                            if(data.estado=='A'){
+                                $('#estadoLabelCita').html('Asistida');
+                                $('#citaEstado').select2('destroy');
+                                $('#citaEstado').addClass('hidden');
+                                $('#estadoLabelCita').removeClass('hidden');
+                            }
+                            else{
+                                $('#citaEstado').removeClass('hidden');
+                                $('#estadoLabelCita').addClass('hidden');
+                                $('#citaEstado').select2();
+                            }
+                            
                             $('#citaTratamiento1').val(data.tratamiento1).change();
                             $('#citatratamiento2').val(data.tratamiento1).change();
                             $('#formEdit').removeClass('hidden');
