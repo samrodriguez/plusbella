@@ -54,10 +54,13 @@
             <script src="{{ asset('Resources/wrapkit/scripts/bootbox.js') }}"></script>
             <script>
                 $(document).ready(function(){
-                    if({{estado}}!=null){
-                    bootbox.alert("Respaldo realizado con éxito!", function() {
-                    });
-                    }
+                    {% if estado %}
+                        
+                        bootbox.alert("Respaldo realizado con éxito!", function() {
+                        });
+                        
+                    {% else %}
+                    {% endif %}
                 });
             </script>
         {% endblock %}

@@ -11,7 +11,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 /**
  * Backup controller.
  *
- * @Route("/admin/backup")
+ * @Route("/backup")
  */
 class BackupController extends Controller{
     
@@ -46,6 +46,7 @@ class BackupController extends Controller{
     {
     //echo PHP_OS; 
     //include_once "conexion/def.php";
+    set_time_limit ( 6000 );
     date_default_timezone_set("America/El_Salvador");
     $backupFile = "laplusbelle_".date("d-m-Y_H-i-s").".sql";
     $path = $this->container->getParameter('plusbelle.backup');
@@ -63,7 +64,8 @@ class BackupController extends Controller{
         
     //var_dump($path);
     try {
-        exec("mysqldump -h localhost -u admin -p 919293marvin marvinvi_demo_plusbella -R> ".$path.$backupFile);
+        /////Hay que dar permisos al usuario de la base de datos, LOCK TABLES y SHOW DATABASES
+        exec("mysqldump -h localhost -uadmin -p919293marvin marvinvi_demo_plusbella -R> ".$path.$backupFile);
     } catch (Exception $e) {
         echo $e->getMessage();
     }

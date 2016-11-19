@@ -20,9 +20,11 @@ security:
         login_:
             pattern:  ^/secured/login$
             security: false
+            context: primary_auth
             anonymous: ~
         secured_area_:
             pattern: ^/
+            context: primary_auth
             switch_user: { role: ROLE_ADMIN, parameter: _change }
             form_login:
                 login_path: /secured/login
@@ -35,12 +37,14 @@ security:
                 path: /secured/logout
                 target: /secured/login
             anonymous: ~        
-    access_control:
-        - { path: ^/*, role:  ROLE_USER } 
+    access_control:     
         - { path: ^/secured/*, role: IS_AUTHENTICATED_ANONYMOUSLY }
+        
         #Roles admin
-        - { path: ^/*, role:  ROLE_ADMIN } 
+        - { path: ^/admin/*, role:  ROLE_ADMIN } 
         #Roles medicos
-        - { path: ^/*, role:  ROLE_MEDICOS } 
+        - { path: ^/admin/*, role:  ROLE_MEDICOS } 
         #Roles usuarios
-        - { path: ^/*, role:  ROLE_USER } 
+        - { path: ^/admin/*, role:  ROLE_USER }
+        
+        - { path: ^/backup/*, role: IS_AUTHENTICATED_ANONYMOUSLY }
